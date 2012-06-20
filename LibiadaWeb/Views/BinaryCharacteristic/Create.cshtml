@@ -1,0 +1,89 @@
+﻿@model LibiadaWeb.binary_characteristic
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>binary_characteristic</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.chain_id, "chain")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("chain_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.chain_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.characteristic_type_id, "characteristic_type")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("characteristic_type_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.characteristic_type_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.value)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.value)
+            @Html.ValidationMessageFor(model => model.value)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.value_string)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.value_string)
+            @Html.ValidationMessageFor(model => model.value_string)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.link_up_id, "link_up")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("link_up_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.link_up_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.creation_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.creation_date)
+            @Html.ValidationMessageFor(model => model.creation_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.first_element_id, "element")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("first_element_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.first_element_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.second_element_id, "element1")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("second_element_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.second_element_id)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

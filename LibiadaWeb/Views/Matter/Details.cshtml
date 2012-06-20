@@ -1,0 +1,40 @@
+﻿@model LibiadaWeb.matter
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>matter</legend>
+
+    <div class="display-label">name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">nature</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nature.name)
+    </div>
+
+    <div class="display-label">description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+
+    <div class="display-label">remote_db</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.remote_db.name)
+    </div>
+
+    <div class="display-label">id_in_remote_db</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.id_in_remote_db)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

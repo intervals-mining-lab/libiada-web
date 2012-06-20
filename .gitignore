@@ -1,0 +1,7 @@
+*.pidb
+*.userprefs
+*.DotSettings.user
+*.suo
+[Oo]bj
+[Bb]in
+_ReSharper*

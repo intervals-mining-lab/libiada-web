@@ -1,0 +1,48 @@
+﻿@model LibiadaWeb.characteristic
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>characteristic</legend>
+
+    <div class="display-label">chain</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.chain.building)
+    </div>
+
+    <div class="display-label">characteristic_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.characteristic_type.name)
+    </div>
+
+    <div class="display-label">value</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.value)
+    </div>
+
+    <div class="display-label">value_string</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.value_string)
+    </div>
+
+    <div class="display-label">link_up</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.link_up.name)
+    </div>
+
+    <div class="display-label">creation_date</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.creation_date)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

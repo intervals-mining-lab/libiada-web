@@ -1,0 +1,30 @@
+﻿@model LibiadaWeb.connection
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>connection</legend>
+
+    <div class="display-label">chain1</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.chain1.building)
+    </div>
+
+    <div class="display-label">chain</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.chain.building)
+    </div>
+
+    <div class="display-label">connection_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.connection_type.name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

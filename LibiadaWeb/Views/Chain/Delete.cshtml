@@ -1,0 +1,51 @@
+﻿@model LibiadaWeb.chain
+
+@{
+    ViewBag.Title = "Цепочки";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы действительно хотите удалить эту цепочку?</h3>
+<fieldset>
+    <legend>Цепочка</legend>
+
+    <div class="display-label">Строй</div>
+    <div class="display-field">
+        @{
+            string shortBuilding = Model.building.Substring(0, 20) + "...";
+        }
+        @shortBuilding
+    </div>
+
+    <div class="display-label">Тип строя</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.building_type.name)
+    </div>
+
+    <div class="display-label">Форма записи</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.notation.name)
+    </div>
+
+    <div class="display-label">Дата создания</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.creation_date)
+    </div>
+
+    <div class="display-label">Объект, которому принадлежит цепочка</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matter.name)
+    </div>
+
+    <div class="display-label">Разнородность</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dissimilar)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
+    </p>
+}

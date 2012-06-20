@@ -1,0 +1,35 @@
+﻿@model LibiadaWeb.characteristic_type
+
+@{
+    ViewBag.Title = "Цепочки";
+}
+
+<h2>Подробности</h2>
+
+<fieldset>
+    <legend>characteristic_type</legend>
+
+    <div class="display-label">name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+
+    <div class="display-label">characteristic_group1</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.characteristic_group.name)
+    </div>
+
+    <div class="display-label">class_name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.class_name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

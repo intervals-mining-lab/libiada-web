@@ -1,0 +1,43 @@
+﻿@model LibiadaWeb.matter
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>matter</legend>
+
+    <div class="display-label">name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">nature</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nature.name)
+    </div>
+
+    <div class="display-label">description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+
+    <div class="display-label">remote_db</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.remote_db.name)
+    </div>
+
+    <div class="display-label">id_in_remote_db</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.id_in_remote_db)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

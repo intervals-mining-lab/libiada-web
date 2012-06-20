@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb", "LibiadaWeb\LibiadaWeb.csproj", "{9138BC95-58D2-4640-BBB1-80D397ADE2D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb.Tests", "LibiadaWeb.Tests\LibiadaWeb.Tests.csproj", "{6371782B-5FBC-4ADA-ABBD-7FB11A31211B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9138BC95-58D2-4640-BBB1-80D397ADE2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9138BC95-58D2-4640-BBB1-80D397ADE2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9138BC95-58D2-4640-BBB1-80D397ADE2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9138BC95-58D2-4640-BBB1-80D397ADE2D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6371782B-5FBC-4ADA-ABBD-7FB11A31211B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6371782B-5FBC-4ADA-ABBD-7FB11A31211B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6371782B-5FBC-4ADA-ABBD-7FB11A31211B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6371782B-5FBC-4ADA-ABBD-7FB11A31211B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
