@@ -10,7 +10,7 @@ namespace LibiadaWeb.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Добро пожаловать в ASP.NET MVC!";
+            ViewBag.Message = "Добро пожаловать в LibiadaWeb!";
 
             return View();
         }

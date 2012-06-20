@@ -1,21 +1,21 @@
 ﻿@model IEnumerable<LibiadaWeb.characteristic_group>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Группы характеристик";
 }
 
-<h2>Index</h2>
+<h2>Перечень групп характеристик</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
     <tr>
         <th>
-            name
+            Название
         </th>
         <th>
-            description
+            Описание
         </th>
         <th></th>
     </tr>
@@ -29,9 +29,9 @@
             @Html.DisplayFor(modelItem => item.description)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }
