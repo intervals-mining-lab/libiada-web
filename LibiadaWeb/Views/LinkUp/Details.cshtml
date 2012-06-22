@@ -1,25 +1,25 @@
 ﻿@model LibiadaWeb.link_up
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Привязки";
 }
 
-<h2>Details</h2>
+<h2>Подробности</h2>
 
 <fieldset>
-    <legend>link_up</legend>
+    <legend>Привязка</legend>
 
-    <div class="display-label">name</div>
+    <div class="display-label">Название</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
 
-    <div class="display-label">description</div>
+    <div class="display-label">Описание</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Назад к списку", "Index")
 </p>

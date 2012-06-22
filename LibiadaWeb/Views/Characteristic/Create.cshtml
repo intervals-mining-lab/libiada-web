@@ -1,10 +1,10 @@
 ﻿@model LibiadaWeb.characteristic
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Значения характеристик";
 }
 
-<h2>Create</h2>
+<h2>Создание</h2>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
@@ -12,10 +12,10 @@
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend>characteristic</legend>
+        <legend>Значение характеристики</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.chain_id, "chain")
+            @Html.LabelFor(model => model.chain_id, "Принадлежит цепочке:")
         </div>
         <div class="editor-field">
             @Html.DropDownList("chain_id", String.Empty)
@@ -23,7 +23,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_type_id, "characteristic_type")
+            @Html.LabelFor(model => model.characteristic_type_id, "Характеристика")
         </div>
         <div class="editor-field">
             @Html.DropDownList("characteristic_type_id", String.Empty)
@@ -31,7 +31,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value)
+            @Html.LabelFor(model => model.value, "Числовое значение")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value)
@@ -39,7 +39,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value_string)
+            @Html.LabelFor(model => model.value_string, "Строкове значение")
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value_string)
@@ -47,19 +47,11 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.link_up_id, "link_up")
+            @Html.LabelFor(model => model.link_up_id, "Привязка")
         </div>
         <div class="editor-field">
             @Html.DropDownList("link_up_id", String.Empty)
             @Html.ValidationMessageFor(model => model.link_up_id)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.creation_date)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.creation_date)
-            @Html.ValidationMessageFor(model => model.creation_date)
         </div>
 
         <p>

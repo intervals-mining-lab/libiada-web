@@ -311,6 +311,7 @@ div#title {
 .display-field, 
 .editor-field {
     margin: 0.5em 0 0 0;
+    color: black;
 }
 
 .text-box {
@@ -323,4 +324,8 @@ div#title {
 
 .tri-state {
     width: 6em;
+}
+
+.connection-table {
+    vertical-align: top;
 }

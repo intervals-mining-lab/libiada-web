@@ -1,24 +1,24 @@
 ﻿@model IEnumerable<LibiadaWeb.remote_db>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Сторонние БД";
 }
 
-<h2>Index</h2>
+<h2>Перечень стороних БД</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
     <tr>
         <th>
-            name
+            Название
         </th>
         <th>
-            description
+            Описание
         </th>
         <th>
-            url
+            url адрес
         </th>
         <th></th>
     </tr>
@@ -35,9 +35,9 @@
             @Html.DisplayFor(modelItem => item.url)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }

@@ -35,10 +35,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @{
-                var shortBuilding = item.building.Substring(0, 20);
-            }
-            @shortBuilding
+            @item.building.Substring(0, 20);
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.building_type.name)
@@ -58,7 +55,7 @@
         <td>
             @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
             @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
-            @Html.ActionLink("Удаление", "Delete", new { id=item.id })
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }

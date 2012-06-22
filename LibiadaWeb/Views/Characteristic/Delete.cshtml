@@ -1,48 +1,48 @@
 ﻿@model LibiadaWeb.characteristic
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Значения характеристик";
 }
 
-<h2>Delete</h2>
+<h2>Удаление</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы уверены что хотите удалить данное значение характеристики?</h3>
 <fieldset>
-    <legend>characteristic</legend>
+    <legend>Значение характеристики</legend>
 
-    <div class="display-label">chain</div>
+    <div class="display-label">Принадлежит цепочке</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.chain.building)
     </div>
 
-    <div class="display-label">characteristic_type</div>
+    <div class="display-label">Характеристика</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.characteristic_type.name)
     </div>
 
-    <div class="display-label">value</div>
+    <div class="display-label">Числовое значение</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">value_string</div>
+    <div class="display-label">Строковое значение</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value_string)
     </div>
 
-    <div class="display-label">link_up</div>
+    <div class="display-label">Привязка</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.link_up.name)
     </div>
 
-    <div class="display-label">creation_date</div>
+    <div class="display-label">Дата создания</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>
 </fieldset>
 @using (Html.BeginForm()) {
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
     </p>
 }

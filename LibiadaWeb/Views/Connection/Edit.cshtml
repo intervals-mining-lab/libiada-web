@@ -1,23 +1,24 @@
 ﻿@model LibiadaWeb.connection
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Связи";
 }
 
-<h2>Edit</h2>
+<h2>Редактирование</h2>
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     @Html.ValidationSummary(true)
     <fieldset>
-        <legend>connection</legend>
+        <legend>Связь</legend>
 
         @Html.HiddenFor(model => model.id)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.parent_chain_id, "chain1")
+            @Html.LabelFor(model => model.parent_chain_id, "Родительская цепочка")
         </div>
         <div class="editor-field">
             @Html.DropDownList("parent_chain_id", String.Empty)
@@ -25,7 +26,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.child_chain_id, "chain")
+            @Html.LabelFor(model => model.child_chain_id, "Дочерняя цепочка")
         </div>
         <div class="editor-field">
             @Html.DropDownList("child_chain_id", String.Empty)
@@ -33,7 +34,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.connection_type_id, "connection_type")
+            @Html.LabelFor(model => model.connection_type_id, "Тип связи")
         </div>
         <div class="editor-field">
             @Html.DropDownList("connection_type_id", String.Empty)
@@ -41,11 +42,11 @@
         </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Сохранить" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Назад к списку", "Index")
 </div>

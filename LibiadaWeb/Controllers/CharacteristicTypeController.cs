@@ -18,7 +18,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var characteristic_type = db.characteristic_type.Include("characteristic_group1");
+            var characteristic_type = db.characteristic_type.Include("characteristic_group");
             return View(characteristic_type.ToList());
         }
 

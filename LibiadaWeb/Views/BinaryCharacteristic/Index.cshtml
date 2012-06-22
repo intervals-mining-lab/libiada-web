@@ -1,39 +1,39 @@
 ﻿@model IEnumerable<LibiadaWeb.binary_characteristic>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Характеристики бинарных цепей";
 }
 
-<h2>Index</h2>
+<h2>Перечень бинарных харакеристик</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
     <tr>
         <th>
-            chain
+            Цепочка
         </th>
         <th>
-            characteristic_type
+            Тип характеристик
         </th>
         <th>
-            value
+            Значение
         </th>
         <th>
-            value_string
+            Значение в виде строки
         </th>
         <th>
-            link_up
+            Привязка
         </th>
         <th>
-            creation_date
+            Дата создания
         </th>
         <th>
-            element
+            Первый элемент
         </th>
         <th>
-            element1
+            Второй элемент
         </th>
         <th></th>
     </tr>
@@ -65,9 +65,9 @@
             @Html.DisplayFor(modelItem => item.element1.value)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }

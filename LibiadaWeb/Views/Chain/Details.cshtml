@@ -1,4 +1,6 @@
-﻿@model LibiadaWeb.chain
+﻿@using LibiadaWeb.Helpers
+
+@model LibiadaWeb.chain
 
 @{
     ViewBag.Title = "Цепочки";
@@ -11,17 +13,8 @@
 
     <div class="display-label">Строй</div>
     <p>
-    @{
-        String temp = Model.building;
-        String building = "";
-        int step = 200;
-        for (int i = 0; i < temp.Length; i += step)
-        {
-            int blockLength = i + step >= temp.Length ? temp.Length - i : step;
-            building += temp.Substring(i, blockLength) + " ";
-        }
-    }
-    @building
+        
+        @Html.LineBreaker(Model.building,150)
     </p>
 
     <div class="display-label">Тип строя</div>

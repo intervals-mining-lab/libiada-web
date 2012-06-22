@@ -1,30 +1,33 @@
 ﻿@model IEnumerable<LibiadaWeb.element>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Элементы";
 }
 
-<h2>Index</h2>
+<h2>Перечень элементов</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать элемент", "Create")
 </p>
 <table>
     <tr>
         <th>
-            value
+            Значение
         </th>
         <th>
-            description
+            Название
         </th>
         <th>
-            name
+            Описание
         </th>
         <th>
-            notation
+            Форма записи
         </th>
         <th>
-            creation_date
+            Природа
+        </th>
+        <th>
+            Дата создания
         </th>
         <th></th>
     </tr>
@@ -35,21 +38,24 @@
             @Html.DisplayFor(modelItem => item.value)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.description)
+            @Html.DisplayFor(modelItem => item.name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.name)
+            @Html.DisplayFor(modelItem => item.description)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.notation.name)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.notation.nature.name)
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.creation_date)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }

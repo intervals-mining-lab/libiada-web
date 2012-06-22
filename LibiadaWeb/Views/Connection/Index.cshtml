@@ -1,43 +1,45 @@
-﻿@model IEnumerable<LibiadaWeb.connection>
+﻿@using LibiadaWeb.Helpers
+
+@model IEnumerable<LibiadaWeb.connection>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Связи";
 }
 
-<h2>Index</h2>
+<h2>Перечень связей</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
     <tr>
         <th>
-            chain1
+            Родительская цепочка
         </th>
         <th>
-            chain
+            Дочерняя цепочка
         </th>
         <th>
-            connection_type
+            Тип связи
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.chain1.building)
+    <tr class="connection-table">
+        <td >
+            @Html.LineBreaker(item.chain1.building,30)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.chain.building)
+            @Html.LineBreaker(item.chain.building,20)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.connection_type.name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id = item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id = item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id = item.id })
         </td>
     </tr>
 }

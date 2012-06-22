@@ -1,35 +1,35 @@
 ﻿@model LibiadaWeb.characteristic_type
 
 @{
-    ViewBag.Title = "Цепочки";
+    ViewBag.Title = "Характеристики";
 }
 
 <h2>Подробности</h2>
 
 <fieldset>
-    <legend>characteristic_type</legend>
+    <legend>Характеристика</legend>
 
-    <div class="display-label">name</div>
+    <div class="display-label">Название</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
 
-    <div class="display-label">description</div>
+    <div class="display-label">Описание</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">characteristic_group1</div>
+    <div class="display-label">Группа характеристик</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.characteristic_group.name)
     </div>
 
-    <div class="display-label">class_name</div>
+    <div class="display-label">Имя класса калькулятора</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.class_name)
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Редактировать", new { id=Model.id }) |
+    @Html.ActionLink("Назад к списку", "Index")
 </p>

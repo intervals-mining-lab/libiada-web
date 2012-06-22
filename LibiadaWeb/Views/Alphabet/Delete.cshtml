@@ -1,18 +1,18 @@
 ﻿@model LibiadaWeb.alphabet
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Алфавиты";
 }
 
-<h2>Delete</h2>
+<h2>Удаление</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Вы действительно хотите удалить данный алфавит?</h3>
 <fieldset>
-    <legend>alphabet</legend>
+    <legend>Алфавит</legend>
 </fieldset>
 @using (Html.BeginForm()) {
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
     </p>
 }

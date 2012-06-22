@@ -1,27 +1,27 @@
 ﻿@model IEnumerable<LibiadaWeb.characteristic_type>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Характеристики";
 }
 
-<h2>Index</h2>
+<h2>Переченьхарактеристик</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
     <tr>
         <th>
-            name
+            Название
         </th>
         <th>
-            description
+            Описание
         </th>
         <th>
-            characteristic_group1
+            Группа характеристик
         </th>
         <th>
-            class_name
+            Название класса калькулятора
         </th>
         <th></th>
     </tr>
@@ -41,9 +41,9 @@
             @Html.DisplayFor(modelItem => item.class_name)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
         </td>
     </tr>
 }
