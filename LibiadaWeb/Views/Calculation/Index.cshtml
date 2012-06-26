@@ -1,0 +1,99 @@
+﻿@using IvtLibrary.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление характеристик";
+}
+
+<h2>Вычисление характеристик</h2>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th>
+                Название объекта
+            </th>
+            <th>
+                Тип цепочки
+            </th>
+            <th>
+                Форма записи
+            </th>
+            <th>
+                Разнородность
+            </th>
+            <th>
+                Дата создания
+            </th>
+            
+        </tr>
+        @{
+            List<MvcHtmlString> chainsList = Html.CheckBoxGroup("chainIds", (List<SelectListItem>) ViewBag.chainsList);
+            int i = 0;
+
+            foreach (var item in ViewBag.chains)
+            {
+                <tr>
+                    <td>
+                        @chainsList[i]
+                    </td>
+                    <td>
+                        @item.matter.nature.name
+                    </td>
+                    <td>
+                        @item.notation.name
+                    </td>
+                    <td>
+                        @{
+                            string b = "";
+                            if (item.dissimilar)
+                            {
+                                b = "Разнородная";
+                            }
+                            i = i + 1;
+                        }
+                        @b
+                    </td>
+                    <td>
+                        @item.creation_date
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+    <br/>
+    <table>
+        <tr>
+            <th>
+                Характеристики
+            </th>
+        </tr>
+        @{
+            List<MvcHtmlString> characteristicsList = Html.CheckBoxGroup("characteristicIds", (List<SelectListItem>) ViewBag.characteristicsList);
+            int j = 0;
+
+            foreach (var item in ViewBag.characteristics)
+            {
+                <tr>
+                    <td>
+                        @characteristicsList[j]
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+    <br/>
+    <div>Привязка:</div>
+    <select name="linkUp">
+        @foreach (var option in ViewBag.linkUpsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}

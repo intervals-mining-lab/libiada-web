@@ -34,8 +34,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="LibiadaCore">
+      <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.Entity" />
@@ -68,6 +72,7 @@
     <Compile Include="Controllers\AlphabetController.cs" />
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\BuildingTypeController.cs" />
+    <Compile Include="Controllers\CalculationController.cs" />
     <Compile Include="Controllers\ChainController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\CharacteristicGroupController.cs" />
@@ -85,11 +90,40 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DataTransformators.cs" />
+    <Compile Include="Helpers\RazorExtensions.cs" />
     <Compile Include="LibiadaWeb.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\BuildingTypeRepository.cs" />
+    <Compile Include="Models\ChainRepository.cs" />
+    <Compile Include="Models\CharacteristicRepository.cs" />
+    <Compile Include="Models\CharacteristicGroupRepository.cs" />
+    <Compile Include="Models\CharacteristicTypeRepository.cs" />
+    <Compile Include="Models\ConnectionRepository.cs" />
+    <Compile Include="Models\ConnectionTypeRepository.cs" />
+    <Compile Include="Models\ElementRepository.cs" />
+    <Compile Include="Models\IBinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\IBuildingTypeRepository.cs" />
+    <Compile Include="Models\IChainRepository.cs" />
+    <Compile Include="Models\ICharacteristicGroupRepository.cs" />
+    <Compile Include="Models\ICharacteristicRepository.cs" />
+    <Compile Include="Models\ICharacteristicTypeRepository.cs" />
+    <Compile Include="Models\IConnectionRepository.cs" />
+    <Compile Include="Models\IConnectionTypeRepository.cs" />
+    <Compile Include="Models\IElementRepository.cs" />
+    <Compile Include="Models\ILinkUpRepository.cs" />
+    <Compile Include="Models\IMatterRepository.cs" />
+    <Compile Include="Models\INatureRepository.cs" />
+    <Compile Include="Models\INotationRepository.cs" />
+    <Compile Include="Models\IRemoteDbRepository.cs" />
+    <Compile Include="Models\LinkUpRepository.cs" />
+    <Compile Include="Models\MatterRepository.cs" />
+    <Compile Include="Models\NatureRepository.cs" />
+    <Compile Include="Models\NotationRepository.cs" />
+    <Compile Include="Models\RemoteDbRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -235,10 +269,11 @@
     <Content Include="Views\CharacteristicType\Create.cshtml" />
     <Content Include="Views\CharacteristicType\Edit.cshtml" />
     <Content Include="Views\CharacteristicType\Delete.cshtml" />
+    <Content Include="Views\Calculation\Index.cshtml" />
+    <Content Include="Views\Calculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

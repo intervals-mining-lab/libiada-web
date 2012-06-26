@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Характеристики";
+}
+
+<h2>Характеристики</h2>
+<table>
+    <tr>
+        <th>
+            Название цепочки
+        </th>
+        @foreach (var characteristicName in ViewBag.characteristicNames)
+        {
+            <th>
+                @characteristicName
+            </th>
+        }
+    </tr>
+    @for (int i = 0; i < ViewBag.characteristics.Count; i++ )
+    {
+        <tr>
+            <td>
+                @ViewBag.chainNames[i]
+            </td>
+            @foreach (var characteristic in ViewBag.characteristics[i])
+            {
+                <td>
+                    @characteristic
+                </td>
+            }
+        </tr>
+    }
+</table>
