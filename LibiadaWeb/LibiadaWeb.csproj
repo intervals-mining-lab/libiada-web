@@ -42,6 +42,9 @@
       <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PhantomChains">
+      <HintPath>..\..\libiada-phantom-chains\PhantomChains\bin\Debug\PhantomChains.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -86,6 +89,7 @@
     <Compile Include="Controllers\NatureController.cs" />
     <Compile Include="Controllers\NotationController.cs" />
     <Compile Include="Controllers\RemoteDbController.cs" />
+    <Compile Include="Controllers\TransformationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -271,6 +275,7 @@
     <Content Include="Views\CharacteristicType\Delete.cshtml" />
     <Content Include="Views\Calculation\Index.cshtml" />
     <Content Include="Views\Calculation\Result.cshtml" />
+    <Content Include="Views\Transformation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

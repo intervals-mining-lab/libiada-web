@@ -1,0 +1,67 @@
+﻿@using IvtLibrary.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Преобразование цепочек";
+}
+
+<h2>Преобразование цепочек</h2>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th>
+                Название объекта
+            </th>
+            <th>
+                Тип цепочки
+            </th>
+            <th>
+                Форма записи
+            </th>
+            <th>
+                Разнородность
+            </th>
+            <th>
+                Дата создания
+            </th>
+            
+        </tr>
+        @{
+            List<MvcHtmlString> chainsList = Html.CheckBoxGroup("chainIds", (List<SelectListItem>) ViewBag.chainsList);
+            int i = 0;
+
+            foreach (var item in ViewBag.chains)
+            {
+                <tr>
+                    <td>
+                        @chainsList[i]
+                    </td>
+                    <td>
+                        @item.matter.nature.name
+                    </td>
+                    <td>
+                        @item.notation.name
+                    </td>
+                    <td>
+                        @{
+                            string b = "";
+                            if (item.dissimilar)
+                            {
+                                b = "Разнородная";
+                            }
+                            i = i + 1;
+                        }
+                        @b
+                    </td>
+                    <td>
+                        @item.creation_date
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <br/>
+    <input type="submit" value="Преобразовать" />
+}
