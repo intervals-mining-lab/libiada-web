@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using System.Web.Mvc;
 using LibiadaWeb;
 
 namespace LibiadaWeb.Models
@@ -53,6 +54,31 @@ namespace LibiadaWeb.Models
         public void Save()
         {
             context.SaveChanges();
+        }
+
+        public List<SelectListItem> GetSelectListItems(IEnumerable<notation> notations)
+        {
+            HashSet<int> notationIds;
+            if (notations != null)
+            {
+                notationIds = new HashSet<int>(notations.Select(c => c.id));
+            }
+            else
+            {
+                notationIds = new HashSet<int>();
+            }
+            var allNotations = context.notation;
+            var notationsList = new List<SelectListItem>();
+            foreach (var notation in allNotations)
+            {
+                notationsList.Add(new SelectListItem
+                {
+                    Value = notation.id.ToString(),
+                    Text = notation.name,
+                    Selected = notationIds.Contains(notation.id)
+                });
+            }
+            return notationsList;
         }
 
         public void Dispose() 

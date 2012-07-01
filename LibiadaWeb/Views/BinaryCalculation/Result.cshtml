@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Результаты вычисления бинарной характеристики";
+}
+
+<h2>@ViewBag.chainName</h2>
+<table>
+    <tr>
+        <th>
+            Первый элемент\Второй элемент
+        </th>
+        @foreach (var elementName in ViewBag.elementNames)
+        {
+            <th>
+                @elementName
+            </th>
+        }
+    </tr>
+    @for (int i = 0; i < ViewBag.characteristics.Count; i++ )
+    {
+        <tr>
+            <td>
+                @ViewBag.elementNames[i]
+            </td>
+            @foreach (var characteristic in ViewBag.characteristics[i])
+            {
+                <td>
+                    @characteristic
+                </td>
+            }
+        </tr>
+    }
+</table>

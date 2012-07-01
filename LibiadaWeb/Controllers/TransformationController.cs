@@ -51,11 +51,6 @@ namespace LibiadaWeb.Controllers
                 stringBuilding = stringBuilding.Substring(0, stringBuilding.Length - 1);
                 result.building = stringBuilding;
 
-                for (int k = 0; k < tempAminoChain.Alphabet.power; k++)
-                {
-                    
-                }
-
                 for (int i = 0; i < tempAminoChain.Alphabet.power; i++)
                 {
                     alphabet alphabetElement = new alphabet();

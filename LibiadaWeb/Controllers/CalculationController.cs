@@ -26,8 +26,6 @@ namespace LibiadaWeb.Controllers
         public ActionResult Index()
         {
             ViewBag.chains = db.chain.Include("building_type").Include("matter").Include("notation").ToList();
-            ViewBag.characteristics = db.characteristic_type.ToList();
-            ViewBag.linkUps = db.link_up.ToList();
 
             ViewBag.chainsList = chainRepository.GetSelectListItems(null);
             ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(null);
@@ -71,7 +69,7 @@ namespace LibiadaWeb.Controllers
                             alpha.Add(new ValueString(element.value));
                         }
 
-                        Chain tempChain = new Chain(db.chain.Single(c => c.id == chainId).building, alpha);
+                        Chain currentChain = new Chain(db.chain.Single(c => c.id == chainId).building, alpha);
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
@@ -89,7 +87,7 @@ namespace LibiadaWeb.Controllers
                                 link = LinkUp.Both;
                                 break;
                         }
-                        characteristics.Last().Add(calculator.Calculate(tempChain, link));
+                        characteristics.Last().Add(calculator.Calculate(currentChain, link));
                     }
                 }
             }

@@ -56,7 +56,6 @@ namespace LibiadaWeb.Models
             context.SaveChanges();
         }
 
-        // заполняет список чекбоксов цепочек
         public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> characteristicTypes)
         {
             HashSet<int> characteristicTypeIds;

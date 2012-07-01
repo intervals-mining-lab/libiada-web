@@ -1,0 +1,67 @@
+﻿@using IvtLibrary.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Кластеризация";
+}
+
+<h2>Кластеризация</h2>
+
+<script type="text/javascript">
+
+    function AddAxis() {
+        $("#axis").append(
+        '<select name="characteristicIds">'+
+            '@foreach (var option in ViewBag.characteristicsList){<option value="@option.Value">@option.Text</option>}'+
+        '</select>'+
+        '<select name="linkUpIds">'+
+            '@foreach (var option in ViewBag.linkUpsList){<option value="@option.Value">@option.Text</option>}'+
+        '</select>'+
+        '<select name="notationIds">'+
+            '@foreach (var option in ViewBag.notationsList){<option value="@option.Value">@option.Text</option>}'+
+        '</select>'+
+        '<br/>');
+        return false;
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th>
+                Название объекта
+            </th>
+        </tr>
+        @{
+            List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.mattersList);
+            int i = 0;
+
+            foreach (var item in mattersList)
+            {
+                <tr>
+                    <td>
+                        @item
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    @Html.Label("Количество таксонов")
+    <input class="text-box single-line" id="clustersCount" name="clustersCount" type="number" value="2" />
+    <br/>
+    @Html.Label("Вес равномощности таксонов")
+    <input class="text-box single-line" id="powerWeight" name="powerWeight" type="number" value="4" />
+    <br/>
+    @Html.Label("Вес нормализованного расстояния")
+    <input class="text-box single-line" id="normalizedDistanseWeight" name="normalizedDistanseWeight" type="number" value="2" />
+    <br/>
+    @Html.Label("Вес расстояния")
+    <input class="text-box single-line" id="distanseWeight" name="distanseWeight" type="number" value="1" />
+    <br/>
+    <br/>
+    <div onclick="AddAxis()">Добавить ось</div>
+    <div id="axis"></div>
+    <br/>
+    <input type="submit" value="Группировать" />
+}

@@ -56,7 +56,6 @@ namespace LibiadaWeb.Models
             context.SaveChanges();
         }
 
-        // заполняет список чекбоксов цепочек
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> chains)
         {
             HashSet<long> chainIds;

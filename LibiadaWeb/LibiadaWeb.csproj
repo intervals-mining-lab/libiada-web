@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotNet.Highcharts">
+      <HintPath>..\packages\DotNet.Highcharts.1.2\lib\DotNet.Highcharts.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
@@ -42,6 +45,9 @@
       <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="NewClusterization">
+      <HintPath>..\..\libiada-clusterization\NewClusterization\bin\Debug\NewClusterization.dll</HintPath>
+    </Reference>
     <Reference Include="PhantomChains">
       <HintPath>..\..\libiada-phantom-chains\PhantomChains\bin\Debug\PhantomChains.dll</HintPath>
     </Reference>
@@ -73,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AlphabetController.cs" />
+    <Compile Include="Controllers\BinaryCalculationController.cs" />
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\BuildingTypeController.cs" />
     <Compile Include="Controllers\CalculationController.cs" />
@@ -80,6 +87,7 @@
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\CharacteristicGroupController.cs" />
     <Compile Include="Controllers\CharacteristicTypeController.cs" />
+    <Compile Include="Controllers\ClusterizationController.cs" />
     <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\ConnectionTypeController.cs" />
     <Compile Include="Controllers\ElementController.cs" />
@@ -106,6 +114,7 @@
     <Compile Include="Models\CharacteristicRepository.cs" />
     <Compile Include="Models\CharacteristicGroupRepository.cs" />
     <Compile Include="Models\CharacteristicTypeRepository.cs" />
+    <Compile Include="Models\DataTableFiller.cs" />
     <Compile Include="Models\ConnectionRepository.cs" />
     <Compile Include="Models\ConnectionTypeRepository.cs" />
     <Compile Include="Models\ElementRepository.cs" />
@@ -159,6 +168,21 @@
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.src.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-blue.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-green.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\gray.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\grid.js" />
+    <Content Include="Scripts\Highcharts-2.2.1\js\themes\skies.js" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.1.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
@@ -276,6 +300,10 @@
     <Content Include="Views\Calculation\Index.cshtml" />
     <Content Include="Views\Calculation\Result.cshtml" />
     <Content Include="Views\Transformation\Index.cshtml" />
+    <Content Include="Views\Clusterization\Index.cshtml" />
+    <Content Include="Views\Clusterization\Result.cshtml" />
+    <Content Include="Views\BinaryCalculation\Index.cshtml" />
+    <Content Include="Views\BinaryCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -297,7 +325,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>38496</DevelopmentServerPort>
+          <DevelopmentServerPort>34880</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/LibiadaWeb</IISUrl>
           <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>

@@ -21,6 +21,23 @@
             @Html.EditorFor(model => model.name)
             @Html.ValidationMessageFor(model => model.name)
         </div>
+        
+        <div class="editor-label">
+            <label>Цепочка</label>
+        </div>
+        <div class="editor-field">
+            <input class="text-box single-line" id="chaintext" name="chaintext" type="text" value="" />
+        </div>
+        
+        <div class="editor-label">
+            <label>Форма записи цепочки</label>
+        </div>
+        <select name="notationId">
+            @foreach (var option in ViewBag.notation_id)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        </select>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.nature_id, "Природа объекта")
@@ -39,7 +56,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.remote_db_id, "Стороння БД")
+            @Html.LabelFor(model => model.remote_db_id, "Сторонняя БД")
         </div>
         <div class="editor-field">
             @Html.DropDownList("remote_db_id", String.Empty)

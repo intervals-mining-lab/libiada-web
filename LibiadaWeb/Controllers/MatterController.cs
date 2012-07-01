@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using LibiadaCore.Classes.Root;
 using LibiadaWeb;
 
 namespace LibiadaWeb.Controllers
@@ -38,6 +39,7 @@ namespace LibiadaWeb.Controllers
         {
             ViewBag.nature_id = new SelectList(db.nature, "id", "name");
             ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             return View();
         } 
 
@@ -45,10 +47,38 @@ namespace LibiadaWeb.Controllers
         // POST: /Matter/Create
 
         [HttpPost]
-        public ActionResult Create(matter matter)
+        public ActionResult Create(matter matter, String chaintext, int notationId)
         {
+            
             if (ModelState.IsValid)
             {
+                Chain libiadaChain = new Chain(chaintext);
+                chain result = new chain();
+
+                String stringBuilding = "";
+                for (int j = 0; j < libiadaChain.Building.Length; j++)
+                {
+                    stringBuilding += libiadaChain.Building[j] + "|";
+                }
+                stringBuilding = stringBuilding.Substring(0, stringBuilding.Length - 1);
+                result.building = stringBuilding;
+                result.dissimilar = false;
+                result.building_type_id = 1;
+                result.notation_id = notationId;
+                result.matter = matter;
+                result.creation_date = new DateTimeOffset(DateTime.Now);
+
+                for (int i = 0; i < libiadaChain.Alphabet.power; i++)
+                {
+                    alphabet alphabetElement = new alphabet();
+                    alphabetElement.chain = result;
+                    alphabetElement.number = i + 1;
+                    String strElem = libiadaChain.Alphabet[i].ToString();
+                    alphabetElement.element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+                    db.alphabet.AddObject(alphabetElement);
+                }
+
+                db.chain.AddObject(result);
                 db.matter.AddObject(matter);
                 db.SaveChanges();
                 return RedirectToAction("Index");  

@@ -2,11 +2,10 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Вычисление характеристик";
+    ViewBag.Title = "Вычисление бинарных характеристик";
 }
 
-<h2>Вычисление характеристик</h2>
-
+<h2>Вычисление бинарных характеристик</h2>
 @using (Html.BeginForm())
 {
     <table>
@@ -29,7 +28,7 @@
             
         </tr>
         @{
-            List<MvcHtmlString> chainsList = Html.CheckBoxGroup("chainIds", (List<SelectListItem>) ViewBag.chainsList);
+            List<MvcHtmlString> chainsList = Html.RadioButtonGroup("chainId", (List<SelectListItem>) ViewBag.chainsList);
             int i = 0;
 
             foreach (var item in ViewBag.chains)
@@ -64,28 +63,17 @@
 
     </table>
     <br/>
-    <table>
-        <tr>
-            <th>
-                Характеристики
-            </th>
-        </tr>
-        @{
-            List<MvcHtmlString> characteristicsList = Html.CheckBoxGroup("characteristicIds", (List<SelectListItem>) ViewBag.characteristicsList);
-
-            foreach (var characteristic in characteristicsList)
-            {
-                <tr>
-                    <td>
-                        @characteristic
-                    </td>
-                </tr>
-            }
-        }
-
-    </table>
+    @Html.Label("Характеристика:")
     <br/>
-    <div>Привязка:</div>
+    <select name="characteristicId" id="characteristicId">
+        @foreach (var option in ViewBag.characteristicsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    @Html.Label("Привязка:")
+    <br/>
     <select name="linkUp">
         @foreach (var option in ViewBag.linkUpsList)
         {
