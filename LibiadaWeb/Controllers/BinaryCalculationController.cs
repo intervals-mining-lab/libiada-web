@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,35 +16,34 @@ namespace LibiadaWeb.Controllers
     public class BinaryCalculationController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
-        private ChainRepository chainRepository = new ChainRepository();
+        private MatterRepository matterRepository = new MatterRepository();
         private CharacteristicTypeRepository characteristicsRepository = new CharacteristicTypeRepository();
         private LinkUpRepository linkUpRepository = new LinkUpRepository();
+        private NotationRepository notationRepository = new NotationRepository();
 
         //
         // GET: /Calculation/
 
         public ActionResult Index()
         {
-            ViewBag.chains = db.chain.Include("building_type").Include("matter").Include("notation").ToList();
+            ViewBag.matters = db.matter.ToList();
 
-            ViewBag.chainsList = chainRepository.GetSelectListItems(null);
+            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long chainId, int characteristicId, int linkUp)
+        public ActionResult Index(long matterId, int characteristicId, int linkUp, int notationId)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
             
-            List<String> elementNames = new List<string>();
+            List<String> elementNames = new List<String>();
 
-            String chainName = db.chain.Include("matter").Single(c => c.id == chainId).matter.name;
-            int chainNotationId = db.chain.Single(c => c.id == chainId).notation_id;
-
-            characteristics.Add(new List<Double>());
             Alphabet alpha = new Alphabet();
+            long chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
             IEnumerable<element> elements =
                 db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
             foreach (var element in elements)
@@ -55,6 +55,7 @@ namespace LibiadaWeb.Controllers
 
             String className =
                 db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
             LinkUp link = LinkUp.End;
             switch (db.link_up.Single(l => l.id == linkUp).id)
@@ -71,27 +72,35 @@ namespace LibiadaWeb.Controllers
             }
             characteristics = calculator.Calculate(currentChain, link);
 
-            foreach (var element in currentChain.Alphabet)
-            {
-                string el = element.ToString();
-                elementNames.Add(db.element.Single(e => e.value == el && e.notation_id == chainNotationId).name);
-            }
+
 
             TempData["characteristics"] = characteristics;
-            TempData["chainName"] = chainName;
-            TempData["elementNames"] = elementNames;
+            TempData["characteristicName"] = db.characteristic_type.Single(charact => charact.id == characteristicId).name;
+            TempData["chainName"] = db.matter.Single(m => m.id == matterId).name;
+            TempData["notationId"] = notationId;
+            TempData["alphabet"] = currentChain.Alphabet;
 
             return RedirectToAction("Result");
         }
 
         public ActionResult Result()
         {
-            List<List<double>> characteristics = TempData["characteristics"] as List<List<double>>;
-            String chainName = TempData["chainName"] as String;
-            List<String> elementNames = TempData["elementNames"] as List<String>;
-            ViewBag.characteristics = characteristics;
-            ViewBag.chainName = chainName;
+            List<String> elementNames = new List<string>();
+
+            Alphabet alpha = TempData["alphabet"] as Alphabet;
+            int notationId = (int)TempData["notationId"];
+
+            foreach (var element in alpha)
+            {
+                string el = element.ToString();
+                elementNames.Add(db.element.Single(e => e.value == el && e.notation_id == notationId).name);
+            }
             ViewBag.elementNames = elementNames;
+            ViewBag.characteristics = TempData["characteristics"] as List<List<double>>;
+            ViewBag.chainName = TempData["chainName"] as String;
+            ViewBag.characteristicName = TempData["characteristicName"] as String;
+            ViewBag.elementNames = elementNames;
+            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name;;
             return View();
         }
     }

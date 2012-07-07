@@ -40,30 +40,44 @@ namespace LibiadaWeb.Controllers
                 }
                 chain dbChain = db.chain.Single(c => c.id == chainId);
                 Chain tempChain = new Chain(dbChain.building, tempAlphabet);
-                BaseChain tempAminoChain = Coder.Encode(tempChain);
+                BaseChain tempTripletChain = Coder.EncodeTriplets(tempChain);
                 chain result = new chain();
 
                 String stringBuilding = "";
-                for (int j = 0; j < tempAminoChain.Building.Length; j++)
+                for (int j = 0; j < tempTripletChain.Building.Length; j++)
                 {
-                    stringBuilding += tempAminoChain.Building[j] + "|";
+                    stringBuilding += tempTripletChain.Building[j] + "|";
                 }
                 stringBuilding = stringBuilding.Substring(0, stringBuilding.Length - 1);
                 result.building = stringBuilding;
 
-                for (int i = 0; i < tempAminoChain.Alphabet.power; i++)
+                for (int i = 0; i < tempTripletChain.Alphabet.power; i++)
                 {
+                    String strElem = tempTripletChain.Alphabet[i].ToString();
+                    element elem;
+                    if (db.element.Any(e => e.notation_id == 2 && e.value.Equals(strElem)))
+                    {
+                        elem = db.element.Single(e => e.notation_id == 2 && e.value.Equals(strElem));
+                    }
+                    else
+                    {
+                        elem = new element();
+                        elem.name = strElem;
+                        elem.value = strElem;
+                        elem.notation_id = 2;
+                        elem.creation_date = new DateTimeOffset(DateTime.Now);
+                        db.element.AddObject(elem);
+                    }
                     alphabet alphabetElement = new alphabet();
                     alphabetElement.chain = result;
                     alphabetElement.number = i + 1;
-                    String strElem = tempAminoChain.Alphabet[i].ToString();
-                    alphabetElement.element = db.element.Single(e => e.notation_id == 3 && e.value.Equals(strElem));
+                    alphabetElement.element = elem;
                     db.alphabet.AddObject(alphabetElement);
                 }
                 result.matter = dbChain.matter;
                 result.building_type = dbChain.building_type;
                 result.dissimilar = false;
-                result.notation = db.notation.Single(n => n.name == "Аминокислоты");
+                result.notation_id = 2;
                 result.creation_date = new DateTimeOffset(DateTime.Now);
                 db.chain.AddObject(result);
                 db.SaveChanges();

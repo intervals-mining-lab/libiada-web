@@ -46,9 +46,10 @@ namespace LibiadaWeb.Controllers
         {
             List<List<Double>> characteristics = new List<List<Double>>();
             List<String> characteristicNames = new List<string>();
-
+            List<String> chainNames = new List<string>();
             foreach (var matterId in matterIds)
             {
+                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 characteristics.Add(new List<Double>());
                 for (int i = 0; i < notationIds.Length; i++) 
                 {
@@ -101,9 +102,14 @@ namespace LibiadaWeb.Controllers
                 }
             }
 
-            foreach (var characteristicId in characteristicIds)
+            for (int k = 0; k < characteristicIds.Length; k++)
             {
-                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name);
+                int characteristicId = characteristicIds[k];
+                int linkUpId = linkUpIds[k];
+                int notationId = notationIds[k];
+                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
+                    db.link_up.Single(l => l.id == linkUpId).name + " " +
+                    db.notation.Single(n => n.id == notationId).name);
             }
 
             DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
@@ -123,6 +129,7 @@ namespace LibiadaWeb.Controllers
             TempData["characteristicIds"] = characteristicIds;
             TempData["characteristics"] = characteristics;
             TempData["chainIds"] = new List<long>(matterIds);
+            TempData["chainNames"] = chainNames;
             return RedirectToAction("Result", "Clusterization");
         }
 
@@ -139,22 +146,24 @@ namespace LibiadaWeb.Controllers
                     clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
                 }
             }
-            ViewBag.clusters = clusters;
-            ViewBag.clusterNames = clusterNames;
-            ViewBag.characteristicNames = TempData["characteristicNames"] as List<String>;
-            ViewBag.chainIds = TempData["chainIds"] as List<long>;
+            List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
+            
             int[] characteristicIds = TempData["characteristicIds"] as int[];
-            IEnumerable<characteristic_type> usedCharacteristics = db.characteristic_type.Where(c => characteristicIds.Contains(c.id));
             List<SelectListItem> characteristicsList = new List<SelectListItem>();
-            foreach (var usedCharacteristic in usedCharacteristics)
+            for (int i = 0; i < characteristicNames.Count; i++)
             {
                 characteristicsList.Add(new SelectListItem
                 {
-                    Value = usedCharacteristic.id.ToString(),
-                    Text = usedCharacteristic.name,
+                    Value = i.ToString(),
+                    Text = characteristicNames[i],
                     Selected = false
                 });
             }
+            ViewBag.chainNames = TempData["chainNames"] as List<String>;
+            ViewBag.chainIds = TempData["chainIds"] as List<long>;
+            ViewBag.characteristicNames = characteristicNames;
+            ViewBag.clusters = clusters;
+            ViewBag.clusterNames = clusterNames;
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = TempData["characteristics"] as List<List<Double>>;
             ViewBag.characteristicIds = new List<int>(characteristicIds);

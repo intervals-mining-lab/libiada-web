@@ -1,135 +1,160 @@
 ﻿@model dynamic
 
 @{
-	ViewBag.Title = "Результаты кластеризации";
+    ViewBag.Title = "Результаты кластеризации";
 }
 
-<script src="/Scripts/Highcharts-2.2.1/js/highcharts.src.js" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/Highcharts-2.2.1/js/highcharts.src.js")" type="text/javascript"></script>
 
 <script type='text/javascript'>
-	var characteristics = new Array();
-	var clusters = new Array();
-	var chainIds = new Array();
-	var colors = new Array();
-	colors.push('rgba(223, 83, 83, .5)');
-	colors.push('rgba( 83, 223, 83, .5)');
-	colors.push('rgba( 83, 83, 223, .5)');
-	colors.push('rgba( 83, 83, 83, .5)');
-	colors.push('rgba( 223, 223, 223, .5)');
-	colors.push('rgba( 83, 223, 223, .5)');
-	colors.push('rgba( 223, 83, 223, .5)');
-	colors.push('rgba( 223, 223, 83  .5)');
+    var characteristics = new Array();
+    var clusters = new Array();
+    var chainIds = new Array();
+    var colors = new Array();
+    var chainNames = new Array();
 
-	@for (int j = 0; j < ViewBag.characteristics.Count; j++)
-	{
-		string characteristicArray = "characteristics.push(new Array());\n";
-		@characteristicArray
-        string chainId = "chainIds.push(" + ViewBag.chainIds[j] + ");\n";
-        @chainId
-		var characteristicList = ViewBag.characteristics[j];
-		for (int i = 0; i < characteristicList.Count; i++)
-		{
-			String[] tempArray = characteristicList[i].ToString().Split(',');
-			string innerTemp = "characteristics[characteristics.length -1][" + ViewBag.characteristicIds[i] + "] = " + tempArray[0] + "." + tempArray[1] + ";\n";
-			@innerTemp
-		}
-	}
-	@for (int i = 0; i < ViewBag.clusters.Count; i++)
-	{
-		string cluster = "clusters.push(new Array());\n";
-		@cluster
-		for (int j = 0; j < ViewBag.clusters[i].Count; j++)
-		{
-			string chain = "clusters[clusters.length -1].push(" + ViewBag.clusters[i][j] + ");\n";
-			@chain
-		}
-	}
-	
-	var newChart;
-	function DrawChart() {
-		var dataSeries = new Array();
-	    for(var i = 0; i < clusters.length; i++) {
-	        dataSeries.push(new Object());
-	        dataSeries[i].data = new Array();
-	        dataSeries[i].name = "Кластер " + (i + 1);
-	        dataSeries[i].color = colors[i];
-	        for (var j = 0; j < clusters[i].length; j++) {
-	            var chainId = chainIds.indexOf(clusters[i][j]);
-	            var xcharacteristicId = $("#xaxis option:selected")[0].value;
-	            var ycharacteristicId = $("#yaxis option:selected")[0].value;
-	            var x = characteristics[chainId][xcharacteristicId];
-	            var y = characteristics[chainId][ycharacteristicId];
-	            dataSeries[i].data[j] = new Array(x, y);
-	        }
-	    }
+    $(document).ready(function() {
+        colors.push('rgba(223, 83, 83, .5)');
+        colors.push('rgba( 83, 223, 83, .5)');
+        colors.push('rgba( 83, 83, 223, .5)');
+        colors.push('rgba( 83, 83, 83, .5)');
+        colors.push('rgba( 150, 0, 0, .5)');
+        colors.push('rgba( 0, 150, 0, .5)');
+        colors.push('rgba( 0, 0, 150  .5)');
 
-		chart = new Highcharts.Chart({
+        var rows = $("#resultTable")[0].tBodies[0].rows;
+        var clusterNumber = 0;
+        for (var i = 1; i < rows.length; i++) {
+            if(clusterNumber < rows[i].cells[0].innerText) {
+                chainNames.push(new Array());
+                clusterNumber++;
+            }
+            chainNames[clusterNumber - 1].push(rows[i].cells[1].innerText);
+        }
 
-		chart: { renderTo:'visualization_container', defaultSeriesType: 'scatter', zoomType: 'xy' }, 
+        @for (int j = 0; j < ViewBag.characteristics.Count; j++)
+        {
+            string characteristicArray = "characteristics.push(new Array());\n";
+            @characteristicArray
+            string chainId = "chainIds.push(" + ViewBag.chainIds[j] + ");\n";
+            @chainId
+            var characteristicList = ViewBag.characteristics[j];
+            for (int i = 0; i < characteristicList.Count; i++)
+            {
+                String[] tempValue = characteristicList[i].ToString().Split(',');
+                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                string innerTemp = "characteristics[characteristics.length -1].push(" + value + ");\n";
+                @innerTemp
+            }
+        }
+        @for (int i = 0; i < ViewBag.clusters.Count; i++)
+        {
+            string cluster = "clusters.push(new Array());\n";
+            @cluster
+            for (int j = 0; j < ViewBag.clusters[i].Count; j++)
+            {
+                string chain = "clusters[clusters.length -1].push(" + ViewBag.clusters[i][j] + ");\n";
+                @chain
+            }
+        }
+    });
+    
+    
+    var newChart;
+    function DrawChart() {
+        var dataSeries = new Array();
+        for(var i = 0; i < clusters.length; i++) {
+            dataSeries.push(new Object());
+            dataSeries[i].data = new Array();
+            dataSeries[i].name = "Кластер " + (i + 1);
+            dataSeries[i].color = colors[i];
+            for (var j = 0; j < clusters[i].length; j++) {
+                var chainIndex = chainIds.indexOf(clusters[i][j]);
+                var xcharacteristicId = $("#xaxis option:selected")[0].value;
+                var ycharacteristicId = $("#yaxis option:selected")[0].value;
+                var x = characteristics[chainIndex][xcharacteristicId];
+                var y = characteristics[chainIndex][ycharacteristicId];
+                var pointName = chainNames[i][j];
+                dataSeries[i].data[j] = new Object();
+                dataSeries[i].data[j].x = x;
+                dataSeries[i].data[j].y = y;
+                dataSeries[i].data[j].name = pointName;
+            }
+        }
 
-		legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 }, 
+        chart = new Highcharts.Chart({
 
-		plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: '#646464' } } }, states: { hover: { enabled: false } } } }, 
+        chart: { renderTo:'visualization_container', defaultSeriesType: 'scatter', zoomType: 'xy' }, 
 
-		title: { text: 'Результаты кластеризации' }, 
+        legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 }, 
 
-		tooltip: { formatter: function() {return ''+ this.x +' cm, '+ this.y +' kg'; } }, 
+        plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: '#646464' } } }, states: { hover: { enabled: true } } } }, 
 
-		xAxis: { endOnTick: true, showLastLabel: true, startOnTick: true, title: { text: $("#xaxis option:selected")[0].text } }, 
+        title: { text: 'Результаты кластеризации' }, 
 
-		yAxis: { title: { text: $("#yaxis option:selected")[0].text } }, 
+        tooltip: { formatter: function() {
+            return this.point.name + '<br/>' + this.x +'<br/> '+ this.y;
+        } }, 
 
-		series: dataSeries
+        xAxis: { gridLineWidth: 1, endOnTick: true, showLastLabel: true, startOnTick: true, title: { text: $("#xaxis option:selected")[0].text } }, 
 
-	});
+        yAxis: { gridLineWidth: 1, title: { text: $("#yaxis option:selected")[0].text } }, 
 
-	}
+        series: dataSeries
+
+    });
+
+    }
 </script>
 
 <h2>Результаты кластеризации</h2>
-<table>
-	<tr>
-		<th>
-			Номер кластера
-		</th>
-		<th>
-			Название объекта
-		</th>
-	</tr>
-	@for (int i = 0; i < ViewBag.clusterNames.Count; i++)
-	{
+<table id="resultTable">
+    <tr>
+        <th>
+            Номер кластера
+        </th>
+        <th>
+            Название объекта
+        </th>
+        <th>id цепочки</th>
+    </tr>
+    @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
+    {
 
         foreach (var chain in ViewBag.clusterNames[i])
-		{
-			<tr>
-				<td>
-					@(i + 1)
-				</td>
-				<td>
-					@chain
-				</td>
-			</tr>
-		}
-	}
+        {
+            <tr>
+                <td>
+                    @(i + 1)
+                </td>
+                <td>
+                    @chain
+                </td>
+                <td>
+                    @ViewBag.chainIds[ViewBag.chainNames.IndexOf(chain)]
+                </td>
+            </tr>
+        }
+    }
 </table>
 <br/>
 
-<div id="visualization_container"></div>
+<div id="visualization_container" style="width: 800px; height: 800px"></div>
 <br/>
 @Html.Label("Ось х")
 <select name="xaxis" id="xaxis">
-	@foreach (var option in ViewBag.characteristicsList)
-	{
-		<option value="@option.Value">@option.Text</option>
-	}
+    @foreach (var option in ViewBag.characteristicsList)
+    {
+        <option value="@option.Value">@option.Text</option>
+    }
 </select>
 <br/>
 @Html.Label("Ось y")
 <select name="yaxis" id="yaxis">
-	@foreach (var option in ViewBag.characteristicsList)
-	{
-		<option value="@option.Value">@option.Text</option>
-	}
+    @foreach (var option in ViewBag.characteristicsList)
+    {
+        <option value="@option.Value">@option.Text</option>
+    }
 </select>
 <br/>
 <button onclick="DrawChart()" >Отобразить разбиение</button>

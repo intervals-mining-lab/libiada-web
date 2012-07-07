@@ -21,6 +21,10 @@
             @Html.EditorFor(model => model.building)
             @Html.ValidationMessageFor(model => model.building)
         </div>
+        <div class="editor-label">
+            @Html.Label("Цепочка")
+        </div>
+        <input type="text" id="stringChain" name="stringChain"/>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.building_type_id, "Тип строя")

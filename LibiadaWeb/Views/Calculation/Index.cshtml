@@ -7,6 +7,27 @@
 
 <h2>Вычисление характеристик</h2>
 
+<script type="text/javascript">
+
+    function AddAxis() {
+        $("#axis").append(
+        '<select name="characteristicIds">' +
+            '@foreach (var option in ViewBag.characteristicsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<select name="linkUpIds">' +
+            '@foreach (var option in ViewBag.linkUpsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<select name="notationIds">' +
+            '@foreach (var option in ViewBag.notationsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<br/>');
+        return false;
+    }
+</script>
+
 @using (Html.BeginForm())
 {
     <table>
@@ -14,84 +35,24 @@
             <th>
                 Название объекта
             </th>
-            <th>
-                Тип цепочки
-            </th>
-            <th>
-                Форма записи
-            </th>
-            <th>
-                Разнородность
-            </th>
-            <th>
-                Дата создания
-            </th>
-            
         </tr>
         @{
-            List<MvcHtmlString> chainsList = Html.CheckBoxGroup("chainIds", (List<SelectListItem>) ViewBag.chainsList);
-            int i = 0;
+    List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.mattersList);
+    int i = 0;
 
-            foreach (var item in ViewBag.chains)
-            {
+    foreach (var item in mattersList)
+    {
                 <tr>
                     <td>
-                        @chainsList[i]
-                    </td>
-                    <td>
-                        @item.matter.nature.name
-                    </td>
-                    <td>
-                        @item.notation.name
-                    </td>
-                    <td>
-                        @{
-                            string b = "";
-                            if (item.dissimilar)
-                            {
-                                b = "Разнородная";
-                            }
-                            i = i + 1;
-                        }
-                        @b
-                    </td>
-                    <td>
-                        @item.creation_date
+                        @item
                     </td>
                 </tr>
-            }
+    }
         }
-
     </table>
     <br/>
-    <table>
-        <tr>
-            <th>
-                Характеристики
-            </th>
-        </tr>
-        @{
-            List<MvcHtmlString> characteristicsList = Html.CheckBoxGroup("characteristicIds", (List<SelectListItem>) ViewBag.characteristicsList);
-
-            foreach (var characteristic in characteristicsList)
-            {
-                <tr>
-                    <td>
-                        @characteristic
-                    </td>
-                </tr>
-            }
-        }
-
-    </table>
-    <br/>
-    <div>Привязка:</div>
-    <select name="linkUp">
-        @foreach (var option in ViewBag.linkUpsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
+    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <div id="axis"></div>
     <br/>
     <br/>
     <input type="submit" value="Вычислить" />
