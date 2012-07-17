@@ -1,5 +1,13 @@
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="LibiadaWebModelStoreContainer" CdmEntityContainer="LibiadaWebEntities">
+    <EntitySetMapping Name="additional_information">
+      <EntityTypeMapping TypeName="LibiadaWebModel.additional_information">
+        <MappingFragment StoreEntitySet="additional_information">
+          <ScalarProperty Name="chain_id" ColumnName="chain_id" />
+          <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="alphabet">
       <EntityTypeMapping TypeName="LibiadaWebModel.alphabet">
         <MappingFragment StoreEntitySet="alphabet">
@@ -21,6 +29,15 @@
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="first_element_id" ColumnName="first_element_id" />
           <ScalarProperty Name="second_element_id" ColumnName="second_element_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="building">
+      <EntityTypeMapping TypeName="LibiadaWebModel.building">
+        <MappingFragment StoreEntitySet="building">
+          <ScalarProperty Name="chain_id" ColumnName="chain_id" />
+          <ScalarProperty Name="index" ColumnName="index" />
+          <ScalarProperty Name="number" ColumnName="number" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -46,12 +63,13 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.chain">
         <MappingFragment StoreEntitySet="chain">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building" ColumnName="building" />
           <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+          <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+          <ScalarProperty Name="piece_position" ColumnName="piece_position" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -156,6 +174,15 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="piece_type">
+      <EntityTypeMapping TypeName="LibiadaWebModel.piece_type">
+        <MappingFragment StoreEntitySet="piece_type">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

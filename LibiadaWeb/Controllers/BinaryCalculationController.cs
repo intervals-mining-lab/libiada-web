@@ -43,6 +43,7 @@ namespace LibiadaWeb.Controllers
             List<String> elementNames = new List<String>();
 
             Alphabet alpha = new Alphabet();
+            alpha.Add(NullValue.Instance());
             long chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
             IEnumerable<element> elements =
                 db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
@@ -51,7 +52,7 @@ namespace LibiadaWeb.Controllers
                 alpha.Add(new ValueString(element.value));
             }
 
-            Chain currentChain = new Chain(db.chain.Single(c => c.id == chainId).building, alpha);
+            Chain currentChain = new Chain(db.chain.Single(c => c.id == chainId).building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha);
 
             String className =
                 db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;

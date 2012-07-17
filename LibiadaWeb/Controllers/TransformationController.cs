@@ -29,9 +29,11 @@ namespace LibiadaWeb.Controllers
         [HttpPost]
         public ActionResult Index(long[] chainIds)
         {
+            int notationId = 3;
             foreach (var chainId in chainIds)
             {
                 Alphabet tempAlphabet = new Alphabet();
+                //tempAlphabet.Add(NullValue.Instance());
                 IEnumerable<element> elements =
                     db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
                 foreach (var element in elements)
@@ -39,32 +41,33 @@ namespace LibiadaWeb.Controllers
                     tempAlphabet.Add(new ValueString(element.value));
                 }
                 chain dbChain = db.chain.Single(c => c.id == chainId);
-                Chain tempChain = new Chain(dbChain.building, tempAlphabet);
-                BaseChain tempTripletChain = Coder.EncodeTriplets(tempChain);
+                Chain tempChain = new Chain(dbChain.building.OrderBy(b => b.index).Select(b => b.number).ToArray(), tempAlphabet);
+                BaseChain tempTripletChain = Coder.Encode(tempChain);
                 chain result = new chain();
-
-                String stringBuilding = "";
-                for (int j = 0; j < tempTripletChain.Building.Length; j++)
+                int[] build = tempTripletChain.Building;
+                for (int i = 0; i < build.Length; i++)
                 {
-                    stringBuilding += tempTripletChain.Building[j] + "|";
+                    building buildingElement = new building();
+                    buildingElement.chain = result;
+                    buildingElement.index = i;
+                    buildingElement.number = build[i];
+                    db.building.AddObject(buildingElement);
                 }
-                stringBuilding = stringBuilding.Substring(0, stringBuilding.Length - 1);
-                result.building = stringBuilding;
 
-                for (int i = 0; i < tempTripletChain.Alphabet.power; i++)
+                for (int i = 0; i < tempTripletChain.Alphabet.Power; i++)
                 {
                     String strElem = tempTripletChain.Alphabet[i].ToString();
                     element elem;
-                    if (db.element.Any(e => e.notation_id == 2 && e.value.Equals(strElem)))
+                    if (db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                     {
-                        elem = db.element.Single(e => e.notation_id == 2 && e.value.Equals(strElem));
+                        elem = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
                     }
                     else
                     {
                         elem = new element();
                         elem.name = strElem;
                         elem.value = strElem;
-                        elem.notation_id = 2;
+                        elem.notation_id = 3;
                         elem.creation_date = new DateTimeOffset(DateTime.Now);
                         db.element.AddObject(elem);
                     }
@@ -77,7 +80,7 @@ namespace LibiadaWeb.Controllers
                 result.matter = dbChain.matter;
                 result.building_type = dbChain.building_type;
                 result.dissimilar = false;
-                result.notation_id = 2;
+                result.notation_id = notationId;
                 result.creation_date = new DateTimeOffset(DateTime.Now);
                 db.chain.AddObject(result);
                 db.SaveChanges();

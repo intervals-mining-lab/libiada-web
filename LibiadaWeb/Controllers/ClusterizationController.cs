@@ -79,7 +79,7 @@ namespace LibiadaWeb.Controllers
                             alpha.Add(new ValueString(element.value));
                         }
 
-                        Chain tempChain = new Chain(db.chain.Single(c => c.id == chainId).building, alpha);
+                        Chain tempChain = new Chain(db.chain.Single(c => c.id == chainId).building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha);
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;

@@ -39,7 +39,7 @@ namespace LibiadaWeb.Controllers
                 alpha.Add(new ValueString(element.value));
             }
 
-            ViewBag.stringChain = new Chain(chain.building, alpha).ToString();
+            ViewBag.stringChain = new Chain(chain.building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha).ToString();
             return View(chain);
         }
 
@@ -63,37 +63,26 @@ namespace LibiadaWeb.Controllers
             if (ModelState.IsValid)
             {
                 chain.creation_date = new DateTimeOffset(DateTime.Now);
-                String[] elementsArray = stringChain.Split('|');
-                String[] buildingArray = chain.building.Split('|');
-                int addedElements = 0;
-                for (int i = 0; i < elementsArray.Length; i++)
+                BaseChain libiadaChain = new BaseChain(stringChain);
+
+                int[] build = libiadaChain.Building;
+                for (int i = 0; i < build.Length; i++)
                 {
-                    if (Convert.ToInt32(addedElements) < Convert.ToInt32(buildingArray[i]))
-                    {
-                        addedElements++;
-                        element currentElement; 
-                        String elem = elementsArray[i];
-                        if (!db.element.Any(e => e.value.Equals(elem) && e.notation_id == chain.notation_id))
-                        {
-                            currentElement = new element();
-                            currentElement.value = elem;
-                            currentElement.name = elem;
-                            currentElement.notation_id = chain.notation_id;
-                            currentElement.creation_date = new DateTimeOffset(DateTime.Now);
-                            db.element.AddObject(currentElement);
-                        }
-                        else
-                        {
-                            currentElement = db.element.Single(e => e.value.Equals(elem) 
-                                && e.notation_id == chain.notation_id);
-                        }
-                        alphabet chainAlphabetElement = new alphabet();
-                        chainAlphabetElement.chain = chain;
-                        chainAlphabetElement.element = currentElement;
-                        chainAlphabetElement.number = Convert.ToInt64(buildingArray[i]);
-                        db.alphabet.AddObject(chainAlphabetElement);
-                    }
-                    
+                    building buildingElement = new building();
+                    buildingElement.chain = chain;
+                    buildingElement.index = i;
+                    buildingElement.number = build[i];
+                    db.building.AddObject(buildingElement);
+                }
+
+                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+                {
+                    alphabet alphabetElement = new alphabet();
+                    alphabetElement.chain = chain;
+                    alphabetElement.number = i + 1;
+                    String strElem = libiadaChain.Alphabet[i].ToString();
+                    alphabetElement.element = db.element.Single(e => e.notation_id == chain.notation_id && e.value.Equals(strElem));
+                    db.alphabet.AddObject(alphabetElement);
                 }
                 db.chain.AddObject(chain);
                 db.SaveChanges();

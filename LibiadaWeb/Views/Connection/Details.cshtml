@@ -11,12 +11,12 @@
 
     <div class="display-label">Родительская цепочка</div>
     <div class="display-field">
-        @Model.chain1.building.Substring(0,20)
+        @Model.chain1.building.ToString().Substring(0,20)
     </div>
 
     <div class="display-label">Дочерняя цепочка</div>
     <div class="display-field">
-        @Model.chain.building.Substring(0, 20)
+        @Model.chain.building.ToString().Substring(0, 20)
     </div>
 
     <div class="display-label">Тип связи</div>

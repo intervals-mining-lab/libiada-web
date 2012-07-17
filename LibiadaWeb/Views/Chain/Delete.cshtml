@@ -13,7 +13,7 @@
     <div class="display-label">Строй</div>
     <div class="display-field">
         @{
-            string shortBuilding = Model.building.Substring(0, 20) + "...";
+            string shortBuilding = Model.building.ToString().Substring(0, 20) + "...";
         }
         @shortBuilding
     </div>

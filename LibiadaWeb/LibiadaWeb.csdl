@@ -1,7 +1,9 @@
 <Schema Namespace="LibiadaWebModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
   <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="additional_information" EntityType="LibiadaWebModel.additional_information" />
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.alphabet" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.binary_characteristic" />
+    <EntitySet Name="building" EntityType="LibiadaWebModel.building" />
     <EntitySet Name="building_type" EntityType="LibiadaWebModel.building_type" />
     <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.catalog_table" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.chain" />
@@ -15,7 +17,12 @@
     <EntitySet Name="matter" EntityType="LibiadaWebModel.matter" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.nature" />
     <EntitySet Name="notation" EntityType="LibiadaWebModel.notation" />
+    <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
+    <AssociationSet Name="fk_additional_information_chian" Association="LibiadaWebModel.fk_additional_information_chian">
+      <End Role="chain" EntitySet="chain" />
+      <End Role="additional_information" EntitySet="additional_information" />
+    </AssociationSet>
     <AssociationSet Name="fk_alphabet_chain" Association="LibiadaWebModel.fk_alphabet_chain">
       <End Role="chain" EntitySet="chain" />
       <End Role="alphabet" EntitySet="alphabet" />
@@ -43,6 +50,10 @@
     <AssociationSet Name="fk_characteristic_type1" Association="LibiadaWebModel.fk_characteristic_type1">
       <End Role="characteristic_type" EntitySet="characteristic_type" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+    </AssociationSet>
+    <AssociationSet Name="fk_building_chain" Association="LibiadaWebModel.fk_building_chain">
+      <End Role="chain" EntitySet="chain" />
+      <End Role="building" EntitySet="building" />
     </AssociationSet>
     <AssociationSet Name="fk_chain_building_type" Association="LibiadaWebModel.fk_chain_building_type">
       <End Role="building_type" EntitySet="building_type" />
@@ -101,6 +112,14 @@
       <End Role="notation" EntitySet="notation" />
     </AssociationSet>
   </EntityContainer>
+  <EntityType Name="additional_information">
+    <Key>
+      <PropertyRef Name="chain_id" />
+    </Key>
+    <Property Name="chain_id" Type="Int64" Nullable="false" />
+    <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_additional_information_chian" FromRole="additional_information" ToRole="chain" />
+  </EntityType>
   <EntityType Name="alphabet">
     <Key>
       <PropertyRef Name="chain_id" />
@@ -109,7 +128,7 @@
     </Key>
     <Property Name="chain_id" Type="Int64" Nullable="false" />
     <Property Name="element_id" Type="Int64" Nullable="false" />
-    <Property Name="number" Type="Int64" Nullable="false" />
+    <Property Name="number" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_alphabet_chain" FromRole="alphabet" ToRole="chain" />
     <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_alphabet_element" FromRole="alphabet" ToRole="element" />
   </EntityType>
@@ -131,6 +150,17 @@
     <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_binary_characteristic_link_up" FromRole="binary_characteristic" ToRole="link_up" />
     <NavigationProperty Name="element1" Relationship="LibiadaWebModel.fk_binary_characteristic_second_element" FromRole="binary_characteristic" ToRole="element" />
     <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_characteristic_type1" FromRole="binary_characteristic" ToRole="characteristic_type" />
+  </EntityType>
+  <EntityType Name="building">
+    <Key>
+      <PropertyRef Name="chain_id" />
+      <PropertyRef Name="index" />
+      <PropertyRef Name="number" />
+    </Key>
+    <Property Name="chain_id" Type="Int64" Nullable="false" />
+    <Property Name="index" Type="Int32" Nullable="false" />
+    <Property Name="number" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_building_chain" FromRole="building" ToRole="chain" />
   </EntityType>
   <EntityType Name="building_type">
     <Key>
@@ -154,14 +184,17 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="building" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+    <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+    <Property Name="piece_position" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="additional_information" Relationship="LibiadaWebModel.fk_additional_information_chian" FromRole="chain" ToRole="additional_information" />
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_chain" FromRole="chain" ToRole="alphabet" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_chain" FromRole="chain" ToRole="binary_characteristic" />
+    <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_chain" FromRole="chain" ToRole="building" />
     <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_chain_building_type" FromRole="chain" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
@@ -288,6 +321,14 @@
     <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_element_notation" FromRole="notation" ToRole="element" />
     <NavigationProperty Name="nature" Relationship="LibiadaWebModel.fk_notation_nature" FromRole="notation" ToRole="nature" />
   </EntityType>
+  <EntityType Name="piece_type">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+  </EntityType>
   <EntityType Name="remote_db">
     <Key>
       <PropertyRef Name="id" />
@@ -298,6 +339,18 @@
     <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_matter_remote_db" FromRole="remote_db" ToRole="matter" />
   </EntityType>
+  <Association Name="fk_additional_information_chian">
+    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
+    <End Role="additional_information" Type="LibiadaWebModel.additional_information" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="additional_information">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_alphabet_chain">
     <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
     <End Role="alphabet" Type="LibiadaWebModel.alphabet" Multiplicity="*" />
@@ -379,6 +432,18 @@
       </Principal>
       <Dependent Role="binary_characteristic">
         <PropertyRef Name="characteristic_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_building_chain">
+    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
+    <End Role="building" Type="LibiadaWebModel.building" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="building">
+        <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

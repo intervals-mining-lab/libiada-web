@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region Метаданные связи EDM
 
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_additional_information_chian", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "additional_information", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.additional_information), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
@@ -25,6 +26,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_link_up", "link_up", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.link_up), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_second_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type1", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
@@ -93,6 +95,22 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
+        public ObjectSet<additional_information> additional_information
+        {
+            get
+            {
+                if ((_additional_information == null))
+                {
+                    _additional_information = base.CreateObjectSet<additional_information>("additional_information");
+                }
+                return _additional_information;
+            }
+        }
+        private ObjectSet<additional_information> _additional_information;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
         public ObjectSet<alphabet> alphabet
         {
             get
@@ -121,6 +139,22 @@ namespace LibiadaWeb
             }
         }
         private ObjectSet<binary_characteristic> _binary_characteristic;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<building> building
+        {
+            get
+            {
+                if ((_building == null))
+                {
+                    _building = base.CreateObjectSet<building>("building");
+                }
+                return _building;
+            }
+        }
+        private ObjectSet<building> _building;
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -333,6 +367,22 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
+        public ObjectSet<piece_type> piece_type
+        {
+            get
+            {
+                if ((_piece_type == null))
+                {
+                    _piece_type = base.CreateObjectSet<piece_type>("piece_type");
+                }
+                return _piece_type;
+            }
+        }
+        private ObjectSet<piece_type> _piece_type;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
         public ObjectSet<remote_db> remote_db
         {
             get
@@ -350,6 +400,14 @@ namespace LibiadaWeb
         #region Методы AddTo
     
         /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet additional_information. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddToadditional_information(additional_information additional_information)
+        {
+            base.AddObject("additional_information", additional_information);
+        }
+    
+        /// <summary>
         /// Устаревший метод для добавления новых объектов в набор EntitySet alphabet. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
         /// </summary>
         public void AddToalphabet(alphabet alphabet)
@@ -363,6 +421,14 @@ namespace LibiadaWeb
         public void AddTobinary_characteristic(binary_characteristic binary_characteristic)
         {
             base.AddObject("binary_characteristic", binary_characteristic);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet building. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTobuilding(building building)
+        {
+            base.AddObject("building", building);
         }
     
         /// <summary>
@@ -470,6 +536,14 @@ namespace LibiadaWeb
         }
     
         /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet piece_type. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTopiece_type(piece_type piece_type)
+        {
+            base.AddObject("piece_type", piece_type);
+        }
+    
+        /// <summary>
         /// Устаревший метод для добавления новых объектов в набор EntitySet remote_db. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
         /// </summary>
         public void AddToremote_db(remote_db remote_db)
@@ -488,6 +562,126 @@ namespace LibiadaWeb
     /// <summary>
     /// Нет доступной документации по метаданным.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="additional_information")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class additional_information : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта additional_information.
+        /// </summary>
+        /// <param name="chain_id">Исходное значение свойства chain_id.</param>
+        public static additional_information Createadditional_information(global::System.Int64 chain_id)
+        {
+            additional_information additional_information = new additional_information();
+            additional_information.chain_id = chain_id;
+            return additional_information;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 chain_id
+        {
+            get
+            {
+                return _chain_id;
+            }
+            set
+            {
+                if (_chain_id != value)
+                {
+                    Onchain_idChanging(value);
+                    ReportPropertyChanging("chain_id");
+                    _chain_id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("chain_id");
+                    Onchain_idChanged();
+                }
+            }
+        }
+        private global::System.Int64 _chain_id;
+        partial void Onchain_idChanging(global::System.Int64 value);
+        partial void Onchain_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String fasta_header
+        {
+            get
+            {
+                return _fasta_header;
+            }
+            set
+            {
+                Onfasta_headerChanging(value);
+                ReportPropertyChanging("fasta_header");
+                _fasta_header = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("fasta_header");
+                Onfasta_headerChanged();
+            }
+        }
+        private global::System.String _fasta_header;
+        partial void Onfasta_headerChanging(global::System.String value);
+        partial void Onfasta_headerChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_additional_information_chian", "chain")]
+        public chain chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_additional_information_chian", "chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_additional_information_chian", "chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<chain> chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_additional_information_chian", "chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_additional_information_chian", "chain", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="alphabet")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -501,7 +695,7 @@ namespace LibiadaWeb
         /// <param name="chain_id">Исходное значение свойства chain_id.</param>
         /// <param name="element_id">Исходное значение свойства element_id.</param>
         /// <param name="number">Исходное значение свойства number.</param>
-        public static alphabet Createalphabet(global::System.Int64 chain_id, global::System.Int64 element_id, global::System.Int64 number)
+        public static alphabet Createalphabet(global::System.Int64 chain_id, global::System.Int64 element_id, global::System.Int32 number)
         {
             alphabet alphabet = new alphabet();
             alphabet.chain_id = chain_id;
@@ -572,7 +766,7 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int64 number
+        public global::System.Int32 number
         {
             get
             {
@@ -590,8 +784,8 @@ namespace LibiadaWeb
                 }
             }
         }
-        private global::System.Int64 _number;
-        partial void OnnumberChanging(global::System.Int64 value);
+        private global::System.Int32 _number;
+        partial void OnnumberChanging(global::System.Int32 value);
         partial void OnnumberChanged();
 
         #endregion
@@ -1132,6 +1326,160 @@ namespace LibiadaWeb
     /// <summary>
     /// Нет доступной документации по метаданным.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="building")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class building : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта building.
+        /// </summary>
+        /// <param name="chain_id">Исходное значение свойства chain_id.</param>
+        /// <param name="index">Исходное значение свойства index.</param>
+        /// <param name="number">Исходное значение свойства number.</param>
+        public static building Createbuilding(global::System.Int64 chain_id, global::System.Int32 index, global::System.Int32 number)
+        {
+            building building = new building();
+            building.chain_id = chain_id;
+            building.index = index;
+            building.number = number;
+            return building;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 chain_id
+        {
+            get
+            {
+                return _chain_id;
+            }
+            set
+            {
+                if (_chain_id != value)
+                {
+                    Onchain_idChanging(value);
+                    ReportPropertyChanging("chain_id");
+                    _chain_id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("chain_id");
+                    Onchain_idChanged();
+                }
+            }
+        }
+        private global::System.Int64 _chain_id;
+        partial void Onchain_idChanging(global::System.Int64 value);
+        partial void Onchain_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 index
+        {
+            get
+            {
+                return _index;
+            }
+            set
+            {
+                if (_index != value)
+                {
+                    OnindexChanging(value);
+                    ReportPropertyChanging("index");
+                    _index = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("index");
+                    OnindexChanged();
+                }
+            }
+        }
+        private global::System.Int32 _index;
+        partial void OnindexChanging(global::System.Int32 value);
+        partial void OnindexChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 number
+        {
+            get
+            {
+                return _number;
+            }
+            set
+            {
+                if (_number != value)
+                {
+                    OnnumberChanging(value);
+                    ReportPropertyChanging("number");
+                    _number = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("number");
+                    OnnumberChanged();
+                }
+            }
+        }
+        private global::System.Int32 _number;
+        partial void OnnumberChanging(global::System.Int32 value);
+        partial void OnnumberChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_chain", "chain")]
+        public chain chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_building_chain", "chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_building_chain", "chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<chain> chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_building_chain", "chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_building_chain", "chain", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="building_type")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -1378,22 +1726,24 @@ namespace LibiadaWeb
         /// Создание нового объекта chain.
         /// </summary>
         /// <param name="id">Исходное значение свойства id.</param>
-        /// <param name="building">Исходное значение свойства building.</param>
         /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
         /// <param name="notation_id">Исходное значение свойства notation_id.</param>
         /// <param name="creation_date">Исходное значение свойства creation_date.</param>
         /// <param name="matter_id">Исходное значение свойства matter_id.</param>
         /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
-        public static chain Createchain(global::System.Int64 id, global::System.String building, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar)
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        public static chain Createchain(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
         {
             chain chain = new chain();
             chain.id = id;
-            chain.building = building;
             chain.building_type_id = building_type_id;
             chain.notation_id = notation_id;
             chain.creation_date = creation_date;
             chain.matter_id = matter_id;
             chain.dissimilar = dissimilar;
+            chain.piece_type_id = piece_type_id;
+            chain.piece_position = piece_position;
             return chain;
         }
 
@@ -1426,30 +1776,6 @@ namespace LibiadaWeb
         private global::System.Int64 _id;
         partial void OnidChanging(global::System.Int64 value);
         partial void OnidChanged();
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String building
-        {
-            get
-            {
-                return _building;
-            }
-            set
-            {
-                OnbuildingChanging(value);
-                ReportPropertyChanging("building");
-                _building = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("building");
-                OnbuildingChanged();
-            }
-        }
-        private global::System.String _building;
-        partial void OnbuildingChanging(global::System.String value);
-        partial void OnbuildingChanged();
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -1570,10 +1896,96 @@ namespace LibiadaWeb
         private global::System.Boolean _dissimilar;
         partial void OndissimilarChanging(global::System.Boolean value);
         partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
 
         #endregion
     
         #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_additional_information_chian", "additional_information")]
+        public additional_information additional_information
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<additional_information>("LibiadaWebModel.fk_additional_information_chian", "additional_information").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<additional_information>("LibiadaWebModel.fk_additional_information_chian", "additional_information").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<additional_information> additional_informationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<additional_information>("LibiadaWebModel.fk_additional_information_chian", "additional_information");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<additional_information>("LibiadaWebModel.fk_additional_information_chian", "additional_information", value);
+                }
+            }
+        }
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -1615,6 +2027,28 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_chain", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_chain", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building", value);
                 }
             }
         }
@@ -3956,6 +4390,111 @@ namespace LibiadaWeb
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="piece_type")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class piece_type : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта piece_type.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static piece_type Createpiece_type(global::System.Int32 id, global::System.String name)
+        {
+            piece_type piece_type = new piece_type();
+            piece_type.id = id;
+            piece_type.name = name;
+            return piece_type;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
     }
     
     /// <summary>

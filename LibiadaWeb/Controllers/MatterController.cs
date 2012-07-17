@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb;
+using DownLoadedFile = System.IO.File;
 
 namespace LibiadaWeb.Controllers
 { 
@@ -47,28 +49,37 @@ namespace LibiadaWeb.Controllers
         // POST: /Matter/Create
 
         [HttpPost]
-        public ActionResult Create(matter matter, String chaintext, int notationId)
+        public ActionResult Create(matter matter, int notationId, string[] file)
         {
             
             if (ModelState.IsValid)
             {
-                Chain libiadaChain = new Chain(chaintext);
-                chain result = new chain();
+                string stringChain="";
+                var MyFileCollection = Request.Files[0];
+                var MyFile = MyFileCollection;
 
-                String stringBuilding = "";
-                for (int j = 0; j < libiadaChain.Building.Length; j++)
-                {
-                    stringBuilding += libiadaChain.Building[j] + "|";
-                }
-                stringBuilding = stringBuilding.Substring(0, stringBuilding.Length - 1);
-                result.building = stringBuilding;
+                var FileLen = MyFile.ContentLength;
+                byte[] input = new byte[FileLen];
+
+                // Initialize the stream.
+                var fileStream = MyFile.InputStream;
+
+                // Read the file into the byte array.
+                fileStream.Read(input, 0, FileLen);
+
+                // Copy the byte array into a string.
+                stringChain = Encoding.ASCII.GetString(input);
+                var tempString = stringChain.Split('\n');
+                stringChain = tempString[tempString.Length-1];
+                chain result = new chain();
                 result.dissimilar = false;
                 result.building_type_id = 1;
                 result.notation_id = notationId;
                 result.matter = matter;
                 result.creation_date = new DateTimeOffset(DateTime.Now);
+                BaseChain libiadaChain = new BaseChain(stringChain);
 
-                for (int i = 0; i < libiadaChain.Alphabet.power; i++)
+                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
                 {
                     alphabet alphabetElement = new alphabet();
                     alphabetElement.chain = result;
@@ -81,6 +92,23 @@ namespace LibiadaWeb.Controllers
                 db.chain.AddObject(result);
                 db.matter.AddObject(matter);
                 db.SaveChanges();
+
+                int[] build = libiadaChain.Building;
+                for (int i = 0; i < build.Length; i++)
+                {
+                    building buildingElement = new building();
+                    buildingElement.chain = result;
+                    buildingElement.index = i;
+                    buildingElement.number = build[i];
+                    db.building.AddObject(buildingElement);
+                    if(i%1000 == 0)
+                    {
+                        db.SaveChanges();
+                    }
+                }
+
+                db.SaveChanges();
+                
                 return RedirectToAction("Index");  
             }
 

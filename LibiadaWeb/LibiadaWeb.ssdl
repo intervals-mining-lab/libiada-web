@@ -1,7 +1,9 @@
-<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="npgsql" ProviderManifestToken="9.1.3" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="npgsql" ProviderManifestToken="9.1.2" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
   <EntityContainer Name="LibiadaWebModelStoreContainer">
+    <EntitySet Name="additional_information" EntityType="LibiadaWebModel.Store.additional_information" store:Type="Tables" Schema="public" />
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.Store.alphabet" store:Type="Tables" Schema="public" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.Store.binary_characteristic" store:Type="Tables" Schema="public" />
+    <EntitySet Name="building" EntityType="LibiadaWebModel.Store.building" store:Type="Tables" Schema="public" />
     <EntitySet Name="building_type" EntityType="LibiadaWebModel.Store.building_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.Store.catalog_table" store:Type="Tables" Schema="public" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.Store.chain" store:Type="Tables" Schema="public" />
@@ -15,7 +17,12 @@
     <EntitySet Name="matter" EntityType="LibiadaWebModel.Store.matter" store:Type="Tables" Schema="public" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.Store.nature" store:Type="Tables" Schema="public" />
     <EntitySet Name="notation" EntityType="LibiadaWebModel.Store.notation" store:Type="Tables" Schema="public" />
+    <EntitySet Name="piece_type" EntityType="LibiadaWebModel.Store.piece_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.Store.remote_db" store:Type="Tables" Schema="public" />
+    <AssociationSet Name="fk_additional_information_chian" Association="LibiadaWebModel.Store.fk_additional_information_chian">
+      <End Role="chain" EntitySet="chain" />
+      <End Role="additional_information" EntitySet="additional_information" />
+    </AssociationSet>
     <AssociationSet Name="fk_alphabet_chain" Association="LibiadaWebModel.Store.fk_alphabet_chain">
       <End Role="chain" EntitySet="chain" />
       <End Role="alphabet" EntitySet="alphabet" />
@@ -39,6 +46,10 @@
     <AssociationSet Name="fk_binary_characteristic_second_element" Association="LibiadaWebModel.Store.fk_binary_characteristic_second_element">
       <End Role="element" EntitySet="element" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+    </AssociationSet>
+    <AssociationSet Name="fk_building_chain" Association="LibiadaWebModel.Store.fk_building_chain">
+      <End Role="chain" EntitySet="chain" />
+      <End Role="building" EntitySet="building" />
     </AssociationSet>
     <AssociationSet Name="fk_chain_building_type" Association="LibiadaWebModel.Store.fk_chain_building_type">
       <End Role="building_type" EntitySet="building_type" />
@@ -101,6 +112,16 @@
       <End Role="connection" EntitySet="connection" />
     </AssociationSet>
   </EntityContainer>
+  <EntityType Name="additional_information">
+    <Key>
+      <PropertyRef Name="chain_id" />
+    </Key>
+    <Property Name="chain_id" Type="int8" Nullable="false" />
+    <Property Name="fasta_header" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6035: В связи "fk_building_alphabet" имеются столбцы, которые не являются частью ключа таблицы на первичной стороне связи. Связь исключена.
+-->
   <EntityType Name="alphabet">
     <Key>
       <PropertyRef Name="chain_id" />
@@ -109,7 +130,7 @@
     </Key>
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="element_id" Type="int8" Nullable="false" />
-    <Property Name="number" Type="int8" Nullable="false" />
+    <Property Name="number" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="binary_characteristic">
     <Key>
@@ -124,6 +145,16 @@
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="first_element_id" Type="int8" Nullable="false" />
     <Property Name="second_element_id" Type="int8" Nullable="false" />
+  </EntityType>
+  <EntityType Name="building">
+    <Key>
+      <PropertyRef Name="chain_id" />
+      <PropertyRef Name="index" />
+      <PropertyRef Name="number" />
+    </Key>
+    <Property Name="chain_id" Type="int8" Nullable="false" />
+    <Property Name="index" Type="int4" Nullable="false" />
+    <Property Name="number" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="building_type">
     <Key>
@@ -141,17 +172,21 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
+  <!--Ошибки, обнаруженные при создании:
+предупреждение 6005: Тип данных "_int4" не поддерживается, столбец "building" в таблице "Libiada.public.chain" исключен.
+-->
   <EntityType Name="chain">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="building" Type="text" Nullable="false" />
     <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
+    <Property Name="piece_type_id" Type="int4" Nullable="false" />
+    <Property Name="piece_position" Type="int8" Nullable="false" />
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -247,6 +282,14 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
   </EntityType>
+  <EntityType Name="piece_type">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="description" Type="varchar" MaxLength="255" />
+  </EntityType>
   <EntityType Name="remote_db">
     <Key>
       <PropertyRef Name="id" />
@@ -256,6 +299,18 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="url" Type="varchar" MaxLength="255" />
   </EntityType>
+  <Association Name="fk_additional_information_chian">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="additional_information" Type="LibiadaWebModel.Store.additional_information" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="additional_information">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_alphabet_chain">
     <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
     <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
@@ -325,6 +380,18 @@
       </Principal>
       <Dependent Role="binary_characteristic">
         <PropertyRef Name="second_element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_building_chain">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="building" Type="LibiadaWebModel.Store.building" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="building">
+        <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -513,6 +580,7 @@
     <Parameter Name="p_type_id" Type="int4" Mode="In" />
     <Parameter Name="p_description" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="building_transformer" ReturnType="bool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
   <!--Ошибки, обнаруженные при создании:
 предупреждение 6005: Функция "add_chain" содержит параметр "p_alphabet_ids" с индексом 1, имеющий неподдерживаемый тип данных "_int8". Функция исключена.
 
