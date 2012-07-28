@@ -63,7 +63,7 @@ namespace LibiadaWeb.Controllers
                                               charact.characteristic_type_id == characteristicId))
                     {
                         characteristics.Last().
-                            Add((double) db.characteristic.Single(charact =>
+                            Add((double)db.characteristic.Single(charact =>
                                                                   linkUpIds[i] == charact.link_up.id &&
                                                                   charact.chain_id == chainId &&
                                                                   charact.characteristic_type_id == characteristicIds[i])
@@ -72,6 +72,7 @@ namespace LibiadaWeb.Controllers
                     else
                     {
                         Alphabet alpha = new Alphabet();
+                        alpha.Add(NullValue.Instance());
                         IEnumerable<element> elements =
                             db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
                         foreach (var element in elements)
@@ -117,7 +118,7 @@ namespace LibiadaWeb.Controllers
             TempData["characteristicNames"] = characteristicNames;
             TempData["characteristicIds"] = characteristicIds;
             TempData["chainIds"] = new List<long>(matterIds);
-            return  RedirectToAction("Result");
+            return RedirectToAction("Result");
         }
 
         public ActionResult Result()

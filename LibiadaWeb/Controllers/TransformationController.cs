@@ -29,20 +29,20 @@ namespace LibiadaWeb.Controllers
         [HttpPost]
         public ActionResult Index(long[] chainIds)
         {
-            int notationId = 3;
+            int notationId = 2;
             foreach (var chainId in chainIds)
             {
                 Alphabet tempAlphabet = new Alphabet();
-                //tempAlphabet.Add(NullValue.Instance());
-                IEnumerable<element> elements =
-                    db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
-                foreach (var element in elements)
+                tempAlphabet.Add(NullValue.Instance());
+                element[] elements =
+                    db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number).Select(a => a.element).ToArray();
+                for (int j = 0; j < elements.Count(); j++)
                 {
-                    tempAlphabet.Add(new ValueString(element.value));
+                    tempAlphabet.Add(new ValueString(elements[j].value));
                 }
                 chain dbChain = db.chain.Single(c => c.id == chainId);
                 Chain tempChain = new Chain(dbChain.building.OrderBy(b => b.index).Select(b => b.number).ToArray(), tempAlphabet);
-                BaseChain tempTripletChain = Coder.Encode(tempChain);
+                BaseChain tempTripletChain = Coder.EncodeTriplets(tempChain);
                 chain result = new chain();
                 int[] build = tempTripletChain.Building;
                 for (int i = 0; i < build.Length; i++)
@@ -67,7 +67,7 @@ namespace LibiadaWeb.Controllers
                         elem = new element();
                         elem.name = strElem;
                         elem.value = strElem;
-                        elem.notation_id = 3;
+                        elem.notation_id = notationId;
                         elem.creation_date = new DateTimeOffset(DateTime.Now);
                         db.element.AddObject(elem);
                     }

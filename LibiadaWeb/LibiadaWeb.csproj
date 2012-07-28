@@ -41,14 +41,14 @@
       <Private>True</Private>
       <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="LibiadaCore">
+    <Reference Include="LibiadaCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NewClusterization">
+    <Reference Include="NewClusterization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\libiada-clusterization\NewClusterization\bin\Debug\NewClusterization.dll</HintPath>
     </Reference>
-    <Reference Include="PhantomChains">
+    <Reference Include="PhantomChains, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\libiada-phantom-chains\PhantomChains\bin\Debug\PhantomChains.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Entity" />
@@ -306,6 +306,7 @@
     <Content Include="Views\Clusterization\Result.cshtml" />
     <Content Include="Views\BinaryCalculation\Index.cshtml" />
     <Content Include="Views\BinaryCalculation\Result.cshtml" />
+    <Content Include="Views\Matter\ImportFailure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

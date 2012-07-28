@@ -51,7 +51,7 @@ namespace LibiadaWeb.Controllers
             {
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 characteristics.Add(new List<Double>());
-                for (int i = 0; i < notationIds.Length; i++) 
+                for (int i = 0; i < notationIds.Length; i++)
                 {
                     long chainId = db.matter.Single(m => m.id == matterId).
                         chain.Single(c => c.building_type_id == 1 && c.notation_id == notationIds[i]).id;
@@ -116,7 +116,7 @@ namespace LibiadaWeb.Controllers
             AlternativeKRAB clusterizator = new AlternativeKRAB(data, powerWeight, normalizedDistanseWeight, distanseWeight);
             ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
             List<List<long>> clusters = new List<List<long>>();
-            for (int i = 0; i < result.Clusters.Count;i++)
+            for (int i = 0; i < result.Clusters.Count; i++)
             {
                 clusters.Add(new List<long>());
                 foreach (var item in ((Cluster)result.Clusters[i]).Items)
@@ -147,7 +147,7 @@ namespace LibiadaWeb.Controllers
                 }
             }
             List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
-            
+
             int[] characteristicIds = TempData["characteristicIds"] as int[];
             List<SelectListItem> characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicNames.Count; i++)

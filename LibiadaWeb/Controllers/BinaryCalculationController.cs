@@ -39,24 +39,24 @@ namespace LibiadaWeb.Controllers
         public ActionResult Index(long matterId, int characteristicId, int linkUp, int notationId)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
-            
+
             List<String> elementNames = new List<String>();
 
             Alphabet alpha = new Alphabet();
             alpha.Add(NullValue.Instance());
             long chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-            IEnumerable<element> elements =
-                db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
-            foreach (var element in elements)
+            element[] elements =
+                    db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number).Select(a => a.element).ToArray();
+            for (int j = 0; j < elements.Count(); j++)
             {
-                alpha.Add(new ValueString(element.value));
+                alpha.Add(new ValueString(elements[j].value));
             }
 
             Chain currentChain = new Chain(db.chain.Single(c => c.id == chainId).building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha);
 
             String className =
                 db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                
+
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
             LinkUp link = LinkUp.End;
             switch (db.link_up.Single(l => l.id == linkUp).id)
@@ -101,7 +101,7 @@ namespace LibiadaWeb.Controllers
             ViewBag.chainName = TempData["chainName"] as String;
             ViewBag.characteristicName = TempData["characteristicName"] as String;
             ViewBag.elementNames = elementNames;
-            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name;;
+            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name; ;
             return View();
         }
     }

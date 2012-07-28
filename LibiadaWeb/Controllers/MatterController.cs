@@ -11,7 +11,7 @@ using LibiadaWeb;
 using DownLoadedFile = System.IO.File;
 
 namespace LibiadaWeb.Controllers
-{ 
+{
     public class MatterController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
@@ -43,7 +43,7 @@ namespace LibiadaWeb.Controllers
             ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             return View();
-        } 
+        }
 
         //
         // POST: /Matter/Create
@@ -51,10 +51,10 @@ namespace LibiadaWeb.Controllers
         [HttpPost]
         public ActionResult Create(matter matter, int notationId, string[] file)
         {
-            
+
             if (ModelState.IsValid)
             {
-                string stringChain="";
+                string stringChain = "";
                 var MyFileCollection = Request.Files[0];
                 var MyFile = MyFileCollection;
 
@@ -70,56 +70,72 @@ namespace LibiadaWeb.Controllers
                 // Copy the byte array into a string.
                 stringChain = Encoding.ASCII.GetString(input);
                 var tempString = stringChain.Split('\n');
-                stringChain = tempString[tempString.Length-1];
-                chain result = new chain();
-                result.dissimilar = false;
-                result.building_type_id = 1;
-                result.notation_id = notationId;
-                result.matter = matter;
-                result.creation_date = new DateTimeOffset(DateTime.Now);
+                stringChain = tempString[tempString.Length - 1];
                 BaseChain libiadaChain = new BaseChain(stringChain);
-
-                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+                bool continueImport = db.matter.Any(m => m.name == matter.name);
+                int i = 0;
+                chain result;
+                if (!continueImport)
                 {
-                    alphabet alphabetElement = new alphabet();
-                    alphabetElement.chain = result;
-                    alphabetElement.number = i + 1;
-                    String strElem = libiadaChain.Alphabet[i].ToString();
-                    alphabetElement.element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
-                    db.alphabet.AddObject(alphabetElement);
+                    result = new chain();
+                    result.dissimilar = false;
+                    result.building_type_id = 1;
+                    result.notation_id = notationId;
+                    result.matter = matter;
+                    result.creation_date = new DateTimeOffset(DateTime.Now);
+                    for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
+                    {
+                        alphabet alphabetElement = new alphabet();
+                        alphabetElement.chain = result;
+                        alphabetElement.number = j + 1;
+                        String strElem = libiadaChain.Alphabet[j].ToString();
+                        if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+                        {
+                            TempData["failedElement"] = strElem;
+                            RedirectToAction("ImportFailure");
+                        }
+                        alphabetElement.element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+                        db.alphabet.AddObject(alphabetElement);
+                    }
+
+                    db.chain.AddObject(result);
+                    db.matter.AddObject(matter);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    long matterId = db.matter.Single(m => m.name == matter.name).id;
+                    result = db.chain.Single(c => c.matter_id == matterId);
+                    i = db.building.Where(b => b.chain_id == result.id).Select(b => b.index).Max() + 1;
                 }
 
-                db.chain.AddObject(result);
-                db.matter.AddObject(matter);
-                db.SaveChanges();
-
                 int[] build = libiadaChain.Building;
-                for (int i = 0; i < build.Length; i++)
+                for (; i < build.Length; i++)
                 {
                     building buildingElement = new building();
                     buildingElement.chain = result;
                     buildingElement.index = i;
                     buildingElement.number = build[i];
                     db.building.AddObject(buildingElement);
-                    if(i%1000 == 0)
+                    if (i % 1000 == 0)
                     {
                         db.SaveChanges();
                     }
                 }
 
                 db.SaveChanges();
-                
-                return RedirectToAction("Index");  
+
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
             ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", matter.remote_db_id);
             return View(matter);
         }
-        
+
         //
         // GET: /Matter/Edit/5
- 
+
         public ActionResult Edit(long id)
         {
             matter matter = db.matter.Single(m => m.id == id);
@@ -148,7 +164,7 @@ namespace LibiadaWeb.Controllers
 
         //
         // GET: /Matter/Delete/5
- 
+
         public ActionResult Delete(long id)
         {
             matter matter = db.matter.Single(m => m.id == id);
@@ -160,7 +176,7 @@ namespace LibiadaWeb.Controllers
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(long id)
-        {            
+        {
             matter matter = db.matter.Single(m => m.id == id);
             db.matter.DeleteObject(matter);
             db.SaveChanges();
@@ -171,6 +187,12 @@ namespace LibiadaWeb.Controllers
         {
             db.Dispose();
             base.Dispose(disposing);
+        }
+
+        public ActionResult ImportFailure()
+        {
+            ViewBag.failedElement = (String)TempData["failedElement"];
+            return View();
         }
     }
 }
