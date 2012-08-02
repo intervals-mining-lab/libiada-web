@@ -1,13 +1,5 @@
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="LibiadaWebModelStoreContainer" CdmEntityContainer="LibiadaWebEntities">
-    <EntitySetMapping Name="additional_information">
-      <EntityTypeMapping TypeName="LibiadaWebModel.additional_information">
-        <MappingFragment StoreEntitySet="additional_information">
-          <ScalarProperty Name="chain_id" ColumnName="chain_id" />
-          <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="alphabet">
       <EntityTypeMapping TypeName="LibiadaWebModel.alphabet">
         <MappingFragment StoreEntitySet="alphabet">
@@ -125,6 +117,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="dna_information">
+      <EntityTypeMapping TypeName="LibiadaWebModel.dna_information">
+        <MappingFragment StoreEntitySet="dna_information">
+          <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+          <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="element">
       <EntityTypeMapping TypeName="LibiadaWebModel.element">
         <MappingFragment StoreEntitySet="element">
@@ -183,6 +183,7 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="nature_id" ColumnName="nature_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

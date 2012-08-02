@@ -49,7 +49,7 @@ namespace LibiadaWeb.Controllers
         // POST: /Matter/Create
 
         [HttpPost]
-        public ActionResult Create(matter matter, int notationId, string[] file)
+        public ActionResult Create(matter matter, int notationId)
         {
 
             if (ModelState.IsValid)
@@ -69,8 +69,29 @@ namespace LibiadaWeb.Controllers
 
                 // Copy the byte array into a string.
                 stringChain = Encoding.ASCII.GetString(input);
-                var tempString = stringChain.Split('\n');
-                stringChain = tempString[tempString.Length - 1];
+                string[] splittedFasta = stringChain.Split('\n');
+                stringChain = "";
+                String fastaHeader = splittedFasta[0];
+                for (int j = 1; j < splittedFasta.Length; j++)
+                {
+                    stringChain += splittedFasta[j];
+                }
+                splittedFasta = stringChain.Split('\0');
+                stringChain = "";
+
+                for (int k = 0; k < splittedFasta.Length; k++)
+                {
+                    stringChain += splittedFasta[k];
+                }
+
+                splittedFasta = stringChain.Split('\t');
+                stringChain = "";
+
+                for (int l = 0; l < splittedFasta.Length; l++)
+                {
+                    stringChain += splittedFasta[l];
+                }
+
                 BaseChain libiadaChain = new BaseChain(stringChain);
                 bool continueImport = db.matter.Any(m => m.name == matter.name);
                 int i = 0;
@@ -92,12 +113,16 @@ namespace LibiadaWeb.Controllers
                         if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                         {
                             TempData["failedElement"] = strElem;
-                            RedirectToAction("ImportFailure");
+                            return RedirectToAction("ImportFailure");
                         }
                         alphabetElement.element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
                         db.alphabet.AddObject(alphabetElement);
                     }
+                    dna_information dnaData = new dna_information();
+                    dnaData.matter = matter;
+                    dnaData.fasta_header = fastaHeader;
 
+                    db.dna_information.AddObject(dnaData);
                     db.chain.AddObject(result);
                     db.matter.AddObject(matter);
                     db.SaveChanges();

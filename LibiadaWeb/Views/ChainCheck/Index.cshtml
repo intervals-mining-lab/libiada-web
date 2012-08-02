@@ -1,0 +1,20 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Проверка цепочек";
+}
+
+<h2>Проверка цепочек</h2>
+@using (Html.BeginForm("Index", "ChainCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Цепочка</legend>
+
+        <input type="file" name="file" id="file"/>
+
+        <p>
+            <input type="submit" value="Проверить" />
+        </p>
+    </fieldset>
+}

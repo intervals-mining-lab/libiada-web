@@ -1,6 +1,5 @@
 <Schema Namespace="LibiadaWebModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
   <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="additional_information" EntityType="LibiadaWebModel.additional_information" />
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.alphabet" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.binary_characteristic" />
     <EntitySet Name="building" EntityType="LibiadaWebModel.building" />
@@ -12,6 +11,7 @@
     <EntitySet Name="characteristic_type" EntityType="LibiadaWebModel.characteristic_type" />
     <EntitySet Name="connection" EntityType="LibiadaWebModel.connection" />
     <EntitySet Name="connection_type" EntityType="LibiadaWebModel.connection_type" />
+    <EntitySet Name="dna_information" EntityType="LibiadaWebModel.dna_information" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.element" />
     <EntitySet Name="link_up" EntityType="LibiadaWebModel.link_up" />
     <EntitySet Name="matter" EntityType="LibiadaWebModel.matter" />
@@ -19,10 +19,6 @@
     <EntitySet Name="notation" EntityType="LibiadaWebModel.notation" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
-    <AssociationSet Name="fk_additional_information_chian" Association="LibiadaWebModel.fk_additional_information_chian">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="additional_information" EntitySet="additional_information" />
-    </AssociationSet>
     <AssociationSet Name="fk_alphabet_chain" Association="LibiadaWebModel.fk_alphabet_chain">
       <End Role="chain" EntitySet="chain" />
       <End Role="alphabet" EntitySet="alphabet" />
@@ -67,6 +63,10 @@
       <End Role="notation" EntitySet="notation" />
       <End Role="chain" EntitySet="chain" />
     </AssociationSet>
+    <AssociationSet Name="fk_chain_piece_type" Association="LibiadaWebModel.fk_chain_piece_type">
+      <End Role="piece_type" EntitySet="piece_type" />
+      <End Role="chain" EntitySet="chain" />
+    </AssociationSet>
     <AssociationSet Name="fk_characteristic_chain" Association="LibiadaWebModel.fk_characteristic_chain">
       <End Role="chain" EntitySet="chain" />
       <End Role="characteristic" EntitySet="characteristic" />
@@ -95,6 +95,10 @@
       <End Role="connection_type" EntitySet="connection_type" />
       <End Role="connection" EntitySet="connection" />
     </AssociationSet>
+    <AssociationSet Name="fk_dna_information_matter" Association="LibiadaWebModel.fk_dna_information_matter">
+      <End Role="matter" EntitySet="matter" />
+      <End Role="dna_information" EntitySet="dna_information" />
+    </AssociationSet>
     <AssociationSet Name="fk_element_notation" Association="LibiadaWebModel.fk_element_notation">
       <End Role="notation" EntitySet="notation" />
       <End Role="element" EntitySet="element" />
@@ -111,15 +115,11 @@
       <End Role="nature" EntitySet="nature" />
       <End Role="notation" EntitySet="notation" />
     </AssociationSet>
+    <AssociationSet Name="fk_piece_type_nature" Association="LibiadaWebModel.fk_piece_type_nature">
+      <End Role="nature" EntitySet="nature" />
+      <End Role="piece_type" EntitySet="piece_type" />
+    </AssociationSet>
   </EntityContainer>
-  <EntityType Name="additional_information">
-    <Key>
-      <PropertyRef Name="chain_id" />
-    </Key>
-    <Property Name="chain_id" Type="Int64" Nullable="false" />
-    <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_additional_information_chian" FromRole="additional_information" ToRole="chain" />
-  </EntityType>
   <EntityType Name="alphabet">
     <Key>
       <PropertyRef Name="chain_id" />
@@ -191,13 +191,13 @@
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
-    <NavigationProperty Name="additional_information" Relationship="LibiadaWebModel.fk_additional_information_chian" FromRole="chain" ToRole="additional_information" />
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_chain" FromRole="chain" ToRole="alphabet" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_chain" FromRole="chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_chain" FromRole="chain" ToRole="building" />
     <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_chain_building_type" FromRole="chain" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
+    <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="chain" ToRole="piece_type" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_chain" FromRole="chain" ToRole="characteristic" />
     <NavigationProperty Name="connection" Relationship="LibiadaWebModel.fk_child_chain" FromRole="chain" ToRole="connection" />
     <NavigationProperty Name="connection1" Relationship="LibiadaWebModel.fk_parent_chain" FromRole="chain" ToRole="connection" />
@@ -260,6 +260,14 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="connection" Relationship="LibiadaWebModel.fk_connection_type" FromRole="connection_type" ToRole="connection" />
   </EntityType>
+  <EntityType Name="dna_information">
+    <Key>
+      <PropertyRef Name="matter_id" />
+    </Key>
+    <Property Name="matter_id" Type="Int64" Nullable="false" />
+    <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_information_matter" FromRole="dna_information" ToRole="matter" />
+  </EntityType>
   <EntityType Name="element">
     <Key>
       <PropertyRef Name="id" />
@@ -296,6 +304,7 @@
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="id_in_remote_db" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="matter" ToRole="chain" />
+    <NavigationProperty Name="dna_information" Relationship="LibiadaWebModel.fk_dna_information_matter" FromRole="matter" ToRole="dna_information" />
     <NavigationProperty Name="nature" Relationship="LibiadaWebModel.fk_matter_nature" FromRole="matter" ToRole="nature" />
     <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_matter_remote_db" FromRole="matter" ToRole="remote_db" />
   </EntityType>
@@ -308,6 +317,7 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_matter_nature" FromRole="nature" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_notation_nature" FromRole="nature" ToRole="notation" />
+    <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_piece_type_nature" FromRole="nature" ToRole="piece_type" />
   </EntityType>
   <EntityType Name="notation">
     <Key>
@@ -328,6 +338,9 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="nature_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="piece_type" ToRole="chain" />
+    <NavigationProperty Name="nature" Relationship="LibiadaWebModel.fk_piece_type_nature" FromRole="piece_type" ToRole="nature" />
   </EntityType>
   <EntityType Name="remote_db">
     <Key>
@@ -339,18 +352,6 @@
     <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_matter_remote_db" FromRole="remote_db" ToRole="matter" />
   </EntityType>
-  <Association Name="fk_additional_information_chian">
-    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
-    <End Role="additional_information" Type="LibiadaWebModel.additional_information" Multiplicity="0..1" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="additional_information">
-        <PropertyRef Name="chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_alphabet_chain">
     <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
     <End Role="alphabet" Type="LibiadaWebModel.alphabet" Multiplicity="*" />
@@ -483,6 +484,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_chain_piece_type">
+    <End Role="piece_type" Type="LibiadaWebModel.piece_type" Multiplicity="1" />
+    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="piece_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="chain">
+        <PropertyRef Name="piece_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_characteristic_chain">
     <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
     <End Role="characteristic" Type="LibiadaWebModel.characteristic" Multiplicity="*" />
@@ -567,6 +580,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_dna_information_matter">
+    <End Role="matter" Type="LibiadaWebModel.matter" Multiplicity="1" />
+    <End Role="dna_information" Type="LibiadaWebModel.dna_information" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="matter">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_information">
+        <PropertyRef Name="matter_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_element_notation">
     <End Role="notation" Type="LibiadaWebModel.notation" Multiplicity="1" />
     <End Role="element" Type="LibiadaWebModel.element" Multiplicity="*" />
@@ -611,6 +636,18 @@
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="notation">
+        <PropertyRef Name="nature_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_piece_type_nature">
+    <End Role="nature" Type="LibiadaWebModel.nature" Multiplicity="1" />
+    <End Role="piece_type" Type="LibiadaWebModel.piece_type" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="nature">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="piece_type">
         <PropertyRef Name="nature_id" />
       </Dependent>
     </ReferentialConstraint>

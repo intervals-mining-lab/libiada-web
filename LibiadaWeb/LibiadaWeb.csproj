@@ -83,6 +83,7 @@
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\BuildingTypeController.cs" />
     <Compile Include="Controllers\CalculationController.cs" />
+    <Compile Include="Controllers\ChainCheckController.cs" />
     <Compile Include="Controllers\ChainController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\CharacteristicGroupController.cs" />
@@ -307,6 +308,9 @@
     <Content Include="Views\BinaryCalculation\Index.cshtml" />
     <Content Include="Views\BinaryCalculation\Result.cshtml" />
     <Content Include="Views\Matter\ImportFailure.cshtml" />
+    <Content Include="Views\ChainCheck\Index.cshtml" />
+    <Content Include="Views\ChainCheck\Result.cshtml" />
+    <Content Include="Views\Matter\CreateDnaInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
