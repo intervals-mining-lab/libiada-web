@@ -310,7 +310,6 @@
     <Content Include="Views\Matter\ImportFailure.cshtml" />
     <Content Include="Views\ChainCheck\Index.cshtml" />
     <Content Include="Views\ChainCheck\Result.cshtml" />
-    <Content Include="Views\Matter\CreateDnaInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
