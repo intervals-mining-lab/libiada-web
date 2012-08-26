@@ -74,7 +74,7 @@ namespace LibiadaWeb.Controllers
                         Alphabet alpha = new Alphabet();
                         alpha.Add(NullValue.Instance());
                         IEnumerable<element> elements =
-                            db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
+                            db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number).Select(a => a.element);
                         foreach (var element in elements)
                         {
                             alpha.Add(new ValueString(element.value));

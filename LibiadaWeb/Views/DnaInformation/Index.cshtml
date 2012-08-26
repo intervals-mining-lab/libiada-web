@@ -1,0 +1,33 @@
+﻿@model IEnumerable<LibiadaWeb.dna_information>
+
+@{
+    ViewBag.Title = "Данные ДНК";
+}
+
+<h2>Перечень всех объектов с данными ДНК</h2>
+
+<p>
+    @Html.ActionLink("Добавить данные объекта", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Заголовок fasta файла
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.fasta_header)
+        </td>
+        <td>
+            @Html.ActionLink("Редактрировать", "Edit", new { id=item.matter_id }) |
+            @Html.ActionLink("Подробности", "Details", new { id=item.matter_id }) |
+            @Html.ActionLink("Удалить", "Delete", new { id=item.matter_id })
+        </td>
+    </tr>
+}
+
+</table>

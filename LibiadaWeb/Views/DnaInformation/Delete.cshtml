@@ -1,0 +1,23 @@
+﻿@model LibiadaWeb.dna_information
+
+@{
+    ViewBag.Title = "Данные ДНК";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы уверены что хотите удалить данные о ДНК, объект и его цепочки при этом не будут удалёны?</h3>
+<fieldset>
+    <legend>Данные о ДНК</legend>
+
+    <div class="display-label">Заголовок fasta файла</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fasta_header)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
+    </p>
+}

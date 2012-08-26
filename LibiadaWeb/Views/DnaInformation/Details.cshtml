@@ -1,0 +1,20 @@
+﻿@model LibiadaWeb.dna_information
+
+@{
+    ViewBag.Title = "Данные ДНК";
+}
+
+<h2>Подробности</h2>
+
+<fieldset>
+    <legend>dna_information</legend>
+
+    <div class="display-label">Заголовок fasta файла</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fasta_header)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.matter_id }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>

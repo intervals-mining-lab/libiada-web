@@ -91,6 +91,7 @@
     <Compile Include="Controllers\ClusterizationController.cs" />
     <Compile Include="Controllers\ConnectionController.cs" />
     <Compile Include="Controllers\ConnectionTypeController.cs" />
+    <Compile Include="Controllers\DnaInformationController.cs" />
     <Compile Include="Controllers\ElementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LinkUpController.cs" />
@@ -310,6 +311,11 @@
     <Content Include="Views\Matter\ImportFailure.cshtml" />
     <Content Include="Views\ChainCheck\Index.cshtml" />
     <Content Include="Views\ChainCheck\Result.cshtml" />
+    <Content Include="Views\DnaInformation\Index.cshtml" />
+    <Content Include="Views\DnaInformation\Details.cshtml" />
+    <Content Include="Views\DnaInformation\Create.cshtml" />
+    <Content Include="Views\DnaInformation\Edit.cshtml" />
+    <Content Include="Views\DnaInformation\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
