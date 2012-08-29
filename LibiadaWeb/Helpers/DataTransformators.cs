@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Web.Mvc;
+using LibiadaCore.Classes.Root;
 
 namespace LibiadaWeb.Helpers
 {
@@ -17,6 +18,27 @@ namespace LibiadaWeb.Helpers
             }
 
             return MvcHtmlString.Create(result.ToString());
+        }
+
+        public static string CleanFastaFile(string file)
+        {
+            string[] splittedFile = file.Split('\0');
+            file = "";
+
+            for (int k = 0; k < splittedFile.Length; k++)
+            {
+                file += splittedFile[k];
+            }
+
+            splittedFile = file.Split('\t');
+            file = "";
+
+            for (int l = 0; l < splittedFile.Length; l++)
+            {
+                file += splittedFile[l];
+            }
+
+            return file;
         }
     }
 }

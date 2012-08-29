@@ -39,7 +39,7 @@ namespace LibiadaWeb.Controllers
             ViewBag.chain_id = new SelectList(db.chain, "id", "building");
             ViewBag.element_id = new SelectList(db.element, "id", "value");
             return View();
-        } 
+        }
 
         //
         // POST: /Alphabet/Create

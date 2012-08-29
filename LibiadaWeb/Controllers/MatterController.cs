@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb;
+using LibiadaWeb.Helpers;
+using LibiadaWeb.Models;
 using DownLoadedFile = System.IO.File;
 
 namespace LibiadaWeb.Controllers
@@ -15,6 +17,7 @@ namespace LibiadaWeb.Controllers
     public class MatterController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
+        private ChainRepository chainRepository = new ChainRepository();
 
         //
         // GET: /Matter/
@@ -54,21 +57,21 @@ namespace LibiadaWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                string stringChain = "";
-                var MyFileCollection = Request.Files[0];
-                var MyFile = MyFileCollection;
+                var file = Request.Files[0];
 
-                var FileLen = MyFile.ContentLength;
-                byte[] input = new byte[FileLen];
+                int fileLen = file.ContentLength;
+                byte[] input = new byte[fileLen];
 
-                // Initialize the stream.
-                var fileStream = MyFile.InputStream;
+                // Initialize the stream
+                var fileStream = file.InputStream;
 
-                // Read the file into the byte array.
-                fileStream.Read(input, 0, FileLen);
+                // Read the file into the byte array
+                fileStream.Read(input, 0, fileLen);
 
-                // Copy the byte array into a string.
-                stringChain = Encoding.ASCII.GetString(input);
+                // Copy the byte array into a string
+                string stringChain = Encoding.ASCII.GetString(input);
+
+                //отделяем заголовок fasta файла от цепочки
                 string[] splittedFasta = stringChain.Split('\n');
                 stringChain = "";
                 String fastaHeader = splittedFasta[0];
@@ -76,79 +79,15 @@ namespace LibiadaWeb.Controllers
                 {
                     stringChain += splittedFasta[j];
                 }
-                splittedFasta = stringChain.Split('\0');
-                stringChain = "";
 
-                for (int k = 0; k < splittedFasta.Length; k++)
-                {
-                    stringChain += splittedFasta[k];
-                }
+                stringChain = DataTransformators.CleanFastaFile(stringChain);
 
-                splittedFasta = stringChain.Split('\t');
-                stringChain = "";
-
-                for (int l = 0; l < splittedFasta.Length; l++)
-                {
-                    stringChain += splittedFasta[l];
-                }
+                db.matter.AddObject(matter);
 
                 BaseChain libiadaChain = new BaseChain(stringChain);
-                bool continueImport = db.matter.Any(m => m.name == matter.name);
-                int i = 0;
-                chain result;
-                if (!continueImport)
-                {
-                    result = new chain();
-                    result.dissimilar = false;
-                    result.building_type_id = 1;
-                    result.notation_id = notationId;
-                    result.matter = matter;
-                    result.creation_date = new DateTimeOffset(DateTime.Now);
-                    for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
-                    {
-                        alphabet alphabetElement = new alphabet();
-                        alphabetElement.chain = result;
-                        alphabetElement.number = j + 1;
-                        String strElem = libiadaChain.Alphabet[j].ToString();
-                        if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
-                        {
-                            TempData["failedElement"] = strElem;
-                            return RedirectToAction("ImportFailure");
-                        }
-                        alphabetElement.element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
-                        db.alphabet.AddObject(alphabetElement);
-                    }
-                    dna_information dnaData = new dna_information();
-                    dnaData.matter = matter;
-                    dnaData.fasta_header = fastaHeader;
+                chainRepository.FromLibiadaBaseChainToDbChain(libiadaChain, notationId, matter);
 
-                    db.dna_information.AddObject(dnaData);
-                    db.chain.AddObject(result);
-                    db.matter.AddObject(matter);
-                    db.SaveChanges();
-                }
-                else
-                {
-                    long matterId = db.matter.Single(m => m.name == matter.name).id;
-                    result = db.chain.Single(c => c.matter_id == matterId);
-                    i = db.building.Where(b => b.chain_id == result.id).Select(b => b.index).Max() + 1;
-                }
-
-                int[] build = libiadaChain.Building;
-                for (; i < build.Length; i++)
-                {
-                    building buildingElement = new building();
-                    buildingElement.chain = result;
-                    buildingElement.index = i;
-                    buildingElement.number = build[i];
-                    db.building.AddObject(buildingElement);
-                    if (i % 1000 == 0)
-                    {
-                        db.SaveChanges();
-                    }
-                }
-
-                db.SaveChanges();
+                chainRepository.CreateDnaInformation(fastaHeader, matter);
 
                 return RedirectToAction("Index");
             }

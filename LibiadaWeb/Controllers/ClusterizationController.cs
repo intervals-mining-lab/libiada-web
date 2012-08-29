@@ -71,33 +71,13 @@ namespace LibiadaWeb.Controllers
                     }
                     else
                     {
-                        Alphabet alpha = new Alphabet();
-                        IEnumerable<element> elements =
-                            db.alphabet.Where(a => a.chain_id == chainId).Select(a => a.element);
-                        foreach (var element in elements)
-                        {
-                            alpha.Add(new ValueString(element.value));
-                        }
-
-                        Chain tempChain = new Chain(db.chain.Single(c => c.id == chainId).building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha);
+                        Chain tempChain = chainRepository.FromDbChainToLibiadaChain(chainId);
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                         ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
-                        LinkUp link = LinkUp.End;
-                        switch (db.link_up.Single(l => l.id == linkUpId).id)
-                        {
-                            case 1:
-                                link = LinkUp.Start;
-                                break;
-                            case 2:
-                                link = LinkUp.End;
-                                break;
-                            case 3:
-                                link = LinkUp.Both;
-                                break;
-                        }
-                        characteristics.Last().Add(calculator.Calculate(tempChain, link));
+                        LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
+                        characteristics.Last().Add(calculator.Calculate(tempChain, linkUp));
                     }
                 }
             }

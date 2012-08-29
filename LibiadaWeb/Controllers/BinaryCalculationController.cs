@@ -20,6 +20,7 @@ namespace LibiadaWeb.Controllers
         private CharacteristicTypeRepository characteristicsRepository = new CharacteristicTypeRepository();
         private LinkUpRepository linkUpRepository = new LinkUpRepository();
         private NotationRepository notationRepository = new NotationRepository();
+        private ChainRepository chainRepository = new ChainRepository();
 
         //
         // GET: /Calculation/
@@ -42,19 +43,12 @@ namespace LibiadaWeb.Controllers
 
             List<String> elementNames = new List<String>();
 
-            Alphabet alpha = new Alphabet();
-            alpha.Add(NullValue.Instance());
+           
             long chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-            element[] elements =
-                    db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number).Select(a => a.element).ToArray();
-            for (int j = 0; j < elements.Count(); j++)
-            {
-                alpha.Add(new ValueString(elements[j].value));
-            }
 
-            Chain currentChain = new Chain(db.chain.Single(c => c.id == chainId).building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha);
 
-            String className =
+            Chain currentChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+            String className = 
                 db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
 
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
