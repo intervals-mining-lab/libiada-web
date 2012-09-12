@@ -37,37 +37,53 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int characteristicId, int linkUp, int notationId)
+        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
 
-            List<String> elementNames = new List<String>();
+            chain dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
 
-           
-            long chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-
-
-            Chain currentChain = chainRepository.FromDbChainToLibiadaChain(chainId);
-            String className = 
-                db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+            Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
+            String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
-            LinkUp link = LinkUp.End;
-            switch (db.link_up.Single(l => l.id == linkUp).id)
+            LinkUp linkUp = (LinkUp)linkUpId;
+            for (int i = 0; i < currentChain.Alphabet.Power; i++)
             {
-                case 1:
-                    link = LinkUp.Start;
-                    break;
-                case 2:
-                    link = LinkUp.End;
-                    break;
-                case 3:
-                    link = LinkUp.Both;
-                    break;
+                characteristics.Add(new List<double>());
+                for (int j = 0; j < currentChain.Alphabet.Power; j++)
+                {
+                    long firstElementId = dbChain.alphabet.Single(a => a.number == i+1).element_id;
+                    long secondElementId = dbChain.alphabet.Single(a => a.number == j+1).element_id;
+                    if (
+                        db.binary_characteristic.Any(b =>
+                            b.chain_id == dbChain.id && b.characteristic_type_id == characteristicId &&
+                            b.first_element_id == firstElementId && b.second_element_id == secondElementId &&
+                            b.link_up_id == linkUpId))
+                    {
+                        characteristics[i].Add((double)db.binary_characteristic.Single(b =>
+                            b.chain_id == dbChain.id && b.characteristic_type_id == characteristicId &&
+                            b.first_element_id == firstElementId && b.second_element_id == secondElementId &&
+                            b.link_up_id == linkUpId).value);
+                    }
+                    else
+                    {
+                        characteristics[i].Add(calculator.Calculate(currentChain, currentChain.Alphabet[i],
+                                                                    currentChain.Alphabet[j], linkUp));
+                        binary_characteristic currentCharacteristic = new binary_characteristic();
+                        currentCharacteristic.chain_id = dbChain.id;
+                        currentCharacteristic.characteristic_type_id = characteristicId;
+                        currentCharacteristic.link_up_id = linkUpId;
+                        currentCharacteristic.first_element_id = firstElementId;
+                        currentCharacteristic.second_element_id = secondElementId;
+                        currentCharacteristic.value = characteristics[i][j];
+                        currentCharacteristic.value_string = characteristics[i][j].ToString();
+                        currentCharacteristic.creation_date = DateTime.Now;
+                        db.binary_characteristic.AddObject(currentCharacteristic);
+                        db.SaveChanges();
+                    }
+                }
             }
-            characteristics = calculator.Calculate(currentChain, link);
-
-
 
             TempData["characteristics"] = characteristics;
             TempData["characteristicName"] = db.characteristic_type.Single(charact => charact.id == characteristicId).name;
