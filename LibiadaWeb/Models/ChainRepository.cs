@@ -218,18 +218,6 @@ namespace LibiadaWeb.Models
             context.SaveChanges();
 
             return result;
-        } 
- 
-        public dna_information CreateDnaInformation(string fastaHeader, matter parent)
-        {
-            dna_information dnaInformation = new dna_information();
-            dnaInformation.fasta_header = fastaHeader;
-
-            parent.dna_information = dnaInformation;//TODO: проверить, возможно одно из действий лишнее
-            context.dna_information.AddObject(dnaInformation);
-            context.SaveChanges();
-
-            return dnaInformation;
         }
 
         public void Dispose() 

@@ -87,8 +87,6 @@ namespace LibiadaWeb.Controllers
                 BaseChain libiadaChain = new BaseChain(stringChain);
                 chainRepository.FromLibiadaBaseChainToDbChain(libiadaChain, notationId, matter);
 
-                chainRepository.CreateDnaInformation(fastaHeader, matter);
-
                 return RedirectToAction("Index");
             }
 

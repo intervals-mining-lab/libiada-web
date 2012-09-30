@@ -1,4 +1,4 @@
-<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="npgsql" ProviderManifestToken="9.1.2" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="npgsql" ProviderManifestToken="9.2.0" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
   <EntityContainer Name="LibiadaWebModelStoreContainer">
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.Store.alphabet" store:Type="Tables" Schema="public" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.Store.binary_characteristic" store:Type="Tables" Schema="public" />
@@ -11,25 +11,19 @@
     <EntitySet Name="characteristic_type" EntityType="LibiadaWebModel.Store.characteristic_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="connection" EntityType="LibiadaWebModel.Store.connection" store:Type="Tables" Schema="public" />
     <EntitySet Name="connection_type" EntityType="LibiadaWebModel.Store.connection_type" store:Type="Tables" Schema="public" />
-    <EntitySet Name="dna_information" EntityType="LibiadaWebModel.Store.dna_information" store:Type="Tables" Schema="public" />
+    <EntitySet Name="dna_chain" EntityType="LibiadaWebModel.Store.dna_chain" store:Type="Tables" Schema="public" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.Store.element" store:Type="Tables" Schema="public" />
+    <EntitySet Name="language" EntityType="LibiadaWebModel.Store.language" store:Type="Tables" Schema="public" />
     <EntitySet Name="link_up" EntityType="LibiadaWebModel.Store.link_up" store:Type="Tables" Schema="public" />
+    <EntitySet Name="literature_chain" EntityType="LibiadaWebModel.Store.literature_chain" store:Type="Tables" Schema="public" />
     <EntitySet Name="matter" EntityType="LibiadaWebModel.Store.matter" store:Type="Tables" Schema="public" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.Store.nature" store:Type="Tables" Schema="public" />
     <EntitySet Name="notation" EntityType="LibiadaWebModel.Store.notation" store:Type="Tables" Schema="public" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.Store.piece_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.Store.remote_db" store:Type="Tables" Schema="public" />
-    <AssociationSet Name="fk_alphabet_chain" Association="LibiadaWebModel.Store.fk_alphabet_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="alphabet" EntitySet="alphabet" />
-    </AssociationSet>
     <AssociationSet Name="fk_alphabet_element" Association="LibiadaWebModel.Store.fk_alphabet_element">
       <End Role="element" EntitySet="element" />
       <End Role="alphabet" EntitySet="alphabet" />
-    </AssociationSet>
-    <AssociationSet Name="fk_binary_characteristic_chain" Association="LibiadaWebModel.Store.fk_binary_characteristic_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_binary_characteristic_first_element" Association="LibiadaWebModel.Store.fk_binary_characteristic_first_element">
       <End Role="element" EntitySet="element" />
@@ -42,10 +36,6 @@
     <AssociationSet Name="fk_binary_characteristic_second_element" Association="LibiadaWebModel.Store.fk_binary_characteristic_second_element">
       <End Role="element" EntitySet="element" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
-    </AssociationSet>
-    <AssociationSet Name="fk_building_chain" Association="LibiadaWebModel.Store.fk_building_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="building" EntitySet="building" />
     </AssociationSet>
     <AssociationSet Name="fk_chain_building_type" Association="LibiadaWebModel.Store.fk_chain_building_type">
       <End Role="building_type" EntitySet="building_type" />
@@ -62,10 +52,6 @@
     <AssociationSet Name="fk_chain_piece_type" Association="LibiadaWebModel.Store.fk_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="chain" EntitySet="chain" />
-    </AssociationSet>
-    <AssociationSet Name="fk_characteristic_chain" Association="LibiadaWebModel.Store.fk_characteristic_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="characteristic" EntitySet="characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_characteristic_group" Association="LibiadaWebModel.Store.fk_characteristic_group">
       <End Role="characteristic_group" EntitySet="characteristic_group" />
@@ -91,13 +77,45 @@
       <End Role="connection_type" EntitySet="connection_type" />
       <End Role="connection" EntitySet="connection" />
     </AssociationSet>
-    <AssociationSet Name="fk_dna_information_matter" Association="LibiadaWebModel.Store.fk_dna_information_matter">
+    <AssociationSet Name="fk_dna_chain_building_type" Association="LibiadaWebModel.Store.fk_dna_chain_building_type">
+      <End Role="building_type" EntitySet="building_type" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_matter" Association="LibiadaWebModel.Store.fk_dna_chain_matter">
       <End Role="matter" EntitySet="matter" />
-      <End Role="dna_information" EntitySet="dna_information" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_notation" Association="LibiadaWebModel.Store.fk_dna_chain_notation">
+      <End Role="notation" EntitySet="notation" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_piece_type" Association="LibiadaWebModel.Store.fk_dna_chain_piece_type">
+      <End Role="piece_type" EntitySet="piece_type" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_element_notation" Association="LibiadaWebModel.Store.fk_element_notation">
       <End Role="notation" EntitySet="notation" />
       <End Role="element" EntitySet="element" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_building_type" Association="LibiadaWebModel.Store.fk_literature_chain_building_type">
+      <End Role="building_type" EntitySet="building_type" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_language" Association="LibiadaWebModel.Store.fk_literature_chain_language">
+      <End Role="language" EntitySet="language" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_matter" Association="LibiadaWebModel.Store.fk_literature_chain_matter">
+      <End Role="matter" EntitySet="matter" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_notation" Association="LibiadaWebModel.Store.fk_literature_chain_notation">
+      <End Role="notation" EntitySet="notation" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_piece_type" Association="LibiadaWebModel.Store.fk_literature_chain_piece_type">
+      <End Role="piece_type" EntitySet="piece_type" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_matter_nature" Association="LibiadaWebModel.Store.fk_matter_nature">
       <End Role="nature" EntitySet="nature" />
@@ -125,13 +143,12 @@
 -->
   <EntityType Name="alphabet">
     <Key>
-      <PropertyRef Name="chain_id" />
-      <PropertyRef Name="element_id" />
-      <PropertyRef Name="number" />
+      <PropertyRef Name="id" />
     </Key>
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="element_id" Type="int8" Nullable="false" />
     <Property Name="number" Type="int4" Nullable="false" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
   </EntityType>
   <EntityType Name="binary_characteristic">
     <Key>
@@ -233,11 +250,18 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
-  <EntityType Name="dna_information">
+  <EntityType Name="dna_chain">
     <Key>
-      <PropertyRef Name="matter_id" />
+      <PropertyRef Name="id" />
     </Key>
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="building_type_id" Type="int4" Nullable="false" />
+    <Property Name="notation_id" Type="int4" Nullable="false" />
+    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
+    <Property Name="dissimilar" Type="bool" Nullable="false" />
+    <Property Name="piece_type_id" Type="int4" Nullable="false" />
+    <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="fasta_header" Type="varchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="element">
@@ -251,6 +275,14 @@
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" />
   </EntityType>
+  <EntityType Name="language">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="description" Type="varchar" MaxLength="255" />
+  </EntityType>
   <EntityType Name="link_up">
     <Key>
       <PropertyRef Name="id" />
@@ -258,6 +290,21 @@
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="literature_chain">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="building_type_id" Type="int4" Nullable="false" />
+    <Property Name="notation_id" Type="int4" Nullable="false" />
+    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="matter_id" Type="int8" Nullable="false" />
+    <Property Name="dissimilar" Type="bool" Nullable="false" />
+    <Property Name="piece_type_id" Type="int4" Nullable="false" />
+    <Property Name="piece_position" Type="int8" Nullable="false" />
+    <Property Name="original" Type="bool" Nullable="false" />
+    <Property Name="language_id" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="matter">
     <Key>
@@ -305,18 +352,6 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="url" Type="varchar" MaxLength="255" />
   </EntityType>
-  <Association Name="fk_alphabet_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="alphabet">
-        <PropertyRef Name="chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_alphabet_element">
     <End Role="element" Type="LibiadaWebModel.Store.element" Multiplicity="1" />
     <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
@@ -326,18 +361,6 @@
       </Principal>
       <Dependent Role="alphabet">
         <PropertyRef Name="element_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_binary_characteristic_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="binary_characteristic" Type="LibiadaWebModel.Store.binary_characteristic" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="binary_characteristic">
-        <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -374,18 +397,6 @@
       </Principal>
       <Dependent Role="binary_characteristic">
         <PropertyRef Name="second_element_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_building_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="building" Type="LibiadaWebModel.Store.building" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="building">
-        <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -434,18 +445,6 @@
       </Principal>
       <Dependent Role="chain">
         <PropertyRef Name="piece_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_characteristic_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="characteristic" Type="LibiadaWebModel.Store.characteristic" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="characteristic">
-        <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -521,15 +520,51 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_dna_information_matter">
+  <Association Name="fk_dna_chain_building_type">
+    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="building_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="building_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_dna_chain_matter">
     <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
-    <End Role="dna_information" Type="LibiadaWebModel.Store.dna_information" Multiplicity="0..1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="matter">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="dna_information">
+      <Dependent Role="dna_chain">
         <PropertyRef Name="matter_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_dna_chain_notation">
+    <End Role="notation" Type="LibiadaWebModel.Store.notation" Multiplicity="1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="notation">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="notation_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_dna_chain_piece_type">
+    <End Role="piece_type" Type="LibiadaWebModel.Store.piece_type" Multiplicity="1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="piece_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="piece_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -542,6 +577,66 @@
       </Principal>
       <Dependent Role="element">
         <PropertyRef Name="notation_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_building_type">
+    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="building_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="building_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_language">
+    <End Role="language" Type="LibiadaWebModel.Store.language" Multiplicity="1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="language">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="language_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_matter">
+    <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="matter">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="matter_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_notation">
+    <End Role="notation" Type="LibiadaWebModel.Store.notation" Multiplicity="1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="notation">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="notation_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_piece_type">
+    <End Role="piece_type" Type="LibiadaWebModel.Store.piece_type" Multiplicity="1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="piece_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="piece_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -605,12 +700,65 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_alphabet_chain">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="alphabet">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_binary_characteristic_chain">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="binary_characteristic" Type="LibiadaWebModel.Store.binary_characteristic" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="binary_characteristic">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_building_chain">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="building" Type="LibiadaWebModel.Store.building" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="building">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_characteristic_chain">
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
+    <End Role="characteristic" Type="LibiadaWebModel.Store.characteristic" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="chain">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="characteristic">
+        <PropertyRef Name="chain_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
   <Function Name="add_alphabet_element" ReturnType="int8" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
     <Parameter Name="p_value" Type="varchar" Mode="In" />
     <Parameter Name="p_type_id" Type="int4" Mode="In" />
     <Parameter Name="p_description" Type="varchar" Mode="In" />
   </Function>
   <Function Name="building_transformer" ReturnType="bool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
+  <Function Name="dna_chain_transformer" ReturnType="bool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
   <!--Ошибки, обнаруженные при создании:
 предупреждение 6005: Функция "add_chain" содержит параметр "p_alphabet_ids" с индексом 1, имеющий неподдерживаемый тип данных "_int8". Функция исключена.
 
@@ -618,5 +766,17 @@
   <Parameter Name="p_building" Type="text" Mode="In" />
   <Parameter Name="p_nature_id" Type="int4" Mode="In" />
   <Parameter Name="p_type_id" Type="int4" Mode="In" />
-</Function>-->
+</Function>
+Ошибки, обнаруженные при создании:
+предупреждение 6005: Функция "trigger_chain_cascade_update_delete" имеет неподдерживаемый возвращаемый тип данных "trigger". Функция исключена.
+
+<Function Name="trigger_chain_cascade_update_delete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
+Ошибки, обнаруженные при создании:
+предупреждение 6005: Функция "trigger_chain_uk_id" имеет неподдерживаемый возвращаемый тип данных "trigger". Функция исключена.
+
+<Function Name="trigger_chain_uk_id" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
+Ошибки, обнаруженные при создании:
+предупреждение 6005: Функция "trigger_fk_on_chain" имеет неподдерживаемый возвращаемый тип данных "trigger". Функция исключена.
+
+<Function Name="trigger_fk_on_chain" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />-->
 </Schema>

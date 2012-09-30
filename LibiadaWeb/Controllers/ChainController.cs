@@ -32,6 +32,7 @@ namespace LibiadaWeb.Controllers
         {
             chain chain = db.chain.Single(c => c.id == id);
             Alphabet alpha = new Alphabet();
+            alpha.Add(NullValue.Instance());
             IEnumerable<element> elements =
                 db.alphabet.Where(a => a.chain_id == id).Select(a => a.element);
             foreach (var element in elements)

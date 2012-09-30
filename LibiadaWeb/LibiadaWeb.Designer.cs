@@ -18,31 +18,47 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region Метаданные связи EDM
 
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_first_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_link_up", "link_up", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.link_up), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_second_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type1", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_child_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "connection", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.connection), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_parent_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "connection", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.connection), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_link_up", "link_up", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.link_up), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_group", "characteristic_group", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.characteristic_group), "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_connection_type", "connection_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.connection_type), "connection", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.connection), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_information_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "dna_information", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.dna_information), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_element_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "element", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.element), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_language", "language", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.language), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_notation_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.notation), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_piece_type_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.piece_type), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 
 #endregion
 
@@ -273,18 +289,18 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        public ObjectSet<dna_information> dna_information
+        public ObjectSet<dna_chain> dna_chain
         {
             get
             {
-                if ((_dna_information == null))
+                if ((_dna_chain == null))
                 {
-                    _dna_information = base.CreateObjectSet<dna_information>("dna_information");
+                    _dna_chain = base.CreateObjectSet<dna_chain>("dna_chain");
                 }
-                return _dna_information;
+                return _dna_chain;
             }
         }
-        private ObjectSet<dna_information> _dna_information;
+        private ObjectSet<dna_chain> _dna_chain;
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -305,6 +321,22 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
+        public ObjectSet<language> language
+        {
+            get
+            {
+                if ((_language == null))
+                {
+                    _language = base.CreateObjectSet<language>("language");
+                }
+                return _language;
+            }
+        }
+        private ObjectSet<language> _language;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
         public ObjectSet<link_up> link_up
         {
             get
@@ -317,6 +349,22 @@ namespace LibiadaWeb
             }
         }
         private ObjectSet<link_up> _link_up;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<literature_chain> literature_chain
+        {
+            get
+            {
+                if ((_literature_chain == null))
+                {
+                    _literature_chain = base.CreateObjectSet<literature_chain>("literature_chain");
+                }
+                return _literature_chain;
+            }
+        }
+        private ObjectSet<literature_chain> _literature_chain;
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -490,11 +538,11 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// Устаревший метод для добавления новых объектов в набор EntitySet dna_information. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// Устаревший метод для добавления новых объектов в набор EntitySet dna_chain. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
         /// </summary>
-        public void AddTodna_information(dna_information dna_information)
+        public void AddTodna_chain(dna_chain dna_chain)
         {
-            base.AddObject("dna_information", dna_information);
+            base.AddObject("dna_chain", dna_chain);
         }
     
         /// <summary>
@@ -506,11 +554,27 @@ namespace LibiadaWeb
         }
     
         /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet language. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTolanguage(language language)
+        {
+            base.AddObject("language", language);
+        }
+    
+        /// <summary>
         /// Устаревший метод для добавления новых объектов в набор EntitySet link_up. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
         /// </summary>
         public void AddTolink_up(link_up link_up)
         {
             base.AddObject("link_up", link_up);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet literature_chain. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddToliterature_chain(literature_chain literature_chain)
+        {
+            base.AddObject("literature_chain", literature_chain);
         }
     
         /// <summary>
@@ -577,12 +641,14 @@ namespace LibiadaWeb
         /// <param name="chain_id">Исходное значение свойства chain_id.</param>
         /// <param name="element_id">Исходное значение свойства element_id.</param>
         /// <param name="number">Исходное значение свойства number.</param>
-        public static alphabet Createalphabet(global::System.Int64 chain_id, global::System.Int64 element_id, global::System.Int32 number)
+        /// <param name="id">Исходное значение свойства id.</param>
+        public static alphabet Createalphabet(global::System.Int64 chain_id, global::System.Int64 element_id, global::System.Int32 number, global::System.Int64 id)
         {
             alphabet alphabet = new alphabet();
             alphabet.chain_id = chain_id;
             alphabet.element_id = element_id;
             alphabet.number = number;
+            alphabet.id = id;
             return alphabet;
         }
 
@@ -592,7 +658,7 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int64 chain_id
         {
@@ -602,14 +668,11 @@ namespace LibiadaWeb
             }
             set
             {
-                if (_chain_id != value)
-                {
-                    Onchain_idChanging(value);
-                    ReportPropertyChanging("chain_id");
-                    _chain_id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("chain_id");
-                    Onchain_idChanged();
-                }
+                Onchain_idChanging(value);
+                ReportPropertyChanging("chain_id");
+                _chain_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("chain_id");
+                Onchain_idChanged();
             }
         }
         private global::System.Int64 _chain_id;
@@ -619,7 +682,7 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int64 element_id
         {
@@ -629,14 +692,11 @@ namespace LibiadaWeb
             }
             set
             {
-                if (_element_id != value)
-                {
-                    Onelement_idChanging(value);
-                    ReportPropertyChanging("element_id");
-                    _element_id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("element_id");
-                    Onelement_idChanged();
-                }
+                Onelement_idChanging(value);
+                ReportPropertyChanging("element_id");
+                _element_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("element_id");
+                Onelement_idChanged();
             }
         }
         private global::System.Int64 _element_id;
@@ -646,7 +706,7 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 number
         {
@@ -656,61 +716,47 @@ namespace LibiadaWeb
             }
             set
             {
-                if (_number != value)
-                {
-                    OnnumberChanging(value);
-                    ReportPropertyChanging("number");
-                    _number = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("number");
-                    OnnumberChanged();
-                }
+                OnnumberChanging(value);
+                ReportPropertyChanging("number");
+                _number = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("number");
+                OnnumberChanged();
             }
         }
         private global::System.Int32 _number;
         partial void OnnumberChanging(global::System.Int32 value);
         partial void OnnumberChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
 
         #endregion
     
         #region Свойства навигации
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_chain", "chain")]
-        public chain chain
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain").Value = value;
-            }
-        }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<chain> chainReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain", value);
-                }
-            }
-        }
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -746,6 +792,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<element>("LibiadaWebModel.fk_alphabet_element", "element", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_chain", "chain")]
+        public chain chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<chain> chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_alphabet_chain", "chain", value);
                 }
             }
         }
@@ -1018,44 +1102,6 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain")]
-        public chain chain
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain").Value = value;
-            }
-        }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<chain> chainReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_first_element", "element")]
         public element element
         {
@@ -1160,6 +1206,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<element>("LibiadaWebModel.fk_binary_characteristic_second_element", "element", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain")]
+        public chain chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<chain> chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_binary_characteristic_chain", "chain", value);
                 }
             }
         }
@@ -1482,6 +1566,50 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<chain>("LibiadaWebModel.fk_chain_building_type", "chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_building_type", "dna_chain")]
+        public EntityCollection<dna_chain> dna_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_building_type", "dna_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_building_type", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_building_type", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_building_type", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_building_type", "literature_chain", value);
                 }
             }
         }
@@ -1837,72 +1965,6 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_chain", "alphabet")]
-        public EntityCollection<alphabet> alphabet
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_chain", "alphabet");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_chain", "alphabet", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "binary_characteristic")]
-        public EntityCollection<binary_characteristic> binary_characteristic
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_chain", "binary_characteristic");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_chain", "binary_characteristic", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_chain", "building")]
-        public EntityCollection<building> building
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_chain_building_type", "building_type")]
         public building_type building_type
         {
@@ -2045,6 +2107,72 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_chain_piece_type", "piece_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_chain", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_chain", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_chain", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_chain", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_chain", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_chain", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_chain", "binary_characteristic", value);
                 }
             }
         }
@@ -2331,44 +2459,6 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain")]
-        public chain chain
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain").Value = value;
-            }
-        }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<chain> chainReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_link_up", "link_up")]
         public link_up link_up
         {
@@ -2397,6 +2487,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<link_up>("LibiadaWebModel.fk_characteristic_link_up", "link_up", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain")]
+        public chain chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<chain> chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<chain>("LibiadaWebModel.fk_characteristic_chain", "chain", value);
                 }
             }
         }
@@ -3195,22 +3323,36 @@ namespace LibiadaWeb
     /// <summary>
     /// Нет доступной документации по метаданным.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="dna_information")]
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="dna_chain")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class dna_information : EntityObject
+    public partial class dna_chain : EntityObject
     {
         #region Фабричный метод
     
         /// <summary>
-        /// Создание нового объекта dna_information.
+        /// Создание нового объекта dna_chain.
         /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
         /// <param name="matter_id">Исходное значение свойства matter_id.</param>
-        public static dna_information Createdna_information(global::System.Int64 matter_id)
+        /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        public static dna_chain Createdna_chain(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
         {
-            dna_information dna_information = new dna_information();
-            dna_information.matter_id = matter_id;
-            return dna_information;
+            dna_chain dna_chain = new dna_chain();
+            dna_chain.id = id;
+            dna_chain.building_type_id = building_type_id;
+            dna_chain.notation_id = notation_id;
+            dna_chain.creation_date = creation_date;
+            dna_chain.matter_id = matter_id;
+            dna_chain.dissimilar = dissimilar;
+            dna_chain.piece_type_id = piece_type_id;
+            dna_chain.piece_position = piece_position;
+            return dna_chain;
         }
 
         #endregion
@@ -3221,6 +3363,105 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 building_type_id
+        {
+            get
+            {
+                return _building_type_id;
+            }
+            set
+            {
+                Onbuilding_type_idChanging(value);
+                ReportPropertyChanging("building_type_id");
+                _building_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("building_type_id");
+                Onbuilding_type_idChanged();
+            }
+        }
+        private global::System.Int32 _building_type_id;
+        partial void Onbuilding_type_idChanging(global::System.Int32 value);
+        partial void Onbuilding_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
         public global::System.Int64 matter_id
         {
             get
@@ -3229,19 +3470,88 @@ namespace LibiadaWeb
             }
             set
             {
-                if (_matter_id != value)
-                {
-                    Onmatter_idChanging(value);
-                    ReportPropertyChanging("matter_id");
-                    _matter_id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("matter_id");
-                    Onmatter_idChanged();
-                }
+                Onmatter_idChanging(value);
+                ReportPropertyChanging("matter_id");
+                _matter_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("matter_id");
+                Onmatter_idChanged();
             }
         }
         private global::System.Int64 _matter_id;
         partial void Onmatter_idChanging(global::System.Int64 value);
         partial void Onmatter_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean dissimilar
+        {
+            get
+            {
+                return _dissimilar;
+            }
+            set
+            {
+                OndissimilarChanging(value);
+                ReportPropertyChanging("dissimilar");
+                _dissimilar = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("dissimilar");
+                OndissimilarChanged();
+            }
+        }
+        private global::System.Boolean _dissimilar;
+        partial void OndissimilarChanging(global::System.Boolean value);
+        partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -3277,16 +3587,142 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_information_matter", "matter")]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_dna_chain", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_dna_chain", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_dna_chain", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_dna_chain", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_dna_chain", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_dna_chain", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_dna_chain", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_dna_chain", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_dna_chain", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_dna_chain", "characteristic")]
+        public EntityCollection<characteristic> characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_dna_chain", "characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_dna_chain", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_building_type", "building_type")]
+        public building_type building_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_dna_chain_building_type", "building_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_dna_chain_building_type", "building_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<building_type> building_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_dna_chain_building_type", "building_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<building_type>("LibiadaWebModel.fk_dna_chain_building_type", "building_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_matter", "matter")]
         public matter matter
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_information_matter", "matter").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_chain_matter", "matter").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_information_matter", "matter").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_chain_matter", "matter").Value = value;
             }
         }
         /// <summary>
@@ -3298,13 +3734,89 @@ namespace LibiadaWeb
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_information_matter", "matter");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_dna_chain_matter", "matter");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_dna_information_matter", "matter", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_dna_chain_matter", "matter", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_dna_chain_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_dna_chain_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_dna_chain_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_dna_chain_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_piece_type", "piece_type")]
+        public piece_type piece_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_dna_chain_piece_type", "piece_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_dna_chain_piece_type", "piece_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<piece_type> piece_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_dna_chain_piece_type", "piece_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_dna_chain_piece_type", "piece_type", value);
                 }
             }
         }
@@ -3599,6 +4111,136 @@ namespace LibiadaWeb
     /// <summary>
     /// Нет доступной документации по метаданным.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="language")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class language : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта language.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static language Createlanguage(global::System.Int32 id, global::System.String name)
+        {
+            language language = new language();
+            language.id = id;
+            language.name = name;
+            return language;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_language", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_language", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_language", "literature_chain", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="link_up")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -3741,6 +4383,576 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_link_up", "characteristic", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="literature_chain")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class literature_chain : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта literature_chain.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
+        /// <param name="matter_id">Исходное значение свойства matter_id.</param>
+        /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        /// <param name="original">Исходное значение свойства original.</param>
+        /// <param name="language_id">Исходное значение свойства language_id.</param>
+        public static literature_chain Createliterature_chain(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position, global::System.Boolean original, global::System.Int32 language_id)
+        {
+            literature_chain literature_chain = new literature_chain();
+            literature_chain.id = id;
+            literature_chain.building_type_id = building_type_id;
+            literature_chain.notation_id = notation_id;
+            literature_chain.creation_date = creation_date;
+            literature_chain.matter_id = matter_id;
+            literature_chain.dissimilar = dissimilar;
+            literature_chain.piece_type_id = piece_type_id;
+            literature_chain.piece_position = piece_position;
+            literature_chain.original = original;
+            literature_chain.language_id = language_id;
+            return literature_chain;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 building_type_id
+        {
+            get
+            {
+                return _building_type_id;
+            }
+            set
+            {
+                Onbuilding_type_idChanging(value);
+                ReportPropertyChanging("building_type_id");
+                _building_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("building_type_id");
+                Onbuilding_type_idChanged();
+            }
+        }
+        private global::System.Int32 _building_type_id;
+        partial void Onbuilding_type_idChanging(global::System.Int32 value);
+        partial void Onbuilding_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 matter_id
+        {
+            get
+            {
+                return _matter_id;
+            }
+            set
+            {
+                Onmatter_idChanging(value);
+                ReportPropertyChanging("matter_id");
+                _matter_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("matter_id");
+                Onmatter_idChanged();
+            }
+        }
+        private global::System.Int64 _matter_id;
+        partial void Onmatter_idChanging(global::System.Int64 value);
+        partial void Onmatter_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean dissimilar
+        {
+            get
+            {
+                return _dissimilar;
+            }
+            set
+            {
+                OndissimilarChanging(value);
+                ReportPropertyChanging("dissimilar");
+                _dissimilar = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("dissimilar");
+                OndissimilarChanged();
+            }
+        }
+        private global::System.Boolean _dissimilar;
+        partial void OndissimilarChanging(global::System.Boolean value);
+        partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean original
+        {
+            get
+            {
+                return _original;
+            }
+            set
+            {
+                OnoriginalChanging(value);
+                ReportPropertyChanging("original");
+                _original = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("original");
+                OnoriginalChanged();
+            }
+        }
+        private global::System.Boolean _original;
+        partial void OnoriginalChanging(global::System.Boolean value);
+        partial void OnoriginalChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 language_id
+        {
+            get
+            {
+                return _language_id;
+            }
+            set
+            {
+                Onlanguage_idChanging(value);
+                ReportPropertyChanging("language_id");
+                _language_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("language_id");
+                Onlanguage_idChanged();
+            }
+        }
+        private global::System.Int32 _language_id;
+        partial void Onlanguage_idChanging(global::System.Int32 value);
+        partial void Onlanguage_idChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_literature_chain", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_literature_chain", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_literature_chain", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_literature_chain", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_literature_chain", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_literature_chain", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_literature_chain", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_literature_chain", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_literature_chain", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "characteristic")]
+        public EntityCollection<characteristic> characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_literature_chain", "characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_literature_chain", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_building_type", "building_type")]
+        public building_type building_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_literature_chain_building_type", "building_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_literature_chain_building_type", "building_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<building_type> building_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_literature_chain_building_type", "building_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<building_type>("LibiadaWebModel.fk_literature_chain_building_type", "building_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_language", "language")]
+        public language language
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<language>("LibiadaWebModel.fk_literature_chain_language", "language").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<language>("LibiadaWebModel.fk_literature_chain_language", "language").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<language> languageReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<language>("LibiadaWebModel.fk_literature_chain_language", "language");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<language>("LibiadaWebModel.fk_literature_chain_language", "language", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_matter", "matter")]
+        public matter matter
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_literature_chain_matter", "matter").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_literature_chain_matter", "matter").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<matter> matterReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_literature_chain_matter", "matter");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_literature_chain_matter", "matter", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_literature_chain_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_literature_chain_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_literature_chain_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_literature_chain_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "piece_type")]
+        public piece_type piece_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_literature_chain_piece_type", "piece_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_literature_chain_piece_type", "piece_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<piece_type> piece_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_literature_chain_piece_type", "piece_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_literature_chain_piece_type", "piece_type", value);
                 }
             }
         }
@@ -3953,34 +5165,40 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_information_matter", "dna_information")]
-        public dna_information dna_information
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_matter", "dna_chain")]
+        public EntityCollection<dna_chain> dna_chain
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_information>("LibiadaWebModel.fk_dna_information_matter", "dna_information").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_information>("LibiadaWebModel.fk_dna_information_matter", "dna_information").Value = value;
-            }
-        }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<dna_information> dna_informationReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_information>("LibiadaWebModel.fk_dna_information_matter", "dna_information");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_matter", "dna_chain");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dna_information>("LibiadaWebModel.fk_dna_information_matter", "dna_information", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_matter", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_matter", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_matter", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_matter", "literature_chain", value);
                 }
             }
         }
@@ -4397,6 +5615,28 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_notation", "dna_chain")]
+        public EntityCollection<dna_chain> dna_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_notation", "dna_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_notation", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_element_notation", "element")]
         public EntityCollection<element> element
         {
@@ -4409,6 +5649,28 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<element>("LibiadaWebModel.fk_element_notation", "element", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_notation", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_notation", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_notation", "literature_chain", value);
                 }
             }
         }
@@ -4603,6 +5865,50 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<chain>("LibiadaWebModel.fk_chain_piece_type", "chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_piece_type", "dna_chain")]
+        public EntityCollection<dna_chain> dna_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_piece_type", "dna_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_piece_type", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_piece_type", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_piece_type", "literature_chain", value);
                 }
             }
         }

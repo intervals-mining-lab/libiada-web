@@ -6,6 +6,7 @@
           <ScalarProperty Name="chain_id" ColumnName="chain_id" />
           <ScalarProperty Name="element_id" ColumnName="element_id" />
           <ScalarProperty Name="number" ColumnName="number" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -117,10 +118,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="dna_information">
-      <EntityTypeMapping TypeName="LibiadaWebModel.dna_information">
-        <MappingFragment StoreEntitySet="dna_information">
+    <EntitySetMapping Name="dna_chain">
+      <EntityTypeMapping TypeName="LibiadaWebModel.dna_chain">
+        <MappingFragment StoreEntitySet="dna_chain">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
+          <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+          <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+          <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+          <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -137,12 +145,37 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="language">
+      <EntityTypeMapping TypeName="LibiadaWebModel.language">
+        <MappingFragment StoreEntitySet="language">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="link_up">
       <EntityTypeMapping TypeName="LibiadaWebModel.link_up">
         <MappingFragment StoreEntitySet="link_up">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="literature_chain">
+      <EntityTypeMapping TypeName="LibiadaWebModel.literature_chain">
+        <MappingFragment StoreEntitySet="literature_chain">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
+          <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+          <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+          <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+          <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+          <ScalarProperty Name="original" ColumnName="original" />
+          <ScalarProperty Name="language_id" ColumnName="language_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
