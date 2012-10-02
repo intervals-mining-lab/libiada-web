@@ -757,6 +757,9 @@
     <Parameter Name="p_type_id" Type="int4" Mode="In" />
     <Parameter Name="p_description" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="seq_next_value" ReturnType="int8" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
+    <Parameter Name="seq_name" Type="text" Mode="In" />
+  </Function>
   <Function Name="building_transformer" ReturnType="bool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
   <Function Name="dna_chain_transformer" ReturnType="bool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public" />
   <!--Ошибки, обнаруженные при создании:

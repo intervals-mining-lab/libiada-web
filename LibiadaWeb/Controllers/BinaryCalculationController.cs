@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Objects;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -71,6 +73,7 @@ namespace LibiadaWeb.Controllers
                         characteristics[i].Add(calculator.Calculate(currentChain, currentChain.Alphabet[i],
                                                                     currentChain.Alphabet[j], linkUp));
                         binary_characteristic currentCharacteristic = new binary_characteristic();
+                        currentCharacteristic.id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')").First();
                         currentCharacteristic.chain_id = dbChain.id;
                         currentCharacteristic.characteristic_type_id = characteristicId;
                         currentCharacteristic.link_up_id = linkUpId;

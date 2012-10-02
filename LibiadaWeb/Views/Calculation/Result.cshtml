@@ -30,17 +30,17 @@
         
         @for (int j = 0; j < ViewBag.characteristics.Count; j++)
         {
-            string characteristicArray = "characteristics.push(new Array());\n";
-            @characteristicArray
-            string chainId = "chainIds.push(" + ViewBag.chainIds[j] + ");\n";
-            @chainId
+            <text>
+                characteristics.push(new Array());
+                chainIds.push(@ViewBag.chainIds[j]);
+            </text>
+
             var characteristicList = ViewBag.characteristics[j];
             for (int i = 0; i < characteristicList.Count; i++)
             {
                 String[] tempValue = characteristicList[i].ToString().Split(',');
                 String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                string innerTemp = "characteristics[characteristics.length -1][" + i + "] = " + value + ";\n";
-                @innerTemp
+                @: characteristics[characteristics.length -1][@i] = @value;
             }
         }
     });
@@ -104,7 +104,7 @@
     @for (int i = 0; i < ViewBag.characteristics.Count; i++ )
     {
         <tr>
-            <td id="chainNameCell" name="chainNameCell">
+            <td id="chainNameCell">
                 @ViewBag.chainNames[i]
             </td>
             @foreach (var characteristic in ViewBag.characteristics[i])
