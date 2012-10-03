@@ -94,6 +94,7 @@
     <Compile Include="Controllers\ElementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LinkUpController.cs" />
+    <Compile Include="Controllers\LocalCharacteristicsController.cs" />
     <Compile Include="Controllers\MatterController.cs" />
     <Compile Include="Controllers\NatureController.cs" />
     <Compile Include="Controllers\NotationController.cs" />
@@ -310,6 +311,8 @@
     <Content Include="Views\Matter\ImportFailure.cshtml" />
     <Content Include="Views\ChainCheck\Index.cshtml" />
     <Content Include="Views\ChainCheck\Result.cshtml" />
+    <Content Include="Views\LocalCharacteristics\Index.cshtml" />
+    <Content Include="Views\LocalCharacteristics\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

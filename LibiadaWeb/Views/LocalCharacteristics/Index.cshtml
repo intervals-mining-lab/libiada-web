@@ -2,10 +2,10 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Вычисление характеристик";
+    ViewBag.Title = "Вычисление локальных характеристик";
 }
 
-<h2>Вычисление характеристик</h2>
+<h2>Вычисление локальных характеристик</h2>
 
 <script type="text/javascript">
 
@@ -37,8 +37,7 @@
             </th>
         </tr>
         @{
-            List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
-            int i = 0;
+            List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
 
             foreach (var item in mattersList)
             {
@@ -50,6 +49,11 @@
             }
         }
     </table>
+    <br/>
+    @Html.Label("Размер окна:")
+    <input type ="number" id ="length" name = "length" />
+    @Html.Label("Размер шага:")
+    <input type ="number" id ="step" name = "step" />
     <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
     <div id="axis"></div>
