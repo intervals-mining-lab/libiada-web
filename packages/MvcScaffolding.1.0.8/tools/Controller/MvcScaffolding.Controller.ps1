@@ -22,26 +22,23 @@ param(
 $overwriteController = $Force -and ((!$ForceMode) -or ($ForceMode -eq "ControllerOnly"))
 $overwriteFilesExceptController = $Force -and ((!$ForceMode) -or ($ForceMode -eq "PreserveController"))
 
-# Ensure you've referenced System.Data.Entity
-(Get-Project $Project).Object.References.Add("System.Data.Entity") | Out-Null
-
 # If you haven't specified a model type, we'll guess from the controller name
 if (!$ModelType) {
 	if ($ControllerName.EndsWith("Controller", [StringComparison]::OrdinalIgnoreCase)) {
 		# If you've given "PeopleController" as the full controller name, we're looking for a model called People or Person
 		$ModelType = [System.Text.RegularExpressions.Regex]::Replace($ControllerName, "Controller$", "", [System.Text.RegularExpressions.RegexOptions]::IgnoreCase)
-		$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi -ErrorAction SilentlyContinue
+		$foundModelType = Get-ProjectType $ModelType -Project $Project -ErrorAction SilentlyContinue
 		if (!$foundModelType) {
 			$ModelType = [string](Get-SingularizedWord $ModelType)
-			$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi -ErrorAction SilentlyContinue
+			$foundModelType = Get-ProjectType $ModelType -Project $Project -ErrorAction SilentlyContinue
 		}
 	} else {
 		# If you've given "people" as the controller name, we're looking for a model called People or Person, and the controller will be PeopleController
 		$ModelType = $ControllerName
-		$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi -ErrorAction SilentlyContinue
+		$foundModelType = Get-ProjectType $ModelType -Project $Project -ErrorAction SilentlyContinue
 		if (!$foundModelType) {
 			$ModelType = [string](Get-SingularizedWord $ModelType)
-			$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi -ErrorAction SilentlyContinue
+			$foundModelType = Get-ProjectType $ModelType -Project $Project -ErrorAction SilentlyContinue
 		}
 		if ($foundModelType) {
 			$ControllerName = [string](Get-PluralizedWord $foundModelType.Name) + "Controller"
@@ -50,7 +47,7 @@ if (!$ModelType) {
 	if (!$foundModelType) { throw "Cannot find a model type corresponding to a controller called '$ControllerName'. Try supplying a -ModelType parameter value." }
 } else {
 	# If you have specified a model type
-	$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi
+	$foundModelType = Get-ProjectType $ModelType -Project $Project
 	if (!$foundModelType) { return }
 	if (!$ControllerName.EndsWith("Controller", [StringComparison]::OrdinalIgnoreCase)) {
 		$ControllerName = $ControllerName + "Controller"
@@ -61,9 +58,9 @@ Write-Host "Scaffolding $ControllerName..."
 if(!$DbContextType) { $DbContextType = [System.Text.RegularExpressions.Regex]::Replace((Get-Project $Project).Name, "[^a-zA-Z0-9]", "") + "Context" }
 if (!$NoChildItems) {
 	if ($Repository) {
-		Scaffold Repository -ModelType $foundModelType.FullName -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage -Force:$overwriteFilesExceptController -BlockUi
+		Scaffold Repository -ModelType $foundModelType.FullName -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage -Force:$overwriteFilesExceptController
 	} else {
-		$dbContextScaffolderResult = Scaffold DbContext -ModelType $foundModelType.FullName -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage -BlockUi
+		$dbContextScaffolderResult = Scaffold DbContext -ModelType $foundModelType.FullName -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage
 		$foundDbContextType = $dbContextScaffolderResult.DbContextType
 		if (!$foundDbContextType) { return }
 	}

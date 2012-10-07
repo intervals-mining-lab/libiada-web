@@ -1,7 +1,19 @@
 ﻿param($rootPath, $toolsPath, $package, $project)
 
 # Bail out if scaffolding is disabled (probably because you're running an incompatible version of T4Scaffolding.dll)
-if (-not (Get-Module T4Scaffolding)) { return }
+if (-not (Get-Module T4Scaffolding)) {
+	# Remove any existing MvcScaffolding providers (which will break the entire Add Controller dialog without the T4Scaffolding Module)
+	$mvcScaffoldingProviderID = "{9EC893D9-B925-403C-B785-A50545149521}"
+	# There can be multiple, one per loaded ASP.NET MVC tooling DLL, if your VS instance has multiple versions of ASP.NET MVC tooling loaded
+	$scaffolderProviderTypes = [System.AppDomain]::CurrentDomain.GetAssemblies() | %{ $_.GetType("Microsoft.VisualStudio.Web.Mvc.Scaffolding.ScaffolderProviders") } | ?{ $_ }
+	$scaffolderProviderTypes | %{
+		$allProviders = $_.GetProperty("Providers").GetValue($null, $null)
+
+		$existingMvcScaffoldingProviders = $allProviders | ?{ $_.ID -eq $mvcScaffoldingProviderID } 
+		$existingMvcScaffoldingProviders | %{ $allProviders.Remove($_) } | Out-Null
+	}
+	return
+}
 
 # Enable tab expansion
 if (!$global:scaffolderTabExpansion) { $global:scaffolderTabExpansion = @{ } }
@@ -14,7 +26,7 @@ $global:scaffolderTabExpansion["MvcScaffolding.RazorView"] = $global:scaffolderT
 }
 
 # Enable MVC 3 Tools Update "Add Controller" dialog integration
-. (Join-Path $toolsPath "registerWithMvcTooling.ps1")
+. (Join-Path $toolsPath "registerWithMvcTooling.ps1") $rootPath $toolsPath
 
 function CountSolutionFilesByExtension($extension) {
 	$files = (Get-Project).DTE.Solution `

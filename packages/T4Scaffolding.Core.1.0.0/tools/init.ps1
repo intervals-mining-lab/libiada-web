@@ -4,15 +4,7 @@
 if ([NuGet.PackageManager].Assembly.GetName().Version -lt 1.4) 
 {
 	throw "T4Scaffolding requires NuGet (Package Manager Console) 1.4 or later"
-}
-
-# We can't support the current version of PowerShell 3 because of some breaking changes/bugs. Hopefully we will be able to reintroduce support soon.
-if ($PSVersionTable.PSVersion.Major -eq 3)
-{
-	$message = "Sorry, T4Scaffolding and MvcScaffolding currently do not support preview versions of PowerShell 3 (for example, on prerelease copies of Windows 8)."
-	[System.Windows.Forms.MessageBox]::Show($message)
-	throw $message
-}
+} 
 
 function GetLoadedT4ScaffoldingAssemblyVersion() {
 	try {
@@ -23,7 +15,7 @@ function GetLoadedT4ScaffoldingAssemblyVersion() {
 }
 $t4ScaffoldingAssemblyVersion = GetLoadedT4ScaffoldingAssemblyVersion
 
-if ($t4ScaffoldingAssemblyVersion -and ($t4ScaffoldingAssemblyVersion -ne "1.0.0.1"))
+if ($t4ScaffoldingAssemblyVersion -and ($t4ScaffoldingAssemblyVersion -ne "1.0.0.2"))
 {
 	# Prevent the use of scaffolding if you've got the wrong version of T4Scaffolding.dll loaded into your appdomain (we can't unload or update it until VS restarts)
 	Write-Warning "---"
@@ -55,10 +47,8 @@ else
 		Import-Module -Force -Global $tabExpansionPath
 
 		# Ensure you've got some default settings for each of the included scaffolders
-		Set-DefaultScaffolder -Name DbContext -Scaffolder T4Scaffolding.EFDbContext -SolutionWide -DoNotOverwriteExistingSetting
-		Set-DefaultScaffolder -Name Repository -Scaffolder T4Scaffolding.EFRepository -SolutionWide -DoNotOverwriteExistingSetting
-		Set-DefaultScaffolder -Name CustomTemplate -Scaffolder T4Scaffolding.CustomTemplate -SolutionWide -DoNotOverwriteExistingSetting
-		Set-DefaultScaffolder -Name CustomScaffolder -Scaffolder T4Scaffolding.CustomScaffolder -SolutionWide -DoNotOverwriteExistingSetting
+        Set-DefaultScaffolder -Name CustomTemplate -Scaffolder T4Scaffolding.CustomTemplate -SolutionWide -DoNotOverwriteExistingSetting
+        Set-DefaultScaffolder -Name CustomScaffolder -Scaffolder T4Scaffolding.CustomScaffolder -SolutionWide -DoNotOverwriteExistingSetting
 	} 
 	else 
 	{

@@ -13,7 +13,7 @@ param(
 # Ensure you've referenced System.Data.Entity
 (Get-Project $Project).Object.References.Add("System.Data.Entity") | Out-Null
 
-$foundModelType = Get-ProjectType $ModelType -Project $Project -BlockUi
+$foundModelType = Get-ProjectType $ModelType -Project $Project
 if (!$foundModelType) { return }
 
 $primaryKey = Get-PrimaryKey $foundModelType.FullName -Project $Project -ErrorIfNotFound
@@ -32,7 +32,7 @@ if ($Area) {
 }
 
 if (!$NoChildItems) {
-	$dbContextScaffolderResult = Scaffold DbContext -ModelType $ModelType -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage -BlockUi
+	$dbContextScaffolderResult = Scaffold DbContext -ModelType $ModelType -DbContextType $DbContextType -Area $Area -Project $Project -CodeLanguage $CodeLanguage
 	$foundDbContextType = $dbContextScaffolderResult.DbContextType
 	if (!$foundDbContextType) { return }
 }

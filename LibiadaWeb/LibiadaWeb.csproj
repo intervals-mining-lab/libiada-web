@@ -93,6 +93,7 @@
     <Compile Include="Controllers\ConnectionTypeController.cs" />
     <Compile Include="Controllers\ElementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Controllers\LinkUpController.cs" />
     <Compile Include="Controllers\LocalCharacteristicsController.cs" />
     <Compile Include="Controllers\MatterController.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Models\DataTableFiller.cs" />
     <Compile Include="Models\ConnectionRepository.cs" />
     <Compile Include="Models\ConnectionTypeRepository.cs" />
+    <Compile Include="Models\DnaChainRepository.cs" />
     <Compile Include="Models\ElementRepository.cs" />
     <Compile Include="Models\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\IBuildingTypeRepository.cs" />
@@ -128,13 +130,16 @@
     <Compile Include="Models\ICharacteristicTypeRepository.cs" />
     <Compile Include="Models\IConnectionRepository.cs" />
     <Compile Include="Models\IConnectionTypeRepository.cs" />
+    <Compile Include="Models\IDnaChainRepository.cs" />
     <Compile Include="Models\IElementRepository.cs" />
     <Compile Include="Models\ILinkUpRepository.cs" />
+    <Compile Include="Models\ILiteratureChainRepository.cs" />
     <Compile Include="Models\IMatterRepository.cs" />
     <Compile Include="Models\INatureRepository.cs" />
     <Compile Include="Models\INotationRepository.cs" />
     <Compile Include="Models\IRemoteDbRepository.cs" />
     <Compile Include="Models\LinkUpRepository.cs" />
+    <Compile Include="Models\LiteratureChainRepository.cs" />
     <Compile Include="Models\MatterRepository.cs" />
     <Compile Include="Models\NatureRepository.cs" />
     <Compile Include="Models\NotationRepository.cs" />
@@ -313,6 +318,11 @@
     <Content Include="Views\ChainCheck\Result.cshtml" />
     <Content Include="Views\LocalCharacteristics\Index.cshtml" />
     <Content Include="Views\LocalCharacteristics\Result.cshtml" />
+    <Content Include="Views\Language\Index.cshtml" />
+    <Content Include="Views\Language\Details.cshtml" />
+    <Content Include="Views\Language\Create.cshtml" />
+    <Content Include="Views\Language\Edit.cshtml" />
+    <Content Include="Views\Language\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

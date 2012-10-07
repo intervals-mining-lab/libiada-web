@@ -48,6 +48,7 @@ namespace LibiadaWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                notation.id = (int)db.ExecuteStoreQuery<long>("SELECT seq_next_value('catalog_table_id_seq')").First();
                 db.notation.AddObject(notation);
                 db.SaveChanges();
                 return RedirectToAction("Index");  
