@@ -148,8 +148,8 @@ namespace LibiadaWeb.Models
         //TODO: создать репозиторий строя и перенести туда методы строя
         public int[] FromDbBuildingToLibiadaBuilding(literature_chain dbChain)
         {
-            IEnumerable<building> dbBuilding = dbChain.building.OrderBy(b => b.index);
-            return dbBuilding.Select(b => b.number).ToArray();
+            String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
+            return context.ExecuteStoreQuery<int>(query).ToArray();
         }
 
         public IEnumerable<building> FromLibiadaBuildingToDbBuilding(literature_chain parent, int[] libiadaBuilding)

@@ -113,15 +113,15 @@ namespace LibiadaWeb.Controllers
                             db.matter.AddObject(matter);
 
                             dbDnaChain = new dna_chain()
-                                             {
-                                                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                                                 dissimilar = false,
-                                                 building_type_id = 1,
-                                                 notation_id = notationId,
-                                                 fasta_header = fastaHeader,
-                                                 piece_type_id = 1,
-                                                 creation_date = new DateTimeOffset(DateTime.Now)
-                                             };
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                dissimilar = false,
+                                building_type_id = 1,
+                                notation_id = notationId,
+                                fasta_header = fastaHeader,
+                                piece_type_id = 1,
+                                creation_date = new DateTimeOffset(DateTime.Now)
+                            };
 
                             matter.dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
                             db.dna_chain.AddObject(dbDnaChain);
@@ -146,7 +146,7 @@ namespace LibiadaWeb.Controllers
                     //литературная цепочка
                     case 3:
                         string[] text = stringChain.Split('\n');
-                        for (int l = 0; l < text.Length; l++)
+                        for (int l = 0; l < text.Length - 1; l++)
                         {
                             // убираем \r
                             text[l] = text[l].Substring(0, text[l].Length - 1);
@@ -164,16 +164,16 @@ namespace LibiadaWeb.Controllers
                             db.matter.AddObject(matter);
 
                             dbLiteratureChain = new literature_chain()
-                                                    {
-                                                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                                                        dissimilar = false,
-                                                        building_type_id = 1,
-                                                        notation_id = notationId,
-                                                        language_id = languageId,
-                                                        original = original,
-                                                        piece_type_id = 1,
-                                                        creation_date = new DateTimeOffset(DateTime.Now)
-                                                    };
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                dissimilar = false,
+                                building_type_id = 1,
+                                notation_id = notationId,
+                                language_id = languageId,
+                                original = original,
+                                piece_type_id = 1,
+                                creation_date = new DateTimeOffset(DateTime.Now)
+                            };
 
                             matter.literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
                             db.literature_chain.AddObject(dbLiteratureChain);
