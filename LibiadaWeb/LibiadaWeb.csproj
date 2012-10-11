@@ -82,6 +82,7 @@
     <Compile Include="Controllers\AlphabetController.cs" />
     <Compile Include="Controllers\BinaryCalculationController.cs" />
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
+    <Compile Include="Controllers\BuildingCompareController.cs" />
     <Compile Include="Controllers\BuildingTypeController.cs" />
     <Compile Include="Controllers\CalculationController.cs" />
     <Compile Include="Controllers\ChainCheckController.cs" />
@@ -324,6 +325,8 @@
     <Content Include="Views\Language\Create.cshtml" />
     <Content Include="Views\Language\Edit.cshtml" />
     <Content Include="Views\Language\Delete.cshtml" />
+    <Content Include="Views\BuildingCompare\Index.cshtml" />
+    <Content Include="Views\BuildingCompare\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

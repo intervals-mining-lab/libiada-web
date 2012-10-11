@@ -152,7 +152,7 @@ namespace LibiadaWeb.Controllers
                             text[l] = text[l].Substring(0, text[l].Length - 1);
                         }
 
-                        libiadaChain = new BaseChain(text.Length);
+                        libiadaChain = new BaseChain(text.Length - 1);
                         // в конце файла всегда пустая строка поэтому последний элемент не считаем
                         for (int i = 0; i < text.Length - 1; i++)
                         {

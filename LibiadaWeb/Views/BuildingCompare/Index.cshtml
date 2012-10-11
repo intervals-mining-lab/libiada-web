@@ -1,0 +1,65 @@
+﻿@using IvtLibrary.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Сравнение строёв";
+}
+
+<h2>Сравнение строёв</h2>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <td>
+                <table>
+                    <tr>
+                        <th>
+                            Название первого объекта
+                        </th>
+                    </tr>
+                    @{
+                        List<MvcHtmlString> mattersList1 = Html.RadioButtonGroup("matterId1", (List<SelectListItem>) ViewBag.mattersList);
+
+                        foreach (var item in mattersList1)
+                        {
+                            <tr>
+                                <td>
+                                    @item
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <th>
+                            Название второго объекта
+                        </th>
+                    </tr>
+                    @{
+                        List<MvcHtmlString> mattersList2 = Html.RadioButtonGroup("matterId2", (List<SelectListItem>) ViewBag.mattersList);
+
+                        foreach (var item in mattersList2)
+                        {
+                            <tr>
+                                <td>
+                                    @item
+                                </td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br/>
+    @Html.Label("Размер окна:")
+    <input type ="number" id ="length" name = "length" />
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}
