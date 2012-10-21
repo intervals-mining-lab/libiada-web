@@ -42,7 +42,7 @@ namespace LibiadaWeb.Controllers
         public ActionResult Index(long matterId1, long matterId2, int length)
         {
             String chainName1 = db.matter.Single(m => m.id == matterId1).name;
-            String chainName2 = db.matter.Single(m => m.id == matterId1).name;
+            String chainName2 = db.matter.Single(m => m.id == matterId2).name;
             matter matter1 = db.matter.Single(m => m.id == matterId1);
             chain chain1 = matter1.chain.Single(c => c.building_type_id == 1 && c.notation_id == 1);
             Chain libiadaChain1 = chainRepository.FromDbChainToLibiadaChain(chain1);
