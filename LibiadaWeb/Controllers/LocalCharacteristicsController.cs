@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using DotNet.Highcharts;
-using DotNet.Highcharts.Enums;
-using DotNet.Highcharts.Helpers;
-using DotNet.Highcharts.Options;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
@@ -45,7 +39,7 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int length, int step)
+        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int length, int step, bool isDelta, bool isSort)
         {
             List<List<Double>> characteristicsTemp = new List<List<Double>>();
             String chainName = db.matter.Single(m => m.id == matterId).name;
@@ -73,11 +67,29 @@ namespace LibiadaWeb.Controllers
                 {
                     Chain tempChain = iter.Current();
                     partNames.Add(tempChain.ToString());
-                    
-                    double characteristicValue = calculator.Calculate(tempChain, linkUp);
                     characteristicsTemp.Last().Add(calculator.Calculate(tempChain, linkUp));
                 }
             }
+
+            if (isDelta)
+            {   //Перебираем характеристики
+                for (int i = 0; i < characteristicsTemp.Count; i++)
+                {   //перебираем фрагменты цепочек
+                    for (int j = (characteristicsTemp[i].Count)-1; j > 0; j--)
+                    {
+                        characteristicsTemp[i][j] -= characteristicsTemp[i][j - 1];
+                    }
+                    characteristicsTemp[i].RemoveAt(0);
+                }   
+            }
+            if (isSort)
+            {    //Перебираем характеристики
+                for (int i = 0; i < characteristicsTemp.Count; i++)
+                {   //перебираем фрагменты цепочек
+                    characteristicsTemp[i].Sort();
+                }  
+            }
+
 
             List<List<Double>> characteristics = new List<List<Double>>();
 

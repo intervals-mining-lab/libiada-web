@@ -30,7 +30,7 @@ namespace LibiadaWeb.Controllers
         public ActionResult Index()
         {
             ViewBag.matters = db.matter.ToList();
-
+            ViewBag.language_id = new SelectList(db.language, "id", "name");
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
@@ -39,12 +39,20 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId)
+        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId, int languageId)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
-
-            chain dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
-
+            chain dbChain;
+            if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+            {
+                long chainId = db.literature_chain.Single(l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId).id;
+                dbChain = db.chain.Single(c => c.id == chainId);
+            }
+            else
+            {
+                dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
+            }
+            
             Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 

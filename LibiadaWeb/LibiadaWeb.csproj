@@ -222,13 +222,10 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="packages.config" />
-    <None Include="LibiadaWeb.csdl" />
     <EntityDeploy Include="LibiadaWeb.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="LibiadaWeb.msl" />
-    <None Include="LibiadaWeb.ssdl" />
     <None Include="readme.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

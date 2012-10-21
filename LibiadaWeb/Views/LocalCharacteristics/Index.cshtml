@@ -55,6 +55,9 @@
     @Html.Label("Размер шага:")
     <input type ="number" id ="step" name = "step" />
     <br/>
+    <input type="checkbox" name = "isDelta" id="isDelta" value="TRUE">Дельта</input>
+    <input type="checkbox" name = "isSort" id="isSort" value="TRUE" >Сортировка</input>
+    <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
     <div id="axis"></div>
     <br/>

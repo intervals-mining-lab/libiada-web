@@ -14,7 +14,12 @@ namespace LibiadaWeb.Models
 { 
     public class DnaChainRepository : IDnaChainRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities context ;
+
+        public DnaChainRepository(LibiadaWebEntities db)
+        {
+            context = db;
+        }
 
         public IQueryable<dna_chain> All
         {

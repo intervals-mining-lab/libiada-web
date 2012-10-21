@@ -3,18 +3,29 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb;
+using LibiadaWeb.Helpers;
+using LibiadaWeb.Models;
 
 namespace LibiadaWeb.Controllers
 { 
     public class ChainController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
+        private DnaChainRepository dnaChainRepository;
+        private LiteratureChainRepository literatureChainRepository;
+
+        public ChainController()
+        {
+            dnaChainRepository = new DnaChainRepository(db);
+            literatureChainRepository = new LiteratureChainRepository(db);
+        }
 
         //
         // GET: /Chain/
@@ -52,6 +63,8 @@ namespace LibiadaWeb.Controllers
             ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
             return View();
         } 
 
@@ -59,34 +72,143 @@ namespace LibiadaWeb.Controllers
         // POST: /Chain/Create
 
         [HttpPost]
-        public ActionResult Create(chain chain, String stringChain)
+        public ActionResult Create(chain chain, String stringChain, int languageId, bool original)
         {
             if (ModelState.IsValid)
             {
-                chain.creation_date = new DateTimeOffset(DateTime.Now);
-                BaseChain libiadaChain = new BaseChain(stringChain);
+                var file = Request.Files[0];
 
-                int[] build = libiadaChain.Building;
-                for (int i = 0; i < build.Length; i++)
+                int fileLen = file.ContentLength;
+                byte[] input = new byte[fileLen];
+
+                // Initialize the stream
+                var fileStream = file.InputStream;
+
+                // Read the file into the byte array
+                fileStream.Read(input, 0, fileLen);
+                int natureId = db.matter.Single(m => m.id == chain.matter_id).nature_id;
+                // Copy the byte array into a string
+                if (natureId == 1)
                 {
-                    building buildingElement = new building();
-                    buildingElement.chain = chain;
-                    buildingElement.index = i;
-                    buildingElement.number = build[i];
-                    db.building.AddObject(buildingElement);
+                    stringChain = Encoding.ASCII.GetString(input);
+                }
+                else
+                {
+                    stringChain = Encoding.UTF8.GetString(input);
                 }
 
-                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+                BaseChain libiadaChain;// = new BaseChain(stringChain);
+                int[] libiadaBuilding;
+                switch (natureId)
                 {
-                    alphabet alphabetElement = new alphabet();
-                    alphabetElement.chain = chain;
-                    alphabetElement.number = i + 1;
-                    String strElem = libiadaChain.Alphabet[i].ToString();
-                    alphabetElement.element = db.element.Single(e => e.notation_id == chain.notation_id && e.value.Equals(strElem));
-                    db.alphabet.AddObject(alphabetElement);
+                    //генетическая цепочка
+                    case 1:
+                        //отделяем заголовок fasta файла от цепочки
+                        string[] splittedFasta = stringChain.Split('\n');
+                        stringChain = "";
+                        String fastaHeader = splittedFasta[0];
+                        for (int j = 1; j < splittedFasta.Length; j++)
+                        {
+                            stringChain += splittedFasta[j];
+                        }
+
+                        stringChain = DataTransformators.CleanFastaFile(stringChain);
+
+                        libiadaChain = new BaseChain(stringChain);
+
+                        dna_chain dbDnaChain;
+                        bool continueImport =
+                            db.dna_chain.Any(
+                                d =>
+                                d.notation_id == chain.notation_id && d.matter_id == chain.matter_id &&
+                                d.fasta_header == fastaHeader); 
+                        if (!continueImport)
+                        {
+                            dbDnaChain = new dna_chain()
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                dissimilar = chain.dissimilar,
+                                building_type_id = chain.building_type_id,
+                                notation_id = chain.notation_id,
+                                fasta_header = fastaHeader,
+                                piece_type_id = chain.piece_type_id,
+                                creation_date = new DateTimeOffset(DateTime.Now)
+                            };
+
+                            db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
+                            db.dna_chain.AddObject(dbDnaChain);
+
+                            dnaChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain, chain.notation_id);
+                        }
+                        else
+                        {
+                            dbDnaChain = db.dna_chain.Single(c => c.matter_id == chain.matter_id && c.notation_id == chain.notation_id && c.fasta_header == fastaHeader);
+                        }
+
+
+                        libiadaBuilding = libiadaChain.Building;
+
+                        dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaBuilding);
+
+                        db.SaveChanges();
+                        break;
+                    //музыкальная цепочка
+                    case 2:
+                        break;
+                    //литературная цепочка
+                    case 3:
+                        string[] text = stringChain.Split('\n');
+                        for (int l = 0; l < text.Length - 1; l++)
+                        {
+                            // убираем \r
+                            text[l] = text[l].Substring(0, text[l].Length - 1);
+                        }
+
+                        libiadaChain = new BaseChain(text.Length - 1);
+                        // в конце файла всегда пустая строка поэтому последний элемент не считаем
+                        for (int i = 0; i < text.Length - 1; i++)
+                        {
+                            libiadaChain.Add(new ValueString(text[i]), i);
+                        }
+                        literature_chain dbLiteratureChain;
+                        continueImport =
+                            db.literature_chain.Any(
+                                d =>
+                                d.notation_id == chain.notation_id && d.matter_id == chain.matter_id &&
+                                d.language_id == languageId); 
+                        if (!continueImport)
+                        {
+
+                            dbLiteratureChain = new literature_chain()
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                dissimilar = chain.dissimilar,
+                                building_type_id = chain.building_type_id,
+                                notation_id = chain.notation_id,
+                                language_id = languageId,
+                                original = original,
+                                piece_type_id = chain.piece_type_id,
+                                creation_date = new DateTimeOffset(DateTime.Now)
+                            };
+
+                            db.matter.Single(m => m.id == chain.matter_id).literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
+                            db.literature_chain.AddObject(dbLiteratureChain);
+
+                            literatureChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbLiteratureChain, chain.notation_id);
+                        }
+                        else
+                        {
+                            dbLiteratureChain = db.literature_chain.Single(c => c.matter_id == chain.matter_id && c.notation_id == chain.notation_id && c.language_id == languageId);
+                        }
+
+                        libiadaBuilding = libiadaChain.Building;
+
+                        literatureChainRepository.FromLibiadaBuildingToDbBuilding(dbLiteratureChain, libiadaBuilding);
+
+                        db.SaveChanges();
+                        break;
                 }
-                db.chain.AddObject(chain);
-                db.SaveChanges();
+
                 return RedirectToAction("Index");  
             }
 

@@ -18,13 +18,13 @@ namespace LibiadaWeb.Controllers
     public class MatterController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
-        private ChainRepository chainRepository = new ChainRepository();
-        private LiteratureChainRepository literatureChainRepository ;
-        private DnaChainRepository dnaChainRepository = new DnaChainRepository();
+        private LiteratureChainRepository literatureChainRepository;
+        private DnaChainRepository dnaChainRepository;
 
         public MatterController()
         {
             literatureChainRepository = new LiteratureChainRepository(db);
+            dnaChainRepository = new DnaChainRepository(db);
         }
 
         //
