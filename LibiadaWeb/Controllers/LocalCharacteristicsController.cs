@@ -39,21 +39,21 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int length, int step, bool isDelta, bool isSort)
+        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int notationId, int length, int step, bool isDelta, bool isSort)
         {
             List<List<Double>> characteristicsTemp = new List<List<Double>>();
             String chainName = db.matter.Single(m => m.id == matterId).name;
             List<String> partNames = new List<string>();
             List<String> characteristicNames = new List<string>();
-            characteristicsTemp.Add(new List<Double>());
-            for (int i = 0; i < notationIds.Length; i++)
+
+            for (int i = 0; i < characteristicIds.Length; i++)
             {
+                characteristicsTemp.Add(new List<Double>());
                 matter matter = db.matter.Single(m => m.id == matterId);
-                chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationIds[i]);
+                chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationId);
                 Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
                 int characteristicId = characteristicIds[i];
                 int linkUpId = linkUpIds[i];
-                int notationId = notationIds[i];
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
                                         db.link_up.Single(l => l.id == linkUpId).name + " " +
                                         db.notation.Single(n => n.id == notationId).name);

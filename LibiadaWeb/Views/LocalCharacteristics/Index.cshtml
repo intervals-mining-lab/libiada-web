@@ -19,10 +19,6 @@
             '@foreach (var option in ViewBag.linkUpsList)
              {<option value="@option.Value">@option.Text</option>}' +
         '</select>' +
-        '<select name="notationIds">' +
-            '@foreach (var option in ViewBag.notationsList)
-             {<option value="@option.Value">@option.Text</option>}' +
-        '</select>' +
         '<br/>');
         return false;
     }
@@ -51,14 +47,23 @@
     </table>
     <br/>
     @Html.Label("Размер окна:")
-    <input type ="number" id ="length" name = "length" />
+    <input type ="number" id ="length" name = "length" value="50"/>
     @Html.Label("Размер шага:")
-    <input type ="number" id ="step" name = "step" />
+    <input type ="number" id ="step" name = "step" value="2"/>
     <br/>
-    <input type="checkbox" name = "isDelta" id="isDelta" value="TRUE">Дельта</input>
-    <input type="checkbox" name = "isSort" id="isSort" value="TRUE" >Сортировка</input>
+    <input type="checkbox" name = "isDelta" id="isDelta" value="true">Дельта</input>
+    <input type ="hidden" name="isDelta" id="isDelta" value="false" />
+    <input type="checkbox" name = "isSort" id="isSort" value="true" >Сортировка</input>
+    <input type="hidden" name = "isSort" id="isSort" value="false"/>
     <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <br/>
+    <select name="notationId">
+            @foreach (var option in ViewBag.notationsList)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+    </select>
     <div id="axis"></div>
     <br/>
     <br/>

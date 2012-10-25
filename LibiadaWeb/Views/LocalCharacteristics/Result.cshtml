@@ -12,6 +12,7 @@
     var characteristics = new Array();
     var partNames = new Array();
     var colors = new Array();
+    var headers = new Array();
 
     $(document).ready(function() {
         colors.push('rgba(223, 83, 83, .5)');
@@ -22,6 +23,11 @@
         colors.push('rgba( 0, 150, 0, .5)');
         colors.push('rgba( 0, 0, 150  .5)');
 
+        var tableHeaders = $("#resultTable")[0].tBodies[0].rows[0].cells;
+        
+        for (var k = 1; k < tableHeaders.length; k++) {
+            headers.push(tableHeaders[k].innerText);
+        }
         var rows = $("#resultTable")[0].tBodies[0].rows;
         for (var i = 1; i < rows.length; i++) {
             partNames.push(rows[i].cells[0].innerText);
@@ -43,44 +49,90 @@
     
     var newChart;
     function DrawChart() {
-        var dataSeries = new Array();
+        
+        if($("#allGraphics")[0].checked) {
+            var dataSeries = new Array();
         var yValues = new Array();
-        dataSeries.push(new Object());
-        dataSeries[0].data = new Array();
-        dataSeries[0].name = "Характеристики цепочек";
-        dataSeries[0].type = 'area';
-        for(var i = 0; i < partNames.length; i++) {
+        
+            for (var j = 0; j < $("#yaxis option").length; j++) {
+                var ycharacteristicId = $("#yaxis option")[j].value;
+                dataSeries.push(new Object());
+                dataSeries[j].data = new Array();
+                dataSeries[j].name = headers[j];
+                dataSeries[j].type = 'area';
+                for (var i = 0; i < partNames.length; i++) {
+                    var y = characteristics[i][ycharacteristicId];
+                    yValues.push(y);
+                    var pointName = partNames[i];
+                    dataSeries[j].data[i] = new Object();
+                    dataSeries[j].data[i].x = i;
+                    dataSeries[j].data[i].y = y;
+                    dataSeries[j].data[i].name = pointName;
+                }
+
+                chart = new Highcharts.Chart({
+                    chart: { renderTo: 'visualization_container', zoomType: 'x' },
+
+                    legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+
+                    plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, colors[j]], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+
+                    title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
+
+                    tooltip: {
+                        formatter: function() {
+                            return this.point.name + '<br/> ' + this.y;
+                        }
+                    },
+
+                    xAxis: { maxZoom: 3, type: 'number', title: { text: 'Фрагменты цепочки' } },
+
+                    yAxis: { endOnTick: false, startOnTick: false, min: Math.min.apply(null, yValues), title: { text: $("#yaxis option:selected")[0].text } },
+
+                    series: dataSeries
+                });
+            }
+        } else {
+            var dataSeries = new Array();
+            var yValues = new Array();
+            dataSeries.push(new Object());
+            dataSeries[0].data = new Array();
+            dataSeries[0].name =  headers[j];
+            dataSeries[0].type = 'area';
             var ycharacteristicId = $("#yaxis option:selected")[0].value;
-            var y = characteristics[i][ycharacteristicId];
-            yValues.push(y);
-            var pointName = partNames[i];
-            dataSeries[0].data[i] = new Object();
-            dataSeries[0].data[i].x = i;
-            dataSeries[0].data[i].y = y;
-            dataSeries[0].data[i].name = pointName;
+            for (var i = 0; i < partNames.length; i++) {
+                var y = characteristics[i][ycharacteristicId];
+                yValues.push(y);
+                var pointName = partNames[i];
+                dataSeries[0].data[i] = new Object();
+                dataSeries[0].data[i].x = i;
+                dataSeries[0].data[i].y = y;
+                dataSeries[0].data[i].name = pointName;
+            }
+
+            chart = new Highcharts.Chart({
+                chart: { renderTo: 'visualization_container', zoomType: 'x' },
+
+                legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+
+                plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, 'rgb(116, 116, 116)'], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+
+                title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
+
+                tooltip: {
+                    formatter: function() {
+                        return this.point.name + '<br/> ' + this.y;
+                    }
+                },
+
+                xAxis: { maxZoom: 3, type: 'number', title: { text: 'Фрагменты цепочки' } },
+
+                yAxis: { endOnTick: false, startOnTick: false, min: Math.min.apply(null, yValues), title: { text: $("#yaxis option:selected")[0].text } },
+
+                series: dataSeries
+            });
         }
 
-        chart = new Highcharts.Chart({
-
-            chart: { renderTo:'visualization_container', zoomType: 'x' }, 
-
-            legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 }, 
-
-            plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, 'rgb(116, 116, 116)'], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart:0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } }, 
-
-            title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' }, 
-
-            tooltip: { formatter: function() {
-                return this.point.name +'<br/> '+ this.y;
-            } }, 
-
-            xAxis: { maxZoom: 3, type: 'number',   title: { text: 'Фрагменты цепочки' } }, 
-
-            yAxis: { endOnTick: false, startOnTick: false, min: Math.min.apply(null, yValues), title: { text: $("#yaxis option:selected")[0].text } }, 
-
-            series: dataSeries
-
-        });
 
     }
 </script>
@@ -122,5 +174,7 @@
         <option value="@option.Value">@option.Text</option>
     }
 </select>
+<br/>
+<input type="checkbox" name = "allGraphics" id="allGraphics" value="true" >Вывести все графики сразу</input>
 <br/>
 <button onclick="DrawChart()" >Отобразить разбиение</button>
