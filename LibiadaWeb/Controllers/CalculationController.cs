@@ -64,8 +64,8 @@ namespace LibiadaWeb.Controllers
                                               c.characteristic_type_id == characteristicId))
                     {
                         var dbCaracteristic = db.characteristic.Single(c =>
-                                                                       linkUpIds[i] == c.link_up.id && c.chain_id == chainId &&
-                                                                       c.characteristic_type_id == characteristicIds[i]);
+                                                                       linkUpId == c.link_up.id && c.chain_id == chainId &&
+                                                                       c.characteristic_type_id == characteristicId);
                         characteristics.Last().Add(dbCaracteristic.value.Value);
                     }
                     else
