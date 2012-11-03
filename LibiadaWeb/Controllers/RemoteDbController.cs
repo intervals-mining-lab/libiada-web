@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using LibiadaWeb;
 
 namespace LibiadaWeb.Controllers
 { 
     public class RemoteDbController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /RemoteDb/

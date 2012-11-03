@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
-using LibiadaWeb;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
-using DownLoadedFile = System.IO.File;
 
 namespace LibiadaWeb.Controllers
 {
     public class MatterController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
-        private LiteratureChainRepository literatureChainRepository;
-        private DnaChainRepository dnaChainRepository;
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly DnaChainRepository dnaChainRepository;
 
         public MatterController()
         {

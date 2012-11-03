@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data.Objects.DataClasses;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
-using LibiadaCore.Classes.Root.SimpleTypes;
-using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb.Models;
 using NewClusterization.Classes.DataMining.Clusterization;
 using NewClusterization.Classes.DataMining.Clusterization.AlternativeClusterization;
@@ -18,12 +13,21 @@ namespace LibiadaWeb.Controllers
 {
     public class ClusterizationController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
-        private MatterRepository matterRepository = new MatterRepository();
-        private ChainRepository chainRepository = new ChainRepository();
-        private CharacteristicTypeRepository characteristicRepository = new CharacteristicTypeRepository();
-        private LinkUpRepository linkUpRepository = new LinkUpRepository();
-        private NotationRepository notationRepository = new NotationRepository();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly MatterRepository matterRepository;
+        private readonly ChainRepository chainRepository;
+        private readonly CharacteristicTypeRepository characteristicRepository;
+        private readonly LinkUpRepository linkUpRepository;
+        private readonly NotationRepository notationRepository;
+
+        public ClusterizationController()
+        {
+            matterRepository = new MatterRepository(db);
+            chainRepository = new ChainRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            linkUpRepository = new LinkUpRepository(db);
+            notationRepository = new NotationRepository(db);
+        }
 
         //
         // GET: /Transformation/

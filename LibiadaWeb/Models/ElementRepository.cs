@@ -1,26 +1,28 @@
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
-using LibiadaWeb;
 
 namespace LibiadaWeb.Models
 { 
     public class ElementRepository : IElementRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities db = new LibiadaWebEntities();
+
+        public ElementRepository(LibiadaWebEntities db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<element> All
         {
-            get { return context.element; }
+            get { return db.element; }
         }
 
         public IQueryable<element> AllIncluding(params Expression<Func<element, object>>[] includeProperties)
         {
-            IQueryable<element> query = context.element;
+            IQueryable<element> query = db.element;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
@@ -29,35 +31,35 @@ namespace LibiadaWeb.Models
 
         public element Find(long id)
         {
-            return context.element.Single(x => x.id == id);
+            return db.element.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(element element)
         {
             if (element.id == default(long)) {
                 // New entity
-                context.element.AddObject(element);
+                db.element.AddObject(element);
             } else {
                 // Existing entity
-                context.element.Attach(element);
-                context.ObjectStateManager.ChangeObjectState(element, EntityState.Modified);
+                db.element.Attach(element);
+                db.ObjectStateManager.ChangeObjectState(element, EntityState.Modified);
             }
         }
 
         public void Delete(long id)
         {
-            var element = context.element.Single(x => x.id == id);
-            context.element.DeleteObject(element);
+            var element = db.element.Single(x => x.id == id);
+            db.element.DeleteObject(element);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

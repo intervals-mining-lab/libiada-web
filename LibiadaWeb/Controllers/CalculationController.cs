@@ -1,26 +1,31 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
-using LibiadaCore.Classes.Root.SimpleTypes;
-using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb.Models;
 
 namespace LibiadaWeb.Controllers
 {
     public class CalculationController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
-        private MatterRepository matterRepository = new MatterRepository();
-        private CharacteristicTypeRepository characteristicRepository = new CharacteristicTypeRepository();
-        private NotationRepository notationRepository = new NotationRepository();
-        private LinkUpRepository linkUpRepository = new LinkUpRepository();
-        private ChainRepository chainRepository = new ChainRepository();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly MatterRepository matterRepository;
+        private readonly CharacteristicTypeRepository characteristicRepository;
+        private readonly NotationRepository notationRepository;
+        private readonly LinkUpRepository linkUpRepository;
+        private readonly ChainRepository chainRepository;
+
+        public CalculationController()
+        {
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            linkUpRepository = new LinkUpRepository(db);
+            chainRepository = new ChainRepository(db);
+        }
 
         //
         // GET: /Calculation/

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 
@@ -10,7 +8,7 @@ namespace LibiadaWeb.Controllers
 {
     public class ChainCheckController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /ChainCheck/
@@ -24,17 +22,16 @@ namespace LibiadaWeb.Controllers
         public ActionResult Index(string[] file)
         {
             string stringChain = "";
-            var MyFileCollection = Request.Files[0];
-            var MyFile = MyFileCollection;
+            var myFile = Request.Files[0];
 
-            var FileLen = MyFile.ContentLength;
-            byte[] input = new byte[FileLen];
+            var fileLen = myFile.ContentLength;
+            byte[] input = new byte[fileLen];
 
             // Initialize the stream.
-            var fileStream = MyFile.InputStream;
+            var fileStream = myFile.InputStream;
 
             // Read the file into the byte array.
-            fileStream.Read(input, 0, FileLen);
+            fileStream.Read(input, 0, fileLen);
 
             // Copy the byte array into a string.
             stringChain = Encoding.ASCII.GetString(input);

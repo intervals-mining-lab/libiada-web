@@ -11,16 +11,21 @@ namespace LibiadaWeb.Models
 { 
     public class NatureRepository : INatureRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities db = new LibiadaWebEntities();
+
+        public NatureRepository(LibiadaWebEntities db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<nature> All
         {
-            get { return context.nature; }
+            get { return db.nature; }
         }
 
         public IQueryable<nature> AllIncluding(params Expression<Func<nature, object>>[] includeProperties)
         {
-            IQueryable<nature> query = context.nature;
+            IQueryable<nature> query = db.nature;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
@@ -29,35 +34,35 @@ namespace LibiadaWeb.Models
 
         public nature Find(int id)
         {
-            return context.nature.Single(x => x.id == id);
+            return db.nature.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(nature nature)
         {
             if (nature.id == default(int)) {
                 // New entity
-                context.nature.AddObject(nature);
+                db.nature.AddObject(nature);
             } else {
                 // Existing entity
-                context.nature.Attach(nature);
-                context.ObjectStateManager.ChangeObjectState(nature, EntityState.Modified);
+                db.nature.Attach(nature);
+                db.ObjectStateManager.ChangeObjectState(nature, EntityState.Modified);
             }
         }
 
         public void Delete(int id)
         {
-            var nature = context.nature.Single(x => x.id == id);
-            context.nature.DeleteObject(nature);
+            var nature = db.nature.Single(x => x.id == id);
+            db.nature.DeleteObject(nature);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

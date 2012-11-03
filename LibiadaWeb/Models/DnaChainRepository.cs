@@ -4,31 +4,29 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
-using LibiadaWeb;
 
 namespace LibiadaWeb.Models
 { 
     public class DnaChainRepository : IDnaChainRepository
     {
-        LibiadaWebEntities context ;
+        LibiadaWebEntities db;
 
         public DnaChainRepository(LibiadaWebEntities db)
         {
-            context = db;
+            this.db = db;
         }
 
         public IQueryable<dna_chain> All
         {
-            get { return context.dna_chain; }
+            get { return db.dna_chain; }
         }
 
         public IQueryable<dna_chain> AllIncluding(params Expression<Func<dna_chain, object>>[] includeProperties)
         {
-            IQueryable<dna_chain> query = context.dna_chain;
+            IQueryable<dna_chain> query = db.dna_chain;
             foreach (var includeProperty in includeProperties)
             {
                 query = query.Include(includeProperty);
@@ -38,7 +36,7 @@ namespace LibiadaWeb.Models
 
         public dna_chain Find(long id)
         {
-            return context.dna_chain.Single(x => x.id == id);
+            return db.dna_chain.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(dna_chain chain)
@@ -46,20 +44,20 @@ namespace LibiadaWeb.Models
             if (chain.id == default(long))
             {
                 // New entity
-                context.dna_chain.AddObject(chain);
+                db.dna_chain.AddObject(chain);
             }
             else
             {
                 // Existing entity
-                context.dna_chain.Attach(chain);
-                context.ObjectStateManager.ChangeObjectState(chain, EntityState.Modified);
+                db.dna_chain.Attach(chain);
+                db.ObjectStateManager.ChangeObjectState(chain, EntityState.Modified);
             }
         }
 
         public void Delete(long id)
         {
-            var chain = context.dna_chain.Single(x => x.id == id);
-            context.dna_chain.DeleteObject(chain);
+            var chain = db.dna_chain.Single(x => x.id == id);
+            db.dna_chain.DeleteObject(chain);
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
@@ -73,7 +71,7 @@ namespace LibiadaWeb.Models
             {
                 chainIds = new HashSet<long>();
             }
-            var allChains = context.dna_chain.Include("matter");
+            var allChains = db.dna_chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
@@ -111,26 +109,26 @@ namespace LibiadaWeb.Models
                 dbAlphabet.Add(new alphabet());
                 dbAlphabet[j].number = j + 1;
                 String strElem = libiadaAlphabet[j].ToString();
-                if (!context.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                 {
                     element newElement = new element();
                     newElement.value = strElem;
                     newElement.name = strElem;
                     newElement.notation_id = notationId;
                     newElement.creation_date = DateTime.Now;
-                    context.element.AddObject(newElement);
+                    db.element.AddObject(newElement);
                     dbAlphabet[j].element = newElement;
                 }
                 else
                 {
                     dbAlphabet[j].element =
-                    context.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+                    db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
                 }
 
                 parent.alphabet.Add(dbAlphabet[j]); //TODO: проверить, возможно одно из действий лишнее
-                context.alphabet.AddObject(dbAlphabet[j]);
+                db.alphabet.AddObject(dbAlphabet[j]);
             }
-            context.SaveChanges();
+            db.SaveChanges();
 
             return dbAlphabet;
         }
@@ -139,12 +137,12 @@ namespace LibiadaWeb.Models
         public int[] FromDbBuildingToLibiadaBuilding(dna_chain dbChain)
         {
             String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
-            return context.ExecuteStoreQuery<int>(query).ToArray();
+            return db.ExecuteStoreQuery<int>(query).ToArray();
         }
 
         public IEnumerable<building> FromLibiadaBuildingToDbBuilding(dna_chain parent, int[] libiadaBuilding)
         {
-            List<building> result = context.building.Where(b => b.chain_id == parent.id).OrderBy(b => b.index).ToList();
+            List<building> result = db.building.Where(b => b.chain_id == parent.id).OrderBy(b => b.index).ToList();
             int createdCount = result.Count;
             for (int i = createdCount; i < libiadaBuilding.Length; i++)
             {
@@ -153,28 +151,28 @@ namespace LibiadaWeb.Models
                 result[i].number = libiadaBuilding[i];
 
                 parent.building.Add(result[i]); //TODO: проверить, возможно одно из действий лишнее
-                context.building.AddObject(result[i]);
+                db.building.AddObject(result[i]);
 
                 //костыль чтобы БД реже умирала
                 if (i % 1000 == 0)
                 {
-                    context.SaveChanges();
+                    db.SaveChanges();
                 }
             }
 
-            context.SaveChanges();
+            db.SaveChanges();
 
             return result;
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

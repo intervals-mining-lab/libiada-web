@@ -14,22 +14,22 @@ namespace LibiadaWeb.Models
 {
     public class LiteratureChainRepository : ILiteratureChainRepository
     {
-        private LibiadaWebEntities context;
+        private LibiadaWebEntities db;
 
         public LiteratureChainRepository(LibiadaWebEntities db)
         {
-            context = db;
+            this.db = db;
         }
 
         public IQueryable<literature_chain> All
         {
-            get { return context.literature_chain; }
+            get { return db.literature_chain; }
         }
 
         public IQueryable<literature_chain> AllIncluding(
             params Expression<Func<literature_chain, object>>[] includeProperties)
         {
-            IQueryable<literature_chain> query = context.literature_chain;
+            IQueryable<literature_chain> query = db.literature_chain;
             foreach (var includeProperty in includeProperties)
             {
                 query = query.Include(includeProperty);
@@ -39,7 +39,7 @@ namespace LibiadaWeb.Models
 
         public literature_chain Find(long id)
         {
-            return context.literature_chain.Single(x => x.id == id);
+            return db.literature_chain.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(literature_chain literature_chain)
@@ -47,25 +47,25 @@ namespace LibiadaWeb.Models
             if (literature_chain.id == default(long))
             {
                 // New entity
-                context.literature_chain.AddObject(literature_chain);
+                db.literature_chain.AddObject(literature_chain);
             }
             else
             {
                 // Existing entity
-                context.literature_chain.Attach(literature_chain);
-                context.ObjectStateManager.ChangeObjectState(literature_chain, EntityState.Modified);
+                db.literature_chain.Attach(literature_chain);
+                db.ObjectStateManager.ChangeObjectState(literature_chain, EntityState.Modified);
             }
         }
 
         public void Delete(long id)
         {
-            var literature_chain = context.literature_chain.Single(x => x.id == id);
-            context.literature_chain.DeleteObject(literature_chain);
+            var literature_chain = db.literature_chain.Single(x => x.id == id);
+            db.literature_chain.DeleteObject(literature_chain);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<literature_chain> chains)
@@ -79,7 +79,7 @@ namespace LibiadaWeb.Models
             {
                 chainIds = new HashSet<long>();
             }
-            var allChains = context.literature_chain.Include("matter");
+            var allChains = db.literature_chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
@@ -117,7 +117,7 @@ namespace LibiadaWeb.Models
                 dbAlphabet.Add(new alphabet());
                 dbAlphabet[j].number = j + 1;
                 String strElem = libiadaAlphabet[j].ToString();
-                if (!context.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                 {
                     element newElement = new element()
                                              {
@@ -126,19 +126,19 @@ namespace LibiadaWeb.Models
                                                  notation_id = notationId,
                                                  creation_date = DateTime.Now
                                              };
-                    context.element.AddObject(newElement);
-                    context.SaveChanges();
+                    db.element.AddObject(newElement);
+                    db.SaveChanges();
                     dbAlphabet[j].element = newElement;
                 }
                 else
                 {
                     dbAlphabet[j].element =
-                    context.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+                    db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
                 }
 
                 parent.alphabet.Add(dbAlphabet[j]); //TODO: проверить, возможно одно из действий лишнее
-                context.alphabet.AddObject(dbAlphabet[j]);
-                context.SaveChanges();
+                db.alphabet.AddObject(dbAlphabet[j]);
+                db.SaveChanges();
             }
             
 
@@ -149,12 +149,12 @@ namespace LibiadaWeb.Models
         public int[] FromDbBuildingToLibiadaBuilding(literature_chain dbChain)
         {
             String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
-            return context.ExecuteStoreQuery<int>(query).ToArray();
+            return db.ExecuteStoreQuery<int>(query).ToArray();
         }
 
         public IEnumerable<building> FromLibiadaBuildingToDbBuilding(literature_chain parent, int[] libiadaBuilding)
         {
-            List<building> result = context.building.Where(b => b.chain_id == parent.id).OrderBy(b => b.index).ToList();
+            List<building> result = db.building.Where(b => b.chain_id == parent.id).OrderBy(b => b.index).ToList();
             int createdCount = result.Count;
             for (int i = createdCount; i < libiadaBuilding.Length; i++)
             {
@@ -163,23 +163,23 @@ namespace LibiadaWeb.Models
                 result[i].number = libiadaBuilding[i];
 
                 parent.building.Add(result[i]); //TODO: проверить, возможно одно из действий лишнее
-                context.building.AddObject(result[i]);
+                db.building.AddObject(result[i]);
 
                 //костыль чтобы БД реже умирала
                 if (i%1000 == 0)
                 {
-                    context.SaveChanges();
+                    db.SaveChanges();
                 }
             }
 
-            context.SaveChanges();
+            db.SaveChanges();
 
             return result;
         }
 
         public void Dispose()
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

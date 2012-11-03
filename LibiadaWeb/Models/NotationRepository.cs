@@ -12,16 +12,21 @@ namespace LibiadaWeb.Models
 { 
     public class NotationRepository : INotationRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities db = new LibiadaWebEntities();
+
+        public NotationRepository(LibiadaWebEntities db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<notation> All
         {
-            get { return context.notation; }
+            get { return db.notation; }
         }
 
         public IQueryable<notation> AllIncluding(params Expression<Func<notation, object>>[] includeProperties)
         {
-            IQueryable<notation> query = context.notation;
+            IQueryable<notation> query = db.notation;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
@@ -30,30 +35,30 @@ namespace LibiadaWeb.Models
 
         public notation Find(int id)
         {
-            return context.notation.Single(x => x.id == id);
+            return db.notation.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(notation notation)
         {
             if (notation.id == default(int)) {
                 // New entity
-                context.notation.AddObject(notation);
+                db.notation.AddObject(notation);
             } else {
                 // Existing entity
-                context.notation.Attach(notation);
-                context.ObjectStateManager.ChangeObjectState(notation, EntityState.Modified);
+                db.notation.Attach(notation);
+                db.ObjectStateManager.ChangeObjectState(notation, EntityState.Modified);
             }
         }
 
         public void Delete(int id)
         {
-            var notation = context.notation.Single(x => x.id == id);
-            context.notation.DeleteObject(notation);
+            var notation = db.notation.Single(x => x.id == id);
+            db.notation.DeleteObject(notation);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<notation> notations)
@@ -67,7 +72,7 @@ namespace LibiadaWeb.Models
             {
                 notationIds = new HashSet<int>();
             }
-            var allNotations = context.notation;
+            var allNotations = db.notation;
             var notationsList = new List<SelectListItem>();
             foreach (var notation in allNotations)
             {
@@ -83,7 +88,7 @@ namespace LibiadaWeb.Models
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

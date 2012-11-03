@@ -12,16 +12,21 @@ namespace LibiadaWeb.Models
 { 
     public class LinkUpRepository : ILinkUpRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities db = new LibiadaWebEntities();
 
+
+        public LinkUpRepository(LibiadaWebEntities db)
+        {
+            this.db = db;
+        }
         public IQueryable<link_up> All
         {
-            get { return context.link_up; }
+            get { return db.link_up; }
         }
 
         public IQueryable<link_up> AllIncluding(params Expression<Func<link_up, object>>[] includeProperties)
         {
-            IQueryable<link_up> query = context.link_up;
+            IQueryable<link_up> query = db.link_up;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
@@ -30,30 +35,30 @@ namespace LibiadaWeb.Models
 
         public link_up Find(int id)
         {
-            return context.link_up.Single(x => x.id == id);
+            return db.link_up.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(link_up link_up)
         {
             if (link_up.id == default(int)) {
                 // New entity
-                context.link_up.AddObject(link_up);
+                db.link_up.AddObject(link_up);
             } else {
                 // Existing entity
-                context.link_up.Attach(link_up);
-                context.ObjectStateManager.ChangeObjectState(link_up, EntityState.Modified);
+                db.link_up.Attach(link_up);
+                db.ObjectStateManager.ChangeObjectState(link_up, EntityState.Modified);
             }
         }
 
         public void Delete(int id)
         {
-            var link_up = context.link_up.Single(x => x.id == id);
-            context.link_up.DeleteObject(link_up);
+            var link_up = db.link_up.Single(x => x.id == id);
+            db.link_up.DeleteObject(link_up);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<link_up> linkUps)
@@ -67,7 +72,7 @@ namespace LibiadaWeb.Models
             {
                 linkUpIds = new HashSet<int>();
             }
-            var allLinkUps = context.link_up;
+            var allLinkUps = db.link_up;
             var linkUpsList = new List<SelectListItem>();
             foreach (var linkUp in allLinkUps)
             {
@@ -83,7 +88,7 @@ namespace LibiadaWeb.Models
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

@@ -12,16 +12,21 @@ namespace LibiadaWeb.Models
 { 
     public class MatterRepository : IMatterRepository
     {
-        LibiadaWebEntities context = new LibiadaWebEntities();
+        LibiadaWebEntities db = new LibiadaWebEntities();
+
+        public MatterRepository(LibiadaWebEntities db)
+        {
+            this.db = db;
+        }
 
         public IQueryable<matter> All
         {
-            get { return context.matter; }
+            get { return db.matter; }
         }
 
         public IQueryable<matter> AllIncluding(params Expression<Func<matter, object>>[] includeProperties)
         {
-            IQueryable<matter> query = context.matter;
+            IQueryable<matter> query = db.matter;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
@@ -30,30 +35,30 @@ namespace LibiadaWeb.Models
 
         public matter Find(long id)
         {
-            return context.matter.Single(x => x.id == id);
+            return db.matter.Single(x => x.id == id);
         }
 
         public void InsertOrUpdate(matter matter)
         {
             if (matter.id == default(long)) {
                 // New entity
-                context.matter.AddObject(matter);
+                db.matter.AddObject(matter);
             } else {
                 // Existing entity
-                context.matter.Attach(matter);
-                context.ObjectStateManager.ChangeObjectState(matter, EntityState.Modified);
+                db.matter.Attach(matter);
+                db.ObjectStateManager.ChangeObjectState(matter, EntityState.Modified);
             }
         }
 
         public void Delete(long id)
         {
-            var matter = context.matter.Single(x => x.id == id);
-            context.matter.DeleteObject(matter);
+            var matter = db.matter.Single(x => x.id == id);
+            db.matter.DeleteObject(matter);
         }
 
         public void Save()
         {
-            context.SaveChanges();
+            db.SaveChanges();
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> matters)
@@ -67,7 +72,7 @@ namespace LibiadaWeb.Models
             {
                 matterIds = new HashSet<long>();
             }
-            var allMatters = context.matter;
+            var allMatters = db.matter;
             var mattersList = new List<SelectListItem>();
             foreach (var matter in allMatters)
             {
@@ -83,7 +88,7 @@ namespace LibiadaWeb.Models
 
         public void Dispose() 
         {
-            context.Dispose();
+            db.Dispose();
         }
     }
 }

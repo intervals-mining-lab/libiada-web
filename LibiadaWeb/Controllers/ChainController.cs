@@ -4,12 +4,10 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
-using LibiadaWeb;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 
@@ -17,9 +15,9 @@ namespace LibiadaWeb.Controllers
 { 
     public class ChainController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
-        private DnaChainRepository dnaChainRepository;
-        private LiteratureChainRepository literatureChainRepository;
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly DnaChainRepository dnaChainRepository;
+        private readonly LiteratureChainRepository literatureChainRepository;
 
         public ChainController()
         {
@@ -32,7 +30,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var chain = db.chain.Include("building_type").Include("matter").Include("notation");
+            var chain = db.chain.OrderBy(c => c.creation_date).Include("building_type").Include("matter").Include("notation");
             return View(chain.ToList());
         }
 
@@ -72,7 +70,7 @@ namespace LibiadaWeb.Controllers
         // POST: /Chain/Create
 
         [HttpPost]
-        public ActionResult Create(chain chain, String stringChain, int languageId, bool original)
+        public ActionResult Create(chain chain, int languageId, bool original)
         {
             if (ModelState.IsValid)
             {
@@ -88,6 +86,7 @@ namespace LibiadaWeb.Controllers
                 fileStream.Read(input, 0, fileLen);
                 int natureId = db.matter.Single(m => m.id == chain.matter_id).nature_id;
                 // Copy the byte array into a string
+                String stringChain;
                 if (natureId == 1)
                 {
                     stringChain = Encoding.ASCII.GetString(input);

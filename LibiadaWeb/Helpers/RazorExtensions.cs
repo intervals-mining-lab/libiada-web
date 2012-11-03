@@ -4,7 +4,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace IvtLibrary.Helpers
+namespace LibiadaWeb.Helpers
 {
     public static class RazorExtensions
     {

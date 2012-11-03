@@ -1,7 +1,5 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
 
 namespace LibiadaWeb.Helpers
 {

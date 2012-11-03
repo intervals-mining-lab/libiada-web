@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
@@ -13,8 +11,13 @@ namespace LibiadaWeb.Controllers
 {
     public class TransformationController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
-        private ChainRepository chainRepository = new ChainRepository();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly ChainRepository chainRepository;
+
+        public TransformationController()
+        {
+            chainRepository = new ChainRepository(db);
+        }
 
         //
         // GET: /Transformation/
