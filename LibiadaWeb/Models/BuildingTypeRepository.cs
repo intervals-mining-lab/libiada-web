@@ -8,7 +8,7 @@ namespace LibiadaWeb.Models
 { 
     public class BuildingTypeRepository : IBuildingTypeRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public BuildingTypeRepository(LibiadaWebEntities db)
         {

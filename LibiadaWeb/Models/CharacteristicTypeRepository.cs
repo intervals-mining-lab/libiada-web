@@ -10,7 +10,7 @@ namespace LibiadaWeb.Models
 { 
     public class CharacteristicTypeRepository : ICharacteristicTypeRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public CharacteristicTypeRepository(LibiadaWebEntities db)
         {

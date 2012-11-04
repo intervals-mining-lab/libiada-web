@@ -8,7 +8,7 @@ namespace LibiadaWeb.Models
 { 
     public class ElementRepository : IElementRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public ElementRepository(LibiadaWebEntities db)
         {

@@ -12,7 +12,7 @@ namespace LibiadaWeb.Models
 { 
     public class DnaChainRepository : IDnaChainRepository
     {
-        LibiadaWebEntities db;
+        private readonly LibiadaWebEntities db;
 
         public DnaChainRepository(LibiadaWebEntities db)
         {

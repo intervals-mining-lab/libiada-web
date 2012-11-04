@@ -4,15 +4,13 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
-using LibiadaWeb;
 
 namespace LibiadaWeb.Models
 { 
     public class NotationRepository : INotationRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public NotationRepository(LibiadaWebEntities db)
         {

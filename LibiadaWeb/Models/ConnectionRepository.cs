@@ -8,7 +8,7 @@ namespace LibiadaWeb.Models
 { 
     public class ConnectionRepository : IConnectionRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public ConnectionRepository(LibiadaWebEntities db)
         {

@@ -4,17 +4,15 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
-using LibiadaWeb;
 
 namespace LibiadaWeb.Models
 {
     public class LiteratureChainRepository : ILiteratureChainRepository
     {
-        private LibiadaWebEntities db;
+        private readonly LibiadaWebEntities db;
 
         public LiteratureChainRepository(LibiadaWebEntities db)
         {

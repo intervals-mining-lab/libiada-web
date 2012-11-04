@@ -13,7 +13,7 @@ namespace LibiadaWeb.Models
 { 
     public class ChainRepository : IChainRepository
     {
-        LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         public ChainRepository(LibiadaWebEntities db)
         {
