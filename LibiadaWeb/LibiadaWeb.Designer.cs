@@ -57,8 +57,42 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_type", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_link_up", "link_up", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.link_up), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_instrument", "instrument", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.instrument), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_building_type", "building_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.building_type), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "homogeneous_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.homogeneous_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_building_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "building", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.building), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note", "note", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
 
 #endregion
 
@@ -445,6 +479,118 @@ namespace LibiadaWeb
             }
         }
         private ObjectSet<remote_db> _remote_db;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<fmotiv> fmotiv
+        {
+            get
+            {
+                if ((_fmotiv == null))
+                {
+                    _fmotiv = base.CreateObjectSet<fmotiv>("fmotiv");
+                }
+                return _fmotiv;
+            }
+        }
+        private ObjectSet<fmotiv> _fmotiv;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                if ((_homogeneous_characteristic == null))
+                {
+                    _homogeneous_characteristic = base.CreateObjectSet<homogeneous_characteristic>("homogeneous_characteristic");
+                }
+                return _homogeneous_characteristic;
+            }
+        }
+        private ObjectSet<homogeneous_characteristic> _homogeneous_characteristic;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<instrument> instrument
+        {
+            get
+            {
+                if ((_instrument == null))
+                {
+                    _instrument = base.CreateObjectSet<instrument>("instrument");
+                }
+                return _instrument;
+            }
+        }
+        private ObjectSet<instrument> _instrument;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<measure> measure
+        {
+            get
+            {
+                if ((_measure == null))
+                {
+                    _measure = base.CreateObjectSet<measure>("measure");
+                }
+                return _measure;
+            }
+        }
+        private ObjectSet<measure> _measure;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<music_chain> music_chain
+        {
+            get
+            {
+                if ((_music_chain == null))
+                {
+                    _music_chain = base.CreateObjectSet<music_chain>("music_chain");
+                }
+                return _music_chain;
+            }
+        }
+        private ObjectSet<music_chain> _music_chain;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<note> note
+        {
+            get
+            {
+                if ((_note == null))
+                {
+                    _note = base.CreateObjectSet<note>("note");
+                }
+                return _note;
+            }
+        }
+        private ObjectSet<note> _note;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<pitch> pitch
+        {
+            get
+            {
+                if ((_pitch == null))
+                {
+                    _pitch = base.CreateObjectSet<pitch>("pitch");
+                }
+                return _pitch;
+            }
+        }
+        private ObjectSet<pitch> _pitch;
 
         #endregion
         #region Методы AddTo
@@ -615,6 +761,62 @@ namespace LibiadaWeb
         public void AddToremote_db(remote_db remote_db)
         {
             base.AddObject("remote_db", remote_db);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet fmotiv. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTofmotiv(fmotiv fmotiv)
+        {
+            base.AddObject("fmotiv", fmotiv);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet homogeneous_characteristic. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTohomogeneous_characteristic(homogeneous_characteristic homogeneous_characteristic)
+        {
+            base.AddObject("homogeneous_characteristic", homogeneous_characteristic);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet instrument. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddToinstrument(instrument instrument)
+        {
+            base.AddObject("instrument", instrument);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet measure. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTomeasure(measure measure)
+        {
+            base.AddObject("measure", measure);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet music_chain. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTomusic_chain(music_chain music_chain)
+        {
+            base.AddObject("music_chain", music_chain);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet note. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTonote(note note)
+        {
+            base.AddObject("note", note);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet pitch. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTopitch(pitch pitch)
+        {
+            base.AddObject("pitch", pitch);
         }
 
         #endregion
@@ -1610,6 +1812,72 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_building_type", "literature_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_building_type", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_building_type", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_building_type", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_building_type", "measure")]
+        public EntityCollection<measure> measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<measure>("LibiadaWebModel.fk_measure_building_type", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<measure>("LibiadaWebModel.fk_measure_building_type", "measure", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_building_type", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_building_type", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_building_type", "music_chain", value);
                 }
             }
         }
@@ -2936,6 +3204,28 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_type", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_type", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_type", "homogeneous_characteristic", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -4104,6 +4394,1082 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_element", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_element", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_element", "homogeneous_characteristic", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="fmotiv")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class fmotiv : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта fmotiv.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
+        /// <param name="matter_id">Исходное значение свойства matter_id.</param>
+        /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        public static fmotiv Createfmotiv(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
+        {
+            fmotiv fmotiv = new fmotiv();
+            fmotiv.id = id;
+            fmotiv.building_type_id = building_type_id;
+            fmotiv.notation_id = notation_id;
+            fmotiv.creation_date = creation_date;
+            fmotiv.matter_id = matter_id;
+            fmotiv.dissimilar = dissimilar;
+            fmotiv.piece_type_id = piece_type_id;
+            fmotiv.piece_position = piece_position;
+            return fmotiv;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 building_type_id
+        {
+            get
+            {
+                return _building_type_id;
+            }
+            set
+            {
+                Onbuilding_type_idChanging(value);
+                ReportPropertyChanging("building_type_id");
+                _building_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("building_type_id");
+                Onbuilding_type_idChanged();
+            }
+        }
+        private global::System.Int32 _building_type_id;
+        partial void Onbuilding_type_idChanging(global::System.Int32 value);
+        partial void Onbuilding_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 matter_id
+        {
+            get
+            {
+                return _matter_id;
+            }
+            set
+            {
+                Onmatter_idChanging(value);
+                ReportPropertyChanging("matter_id");
+                _matter_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("matter_id");
+                Onmatter_idChanged();
+            }
+        }
+        private global::System.Int64 _matter_id;
+        partial void Onmatter_idChanging(global::System.Int64 value);
+        partial void Onmatter_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean dissimilar
+        {
+            get
+            {
+                return _dissimilar;
+            }
+            set
+            {
+                OndissimilarChanging(value);
+                ReportPropertyChanging("dissimilar");
+                _dissimilar = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("dissimilar");
+                OndissimilarChanged();
+            }
+        }
+        private global::System.Boolean _dissimilar;
+        partial void OndissimilarChanging(global::System.Boolean value);
+        partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                OnvalueChanging(value);
+                ReportPropertyChanging("value");
+                _value = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("value");
+                OnvalueChanged();
+            }
+        }
+        private global::System.String _value;
+        partial void OnvalueChanging(global::System.String value);
+        partial void OnvalueChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_building_type", "building_type")]
+        public building_type building_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_fmotiv_building_type", "building_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_fmotiv_building_type", "building_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<building_type> building_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_fmotiv_building_type", "building_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<building_type>("LibiadaWebModel.fk_fmotiv_building_type", "building_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_matter", "matter")]
+        public matter matter
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_fmotiv_matter", "matter").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_fmotiv_matter", "matter").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<matter> matterReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_fmotiv_matter", "matter");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_fmotiv_matter", "matter", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_fmotiv_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_fmotiv_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_fmotiv_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_fmotiv_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_piece_type", "piece_type")]
+        public piece_type piece_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_fmotiv_piece_type", "piece_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_fmotiv_piece_type", "piece_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<piece_type> piece_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_fmotiv_piece_type", "piece_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_fmotiv_piece_type", "piece_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_fmotiv", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_fmotiv", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_fmotiv", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_fmotiv", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_fmotiv", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_fmotiv", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_fmotiv", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_fmotiv", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_fmotiv", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_fmotiv", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_fmotiv", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_fmotiv", "homogeneous_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_fmotiv", "characteristic")]
+        public EntityCollection<characteristic> characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_fmotiv", "characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_fmotiv", "characteristic", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="homogeneous_characteristic")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class homogeneous_characteristic : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта homogeneous_characteristic.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="chain_id">Исходное значение свойства chain_id.</param>
+        /// <param name="characteristic_type_id">Исходное значение свойства characteristic_type_id.</param>
+        /// <param name="link_up_id">Исходное значение свойства link_up_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
+        /// <param name="element_id">Исходное значение свойства element_id.</param>
+        public static homogeneous_characteristic Createhomogeneous_characteristic(global::System.Int64 id, global::System.Int64 chain_id, global::System.Int32 characteristic_type_id, global::System.Int32 link_up_id, global::System.DateTimeOffset creation_date, global::System.Int64 element_id)
+        {
+            homogeneous_characteristic homogeneous_characteristic = new homogeneous_characteristic();
+            homogeneous_characteristic.id = id;
+            homogeneous_characteristic.chain_id = chain_id;
+            homogeneous_characteristic.characteristic_type_id = characteristic_type_id;
+            homogeneous_characteristic.link_up_id = link_up_id;
+            homogeneous_characteristic.creation_date = creation_date;
+            homogeneous_characteristic.element_id = element_id;
+            return homogeneous_characteristic;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 chain_id
+        {
+            get
+            {
+                return _chain_id;
+            }
+            set
+            {
+                Onchain_idChanging(value);
+                ReportPropertyChanging("chain_id");
+                _chain_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("chain_id");
+                Onchain_idChanged();
+            }
+        }
+        private global::System.Int64 _chain_id;
+        partial void Onchain_idChanging(global::System.Int64 value);
+        partial void Onchain_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 characteristic_type_id
+        {
+            get
+            {
+                return _characteristic_type_id;
+            }
+            set
+            {
+                Oncharacteristic_type_idChanging(value);
+                ReportPropertyChanging("characteristic_type_id");
+                _characteristic_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("characteristic_type_id");
+                Oncharacteristic_type_idChanged();
+            }
+        }
+        private global::System.Int32 _characteristic_type_id;
+        partial void Oncharacteristic_type_idChanging(global::System.Int32 value);
+        partial void Oncharacteristic_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Double> value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                OnvalueChanging(value);
+                ReportPropertyChanging("value");
+                _value = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("value");
+                OnvalueChanged();
+            }
+        }
+        private Nullable<global::System.Double> _value;
+        partial void OnvalueChanging(Nullable<global::System.Double> value);
+        partial void OnvalueChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String value_string
+        {
+            get
+            {
+                return _value_string;
+            }
+            set
+            {
+                Onvalue_stringChanging(value);
+                ReportPropertyChanging("value_string");
+                _value_string = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("value_string");
+                Onvalue_stringChanged();
+            }
+        }
+        private global::System.String _value_string;
+        partial void Onvalue_stringChanging(global::System.String value);
+        partial void Onvalue_stringChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 link_up_id
+        {
+            get
+            {
+                return _link_up_id;
+            }
+            set
+            {
+                Onlink_up_idChanging(value);
+                ReportPropertyChanging("link_up_id");
+                _link_up_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("link_up_id");
+                Onlink_up_idChanged();
+            }
+        }
+        private global::System.Int32 _link_up_id;
+        partial void Onlink_up_idChanging(global::System.Int32 value);
+        partial void Onlink_up_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 element_id
+        {
+            get
+            {
+                return _element_id;
+            }
+            set
+            {
+                Onelement_idChanging(value);
+                ReportPropertyChanging("element_id");
+                _element_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("element_id");
+                Onelement_idChanged();
+            }
+        }
+        private global::System.Int64 _element_id;
+        partial void Onelement_idChanging(global::System.Int64 value);
+        partial void Onelement_idChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_type", "characteristic_type")]
+        public characteristic_type characteristic_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_type>("LibiadaWebModel.fk_homogeneous_characteristic_type", "characteristic_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_type>("LibiadaWebModel.fk_homogeneous_characteristic_type", "characteristic_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<characteristic_type> characteristic_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_type>("LibiadaWebModel.fk_homogeneous_characteristic_type", "characteristic_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<characteristic_type>("LibiadaWebModel.fk_homogeneous_characteristic_type", "characteristic_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_element", "element")]
+        public element element
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<element>("LibiadaWebModel.fk_homogeneous_characteristic_element", "element").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<element>("LibiadaWebModel.fk_homogeneous_characteristic_element", "element").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<element> elementReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<element>("LibiadaWebModel.fk_homogeneous_characteristic_element", "element");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<element>("LibiadaWebModel.fk_homogeneous_characteristic_element", "element", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_link_up", "link_up")]
+        public link_up link_up
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<link_up>("LibiadaWebModel.fk_homogeneous_characteristic_link_up", "link_up").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<link_up>("LibiadaWebModel.fk_homogeneous_characteristic_link_up", "link_up").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<link_up> link_upReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<link_up>("LibiadaWebModel.fk_homogeneous_characteristic_link_up", "link_up");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<link_up>("LibiadaWebModel.fk_homogeneous_characteristic_link_up", "link_up", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="instrument")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class instrument : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта instrument.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static instrument Createinstrument(global::System.Int32 id, global::System.String name)
+        {
+            instrument instrument = new instrument();
+            instrument.id = id;
+            instrument.name = name;
+            return instrument;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_instrument", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_instrument", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_instrument", "music_chain", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -4751,6 +6117,28 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_literature_chain", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_literature_chain", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_literature_chain", "homogeneous_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "characteristic")]
         public EntityCollection<characteristic> characteristic
         {
@@ -5278,6 +6666,1312 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_matter", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_matter", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_matter", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_matter", "measure")]
+        public EntityCollection<measure> measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<measure>("LibiadaWebModel.fk_measure_matter", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<measure>("LibiadaWebModel.fk_measure_matter", "measure", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_matter", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_matter", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_matter", "music_chain", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="measure")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class measure : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта measure.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
+        /// <param name="matter_id">Исходное значение свойства matter_id.</param>
+        /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        /// <param name="beats">Исходное значение свойства beats.</param>
+        /// <param name="beatbase">Исходное значение свойства beatbase.</param>
+        /// <param name="fifths">Исходное значение свойства fifths.</param>
+        public static measure Createmeasure(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position, global::System.Int32 beats, global::System.Int32 beatbase, global::System.Int32 fifths)
+        {
+            measure measure = new measure();
+            measure.id = id;
+            measure.building_type_id = building_type_id;
+            measure.notation_id = notation_id;
+            measure.creation_date = creation_date;
+            measure.matter_id = matter_id;
+            measure.dissimilar = dissimilar;
+            measure.piece_type_id = piece_type_id;
+            measure.piece_position = piece_position;
+            measure.beats = beats;
+            measure.beatbase = beatbase;
+            measure.fifths = fifths;
+            return measure;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 building_type_id
+        {
+            get
+            {
+                return _building_type_id;
+            }
+            set
+            {
+                Onbuilding_type_idChanging(value);
+                ReportPropertyChanging("building_type_id");
+                _building_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("building_type_id");
+                Onbuilding_type_idChanged();
+            }
+        }
+        private global::System.Int32 _building_type_id;
+        partial void Onbuilding_type_idChanging(global::System.Int32 value);
+        partial void Onbuilding_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 matter_id
+        {
+            get
+            {
+                return _matter_id;
+            }
+            set
+            {
+                Onmatter_idChanging(value);
+                ReportPropertyChanging("matter_id");
+                _matter_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("matter_id");
+                Onmatter_idChanged();
+            }
+        }
+        private global::System.Int64 _matter_id;
+        partial void Onmatter_idChanging(global::System.Int64 value);
+        partial void Onmatter_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean dissimilar
+        {
+            get
+            {
+                return _dissimilar;
+            }
+            set
+            {
+                OndissimilarChanging(value);
+                ReportPropertyChanging("dissimilar");
+                _dissimilar = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("dissimilar");
+                OndissimilarChanged();
+            }
+        }
+        private global::System.Boolean _dissimilar;
+        partial void OndissimilarChanging(global::System.Boolean value);
+        partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                OnvalueChanging(value);
+                ReportPropertyChanging("value");
+                _value = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("value");
+                OnvalueChanged();
+            }
+        }
+        private global::System.String _value;
+        partial void OnvalueChanging(global::System.String value);
+        partial void OnvalueChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 beats
+        {
+            get
+            {
+                return _beats;
+            }
+            set
+            {
+                OnbeatsChanging(value);
+                ReportPropertyChanging("beats");
+                _beats = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("beats");
+                OnbeatsChanged();
+            }
+        }
+        private global::System.Int32 _beats;
+        partial void OnbeatsChanging(global::System.Int32 value);
+        partial void OnbeatsChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 beatbase
+        {
+            get
+            {
+                return _beatbase;
+            }
+            set
+            {
+                OnbeatbaseChanging(value);
+                ReportPropertyChanging("beatbase");
+                _beatbase = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("beatbase");
+                OnbeatbaseChanged();
+            }
+        }
+        private global::System.Int32 _beatbase;
+        partial void OnbeatbaseChanging(global::System.Int32 value);
+        partial void OnbeatbaseChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ticks_per_beat
+        {
+            get
+            {
+                return _ticks_per_beat;
+            }
+            set
+            {
+                Onticks_per_beatChanging(value);
+                ReportPropertyChanging("ticks_per_beat");
+                _ticks_per_beat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ticks_per_beat");
+                Onticks_per_beatChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ticks_per_beat;
+        partial void Onticks_per_beatChanging(Nullable<global::System.Int32> value);
+        partial void Onticks_per_beatChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 fifths
+        {
+            get
+            {
+                return _fifths;
+            }
+            set
+            {
+                OnfifthsChanging(value);
+                ReportPropertyChanging("fifths");
+                _fifths = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("fifths");
+                OnfifthsChanged();
+            }
+        }
+        private global::System.Int32 _fifths;
+        partial void OnfifthsChanging(global::System.Int32 value);
+        partial void OnfifthsChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_building_type", "building_type")]
+        public building_type building_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_measure_building_type", "building_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_measure_building_type", "building_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<building_type> building_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_measure_building_type", "building_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<building_type>("LibiadaWebModel.fk_measure_building_type", "building_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_matter", "matter")]
+        public matter matter
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_measure_matter", "matter").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_measure_matter", "matter").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<matter> matterReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_measure_matter", "matter");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_measure_matter", "matter", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_measure_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_measure_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_measure_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_measure_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_piece_type", "piece_type")]
+        public piece_type piece_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_measure_piece_type", "piece_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_measure_piece_type", "piece_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<piece_type> piece_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_measure_piece_type", "piece_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_measure_piece_type", "piece_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_measure", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_measure", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_measure", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_measure", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_measure", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_measure", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_measure", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_measure", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_measure", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_measure", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_measure", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_measure", "homogeneous_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_measure", "characteristic")]
+        public EntityCollection<characteristic> characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_measure", "characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_measure", "characteristic", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="music_chain")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class music_chain : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта music_chain.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="building_type_id">Исходное значение свойства building_type_id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="creation_date">Исходное значение свойства creation_date.</param>
+        /// <param name="matter_id">Исходное значение свойства matter_id.</param>
+        /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
+        /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
+        /// <param name="piece_position">Исходное значение свойства piece_position.</param>
+        public static music_chain Createmusic_chain(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
+        {
+            music_chain music_chain = new music_chain();
+            music_chain.id = id;
+            music_chain.building_type_id = building_type_id;
+            music_chain.notation_id = notation_id;
+            music_chain.creation_date = creation_date;
+            music_chain.matter_id = matter_id;
+            music_chain.dissimilar = dissimilar;
+            music_chain.piece_type_id = piece_type_id;
+            music_chain.piece_position = piece_position;
+            return music_chain;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 building_type_id
+        {
+            get
+            {
+                return _building_type_id;
+            }
+            set
+            {
+                Onbuilding_type_idChanging(value);
+                ReportPropertyChanging("building_type_id");
+                _building_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("building_type_id");
+                Onbuilding_type_idChanged();
+            }
+        }
+        private global::System.Int32 _building_type_id;
+        partial void Onbuilding_type_idChanging(global::System.Int32 value);
+        partial void Onbuilding_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTimeOffset creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private global::System.DateTimeOffset _creation_date;
+        partial void Oncreation_dateChanging(global::System.DateTimeOffset value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 matter_id
+        {
+            get
+            {
+                return _matter_id;
+            }
+            set
+            {
+                Onmatter_idChanging(value);
+                ReportPropertyChanging("matter_id");
+                _matter_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("matter_id");
+                Onmatter_idChanged();
+            }
+        }
+        private global::System.Int64 _matter_id;
+        partial void Onmatter_idChanging(global::System.Int64 value);
+        partial void Onmatter_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean dissimilar
+        {
+            get
+            {
+                return _dissimilar;
+            }
+            set
+            {
+                OndissimilarChanging(value);
+                ReportPropertyChanging("dissimilar");
+                _dissimilar = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("dissimilar");
+                OndissimilarChanged();
+            }
+        }
+        private global::System.Boolean _dissimilar;
+        partial void OndissimilarChanging(global::System.Boolean value);
+        partial void OndissimilarChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 piece_type_id
+        {
+            get
+            {
+                return _piece_type_id;
+            }
+            set
+            {
+                Onpiece_type_idChanging(value);
+                ReportPropertyChanging("piece_type_id");
+                _piece_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_type_id");
+                Onpiece_type_idChanged();
+            }
+        }
+        private global::System.Int32 _piece_type_id;
+        partial void Onpiece_type_idChanging(global::System.Int32 value);
+        partial void Onpiece_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 piece_position
+        {
+            get
+            {
+                return _piece_position;
+            }
+            set
+            {
+                Onpiece_positionChanging(value);
+                ReportPropertyChanging("piece_position");
+                _piece_position = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("piece_position");
+                Onpiece_positionChanged();
+            }
+        }
+        private global::System.Int64 _piece_position;
+        partial void Onpiece_positionChanging(global::System.Int64 value);
+        partial void Onpiece_positionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> instrument_id
+        {
+            get
+            {
+                return _instrument_id;
+            }
+            set
+            {
+                Oninstrument_idChanging(value);
+                ReportPropertyChanging("instrument_id");
+                _instrument_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("instrument_id");
+                Oninstrument_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _instrument_id;
+        partial void Oninstrument_idChanging(Nullable<global::System.Int32> value);
+        partial void Oninstrument_idChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_building_type", "building_type")]
+        public building_type building_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_music_chain_building_type", "building_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_music_chain_building_type", "building_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<building_type> building_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<building_type>("LibiadaWebModel.fk_music_chain_building_type", "building_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<building_type>("LibiadaWebModel.fk_music_chain_building_type", "building_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_instrument", "instrument")]
+        public instrument instrument
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<instrument> instrumentReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_matter", "matter")]
+        public matter matter
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_music_chain_matter", "matter").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_music_chain_matter", "matter").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<matter> matterReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<matter>("LibiadaWebModel.fk_music_chain_matter", "matter");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<matter>("LibiadaWebModel.fk_music_chain_matter", "matter", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_music_chain_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_music_chain_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_music_chain_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_music_chain_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_piece_type", "piece_type")]
+        public piece_type piece_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_music_chain_piece_type", "piece_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_music_chain_piece_type", "piece_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<piece_type> piece_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<piece_type>("LibiadaWebModel.fk_music_chain_piece_type", "piece_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_music_chain_piece_type", "piece_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_music_chain", "alphabet")]
+        public EntityCollection<alphabet> alphabet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_music_chain", "alphabet");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<alphabet>("LibiadaWebModel.fk_alphabet_music_chain", "alphabet", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_building_music_chain", "building")]
+        public EntityCollection<building> building
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<building>("LibiadaWebModel.fk_building_music_chain", "building");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<building>("LibiadaWebModel.fk_building_music_chain", "building", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_binary_characteristic_music_chain", "binary_characteristic")]
+        public EntityCollection<binary_characteristic> binary_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_music_chain", "binary_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<binary_characteristic>("LibiadaWebModel.fk_binary_characteristic_music_chain", "binary_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_homogeneous_characteristic_music_chain", "homogeneous_characteristic")]
+        public EntityCollection<homogeneous_characteristic> homogeneous_characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_music_chain", "homogeneous_characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<homogeneous_characteristic>("LibiadaWebModel.fk_homogeneous_characteristic_music_chain", "homogeneous_characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_music_chain", "characteristic")]
+        public EntityCollection<characteristic> characteristic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_music_chain", "characteristic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_music_chain", "characteristic", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -5712,6 +8406,512 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_notation", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_notation", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_notation", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_notation", "measure")]
+        public EntityCollection<measure> measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<measure>("LibiadaWebModel.fk_measure_notation", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<measure>("LibiadaWebModel.fk_measure_notation", "measure", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_notation", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_notation", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_notation", "music_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_note_notation", "note")]
+        public EntityCollection<note> note
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<note>("LibiadaWebModel.fk_note_notation", "note");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<note>("LibiadaWebModel.fk_note_notation", "note", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="note")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class note : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта note.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="notation_id">Исходное значение свойства notation_id.</param>
+        /// <param name="numerator">Исходное значение свойства numerator.</param>
+        /// <param name="denominator">Исходное значение свойства denominator.</param>
+        /// <param name="onumerator">Исходное значение свойства onumerator.</param>
+        /// <param name="odenominator">Исходное значение свойства odenominator.</param>
+        /// <param name="triplet">Исходное значение свойства triplet.</param>
+        public static note Createnote(global::System.Int64 id, global::System.Int32 notation_id, global::System.Int32 numerator, global::System.Int32 denominator, global::System.Int32 onumerator, global::System.Int32 odenominator, global::System.Boolean triplet)
+        {
+            note note = new note();
+            note.id = id;
+            note.notation_id = notation_id;
+            note.numerator = numerator;
+            note.denominator = denominator;
+            note.onumerator = onumerator;
+            note.odenominator = odenominator;
+            note.triplet = triplet;
+            return note;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int64 _id;
+        partial void OnidChanging(global::System.Int64 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String value
+        {
+            get
+            {
+                return _value;
+            }
+            set
+            {
+                OnvalueChanging(value);
+                ReportPropertyChanging("value");
+                _value = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("value");
+                OnvalueChanged();
+            }
+        }
+        private global::System.String _value;
+        partial void OnvalueChanging(global::System.String value);
+        partial void OnvalueChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 notation_id
+        {
+            get
+            {
+                return _notation_id;
+            }
+            set
+            {
+                Onnotation_idChanging(value);
+                ReportPropertyChanging("notation_id");
+                _notation_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("notation_id");
+                Onnotation_idChanged();
+            }
+        }
+        private global::System.Int32 _notation_id;
+        partial void Onnotation_idChanging(global::System.Int32 value);
+        partial void Onnotation_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTimeOffset> creation_date
+        {
+            get
+            {
+                return _creation_date;
+            }
+            set
+            {
+                Oncreation_dateChanging(value);
+                ReportPropertyChanging("creation_date");
+                _creation_date = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("creation_date");
+                Oncreation_dateChanged();
+            }
+        }
+        private Nullable<global::System.DateTimeOffset> _creation_date;
+        partial void Oncreation_dateChanging(Nullable<global::System.DateTimeOffset> value);
+        partial void Oncreation_dateChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 numerator
+        {
+            get
+            {
+                return _numerator;
+            }
+            set
+            {
+                OnnumeratorChanging(value);
+                ReportPropertyChanging("numerator");
+                _numerator = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("numerator");
+                OnnumeratorChanged();
+            }
+        }
+        private global::System.Int32 _numerator;
+        partial void OnnumeratorChanging(global::System.Int32 value);
+        partial void OnnumeratorChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 denominator
+        {
+            get
+            {
+                return _denominator;
+            }
+            set
+            {
+                OndenominatorChanging(value);
+                ReportPropertyChanging("denominator");
+                _denominator = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("denominator");
+                OndenominatorChanged();
+            }
+        }
+        private global::System.Int32 _denominator;
+        partial void OndenominatorChanging(global::System.Int32 value);
+        partial void OndenominatorChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> ticks
+        {
+            get
+            {
+                return _ticks;
+            }
+            set
+            {
+                OnticksChanging(value);
+                ReportPropertyChanging("ticks");
+                _ticks = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ticks");
+                OnticksChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _ticks;
+        partial void OnticksChanging(Nullable<global::System.Int32> value);
+        partial void OnticksChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 onumerator
+        {
+            get
+            {
+                return _onumerator;
+            }
+            set
+            {
+                OnonumeratorChanging(value);
+                ReportPropertyChanging("onumerator");
+                _onumerator = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("onumerator");
+                OnonumeratorChanged();
+            }
+        }
+        private global::System.Int32 _onumerator;
+        partial void OnonumeratorChanging(global::System.Int32 value);
+        partial void OnonumeratorChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 odenominator
+        {
+            get
+            {
+                return _odenominator;
+            }
+            set
+            {
+                OnodenominatorChanging(value);
+                ReportPropertyChanging("odenominator");
+                _odenominator = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("odenominator");
+                OnodenominatorChanged();
+            }
+        }
+        private global::System.Int32 _odenominator;
+        partial void OnodenominatorChanging(global::System.Int32 value);
+        partial void OnodenominatorChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean triplet
+        {
+            get
+            {
+                return _triplet;
+            }
+            set
+            {
+                OntripletChanging(value);
+                ReportPropertyChanging("triplet");
+                _triplet = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("triplet");
+                OntripletChanged();
+            }
+        }
+        private global::System.Boolean _triplet;
+        partial void OntripletChanging(global::System.Boolean value);
+        partial void OntripletChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> priority
+        {
+            get
+            {
+                return _priority;
+            }
+            set
+            {
+                OnpriorityChanging(value);
+                ReportPropertyChanging("priority");
+                _priority = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("priority");
+                OnpriorityChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _priority;
+        partial void OnpriorityChanging(Nullable<global::System.Int32> value);
+        partial void OnpriorityChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_note_notation", "notation")]
+        public notation notation
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_note_notation", "notation").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_note_notation", "notation").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<notation> notationReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<notation>("LibiadaWebModel.fk_note_notation", "notation");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<notation>("LibiadaWebModel.fk_note_notation", "notation", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_note", "pitch")]
+        public EntityCollection<pitch> pitch
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_note", "pitch");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_note", "pitch", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -5947,6 +9147,272 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<nature>("LibiadaWebModel.fk_piece_type_nature", "nature", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_piece_type", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_piece_type", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_piece_type", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_piece_type", "measure")]
+        public EntityCollection<measure> measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<measure>("LibiadaWebModel.fk_measure_piece_type", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<measure>("LibiadaWebModel.fk_measure_piece_type", "measure", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_piece_type", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_piece_type", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_piece_type", "music_chain", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="pitch")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class pitch : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта pitch.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="octave">Исходное значение свойства octave.</param>
+        /// <param name="midinumber">Исходное значение свойства midinumber.</param>
+        /// <param name="instrument">Исходное значение свойства instrument.</param>
+        /// <param name="note_id">Исходное значение свойства note_id.</param>
+        public static pitch Createpitch(global::System.Int32 id, global::System.Int32 octave, global::System.Int32 midinumber, global::System.Int32 instrument, global::System.Int64 note_id)
+        {
+            pitch pitch = new pitch();
+            pitch.id = id;
+            pitch.octave = octave;
+            pitch.midinumber = midinumber;
+            pitch.instrument = instrument;
+            pitch.note_id = note_id;
+            return pitch;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 octave
+        {
+            get
+            {
+                return _octave;
+            }
+            set
+            {
+                OnoctaveChanging(value);
+                ReportPropertyChanging("octave");
+                _octave = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("octave");
+                OnoctaveChanged();
+            }
+        }
+        private global::System.Int32 _octave;
+        partial void OnoctaveChanging(global::System.Int32 value);
+        partial void OnoctaveChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 midinumber
+        {
+            get
+            {
+                return _midinumber;
+            }
+            set
+            {
+                OnmidinumberChanging(value);
+                ReportPropertyChanging("midinumber");
+                _midinumber = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("midinumber");
+                OnmidinumberChanged();
+            }
+        }
+        private global::System.Int32 _midinumber;
+        partial void OnmidinumberChanging(global::System.Int32 value);
+        partial void OnmidinumberChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 instrument
+        {
+            get
+            {
+                return _instrument;
+            }
+            set
+            {
+                OninstrumentChanging(value);
+                ReportPropertyChanging("instrument");
+                _instrument = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("instrument");
+                OninstrumentChanged();
+            }
+        }
+        private global::System.Int32 _instrument;
+        partial void OninstrumentChanging(global::System.Int32 value);
+        partial void OninstrumentChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int64 note_id
+        {
+            get
+            {
+                return _note_id;
+            }
+            set
+            {
+                Onnote_idChanging(value);
+                ReportPropertyChanging("note_id");
+                _note_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("note_id");
+                Onnote_idChanged();
+            }
+        }
+        private global::System.Int64 _note_id;
+        partial void Onnote_idChanging(global::System.Int64 value);
+        partial void Onnote_idChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_note", "note")]
+        public note note
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note>("LibiadaWebModel.fk_pitch_note", "note").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note>("LibiadaWebModel.fk_pitch_note", "note").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<note> noteReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note>("LibiadaWebModel.fk_pitch_note", "note");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<note>("LibiadaWebModel.fk_pitch_note", "note", value);
                 }
             }
         }
