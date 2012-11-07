@@ -95,6 +95,7 @@
     <Compile Include="Controllers\ConnectionTypeController.cs" />
     <Compile Include="Controllers\ElementController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomogeneousCalculationController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Controllers\LinkUpController.cs" />
     <Compile Include="Controllers\LocalCharacteristicsController.cs" />
@@ -324,6 +325,8 @@
     <Content Include="Views\Language\Delete.cshtml" />
     <Content Include="Views\BuildingCompare\Index.cshtml" />
     <Content Include="Views\BuildingCompare\Result.cshtml" />
+    <Content Include="Views\HomogeneousCalculation\Index.cshtml" />
+    <Content Include="Views\HomogeneousCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

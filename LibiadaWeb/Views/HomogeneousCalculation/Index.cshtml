@@ -1,0 +1,61 @@
+﻿@using LibiadaWeb.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление характеристик однородных цепочек";
+}
+
+<h2>Вычисление характеристик однородных цепочек</h2>
+
+<script type="text/javascript">
+
+    function AddAxis() {
+        $("#axis").append(
+        '<select name="characteristicIds">' +
+            '@foreach (var option in ViewBag.characteristicsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<select name="linkUpIds">' +
+            '@foreach (var option in ViewBag.linkUpsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<br/>');
+        return false;
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <table>
+        <tr>
+            <th>
+                Название объекта
+            </th>
+        </tr>
+        @{
+            List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
+
+            foreach (var item in mattersList)
+            {
+                <tr>
+                    <td>
+                        @item
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <br/>
+    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <br/>
+    <select name="notationId">
+            @foreach (var option in ViewBag.notationsList)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+    </select>
+    <div id="axis"></div>
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}
