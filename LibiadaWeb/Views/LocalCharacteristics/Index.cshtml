@@ -51,10 +51,11 @@
     @Html.Label("Размер шага:")
     <input type ="number" id ="step" name = "step" value="2"/>
     <br/>
-    <input type="checkbox" name = "isDelta" id="isDelta" value="true">Дельта</input>
-    <input type ="hidden" name="isDelta" id="isDelta" value="false" />
-    <input type="checkbox" name = "isSort" id="isSort" value="true" >Сортировка</input>
-    <input type="hidden" name = "isSort" id="isSort" value="false"/>
+    @Html.CheckBox("isDelta")
+    @Html.Label("isDelta", "Считать разницу между характеристиками")
+    <br/>
+    @Html.CheckBox("isSort")
+    @Html.Label("isSort", "Сортировать")
     <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
     <br/>

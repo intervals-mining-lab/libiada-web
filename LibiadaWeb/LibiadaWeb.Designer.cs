@@ -93,6 +93,10 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note", "note", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_accidental", "accidental", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.accidental), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note_symbol), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_slur", "slur", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.slur), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
 
 #endregion
 
@@ -591,6 +595,70 @@ namespace LibiadaWeb
             }
         }
         private ObjectSet<pitch> _pitch;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<accidental> accidental
+        {
+            get
+            {
+                if ((_accidental == null))
+                {
+                    _accidental = base.CreateObjectSet<accidental>("accidental");
+                }
+                return _accidental;
+            }
+        }
+        private ObjectSet<accidental> _accidental;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<fmotiv_type> fmotiv_type
+        {
+            get
+            {
+                if ((_fmotiv_type == null))
+                {
+                    _fmotiv_type = base.CreateObjectSet<fmotiv_type>("fmotiv_type");
+                }
+                return _fmotiv_type;
+            }
+        }
+        private ObjectSet<fmotiv_type> _fmotiv_type;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<note_symbol> note_symbol
+        {
+            get
+            {
+                if ((_note_symbol == null))
+                {
+                    _note_symbol = base.CreateObjectSet<note_symbol>("note_symbol");
+                }
+                return _note_symbol;
+            }
+        }
+        private ObjectSet<note_symbol> _note_symbol;
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        public ObjectSet<slur> slur
+        {
+            get
+            {
+                if ((_slur == null))
+                {
+                    _slur = base.CreateObjectSet<slur>("slur");
+                }
+                return _slur;
+            }
+        }
+        private ObjectSet<slur> _slur;
 
         #endregion
         #region Методы AddTo
@@ -818,6 +886,38 @@ namespace LibiadaWeb
         {
             base.AddObject("pitch", pitch);
         }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet accidental. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddToaccidental(accidental accidental)
+        {
+            base.AddObject("accidental", accidental);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet fmotiv_type. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTofmotiv_type(fmotiv_type fmotiv_type)
+        {
+            base.AddObject("fmotiv_type", fmotiv_type);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet note_symbol. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddTonote_symbol(note_symbol note_symbol)
+        {
+            base.AddObject("note_symbol", note_symbol);
+        }
+    
+        /// <summary>
+        /// Устаревший метод для добавления новых объектов в набор EntitySet slur. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
+        /// </summary>
+        public void AddToslur(slur slur)
+        {
+            base.AddObject("slur", slur);
+        }
 
         #endregion
     }
@@ -826,6 +926,136 @@ namespace LibiadaWeb
     #endregion
     
     #region Сущности
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="accidental")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class accidental : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта accidental.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static accidental Createaccidental(global::System.Int32 id, global::System.String name)
+        {
+            accidental accidental = new accidental();
+            accidental.id = id;
+            accidental.name = name;
+            return accidental;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_accidental", "pitch")]
+        public EntityCollection<pitch> pitch
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_accidental", "pitch");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_accidental", "pitch", value);
+                }
+            }
+        }
+
+        #endregion
+    }
     
     /// <summary>
     /// Нет доступной документации по метаданным.
@@ -4441,7 +4671,8 @@ namespace LibiadaWeb
         /// <param name="dissimilar">Исходное значение свойства dissimilar.</param>
         /// <param name="piece_type_id">Исходное значение свойства piece_type_id.</param>
         /// <param name="piece_position">Исходное значение свойства piece_position.</param>
-        public static fmotiv Createfmotiv(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
+        /// <param name="fmotiv_type_id">Исходное значение свойства fmotiv_type_id.</param>
+        public static fmotiv Createfmotiv(global::System.Int64 id, global::System.Int32 building_type_id, global::System.Int32 notation_id, global::System.DateTimeOffset creation_date, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position, global::System.Int32 fmotiv_type_id)
         {
             fmotiv fmotiv = new fmotiv();
             fmotiv.id = id;
@@ -4452,6 +4683,7 @@ namespace LibiadaWeb
             fmotiv.dissimilar = dissimilar;
             fmotiv.piece_type_id = piece_type_id;
             fmotiv.piece_position = piece_position;
+            fmotiv.fmotiv_type_id = fmotiv_type_id;
             return fmotiv;
         }
 
@@ -4724,6 +4956,30 @@ namespace LibiadaWeb
         private global::System.String _name;
         partial void OnnameChanging(global::System.String value);
         partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 fmotiv_type_id
+        {
+            get
+            {
+                return _fmotiv_type_id;
+            }
+            set
+            {
+                Onfmotiv_type_idChanging(value);
+                ReportPropertyChanging("fmotiv_type_id");
+                _fmotiv_type_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("fmotiv_type_id");
+                Onfmotiv_type_idChanged();
+            }
+        }
+        private global::System.Int32 _fmotiv_type_id;
+        partial void Onfmotiv_type_idChanging(global::System.Int32 value);
+        partial void Onfmotiv_type_idChanged();
 
         #endregion
     
@@ -4987,6 +5243,174 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_fmotiv", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv_type")]
+        public fmotiv_type fmotiv_type
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv_type>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv_type").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv_type>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv_type").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<fmotiv_type> fmotiv_typeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv_type>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv_type");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<fmotiv_type>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv_type", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="fmotiv_type")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class fmotiv_type : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта fmotiv_type.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static fmotiv_type Createfmotiv_type(global::System.Int32 id, global::System.String name)
+        {
+            fmotiv_type fmotiv_type = new fmotiv_type();
+            fmotiv_type.id = id;
+            fmotiv_type.name = name;
+            return fmotiv_type;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv", value);
                 }
             }
         }
@@ -8518,7 +8942,8 @@ namespace LibiadaWeb
         /// <param name="onumerator">Исходное значение свойства onumerator.</param>
         /// <param name="odenominator">Исходное значение свойства odenominator.</param>
         /// <param name="triplet">Исходное значение свойства triplet.</param>
-        public static note Createnote(global::System.Int64 id, global::System.Int32 notation_id, global::System.Int32 numerator, global::System.Int32 denominator, global::System.Int32 onumerator, global::System.Int32 odenominator, global::System.Boolean triplet)
+        /// <param name="slur_id">Исходное значение свойства slur_id.</param>
+        public static note Createnote(global::System.Int64 id, global::System.Int32 notation_id, global::System.Int32 numerator, global::System.Int32 denominator, global::System.Int32 onumerator, global::System.Int32 odenominator, global::System.Boolean triplet, global::System.Int32 slur_id)
         {
             note note = new note();
             note.id = id;
@@ -8528,6 +8953,7 @@ namespace LibiadaWeb
             note.onumerator = onumerator;
             note.odenominator = odenominator;
             note.triplet = triplet;
+            note.slur_id = slur_id;
             return note;
         }
 
@@ -8848,6 +9274,30 @@ namespace LibiadaWeb
         private Nullable<global::System.Int32> _priority;
         partial void OnpriorityChanging(Nullable<global::System.Int32> value);
         partial void OnpriorityChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 slur_id
+        {
+            get
+            {
+                return _slur_id;
+            }
+            set
+            {
+                Onslur_idChanging(value);
+                ReportPropertyChanging("slur_id");
+                _slur_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("slur_id");
+                Onslur_idChanged();
+            }
+        }
+        private global::System.Int32 _slur_id;
+        partial void Onslur_idChanging(global::System.Int32 value);
+        partial void Onslur_idChanged();
 
         #endregion
     
@@ -8909,6 +9359,174 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_note", "pitch", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_note_slur", "slur")]
+        public slur slur
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<slur>("LibiadaWebModel.fk_note_slur", "slur").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<slur>("LibiadaWebModel.fk_note_slur", "slur").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<slur> slurReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<slur>("LibiadaWebModel.fk_note_slur", "slur");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<slur>("LibiadaWebModel.fk_note_slur", "slur", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="note_symbol")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class note_symbol : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта note_symbol.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static note_symbol Createnote_symbol(global::System.Int32 id, global::System.String name)
+        {
+            note_symbol note_symbol = new note_symbol();
+            note_symbol.id = id;
+            note_symbol.name = name;
+            return note_symbol;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "pitch")]
+        public EntityCollection<pitch> pitch
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_note_symbol", "pitch");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<pitch>("LibiadaWebModel.fk_pitch_note_symbol", "pitch", value);
                 }
             }
         }
@@ -9238,7 +9856,9 @@ namespace LibiadaWeb
         /// <param name="midinumber">Исходное значение свойства midinumber.</param>
         /// <param name="instrument">Исходное значение свойства instrument.</param>
         /// <param name="note_id">Исходное значение свойства note_id.</param>
-        public static pitch Createpitch(global::System.Int32 id, global::System.Int32 octave, global::System.Int32 midinumber, global::System.Int32 instrument, global::System.Int64 note_id)
+        /// <param name="accidental_id">Исходное значение свойства accidental_id.</param>
+        /// <param name="note_symbol_id">Исходное значение свойства note_symbol_id.</param>
+        public static pitch Createpitch(global::System.Int32 id, global::System.Int32 octave, global::System.Int32 midinumber, global::System.Int32 instrument, global::System.Int64 note_id, global::System.Int32 accidental_id, global::System.Int32 note_symbol_id)
         {
             pitch pitch = new pitch();
             pitch.id = id;
@@ -9246,6 +9866,8 @@ namespace LibiadaWeb
             pitch.midinumber = midinumber;
             pitch.instrument = instrument;
             pitch.note_id = note_id;
+            pitch.accidental_id = accidental_id;
+            pitch.note_symbol_id = note_symbol_id;
             return pitch;
         }
 
@@ -9374,6 +9996,54 @@ namespace LibiadaWeb
         private global::System.Int64 _note_id;
         partial void Onnote_idChanging(global::System.Int64 value);
         partial void Onnote_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 accidental_id
+        {
+            get
+            {
+                return _accidental_id;
+            }
+            set
+            {
+                Onaccidental_idChanging(value);
+                ReportPropertyChanging("accidental_id");
+                _accidental_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("accidental_id");
+                Onaccidental_idChanged();
+            }
+        }
+        private global::System.Int32 _accidental_id;
+        partial void Onaccidental_idChanging(global::System.Int32 value);
+        partial void Onaccidental_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 note_symbol_id
+        {
+            get
+            {
+                return _note_symbol_id;
+            }
+            set
+            {
+                Onnote_symbol_idChanging(value);
+                ReportPropertyChanging("note_symbol_id");
+                _note_symbol_id = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("note_symbol_id");
+                Onnote_symbol_idChanged();
+            }
+        }
+        private global::System.Int32 _note_symbol_id;
+        partial void Onnote_symbol_idChanging(global::System.Int32 value);
+        partial void Onnote_symbol_idChanged();
 
         #endregion
     
@@ -9413,6 +10083,82 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<note>("LibiadaWebModel.fk_pitch_note", "note", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_accidental", "accidental")]
+        public accidental accidental
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<accidental>("LibiadaWebModel.fk_pitch_accidental", "accidental").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<accidental>("LibiadaWebModel.fk_pitch_accidental", "accidental").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<accidental> accidentalReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<accidental>("LibiadaWebModel.fk_pitch_accidental", "accidental");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<accidental>("LibiadaWebModel.fk_pitch_accidental", "accidental", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol")]
+        public note_symbol note_symbol
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note_symbol>("LibiadaWebModel.fk_pitch_note_symbol", "note_symbol").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note_symbol>("LibiadaWebModel.fk_pitch_note_symbol", "note_symbol").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<note_symbol> note_symbolReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<note_symbol>("LibiadaWebModel.fk_pitch_note_symbol", "note_symbol");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<note_symbol>("LibiadaWebModel.fk_pitch_note_symbol", "note_symbol", value);
                 }
             }
         }
@@ -9567,6 +10313,136 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<matter>("LibiadaWebModel.fk_matter_remote_db", "matter", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// Нет доступной документации по метаданным.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="slur")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class slur : EntityObject
+    {
+        #region Фабричный метод
+    
+        /// <summary>
+        /// Создание нового объекта slur.
+        /// </summary>
+        /// <param name="id">Исходное значение свойства id.</param>
+        /// <param name="name">Исходное значение свойства name.</param>
+        public static slur Createslur(global::System.Int32 id, global::System.String name)
+        {
+            slur slur = new slur();
+            slur.id = id;
+            slur.name = name;
+            return slur;
+        }
+
+        #endregion
+        #region Свойства-примитивы
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id != value)
+                {
+                    OnidChanging(value);
+                    ReportPropertyChanging("id");
+                    _id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("id");
+                    OnidChanged();
+                }
+            }
+        }
+        private global::System.Int32 _id;
+        partial void OnidChanging(global::System.Int32 value);
+        partial void OnidChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                OnnameChanging(value);
+                ReportPropertyChanging("name");
+                _name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("name");
+                OnnameChanged();
+            }
+        }
+        private global::System.String _name;
+        partial void OnnameChanging(global::System.String value);
+        partial void OnnameChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
+
+        #endregion
+    
+        #region Свойства навигации
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_note_slur", "note")]
+        public EntityCollection<note> note
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<note>("LibiadaWebModel.fk_note_slur", "note");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<note>("LibiadaWebModel.fk_note_slur", "note", value);
                 }
             }
         }
