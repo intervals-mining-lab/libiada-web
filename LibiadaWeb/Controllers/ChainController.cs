@@ -18,11 +18,13 @@ namespace LibiadaWeb.Controllers
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly DnaChainRepository dnaChainRepository;
         private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly AlphabetRepository alphabetRepository;
 
         public ChainController()
         {
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
+            alphabetRepository = new AlphabetRepository(db);
         }
 
         //
@@ -136,8 +138,9 @@ namespace LibiadaWeb.Controllers
 
                             db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
                             db.dna_chain.AddObject(dbDnaChain);
-
-                            dnaChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain, chain.notation_id);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id);
+                            dbDnaChain.alphabet.Attach(alphabet);
+                             
                         }
                         else
                         {
@@ -193,7 +196,8 @@ namespace LibiadaWeb.Controllers
                             db.matter.Single(m => m.id == chain.matter_id).literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
                             db.literature_chain.AddObject(dbLiteratureChain);
 
-                            literatureChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbLiteratureChain, chain.notation_id);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id);
+                            dbLiteratureChain.alphabet.Attach(alphabet);
                         }
                         else
                         {

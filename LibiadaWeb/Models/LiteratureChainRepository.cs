@@ -91,58 +91,6 @@ namespace LibiadaWeb.Models
             return chainsList;
         }
 
-        //TODO: сделать в таблице алфавита id чтобы можно было создать репозиторий алфавита и переместить туда методы алфавита
-        public Alphabet FromDbAlphabetToLibiadaAlphabet(literature_chain dbChain)
-        {
-            IEnumerable<alphabet> dbAlphabet = dbChain.alphabet.OrderBy(a => a.number);
-            IEnumerable<element> dbElements = dbAlphabet.Select(a => a.element);
-
-            Alphabet alphabet = new Alphabet();
-            alphabet.Add(NullValue.Instance());
-            foreach (var element in dbElements)
-            {
-                alphabet.Add(new ValueString(element.value));
-            }
-            return alphabet;
-        }
-
-        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, literature_chain parent,
-                                                                     int notationId)
-        {
-            List<alphabet> dbAlphabet = new List<alphabet>();
-            for (int j = 0; j < libiadaAlphabet.Power; j++)
-            {
-                dbAlphabet.Add(new alphabet());
-                dbAlphabet[j].number = j + 1;
-                String strElem = libiadaAlphabet[j].ToString();
-                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
-                {
-                    element newElement = new element()
-                                             {
-                                                 value = strElem,
-                                                 name = strElem,
-                                                 notation_id = notationId,
-                                                 creation_date = DateTime.Now
-                                             };
-                    db.element.AddObject(newElement);
-                    db.SaveChanges();
-                    dbAlphabet[j].element = newElement;
-                }
-                else
-                {
-                    dbAlphabet[j].element =
-                    db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
-                }
-
-                parent.alphabet.Add(dbAlphabet[j]); //TODO: проверить, возможно одно из действий лишнее
-                db.alphabet.AddObject(dbAlphabet[j]);
-                db.SaveChanges();
-            }
-            
-
-            return dbAlphabet;
-        }
-
         //TODO: создать репозиторий строя и перенести туда методы строя
         public int[] FromDbBuildingToLibiadaBuilding(literature_chain dbChain)
         {

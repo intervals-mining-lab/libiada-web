@@ -125,6 +125,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\AlphabetRepository.cs" />
     <Compile Include="Models\FmotivTypeRepository.cs" />
     <Compile Include="Models\IAccidentalRepository.cs" />
     <Compile Include="Models\BinaryCharacteristicRepository.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="Models\DnaChainRepository.cs" />
     <Compile Include="Models\ElementRepository.cs" />
     <Compile Include="Models\FmotivRepository.cs" />
+    <Compile Include="Models\IAlphabetRepository.cs" />
     <Compile Include="Models\IFmotivRepository.cs" />
     <Compile Include="Models\IFmotivTypeRepository.cs" />
     <Compile Include="Models\HomogeneousCharacteristicRepository.cs" />

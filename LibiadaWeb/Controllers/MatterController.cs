@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,13 @@ namespace LibiadaWeb.Controllers
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly LiteratureChainRepository literatureChainRepository;
         private readonly DnaChainRepository dnaChainRepository;
+        private readonly AlphabetRepository alphabetRepository;
 
         public MatterController()
         {
             literatureChainRepository = new LiteratureChainRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
+            alphabetRepository = new AlphabetRepository(db);
         }
 
         //
@@ -121,12 +124,12 @@ namespace LibiadaWeb.Controllers
                             matter.dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
                             db.dna_chain.AddObject(dbDnaChain);
 
-                            dnaChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain, notationId);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId);
+                            dbDnaChain.alphabet.Attach(alphabet);
                         }
                         else
                         {
-                            long matterId = db.matter.Single(m => m.name == matter.name).id;
-                            dbDnaChain = db.dna_chain.Single(c => c.matter_id == matterId);
+                            dbDnaChain = db.dna_chain.Single(c => c.matter_id == matter.id && c.notation_id == notationId && c.fasta_header == fastaHeader);
                         }
 
                         libiadaBuilding = libiadaChain.Building;
@@ -173,12 +176,12 @@ namespace LibiadaWeb.Controllers
                             matter.literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
                             db.literature_chain.AddObject(dbLiteratureChain);
 
-                            literatureChainRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbLiteratureChain, notationId);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId);
+                            dbLiteratureChain.alphabet.Attach(alphabet);
                         }
                         else
                         {
-                            long matterId = db.matter.Single(m => m.name == matter.name).id;
-                            dbLiteratureChain = db.literature_chain.Single(c => c.matter_id == matterId);
+                            dbLiteratureChain = db.literature_chain.Single(c => c.matter_id == matter.id && c.notation_id == notationId && c.language_id == languageId);
                         }
 
                         libiadaBuilding = libiadaChain.Building;

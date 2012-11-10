@@ -14,10 +14,12 @@ namespace LibiadaWeb.Models
     public class ChainRepository : IChainRepository
     {
         private readonly LibiadaWebEntities db;
+        private readonly AlphabetRepository alphabetRepository;
 
         public ChainRepository(LibiadaWebEntities db)
         {
             this.db = db;
+            alphabetRepository = new AlphabetRepository(db);
         }
 
         public IQueryable<chain> All
@@ -95,7 +97,7 @@ namespace LibiadaWeb.Models
 
         public BaseChain FromDbChainToLibiadaBaseChain(chain dbChain)
         {
-            Alphabet alphabet = FromDbAlphabetToLibiadaAlphabet(dbChain);
+            Alphabet alphabet = alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
 
             int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
 
@@ -111,7 +113,7 @@ namespace LibiadaWeb.Models
         //TODO: вытаскивать сразу и имеющиеся характеристики цепочки
         public Chain FromDbChainToLibiadaChain(chain dbChain)
         {
-            Alphabet alphabet = FromDbAlphabetToLibiadaAlphabet(dbChain);
+            Alphabet alphabet = alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
 
             int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
 
@@ -131,8 +133,9 @@ namespace LibiadaWeb.Models
                 result.notation_id = notationId;
                 result.creation_date = new DateTimeOffset(DateTime.Now);
 
-                FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, result, notationId);
+                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId);
 
+                result.alphabet.Attach(alphabet);
                 parent.chain.Add(result);//TODO: проверить, возможно одно из действий лишнее
                 db.chain.AddObject(result);
 
@@ -140,8 +143,7 @@ namespace LibiadaWeb.Models
             }
             else
             {
-                long matterId = db.matter.Single(m => m.name == parent.name).id;
-                result = db.chain.Single(c => c.matter_id == matterId);
+                result = db.chain.Single(c => c.matter_id == parent.id);
             }
 
             int[] libiadaBuilding = libiadaChain.Building;
@@ -153,42 +155,7 @@ namespace LibiadaWeb.Models
             return result;
         }
 
-        //TODO: сделать в таблице алфавита id чтобы можно было создать репозиторий алфавита и переместить туда методы алфавита
-        public Alphabet FromDbAlphabetToLibiadaAlphabet(chain dbChain)
-        {
-            IEnumerable<alphabet> dbAlphabet = dbChain.alphabet.OrderBy(a => a.number);
-            IEnumerable<element> dbElements = dbAlphabet.Select(a => a.element);
-
-            Alphabet alphabet = new Alphabet();
-            alphabet.Add(NullValue.Instance());
-            foreach (var element in dbElements)
-            {
-                alphabet.Add(new ValueString(element.value));
-            }
-            return alphabet;
-        }
-
-        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, chain parent, int notationId)
-        {
-            List<alphabet> dbAlphabet = new List<alphabet>();
-            for (int j = 0; j < libiadaAlphabet.Power; j++)
-            {
-                dbAlphabet.Add(new alphabet());
-                dbAlphabet[j].number = j + 1;
-                String strElem = libiadaAlphabet[j].ToString();
-                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
-                {
-                    throw new Exception("Элемент " + strElem + " не найден в БД.");
-                }
-                dbAlphabet[j].element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
-
-                parent.alphabet.Add(dbAlphabet[j]);//TODO: проверить, возможно одно из действий лишнее
-                db.alphabet.AddObject(dbAlphabet[j]);
-            }
-            db.SaveChanges();
-
-            return dbAlphabet;
-        }
+        
 
         //TODO: создать репозиторий строя и перенести туда методы строя
         public int[] FromDbBuildingToLibiadaBuilding(chain dbChain)
