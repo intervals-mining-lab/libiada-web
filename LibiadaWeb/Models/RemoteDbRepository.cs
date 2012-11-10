@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var remote_db = db.remote_db.Single(x => x.id == id);
+            var remote_db = Find(id);
             db.remote_db.DeleteObject(remote_db);
         }
 

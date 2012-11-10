@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var element = db.element.Single(x => x.id == id);
+            var element = Find(id);
             db.element.DeleteObject(element);
         }
 

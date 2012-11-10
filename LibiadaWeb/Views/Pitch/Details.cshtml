@@ -1,0 +1,45 @@
+﻿@model LibiadaWeb.pitch
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>pitch</legend>
+
+    <div class="display-label">octave</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.octave)
+    </div>
+
+    <div class="display-label">midinumber</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.midinumber)
+    </div>
+
+    <div class="display-label">instrument</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.instrument)
+    </div>
+
+    <div class="display-label">note</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.note.value)
+    </div>
+
+    <div class="display-label">accidental</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.accidental.name)
+    </div>
+
+    <div class="display-label">note_symbol</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.note_symbol.name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

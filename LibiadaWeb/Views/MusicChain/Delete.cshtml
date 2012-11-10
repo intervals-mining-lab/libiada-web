@@ -1,0 +1,58 @@
+﻿@model LibiadaWeb.music_chain
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>music_chain</legend>
+
+    <div class="display-label">building_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.building_type.name)
+    </div>
+
+    <div class="display-label">notation</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.notation.name)
+    </div>
+
+    <div class="display-label">creation_date</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.creation_date)
+    </div>
+
+    <div class="display-label">matter</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matter.name)
+    </div>
+
+    <div class="display-label">dissimilar</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dissimilar)
+    </div>
+
+    <div class="display-label">piece_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_type.name)
+    </div>
+
+    <div class="display-label">piece_position</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_position)
+    </div>
+
+    <div class="display-label">instrument</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.instrument.name)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

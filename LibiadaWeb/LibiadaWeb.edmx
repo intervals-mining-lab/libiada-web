@@ -4067,8 +4067,8 @@
     </AssociationConnector>
     <AssociationConnector Association="LibiadaWebModel.fk_element_notation" ManuallyRouted="false">
       <ConnectorPoint PointX="5.75" PointY="15.629547526041668" />
-      <ConnectorPoint PointX="6.135416666666667" PointY="15.629547526041668" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="15.629547526041668" />
+      <ConnectorPoint PointX="6.166666666666667" PointY="15.629547526041668" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="15.629547526041668" />
           <ConnectorPoint PointX="8.375" PointY="15.629547526041668" />
     </AssociationConnector>
     <AssociationConnector Association="LibiadaWebModel.fk_matter_nature" ManuallyRouted="false">
@@ -4122,20 +4122,20 @@
           <ConnectorPoint PointX="3.8645833333333335" PointY="15.136894972656249" />
           <ConnectorPoint PointX="4" PointY="15.136894972656249" />
           <ConnectorPoint PointX="4" PointY="14.25" />
-          <ConnectorPoint PointX="4.4244785416666668" PointY="14.25" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="14.25" />
-          <ConnectorPoint PointX="4.6822904166666666" PointY="14.25" />
-          <ConnectorPoint PointX="4.8489570833333326" PointY="14.25" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="14.25" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="14.25" />
-          <ConnectorPoint PointX="6.5416661666666664" PointY="14.25" />
-          <ConnectorPoint PointX="6.7083328333333325" PointY="14.25" />
-          <ConnectorPoint PointX="7.479166666666667" PointY="14.25" />
-          <ConnectorPoint PointX="7.645833333333333" PointY="14.25" />
+          <ConnectorPoint PointX="4.8893251041666668" PointY="14.25" />
+          <ConnectorPoint PointX="5.0559917708333328" PointY="14.25" />
+          <ConnectorPoint PointX="5.1217483854166668" PointY="14.25" />
+          <ConnectorPoint PointX="5.2884150520833328" PointY="14.25" />
+          <ConnectorPoint PointX="5.291666666666667" PointY="14.25" />
+          <ConnectorPoint PointX="5.458333333333333" PointY="14.25" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="14.25" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="14.25" />
+          <ConnectorPoint PointX="7.604166666666667" PointY="14.25" />
+          <ConnectorPoint PointX="7.770833333333333" PointY="14.25" />
           <ConnectorPoint PointX="8.125" PointY="14.25" />
-          <ConnectorPoint PointX="8.125" PointY="13.375" />
-          <ConnectorPoint PointX="8.7500004999999987" PointY="13.375" />
-          <ConnectorPoint PointX="8.7500004999999987" PointY="11.384095052083332" />
+          <ConnectorPoint PointX="8.125" PointY="13.359375" />
+          <ConnectorPoint PointX="9.125" PointY="13.359375" />
+          <ConnectorPoint PointX="9.125" PointY="11.384095052083332" />
     </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_piece_type">
           <ConnectorPoint PointX="9.875" PointY="8.34375" />
@@ -4162,41 +4162,33 @@
           <ConnectorPoint PointX="10.96875" PointY="16.787903645833332" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_building_type">
-          <ConnectorPoint PointX="3.875" PointY="7.194216759498703" />
-          <ConnectorPoint PointX="4.4244785416666668" PointY="7.1942167594987021" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="7.194216759498703" />
-          <ConnectorPoint PointX="5.166666666666667" PointY="7.1942167594987021" />
-          <ConnectorPoint PointX="5.333333333333333" PointY="7.194216759498703" />
-          <ConnectorPoint PointX="5.375" PointY="7.194216759498703" />
-          <ConnectorPoint PointX="5.375" PointY="14.297587890625" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="14.297587890625" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="14.297587890625" />
-          <ConnectorPoint PointX="6.5416661666666664" PointY="14.297587890625" />
-          <ConnectorPoint PointX="6.7083328333333325" PointY="14.297587890625" />
-          <ConnectorPoint PointX="7.5" PointY="14.297587890625" />
-          <ConnectorPoint PointX="7.5" PointY="8" />
-          <ConnectorPoint PointX="9.4479166666666661" PointY="7.9999999999999991" />
-          <ConnectorPoint PointX="9.6145833333333339" PointY="8" />
+          <ConnectorPoint PointX="3.875" PointY="7.2862550814351676" />
+          <ConnectorPoint PointX="5.375" PointY="7.2862550814351676" />
+          <ConnectorPoint PointX="5.375" PointY="14.313212890625" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="14.313212890625" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="14.313212890625" />
+          <ConnectorPoint PointX="7.5625" PointY="14.313212890625" />
+          <ConnectorPoint PointX="7.5625" PointY="8" />
           <ConnectorPoint PointX="10.125" PointY="8" />
           <ConnectorPoint PointX="10.125" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.276039166666665" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.442705833333333" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="10.385416666666666" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="10.552083333333334" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="10.572916666666666" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="10.739583333333334" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="11.041666666666666" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="11.208333333333334" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="13.479166666666666" PointY="8.1917936197916674" />
           <ConnectorPoint PointX="13.645833333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.322916666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.489583333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.942705833333333" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="15" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="15" PointY="14.875" />
-          <ConnectorPoint PointX="14.942705833333333" PointY="14.875" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="14.875" />
-          <ConnectorPoint PointX="14.52343625" PointY="14.875" />
-          <ConnectorPoint PointX="14.52343625" PointY="15.25" />
+          <ConnectorPoint PointX="14.447916666666666" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="14.614583333333334" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="8.1917936197916656" />
+          <ConnectorPoint PointX="15.052083333333334" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="15.0625" PointY="8.1917936197916674" />
+          <ConnectorPoint PointX="15.0625" PointY="13.625" />
+          <ConnectorPoint PointX="15.052083333333334" PointY="13.624999999999998" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="13.625" />
+          <ConnectorPoint PointX="14.52343625" PointY="13.625" />
+          <ConnectorPoint PointX="14.52343625" PointY="14" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_dna_chain_piece_type">
           <ConnectorPoint PointX="9.875" PointY="10.963440755208332" />
@@ -4273,10 +4265,10 @@
         <EntityTypeShape EntityType="LibiadaWebModel.fmotiv" Width="2.625" PointX="12.75" PointY="21.125" Height="4.8648079427083282" />
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_matter">
           <ConnectorPoint PointX="3.78125" PointY="12.460999348958334" />
-          <ConnectorPoint PointX="3.78125" PointY="24.477804361979167" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="24.477804361979167" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="24.477804361979167" />
-          <ConnectorPoint PointX="12.75" PointY="24.477804361979167" />
+          <ConnectorPoint PointX="3.78125" PointY="25.206492513020834" />
+          <ConnectorPoint PointX="9.0104141666666653" PointY="25.206492513020834" />
+          <ConnectorPoint PointX="9.1770808333333331" PointY="25.206492513020834" />
+          <ConnectorPoint PointX="12.75" PointY="25.206492513020834" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_music_chain">
           <ConnectorPoint PointX="17.125" PointY="5.5862532552083337" />
@@ -4309,9 +4301,11 @@
           <ConnectorPoint PointX="10.3593725" PointY="7.9417936197916674" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_alphabet_fmotiv">
-          <ConnectorPoint PointX="12.75" PointY="25.26505865234374" />
-          <ConnectorPoint PointX="6.21875" PointY="25.26505865234374" />
-          <ConnectorPoint PointX="6.21875" PointY="14.047587890625" />
+          <ConnectorPoint PointX="12.75" PointY="24.809736269531257" />
+          <ConnectorPoint PointX="9.1770808333333331" PointY="24.809736269531257" />
+          <ConnectorPoint PointX="9.0104141666666653" PointY="24.809736269531257" />
+          <ConnectorPoint PointX="6.25" PointY="24.809736269531257" />
+          <ConnectorPoint PointX="6.25" PointY="14.047587890625" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_measure_building_type">
           <ConnectorPoint PointX="3.875" PointY="7.5401315665924447" />
@@ -4398,27 +4392,29 @@
           <ConnectorPoint PointX="10.65625" PointY="7.9417936197916674" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_music_chain_notation">
-          <ConnectorPoint PointX="4.507811875" PointY="14.5" />
-          <ConnectorPoint PointX="4.507811875" PointY="6.4129850260416656" />
-          <ConnectorPoint PointX="5.7916646666666667" PointY="6.4129850260416648" />
-          <ConnectorPoint PointX="5.9583313333333328" PointY="6.4129850260416656" />
-          <ConnectorPoint PointX="6.229166666666667" PointY="6.4129850260416648" />
-          <ConnectorPoint PointX="6.395833333333333" PointY="6.4129850260416656" />
-          <ConnectorPoint PointX="6.6041686666666672" PointY="6.4129850260416648" />
-          <ConnectorPoint PointX="6.7708353333333333" PointY="6.4129850260416656" />
-          <ConnectorPoint PointX="7.25" PointY="6.4129850260416656" />
-          <ConnectorPoint PointX="7.25" PointY="4.703125" />
-          <ConnectorPoint PointX="8.4166666666666661" PointY="4.7031249999999991" />
-          <ConnectorPoint PointX="8.5833333333333339" PointY="4.703125" />
-          <ConnectorPoint PointX="10.666666666666666" PointY="4.7031249999999991" />
-          <ConnectorPoint PointX="10.833333333333334" PointY="4.703125" />
-          <ConnectorPoint PointX="12.854166666666666" PointY="4.7031249999999991" />
-          <ConnectorPoint PointX="13.020833333333334" PointY="4.703125" />
-          <ConnectorPoint PointX="14.875" PointY="4.703125" />
-          <ConnectorPoint PointX="14.875" PointY="7.148625802083334" />
-          <ConnectorPoint PointX="14.994794166666667" PointY="7.1486258020833322" />
-          <ConnectorPoint PointX="15.458333333333334" PointY="7.148625802083334" />
-          <ConnectorPoint PointX="15.625" PointY="7.148625802083334" />
+          <ConnectorPoint PointX="5.406252" PointY="18.018697916666667" />
+          <ConnectorPoint PointX="5.406252" PointY="18.284322916666667" />
+          <ConnectorPoint PointX="6.0625" PointY="18.284322916666667" />
+          <ConnectorPoint PointX="6.0625" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="16.3125" />
+          <ConnectorPoint PointX="12.885416666666666" PointY="16.3125" />
+          <ConnectorPoint PointX="13.052083333333334" PointY="16.3125" />
+          <ConnectorPoint PointX="13.0625" PointY="16.3125" />
+          <ConnectorPoint PointX="13.0625" PointY="13.78125" />
+          <ConnectorPoint PointX="13.104166666666666" PointY="13.78125" />
+          <ConnectorPoint PointX="13.270833333333334" PointY="13.78125" />
+          <ConnectorPoint PointX="14.104166666666666" PointY="13.78125" />
+          <ConnectorPoint PointX="14.270833333333334" PointY="13.78125" />
+          <ConnectorPoint PointX="14.440102916666666" PointY="13.78125" />
+          <ConnectorPoint PointX="14.606769583333334" PointY="13.78125" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="13.781249999999998" />
+          <ConnectorPoint PointX="15.411460208333333" PointY="13.78125" />
+          <ConnectorPoint PointX="16" PointY="13.78125" />
+          <ConnectorPoint PointX="16" PointY="16.336253255208334" />
+          <ConnectorPoint PointX="16.625" PointY="16.336253255208334" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_fmotiv">
           <ConnectorPoint PointX="13.015625" PointY="21.125" />
@@ -4450,23 +4446,29 @@
           <ConnectorPoint PointX="15.625" PointY="4.84375" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_measure_notation">
-          <ConnectorPoint PointX="5" PointY="18.018697916666667" />
-          <ConnectorPoint PointX="5" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="5.3229191666666669" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="5.4895858333333329" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="11.125" PointY="18.268697916666667" />
-          <ConnectorPoint PointX="11.125" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="12.932291666666666" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="13.098958333333334" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="13.291666666666666" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="13.458333333333334" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="15.135415416666666" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="15.395835833333331" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="16.25" PointY="20.364807942708339" />
-          <ConnectorPoint PointX="16.25" PointY="19.095708321614588" />
-          <ConnectorPoint PointX="16.625" PointY="19.095708321614588" />
+          <ConnectorPoint PointX="5.75" PointY="15.03352176302084" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="15.03352176302084" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="15.03352176302084" />
+          <ConnectorPoint PointX="8.0625" PointY="15.03352176302084" />
+          <ConnectorPoint PointX="8.0625" PointY="13.34375" />
+          <ConnectorPoint PointX="10.1875" PointY="13.34375" />
+          <ConnectorPoint PointX="10.1875" PointY="15.725403645833332" />
+          <ConnectorPoint PointX="10.291666666666666" PointY="15.725403645833332" />
+          <ConnectorPoint PointX="10.489583333333334" PointY="15.725403645833332" />
+          <ConnectorPoint PointX="12.885416666666666" PointY="15.72540364583333" />
+          <ConnectorPoint PointX="13.552083333333334" PointY="15.725403645833332" />
+          <ConnectorPoint PointX="13.5625" PointY="15.725403645833332" />
+          <ConnectorPoint PointX="13.5625" PointY="13.8125" />
+          <ConnectorPoint PointX="14.104166666666666" PointY="13.8125" />
+          <ConnectorPoint PointX="14.270833333333334" PointY="13.8125" />
+          <ConnectorPoint PointX="14.440102916666666" PointY="13.8125" />
+          <ConnectorPoint PointX="14.606769583333334" PointY="13.8125" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="13.812499999999998" />
+          <ConnectorPoint PointX="15.083335833333335" PointY="13.8125" />
+          <ConnectorPoint PointX="15.135415416666666" PointY="13.812499999999998" />
+          <ConnectorPoint PointX="15.411460208333333" PointY="13.8125" />
+          <ConnectorPoint PointX="16.375" PointY="13.8125" />
+          <ConnectorPoint PointX="16.375" PointY="13.13401367187501" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_measure">
           <ConnectorPoint PointX="17.0625" PointY="14.875" />
@@ -4513,11 +4515,19 @@
           <ConnectorPoint PointX="11.5" PointY="7.8768929036458335" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_notation">
-          <ConnectorPoint PointX="4.5937475" PointY="18.018697916666667" />
-          <ConnectorPoint PointX="4.5937475" PointY="23.887363644205738" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="23.887363644205738" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="23.887363644205738" />
-          <ConnectorPoint PointX="12.75" PointY="23.887363644205738" />
+          <ConnectorPoint PointX="5.75" PointY="16.350573789062494" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="16.350573789062494" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="16.350573789062494" />
+          <ConnectorPoint PointX="8.125" PointY="16.350573789062494" />
+          <ConnectorPoint PointX="8.125" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="12.885416666666666" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="13.052083333333334" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="13.229166666666666" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="13.552083333333334" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="14.667967812499999" PointY="19.114807942708339" />
+          <ConnectorPoint PointX="14.667967812499999" PointY="21.125" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_characteristic_fmotiv">
           <ConnectorPoint PointX="15.249997500000001" PointY="21.125" />
@@ -4626,47 +4636,41 @@
           <ConnectorPoint PointX="16.7499995" PointY="7.9225065104166674" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_building_type">
-          <ConnectorPoint PointX="3.875" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="4.4244785416666668" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="5.166666666666667" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="5.333333333333333" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="5.375" PointY="8.2865212805930941" />
-          <ConnectorPoint PointX="5.375" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.5416661666666664" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.7083328333333325" PointY="14.313212890625" />
-          <ConnectorPoint PointX="7.625" PointY="14.313212890625" />
+          <ConnectorPoint PointX="3.875" PointY="6.2150933574207219" />
+          <ConnectorPoint PointX="5.375" PointY="6.2150933574207219" />
+          <ConnectorPoint PointX="5.375" PointY="14.328837890625" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="14.328837890625" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="14.328837890625" />
+          <ConnectorPoint PointX="7.625" PointY="14.328837890625" />
           <ConnectorPoint PointX="7.625" PointY="8" />
-          <ConnectorPoint PointX="9.4479166666666661" PointY="7.9999999999999991" />
-          <ConnectorPoint PointX="9.6145833333333339" PointY="8" />
           <ConnectorPoint PointX="10.125" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="10.276039166666665" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="10.442705833333333" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="10.739583333333334" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="11.041666666666666" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="11.208333333333334" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="13.479166666666666" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="13.645833333333334" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="14.322916666666666" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="14.489583333333334" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="14.942705833333333" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="15" PointY="8.2230436197916674" />
-          <ConnectorPoint PointX="15" PointY="14.9375" />
-          <ConnectorPoint PointX="14.942705833333333" PointY="14.9375" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="14.9375" />
-          <ConnectorPoint PointX="14.270833333333334" PointY="14.9375" />
-          <ConnectorPoint PointX="14.104166666666666" PointY="14.9375" />
-          <ConnectorPoint PointX="13.997393333333333" PointY="14.9375" />
-          <ConnectorPoint PointX="13.830726666666665" PointY="14.9375" />
-          <ConnectorPoint PointX="13.375" PointY="14.9375" />
-          <ConnectorPoint PointX="13.375" PointY="20.75" />
-          <ConnectorPoint PointX="14.824222500000001" PointY="20.75" />
-          <ConnectorPoint PointX="14.824222500000001" PointY="21.125" />
+          <ConnectorPoint PointX="10.125" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="10.572916666666666" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="10.739583333333334" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="11.041666666666666" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="11.208333333333334" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="13.479166666666666" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="13.645833333333334" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="14.447916666666666" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="14.614583333333334" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="8.2074186197916656" />
+          <ConnectorPoint PointX="15.052083333333334" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="15.125" PointY="8.2074186197916674" />
+          <ConnectorPoint PointX="15.125" PointY="13.875" />
+          <ConnectorPoint PointX="15.083335833333335" PointY="13.874999999999998" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="13.875" />
+          <ConnectorPoint PointX="14.606769583333334" PointY="13.875" />
+          <ConnectorPoint PointX="14.440102916666666" PointY="13.875" />
+          <ConnectorPoint PointX="14.270833333333334" PointY="13.875" />
+          <ConnectorPoint PointX="14.104166666666666" PointY="13.875" />
+          <ConnectorPoint PointX="13.958331333333334" PointY="13.875" />
+          <ConnectorPoint PointX="13.791664666666666" PointY="13.875" />
+          <ConnectorPoint PointX="13.3125" PointY="13.875" />
+          <ConnectorPoint PointX="13.3125" PointY="20.75" />
+          <ConnectorPoint PointX="13.385416666666666" PointY="20.75" />
+          <ConnectorPoint PointX="13.552083333333334" PointY="20.75" />
+          <ConnectorPoint PointX="14.117186875" PointY="20.75" />
+          <ConnectorPoint PointX="14.117186875" PointY="21.125" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_fmotiv">
           <ConnectorPoint PointX="15.312502499999999" PointY="21.125" />
@@ -4793,11 +4797,12 @@
           <ConnectorPoint PointX="6.6249994999999995" PointY="14.047587890625" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_note_notation">
-          <ConnectorPoint PointX="5.4062525" PointY="18.018697916666667" />
-          <ConnectorPoint PointX="5.4062525" PointY="20.951650390625005" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="20.951650390625005" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="20.951650390625005" />
-          <ConnectorPoint PointX="6.5" PointY="20.951650390625005" />
+          <ConnectorPoint PointX="5.75" PointY="17.759348958333334" />
+          <ConnectorPoint PointX="5.916666666666667" PointY="17.759348958333334" />
+          <ConnectorPoint PointX="6.145833333333333" PointY="17.759348958333334" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="17.759348958333334" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="17.759348958333334" />
+          <ConnectorPoint PointX="6.5" PointY="17.759348958333334" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_measure_matter">
           <ConnectorPoint PointX="4.25" PointY="10.054530510875345" />
@@ -4970,14 +4975,77 @@
           <ConnectorPoint PointX="7.25" PointY="12.983172141927092" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_notation">
-          <ConnectorPoint PointX="5.75" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="12.932291666666666" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="13.098958333333334" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="13.291666666666666" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="13.458333333333334" PointY="17.525101161458334" />
-          <ConnectorPoint PointX="13.625" PointY="17.525101161458334" />
+          <ConnectorPoint PointX="5" PointY="18.018697916666667" />
+          <ConnectorPoint PointX="5" PointY="18.268697916666667" />
+          <ConnectorPoint PointX="6" PointY="18.268697916666667" />
+          <ConnectorPoint PointX="6" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="17.009095052083335" />
+          <ConnectorPoint PointX="11.125" PointY="16.125" />
+          <ConnectorPoint PointX="12.885416666666666" PointY="16.125" />
+          <ConnectorPoint PointX="13.145833333333334" PointY="16.125" />
+          <ConnectorPoint PointX="13.25" PointY="16.125" />
+          <ConnectorPoint PointX="13.25" PointY="14.893952322916665" />
+          <ConnectorPoint PointX="13.291666666666666" PointY="14.893952322916663" />
+          <ConnectorPoint PointX="13.552083333333334" PointY="14.893952322916665" />
+          <ConnectorPoint PointX="13.625" PointY="14.893952322916665" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="LibiadaWebModel.accidental" Width="1.5" PointX="6.875" PointY="22.5" Height="1.7879850260416674" />
+        <AssociationConnector Association="LibiadaWebModel.fk_pitch_accidental">
+          <ConnectorPoint PointX="8.375" PointY="23.393992513020834" />
+          <ConnectorPoint PointX="9.0104141666666653" PointY="23.393992513020834" />
+          <ConnectorPoint PointX="9.1770808333333331" PointY="23.393992513020834" />
+          <ConnectorPoint PointX="9.5" PointY="23.393992513020834" />
+          <ConnectorPoint PointX="9.5" PointY="21.191793619791667" />
+        </AssociationConnector>
+        <AssociationConnector Association="LibiadaWebModel.fk_note_slur">
+          <ConnectorPoint PointX="5.75" PointY="19.643992513020834" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="19.643992513020834" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="19.643992513020834" />
+          <ConnectorPoint PointX="6.5" PointY="19.643992513020834" />
+        </AssociationConnector>
+        <AssociationConnector Association="LibiadaWebModel.fk_music_chain_building_type">
+          <ConnectorPoint PointX="3.875" PointY="8.0153662586821248" />
+          <ConnectorPoint PointX="4.8893251041666668" PointY="8.0153662586821248" />
+          <ConnectorPoint PointX="5.0559917708333328" PointY="8.0153662586821248" />
+          <ConnectorPoint PointX="5.375" PointY="8.0153662586821248" />
+          <ConnectorPoint PointX="5.375" PointY="14.344462890625" />
+          <ConnectorPoint PointX="6.166666666666667" PointY="14.344462890625" />
+          <ConnectorPoint PointX="6.333333333333333" PointY="14.344462890625" />
+          <ConnectorPoint PointX="7.6875" PointY="14.344462890625" />
+          <ConnectorPoint PointX="7.6875" PointY="8" />
+          <ConnectorPoint PointX="10.125" PointY="8" />
+          <ConnectorPoint PointX="10.125" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="10.572916666666666" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="10.739583333333334" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="11.041666666666666" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="11.208333333333334" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="13.479166666666666" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="13.645833333333334" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="14.447916666666666" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="14.614583333333334" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="14.776039166666665" PointY="8.2386686197916656" />
+          <ConnectorPoint PointX="15.052083333333334" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="15.158851979166665" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="15.411460208333333" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="15.5625" PointY="8.2386686197916674" />
+          <ConnectorPoint PointX="15.5625" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.088540666666667" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.255207333333331" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.291666666666668" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.458333333333332" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.682288666666668" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.848955333333333" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="16.885414666666666" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="17.05208133333333" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="17.375" PointY="13.63401367187501" />
+          <ConnectorPoint PointX="17.375" PointY="14" />
+        </AssociationConnector>
+        <AssociationConnector Association="LibiadaWebModel.fk_pitch_note_symbol">
+          <ConnectorPoint PointX="8" PointY="26.893992513020834" />
+          <ConnectorPoint PointX="9.0937475" PointY="26.893992513020834" />
+          <ConnectorPoint PointX="9.0937475" PointY="21.191793619791667" />
         </AssociationConnector>
   </Diagram>
     </edmx:Diagrams>

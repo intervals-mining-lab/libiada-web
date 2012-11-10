@@ -57,7 +57,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var literature_chain = db.literature_chain.Single(x => x.id == id);
+            var literature_chain = Find(id);
             db.literature_chain.DeleteObject(literature_chain);
         }
 

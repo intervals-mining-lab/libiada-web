@@ -1,0 +1,85 @@
+﻿@model LibiadaWeb.measure
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>measure</legend>
+
+    <div class="display-label">building_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.building_type.name)
+    </div>
+
+    <div class="display-label">notation</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.notation.name)
+    </div>
+
+    <div class="display-label">creation_date</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.creation_date)
+    </div>
+
+    <div class="display-label">matter</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matter.name)
+    </div>
+
+    <div class="display-label">dissimilar</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dissimilar)
+    </div>
+
+    <div class="display-label">piece_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_type.name)
+    </div>
+
+    <div class="display-label">piece_position</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_position)
+    </div>
+
+    <div class="display-label">value</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.value)
+    </div>
+
+    <div class="display-label">description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+
+    <div class="display-label">name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">beats</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.beats)
+    </div>
+
+    <div class="display-label">beatbase</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.beatbase)
+    </div>
+
+    <div class="display-label">ticks_per_beat</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ticks_per_beat)
+    </div>
+
+    <div class="display-label">fifths</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fifths)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

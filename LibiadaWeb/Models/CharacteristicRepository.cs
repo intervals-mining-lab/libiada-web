@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var characteristic = db.characteristic.Single(x => x.id == id);
+            var characteristic = Find(id);
             db.characteristic.DeleteObject(characteristic);
         }
 

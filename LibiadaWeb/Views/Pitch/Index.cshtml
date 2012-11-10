@@ -1,0 +1,63 @@
+﻿@model IEnumerable<LibiadaWeb.pitch>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            octave
+        </th>
+        <th>
+            midinumber
+        </th>
+        <th>
+            instrument
+        </th>
+        <th>
+            note
+        </th>
+        <th>
+            accidental
+        </th>
+        <th>
+            note_symbol
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.octave)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.midinumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.instrument)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.note.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.accidental.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.note_symbol.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

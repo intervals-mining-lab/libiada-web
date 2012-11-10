@@ -50,7 +50,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var link_up = db.link_up.Single(x => x.id == id);
+            var link_up = Find(id);
             db.link_up.DeleteObject(link_up);
         }
 

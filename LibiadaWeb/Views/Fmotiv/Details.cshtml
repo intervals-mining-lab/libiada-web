@@ -1,0 +1,70 @@
+﻿@model LibiadaWeb.fmotiv
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>fmotiv</legend>
+
+    <div class="display-label">building_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.building_type.name)
+    </div>
+
+    <div class="display-label">notation</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.notation.name)
+    </div>
+
+    <div class="display-label">creation_date</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.creation_date)
+    </div>
+
+    <div class="display-label">matter</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.matter.name)
+    </div>
+
+    <div class="display-label">dissimilar</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.dissimilar)
+    </div>
+
+    <div class="display-label">piece_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_type.name)
+    </div>
+
+    <div class="display-label">piece_position</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.piece_position)
+    </div>
+
+    <div class="display-label">value</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.value)
+    </div>
+
+    <div class="display-label">description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+
+    <div class="display-label">name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">fmotiv_type</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.fmotiv_type.name)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

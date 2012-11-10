@@ -50,7 +50,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var matter = db.matter.Single(x => x.id == id);
+            var matter = Find(id);
             db.matter.DeleteObject(matter);
         }
 

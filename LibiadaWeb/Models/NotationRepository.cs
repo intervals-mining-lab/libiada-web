@@ -50,7 +50,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var notation = db.notation.Single(x => x.id == id);
+            var notation = Find(id);
             db.notation.DeleteObject(notation);
         }
 

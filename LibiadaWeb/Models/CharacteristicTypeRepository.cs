@@ -50,7 +50,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var characteristic_type = db.characteristic_type.Single(x => x.id == id);
+            var characteristic_type = Find(id);
             db.characteristic_type.DeleteObject(characteristic_type);
         }
 

@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var connection = db.connection.Single(x => x.id == id);
+            var connection = Find(id);
             db.connection.DeleteObject(connection);
         }
 

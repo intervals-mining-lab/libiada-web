@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var binary_characteristic = db.binary_characteristic.Single(x => x.id == id);
+            var binary_characteristic = Find(id);
             db.binary_characteristic.DeleteObject(binary_characteristic);
         }
 

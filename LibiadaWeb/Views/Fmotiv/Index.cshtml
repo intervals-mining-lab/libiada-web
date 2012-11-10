@@ -1,0 +1,93 @@
+﻿@model IEnumerable<LibiadaWeb.fmotiv>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            building_type
+        </th>
+        <th>
+            notation
+        </th>
+        <th>
+            creation_date
+        </th>
+        <th>
+            matter
+        </th>
+        <th>
+            dissimilar
+        </th>
+        <th>
+            piece_type
+        </th>
+        <th>
+            piece_position
+        </th>
+        <th>
+            value
+        </th>
+        <th>
+            description
+        </th>
+        <th>
+            name
+        </th>
+        <th>
+            fmotiv_type
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.building_type.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.notation.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.creation_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.matter.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dissimilar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.piece_type.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.piece_position)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fmotiv_type.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

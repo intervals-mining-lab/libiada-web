@@ -56,7 +56,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(long id)
         {
-            var chain = db.dna_chain.Single(x => x.id == id);
+            var chain = Find(id);
             db.dna_chain.DeleteObject(chain);
         }
 

@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var nature = db.nature.Single(x => x.id == id);
+            var nature = Find(id);
             db.nature.DeleteObject(nature);
         }
 

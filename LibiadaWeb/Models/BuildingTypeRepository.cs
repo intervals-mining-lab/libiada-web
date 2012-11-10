@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models
 
         public void Delete(int id)
         {
-            var building_type = db.building_type.Single(x => x.id == id);
+            var building_type = Find(id);
             db.building_type.DeleteObject(building_type);
         }
 

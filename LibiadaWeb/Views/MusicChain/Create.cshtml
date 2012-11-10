@@ -1,0 +1,89 @@
+﻿@model LibiadaWeb.music_chain
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>music_chain</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.building_type_id, "building_type")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("building_type_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.building_type_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.notation_id, "notation")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("notation_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.notation_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.creation_date)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.creation_date)
+            @Html.ValidationMessageFor(model => model.creation_date)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.matter_id, "matter")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("matter_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.matter_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.dissimilar)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.dissimilar)
+            @Html.ValidationMessageFor(model => model.dissimilar)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.piece_type_id, "piece_type")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("piece_type_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.piece_type_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.piece_position)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.piece_position)
+            @Html.ValidationMessageFor(model => model.piece_position)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.instrument_id, "instrument")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("instrument_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.instrument_id)
+        </div>
+
+        <p>
+            <input type="submit" value="Create" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

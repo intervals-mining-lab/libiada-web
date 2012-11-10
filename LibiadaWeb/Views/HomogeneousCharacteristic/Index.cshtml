@@ -1,0 +1,69 @@
+﻿@model IEnumerable<LibiadaWeb.homogeneous_characteristic>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            chain_id
+        </th>
+        <th>
+            characteristic_type
+        </th>
+        <th>
+            value
+        </th>
+        <th>
+            value_string
+        </th>
+        <th>
+            link_up
+        </th>
+        <th>
+            creation_date
+        </th>
+        <th>
+            element
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.chain_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.characteristic_type.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value_string)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.link_up.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.creation_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.element.value)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>
