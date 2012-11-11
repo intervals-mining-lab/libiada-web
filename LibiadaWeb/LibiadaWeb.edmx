@@ -234,6 +234,16 @@
       <End Role="slur" EntitySet="slur" />
       <End Role="note" EntitySet="note" />
     </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_measure" Association="LibiadaWebModel.Store.fk_alphabet_measure_element">
+      <End Role="measure" EntitySet="measure" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_fmotiv" Association="LibiadaWebModel.Store.fk_alphabet_fmotiv_element">
+      <End Role="fmotiv" EntitySet="fmotiv" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
   </EntityContainer>
   
   
@@ -1560,8 +1570,35 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  
 
+  <Association Name="fk_alphabet_measure_element">
+    <End Role="measure" Type="LibiadaWebModel.Store.measure" Multiplicity="1" />
+    <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="measure">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="alphabet">
+        <PropertyRef Name="element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_alphabet_fmotiv_element">
+    <End Role="fmotiv" Type="LibiadaWebModel.Store.fmotiv" Multiplicity="1" />
+    <End Role="alphabet" Type="LibiadaWebModel.Store.alphabet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="fmotiv">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="alphabet">
+        <PropertyRef Name="element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  
+  
 
   <Function Name="add_alphabet_element" ReturnType="int8" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
     <Parameter Name="p_value" Type="varchar" Mode="In" />
@@ -1976,6 +2013,16 @@
       <End Role="slur" EntitySet="slur" />
       <End Role="note" EntitySet="note" />
     </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_measure_element" Association="LibiadaWebModel.fk_alphabet_measure_element">
+      <End Role="measure" EntitySet="measure" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_fmotiv_element" Association="LibiadaWebModel.fk_alphabet_fmotiv_element">
+      <End Role="fmotiv" EntitySet="fmotiv" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
   </EntityContainer>
 
   
@@ -1992,6 +2039,10 @@
     <Property Name="number" Type="Int32" Nullable="false" />
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_alphabet_element" FromRole="alphabet" ToRole="element" />
+    <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_alphabet_measure" FromRole="alphabet" ToRole="measure" />
+    <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_alphabet_fmotiv" FromRole="alphabet" ToRole="fmotiv" />
+    <NavigationProperty Name="fmotiv_element" Relationship="LibiadaWebModel.fk_alphabet_fmotiv_element" FromRole="alphabet" ToRole="fmotiv" />
+    <NavigationProperty Name="measure_element" Relationship="LibiadaWebModel.fk_alphabet_measure_element" FromRole="alphabet" ToRole="measure" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_alphabet_chain" FromRole="alphabet" ToRole="chain" />
   </EntityType>
   <EntityType Name="binary_characteristic">
@@ -3515,6 +3566,32 @@
       </Principal>
       <Dependent Role="note">
         <PropertyRef Name="slur_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_alphabet_measure_element">
+    <End Role="measure" Type="LibiadaWebModel.measure" Multiplicity="1" />
+    <End Role="alphabet" Type="LibiadaWebModel.alphabet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="measure">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="alphabet">
+        <PropertyRef Name="element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_alphabet_fmotiv_element">
+    <End Role="fmotiv" Type="LibiadaWebModel.fmotiv" Multiplicity="1" />
+    <End Role="alphabet" Type="LibiadaWebModel.alphabet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="fmotiv">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="alphabet">
+        <PropertyRef Name="element_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

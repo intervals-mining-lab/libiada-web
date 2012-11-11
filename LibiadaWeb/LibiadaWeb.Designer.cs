@@ -97,6 +97,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note_symbol), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_slur", "slur", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.slur), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_measure_element", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_fmotiv_element", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 
 #endregion
 
@@ -1224,6 +1226,158 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<element>("LibiadaWebModel.fk_alphabet_element", "element", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_measure", "measure")]
+        public measure measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure", "measure").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure", "measure").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<measure> measureReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure", "measure", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_fmotiv", "fmotiv")]
+        public fmotiv fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv", "fmotiv").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv", "fmotiv").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<fmotiv> fmotivReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_fmotiv_element", "fmotiv")]
+        public fmotiv fmotiv_element
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv_element", "fmotiv").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv_element", "fmotiv").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<fmotiv> fmotiv_elementReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv_element", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<fmotiv>("LibiadaWebModel.fk_alphabet_fmotiv_element", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_measure_element", "measure")]
+        public measure measure_element
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure_element", "measure").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure_element", "measure").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<measure> measure_elementReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure_element", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<measure>("LibiadaWebModel.fk_alphabet_measure_element", "measure", value);
                 }
             }
         }
