@@ -465,7 +465,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
@@ -482,7 +482,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
@@ -495,7 +495,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -504,7 +504,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
@@ -524,7 +524,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
@@ -539,7 +539,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="value" Type="varchar" MaxLength="255" />
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="name" Type="varchar" MaxLength="255" />
@@ -572,7 +572,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -599,7 +599,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -2341,7 +2341,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2368,7 +2368,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="chain_id" Type="Int64" Nullable="false" />
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
@@ -2384,7 +2384,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="instrument" ToRole="music_chain" />
@@ -2393,7 +2393,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2422,7 +2422,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2446,7 +2446,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -2484,7 +2484,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_accidental" FromRole="accidental" ToRole="pitch" />
@@ -2514,7 +2514,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_slur" FromRole="slur" ToRole="note" />

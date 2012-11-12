@@ -33,27 +33,42 @@
             </th>
         </tr>
         @{
-            List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
+    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
 
-            foreach (var item in mattersList)
-            {
+    foreach (var item in mattersList)
+    {
                 <tr>
                     <td>
                         @item
                     </td>
                 </tr>
-            }
+    }
         }
     </table>
+     <br/>
+    @Html.CheckBox("isSort")
+    @Html.Label("isSort", "Ранжировать")
+    <br/>
+    @Html.Label("Форма записи цепочки")
+    <br/>
+    <select name="notationId">
+        @foreach (var option in ViewBag.notationsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    @Html.Label("Язык литературного произведения")
+    <br/>
+    <select name="languageId">
+    @foreach (var option in ViewBag.language_id)
+    {
+        <option value="@option.Value">@option.Text</option>
+    }
+    </select>
     <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
     <br/>
-    <select name="notationId">
-            @foreach (var option in ViewBag.notationsList)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-    </select>
     <div id="axis"></div>
     <br/>
     <br/>
