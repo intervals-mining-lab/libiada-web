@@ -72,23 +72,23 @@ namespace LibiadaWeb.Controllers
             chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationId);
             Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
 
-            for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+            for (int i = 0; i < characteristicIds.Length; i++)
             {
                 characteristics.Add(new List<KeyValuePair<int, double>>());
+                int characteristicId = characteristicIds[i];
+                int linkUpId = linkUpIds[i];
 
-                long elementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
+                LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
+                
 
-                UniformChain tempChain = libiadaChain.GetUniformChain(i);
-                partNames.Add(tempChain.ToString());
-
-                for (int j = 0; j < characteristicIds.Length; j++)
+                for (int j = 0; j <   libiadaChain.Alphabet.Power; j++)
                 {
-                    int characteristicId = characteristicIds[j];
-                    int linkUpId = linkUpIds[j];
+                    long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
 
-                    String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
-                    LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
+                    UniformChain tempChain = libiadaChain.GetUniformChain(j);
+                    partNames.Add(tempChain.ToString());
 
                     if (db.homogeneous_characteristic.Any(b =>
                             b.chain_id == dbChain.id && b.characteristic_type_id == characteristicId &&
@@ -126,7 +126,13 @@ namespace LibiadaWeb.Controllers
                                         db.notation.Single(n => n.id == notationId).name);
             }
 
-
+            if (isSort)
+            {
+                for (int p = 0; p < characteristics.Count; p++)
+                {
+                    SortKeyValuePairList(characteristics[p]);
+                }
+            }
 
             TempData["characteristics"] = characteristics;
             TempData["chainName"] = chainName;
@@ -135,6 +141,17 @@ namespace LibiadaWeb.Controllers
             TempData["characteristicIds"] = characteristicIds;
             TempData["chainIds"] = matterId;
             return RedirectToAction("Result");
+        }
+
+        private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
+        {
+            arrayForSort.Sort(
+                delegate(KeyValuePair<int, double> firstPair,
+                         KeyValuePair<int, double> nextPair)
+                    {
+                        return nextPair.Value.CompareTo(firstPair.Value);
+                    }
+                );
         }
 
         public ActionResult Result()
