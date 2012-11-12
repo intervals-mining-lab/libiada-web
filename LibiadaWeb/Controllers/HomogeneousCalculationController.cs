@@ -54,7 +54,7 @@ namespace LibiadaWeb.Controllers
 
             List<List<KeyValuePair<int, double>>> characteristics = new List<List<KeyValuePair<int, double>>>();
             String chainName = db.matter.Single(m => m.id == matterId).name;
-            List<String> partNames = new List<string>();
+            List<String> elementNames = new List<string>();
             List<String> characteristicNames = new List<string>();
             
             chain dbChain;
@@ -83,25 +83,25 @@ namespace LibiadaWeb.Controllers
                 LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
                 
 
-                for (int j = 0; j <   libiadaChain.Alphabet.Power; j++)
+                for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
                 {
                     long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
 
                     UniformChain tempChain = libiadaChain.GetUniformChain(j);
-                    partNames.Add(tempChain.ToString());
+                    elementNames.Add(libiadaChain.Alphabet[j].ToString());
 
                     if (db.homogeneous_characteristic.Any(b =>
                             b.chain_id == dbChain.id && b.characteristic_type_id == characteristicId &&
                             b.element_id == elementId && b.link_up_id == linkUpId))
                     {
-                        characteristics.Last().Add(new KeyValuePair<int, double>(i, (double)db.homogeneous_characteristic.Single(b =>
+                        characteristics.Last().Add(new KeyValuePair<int, double>(j, (double)db.homogeneous_characteristic.Single(b =>
                             b.chain_id == dbChain.id && b.characteristic_type_id == characteristicId &&
                             b.element_id == elementId && b.link_up_id == linkUpId).value));
                     }
                     else
                     {
                         double value = calculator.Calculate(tempChain, linkUp);
-                        characteristics.Last().Add(new KeyValuePair<int, double>(i, value));
+                        characteristics.Last().Add(new KeyValuePair<int, double>(j, value));
                         homogeneous_characteristic currentCharacteristic = new homogeneous_characteristic();
                         currentCharacteristic.id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')").First();
                         currentCharacteristic.chain_id = dbChain.id;
@@ -136,7 +136,7 @@ namespace LibiadaWeb.Controllers
 
             TempData["characteristics"] = characteristics;
             TempData["chainName"] = chainName;
-            TempData["partNames"] = partNames;
+            TempData["elementNames"] = elementNames;
             TempData["characteristicNames"] = characteristicNames;
             TempData["characteristicIds"] = characteristicIds;
             TempData["chainIds"] = matterId;
@@ -174,7 +174,7 @@ namespace LibiadaWeb.Controllers
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = characteristics;
             ViewBag.chainName = TempData["chainName"] as String;
-            ViewBag.partNames = TempData["partNames"] as List<String>;
+            ViewBag.elementNames = TempData["elementNames"] as List<String>;
             ViewBag.characteristicNames = characteristicNames;
             return View();
         }
