@@ -25,11 +25,11 @@
         var rows = $("#resultTable")[0].tBodies[0].rows;
         var clusterNumber = 0;
         for (var i = 1; i < rows.length; i++) {
-            if(clusterNumber < rows[i].cells[0].innerText) {
+            if(clusterNumber < rows[i].cells[0].textContent) {
                 chainNames.push(new Array());
                 clusterNumber++;
             }
-            chainNames[clusterNumber - 1].push(rows[i].cells[1].innerText);
+            chainNames[clusterNumber - 1].push(rows[i].cells[1].textContent);
         }
 
         @for (int j = 0; j < ViewBag.characteristics.Count; j++)

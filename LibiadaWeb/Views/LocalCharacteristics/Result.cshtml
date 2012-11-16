@@ -26,11 +26,11 @@
         var tableHeaders = $("#resultTable")[0].tBodies[0].rows[0].cells;
         
         for (var k = 1; k < tableHeaders.length; k++) {
-            headers.push(tableHeaders[k].innerText);
+            headers.push(tableHeaders[k].textContent);
         }
         var rows = $("#resultTable")[0].tBodies[0].rows;
         for (var i = 1; i < rows.length; i++) {
-            partNames.push(rows[i].cells[0].innerText);
+            partNames.push(rows[i].cells[0].textContent);
         }
         
         @for (int j = 0; j < ViewBag.characteristics.Count; j++)
@@ -75,7 +75,7 @@
 
                     legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
 
-                    plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, colors[j]], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+                    plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
                     title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
 
@@ -115,7 +115,7 @@
 
                 legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
 
-                plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, 'rgb(116, 116, 116)'], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+                plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
                 title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
 

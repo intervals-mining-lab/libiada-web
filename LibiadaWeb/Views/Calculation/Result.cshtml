@@ -25,7 +25,7 @@
 
         var rows = $("#resultTable")[0].tBodies[0].rows;
         for (var i = 1; i < rows.length; i++) {
-            chainNames.push(rows[i].cells[0].innerText);
+            chainNames.push(rows[i].cells[0].textContent);
         }
         
         @for (int j = 0; j < ViewBag.characteristics.Count; j++)
