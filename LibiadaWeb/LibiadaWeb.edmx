@@ -34,7 +34,7 @@
     <EntitySet Name="accidental" EntityType="LibiadaWebModel.Store.accidental" store:Type="Tables" Schema="public" />
     <EntitySet Name="fmotiv_type" EntityType="LibiadaWebModel.Store.fmotiv_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="note_symbol" EntityType="LibiadaWebModel.Store.note_symbol" store:Type="Tables" Schema="public" />
-    <EntitySet Name="slur" EntityType="LibiadaWebModel.Store.slur" store:Type="Tables" Schema="public" />
+    <EntitySet Name="tie" EntityType="LibiadaWebModel.Store.tie" store:Type="Tables" Schema="public" />
 
     <AssociationSet Name="fk_alphabet_element" Association="LibiadaWebModel.Store.fk_alphabet_element">
       <End Role="element" EntitySet="element" />
@@ -230,8 +230,8 @@
       <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_note_slur" Association="LibiadaWebModel.Store.fk_note_slur">
-      <End Role="slur" EntitySet="slur" />
+    <AssociationSet Name="fk_note_tie" Association="LibiadaWebModel.Store.fk_note_tie">
+      <End Role="tie" EntitySet="tie" />
       <End Role="note" EntitySet="note" />
     </AssociationSet>
 
@@ -243,6 +243,11 @@
     <AssociationSet Name="fk_alphabet_fmotiv" Association="LibiadaWebModel.Store.fk_alphabet_fmotiv_element">
       <End Role="fmotiv" EntitySet="fmotiv" />
       <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_pitch_instrument" Association="LibiadaWebModel.Store.fk_pitch_instrument">
+      <End Role="instrument" EntitySet="instrument" />
+      <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
   </EntityContainer>
   
@@ -552,7 +557,7 @@
     <Property Name="odenominator" Type="int4" Nullable="false" />
     <Property Name="triplet" Type="bool" Nullable="false" />
     <Property Name="priority" Type="int4" />
-    <Property Name="slur_id" Type="int4" Nullable="false" />
+    <Property Name="tie_id" Type="int4" Nullable="false" />
   </EntityType>
 
   <EntityType Name="pitch">
@@ -562,7 +567,7 @@
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="octave" Type="int4" Nullable="false" />
     <Property Name="midinumber" Type="int4" Nullable="false" />
-    <Property Name="instrument" Type="int4" Nullable="false" />
+    <Property Name="instrument_id" Type="int4" Nullable="false" />
     <Property Name="note_id" Type="int8" Nullable="false" />
     <Property Name="accidental_id" Type="int4" Nullable="false" />
     <Property Name="note_symbol_id" Type="int4" Nullable="false" />
@@ -595,7 +600,7 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
 
-  <EntityType Name="slur">
+  <EntityType Name="tie">
     <Key>
       <PropertyRef Name="id" />
     </Key>
@@ -1558,15 +1563,15 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_note_slur">
-    <End Role="slur" Type="LibiadaWebModel.Store.slur" Multiplicity="1" />
+  <Association Name="fk_note_tie">
+    <End Role="tie" Type="LibiadaWebModel.Store.tie" Multiplicity="1" />
     <End Role="note" Type="LibiadaWebModel.Store.note" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="slur">
+      <Principal Role="tie">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="note">
-        <PropertyRef Name="slur_id" />
+        <PropertyRef Name="tie_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1593,6 +1598,19 @@
       </Principal>
       <Dependent Role="alphabet">
         <PropertyRef Name="element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_pitch_instrument">
+    <End Role="instrument" Type="LibiadaWebModel.Store.instrument" Multiplicity="1" />
+    <End Role="pitch" Type="LibiadaWebModel.Store.pitch" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="instrument">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="pitch">
+        <PropertyRef Name="instrument_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1647,7 +1665,7 @@
     <EntitySet Name="accidental" EntityType="LibiadaWebModel.accidental" />
     <EntitySet Name="fmotiv_type" EntityType="LibiadaWebModel.fmotiv_type" />
     <EntitySet Name="note_symbol" EntityType="LibiadaWebModel.note_symbol" />
-    <EntitySet Name="slur" EntityType="LibiadaWebModel.slur" />
+    <EntitySet Name="tie" EntityType="LibiadaWebModel.tie" />
     
     
     
@@ -2009,8 +2027,8 @@
       <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_note_slur" Association="LibiadaWebModel.fk_note_slur">
-      <End Role="slur" EntitySet="slur" />
+    <AssociationSet Name="fk_note_tie" Association="LibiadaWebModel.fk_note_tie">
+      <End Role="tie" EntitySet="tie" />
       <End Role="note" EntitySet="note" />
     </AssociationSet>
 
@@ -2022,6 +2040,11 @@
     <AssociationSet Name="fk_alphabet_fmotiv_element" Association="LibiadaWebModel.fk_alphabet_fmotiv_element">
       <End Role="fmotiv" EntitySet="fmotiv" />
       <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_pitch_instrument" Association="LibiadaWebModel.fk_pitch_instrument">
+      <End Role="instrument" EntitySet="instrument" />
+      <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
   </EntityContainer>
 
@@ -2388,6 +2411,7 @@
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="instrument" ToRole="music_chain" />
+    <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_instrument" FromRole="instrument" ToRole="pitch" />
   </EntityType>
   <EntityType Name="measure">
     <Key>
@@ -2459,10 +2483,10 @@
     <Property Name="odenominator" Type="Int32" Nullable="false" />
     <Property Name="triplet" Type="Boolean" Nullable="false" />
     <Property Name="priority" Type="Int32" />
-    <Property Name="slur_id" Type="Int32" Nullable="false" />
+    <Property Name="tie_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_note_notation" FromRole="note" ToRole="notation" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_note" FromRole="note" ToRole="pitch" />
-    <NavigationProperty Name="slur" Relationship="LibiadaWebModel.fk_note_slur" FromRole="note" ToRole="slur" />
+    <NavigationProperty Name="tie" Relationship="LibiadaWebModel.fk_note_tie" FromRole="note" ToRole="tie" />
   </EntityType>
   <EntityType Name="pitch">
     <Key>
@@ -2471,11 +2495,12 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="octave" Type="Int32" Nullable="false" />
     <Property Name="midinumber" Type="Int32" Nullable="false" />
-    <Property Name="instrument" Type="Int32" Nullable="false" />
+    <Property Name="instrument_id" Type="Int32" Nullable="false" />
     <Property Name="note_id" Type="Int64" Nullable="false" />
     <Property Name="accidental_id" Type="Int32" Nullable="false" />
     <Property Name="note_symbol_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_pitch_note" FromRole="pitch" ToRole="note" />
+    <NavigationProperty Name="instrument" Relationship="LibiadaWebModel.fk_pitch_instrument" FromRole="pitch" ToRole="instrument" />
     <NavigationProperty Name="accidental" Relationship="LibiadaWebModel.fk_pitch_accidental" FromRole="pitch" ToRole="accidental" />
     <NavigationProperty Name="note_symbol" Relationship="LibiadaWebModel.fk_pitch_note_symbol" FromRole="pitch" ToRole="note_symbol" />
   </EntityType>
@@ -2510,14 +2535,14 @@
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_note_symbol" FromRole="note_symbol" ToRole="pitch" />
   </EntityType>
 
-  <EntityType Name="slur">
+  <EntityType Name="tie">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_slur" FromRole="slur" ToRole="note" />
+    <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_tie" FromRole="tie" ToRole="note" />
   </EntityType>
   
   
@@ -3557,15 +3582,15 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_note_slur">
-    <End Role="slur" Type="LibiadaWebModel.slur" Multiplicity="1" />
+  <Association Name="fk_note_tie">
+    <End Role="tie" Type="LibiadaWebModel.tie" Multiplicity="1" />
     <End Role="note" Type="LibiadaWebModel.note" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="slur">
+      <Principal Role="tie">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="note">
-        <PropertyRef Name="slur_id" />
+        <PropertyRef Name="tie_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3592,6 +3617,19 @@
       </Principal>
       <Dependent Role="alphabet">
         <PropertyRef Name="element_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+  <Association Name="fk_pitch_instrument">
+    <End Role="instrument" Type="LibiadaWebModel.instrument" Multiplicity="1" />
+    <End Role="pitch" Type="LibiadaWebModel.pitch" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="instrument">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="pitch">
+        <PropertyRef Name="instrument_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3935,7 +3973,7 @@
           <ScalarProperty Name="odenominator" ColumnName="odenominator" />
           <ScalarProperty Name="triplet" ColumnName="triplet" />
           <ScalarProperty Name="priority" ColumnName="priority" />
-          <ScalarProperty Name="slur_id" ColumnName="slur_id" />
+          <ScalarProperty Name="tie_id" ColumnName="tie_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3946,7 +3984,7 @@
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="octave" ColumnName="octave" />
           <ScalarProperty Name="midinumber" ColumnName="midinumber" />
-          <ScalarProperty Name="instrument" ColumnName="instrument" />
+          <ScalarProperty Name="instrument_id" ColumnName="instrument_id" />
           <ScalarProperty Name="note_id" ColumnName="note_id" />
           <ScalarProperty Name="accidental_id" ColumnName="accidental_id" />
           <ScalarProperty Name="note_symbol_id" ColumnName="note_symbol_id" />
@@ -3984,9 +4022,9 @@
       </EntityTypeMapping>
     </EntitySetMapping>
 
-    <EntitySetMapping Name="slur">
-      <EntityTypeMapping TypeName="LibiadaWebModel.slur">
-        <MappingFragment StoreEntitySet="slur">
+    <EntitySetMapping Name="tie">
+      <EntityTypeMapping TypeName="LibiadaWebModel.tie">
+        <MappingFragment StoreEntitySet="tie">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
@@ -5076,7 +5114,7 @@
           <ConnectorPoint PointX="9.5" PointY="23.393992513020834" />
           <ConnectorPoint PointX="9.5" PointY="21.191793619791667" />
         </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_note_slur">
+        <AssociationConnector Association="LibiadaWebModel.fk_note_tie">
           <ConnectorPoint PointX="5.75" PointY="19.643992513020834" />
           <ConnectorPoint PointX="6.166666666666667" PointY="19.643992513020834" />
           <ConnectorPoint PointX="6.333333333333333" PointY="19.643992513020834" />

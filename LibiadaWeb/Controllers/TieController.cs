@@ -9,29 +9,29 @@ using LibiadaWeb;
 
 namespace LibiadaWeb.Controllers
 { 
-    public class SlurController : Controller
+    public class TieController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
-        // GET: /Slur/
+        // GET: /tie/
 
         public ViewResult Index()
         {
-            return View(db.slur.ToList());
+            return View(db.tie.ToList());
         }
 
         //
-        // GET: /Slur/Details/5
+        // GET: /tie/Details/5
 
         public ViewResult Details(int id)
         {
-            slur slur = db.slur.Single(s => s.id == id);
-            return View(slur);
+            tie tie = db.tie.Single(s => s.id == id);
+            return View(tie);
         }
 
         //
-        // GET: /Slur/Create
+        // GET: /tie/Create
 
         public ActionResult Create()
         {
@@ -39,63 +39,63 @@ namespace LibiadaWeb.Controllers
         } 
 
         //
-        // POST: /Slur/Create
+        // POST: /tie/Create
 
         [HttpPost]
-        public ActionResult Create(slur slur)
+        public ActionResult Create(tie tie)
         {
             if (ModelState.IsValid)
             {
-                db.slur.AddObject(slur);
+                db.tie.AddObject(tie);
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
 
-            return View(slur);
+            return View(tie);
         }
         
         //
-        // GET: /Slur/Edit/5
+        // GET: /tie/Edit/5
  
         public ActionResult Edit(int id)
         {
-            slur slur = db.slur.Single(s => s.id == id);
-            return View(slur);
+            tie tie = db.tie.Single(s => s.id == id);
+            return View(tie);
         }
 
         //
-        // POST: /Slur/Edit/5
+        // POST: /tie/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(slur slur)
+        public ActionResult Edit(tie tie)
         {
             if (ModelState.IsValid)
             {
-                db.slur.Attach(slur);
-                db.ObjectStateManager.ChangeObjectState(slur, EntityState.Modified);
+                db.tie.Attach(tie);
+                db.ObjectStateManager.ChangeObjectState(tie, EntityState.Modified);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(slur);
+            return View(tie);
         }
 
         //
-        // GET: /Slur/Delete/5
+        // GET: /tie/Delete/5
  
         public ActionResult Delete(int id)
         {
-            slur slur = db.slur.Single(s => s.id == id);
-            return View(slur);
+            tie tie = db.tie.Single(s => s.id == id);
+            return View(tie);
         }
 
         //
-        // POST: /Slur/Delete/5
+        // POST: /tie/Delete/5
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {            
-            slur slur = db.slur.Single(s => s.id == id);
-            db.slur.DeleteObject(slur);
+            tie tie = db.tie.Single(s => s.id == id);
+            db.tie.DeleteObject(tie);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

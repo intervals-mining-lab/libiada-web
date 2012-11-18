@@ -45,6 +45,9 @@
     <Reference Include="LibiadaCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
     </Reference>
+    <Reference Include="MDA">
+      <HintPath>..\..\libiada-music\MDA\bin\Debug\MDA.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NewClusterization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\libiada-clusterization\NewClusterization\bin\Debug\NewClusterization.dll</HintPath>
@@ -113,7 +116,7 @@
     <Compile Include="Controllers\NoteSymbolController.cs" />
     <Compile Include="Controllers\PitchController.cs" />
     <Compile Include="Controllers\RemoteDbController.cs" />
-    <Compile Include="Controllers\SlurController.cs" />
+    <Compile Include="Controllers\TieController.cs" />
     <Compile Include="Controllers\TransformationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -169,7 +172,7 @@
     <Compile Include="Models\InstrumentRepository.cs" />
     <Compile Include="Models\IPitchRepository.cs" />
     <Compile Include="Models\IRemoteDbRepository.cs" />
-    <Compile Include="Models\ISlurRepository.cs" />
+    <Compile Include="Models\ITieRepository.cs" />
     <Compile Include="Models\LinkUpRepository.cs" />
     <Compile Include="Models\LiteratureChainRepository.cs" />
     <Compile Include="Models\MatterRepository.cs" />
@@ -181,7 +184,7 @@
     <Compile Include="Models\NoteSymbolRepository.cs" />
     <Compile Include="Models\PitchRepository.cs" />
     <Compile Include="Models\RemoteDbRepository.cs" />
-    <Compile Include="Models\SlurRepository.cs" />
+    <Compile Include="Models\TieRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -412,11 +415,11 @@
     <Content Include="Views\Pitch\Create.cshtml" />
     <Content Include="Views\Pitch\Edit.cshtml" />
     <Content Include="Views\Pitch\Delete.cshtml" />
-    <Content Include="Views\Slur\Index.cshtml" />
-    <Content Include="Views\Slur\Details.cshtml" />
-    <Content Include="Views\Slur\Create.cshtml" />
-    <Content Include="Views\Slur\Edit.cshtml" />
-    <Content Include="Views\Slur\Delete.cshtml" />
+    <Content Include="Views\Tie\Index.cshtml" />
+    <Content Include="Views\Tie\Details.cshtml" />
+    <Content Include="Views\Tie\Create.cshtml" />
+    <Content Include="Views\Tie\Edit.cshtml" />
+    <Content Include="Views\Tie\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

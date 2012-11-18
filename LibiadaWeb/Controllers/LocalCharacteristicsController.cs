@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
@@ -43,17 +44,21 @@ namespace LibiadaWeb.Controllers
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
-            
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int notationId, int length, int step, bool isDelta, bool isSort)
+        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int notationId, int length,
+                                  int step, bool isDelta, bool isSort, bool isFurie)
         {
+
             List<List<Double>> characteristicsTemp = new List<List<Double>>();
             String chainName = db.matter.Single(m => m.id == matterId).name;
             List<String> partNames = new List<string>();
             List<String> characteristicNames = new List<string>();
+
+
 
             for (int i = 0; i < characteristicIds.Length; i++)
             {
@@ -81,22 +86,65 @@ namespace LibiadaWeb.Controllers
             }
 
             if (isDelta)
-            {   //Перебираем характеристики
+            {
+                //Перебираем характеристики
                 for (int i = 0; i < characteristicsTemp.Count; i++)
-                {   //перебираем фрагменты цепочек
-                    for (int j = (characteristicsTemp[i].Count)-1; j > 0; j--)
+                {
+                    //перебираем фрагменты цепочек
+                    for (int j = (characteristicsTemp[i].Count) - 1; j > 0; j--)
                     {
                         characteristicsTemp[i][j] -= characteristicsTemp[i][j - 1];
                     }
                     characteristicsTemp[i].RemoveAt(0);
-                }   
+                }
             }
             if (isSort)
-            {    //Перебираем характеристики
+            {
+                //Перебираем характеристики
                 for (int i = 0; i < characteristicsTemp.Count; i++)
-                {   //перебираем фрагменты цепочек
+                {
+                    //перебираем фрагменты цепочек
                     characteristicsTemp[i].Sort();
-                }  
+                }
+            }
+
+            if (isFurie)
+            {
+
+                //переводим в комлексный вид
+                for (int i = 0; i < characteristicsTemp.Count; i++)
+                {
+                    List<Complex> comp = new List<Complex>();
+                    int j = 0;
+
+                    for (j = 0; j < characteristicsTemp[i].Count; j++)
+                    {
+                        comp.Add(new Complex(characteristicsTemp[i][j], 0));
+                    }
+
+                    int k = 1;
+
+                    while (k < j)
+                    {
+                        k *= 2;
+                    }
+
+                    for (; j < k; j++)
+                    {
+                        comp.Add(new Complex(0, 0));
+                    }
+
+                    Complex[] data = FFT.Fft(comp.ToArray()); //вернёт массив
+                    List<double> temp = new List<double>();
+                    //переводим в массив double
+
+                    foreach (var fftElement in data)
+                    {
+                        temp.Add(fftElement.Real);
+                    }
+
+                    characteristicsTemp[i] = temp;
+                }
             }
 
 
@@ -110,6 +158,8 @@ namespace LibiadaWeb.Controllers
                     characteristics[t].Add(characteristicsTemp[w][t]);
                 }
             }
+
+
 
             TempData["characteristics"] = characteristics;
             TempData["chainName"] = chainName;

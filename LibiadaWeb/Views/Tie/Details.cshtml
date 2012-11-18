@@ -1,14 +1,13 @@
-﻿@model LibiadaWeb.slur
+﻿@model LibiadaWeb.tie
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Details";
 }
 
-<h2>Delete</h2>
+<h2>Details</h2>
 
-<h3>Are you sure you want to delete this?</h3>
 <fieldset>
-    <legend>slur</legend>
+    <legend>tie</legend>
 
     <div class="display-label">name</div>
     <div class="display-field">
@@ -20,9 +19,7 @@
         @Html.DisplayFor(model => model.description)
     </div>
 </fieldset>
-@using (Html.BeginForm()) {
-    <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
-}
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

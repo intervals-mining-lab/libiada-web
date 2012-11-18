@@ -18,7 +18,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var note = db.note.Include("notation").Include("slur");
+            var note = db.note.Include("notation").Include("tie");
             return View(note.ToList());
         }
 
@@ -37,7 +37,7 @@ namespace LibiadaWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
-            ViewBag.slur_id = new SelectList(db.slur, "id", "name");
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name");
             return View();
         } 
 
@@ -55,7 +55,7 @@ namespace LibiadaWeb.Controllers
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
-            ViewBag.slur_id = new SelectList(db.slur, "id", "name", note.slur_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
         
@@ -66,7 +66,7 @@ namespace LibiadaWeb.Controllers
         {
             note note = db.note.Single(n => n.id == id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
-            ViewBag.slur_id = new SelectList(db.slur, "id", "name", note.slur_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
 
@@ -84,7 +84,7 @@ namespace LibiadaWeb.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
-            ViewBag.slur_id = new SelectList(db.slur, "id", "name", note.slur_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
 

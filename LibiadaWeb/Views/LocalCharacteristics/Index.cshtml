@@ -33,16 +33,16 @@
             </th>
         </tr>
         @{
-            List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
+    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
 
-            foreach (var item in mattersList)
-            {
+    foreach (var item in mattersList)
+    {
                 <tr>
                     <td>
                         @item
                     </td>
                 </tr>
-            }
+    }
         }
     </table>
     <br/>
@@ -58,6 +58,9 @@
     @Html.Label("isSort", "Сортировать")
     <br/>
     <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <br/>
+    @Html.CheckBox("isFurie")
+    @Html.Label("isFurie", "Быстрое преобразование Фурье")
     <br/>
     <select name="notationId">
             @foreach (var option in ViewBag.notationsList)

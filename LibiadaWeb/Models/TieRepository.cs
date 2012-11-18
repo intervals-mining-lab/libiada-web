@@ -6,50 +6,50 @@ using System.Linq.Expressions;
 
 namespace LibiadaWeb.Models
 { 
-    public class SlurRepository : ISlurRepository
+    public class TieRepository : ITieRepository
     {
         private readonly LibiadaWebEntities db;
 
-        public SlurRepository(LibiadaWebEntities db)
+        public TieRepository(LibiadaWebEntities db)
         {
             this.db = db;
         }
 
-        public IQueryable<slur> All
+        public IQueryable<tie> All
         {
-            get { return db.slur; }
+            get { return db.tie; }
         }
 
-        public IQueryable<slur> AllIncluding(params Expression<Func<slur, object>>[] includeProperties)
+        public IQueryable<tie> AllIncluding(params Expression<Func<tie, object>>[] includeProperties)
         {
-            IQueryable<slur> query = db.slur;
+            IQueryable<tie> query = db.tie;
             foreach (var includeProperty in includeProperties) {
                 query = query.Include(includeProperty);
             }
             return query;
         }
 
-        public slur Find(int id)
+        public tie Find(int id)
         {
-            return db.slur.Single(x => x.id == id);
+            return db.tie.Single(x => x.id == id);
         }
 
-        public void InsertOrUpdate(slur slur)
+        public void InsertOrUpdate(tie tie)
         {
-            if (slur.id == default(int)) {
+            if (tie.id == default(int)) {
                 // New entity
-                db.slur.AddObject(slur);
+                db.tie.AddObject(tie);
             } else {
                 // Existing entity
-                db.slur.Attach(slur);
-                db.ObjectStateManager.ChangeObjectState(slur, EntityState.Modified);
+                db.tie.Attach(tie);
+                db.ObjectStateManager.ChangeObjectState(tie, EntityState.Modified);
             }
         }
 
         public void Delete(int id)
         {
-            var slur = Find(id);
-            db.slur.DeleteObject(slur);
+            var tie = Find(id);
+            db.tie.DeleteObject(tie);
         }
 
         public void Save()
