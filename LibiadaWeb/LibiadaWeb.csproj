@@ -116,6 +116,7 @@
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\NoteSymbolController.cs" />
     <Compile Include="Controllers\PitchController.cs" />
+    <Compile Include="Controllers\QuickCalculationController.cs" />
     <Compile Include="Controllers\RemoteDbController.cs" />
     <Compile Include="Controllers\TieController.cs" />
     <Compile Include="Controllers\TransformationController.cs" />
@@ -422,6 +423,8 @@
     <Content Include="Views\Tie\Create.cshtml" />
     <Content Include="Views\Tie\Edit.cshtml" />
     <Content Include="Views\Tie\Delete.cshtml" />
+    <Content Include="Views\QuickCalculation\Index.cshtml" />
+    <Content Include="Views\QuickCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

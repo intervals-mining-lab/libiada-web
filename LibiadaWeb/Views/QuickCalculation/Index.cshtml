@@ -1,0 +1,37 @@
+﻿@using LibiadaWeb.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление характеристик произвольной цепочки";
+}
+
+<h2>Вычисление характеристик произвольной цепочки</h2>
+
+<script type="text/javascript">
+
+    function AddAxis() {
+        $("#axis").append(
+        '<select name="characteristicIds">' +
+            '@foreach (var option in ViewBag.characteristicsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<select name="linkUpIds">' +
+            '@foreach (var option in ViewBag.linkUpsList)
+             {<option value="@option.Value">@option.Text</option>}' +
+        '</select>' +
+        '<br/>');
+        return false;
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.Label("Цепочка")
+    @Html.Editor("chain")
+    <br/>
+    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <div id="axis"></div>
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}
