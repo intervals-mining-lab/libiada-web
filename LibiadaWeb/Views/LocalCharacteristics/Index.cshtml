@@ -33,16 +33,16 @@
             </th>
         </tr>
         @{
-    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
+            List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
 
-    foreach (var item in mattersList)
-    {
+            foreach (var item in mattersList)
+            {
                 <tr>
                     <td>
                         @item
                     </td>
                 </tr>
-    }
+            }
         }
     </table>
     <br/>
