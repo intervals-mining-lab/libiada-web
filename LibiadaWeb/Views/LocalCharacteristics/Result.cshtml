@@ -23,16 +23,18 @@
         colors.push('rgba( 0, 150, 0, .5)');
         colors.push('rgba( 0, 0, 150  .5)');
 
-        var tableHeaders = $("#resultTable")[0].tBodies[0].rows[0].cells;
-        
-        for (var k = 1; k < tableHeaders.length; k++) {
-            headers.push(tableHeaders[k].innerText);
+        for(var l = 0; l < $("table").length; l++) {
+            var tableHeaders = $("table")[l].tBodies[0].rows[0].cells;
+            headers.push(tableHeaders[0].textContent);
+            partNames.push(new Array());
+
+            var rows = $("table")[l].tBodies[0].rows;
+            for (var i = 1; i < rows.length; i++) {
+                partNames[l].push(rows[i].cells[0].textContent);
+            }
         }
-        var rows = $("#resultTable")[0].tBodies[0].rows;
-        for (var i = 1; i < rows.length; i++) {
-            partNames.push(rows[i].cells[0].innerText);
-        }
-        
+
+
         @for (int j = 0; j < ViewBag.characteristics.Count; j++)
         {
             @: characteristics.push(new Array());
@@ -40,130 +42,112 @@
             var characteristicList = ViewBag.characteristics[j];
             for (int i = 0; i < characteristicList.Count; i++)
             {
-                String[] tempValue = characteristicList[i].ToString().Split(',');
-                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                @: characteristics[characteristics.length -1][@i] = @value;
+                @: characteristics[@j].push(new Array());
+
+                var characteristic = characteristicList[i];
+                for (int k = 0; k < characteristic.Count; k++)
+                {
+                    String[] tempValue = characteristic[k].ToString().Split(',');
+                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                    @: characteristics[@j][@i][@k] = @value;
+                }
             }
         }
     });
     
-    var newChart;
-    function DrawChart() {
-        
-        if($("#allGraphics")[0].checked) {
-            var dataSeries = new Array();
-        var yValues = new Array();
-        
-            for (var j = 0; j < $("#yaxis option").length; j++) {
-                var ycharacteristicId = $("#yaxis option")[j].value;
-                dataSeries.push(new Object());
-                dataSeries[j].data = new Array();
-                dataSeries[j].name = headers[j];
-                dataSeries[j].type = 'area';
-                for (var i = 0; i < partNames.length; i++) {
-                    var y = characteristics[i][ycharacteristicId];
-                    yValues.push(y);
-                    var pointName = partNames[i];
-                    dataSeries[j].data[i] = new Object();
-                    dataSeries[j].data[i].x = i;
-                    dataSeries[j].data[i].y = y;
-                    dataSeries[j].data[i].name = pointName;
+    var yVals;
+
+    function FillSeries(characteristicId, dataSeries) {
+
+        for (var i = 0; i < partNames.length; i++) {
+            var series = new Object();
+            series.data = new Array();
+            series.type = 'area';
+            series.name = headers[i];
+            for (var j = 0; j < partNames[i].length; j++) {
+                var y = characteristics[i][j][characteristicId];
+                var pointName = partNames[i][j];
+                series.data[j] = new Object();
+                series.data[j].x = j + 1;
+                series.data[j].y = y;
+                series.data[j].name = pointName;
+                // массив для определения минимального значения для границ графика
+                yVals.push(y);
+            }
+            dataSeries.push(series);
+        }
+    }
+
+    function CreateChart(dataSeries, minY) {
+        chart = new Highcharts.Chart({
+            chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: 'x' },
+
+            legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+
+            plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+
+            title: { text: 'Локальне характеристики цепочек' },
+
+            tooltip: {
+                formatter: function() {
+                    return this.point.name + '<br/> ' + this.y;
                 }
+            },
 
-                chart = new Highcharts.Chart({
-                    chart: { renderTo: 'visualization_container', zoomType: 'x' },
+            xAxis: { min: 0, maxZoom: 3, title: {text: 'Фрагменты цепочки'} },
 
-                    legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+            yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
-                    plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, colors[j]], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
+            series: dataSeries
+        });
+    }
 
-                    title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
-
-                    tooltip: {
-                        formatter: function() {
-                            return this.point.name + '<br/> ' + this.y;
-                        }
-                    },
-
-                    xAxis: { maxZoom: 3, type: 'number', title: { text: 'Фрагменты цепочки' } },
-
-                    yAxis: { endOnTick: false, startOnTick: false, min: Math.min.apply(null, yValues), title: { text: $("#yaxis option:selected")[0].text } },
-
-                    series: dataSeries
-                });
+    function DrawChart() {
+        yVals = new Array();
+        var dataSeries = new Array();
+        
+        if ($("#allGraphics")[0].checked) {
+            for (var j = 0; j < $("#yaxis option").length; j++) {
+                FillSeries($("#yaxis option")[j].value, dataSeries);
             }
         } else {
-            var dataSeries = new Array();
-            var yValues = new Array();
-            dataSeries.push(new Object());
-            dataSeries[0].data = new Array();
-            dataSeries[0].name =  headers[j];
-            dataSeries[0].type = 'area';
-            var ycharacteristicId = $("#yaxis option:selected")[0].value;
-            for (var i = 0; i < partNames.length; i++) {
-                var y = characteristics[i][ycharacteristicId];
-                yValues.push(y);
-                var pointName = partNames[i];
-                dataSeries[0].data[i] = new Object();
-                dataSeries[0].data[i].x = i;
-                dataSeries[0].data[i].y = y;
-                dataSeries[0].data[i].name = pointName;
-            }
-
-            chart = new Highcharts.Chart({
-                chart: { renderTo: 'visualization_container', zoomType: 'x' },
-
-                legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
-
-                plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [[0, 'rgb(116, 116, 116)'], [1, 'gold']] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
-
-                title: { text: 'Локальне характеристики цепочки @ViewBag.chainName' },
-
-                tooltip: {
-                    formatter: function() {
-                        return this.point.name + '<br/> ' + this.y;
-                    }
-                },
-
-                xAxis: { maxZoom: 3, type: 'number', title: { text: 'Фрагменты цепочки' } },
-
-                yAxis: { endOnTick: false, startOnTick: false, min: Math.min.apply(null, yValues), title: { text: $("#yaxis option:selected")[0].text } },
-
-                series: dataSeries
-            });
+            FillSeries($("#yaxis option:selected")[0].value, dataSeries);
         }
-
-
+        CreateChart(dataSeries, Math.min.apply(null, yVals));
     }
 </script>
 
-<table id="resultTable">
-    <tr>
-        <th>
-            Название цепочки
-        </th>
-        @foreach (var characteristicName in ViewBag.characteristicNames)
-        {
-            <th>
-                @characteristicName
-            </th>
-        }
-    </tr>
-    @for (int i = 0; i < ViewBag.partNames.Count; i++ )
-    {
+@for (int k = 0; k < ViewBag.chainNames.Count; k++)
+{
+    <table>
         <tr>
-            <td id="chainNameCell">
-                @ViewBag.partNames[i]
-            </td>
-            @foreach (var characteristic in ViewBag.characteristics[i])
+            <th>
+                @ViewBag.chainNames[k]
+            </th>
+            @foreach (var characteristicName in ViewBag.characteristicNames)
             {
-                <td>
-                    @characteristic
-                </td>
+                <th>
+                    @characteristicName
+                </th>
             }
         </tr>
-    }
-</table>
+        @for (int i = 0; i < ViewBag.partNames[k].Count; i++)
+        {
+            <tr>
+                <td id="chainNameCell">
+                    @ViewBag.partNames[k][i]
+                </td>
+                @foreach (var characteristic in ViewBag.characteristics[k][i])
+                {
+                    <td>
+                        @characteristic
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+
 <br/>
 <div id="visualization_container" style="width: 800px; height: 500px"></div>
 <br/>

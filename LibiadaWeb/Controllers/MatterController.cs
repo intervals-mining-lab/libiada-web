@@ -9,8 +9,6 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
-using MDA.OIP.MusicXml;
-using MDA.OIP.ScoreModel;
 
 namespace LibiadaWeb.Controllers
 {
@@ -145,9 +143,9 @@ namespace LibiadaWeb.Controllers
                     case 2:
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(stringChain);
-                        MusicXmlParser parser = new MusicXmlParser();
-                        parser.Execute(doc, "test");
-                        ScoreTrack tempTrack = parser.ScoreModel;
+                        //MusicXmlParser parser = new MusicXmlParser();
+                        //parser.Execute(doc, "test");
+                        //ScoreTrack tempTrack = parser.ScoreModel;
 
                         break;
                     //литературная цепочка

@@ -91,7 +91,7 @@ namespace LibiadaWeb.Controllers
                         dbCharacteristic.creation_date = DateTime.Now;
                         db.characteristic.AddObject(dbCharacteristic);
                         db.SaveChanges();
-                        characteristics.Last().Add(calculator.Calculate(tempChain, linkUp));
+                        characteristics.Last().Add(characteristicValue);
                     }
                 }
             }
