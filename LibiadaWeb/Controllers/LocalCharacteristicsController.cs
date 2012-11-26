@@ -50,10 +50,10 @@ namespace LibiadaWeb.Controllers
 
         [HttpPost]
         public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int notationId, int length,
-                                  int step, bool isDelta, bool isSort, bool isFurie)
+                                  int step, bool isDelta, bool isFurie)
         {
 
-            List<List<List<Double>>> characteristicsTemp = new List<List<List<Double>>>();
+            List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
             List<String> chainNames = new List<string>();
             List<string> characteristicNames = new List<string>();
             List<List<String>> partNames = new List<List<String>>();
@@ -64,69 +64,58 @@ namespace LibiadaWeb.Controllers
                 long mattrId = matterIds[k];
                 chainNames.Add(db.matter.Single(m => m.id == mattrId).name);
                 partNames.Add(new List<string>());
-                characteristicsTemp.Add(new List<List<double>>());
+                characteristics.Add(new List<List<double>>());
 
                 matter matter = db.matter.Single(m => m.id == mattrId);
                 chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationId);
                 Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
 
-                for (int i = 0; i < characteristicIds.Length; i++)
+                IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
+                while (iter.Next())
                 {
-                    characteristicsTemp.Last().Add(new List<Double>());
-
-
-                    int characteristicId = characteristicIds[i];
-                    int linkUpId = linkUpIds[i];
-
-
-                    String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
-                    LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
-
-                    IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
-                    while (iter.Next())
+                    characteristics.Last().Add(new List<Double>());
+                    Chain tempChain = iter.Current();
+                    partNames.Last().Add(tempChain.ToString());
+                    for (int i = 0; i < characteristicIds.Length; i++)
                     {
-                        Chain tempChain = iter.Current();
-                        partNames.Last().Add(tempChain.ToString());
-                        characteristicsTemp.Last().Last().Add(calculator.Calculate(tempChain, linkUp));
+                        int characteristicId = characteristicIds[i];
+                        int linkUpId = linkUpIds[i];
+                        String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+
+                        ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
+                        LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
+                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, linkUp));
                     }
                 }
 
                 if (isDelta)
                 {
-                    //Перебираем характеристики
-                    for (int i = 0; i < characteristicsTemp.Count; i++)
+                    //Перебираем характеристики 
+                    for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
                         //перебираем фрагменты цепочек
-                        for (int j = (characteristicsTemp[i].Count) - 1; j > 0; j--)
+                        for (int j = (characteristics.Last().Count) - 1; j > 0; j--)
                         {
-                            characteristicsTemp.Last()[i][j] -= characteristicsTemp.Last()[i][j - 1];
+                            characteristics.Last()[j][i] -= characteristics.Last()[j - 1][i];
                         }
-                        characteristicsTemp.Last()[i].RemoveAt(0);
                     }
-                }
-                if (isSort)
-                {
-                    //Перебираем характеристики
-                    for (int i = 0; i < characteristicsTemp.Count; i++)
-                    {
-                        //перебираем фрагменты цепочек
-                        characteristicsTemp.Last()[i].Sort();
-                    }
+                    characteristics.Last().RemoveAt(0);
                 }
 
                 if (isFurie)
                 {
 
                     //переводим в комлексный вид
-                    for (int i = 0; i < characteristicsTemp.Count; i++)
+                    // Для всех характеристик
+                    for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
                         List<Complex> comp = new List<Complex>();
                         int j = 0;
 
-                        for (j = 0; j < characteristicsTemp[i].Count; j++)
+                        //Для всех фрагментов цепочек
+                        for (j = 0; j < characteristics.Last().Count; j++)
                         {
-                            comp.Add(new Complex(characteristicsTemp.Last()[i][j], 0));
+                            comp.Add(new Complex(characteristics.Last()[j][i], 0));
                         }
 
                         int m = 1;
@@ -142,33 +131,12 @@ namespace LibiadaWeb.Controllers
                         }
 
                         Complex[] data = FFT.Fft(comp.ToArray()); //вернёт массив
-                        List<double> temp = new List<double>();
+
                         //переводим в массив double
-
-                        foreach (var fftElement in data)
+                        for (int g = 0; g < characteristics.Last().Count; g++ )
                         {
-                            temp.Add(fftElement.Real);
+                            characteristics.Last()[g][i] = data[g].Real;
                         }
-
-                        characteristicsTemp.Last()[i] = temp;
-                    }
-                }
-            }
-
-            List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
-
-            //Перебираем цепочки
-            for (int z = 0; z < matterIds.Length; z++)
-            {
-                characteristics.Add(new List<List<double>>());
-                // перебираем характеристики
-                for (int t = 0; t < characteristicsTemp[z][0].Count; t++)
-                {
-                    characteristics[z].Add(new List<double>());
-                    //перебираем фрагменты
-                    for (int w = 0; w < characteristicsTemp[z].Count; w++)
-                    {
-                        characteristics[z][t].Add(characteristicsTemp[z][w][t]);
                     }
                 }
             }

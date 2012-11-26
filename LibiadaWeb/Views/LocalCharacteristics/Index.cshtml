@@ -54,13 +54,11 @@
     @Html.CheckBox("isDelta")
     @Html.Label("isDelta", "Считать разницу между характеристиками")
     <br/>
-    @Html.CheckBox("isSort")
-    @Html.Label("isSort", "Сортировать")
-    <br/>
-    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
-    <br/>
+    
     @Html.CheckBox("isFurie")
     @Html.Label("isFurie", "Быстрое преобразование Фурье")
+    <br/>
+    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
     <br/>
     <select name="notationId">
             @foreach (var option in ViewBag.notationsList)
