@@ -138,7 +138,7 @@ namespace LibiadaWeb.Controllers
 
                             db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
                             db.dna_chain.AddObject(dbDnaChain);
-                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id, false);
                             dbDnaChain.alphabet.Attach(alphabet);
                              
                         }
@@ -196,7 +196,7 @@ namespace LibiadaWeb.Controllers
                             db.matter.Single(m => m.id == chain.matter_id).literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
                             db.literature_chain.AddObject(dbLiteratureChain);
 
-                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id);
+                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id, true);
                             dbLiteratureChain.alphabet.Attach(alphabet);
                         }
                         else

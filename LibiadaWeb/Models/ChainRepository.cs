@@ -133,7 +133,7 @@ namespace LibiadaWeb.Models
                 result.notation_id = notationId;
                 result.creation_date = new DateTimeOffset(DateTime.Now);
 
-                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId);
+                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, false);
 
                 result.alphabet.Attach(alphabet);
                 parent.chain.Add(result);//TODO: проверить, возможно одно из действий лишнее

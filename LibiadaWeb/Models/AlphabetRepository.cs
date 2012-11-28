@@ -81,7 +81,7 @@ namespace LibiadaWeb.Models
             return alphabet;
         }
 
-        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, int notationId)
+        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, int notationId, bool createElements)
         {
             List<alphabet> dbAlphabet = new List<alphabet>();
             for (int j = 0; j < libiadaAlphabet.Power; j++)
@@ -89,11 +89,29 @@ namespace LibiadaWeb.Models
                 dbAlphabet.Add(new alphabet());
                 dbAlphabet[j].number = j + 1;
                 String strElem = libiadaAlphabet[j].ToString();
-                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+
+                if (!createElements && !db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                 {
                     throw new Exception("Ёлемент " + strElem + " не найден в Ѕƒ.");
                 }
-                dbAlphabet[j].element = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+
+                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+                {
+                    element newElement = new element()
+                    {
+                        value = strElem,
+                        name = strElem,
+                        notation_id = notationId,
+                        creation_date = DateTime.Now
+                    };
+                    db.element.AddObject(newElement);
+                    dbAlphabet[j].element = newElement;
+                }
+                else
+                {
+                    dbAlphabet[j].element =
+                        db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
+                }
 
                 db.alphabet.AddObject(dbAlphabet[j]);
             }
