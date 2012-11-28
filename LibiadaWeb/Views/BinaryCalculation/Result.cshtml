@@ -8,30 +8,52 @@
 <h2>@ViewBag.characteristicName</h2>
 <h2>@ViewBag.notationName</h2>
 
-<table>
-    <tr>
-        <th>
-            Первый элемент\Второй элемент
-        </th>
-        @foreach (var elementName in ViewBag.elementNames)
-        {
-            <th>
-                @elementName
-            </th>
-        }
-    </tr>
-    @for (int i = 0; i < ViewBag.characteristics.Count; i++ )
-    {
+@if (!ViewBag.isFilter)
+{
+    <table>
         <tr>
-            <td>
-                @ViewBag.elementNames[i]
-            </td>
-            @foreach (var characteristic in ViewBag.characteristics[i])
+            <th>
+                Первый элемент\Второй элемент
+            </th>
+            @foreach (var elementName in ViewBag.elementNames)
             {
-                <td>
-                    @characteristic
-                </td>
+                <th>
+                    @elementName
+                </th>
             }
         </tr>
-    }
-</table>
+        @for (int i = 0; i < ViewBag.characteristics.Count; i++)
+        {
+            <tr>
+                <td>
+                    @ViewBag.elementNames[i]
+                </td>
+                @foreach (var characteristic in ViewBag.characteristics[i])
+                {
+                    <td>
+                        @characteristic
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <table>
+        @foreach (var ch in ViewBag.characteristics)
+        {
+            <tr>
+                <td>
+                    @ViewBag.alphabet[ch.Key.i]
+                </td>
+                <td>
+                    @ViewBag.alphabet[ch.Key.j]
+                </td>
+                <td>
+                    @ch.Value
+                </td>
+            </tr>
+        }
+    </table>
+}

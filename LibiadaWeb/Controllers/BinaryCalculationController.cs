@@ -10,6 +10,18 @@ using LibiadaWeb.Models;
 
 namespace LibiadaWeb.Controllers
 {
+    public class Coordinates
+    {
+        public int i = 0;
+        public int j = 0;
+
+        public Coordinates(int a, int b)
+        {
+            i = a;
+            j = b;
+        }
+    }
+
     public class BinaryCalculationController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
@@ -43,9 +55,12 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId, int languageId)
+        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId, int languageId, int filtersize, bool filter)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
+
+            List<KeyValuePair<Coordinates, double>> filterDictionary = new List<KeyValuePair<Coordinates, double>>();
+
             chain dbChain;
             if (db.matter.Single(m => m.id == matterId).nature_id == 3)
             {
@@ -100,6 +115,31 @@ namespace LibiadaWeb.Controllers
                 }
             }
 
+            if (filter)
+            {
+                for (int i = 0; i < filtersize; i++)
+                {
+                    filterDictionary.Add(new KeyValuePair<Coordinates, double>(new Coordinates(i, 0), characteristics[i][0]));
+                }
+
+
+                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                {
+                    for (int j = 0; j < currentChain.Alphabet.Power; j++)
+                    {
+
+                        if (characteristics[i][j] > filterDictionary[filtersize - 1].Value)
+                        {
+                            filterDictionary[filtersize - 1] = new KeyValuePair<Coordinates, double>(filterDictionary[filtersize - 1].Key, characteristics[i][j]);
+                            SortCharacteristicsFilter(filterDictionary);
+                        }
+                    }
+                }    
+            }
+
+            TempData["filter"] = filter;
+            TempData["filterDictionary"] = filterDictionary;
+            TempData["filtersize"] = filtersize;
             TempData["characteristics"] = characteristics;
             TempData["characteristicName"] = db.characteristic_type.Single(charact => charact.id == characteristicId).name;
             TempData["chainName"] = db.matter.Single(m => m.id == matterId).name;
@@ -107,6 +147,17 @@ namespace LibiadaWeb.Controllers
             TempData["alphabet"] = currentChain.Alphabet;
 
             return RedirectToAction("Result");
+        }
+
+        private void SortCharacteristicsFilter(List<KeyValuePair<Coordinates, double>> arrayForSort)
+        {
+            arrayForSort.Sort(
+                delegate(KeyValuePair<Coordinates, double> firstPair,
+                         KeyValuePair<Coordinates, double> nextPair)
+                {
+                    return nextPair.Value.CompareTo(firstPair.Value);
+                }
+                );
         }
 
         public ActionResult Result()
@@ -122,11 +173,22 @@ namespace LibiadaWeb.Controllers
                 elementNames.Add(db.element.Single(e => e.value == el && e.notation_id == notationId).name);
             }
             ViewBag.elementNames = elementNames;
-            ViewBag.characteristics = TempData["characteristics"] as List<List<double>>;
             ViewBag.chainName = TempData["chainName"] as String;
             ViewBag.characteristicName = TempData["characteristicName"] as String;
             ViewBag.elementNames = elementNames;
-            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name; ;
+            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name;
+            ViewBag.isFilter = TempData["filter"];
+
+            if ((bool)TempData["filter"])
+            {
+                ViewBag.alphabet = alpha;
+                ViewBag.filtersize = TempData["filtersize"];
+                ViewBag.characteristics = TempData["filterDictionary"] as List<KeyValuePair<Coordinates, double>>;
+            }
+            else
+            {
+                ViewBag.characteristics = TempData["characteristics"] as List<List<double>>;
+            }
             return View();
         }
     }
