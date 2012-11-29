@@ -1420,6 +1420,120 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_dna_chain", "dna_chain")]
+        public dna_chain dna_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_chain>("LibiadaWebModel.fk_alphabet_dna_chain", "dna_chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_chain>("LibiadaWebModel.fk_alphabet_dna_chain", "dna_chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<dna_chain> dna_chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dna_chain>("LibiadaWebModel.fk_alphabet_dna_chain", "dna_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dna_chain>("LibiadaWebModel.fk_alphabet_dna_chain", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_literature_chain", "literature_chain")]
+        public literature_chain literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<literature_chain>("LibiadaWebModel.fk_alphabet_literature_chain", "literature_chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<literature_chain>("LibiadaWebModel.fk_alphabet_literature_chain", "literature_chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<literature_chain> literature_chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<literature_chain>("LibiadaWebModel.fk_alphabet_literature_chain", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<literature_chain>("LibiadaWebModel.fk_alphabet_literature_chain", "literature_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_alphabet_music_chain", "music_chain")]
+        public music_chain music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<music_chain>("LibiadaWebModel.fk_alphabet_music_chain", "music_chain").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<music_chain>("LibiadaWebModel.fk_alphabet_music_chain", "music_chain").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<music_chain> music_chainReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<music_chain>("LibiadaWebModel.fk_alphabet_music_chain", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<music_chain>("LibiadaWebModel.fk_alphabet_music_chain", "music_chain", value);
+                }
+            }
+        }
 
         #endregion
     }

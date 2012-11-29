@@ -245,6 +245,21 @@
       <End Role="alphabet" EntitySet="alphabet" />
     </AssociationSet>
 
+    <AssociationSet Name="fk_alphabet_chain" Association="LibiadaWebModel.Store.fk_alphabet_chain">
+      <End Role="chain" EntitySet="chain" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_dna_chain" Association="LibiadaWebModel.Store.fk_alphabet_dna_chain">
+      <End Role="dna_chain" EntitySet="dna_chain" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
+    <AssociationSet Name="fk_alphabet_literature_chain" Association="LibiadaWebModel.Store.fk_alphabet_literature_chain">
+      <End Role="literature_chain" EntitySet="literature_chain" />
+      <End Role="alphabet" EntitySet="alphabet" />
+    </AssociationSet>
+
     <AssociationSet Name="fk_pitch_instrument" Association="LibiadaWebModel.Store.fk_pitch_instrument">
       <End Role="instrument" EntitySet="instrument" />
       <End Role="pitch" EntitySet="pitch" />
@@ -2067,6 +2082,9 @@
     <NavigationProperty Name="fmotiv_element" Relationship="LibiadaWebModel.fk_alphabet_fmotiv_element" FromRole="alphabet" ToRole="fmotiv" />
     <NavigationProperty Name="measure_element" Relationship="LibiadaWebModel.fk_alphabet_measure_element" FromRole="alphabet" ToRole="measure" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_alphabet_chain" FromRole="alphabet" ToRole="chain" />
+    <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_alphabet_dna_chain" FromRole="alphabet" ToRole="dna_chain" />
+    <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_alphabet_literature_chain" FromRole="alphabet" ToRole="literature_chain" />
+    <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_alphabet_music_chain" FromRole="alphabet" ToRole="music_chain" />
   </EntityType>
   <EntityType Name="binary_characteristic">
     <Key>

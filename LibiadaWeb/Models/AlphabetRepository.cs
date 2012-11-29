@@ -67,7 +67,7 @@ namespace LibiadaWeb.Models
             db.Dispose();
         }
 
-        //TODO: сделать в таблице алфавита id чтобы можно было создать репозиторий алфавита и переместить туда методы алфавита
+        
         public Alphabet FromDbAlphabetToLibiadaAlphabet(IEnumerable<alphabet> dbAlphabet)
         {
             IEnumerable<element> dbElements = dbAlphabet.Select(a => a.element);
@@ -81,7 +81,7 @@ namespace LibiadaWeb.Models
             return alphabet;
         }
 
-        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, int notationId, bool createElements)
+        public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId, bool createElements)
         {
             List<alphabet> dbAlphabet = new List<alphabet>();
             for (int j = 0; j < libiadaAlphabet.Power; j++)
@@ -112,10 +112,10 @@ namespace LibiadaWeb.Models
                     dbAlphabet[j].element =
                         db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
                 }
-
+                dbAlphabet[j].chain_id = chainId;
                 db.alphabet.AddObject(dbAlphabet[j]);
+                db.SaveChanges();
             }
-            db.SaveChanges();
 
             return dbAlphabet;
         }

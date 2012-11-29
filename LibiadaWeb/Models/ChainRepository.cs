@@ -127,13 +127,16 @@ namespace LibiadaWeb.Models
             bool continueImport = db.matter.Any(m => m.name == parent.name);
             if (!continueImport)
             {
-                result = new chain();
-                result.dissimilar = false;
-                result.building_type_id = 1;
-                result.notation_id = notationId;
-                result.creation_date = new DateTimeOffset(DateTime.Now);
+                result = new chain()
+                    {
+                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(), 
+                        dissimilar = false,
+                        building_type_id = 1,
+                        notation_id = notationId,
+                        creation_date = DateTime.Now
+                    };
 
-                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, false);
+                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, result.id, false);
 
                 result.alphabet.Attach(alphabet);
                 parent.chain.Add(result);//TODO: проверить, возможно одно из действий лишнее
