@@ -15,23 +15,23 @@
             <th>
                 Первый элемент\Второй элемент
             </th>
-            @foreach (var elementName in ViewBag.elementNames)
+            @for (int k = 0; k < ViewBag.elements.Count; k++)
             {
                 <th>
-                    @elementName
+                    @ViewBag.elements[k].name
                 </th>
             }
         </tr>
-        @for (int i = 0; i < ViewBag.characteristics.Count; i++)
+        @for (int i = 0; i < ViewBag.elements.Count; i++)
         {
             <tr>
                 <td>
-                    @ViewBag.elementNames[i]
+                    @ViewBag.elements[i].name
                 </td>
-                @foreach (var characteristic in ViewBag.characteristics[i])
+                @for (int j = 0; j < ViewBag.elements.Count; j++)
                 {
                     <td>
-                        @characteristic
+                        @ViewBag.characteristics[i * ViewBag.elements.Count + j].value
                     </td>
                 }
             </tr>
@@ -41,17 +41,17 @@
 else
 {
     <table>
-        @foreach (var ch in ViewBag.characteristics)
+        @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
         {
             <tr>
                 <td>
-                    @ViewBag.alphabet[ch.Key.i]
+                    @ViewBag.firstElements[l].value
                 </td>
                 <td>
-                    @ViewBag.alphabet[ch.Key.j]
+                    @ViewBag.secondElements[l].value
                 </td>
                 <td>
-                    @ch.Value
+                    @ViewBag.filteredResult[l].value
                 </td>
             </tr>
         }
