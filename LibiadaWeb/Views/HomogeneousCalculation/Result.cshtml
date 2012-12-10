@@ -13,6 +13,7 @@
     var partNames = new Array();
     var colors = new Array();
     var headers = new Array();
+    var theoreticalRanks = new Array();
 
     $(document).ready(function() {
         colors.push('rgba(223, 83, 83, .5)');
@@ -32,7 +33,7 @@
         for (var i = 1; i < rows.length; i++) {
             partNames.push(rows[i].cells[0].textContent);
         }
-        
+
         @for (int j = 0; j < ViewBag.characteristics[0].Count; j++)
         {
             @: characteristics.push(new Array());
@@ -43,6 +44,15 @@
                 String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                 int key = ViewBag.characteristics[i][j].Key;
                 @: characteristics[characteristics.length -1][@i] = {key: @key, value: @value} ;
+            }
+        }
+        @if (ViewBag.theoreticalRanks != null)
+        {
+            for (int f = 0; f < ViewBag.theoreticalRanks.Count; f++)
+            {
+                String[] tempValue = ViewBag.theoreticalRanks[f].ToString().Split(',');
+                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                @:theoreticalRanks.push(@value); 
             }
         }
     });
@@ -148,6 +158,32 @@
             series: dataSeries
         });
     }
+    
+    function FillTheoreticalRanks(logarithmic) {
+        var series = new Object();
+        series.data = new Array();
+        series.type = 'area';
+        series.name = "Теоретическое распределение";
+        for (var i = 0; i < theoreticalRanks.length; i++) {
+            var y = theoreticalRanks[i];
+            var pointName = i + 1;
+            series.data[i] = new Object();
+            if(logarithmic) {
+                series.data[i].x = Math.log(i + 1)/Math.log(10);
+                maxZoomX = 0.1;
+            } else {
+                series.data[i].x = i + 1;
+                maxZoomX = 3;
+            }
+            
+            series.data[i].y = y;
+            series.data[i].name = pointName;
+            // массив для определения минимального значения для границ графика
+            xVals.push(i);
+            yVals.push(y);
+        }
+        return series;
+    }
 
     function DrawChart() {
         xVals = new Array();
@@ -165,7 +201,10 @@
                 dataSeries.push(FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, logarithmic));
             }
         }
-        CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals));
+        if (theoreticalRanks.length > 0) {
+            dataSeries.push(FillTheoreticalRanks(logarithmic));
+        }
+        CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked);
     }
 </script>
 

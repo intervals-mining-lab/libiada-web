@@ -48,7 +48,7 @@ namespace LibiadaWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int notationId, int languageId, bool isSort)
+        public ActionResult Index(long matterId, int[] characteristicIds, int[] linkUpIds, int notationId, int languageId, bool isSort, bool theoretical)
         {
 
             List<List<KeyValuePair<int, double>>> characteristics = new List<List<KeyValuePair<int, double>>>();
@@ -133,12 +133,45 @@ namespace LibiadaWeb.Controllers
                 }
             }
 
+            List<double> teoreticalRanks = new List<double>();
+
+            if (theoretical)
+            {
+                ICharacteristicCalculator countCalculator = CharacteristicsFactory.Create("Count");
+                List<int> counts = new List<int>();
+                for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                {
+                    counts.Add((int)countCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                }
+
+                ICharacteristicCalculator frequencyCalculator = CharacteristicsFactory.Create("Probability");
+                List<double> frequency = new List<double>();
+                for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                {
+                    frequency.Add(frequencyCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                }
+
+                double maxFrequency = frequency.Max();
+                double K = 1 / Math.Log(counts.Max());
+                double B = (K / maxFrequency) - 1;
+                int i = 1;
+                double Plow = libiadaChain.Length;
+                double P = K / (B + i);
+                while (P >= (1 / Plow))
+                {
+                    teoreticalRanks.Add(P);
+                    i++;
+                    P = K / (B + i);
+                }
+            }
+
             TempData["characteristics"] = characteristics;
             TempData["chainName"] = chainName;
             TempData["elementNames"] = elementNames;
             TempData["characteristicNames"] = characteristicNames;
             TempData["characteristicIds"] = characteristicIds;
             TempData["chainIds"] = matterId;
+            TempData["teoreticalRanks"] = teoreticalRanks;
             return RedirectToAction("Result");
         }
 
@@ -172,9 +205,10 @@ namespace LibiadaWeb.Controllers
             ViewBag.characteristicIds = new List<int>(characteristicIds);
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = characteristics;
-            ViewBag.chainName = TempData["chainName"] as String;
-            ViewBag.elementNames = TempData["elementNames"] as List<String>;
+            ViewBag.chainName = TempData["chainName"];
+            ViewBag.elementNames = TempData["elementNames"];
             ViewBag.characteristicNames = characteristicNames;
+            ViewBag.theoreticalRanks = TempData["teoreticalRanks"];
             return View();
         }
 
