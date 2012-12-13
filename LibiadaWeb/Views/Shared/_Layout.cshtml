@@ -1,53 +1,67 @@
 ﻿<!DOCTYPE html>
-<html>
-<head>
+<html lang="ru">
+    <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title — LibiadaWeb</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">@Html.ActionLink("ваша эмблема здесь", "Index", "Home")</p>
+                </div>
+                <div class="float-right">
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+                    <nav>
+                        <ul id="menu">
+                            <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
+                            <li>@Html.ActionLink("Объекты", "Index", "Matter")</li>
+                            <li>@Html.ActionLink("Цепочки", "Index", "Chain")</li>
+                            <li>@Html.ActionLink("Элементы", "Index", "Element")</li>
+                            <li>@Html.ActionLink("Типы строев", "Index", "BuildingType")</li>
+                            <li>@Html.ActionLink("Природа объектов", "Index", "Nature")</li>
+                            <li>@Html.ActionLink("Языки", "Index", "Language")</li>
+                            <li>@Html.ActionLink("Формы записи", "Index", "Notation")</li>
+                            <li>@Html.ActionLink("Привязки", "Index", "LinkUp")</li>
+                            <li>@Html.ActionLink("Сторонние БД", "Index", "RemoteDb")</li>
+                            <li>@Html.ActionLink("Группы характеристик", "Index", "CharacteristicGroup")</li>
+                            <li>@Html.ActionLink("Типы характеристик", "Index", "CharacteristicType")</li>
+                            <li>@Html.ActionLink("Типы связей", "Index", "ConnectionType")</li>
+                            <li>@Html.ActionLink("Связи", "Index", "Connection")</li>
+                            <li>@Html.ActionLink("Характеристики", "Index", "Calculation")</li>
+                            <li>@Html.ActionLink("Однородные характеристики", "Index", "HomogeneousCalculation")</li>
+                            <li>@Html.ActionLink("Бинарные характеристики", "Index", "BinaryCalculation")</li>
+                            <li>@Html.ActionLink("Локальные характеристики", "Index", "LocalCharacteristics")</li>
+                            <li>@Html.ActionLink("Кластеризация", "Index", "Clusterization")</li>
+                            <li>@Html.ActionLink("Проверка цепочек", "Index", "ChainCheck")</li>
+                            <li>@Html.ActionLink("Преобразование цепочек", "Index", "Transformation")</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year — LibiadaWeb</p>
+                </div>
+            </div>
+        </footer>
 
-    <title>@ViewBag.Title</title>
-    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-    <script src="@Url.Content("~/Scripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
-</head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<body>
-    <div class="page">
-        <div id="header">
-            <div id="title">
-                <h1>LibiadaWeb</h1>
-            </div>
-            <div id="logindisplay">
-                Добро пожаловать, <strong>@User.Identity.Name</strong>!
-            </div>
-            <div id="menucontainer">
-                <ul id="menu">
-                    <li>@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Объекты", "Index", "Matter")</li>
-                    <li>@Html.ActionLink("Цепочки", "Index", "Chain")</li>
-                    <li>@Html.ActionLink("Элементы", "Index", "Element")</li>
-                    <li>@Html.ActionLink("Типы строев", "Index", "BuildingType")</li>
-                    <li>@Html.ActionLink("Природа объектов", "Index", "Nature")</li>
-                    <li>@Html.ActionLink("Языки", "Index", "Language")</li>
-                    <li>@Html.ActionLink("Формы записи", "Index", "Notation")</li>
-                    <li>@Html.ActionLink("Привязки", "Index", "LinkUp")</li>
-                    <li>@Html.ActionLink("Сторонние БД", "Index", "RemoteDb")</li>
-                    <li>@Html.ActionLink("Группы характеристик", "Index", "CharacteristicGroup")</li>
-                    <li>@Html.ActionLink("Типы характеристик", "Index", "CharacteristicType")</li>
-                    <li>@Html.ActionLink("Типы связей", "Index", "ConnectionType")</li>
-                    <li>@Html.ActionLink("Связи", "Index", "Connection")</li>
-                    <li>@Html.ActionLink("Характеристики", "Index", "Calculation")</li>
-                    <li>@Html.ActionLink("Однородные характеристики", "Index", "HomogeneousCalculation")</li>
-                    <li>@Html.ActionLink("Бинарные характеристики", "Index", "BinaryCalculation")</li>
-                    <li>@Html.ActionLink("Локальные характеристики", "Index", "LocalCharacteristics")</li>
-                    <li>@Html.ActionLink("Кластеризация", "Index", "Clusterization")</li>
-                    <li>@Html.ActionLink("Проверка цепочек", "Index", "ChainCheck")</li>
-                    <li>@Html.ActionLink("Преобразование цепочек", "Index", "Transformation")</li>
-                </ul>
-            </div>
-        </div>
-        <div id="main">
-            @RenderBody()
-        </div>
-        <div id="footer">
-        </div>
-    </div>
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </body>
 </html>

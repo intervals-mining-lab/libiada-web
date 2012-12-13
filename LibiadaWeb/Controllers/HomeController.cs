@@ -17,6 +17,15 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult About()
         {
+            ViewBag.Message = "Страница описания приложения.";
+
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            ViewBag.Message = "Страница контактов.";
+
             return View();
         }
     }
