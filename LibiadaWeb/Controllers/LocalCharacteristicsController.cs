@@ -50,7 +50,7 @@ namespace LibiadaWeb.Controllers
 
         [HttpPost]
         public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int notationId, int length,
-                                  int step, bool isDelta, bool isFurie)
+                                  int step, bool isDelta, bool isFurie, bool isGrowingWindow)
         {
 
             List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
@@ -70,11 +70,21 @@ namespace LibiadaWeb.Controllers
                 chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationId);
                 Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
 
-                IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
-                while (iter.Next())
+                //IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
+                CutRule cutRule = isGrowingWindow ? (CutRule) new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                CutRuleIterator iter = cutRule.getIterator();
+               
+                while (iter.next())
                 {
                     characteristics.Last().Add(new List<Double>());
-                    Chain tempChain = iter.Current();
+                    //Chain tempChain = cutRule.Current();
+                    Chain tempChain = new Chain();
+                    tempChain.ClearAndSetNewLength(iter.getStopPos());
+
+                    for (int i = 0; i < iter.getStopPos(); i++)
+                    {
+                        tempChain.Add(libiadaChain[iter.getStartPos() + i], i);
+                    }
                     partNames.Last().Add(tempChain.ToString());
                     for (int i = 0; i < characteristicIds.Length; i++)
                     {
@@ -140,6 +150,8 @@ namespace LibiadaWeb.Controllers
                     }
                 }
             }
+
+            
 
             for (int i = 0; i < characteristicIds.Length; i++)
             {
