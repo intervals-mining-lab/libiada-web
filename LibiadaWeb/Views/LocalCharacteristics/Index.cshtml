@@ -9,6 +9,13 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function() {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+
     function AddAxis() {
         $("#axis").append(
         '<select name="characteristicIds">' +
@@ -27,23 +34,27 @@
 @using (Html.BeginForm())
 {
     <table>
-        <tr>
-            <th>
-                Название объекта
-            </th>
-        </tr>
-        @{
-    List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.mattersList);
+        <thead>
+            <tr>
+                <th>
+                    Название объекта
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
 
-    foreach (var item in mattersList)
-    {
-                <tr>
-                    <td>
-                        @item
-                    </td>
-                </tr>
-    }
-        }
+                foreach (var item in mattersList)
+                {
+                    <tr>
+                        <td>
+                            @item
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
     <br/>
     @Html.Label("Размер окна:")
@@ -53,22 +64,22 @@
     <br/>
     @Html.CheckBox("isDelta")
     @Html.Label("isDelta", "Считать разницу между характеристиками")
-   
-     <br/>
+
+    <br/>
     @Html.CheckBox("isGrowingWindow")
     @Html.Label("isGrowingWindow", "Считать увеличивающееся окно")
     <br/>
     @Html.CheckBox("isFurie")
     @Html.Label("isFurie", "Быстрое преобразование Фурье")
     <br/>
-    
-    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+
+    <input type="button" onclick=" AddAxis() " value="Добавить ось"/>
     <br/>
     <select name="notationId">
-            @foreach (var option in ViewBag.notationsList)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
+        @foreach (var option in ViewBag.notationsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
     </select>
     <div id="axis"></div>
     <br/>

@@ -18,6 +18,10 @@ namespace LibiadaWeb
                         "~/Scripts/jquery.unobtrusive*",
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqueryDataTables").Include(
+                        "~/Scripts/DataTables-1.9.4/media/js/jquery.dataTables.js"));
+
+
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -37,7 +41,8 @@ namespace LibiadaWeb
                         "~/Content/themes/base/jquery.ui.tabs.css",
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.theme.css"));
+                        "~/Content/themes/base/jquery.ui.theme.css",
+                        "~/Content/DataTables-1.9.4/media/css/jquery.dataTables_themeroller.css"));
         }
     }
 }
