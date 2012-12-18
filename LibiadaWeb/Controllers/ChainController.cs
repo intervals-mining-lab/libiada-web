@@ -18,12 +18,14 @@ namespace LibiadaWeb.Controllers
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly DnaChainRepository dnaChainRepository;
         private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly ChainRepository chainRepository;
         private readonly AlphabetRepository alphabetRepository;
 
         public ChainController()
         {
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
+            chainRepository = new ChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
         }
 
@@ -42,16 +44,9 @@ namespace LibiadaWeb.Controllers
         public ViewResult Details(long id)
         {
             chain chain = db.chain.Single(c => c.id == id);
-            Alphabet alpha = new Alphabet();
-            alpha.Add(NullValue.Instance());
-            IEnumerable<element> elements =
-                db.alphabet.Where(a => a.chain_id == id).Select(a => a.element);
-            foreach (var element in elements)
-            {
-                alpha.Add(new ValueString(element.value));
-            }
+            Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(id);
 
-            ViewBag.stringChain = new Chain(chain.building.OrderBy(b => b.index).Select(b => b.number).ToArray(), alpha).ToString();
+            ViewBag.stringChain = libiadaChain.ToString();
             return View(chain);
         }
 
@@ -66,7 +61,68 @@ namespace LibiadaWeb.Controllers
             ViewBag.language_id = new SelectList(db.language, "id", "name");
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
             return View();
-        } 
+        }
+
+        //
+        // GET: /Chain/Segmentated
+
+        public ActionResult Segmentated()
+        {
+            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            return View();
+        }
+
+        //
+        // POST: /Chain/Create
+
+        [HttpPost]
+        public ActionResult Segmentated(chain chain, String stringChain)
+        {
+            if (ModelState.IsValid)
+            {
+                BaseChain libiadaChain = new BaseChain(stringChain);
+
+                //отделяем заголовок fasta файла от цепочки
+                string[] splittedChain = stringChain.Split('-');
+                libiadaChain = new BaseChain(splittedChain.Length);
+                for (int k = 0; k < splittedChain.Length; k++)
+                {
+                    libiadaChain.Add(new ValueString(splittedChain[k]), k);
+                }
+                dna_chain dbDnaChain;
+
+                dbDnaChain = new dna_chain()
+                    {
+                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                        dissimilar = false,
+                        building_type_id = 1,
+                        notation_id = 6,
+                        fasta_header = "",
+                        piece_type_id = 1,
+                        piece_position = 0,
+                        creation_date = DateTime.Now
+                    };
+
+                db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
+                //TODO: проверить, возможно одно из действий лишнее
+                db.dna_chain.AddObject(dbDnaChain);
+                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
+                                                                       dbDnaChain.id, false);
+                dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaChain.Building);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", chain.building_type_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
+            return View(chain);
+        }
 
         //
         // POST: /Chain/Create
