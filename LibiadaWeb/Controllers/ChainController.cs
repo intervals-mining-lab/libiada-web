@@ -110,17 +110,15 @@ namespace LibiadaWeb.Controllers
                 db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
                 //TODO: проверить, возможно одно из действий лишнее
                 db.dna_chain.AddObject(dbDnaChain);
-                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
-                                                                       dbDnaChain.id, false);
+                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain.notation_id,
+                                                                       dbDnaChain.id, true);
                 dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaChain.Building);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
 
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", chain.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
             return View(chain);
         }
 

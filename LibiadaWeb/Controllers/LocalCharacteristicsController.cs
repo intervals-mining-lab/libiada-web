@@ -79,9 +79,9 @@ namespace LibiadaWeb.Controllers
                     characteristics.Last().Add(new List<Double>());
                     //Chain tempChain = cutRule.Current();
                     Chain tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.getStopPos());
+                    tempChain.ClearAndSetNewLength(iter.getStopPos() - iter.getStartPos());
 
-                    for (int i = 0; i < iter.getStopPos(); i++)
+                    for (int i = 0; iter.getStartPos() + i < iter.getStopPos(); i++)
                     {
                         tempChain.Add(libiadaChain[iter.getStartPos() + i], i);
                     }
