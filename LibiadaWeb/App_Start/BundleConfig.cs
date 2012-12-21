@@ -21,6 +21,12 @@ namespace LibiadaWeb
             bundles.Add(new ScriptBundle("~/bundles/jqueryDataTables").Include(
                         "~/Scripts/DataTables-1.9.4/media/js/jquery.dataTables.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/HighCharts").Include(
+                       "~/Scripts/Highcharts-2.2.1/js/highcharts.src.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/HighStock").Include(
+                      "~/Scripts/Highstock-1.2.5/highstock.src.js"));
+
 
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
