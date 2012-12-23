@@ -7,53 +7,50 @@
 
 <h2>Сравнение строёв</h2>
 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
 @using (Html.BeginForm())
 {
     <table>
-        <tr>
-            <td>
-                <table>
-                    <tr>
-                        <th>
-                            Название первого объекта
-                        </th>
-                    </tr>
-                    @{
-                        List<MvcHtmlString> mattersList1 = Html.RadioButtonGroup("matterId1", (List<SelectListItem>) ViewBag.mattersList);
+        <thead>
+            <tr>
+                <th>
+                    Название первого объекта
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    Название второго объекта
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<MvcHtmlString> mattersList1 = Html.RadioButtonGroup("matterId1", (List<SelectListItem>) ViewBag.mattersList);
+                List<MvcHtmlString> mattersList2 = Html.RadioButtonGroup("matterId2", (List<SelectListItem>) ViewBag.mattersList);
 
-                        foreach (var item in mattersList1)
-                        {
-                            <tr>
-                                <td>
-                                    @item
-                                </td>
-                            </tr>
-                        }
-                    }
-                </table>
-            </td>
-            <td>
-                <table>
+                for (int i = 0; i < mattersList1.Count; i++)
+                {
                     <tr>
-                        <th>
-                            Название второго объекта
-                        </th>
+                        <td>
+                            @mattersList1[i]
+                        </td>
+                        <td>
+                            @mattersList2[i]
+                        </td>
                     </tr>
-                    @{
-                        List<MvcHtmlString> mattersList2 = Html.RadioButtonGroup("matterId2", (List<SelectListItem>) ViewBag.mattersList);
-
-                        foreach (var item in mattersList2)
-                        {
-                            <tr>
-                                <td>
-                                    @item
-                                </td>
-                            </tr>
-                        }
-                    }
-                </table>
-            </td>
-        </tr>
+                }
+            }
+        </tbody>
     </table>
 
     <br/>

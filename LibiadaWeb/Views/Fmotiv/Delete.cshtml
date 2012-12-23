@@ -4,7 +4,7 @@
     ViewBag.Title = "Delete";
 }
 
-<h2>Delete</h2>
+<h2>Удаление</h2>
 
 <h3>Are you sure you want to delete this?</h3>
 <fieldset>
@@ -50,12 +50,12 @@
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">description</div>
+    <div class="display-label">Описание</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">name</div>
+    <div class="display-label">Название</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
@@ -67,7 +67,7 @@
 </fieldset>
 @using (Html.BeginForm()) {
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
     </p>
 }

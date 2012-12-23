@@ -1,75 +1,89 @@
 ﻿@model IEnumerable<LibiadaWeb.music_chain>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Музыкальные цепочки";
 }
 
-<h2>Index</h2>
+<h2>Перечень музыкальных цепочек</h2>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
-    <tr>
-        <th>
-            building_type
-        </th>
-        <th>
-            notation
-        </th>
-        <th>
-            creation_date
-        </th>
-        <th>
-            matter
-        </th>
-        <th>
-            dissimilar
-        </th>
-        <th>
-            piece_type
-        </th>
-        <th>
-            piece_position
-        </th>
-        <th>
-            instrument
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.building_type.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.notation.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.creation_date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.matter.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dissimilar)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.piece_type.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.piece_position)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.instrument.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Тип строя
+            </th>
+            <th>
+                Форма записи
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th>
+                Принадлежит объекту
+            </th>
+            <th>
+                Разнородная
+            </th>
+            <th>
+                Тип фрагмента
+            </th>
+            <th>
+                Позиция фрагментаа
+            </th>
+            <th>
+                Инструмент
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.building_type.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.notation.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creation_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.matter.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dissimilar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.piece_type.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.piece_position)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.instrument.name)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new {id = item.id}) |
+                    @Html.ActionLink("Подробности", "Details", new {id = item.id}) |
+                    @Html.ActionLink("Удалить", "Delete", new {id = item.id})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

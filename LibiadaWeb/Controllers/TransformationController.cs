@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
@@ -12,11 +13,13 @@ namespace LibiadaWeb.Controllers
     public class TransformationController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
-        private readonly ChainRepository chainRepository;
+        private readonly DnaChainRepository dnaChainRepository;
+        private readonly AlphabetRepository alphabetRepository;
 
         public TransformationController()
         {
-            chainRepository = new ChainRepository(db);
+            dnaChainRepository = new DnaChainRepository(db);
+            alphabetRepository = new AlphabetRepository(db);
         }
 
         //
@@ -24,68 +27,53 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.chains = db.chain.Include("building_type").Include("matter").Include("notation").ToList();
-            ViewBag.chainsList = chainRepository.GetSelectListItems(null);
+            var chains = db.dna_chain.Where(d => d.notation_id == 1 && d.dissimilar == false).Include("matter");
+            ViewBag.chains = chains.ToList();
+            ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] chainIds)
+        public ActionResult Index(long[] chainIds, bool toAmino)
         {
-            int notationId = 2;
+            int notationId;
+            if (toAmino)
+            {
+                notationId = 3;
+            }
+            else
+            {
+                notationId = 2;
+            }
+
             foreach (var chainId in chainIds)
             {
-                Alphabet tempAlphabet = new Alphabet();
-                tempAlphabet.Add(NullValue.Instance());
-                element[] elements =
-                    db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number).Select(a => a.element).ToArray();
-                for (int j = 0; j < elements.Count(); j++)
+                dna_chain dbParentChain = db.dna_chain.Single(c => c.id == chainId);
+                Chain tempChain = new Chain(dnaChainRepository.FromDbBuildingToLibiadaBuilding(dbParentChain),
+                                            alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbParentChain.id));
+                BaseChain transformedChain;
+                if (toAmino)
                 {
-                    tempAlphabet.Add(new ValueString(elements[j].value));
+                    transformedChain = Coder.Encode(tempChain);
                 }
-                chain dbChain = db.chain.Single(c => c.id == chainId);
-                Chain tempChain = new Chain(dbChain.building.OrderBy(b => b.index).Select(b => b.number).ToArray(), tempAlphabet);
-                BaseChain tempTripletChain = Coder.EncodeTriplets(tempChain);
-                chain result = new chain();
-                int[] build = tempTripletChain.Building;
-                for (int i = 0; i < build.Length; i++)
+                else
                 {
-                    building buildingElement = new building();
-                    buildingElement.chain = result;
-                    buildingElement.index = i;
-                    buildingElement.number = build[i];
-                    db.building.AddObject(buildingElement);
+                    transformedChain = Coder.EncodeTriplets(tempChain);
                 }
 
-                for (int i = 0; i < tempTripletChain.Alphabet.Power; i++)
-                {
-                    String strElem = tempTripletChain.Alphabet[i].ToString();
-                    element elem;
-                    if (db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
+                dna_chain result = new dna_chain()
                     {
-                        elem = db.element.Single(e => e.notation_id == notationId && e.value.Equals(strElem));
-                    }
-                    else
-                    {
-                        elem = new element();
-                        elem.name = strElem;
-                        elem.value = strElem;
-                        elem.notation_id = notationId;
-                        elem.creation_date = new DateTimeOffset(DateTime.Now);
-                        db.element.AddObject(elem);
-                    }
-                    alphabet alphabetElement = new alphabet();
-                    alphabetElement.chain = result;
-                    alphabetElement.number = i + 1;
-                    alphabetElement.element = elem;
-                    db.alphabet.AddObject(alphabetElement);
-                }
-                result.matter = dbChain.matter;
-                result.building_type = dbChain.building_type;
-                result.dissimilar = false;
-                result.notation_id = notationId;
-                result.creation_date = new DateTimeOffset(DateTime.Now);
-                db.chain.AddObject(result);
+                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                        matter = dbParentChain.matter,
+                        building_type = dbParentChain.building_type,
+                        dissimilar = false,
+                        notation_id = notationId,
+                        creation_date = DateTime.Now
+                    };
+                db.dna_chain.AddObject(result);
+                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(transformedChain.Alphabet, notationId, result.id,
+                                                                   false);
+                dnaChainRepository.FromLibiadaBuildingToDbBuilding(result, transformedChain.Building);
                 db.SaveChanges();
             }
             return RedirectToAction("Index", "Chain");

@@ -85,6 +85,34 @@ namespace LibiadaWeb.Models
             return chainsList;
         }
 
+        public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains, IEnumerable<dna_chain> selectedChain)
+        {
+            HashSet<long> chainIds;
+            if (selectedChain != null)
+            {
+                chainIds = new HashSet<long>(selectedChain.Select(c => c.id));
+            }
+            else
+            {
+                chainIds = new HashSet<long>();
+            }
+            if (allChains == null)
+            {
+                allChains = db.dna_chain.Include("matter");
+            }
+            var chainsList = new List<SelectListItem>();
+            foreach (var chain in allChains)
+            {
+                chainsList.Add(new SelectListItem
+                {
+                    Value = chain.id.ToString(),
+                    Text = chain.matter.name,
+                    Selected = chainIds.Contains(chain.id)
+                });
+            }
+            return chainsList;
+        }
+
         //TODO: создать репозиторий строя и перенести туда методы строя
         public int[] FromDbBuildingToLibiadaBuilding(dna_chain dbChain)
         {

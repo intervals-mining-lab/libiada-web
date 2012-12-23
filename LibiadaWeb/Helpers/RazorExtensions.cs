@@ -31,7 +31,7 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                sb.Append(CheckBox(info, name, htmlAttributes));
+                sb.Append(htmlHelper.CreateInputElement(info, name, "checkbox", htmlAttributes));
             }
 
             return MvcHtmlString.Create(sb.ToString());
@@ -61,25 +61,10 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                 result.Add(MvcHtmlString.Create(CheckBox(info, name, htmlAttributes)));
+                result.Add(htmlHelper.CreateInputElement(info, name, "checkbox", htmlAttributes));
             }
 
             return result;
-        }
-
-        public static String CheckBox(SelectListItem info, String name, IDictionary<string, object> htmlAttributes)
-        {
-            TagBuilder builder = new TagBuilder("input");
-            if (info.Selected)
-            {
-                builder.MergeAttribute("checked", "checked");
-            }
-            builder.MergeAttributes<string, object>(htmlAttributes);
-            builder.MergeAttribute("type", "checkbox");
-            builder.MergeAttribute("value", info.Value);
-            builder.MergeAttribute("name", name);
-            builder.InnerHtml = info.Text;
-            return builder.ToString(TagRenderMode.Normal) + "<br />";
         }
 
         public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
@@ -105,25 +90,43 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                result.Add(MvcHtmlString.Create(RadioButton(info, name, htmlAttributes)));
+                result.Add(htmlHelper.CreateInputElement(info, name, "radio", htmlAttributes));
             }
 
             return result;
         }
 
-        private static String RadioButton(SelectListItem info, String name, IDictionary<string, object> htmlAttributes)
+        public static MvcHtmlString CreateInputElement(this HtmlHelper htmlHelper, SelectListItem info, String name, String type, IDictionary<string, object> htmlAttributes)
         {
-            TagBuilder builder = new TagBuilder("input");
+            TagBuilder elementBuilder = new TagBuilder("input");
             if (info.Selected)
             {
-                builder.MergeAttribute("checked", "checked");
+                elementBuilder.MergeAttribute("checked", "checked");
             }
-            builder.MergeAttributes<string, object>(htmlAttributes);
-            builder.MergeAttribute("type", "radio");
-            builder.MergeAttribute("value", info.Value);
-            builder.MergeAttribute("name", name);
-            builder.InnerHtml = info.Text;
-            return builder.ToString(TagRenderMode.Normal) + "<br />";
+            elementBuilder.MergeAttributes<string, object>(htmlAttributes);
+            elementBuilder.MergeAttribute("type", type);
+            elementBuilder.MergeAttribute("value", info.Value);
+            elementBuilder.MergeAttribute("name", name);
+            elementBuilder.InnerHtml = info.Text;
+
+            return MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) + "<br />");
+        }
+
+        public static MvcHtmlString CheckBox(this HtmlHelper htmlHelper, String name, String label, IDictionary<string, object> htmlAttributes)
+        {
+            TagBuilder elementBuilder = new TagBuilder("input");
+            elementBuilder.MergeAttributes<string, object>(htmlAttributes);
+            elementBuilder.MergeAttribute("type", "checkbox");
+            elementBuilder.MergeAttribute("value", "true");
+            elementBuilder.MergeAttribute("name", name);
+            elementBuilder.InnerHtml = label;
+
+            TagBuilder hiddenElement = new TagBuilder("input");
+            hiddenElement.MergeAttribute("type", "hidden");
+            hiddenElement.MergeAttribute("value", "false");
+            hiddenElement.MergeAttribute("name", name);
+
+            return MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) + hiddenElement.ToString(TagRenderMode.Normal) + "<br />");
         }
     }
 }

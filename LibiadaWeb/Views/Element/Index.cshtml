@@ -6,58 +6,72 @@
 
 <h2>Перечень элементов</h2>
 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
 <p>
     @Html.ActionLink("Создать элемент", "Create")
 </p>
 <table>
-    <tr>
-        <th>
-            Значение
-        </th>
-        <th>
-            Название
-        </th>
-        <th>
-            Описание
-        </th>
-        <th>
-            Форма записи
-        </th>
-        <th>
-            Природа
-        </th>
-        <th>
-            Дата создания
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.notation.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.notation.nature.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.creation_date)
-        </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Значение
+            </th>
+            <th>
+                Название
+            </th>
+            <th>
+                Описание
+            </th>
+            <th>
+                Форма записи
+            </th>
+            <th>
+                Природа
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.notation.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.notation.nature.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creation_date)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new {id = item.id}) |
+                    @Html.ActionLink("Подробности", "Details", new {id = item.id}) |
+                    @Html.ActionLink("Удалить", "Delete", new {id = item.id})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

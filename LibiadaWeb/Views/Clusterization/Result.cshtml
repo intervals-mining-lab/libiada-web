@@ -4,7 +4,7 @@
     ViewBag.Title = "Результаты кластеризации";
 }
 
-<script src="@Url.Content("~/Scripts/Highcharts-2.2.1/js/highcharts.src.js")" type="text/javascript"></script>
+<h2>Результаты кластеризации</h2>
 
 <script type='text/javascript'>
     var characteristics = new Array();
@@ -55,6 +55,11 @@
                 @: clusters[clusters.length -1].push(@ViewBag.clusters[i][j]);
             }
         }
+        
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
     });
     
     
@@ -107,33 +112,37 @@
 
 <h2>Результаты кластеризации</h2>
 <table id="resultTable">
-    <tr>
-        <th>
-            Номер кластера
-        </th>
-        <th>
-            Название объекта
-        </th>
-        <th>id цепочки</th>
-    </tr>
-    @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
-    {
-
-        foreach (var chain in ViewBag.clusterNames[i])
+    <thead>
+        <tr>
+            <th>
+                Номер кластера
+            </th>
+            <th>
+                Название объекта
+            </th>
+            <th>id цепочки</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
         {
-            <tr>
-                <td>
-                    @(i + 1)
-                </td>
-                <td>
-                    @chain
-                </td>
-                <td>
-                    @ViewBag.chainIds[ViewBag.chainNames.IndexOf(chain)]
-                </td>
-            </tr>
+
+            foreach (var chain in ViewBag.clusterNames[i])
+            {
+                <tr>
+                    <td>
+                        @(i + 1)
+                    </td>
+                    <td>
+                        @chain
+                    </td>
+                    <td>
+                        @ViewBag.chainIds[ViewBag.chainNames.IndexOf(chain)]
+                    </td>
+                </tr>
+            }
         }
-    }
+    </tbody>
 </table>
 <br/>
 

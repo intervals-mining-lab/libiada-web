@@ -6,8 +6,6 @@
 
 <h2>Характеристики</h2>
 
-<script src="@Url.Content("~/Scripts/Highcharts-2.2.1/js/highcharts.src.js")" type="text/javascript"></script>
-
 <script type='text/javascript'>
     var characteristics = new Array();
     var chainIds = new Array();
@@ -43,6 +41,11 @@
                 @: characteristics[characteristics.length -1][@i] = @value;
             }
         }
+        
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
     });
     
     var newChart;
@@ -90,17 +93,20 @@
 </script>
 
 <table id="resultTable">
-    <tr>
-        <th>
-            Название цепочки
-        </th>
-        @foreach (var characteristicName in ViewBag.characteristicNames)
-        {
+    <thead>
+        <tr>
             <th>
-                @characteristicName
+                Название цепочки
             </th>
-        }
-    </tr>
+            @foreach (var characteristicName in ViewBag.characteristicNames)
+            {
+                <th>
+                    @characteristicName
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
     @for (int i = 0; i < ViewBag.characteristics.Count; i++ )
     {
         <tr>
@@ -115,6 +121,7 @@
             }
         </tr>
     }
+    </tbody>
 </table>
 <br/>
 <div id="visualization_container" style="width: 800px; height: 800px"></div>

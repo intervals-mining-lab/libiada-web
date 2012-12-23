@@ -8,52 +8,82 @@
 <h2>@ViewBag.characteristicName</h2>
 <h2>@ViewBag.notationName</h2>
 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
 @if (!ViewBag.isFilter)
 {
     <table>
-        <tr>
-            <th>
-                Первый элемент\Второй элемент
-            </th>
-            @for (int k = 0; k < ViewBag.elements.Count; k++)
-            {
-                <th>
-                    @ViewBag.elements[k].name
-                </th>
-            }
-        </tr>
-        @for (int i = 0; i < ViewBag.elements.Count; i++)
-        {
+        <thead>
             <tr>
-                <td>
-                    @ViewBag.elements[i].name
-                </td>
-                @for (int j = 0; j < ViewBag.elements.Count; j++)
+                <th>
+                    Первый элемент\Второй элемент
+                </th>
+                @for (int k = 0; k < ViewBag.elements.Count; k++)
                 {
-                    <td>
-                        @ViewBag.characteristics[i * ViewBag.elements.Count + j].value
-                    </td>
+                    <th>
+                        @ViewBag.elements[k].name
+                    </th>
                 }
             </tr>
-        }
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.elements.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.elements[i].name
+                    </td>
+                    @for (int j = 0; j < ViewBag.elements.Count; j++)
+                    {
+                        <td>
+                            @ViewBag.characteristics[i*ViewBag.elements.Count + j].value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
     </table>
 }
 else
 {
     <table>
-        @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
-        {
+        <thead>
             <tr>
-                <td>
-                    @ViewBag.firstElements[l].value
-                </td>
-                <td>
-                    @ViewBag.secondElements[l].value
-                </td>
-                <td>
-                    @ViewBag.filteredResult[l].value
-                </td>
+                <th>
+                    Первый элемент
+                </th>
+                <th>
+                    Второй элемент
+                </th>
+                <th>
+                    @ViewBag.characteristicName
+                </th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.firstElements[l].value
+                    </td>
+                    <td>
+                        @ViewBag.secondElements[l].value
+                    </td>
+                    <td>
+                        @ViewBag.filteredResult[l].value
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 }

@@ -7,18 +7,22 @@
 
 <script language="javascript">
 
-    function FiltrationSwitch(event) {
+    $(document).ready(function () {
+        var filter = $("[name='filter']")[0];
+        filter.onclick = FiltrationSwitch;
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+
+    function FiltrationSwitch() {
         if ($("#filter")[0].checked) {
             $("#filter_div")[0].hidden = false;
         } else {
             $("#filter_div")[0].hidden = true;
         }
     }
-
-    $(document).ready(function () {
-        var filter = $("[name='filter']")[0];
-        filter.onclick = FiltrationSwitch;
-    });
     
 </script>
 
@@ -26,31 +30,33 @@
 @using (Html.BeginForm())
 {
     <table>
-        <tr>
-            <th>
-                Название объекта
-            </th>
-            <th>
-                Тип цепочки
-            </th>
-        </tr>
-        @{
-    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
+        <thead>
+            <tr>
+                <th>
+                    Название объекта
+                </th>
+                <th>
+                    Тип цепочки
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
 
-
-    for (int i = 0; i < mattersList.Count; i++)
-    {
-                <tr>
-                    <td>
-                        @mattersList[i]
-                    </td>
-                    <td>
-                        @ViewBag.matters[i].nature.name
-                    </td>
-                </tr>
-    }
-        }
-
+                for (int i = 0; i < mattersList.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @mattersList[i]
+                        </td>
+                        <td>
+                            @ViewBag.matters[i].nature.name
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
     <br/>
     @Html.Label("Характеристика:")
@@ -83,10 +89,10 @@
     @Html.Label(" Язык литературного произведения")
     <br/>
     <select name="languageId">
-    @foreach (var option in ViewBag.language_id)
-    {
-        <option value="@option.Value">@option.Text</option>
-    }
+        @foreach (var option in ViewBag.language_id)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
     </select>
     <br/>
     @Html.CheckBox("filter")

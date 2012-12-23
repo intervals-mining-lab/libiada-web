@@ -1,63 +1,76 @@
 ﻿@model IEnumerable<LibiadaWeb.pitch>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Высоты нот";
 }
 
-<h2>Index</h2>
+<h2>Перечень высот нот</h2>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Создать", "Create")
 </p>
 <table>
-    <tr>
-        <th>
-            octave
-        </th>
-        <th>
-            midinumber
-        </th>
-        <th>
-            instrument
-        </th>
-        <th>
-            note
-        </th>
-        <th>
-            accidental
-        </th>
-        <th>
-            note_symbol
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.octave)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.midinumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.instrument)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.note.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.accidental.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.note_symbol.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Номер октавы
+            </th>
+            <th>
+                Уникальный номер ноты по миди стандарту
+            </th>
+            <th>
+                Инструмент
+            </th>
+            <th>
+                Принадлежит ноте
+            </th>
+            <th>
+                Знак альтерации
+            </th>
+            <th>
+                Обозначение ноты
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.octave)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.midinumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.instrument)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.note.value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.accidental.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.note_symbol.name)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
+                    @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
+                    @Html.ActionLink("Удалить", "Delete", new { id=item.id })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

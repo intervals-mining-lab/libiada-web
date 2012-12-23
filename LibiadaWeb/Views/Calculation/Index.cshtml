@@ -9,6 +9,13 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+
     function AddAxis() {
         $("#axis").append(
         '<select name="characteristicIds">' +
@@ -31,27 +38,31 @@
 @using (Html.BeginForm())
 {
     <table>
-        <tr>
-            <th>
-                Название объекта
-            </th>
-        </tr>
-        @{
-            List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
-            int i = 0;
+        <thead>
+            <tr>
+                <th>
+                    Название объекта
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
+                int i = 0;
 
-            foreach (var item in mattersList)
-            {
-                <tr>
-                    <td>
-                        @item
-                    </td>
-                </tr>
+                foreach (var item in mattersList)
+                {
+                    <tr>
+                        <td>
+                            @item
+                        </td>
+                    </tr>
+                }
             }
-        }
+        </tbody>
     </table>
     <br/>
-    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <input type="button" onclick=" AddAxis() " value="Добавить ось"/>
     <div id="axis"></div>
     <br/>
     <br/>

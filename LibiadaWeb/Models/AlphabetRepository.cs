@@ -67,6 +67,12 @@ namespace LibiadaWeb.Models
             db.Dispose();
         }
 
+
+        public Alphabet FromDbAlphabetToLibiadaAlphabet(long chainId)
+        {
+            IEnumerable<alphabet> alphabet = db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number);
+            return FromDbAlphabetToLibiadaAlphabet(alphabet);
+        }
         
         public Alphabet FromDbAlphabetToLibiadaAlphabet(IEnumerable<alphabet> dbAlphabet)
         {

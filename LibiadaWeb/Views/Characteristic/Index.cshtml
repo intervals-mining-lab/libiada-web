@@ -6,58 +6,72 @@
 
 <h2>Перечень значений характеристик</h2>
 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
 <p>
     @Html.ActionLink("Создать", "Create")
 </p>
 <table>
-    <tr>
-        <th>
-            Принадлежит цепочке
-        </th>
-        <th>
-            Характеристика
-        </th>
-        <th>
-            Числовое значение
-        </th>
-        <th>
-            Стороковое значение
-        </th>
-        <th>
-            Привязка
-        </th>
-        <th>
-            Дата создания
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.chain.building)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.characteristic_type.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.value_string)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.link_up.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.creation_date)
-        </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Принадлежит цепочке
+            </th>
+            <th>
+                Характеристика
+            </th>
+            <th>
+                Числовое значение
+            </th>
+            <th>
+                Стороковое значение
+            </th>
+            <th>
+                Привязка
+            </th>
+            <th>
+                Дата создания
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.chain.building)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.characteristic_type.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.value)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.value_string)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.link_up.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creation_date)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new {id = item.id}) |
+                    @Html.ActionLink("Подробности", "Details", new {id = item.id}) |
+                    @Html.ActionLink("Удалить", "Delete", new {id = item.id})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

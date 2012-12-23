@@ -8,6 +8,13 @@
 <h2>Вычисление характеристик однородных цепочек</h2>
 
 <script type="text/javascript">
+    
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
 
     function AddAxis() {
         $("#axis").append(
@@ -27,23 +34,27 @@
 @using (Html.BeginForm())
 {
     <table>
-        <tr>
-            <th>
-                Название объекта
-            </th>
-        </tr>
-        @{
-    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
+        <thead>
+            <tr>
+                <th>
+                    Название объекта
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
 
-    foreach (var item in mattersList)
-    {
-                <tr>
-                    <td>
-                        @item
-                    </td>
-                </tr>
-    }
-        }
+                foreach (var item in mattersList)
+                {
+                    <tr>
+                        <td>
+                            @item
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
     </table>
     <br/>
     @Html.CheckBox("isSort")
@@ -64,13 +75,13 @@
     @Html.Label("Язык литературного произведения")
     <br/>
     <select name="languageId">
-    @foreach (var option in ViewBag.language_id)
-    {
-        <option value="@option.Value">@option.Text</option>
-    }
+        @foreach (var option in ViewBag.language_id)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
     </select>
     <br/>
-    <input type="button" onclick="AddAxis()" value="Добавить ось"/>
+    <input type="button" onclick=" AddAxis() " value="Добавить ось"/>
     <br/>
     <div id="axis"></div>
     <br/>

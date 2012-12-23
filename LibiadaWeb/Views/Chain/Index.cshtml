@@ -6,59 +6,73 @@
 
 <h2>Перечень цепочек</h2>
 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
 <p>
     @Html.ActionLink("Создать", "Create")
     @Html.ActionLink("Добавить сегментированную цепочку","Segmentated")
 </p>
 <table>
-    <tr>
-        <th>
-            Строй
-        </th>
-        <th>
-            Тип цепочки
-        </th>
-        <th>
-            Форма записи
-        </th>
-        <th>
-            Дата создания записи
-        </th>
-        <th>
-            Объект
-        </th>
-        <th>
-            Разнородность
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @item.building.ToString().Substring(0, 20);
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.building_type.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.notation.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.creation_date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.matter.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dissimilar)
-        </td>
-        <td>
-            @Html.ActionLink("Редактировать", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Подробности", "Details", new { id=item.id }) |
-            @Html.ActionLink("Удалить", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
-
+    <thead>
+        <tr>
+            <th>
+                Строй
+            </th>
+            <th>
+                Тип цепочки
+            </th>
+            <th>
+                Форма записи
+            </th>
+            <th>
+                Дата создания записи
+            </th>
+            <th>
+                Объект
+            </th>
+            <th>
+                Разнородность
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.building.ToString().Substring(0, 20);
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.building_type.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.notation.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.creation_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.matter.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dissimilar)
+                </td>
+                <td>
+                    @Html.ActionLink("Редактировать", "Edit", new {id = item.id}) |
+                    @Html.ActionLink("Подробности", "Details", new {id = item.id}) |
+                    @Html.ActionLink("Удалить", "Delete", new {id = item.id})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
