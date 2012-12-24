@@ -193,8 +193,6 @@
     <Compile Include="Controllers\CharacteristicGroupController.cs" />
     <Compile Include="Controllers\CharacteristicTypeController.cs" />
     <Compile Include="Controllers\ClusterizationController.cs" />
-    <Compile Include="Controllers\ConnectionController.cs" />
-    <Compile Include="Controllers\ConnectionTypeController.cs" />
     <Compile Include="Controllers\ElementController.cs" />
     <Compile Include="Controllers\FmotivController.cs" />
     <Compile Include="Controllers\FmotivTypeController.cs" />
@@ -236,8 +234,6 @@
     <Compile Include="Models\CharacteristicGroupRepository.cs" />
     <Compile Include="Models\CharacteristicRepository.cs" />
     <Compile Include="Models\CharacteristicTypeRepository.cs" />
-    <Compile Include="Models\ConnectionRepository.cs" />
-    <Compile Include="Models\ConnectionTypeRepository.cs" />
     <Compile Include="Models\DataTableFiller.cs" />
     <Compile Include="Models\DnaChainRepository.cs" />
     <Compile Include="Models\ElementRepository.cs" />
@@ -252,8 +248,6 @@
     <Compile Include="Models\ICharacteristicGroupRepository.cs" />
     <Compile Include="Models\ICharacteristicRepository.cs" />
     <Compile Include="Models\ICharacteristicTypeRepository.cs" />
-    <Compile Include="Models\IConnectionRepository.cs" />
-    <Compile Include="Models\IConnectionTypeRepository.cs" />
     <Compile Include="Models\IDnaChainRepository.cs" />
     <Compile Include="Models\IElementRepository.cs" />
     <Compile Include="Models\IFmotivRepository.cs" />
@@ -617,16 +611,6 @@
     <Content Include="Views\Characteristic\Index.cshtml" />
     <Content Include="Views\Clusterization\Index.cshtml" />
     <Content Include="Views\Clusterization\Result.cshtml" />
-    <Content Include="Views\ConnectionType\Create.cshtml" />
-    <Content Include="Views\ConnectionType\Delete.cshtml" />
-    <Content Include="Views\ConnectionType\Details.cshtml" />
-    <Content Include="Views\ConnectionType\Edit.cshtml" />
-    <Content Include="Views\ConnectionType\Index.cshtml" />
-    <Content Include="Views\Connection\Create.cshtml" />
-    <Content Include="Views\Connection\Delete.cshtml" />
-    <Content Include="Views\Connection\Details.cshtml" />
-    <Content Include="Views\Connection\Edit.cshtml" />
-    <Content Include="Views\Connection\Index.cshtml" />
     <Content Include="Views\Element\Create.cshtml" />
     <Content Include="Views\Element\Delete.cshtml" />
     <Content Include="Views\Element\Details.cshtml" />

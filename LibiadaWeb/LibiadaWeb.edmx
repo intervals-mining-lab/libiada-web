@@ -11,8 +11,6 @@
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.Store.characteristic" store:Type="Tables" Schema="public" />
     <EntitySet Name="characteristic_group" EntityType="LibiadaWebModel.Store.characteristic_group" store:Type="Tables" Schema="public" />
     <EntitySet Name="characteristic_type" EntityType="LibiadaWebModel.Store.characteristic_type" store:Type="Tables" Schema="public" />
-    <EntitySet Name="connection" EntityType="LibiadaWebModel.Store.connection" store:Type="Tables" Schema="public" />
-    <EntitySet Name="connection_type" EntityType="LibiadaWebModel.Store.connection_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="dna_chain" EntityType="LibiadaWebModel.Store.dna_chain" store:Type="Tables" Schema="public" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.Store.element" store:Type="Tables" Schema="public" />
     <EntitySet Name="language" EntityType="LibiadaWebModel.Store.language" store:Type="Tables" Schema="public" />
@@ -79,14 +77,6 @@
       <End Role="characteristic_type" EntitySet="characteristic_type" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_child_chain" Association="LibiadaWebModel.Store.fk_child_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="connection" EntitySet="connection" />
-    </AssociationSet>
-    <AssociationSet Name="fk_connection_type" Association="LibiadaWebModel.Store.fk_connection_type">
-      <End Role="connection_type" EntitySet="connection_type" />
-      <End Role="connection" EntitySet="connection" />
-    </AssociationSet>
     <AssociationSet Name="fk_dna_chain_matter" Association="LibiadaWebModel.Store.fk_dna_chain_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="dna_chain" EntitySet="dna_chain" />
@@ -130,10 +120,6 @@
     <AssociationSet Name="fk_notation_nature" Association="LibiadaWebModel.Store.fk_notation_nature">
       <End Role="nature" EntitySet="nature" />
       <End Role="notation" EntitySet="notation" />
-    </AssociationSet>
-    <AssociationSet Name="fk_parent_chain" Association="LibiadaWebModel.Store.fk_parent_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="connection" EntitySet="connection" />
     </AssociationSet>
     <AssociationSet Name="fk_piece_type_nature" Association="LibiadaWebModel.Store.fk_piece_type_nature">
       <End Role="nature" EntitySet="nature" />
@@ -328,23 +314,6 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="characteristic_group_id" Type="int4" />
     <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
-  </EntityType>
-  <EntityType Name="connection">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="parent_chain_id" Type="int8" Nullable="false" />
-    <Property Name="child_chain_id" Type="int8" Nullable="false" />
-    <Property Name="connection_type_id" Type="int4" Nullable="false" />
-  </EntityType>
-  <EntityType Name="connection_type">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="dna_chain">
     <Key>
@@ -721,30 +690,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_child_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.Store.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="child_chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_connection_type">
-    <End Role="connection_type" Type="LibiadaWebModel.Store.connection_type" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.Store.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="connection_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="connection_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_dna_chain_matter">
     <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
     <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
@@ -874,18 +819,6 @@
       </Principal>
       <Dependent Role="notation">
         <PropertyRef Name="nature_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_parent_chain">
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.Store.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="parent_chain_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1558,8 +1491,6 @@
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.characteristic" />
     <EntitySet Name="characteristic_group" EntityType="LibiadaWebModel.characteristic_group" />
     <EntitySet Name="characteristic_type" EntityType="LibiadaWebModel.characteristic_type" />
-    <EntitySet Name="connection" EntityType="LibiadaWebModel.connection" />
-    <EntitySet Name="connection_type" EntityType="LibiadaWebModel.connection_type" />
     <EntitySet Name="dna_chain" EntityType="LibiadaWebModel.dna_chain" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.element" />
     <EntitySet Name="language" EntityType="LibiadaWebModel.language" />
@@ -1618,14 +1549,6 @@
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="chain" EntitySet="chain" />
     </AssociationSet>
-    <AssociationSet Name="fk_child_chain" Association="LibiadaWebModel.fk_child_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="connection" EntitySet="connection" />
-    </AssociationSet>
-    <AssociationSet Name="fk_parent_chain" Association="LibiadaWebModel.fk_parent_chain">
-      <End Role="chain" EntitySet="chain" />
-      <End Role="connection" EntitySet="connection" />
-    </AssociationSet>
     <AssociationSet Name="fk_characteristic_link_up" Association="LibiadaWebModel.fk_characteristic_link_up">
       <End Role="link_up" EntitySet="link_up" />
       <End Role="characteristic" EntitySet="characteristic" />
@@ -1637,10 +1560,6 @@
     <AssociationSet Name="fk_characteristic_group" Association="LibiadaWebModel.fk_characteristic_group">
       <End Role="characteristic_group" EntitySet="characteristic_group" />
       <End Role="characteristic_type" EntitySet="characteristic_type" />
-    </AssociationSet>
-    <AssociationSet Name="fk_connection_type" Association="LibiadaWebModel.fk_connection_type">
-      <End Role="connection_type" EntitySet="connection_type" />
-      <End Role="connection" EntitySet="connection" />
     </AssociationSet>
     <AssociationSet Name="fk_dna_chain_matter" Association="LibiadaWebModel.fk_dna_chain_matter">
       <End Role="matter" EntitySet="matter" />
@@ -2016,8 +1935,6 @@
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_chain" FromRole="chain" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_chain" FromRole="chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_chain" FromRole="chain" ToRole="characteristic" />
-    <NavigationProperty Name="connection" Relationship="LibiadaWebModel.fk_child_chain" FromRole="chain" ToRole="connection" />
-    <NavigationProperty Name="connection1" Relationship="LibiadaWebModel.fk_parent_chain" FromRole="chain" ToRole="connection" />
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -2056,27 +1973,6 @@
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
     <NavigationProperty Name="characteristic_group" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
     <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_type" FromRole="characteristic_type" ToRole="homogeneous_characteristic" />
-  </EntityType>
-  <EntityType Name="connection">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="parent_chain_id" Type="Int64" Nullable="false" />
-    <Property Name="child_chain_id" Type="Int64" Nullable="false" />
-    <Property Name="connection_type_id" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_child_chain" FromRole="connection" ToRole="chain" />
-    <NavigationProperty Name="chain1" Relationship="LibiadaWebModel.fk_parent_chain" FromRole="connection" ToRole="chain" />
-    <NavigationProperty Name="connection_type" Relationship="LibiadaWebModel.fk_connection_type" FromRole="connection" ToRole="connection_type" />
-  </EntityType>
-  <EntityType Name="connection_type">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="connection" Relationship="LibiadaWebModel.fk_connection_type" FromRole="connection_type" ToRole="connection" />
   </EntityType>
   <EntityType Name="dna_chain">
     <Key>
@@ -2706,30 +2602,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_child_chain">
-    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="child_chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_parent_chain">
-    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="chain">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="parent_chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_characteristic_link_up">
     <End Role="link_up" Type="LibiadaWebModel.link_up" Multiplicity="1" />
     <End Role="characteristic" Type="LibiadaWebModel.characteristic" Multiplicity="*" />
@@ -2763,18 +2635,6 @@
       </Principal>
       <Dependent Role="characteristic_type">
         <PropertyRef Name="characteristic_group_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_connection_type">
-    <End Role="connection_type" Type="LibiadaWebModel.connection_type" Multiplicity="1" />
-    <End Role="connection" Type="LibiadaWebModel.connection" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="connection_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="connection">
-        <PropertyRef Name="connection_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3526,25 +3386,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="connection">
-      <EntityTypeMapping TypeName="LibiadaWebModel.connection">
-        <MappingFragment StoreEntitySet="connection">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="parent_chain_id" ColumnName="parent_chain_id" />
-          <ScalarProperty Name="child_chain_id" ColumnName="child_chain_id" />
-          <ScalarProperty Name="connection_type_id" ColumnName="connection_type_id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="connection_type">
-      <EntityTypeMapping TypeName="LibiadaWebModel.connection_type">
-        <MappingFragment StoreEntitySet="connection_type">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="description" ColumnName="description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="dna_chain">
       <EntityTypeMapping TypeName="LibiadaWebModel.dna_chain">
         <MappingFragment StoreEntitySet="dna_chain">
@@ -3828,8 +3669,6 @@
     <EntityTypeShape EntityType="LibiadaWebModel.characteristic" Width="1.5" PointX="10" PointY="5" Height="2.9417936197916674" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.characteristic_group" Width="1.75" PointX="11.875" PointY="2.5" Height="1.7879850260416674" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.characteristic_type" Width="2" PointX="12.25" PointY="5" Height="2.5571907552083326" IsExpanded="true" />
-    <EntityTypeShape EntityType="LibiadaWebModel.connection" Width="1.5" PointX="7.75" PointY="5.25" Height="2.3648893229166674" IsExpanded="true" />
-    <EntityTypeShape EntityType="LibiadaWebModel.connection_type" Width="1.5" PointX="7.75" PointY="2.5" Height="1.7879850260416674" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.element" Width="1.5" PointX="8.375" PointY="13.625" Height="2.9417936197916745" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.link_up" Width="1.5" PointX="10.75" PointY="8.5" Height="1.9802864583333317" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.matter" Width="1.5" PointX="2.75" PointY="8.75" Height="2.7494921875000031" IsExpanded="true" />
@@ -3944,10 +3783,6 @@
     <AssociationConnector Association="LibiadaWebModel.fk_characteristic_group" ManuallyRouted="false">
       <ConnectorPoint PointX="12.9375" PointY="4.2879850260416674" />
       <ConnectorPoint PointX="12.9375" PointY="5" />
-    </AssociationConnector>
-    <AssociationConnector Association="LibiadaWebModel.fk_connection_type" ManuallyRouted="false">
-      <ConnectorPoint PointX="8.5" PointY="4.2879850260416674" />
-      <ConnectorPoint PointX="8.5" PointY="5.25" />
     </AssociationConnector>
     <AssociationConnector Association="LibiadaWebModel.fk_element_notation" ManuallyRouted="false">
       <ConnectorPoint PointX="5.75" PointY="15.629547526041668" />
