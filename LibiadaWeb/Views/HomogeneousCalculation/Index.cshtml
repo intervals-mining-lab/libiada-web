@@ -9,24 +9,61 @@
 
 <script type="text/javascript">
     
+    var divCounter = 0;
+
     $(document).ready(function () {
         $("table").dataTable({
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
+
+        AddCharacteristic();
     });
 
-    function AddAxis() {
-        $("#axis").append(
-        '<select name="characteristicIds">' +
-            '@foreach (var option in ViewBag.characteristicsList)
-             {<option value="@option.Value">@option.Text</option>}' +
-        '</select>' +
-        '<select name="linkUpIds">' +
-            '@foreach (var option in ViewBag.linkUpsList)
-             {<option value="@option.Value">@option.Text</option>}' +
-        '</select>' +
-        '<br/>');
+    function AddCharacteristic() {
+        
+        var characteristicTypes = new Array();
+        var linkUps = new Array();
+
+        @foreach (var option in ViewBag.characteristicsList)
+        {
+            @:characteristicTypes.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+        }
+
+        @foreach (var option in ViewBag.linkUpsList)
+        {
+            @:linkUps.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+        }
+
+        var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divCounter).attr('id', 'characteristic' + divCounter);
+
+        $("#characteristics_list").append(characteristicsDiv);
+        
+        var selectList = $('<select/>').attr('name', 'characteristicIds');
+        for (var i = 0; i < characteristicTypes.length; i++) 
+        {
+            selectList.append(characteristicTypes[i]);
+        }
+        characteristicsDiv.append(selectList);
+        
+        selectList = $('<select/>').attr('name', 'linkUpIds');
+        for (var i = 0; i < linkUps.length; i++) 
+        {
+            selectList.append(linkUps[i]);
+        }
+        characteristicsDiv.append(selectList);
+        
+        //функция, возвращающая функцию для call back'а
+        var tempDeleteFunction = function(element) {
+            return function() {
+                DeleteElementByName(element.elemName);
+            };
+        };
+        var callBackDeleteFunction = tempDeleteFunction({ elemName: 'characteristic' + divCounter });
+        characteristicsDiv.append($('<input/>').attr('type', 'button').attr('value','Удалить').click(callBackDeleteFunction));
+        AppendBr(characteristicsDiv);
+        
+        divCounter++;
         return false;
     }
 </script>
@@ -81,9 +118,9 @@
         }
     </select>
     <br/>
-    <input type="button" onclick=" AddAxis() " value="Добавить ось"/>
+    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
     <br/>
-    <div id="axis"></div>
+    <div id="characteristics_list"></div>
     <br/>
     <br/>
     <input type="submit" value="Вычислить" />

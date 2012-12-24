@@ -27,6 +27,9 @@ namespace LibiadaWeb
             bundles.Add(new ScriptBundle("~/bundles/HighStock").Include(
                       "~/Scripts/Highstock-1.2.5/highstock.src.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Procedures").Include(
+                      "~/Scripts/procs.js"));
+
 
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
