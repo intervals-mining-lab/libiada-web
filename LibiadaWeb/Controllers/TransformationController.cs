@@ -65,7 +65,6 @@ namespace LibiadaWeb.Controllers
                     {
                         id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                         matter = dbParentChain.matter,
-                        building_type = dbParentChain.building_type,
                         dissimilar = false,
                         notation_id = notationId,
                         creation_date = DateTime.Now

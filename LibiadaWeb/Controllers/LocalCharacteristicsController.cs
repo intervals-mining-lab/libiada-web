@@ -67,7 +67,7 @@ namespace LibiadaWeb.Controllers
                 characteristics.Add(new List<List<double>>());
 
                 matter matter = db.matter.Single(m => m.id == mattrId);
-                chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationId);
+                chain chain = matter.chain.Single(c => c.notation_id == notationId);
                 Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
 
                 //IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);

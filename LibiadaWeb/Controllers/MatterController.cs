@@ -115,7 +115,6 @@ namespace LibiadaWeb.Controllers
                             {
                                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                                 dissimilar = false,
-                                building_type_id = 1,
                                 notation_id = notationId,
                                 fasta_header = fastaHeader,
                                 piece_type_id = 1,
@@ -171,7 +170,6 @@ namespace LibiadaWeb.Controllers
                             {
                                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                                 dissimilar = false,
-                                building_type_id = 1,
                                 notation_id = notationId,
                                 language_id = languageId,
                                 original = original,

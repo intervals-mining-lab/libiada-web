@@ -131,7 +131,6 @@ namespace LibiadaWeb.Models
                     {
                         id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(), 
                         dissimilar = false,
-                        building_type_id = 1,
                         notation_id = notationId,
                         creation_date = DateTime.Now
                     };

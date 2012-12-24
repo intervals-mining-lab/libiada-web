@@ -34,7 +34,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var chain = db.chain.OrderBy(c => c.creation_date).Include("building_type").Include("matter").Include("notation");
+            var chain = db.chain.OrderBy(c => c.creation_date).Include("matter").Include("notation");
             return View(chain.ToList());
         }
 
@@ -55,7 +55,6 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             ViewBag.language_id = new SelectList(db.language, "id", "name");
@@ -68,7 +67,6 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Segmentated()
         {
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             ViewBag.language_id = new SelectList(db.language, "id", "name");
@@ -99,7 +97,6 @@ namespace LibiadaWeb.Controllers
                     {
                         id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                         dissimilar = false,
-                        building_type_id = 1,
                         notation_id = 6,
                         fasta_header = "",
                         piece_type_id = 1,
@@ -183,7 +180,6 @@ namespace LibiadaWeb.Controllers
                             {
                                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                                 dissimilar = chain.dissimilar,
-                                building_type_id = chain.building_type_id,
                                 notation_id = chain.notation_id,
                                 fasta_header = fastaHeader,
                                 piece_type_id = chain.piece_type_id,
@@ -238,7 +234,6 @@ namespace LibiadaWeb.Controllers
                             {
                                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                                 dissimilar = chain.dissimilar,
-                                building_type_id = chain.building_type_id,
                                 notation_id = chain.notation_id,
                                 language_id = languageId,
                                 original = original,
@@ -267,7 +262,6 @@ namespace LibiadaWeb.Controllers
                 return RedirectToAction("Index");  
             }
 
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", chain.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
             return View(chain);
@@ -279,7 +273,6 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             chain chain = db.chain.Single(c => c.id == id);
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", chain.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
             return View(chain);
@@ -298,7 +291,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", chain.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
             return View(chain);

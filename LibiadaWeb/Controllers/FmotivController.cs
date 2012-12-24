@@ -18,7 +18,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var fmotiv = db.fmotiv.Include("building_type").Include("matter").Include("notation").Include("piece_type").Include("fmotiv_type");
+            var fmotiv = db.fmotiv.Include("matter").Include("notation").Include("piece_type").Include("fmotiv_type");
             return View(fmotiv.ToList());
         }
 
@@ -36,7 +36,6 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
@@ -56,8 +55,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
-
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", fmotiv.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", fmotiv.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", fmotiv.piece_type_id);
@@ -71,7 +68,6 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             fmotiv fmotiv = db.fmotiv.Single(f => f.id == id);
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", fmotiv.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", fmotiv.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", fmotiv.piece_type_id);
@@ -92,7 +88,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", fmotiv.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", fmotiv.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", fmotiv.piece_type_id);

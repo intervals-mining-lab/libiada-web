@@ -28,9 +28,6 @@
                 Строй
             </th>
             <th>
-                Тип цепочки
-            </th>
-            <th>
                 Форма записи
             </th>
             <th>
@@ -51,9 +48,6 @@
             <tr>
                 <td>
                     @item.building.ToString().Substring(0, 20);
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.building_type.name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.notation.name)

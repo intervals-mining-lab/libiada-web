@@ -6,7 +6,6 @@
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.Store.alphabet" store:Type="Tables" Schema="public" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.Store.binary_characteristic" store:Type="Tables" Schema="public" />
     <EntitySet Name="building" EntityType="LibiadaWebModel.Store.building" store:Type="Tables" Schema="public" />
-    <EntitySet Name="building_type" EntityType="LibiadaWebModel.Store.building_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.Store.catalog_table" store:Type="Tables" Schema="public" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.Store.chain" store:Type="Tables" Schema="public" />
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.Store.characteristic" store:Type="Tables" Schema="public" />
@@ -52,10 +51,6 @@
       <End Role="element" EntitySet="element" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_chain_building_type" Association="LibiadaWebModel.Store.fk_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="chain" EntitySet="chain" />
-    </AssociationSet>
     <AssociationSet Name="fk_chain_matter" Association="LibiadaWebModel.Store.fk_chain_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="chain" EntitySet="chain" />
@@ -92,10 +87,6 @@
       <End Role="connection_type" EntitySet="connection_type" />
       <End Role="connection" EntitySet="connection" />
     </AssociationSet>
-    <AssociationSet Name="fk_dna_chain_building_type" Association="LibiadaWebModel.Store.fk_dna_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="dna_chain" EntitySet="dna_chain" />
-    </AssociationSet>
     <AssociationSet Name="fk_dna_chain_matter" Association="LibiadaWebModel.Store.fk_dna_chain_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="dna_chain" EntitySet="dna_chain" />
@@ -111,10 +102,6 @@
     <AssociationSet Name="fk_element_notation" Association="LibiadaWebModel.Store.fk_element_notation">
       <End Role="notation" EntitySet="notation" />
       <End Role="element" EntitySet="element" />
-    </AssociationSet>
-    <AssociationSet Name="fk_literature_chain_building_type" Association="LibiadaWebModel.Store.fk_literature_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="literature_chain" EntitySet="literature_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_literature_chain_language" Association="LibiadaWebModel.Store.fk_literature_chain_language">
       <End Role="language" EntitySet="language" />
@@ -152,11 +139,6 @@
       <End Role="nature" EntitySet="nature" />
       <End Role="piece_type" EntitySet="piece_type" />
     </AssociationSet>
-    
-    <AssociationSet Name="fk_fmotiv_building_type" Association="LibiadaWebModel.Store.fk_fmotiv_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="fmotiv" EntitySet="fmotiv" />
-    </AssociationSet>
     <AssociationSet Name="fk_fmotiv_matter" Association="LibiadaWebModel.Store.fk_fmotiv_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="fmotiv" EntitySet="fmotiv" />
@@ -183,11 +165,6 @@
     </AssociationSet>
     <AssociationSet Name="fk_music_chain_instrument" Association="LibiadaWebModel.Store.fk_music_chain_instrument">
       <End Role="instrument" EntitySet="instrument" />
-      <End Role="music_chain" EntitySet="music_chain" />
-    </AssociationSet>
-
-    <AssociationSet Name="fk_music_chain_building_type" Association="LibiadaWebModel.Store.fk_music_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
       <End Role="music_chain" EntitySet="music_chain" />
     </AssociationSet>
 
@@ -302,14 +279,6 @@
     <Property Name="index" Type="int4" Nullable="false" />
     <Property Name="number" Type="int4" Nullable="false" />
   </EntityType>
-  <EntityType Name="building_type">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
-  </EntityType>
   <EntityType Name="catalog_table">
     <Key>
       <PropertyRef Name="id" />
@@ -323,7 +292,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -383,7 +351,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -424,7 +391,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -486,7 +452,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -525,7 +490,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -545,7 +509,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="int4" Nullable="false" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="creation_date" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
@@ -674,18 +637,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
-    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="chain">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_chain_matter">
     <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
     <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="*" />
@@ -794,18 +745,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_dna_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
-    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="dna_chain">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_dna_chain_matter">
     <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
     <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
@@ -851,18 +790,6 @@
       </Principal>
       <Dependent Role="element">
         <PropertyRef Name="notation_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_literature_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
-    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="literature_chain">
-        <PropertyRef Name="building_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1170,18 +1097,6 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_fmotiv_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
-    <End Role="fmotiv" Type="LibiadaWebModel.Store.fmotiv" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="fmotiv">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_fmotiv_matter">
     <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="1" />
     <End Role="fmotiv" Type="LibiadaWebModel.Store.fmotiv" Multiplicity="*" />
@@ -1328,19 +1243,6 @@
       </Principal>
       <Dependent Role="music_chain">
         <PropertyRef Name="instrument_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-
-  <Association Name="fk_music_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.Store.building_type" Multiplicity="1" />
-    <End Role="music_chain" Type="LibiadaWebModel.Store.music_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="music_chain">
-        <PropertyRef Name="building_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1651,7 +1553,6 @@
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.alphabet" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.binary_characteristic" />
     <EntitySet Name="building" EntityType="LibiadaWebModel.building" />
-    <EntitySet Name="building_type" EntityType="LibiadaWebModel.building_type" />
     <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.catalog_table" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.chain" />
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.characteristic" />
@@ -1704,18 +1605,6 @@
     <AssociationSet Name="fk_characteristic_type1" Association="LibiadaWebModel.fk_characteristic_type1">
       <End Role="characteristic_type" EntitySet="characteristic_type" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
-    </AssociationSet>
-    <AssociationSet Name="fk_chain_building_type" Association="LibiadaWebModel.fk_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="chain" EntitySet="chain" />
-    </AssociationSet>
-    <AssociationSet Name="fk_dna_chain_building_type" Association="LibiadaWebModel.fk_dna_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="dna_chain" EntitySet="dna_chain" />
-    </AssociationSet>
-    <AssociationSet Name="fk_literature_chain_building_type" Association="LibiadaWebModel.fk_literature_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="literature_chain" EntitySet="literature_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_chain_matter" Association="LibiadaWebModel.fk_chain_matter">
       <End Role="matter" EntitySet="matter" />
@@ -1867,11 +1756,6 @@
       <End Role="characteristic" EntitySet="characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_fmotiv_building_type" Association="LibiadaWebModel.fk_fmotiv_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="fmotiv" EntitySet="fmotiv" />
-    </AssociationSet>
-
     <AssociationSet Name="fk_fmotiv_matter" Association="LibiadaWebModel.fk_fmotiv_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="fmotiv" EntitySet="fmotiv" />
@@ -1931,11 +1815,6 @@
       <End Role="music_chain" EntitySet="music_chain" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_measure_building_type" Association="LibiadaWebModel.fk_measure_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="measure" EntitySet="measure" />
-    </AssociationSet>
-
     <AssociationSet Name="fk_measure_matter" Association="LibiadaWebModel.fk_measure_matter">
       <End Role="matter" EntitySet="matter" />
       <End Role="measure" EntitySet="measure" />
@@ -1973,11 +1852,6 @@
     <AssociationSet Name="fk_characteristic_measure" Association="LibiadaWebModel.fk_characteristic_measure">
       <End Role="measure" EntitySet="measure" />
       <End Role="characteristic" EntitySet="characteristic" />
-    </AssociationSet>
-
-    <AssociationSet Name="fk_music_chain_building_type" Association="LibiadaWebModel.fk_music_chain_building_type">
-      <End Role="building_type" EntitySet="building_type" />
-      <End Role="music_chain" EntitySet="music_chain" />
     </AssociationSet>
 
     <AssociationSet Name="fk_music_chain_matter" Association="LibiadaWebModel.fk_music_chain_matter">
@@ -2116,20 +1990,6 @@
     <Property Name="number" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_building_chain" FromRole="building" ToRole="chain" />
   </EntityType>
-  <EntityType Name="building_type">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_building_type" FromRole="building_type" ToRole="chain" />
-    <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_building_type" FromRole="building_type" ToRole="dna_chain" />
-    <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_building_type" FromRole="building_type" ToRole="literature_chain" />
-    <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_fmotiv_building_type" FromRole="building_type" ToRole="fmotiv" />
-    <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_measure_building_type" FromRole="building_type" ToRole="measure" />
-    <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_building_type" FromRole="building_type" ToRole="music_chain" />
-  </EntityType>
   <EntityType Name="catalog_table">
     <Key>
       <PropertyRef Name="id" />
@@ -2143,14 +2003,12 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_chain_building_type" FromRole="chain" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="chain" ToRole="piece_type" />
@@ -2225,7 +2083,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
@@ -2237,7 +2094,6 @@
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_dna_chain" FromRole="dna_chain" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_dna_chain_building_type" FromRole="dna_chain" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_dna_chain_notation" FromRole="dna_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_dna_chain_piece_type" FromRole="dna_chain" ToRole="piece_type" />
@@ -2282,7 +2138,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
@@ -2296,7 +2151,6 @@
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_literature_chain" FromRole="literature_chain" ToRole="homogeneous_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_literature_chain_building_type" FromRole="literature_chain" ToRole="building_type" />
     <NavigationProperty Name="language" Relationship="LibiadaWebModel.fk_literature_chain_language" FromRole="literature_chain" ToRole="language" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="literature_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_literature_chain_notation" FromRole="literature_chain" ToRole="notation" />
@@ -2383,7 +2237,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
@@ -2394,7 +2247,6 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fmotiv_type_id" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_fmotiv_building_type" FromRole="fmotiv" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_fmotiv_matter" FromRole="fmotiv" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_fmotiv_notation" FromRole="fmotiv" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_fmotiv_piece_type" FromRole="fmotiv" ToRole="piece_type" />
@@ -2436,7 +2288,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
@@ -2450,7 +2301,6 @@
     <Property Name="beatbase" Type="Int32" Nullable="false" />
     <Property Name="ticks_per_beat" Type="Int32" />
     <Property Name="fifths" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_measure_building_type" FromRole="measure" ToRole="building_type" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_measure_matter" FromRole="measure" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_measure_notation" FromRole="measure" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_measure_piece_type" FromRole="measure" ToRole="piece_type" />
@@ -2465,7 +2315,6 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="building_type_id" Type="Int32" Nullable="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
@@ -2473,7 +2322,6 @@
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="instrument_id" Type="Int32" />
-    <NavigationProperty Name="building_type" Relationship="LibiadaWebModel.fk_music_chain_building_type" FromRole="music_chain" ToRole="building_type" />
     <NavigationProperty Name="instrument" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="music_chain" ToRole="instrument" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_music_chain_matter" FromRole="music_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_music_chain_notation" FromRole="music_chain" ToRole="notation" />
@@ -2822,42 +2670,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="chain">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_dna_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="dna_chain" Type="LibiadaWebModel.dna_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="dna_chain">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_literature_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="literature_chain" Type="LibiadaWebModel.literature_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="literature_chain">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="fk_chain_matter">
     <End Role="matter" Type="LibiadaWebModel.matter" Multiplicity="1" />
     <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="*" />
@@ -3111,19 +2923,6 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_fmotiv_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="fmotiv" Type="LibiadaWebModel.fmotiv" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="fmotiv">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-
   <Association Name="fk_fmotiv_matter">
     <End Role="matter" Type="LibiadaWebModel.matter" Multiplicity="1" />
     <End Role="fmotiv" Type="LibiadaWebModel.fmotiv" Multiplicity="*" />
@@ -3284,18 +3083,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_measure_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="measure" Type="LibiadaWebModel.measure" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="measure">
-        <PropertyRef Name="building_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 
   <Association Name="fk_measure_matter">
     <End Role="matter" Type="LibiadaWebModel.matter" Multiplicity="1" />
@@ -3404,19 +3191,6 @@
       </Principal>
       <Dependent Role="building">
         <PropertyRef Name="chain_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  
-  <Association Name="fk_music_chain_building_type">
-    <End Role="building_type" Type="LibiadaWebModel.building_type" Multiplicity="1" />
-    <End Role="music_chain" Type="LibiadaWebModel.music_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="building_type">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="music_chain">
-        <PropertyRef Name="building_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3696,15 +3470,7 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="building_type">
-      <EntityTypeMapping TypeName="LibiadaWebModel.building_type">
-        <MappingFragment StoreEntitySet="building_type">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="description" ColumnName="description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
+
     <EntitySetMapping Name="catalog_table">
       <EntityTypeMapping TypeName="LibiadaWebModel.catalog_table">
         <MappingFragment StoreEntitySet="catalog_table">
@@ -3718,7 +3484,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.chain">
         <MappingFragment StoreEntitySet="chain">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -3784,7 +3549,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.dna_chain">
         <MappingFragment StoreEntitySet="dna_chain">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -3829,7 +3593,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.literature_chain">
         <MappingFragment StoreEntitySet="literature_chain">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -3897,7 +3660,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.fmotiv">
         <MappingFragment StoreEntitySet="fmotiv">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -3941,7 +3703,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.measure">
         <MappingFragment StoreEntitySet="measure">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -3963,7 +3724,6 @@
       <EntityTypeMapping TypeName="LibiadaWebModel.music_chain">
         <MappingFragment StoreEntitySet="music_chain">
           <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="building_type_id" ColumnName="building_type_id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
           <ScalarProperty Name="creation_date" ColumnName="creation_date" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
@@ -4063,7 +3823,6 @@
   <Diagram Name="LibiadaWeb">
     <EntityTypeShape EntityType="LibiadaWebModel.alphabet" Width="1.5" PointX="5.75" PointY="11.875" Height="1.9802864583333353" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.binary_characteristic" Width="1.875" PointX="12.875" PointY="8.625" Height="3.7109993489583317" IsExpanded="true" />
-    <EntityTypeShape EntityType="LibiadaWebModel.building_type" Width="1.5" PointX="2.375" PointY="5.875" Height="1.7879850260416674" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.catalog_table" Width="1.5" PointX="3.25" PointY="3.875" Height="1.5956835937499996" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.chain" Width="1.5" PointX="5.625" PointY="7" Height="3.7109993489583335" IsExpanded="true" />
     <EntityTypeShape EntityType="LibiadaWebModel.characteristic" Width="1.5" PointX="10" PointY="5" Height="2.9417936197916674" IsExpanded="true" />
@@ -4136,14 +3895,6 @@
     <AssociationConnector Association="LibiadaWebModel.fk_characteristic_type1" ManuallyRouted="false">
       <ConnectorPoint PointX="13.5625" PointY="7.7494921875" />
       <ConnectorPoint PointX="13.5625" PointY="8.625" />
-    </AssociationConnector>
-    <AssociationConnector Association="LibiadaWebModel.fk_chain_building_type" ManuallyRouted="false">
-      <ConnectorPoint PointX="3.875" PointY="7.8860463736861863" />
-      <ConnectorPoint PointX="4.4244785416666668" PointY="7.8860463736861854" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="7.8860463736861863" />
-          <ConnectorPoint PointX="5.166666666666667" PointY="7.8860463736861854" />
-          <ConnectorPoint PointX="5.458333333333333" PointY="7.8860463736861863" />
-          <ConnectorPoint PointX="5.625" PointY="7.8860463736861863" />
     </AssociationConnector>
     <AssociationConnector Association="LibiadaWebModel.fk_chain_matter" ManuallyRouted="false">
       <ConnectorPoint PointX="4.25" PointY="9.5154140145004646" />
@@ -4294,35 +4045,6 @@
           <ConnectorPoint PointX="10.96875" PointY="17.237702322916668" />
           <ConnectorPoint PointX="10.96875" PointY="16.787903645833332" />
         </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_building_type">
-          <ConnectorPoint PointX="3.875" PointY="7.2862550814351676" />
-          <ConnectorPoint PointX="5.375" PointY="7.2862550814351676" />
-          <ConnectorPoint PointX="5.375" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.166666666666667" PointY="14.313212890625" />
-          <ConnectorPoint PointX="6.333333333333333" PointY="14.313212890625" />
-          <ConnectorPoint PointX="7.5625" PointY="14.313212890625" />
-          <ConnectorPoint PointX="7.5625" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.385416666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.552083333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="10.739583333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="11.041666666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="11.208333333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="13.479166666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="13.645833333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.447916666666666" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.614583333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.1917936197916656" />
-          <ConnectorPoint PointX="15.052083333333334" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="15.0625" PointY="8.1917936197916674" />
-          <ConnectorPoint PointX="15.0625" PointY="13.625" />
-          <ConnectorPoint PointX="15.052083333333334" PointY="13.624999999999998" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="13.625" />
-          <ConnectorPoint PointX="14.52343625" PointY="13.625" />
-          <ConnectorPoint PointX="14.52343625" PointY="14" />
-        </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_dna_chain_piece_type">
           <ConnectorPoint PointX="9.875" PointY="10.963440755208332" />
           <ConnectorPoint PointX="10.671875" PointY="10.963440755208332" />
@@ -4378,23 +4100,6 @@
           <ConnectorPoint PointX="13.91406" PointY="12.585999348958332" />
           <ConnectorPoint PointX="13.91406" PointY="15.25" />
         </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_dna_chain_building_type">
-          <ConnectorPoint PointX="3.875" PointY="6.5023871453112205" />
-          <ConnectorPoint PointX="4.4244785416666668" PointY="6.50238714531122" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="6.5023871453112205" />
-          <ConnectorPoint PointX="5.375" PointY="6.5023871453112205" />
-          <ConnectorPoint PointX="5.375" PointY="11.609375" />
-          <ConnectorPoint PointX="6.354166666666667" PointY="11.609375" />
-          <ConnectorPoint PointX="6.520833333333333" PointY="11.609375" />
-          <ConnectorPoint PointX="7.416666666666667" PointY="11.609374999999998" />
-          <ConnectorPoint PointX="7.770833333333333" PointY="11.609375" />
-          <ConnectorPoint PointX="8.6666671666666648" PointY="11.609375" />
-          <ConnectorPoint PointX="8.8333338333333327" PointY="11.609375" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="11.609375" />
-          <ConnectorPoint PointX="10.755208333333334" PointY="11.609375" />
-          <ConnectorPoint PointX="11.421877" PointY="11.609375" />
-          <ConnectorPoint PointX="11.421877" PointY="12.5" />
-        </AssociationConnector>
         <EntityTypeShape EntityType="LibiadaWebModel.fmotiv" Width="2.625" PointX="12.75" PointY="21.125" Height="4.8648079427083282" />
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_matter">
           <ConnectorPoint PointX="3.78125" PointY="12.460999348958334" />
@@ -4439,45 +4144,6 @@
           <ConnectorPoint PointX="9.0104141666666653" PointY="24.809736269531257" />
           <ConnectorPoint PointX="6.25" PointY="24.809736269531257" />
           <ConnectorPoint PointX="6.25" PointY="14.047587890625" />
-        </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_measure_building_type">
-          <ConnectorPoint PointX="3.875" PointY="7.5401315665924447" />
-          <ConnectorPoint PointX="4.4244785416666668" PointY="7.5401315665924438" />
-          <ConnectorPoint PointX="4.5911452083333328" PointY="7.5401315665924447" />
-          <ConnectorPoint PointX="5.166666666666667" PointY="7.5401315665924438" />
-          <ConnectorPoint PointX="5.333333333333333" PointY="7.5401315665924447" />
-          <ConnectorPoint PointX="5.375" PointY="7.5401315665924447" />
-          <ConnectorPoint PointX="5.375" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.135416666666667" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.302083333333333" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.5416661666666664" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.7083328333333325" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.479166666666667" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.645833333333333" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.6875" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.6875" PointY="8" />
-          <ConnectorPoint PointX="9.4479166666666661" PointY="7.9999999999999991" />
-          <ConnectorPoint PointX="9.6145833333333339" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="10.276039166666665" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="10.442705833333333" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="10.739583333333334" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="11.041666666666666" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="11.208333333333334" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="13.479166666666666" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="13.645833333333334" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="14.322916666666666" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="14.489583333333334" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="14.942705833333333" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="14.994794166666667" PointY="8.1725065104166656" />
-          <ConnectorPoint PointX="15.458333333333334" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="16.072917166666667" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="16.239583833333331" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="17.4140625" PointY="8.1725065104166674" />
-          <ConnectorPoint PointX="17.4140625" PointY="14.875" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_literature_chain">
           <ConnectorPoint PointX="15.125" PointY="15.25" />
@@ -4767,43 +4433,6 @@
           <ConnectorPoint PointX="16.239583833333331" PointY="8.2074186197916674" />
           <ConnectorPoint PointX="16.7499995" PointY="8.2074186197916674" />
           <ConnectorPoint PointX="16.7499995" PointY="7.9225065104166674" />
-        </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_building_type">
-          <ConnectorPoint PointX="3.875" PointY="6.2150933574207219" />
-          <ConnectorPoint PointX="5.375" PointY="6.2150933574207219" />
-          <ConnectorPoint PointX="5.375" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.166666666666667" PointY="14.328837890625" />
-          <ConnectorPoint PointX="6.333333333333333" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.625" PointY="14.328837890625" />
-          <ConnectorPoint PointX="7.625" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="10.739583333333334" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="11.041666666666666" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="11.208333333333334" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="13.479166666666666" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="13.645833333333334" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="14.447916666666666" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="14.614583333333334" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.2074186197916656" />
-          <ConnectorPoint PointX="15.052083333333334" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="15.125" PointY="8.2074186197916674" />
-          <ConnectorPoint PointX="15.125" PointY="13.875" />
-          <ConnectorPoint PointX="15.083335833333335" PointY="13.874999999999998" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="13.875" />
-          <ConnectorPoint PointX="14.606769583333334" PointY="13.875" />
-          <ConnectorPoint PointX="14.440102916666666" PointY="13.875" />
-          <ConnectorPoint PointX="14.270833333333334" PointY="13.875" />
-          <ConnectorPoint PointX="14.104166666666666" PointY="13.875" />
-          <ConnectorPoint PointX="13.958331333333334" PointY="13.875" />
-          <ConnectorPoint PointX="13.791664666666666" PointY="13.875" />
-          <ConnectorPoint PointX="13.3125" PointY="13.875" />
-          <ConnectorPoint PointX="13.3125" PointY="20.75" />
-          <ConnectorPoint PointX="13.385416666666666" PointY="20.75" />
-          <ConnectorPoint PointX="13.552083333333334" PointY="20.75" />
-          <ConnectorPoint PointX="14.117186875" PointY="20.75" />
-          <ConnectorPoint PointX="14.117186875" PointY="21.125" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_fmotiv">
           <ConnectorPoint PointX="15.312502499999999" PointY="21.125" />
@@ -5137,43 +4766,6 @@
           <ConnectorPoint PointX="6.166666666666667" PointY="19.643992513020834" />
           <ConnectorPoint PointX="6.333333333333333" PointY="19.643992513020834" />
           <ConnectorPoint PointX="6.5" PointY="19.643992513020834" />
-        </AssociationConnector>
-        <AssociationConnector Association="LibiadaWebModel.fk_music_chain_building_type">
-          <ConnectorPoint PointX="3.875" PointY="8.0153662586821248" />
-          <ConnectorPoint PointX="4.8893251041666668" PointY="8.0153662586821248" />
-          <ConnectorPoint PointX="5.0559917708333328" PointY="8.0153662586821248" />
-          <ConnectorPoint PointX="5.375" PointY="8.0153662586821248" />
-          <ConnectorPoint PointX="5.375" PointY="14.344462890625" />
-          <ConnectorPoint PointX="6.166666666666667" PointY="14.344462890625" />
-          <ConnectorPoint PointX="6.333333333333333" PointY="14.344462890625" />
-          <ConnectorPoint PointX="7.6875" PointY="14.344462890625" />
-          <ConnectorPoint PointX="7.6875" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8" />
-          <ConnectorPoint PointX="10.125" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="10.572916666666666" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="10.739583333333334" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="11.041666666666666" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="11.208333333333334" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="13.479166666666666" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="13.645833333333334" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="14.447916666666666" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="14.614583333333334" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="14.776039166666665" PointY="8.2386686197916656" />
-          <ConnectorPoint PointX="15.052083333333334" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="15.158851979166665" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="15.411460208333333" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="15.5625" PointY="8.2386686197916674" />
-          <ConnectorPoint PointX="15.5625" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.088540666666667" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.255207333333331" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.291666666666668" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.458333333333332" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.682288666666668" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.848955333333333" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="16.885414666666666" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="17.05208133333333" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="17.375" PointY="13.63401367187501" />
-          <ConnectorPoint PointX="17.375" PointY="14" />
         </AssociationConnector>
         <AssociationConnector Association="LibiadaWebModel.fk_pitch_note_symbol">
           <ConnectorPoint PointX="8" PointY="26.893992513020834" />

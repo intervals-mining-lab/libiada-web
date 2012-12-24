@@ -18,7 +18,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var measure = db.measure.Include("building_type").Include("matter").Include("notation").Include("piece_type");
+            var measure = db.measure.Include("matter").Include("notation").Include("piece_type");
             return View(measure.ToList());
         }
 
@@ -36,7 +36,6 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
@@ -55,8 +54,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
-
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", measure.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
@@ -69,7 +66,6 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             measure measure = db.measure.Single(m => m.id == id);
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", measure.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
@@ -89,7 +85,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", measure.building_type_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);

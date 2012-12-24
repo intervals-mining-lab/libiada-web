@@ -186,7 +186,6 @@
     <Compile Include="Controllers\BinaryCalculationController.cs" />
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\BuildingCompareController.cs" />
-    <Compile Include="Controllers\BuildingTypeController.cs" />
     <Compile Include="Controllers\CalculationController.cs" />
     <Compile Include="Controllers\ChainCheckController.cs" />
     <Compile Include="Controllers\ChainController.cs" />
@@ -233,7 +232,6 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\AlphabetRepository.cs" />
     <Compile Include="Models\BinaryCharacteristicRepository.cs" />
-    <Compile Include="Models\BuildingTypeRepository.cs" />
     <Compile Include="Models\ChainRepository.cs" />
     <Compile Include="Models\CharacteristicGroupRepository.cs" />
     <Compile Include="Models\CharacteristicRepository.cs" />
@@ -250,7 +248,6 @@
     <Compile Include="Models\IAccidentalRepository.cs" />
     <Compile Include="Models\IAlphabetRepository.cs" />
     <Compile Include="Models\IBinaryCharacteristicRepository.cs" />
-    <Compile Include="Models\IBuildingTypeRepository.cs" />
     <Compile Include="Models\IChainRepository.cs" />
     <Compile Include="Models\ICharacteristicGroupRepository.cs" />
     <Compile Include="Models\ICharacteristicRepository.cs" />
@@ -594,11 +591,6 @@
     <Content Include="Views\BinaryCharacteristic\Index.cshtml" />
     <Content Include="Views\BuildingCompare\Index.cshtml" />
     <Content Include="Views\BuildingCompare\Result.cshtml" />
-    <Content Include="Views\BuildingType\Create.cshtml" />
-    <Content Include="Views\BuildingType\Delete.cshtml" />
-    <Content Include="Views\BuildingType\Details.cshtml" />
-    <Content Include="Views\BuildingType\Edit.cshtml" />
-    <Content Include="Views\BuildingType\Index.cshtml" />
     <Content Include="Views\Calculation\Index.cshtml" />
     <Content Include="Views\Calculation\Result.cshtml" />
     <Content Include="Views\ChainCheck\Index.cshtml" />

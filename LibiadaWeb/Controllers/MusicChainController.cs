@@ -18,7 +18,7 @@ namespace LibiadaWeb.Controllers
 
         public ViewResult Index()
         {
-            var music_chain = db.music_chain.Include("building_type").Include("instrument").Include("matter").Include("notation").Include("piece_type");
+            var music_chain = db.music_chain.Include("instrument").Include("matter").Include("notation").Include("piece_type");
             return View(music_chain.ToList());
         }
 
@@ -36,7 +36,6 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name");
             ViewBag.instrument_id = new SelectList(db.instrument, "id", "name");
             ViewBag.matter_id = new SelectList(db.matter, "id", "name");
             ViewBag.notation_id = new SelectList(db.notation, "id", "name");
@@ -56,8 +55,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
-
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", music_chain.building_type_id);
             ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
@@ -71,7 +68,6 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             music_chain music_chain = db.music_chain.Single(m => m.id == id);
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", music_chain.building_type_id);
             ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
@@ -92,7 +88,6 @@ namespace LibiadaWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.building_type_id = new SelectList(db.building_type, "id", "name", music_chain.building_type_id);
             ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);

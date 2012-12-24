@@ -49,10 +49,10 @@ namespace LibiadaWeb.Controllers
             String chainName1 = db.matter.Single(m => m.id == matterId1).name;
             String chainName2 = db.matter.Single(m => m.id == matterId2).name;
             matter matter1 = db.matter.Single(m => m.id == matterId1);
-            chain chain1 = matter1.chain.Single(c => c.building_type_id == 1 && c.notation_id == 1);
+            chain chain1 = matter1.chain.Single(c => c.notation_id == 1);
             Chain libiadaChain1 = chainRepository.FromDbChainToLibiadaChain(chain1);
             matter matter2 = db.matter.Single(m => m.id == matterId2);
-            chain chain2 = matter2.chain.Single(c => c.building_type_id == 1 && c.notation_id == 1);
+            chain chain2 = matter2.chain.Single(c => c.notation_id == 1);
             Chain libiadaChain2 = chainRepository.FromDbChainToLibiadaChain(chain2);
 
             Chain res1 = null;

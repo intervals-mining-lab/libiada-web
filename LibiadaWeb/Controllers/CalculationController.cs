@@ -59,7 +59,7 @@ namespace LibiadaWeb.Controllers
                 for (int i = 0; i < notationIds.Length; i++)
                 {
                     matter matter = db.matter.Single(m => m.id == matterId);
-                    chain chain = matter.chain.Single(c => c.building_type_id == 1 && c.notation_id == notationIds[i]);
+                    chain chain = matter.chain.Single(c => c.notation_id == notationIds[i]);
                     long chainId = chain.id;
 
                     int characteristicId = characteristicIds[i];

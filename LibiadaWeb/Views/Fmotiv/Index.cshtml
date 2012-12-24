@@ -24,9 +24,6 @@
     <thead>
         <tr>
             <th>
-                Тип строя
-            </th>
-            <th>
                 дата создания
             </th>
             <th>
@@ -48,9 +45,6 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.building_type.name)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.creation_date)
                 </td>
