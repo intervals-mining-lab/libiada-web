@@ -1,0 +1,25 @@
+﻿@model LibiadaWeb.note_symbol
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Подробности</h2>
+
+<fieldset>
+    <legend>note_symbol</legend>
+
+    <div class="display-label">Название</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">Описание</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>

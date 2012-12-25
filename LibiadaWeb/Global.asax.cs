@@ -23,6 +23,9 @@ namespace LibiadaWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new LibiadaRazorViewEngine());
+        }
         }
     }
-}

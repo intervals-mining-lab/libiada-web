@@ -1,0 +1,56 @@
+﻿@model dynamic
+           
+@{
+    ViewBag.Title = "Локальные характеристики";
+}
+
+<h2>Сравнение строёв цепочек @ViewBag.chainName1 и @ViewBag.chainName2 </h2>
+
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h1>
+            @if (ViewBag.duplicate)
+            {
+                @: Совпадение начиная с позиций @ViewBag.pos1 и @ViewBag.pos2 
+            }
+        </h1>
+        <div>
+           @if (ViewBag.duplicate)
+               {
+                   <table>
+                       <tr>
+                           @for(int i = 0; i < ViewBag.res1.Length; i++)
+                           {
+                               <td>
+                                   @ViewBag.res1[i]
+                               </td>
+                           }
+                       </tr>
+                       <tr>
+                           @for(int j = 0; j < ViewBag.res2.Length; j++)
+                           {
+                               <td>
+                                   @ViewBag.res2[j]
+                               </td>
+                           } 
+                       </tr>
+                       <tr>
+                           @for(int i = 0; i < ViewBag.res1.Length; i++)
+                           {
+                               <td>
+                                   @ViewBag.res1.Building[i]
+                               </td>
+                           }  
+                       </tr>
+                   </table>
+               }
+               else
+               {
+                   @:Совпадений строя не найдено
+               }   
+        </div>
+    </body>
+</html>

@@ -1,0 +1,28 @@
+﻿@model LibiadaWeb.accidental
+
+@{
+    ViewBag.Title = "Знаки альтерации";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы действительно хотите удалить этот знак альтерации?</h3>
+<fieldset>
+    <legend>Знак альтерации</legend>
+
+    <div class="display-label">Название</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.name)
+    </div>
+
+    <div class="display-label">Описание</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.description)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Удалить" /> |
+        @Html.ActionLink("Назад к списку", "Index")
+    </p>
+}

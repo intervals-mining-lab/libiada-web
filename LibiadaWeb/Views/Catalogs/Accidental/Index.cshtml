@@ -1,0 +1,53 @@
+﻿@model IEnumerable<LibiadaWeb.accidental>
+
+@{
+    ViewBag.Title = "Знаки альтерации";
+}
+
+<h2>Перечень знаков альтерации</h2>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("table").dataTable({
+            bJQueryUI: true,
+            sPaginationType: "full_numbers"
+        });
+    });
+    
+</script>
+
+<p>
+    @Html.ActionLink("Создать", "Create")
+</p>
+<table>
+    <thead>
+        <tr>
+            <th>
+            Название
+        </th>
+        <th>
+            Описание
+        </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {id = item.id}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.id}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.id})
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
