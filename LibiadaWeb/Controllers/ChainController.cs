@@ -10,6 +10,7 @@ using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 
 namespace LibiadaWeb.Controllers
 { 

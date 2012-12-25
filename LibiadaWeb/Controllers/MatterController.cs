@@ -9,6 +9,7 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 
 namespace LibiadaWeb.Controllers
 {

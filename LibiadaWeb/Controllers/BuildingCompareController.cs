@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 
 namespace LibiadaWeb.Controllers
 {

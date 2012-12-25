@@ -6,6 +6,7 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 using PhantomChains.Classes.PhantomChains;
 
 namespace LibiadaWeb.Controllers

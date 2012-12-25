@@ -6,6 +6,7 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 
 namespace LibiadaWeb.Controllers
 {

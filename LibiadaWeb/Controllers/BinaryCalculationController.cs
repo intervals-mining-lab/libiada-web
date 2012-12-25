@@ -7,6 +7,7 @@ using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.BinaryCalculators;
 using LibiadaCore.Classes.TheoryOfSet;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 
 namespace LibiadaWeb.Controllers
 {
