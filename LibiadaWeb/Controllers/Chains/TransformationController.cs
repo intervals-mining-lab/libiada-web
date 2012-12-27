@@ -2,9 +2,9 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using LibiadaCore.Classes.Misc.DataTransformators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models.Repositories;
-using PhantomChains.Classes.PhantomChains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
@@ -52,11 +52,11 @@ namespace LibiadaWeb.Controllers.Chains
                 BaseChain transformedChain;
                 if (toAmino)
                 {
-                    transformedChain = Coder.Encode(tempChain);
+                    transformedChain = DnaTransformator.Encode(tempChain);
                 }
                 else
                 {
-                    transformedChain = Coder.EncodeTriplets(tempChain);
+                    transformedChain = DnaTransformator.EncodeTriplets(tempChain);
                 }
 
                 dna_chain result = new dna_chain()
