@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models.Repositories;
+using LibiadaWeb.Models.Repositories.Catalogs;
+using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
