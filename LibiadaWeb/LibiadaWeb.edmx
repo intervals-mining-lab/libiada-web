@@ -32,6 +32,7 @@
     <EntitySet Name="fmotiv_type" EntityType="LibiadaWebModel.Store.fmotiv_type" store:Type="Tables" Schema="public" />
     <EntitySet Name="note_symbol" EntityType="LibiadaWebModel.Store.note_symbol" store:Type="Tables" Schema="public" />
     <EntitySet Name="tie" EntityType="LibiadaWebModel.Store.tie" store:Type="Tables" Schema="public" />
+    <EntitySet Name="characteristic_applicability" EntityType="LibiadaWebModel.Store.characteristic_applicability" store:Type="Tables" Schema="public" />
 
     <AssociationSet Name="fk_alphabet_element" Association="LibiadaWebModel.Store.fk_alphabet_element">
       <End Role="element" EntitySet="element" />
@@ -227,6 +228,11 @@
       <End Role="instrument" EntitySet="instrument" />
       <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
+
+    <AssociationSet Name="fk_characteristic_type_characteristic_applicability" Association="LibiadaWebModel.Store.fk_characteristic_type_characteristic_applicability">
+      <End Role="characteristic_applicability" EntitySet="characteristic_applicability" />
+      <End Role="characteristic_type" EntitySet="characteristic_type" />
+    </AssociationSet>
   </EntityContainer>
   
   
@@ -314,7 +320,18 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="characteristic_group_id" Type="int4" />
     <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
+    <Property Name="characteristic_applicability_id" Type="int4" />
   </EntityType>
+
+  <EntityType Name="characteristic_applicability">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="description" Type="varchar" MaxLength="255" />
+  </EntityType>
+  
   <EntityType Name="dna_chain">
     <Key>
       <PropertyRef Name="id" />
@@ -1465,8 +1482,21 @@
     </ReferentialConstraint>
   </Association>
 
-  
-  
+  <Association Name="fk_characteristic_type_characteristic_applicability">
+    <End Role="characteristic_applicability" Type="LibiadaWebModel.Store.characteristic_applicability" Multiplicity="0..1" />
+    <End Role="characteristic_type" Type="LibiadaWebModel.Store.characteristic_type" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="characteristic_applicability">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="characteristic_type">
+        <PropertyRef Name="characteristic_applicability_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+
+
+
 
   <Function Name="add_alphabet_element" ReturnType="int8" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="public">
     <Parameter Name="p_value" Type="varchar" Mode="In" />
@@ -1501,7 +1531,6 @@
     <EntitySet Name="notation" EntityType="LibiadaWebModel.notation" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
-
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.fmotiv" />
     <EntitySet Name="homogeneous_characteristic" EntityType="LibiadaWebModel.homogeneous_characteristic" />
     <EntitySet Name="instrument" EntityType="LibiadaWebModel.instrument" />
@@ -1513,6 +1542,7 @@
     <EntitySet Name="fmotiv_type" EntityType="LibiadaWebModel.fmotiv_type" />
     <EntitySet Name="note_symbol" EntityType="LibiadaWebModel.note_symbol" />
     <EntitySet Name="tie" EntityType="LibiadaWebModel.tie" />
+    <EntitySet Name="characteristic_applicability" EntityType="LibiadaWebModel.characteristic_applicability" />
     
     
     
@@ -1854,6 +1884,11 @@
       <End Role="instrument" EntitySet="instrument" />
       <End Role="pitch" EntitySet="pitch" />
     </AssociationSet>
+
+    <AssociationSet Name="fk_characteristic_type_characteristic_applicability" Association="LibiadaWebModel.fk_characteristic_type_characteristic_applicability">
+      <End Role="characteristic_applicability" EntitySet="characteristic_applicability" />
+      <End Role="characteristic_type" EntitySet="characteristic_type" />
+    </AssociationSet>
   </EntityContainer>
 
   
@@ -1969,9 +2004,11 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="characteristic_group_id" Type="Int32" />
     <Property Name="class_name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="characteristic_applicability_id" Type="Int32" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_characteristic_type1" FromRole="characteristic_type" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
     <NavigationProperty Name="characteristic_group" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
+    <NavigationProperty Name="characteristic_applicability" Relationship="LibiadaWebModel.fk_characteristic_type_characteristic_applicability" FromRole="characteristic_type" ToRole="characteristic_applicability" />
     <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_type" FromRole="characteristic_type" ToRole="homogeneous_characteristic" />
   </EntityType>
   <EntityType Name="dna_chain">
@@ -2305,6 +2342,16 @@
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_tie" FromRole="tie" ToRole="note" />
+  </EntityType>
+
+  <EntityType Name="characteristic_applicability">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_characteristic_type_characteristic_applicability" FromRole="characteristic_applicability" ToRole="characteristic_type" />
   </EntityType>
   
   
@@ -3285,6 +3332,19 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+
+  <Association Name="fk_characteristic_type_characteristic_applicability">
+    <End Role="characteristic_applicability" Type="LibiadaWebModel.characteristic_applicability" Multiplicity="0..1" />
+    <End Role="characteristic_type" Type="LibiadaWebModel.characteristic_type" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="characteristic_applicability">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="characteristic_type">
+        <PropertyRef Name="characteristic_applicability_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>
   
   
@@ -3383,6 +3443,7 @@
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="characteristic_group_id" ColumnName="characteristic_group_id" />
           <ScalarProperty Name="class_name" ColumnName="class_name" />
+          <ScalarProperty Name="characteristic_applicability_id" ColumnName="characteristic_applicability_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3650,6 +3711,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+
+    <EntitySetMapping Name="characteristic_applicability">
+      <EntityTypeMapping TypeName="LibiadaWebModel.characteristic_applicability">
+        <MappingFragment StoreEntitySet="characteristic_applicability">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    
   </EntityContainerMapping>
 </Mapping>
 </edmx:Mappings>
