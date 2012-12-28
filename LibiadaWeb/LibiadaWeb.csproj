@@ -185,6 +185,7 @@
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Calculators\BuildingCompareController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
+    <Compile Include="Controllers\Catalogs\CharacteristicApplicabilityController.cs" />
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
@@ -717,6 +718,11 @@
     <None Include="Scripts\DataTables-1.9.4\extras\Scroller\media\js\dataTables.scroller.min.js.gz" />
     <None Include="Scripts\DataTables-1.9.4\extras\TableTools\media\js\TableTools.min.js.gz" />
     <Content Include="Views\Chains\Chain\Segmentated.cshtml" />
+    <Content Include="Views\Catalogs\CharacteristicApplicability\Index.cshtml" />
+    <Content Include="Views\Catalogs\CharacteristicApplicability\Details.cshtml" />
+    <Content Include="Views\Catalogs\CharacteristicApplicability\Create.cshtml" />
+    <Content Include="Views\Catalogs\CharacteristicApplicability\Edit.cshtml" />
+    <Content Include="Views\Catalogs\CharacteristicApplicability\Delete.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -80,7 +80,7 @@
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>) ViewBag.mattersList);
+                List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
 
                 foreach (var item in mattersList)
                 {

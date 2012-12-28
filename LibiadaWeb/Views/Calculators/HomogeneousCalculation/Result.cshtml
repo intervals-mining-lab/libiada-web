@@ -210,38 +210,42 @@
         CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked);
     }
 </script>
-
-<table id="resultTable">
-    <thead>
-        <tr>
-            <th>
-                Название цепочки
-            </th>
-            @foreach (var characteristicName in ViewBag.characteristicNames)
-            {
-                <th>
-                    @characteristicName
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @for (int i = 0; i < ViewBag.characteristics[0].Count; i++)
-        {
+@for (int d = 0; d < ViewBag.characteristics.Count; d++)
+{
+    <table id="resultTable">
+        <thead>
             <tr>
-                <td id="chainNameCell">
-                    @ViewBag.elementNames[i]
-                </td>
-                @foreach (var characteristic in ViewBag.characteristics)
+                <th>
+                    Название цепочки
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
                 {
-                    <td>
-                        @characteristic[i].Value
-                    </td>
+                    <th>
+                        @characteristicName
+                    </th>
                 }
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
+            {
+                <tr>
+                    <td id="chainNameCell">
+                        @ViewBag.elementNames[d][i]
+                    </td>
+                    @foreach (var characteristic in ViewBag.characteristics[d])
+                    {
+                        <td>
+                            @characteristic[i].Value
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+}
+
 <br/>
 <div id="visualization_container" style="width: 800px; height: 500px"></div>
 <br/>
