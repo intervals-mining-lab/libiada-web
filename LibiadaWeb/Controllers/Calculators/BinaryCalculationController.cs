@@ -37,7 +37,9 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.matters = db.matter.ToList();
             ViewBag.language_id = new SelectList(db.language, "id", "name");
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
-            ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(null);
+            IEnumerable<characteristic_type> characteristics =
+                db.characteristic_type.Where(c => new List<int>{3,5,6,7}.Contains(c.characteristic_applicability_id));
+            ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(characteristics, null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();

@@ -1,13 +1,13 @@
 ﻿@model LibiadaWeb.characteristic_applicability
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Применимость характеристик";
 }
 
-<h2>Details</h2>
+<h2>Подробности</h2>
 
 <fieldset>
-    <legend>characteristic_applicability</legend>
+    <legend>Применимость характеристик</legend>
 
     <div class="display-label">
          @Html.DisplayNameFor(model => model.name)
@@ -24,6 +24,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Назад к списку", "Index")
 </p>

@@ -33,6 +33,9 @@
                 Группа характеристик
             </th>
             <th>
+                Применимость характеристики
+            </th>
+            <th>
                 Название класса калькулятора
             </th>
             <th></th>
@@ -50,6 +53,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.characteristic_group.name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.characteristic_applicability.name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.class_name)

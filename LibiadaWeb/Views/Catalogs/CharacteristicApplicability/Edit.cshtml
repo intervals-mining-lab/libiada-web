@@ -1,16 +1,20 @@
 ﻿@model LibiadaWeb.characteristic_applicability
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Применимость характеристик";
 }
 
-<h2>Edit</h2>
+<h2>Редактирование</h2>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>characteristic_applicability</legend>
+        <legend>Применимость характеристик</legend>
 
         @Html.HiddenFor(model => model.id)
 
@@ -31,15 +35,13 @@
         </div>
 
         <p>
-            <input type="submit" value="Save" />
+            <input type="submit" value="Сохранить" />
         </p>
     </fieldset>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Назад к списку", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+

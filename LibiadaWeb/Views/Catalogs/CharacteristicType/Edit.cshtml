@@ -37,8 +37,16 @@
             @Html.LabelFor(model => model.characteristic_group, "Группа характеристик")
         </div>
         <div class="editor-field">
-            @Html.DropDownList("characteristic_group", String.Empty)
+            @Html.DropDownList("characteristic_group_id", String.Empty)
             @Html.ValidationMessageFor(model => model.characteristic_group)
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.characteristic_applicability, "Применимость характеристики")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("characteristic_applicability_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.characteristic_applicability)
         </div>
 
         <div class="editor-label">

@@ -91,7 +91,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_measure_element", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_alphabet_fmotiv_element", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "alphabet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.alphabet), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_instrument", "instrument", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.instrument), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type_characteristic_applicability", "characteristic_applicability", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.characteristic_applicability), "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type_characteristic_applicability", "characteristic_applicability", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_applicability), "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
 
 #endregion
 
@@ -3209,12 +3209,14 @@ namespace LibiadaWeb
         /// <param name="id">Исходное значение свойства id.</param>
         /// <param name="name">Исходное значение свойства name.</param>
         /// <param name="class_name">Исходное значение свойства class_name.</param>
-        public static characteristic_type Createcharacteristic_type(global::System.Int32 id, global::System.String name, global::System.String class_name)
+        /// <param name="characteristic_applicability_id">Исходное значение свойства characteristic_applicability_id.</param>
+        public static characteristic_type Createcharacteristic_type(global::System.Int32 id, global::System.String name, global::System.String class_name, global::System.Int32 characteristic_applicability_id)
         {
             characteristic_type characteristic_type = new characteristic_type();
             characteristic_type.id = id;
             characteristic_type.name = name;
             characteristic_type.class_name = class_name;
+            characteristic_type.characteristic_applicability_id = characteristic_applicability_id;
             return characteristic_type;
         }
 
@@ -3347,9 +3349,9 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> characteristic_applicability_id
+        public global::System.Int32 characteristic_applicability_id
         {
             get
             {
@@ -3364,8 +3366,8 @@ namespace LibiadaWeb
                 Oncharacteristic_applicability_idChanged();
             }
         }
-        private Nullable<global::System.Int32> _characteristic_applicability_id;
-        partial void Oncharacteristic_applicability_idChanging(Nullable<global::System.Int32> value);
+        private global::System.Int32 _characteristic_applicability_id;
+        partial void Oncharacteristic_applicability_idChanging(global::System.Int32 value);
         partial void Oncharacteristic_applicability_idChanged();
 
         #endregion

@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers.Catalogs
 
         public ViewResult Index()
         {
-            var characteristic_type = db.characteristic_type.Include("characteristic_group");
+            var characteristic_type = db.characteristic_type.Include("characteristic_group").Include("characteristic_applicability");
             return View(characteristic_type.ToList());
         }
 
@@ -32,6 +32,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Create()
         {
             ViewBag.characteristic_group = new SelectList(db.characteristic_group, "id", "name");
+            ViewBag.characteristic_applicability = new SelectList(db.characteristic_applicability, "id", "name");
             return View();
         } 
 
@@ -49,6 +50,7 @@ namespace LibiadaWeb.Controllers.Catalogs
             }
 
             ViewBag.characteristic_group = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group);
+            ViewBag.characteristic_applicability = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability);
             return View(characteristic_type);
         }
         
@@ -58,7 +60,8 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             characteristic_type characteristic_type = db.characteristic_type.Single(c => c.id == id);
-            ViewBag.characteristic_group = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group);
+            ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group);
+            ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability);
             return View(characteristic_type);
         }
 
@@ -76,6 +79,7 @@ namespace LibiadaWeb.Controllers.Catalogs
                 return RedirectToAction("Index");
             }
             ViewBag.characteristic_group = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group);
+            ViewBag.characteristic_applicability = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability);
             return View(characteristic_type);
         }
 

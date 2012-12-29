@@ -225,6 +225,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Repositories\Catalogs\CharacteristicApplicabilityRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Repositories\AlphabetRepository.cs" />
@@ -278,6 +280,7 @@
     <Compile Include="Models\Repositories\PitchRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\TieRepository.cs" />
+    <Compile Include="LibiadaWebDataAnnotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -554,7 +557,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\Validation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

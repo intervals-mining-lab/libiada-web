@@ -320,7 +320,7 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="characteristic_group_id" Type="int4" />
     <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
-    <Property Name="characteristic_applicability_id" Type="int4" />
+    <Property Name="characteristic_applicability_id" Nullable="false" Type="int4" />
   </EntityType>
 
   <EntityType Name="characteristic_applicability">
@@ -1483,7 +1483,7 @@
   </Association>
 
   <Association Name="fk_characteristic_type_characteristic_applicability">
-    <End Role="characteristic_applicability" Type="LibiadaWebModel.Store.characteristic_applicability" Multiplicity="0..1" />
+    <End Role="characteristic_applicability" Type="LibiadaWebModel.Store.characteristic_applicability" Multiplicity="1" />
     <End Role="characteristic_type" Type="LibiadaWebModel.Store.characteristic_type" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="characteristic_applicability">
@@ -2004,7 +2004,7 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="characteristic_group_id" Type="Int32" />
     <Property Name="class_name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="characteristic_applicability_id" Type="Int32" />
+    <Property Name="characteristic_applicability_id" Nullable="false" Type="Int32" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_characteristic_type1" FromRole="characteristic_type" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
     <NavigationProperty Name="characteristic_group" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
@@ -3334,7 +3334,7 @@
   </Association>
 
   <Association Name="fk_characteristic_type_characteristic_applicability">
-    <End Role="characteristic_applicability" Type="LibiadaWebModel.characteristic_applicability" Multiplicity="0..1" />
+    <End Role="characteristic_applicability" Type="LibiadaWebModel.characteristic_applicability" Multiplicity="1" />
     <End Role="characteristic_type" Type="LibiadaWebModel.characteristic_type" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="characteristic_applicability">
