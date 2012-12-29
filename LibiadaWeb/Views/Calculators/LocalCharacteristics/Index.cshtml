@@ -109,15 +109,14 @@
     @Html.CheckBox("isFurie")
     @Html.Label("isFurie", "Быстрое преобразование Фурье")
     <br/>
-
-    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
-    <br/>
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
         {
             <option value="@option.Value">@option.Text</option>
         }
     </select>
+    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
+    <br/>
     <div id="characteristics_list"></div>
     <br/>
     <br/>

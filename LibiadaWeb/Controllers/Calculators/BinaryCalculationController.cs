@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.BinaryCalculators;
-using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -15,7 +14,7 @@ namespace LibiadaWeb.Controllers.Calculators
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly MatterRepository matterRepository;
-        private readonly CharacteristicTypeRepository characteristicsRepository;
+        private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
@@ -23,7 +22,7 @@ namespace LibiadaWeb.Controllers.Calculators
         public BinaryCalculationController()
         {
             matterRepository = new MatterRepository(db);
-            characteristicsRepository = new CharacteristicTypeRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
@@ -39,7 +38,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
                 db.characteristic_type.Where(c => new List<int>{3,5,6,7}.Contains(c.characteristic_applicability_id));
-            ViewBag.characteristicsList = characteristicsRepository.GetSelectListItems(characteristics, null);
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();
