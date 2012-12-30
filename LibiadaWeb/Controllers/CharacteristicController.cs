@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Characteristic/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var characteristic = db.characteristic.Include("chain").Include("link_up").Include("characteristic_type");
             return View(characteristic.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Characteristic/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             characteristic characteristic = db.characteristic.Single(c => c.id == id);
+            if (characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic);
         }
 
@@ -62,6 +66,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             characteristic characteristic = db.characteristic.Single(c => c.id == id);
+            if (characteristic == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", characteristic.chain_id);
             ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", characteristic.link_up_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
@@ -93,6 +101,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(long id)
         {
             characteristic characteristic = db.characteristic.Single(c => c.id == id);
+            if (characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic);
         }
 

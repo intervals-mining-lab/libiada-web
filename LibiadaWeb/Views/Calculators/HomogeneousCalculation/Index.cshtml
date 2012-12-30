@@ -94,14 +94,11 @@
         </tbody>
     </table>
     <br/>
-    @Html.CheckBox("isSort")
-    @Html.Label("isSort", "Ранжировать")
+    @Html.CheckBox("isSort", "Ранжировать", null)
     <br/>
-    @Html.CheckBox("theoretical")
-    @Html.Label("theoretical", "Строить теоретическое распределение")
+    @Html.CheckBox("theoretical", "Строить теоретическое распределение", null)
     <br/>
     @Html.Label("Форма записи цепочки")
-    <br/>
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
         {
@@ -110,13 +107,13 @@
     </select>
     <br/>
     @Html.Label("Язык литературного произведения")
-    <br/>
     <select name="languageId">
         @foreach (var option in ViewBag.language_id)
         {
             <option value="@option.Value">@option.Text</option>
         }
     </select>
+    <br/>
     <br/>
     <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
     <br/>

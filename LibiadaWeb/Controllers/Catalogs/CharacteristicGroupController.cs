@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /CharacteristicGroup/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.characteristic_group.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /CharacteristicGroup/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             characteristic_group characteristic_group = db.characteristic_group.Single(c => c.id == id);
+            if (characteristic_group == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic_group);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             characteristic_group characteristic_group = db.characteristic_group.Single(c => c.id == id);
+            if (characteristic_group == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic_group);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             characteristic_group characteristic_group = db.characteristic_group.Single(c => c.id == id);
+            if (characteristic_group == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic_group);
         }
 

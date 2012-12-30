@@ -32,7 +32,7 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Chain/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var chain = db.chain.OrderBy(c => c.creation_date).Include("matter").Include("notation");
             return View(chain.ToList());
@@ -41,9 +41,13 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Chain/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             chain chain = db.chain.Single(c => c.id == id);
+            if (chain == null)
+            {
+                return HttpNotFound();
+            }
             Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(id);
 
             ViewBag.stringChain = libiadaChain.ToString();
@@ -273,6 +277,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Edit(long id)
         {
             chain chain = db.chain.Single(c => c.id == id);
+            if (chain == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
             return View(chain);
@@ -302,6 +310,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Delete(long id)
         {
             chain chain = db.chain.Single(c => c.id == id);
+            if (chain == null)
+            {
+                return HttpNotFound();
+            }
             return View(chain);
         }
 

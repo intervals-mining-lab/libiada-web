@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Fmotiv/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var fmotiv = db.fmotiv.Include("matter").Include("notation").Include("piece_type").Include("fmotiv_type");
             return View(fmotiv.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Fmotiv/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             fmotiv fmotiv = db.fmotiv.Single(f => f.id == id);
+            if (fmotiv == null)
+            {
+                return HttpNotFound();
+            }
             return View(fmotiv);
         }
 
@@ -63,6 +67,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Edit(long id)
         {
             fmotiv fmotiv = db.fmotiv.Single(f => f.id == id);
+            if (fmotiv == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", fmotiv.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", fmotiv.piece_type_id);
@@ -96,6 +104,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Delete(long id)
         {
             fmotiv fmotiv = db.fmotiv.Single(f => f.id == id);
+            if (fmotiv == null)
+            {
+                return HttpNotFound();
+            }
             return View(fmotiv);
         }
 

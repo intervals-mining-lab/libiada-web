@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Nature/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.nature.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Nature/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             nature nature = db.nature.Single(n => n.id == id);
+            if (nature == null)
+            {
+                return HttpNotFound();
+            }
             return View(nature);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             nature nature = db.nature.Single(n => n.id == id);
+            if (nature == null)
+            {
+                return HttpNotFound();
+            }
             return View(nature);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             nature nature = db.nature.Single(n => n.id == id);
+            if (nature == null)
+            {
+                return HttpNotFound();
+            }
             return View(nature);
         }
 

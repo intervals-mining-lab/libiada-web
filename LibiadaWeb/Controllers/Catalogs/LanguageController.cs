@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Language/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.language.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Language/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             language language = db.language.Single(l => l.id == id);
+            if (language == null)
+            {
+                return HttpNotFound();
+            }
             return View(language);
         }
 
@@ -56,6 +60,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             language language = db.language.Single(l => l.id == id);
+            if (language == null)
+            {
+                return HttpNotFound();
+            }
             return View(language);
         }
 
@@ -81,6 +89,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             language language = db.language.Single(l => l.id == id);
+            if (language == null)
+            {
+                return HttpNotFound();
+            }
             return View(language);
         }
 

@@ -119,6 +119,7 @@ namespace LibiadaWeb.Helpers
             elementBuilder.MergeAttribute("type", "checkbox");
             elementBuilder.MergeAttribute("value", "true");
             elementBuilder.MergeAttribute("name", name);
+            elementBuilder.MergeAttribute("id", name);
             elementBuilder.InnerHtml = label;
 
             TagBuilder hiddenElement = new TagBuilder("input");

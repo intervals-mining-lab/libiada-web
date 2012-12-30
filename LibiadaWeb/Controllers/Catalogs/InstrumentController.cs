@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Instrument/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.instrument.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Instrument/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             instrument instrument = db.instrument.Single(i => i.id == id);
+            if (instrument == null)
+            {
+                return HttpNotFound();
+            }
             return View(instrument);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             instrument instrument = db.instrument.Single(i => i.id == id);
+            if (instrument == null)
+            {
+                return HttpNotFound();
+            }
             return View(instrument);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             instrument instrument = db.instrument.Single(i => i.id == id);
+            if (instrument == null)
+            {
+                return HttpNotFound();
+            }
             return View(instrument);
         }
 

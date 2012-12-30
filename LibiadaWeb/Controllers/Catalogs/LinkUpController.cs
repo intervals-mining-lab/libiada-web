@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /LinkUp/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.link_up.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /LinkUp/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             link_up link_up = db.link_up.Single(l => l.id == id);
+            if (link_up == null)
+            {
+                return HttpNotFound();
+            }
             return View(link_up);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             link_up link_up = db.link_up.Single(l => l.id == id);
+            if (link_up == null)
+            {
+                return HttpNotFound();
+            }
             return View(link_up);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             link_up link_up = db.link_up.Single(l => l.id == id);
+            if (link_up == null)
+            {
+                return HttpNotFound();
+            }
             return View(link_up);
         }
 

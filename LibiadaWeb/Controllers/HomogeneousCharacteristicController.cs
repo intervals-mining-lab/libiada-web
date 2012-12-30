@@ -16,7 +16,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /HomogeneousCharacteristic/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var homogeneous_characteristic = db.homogeneous_characteristic.Include("characteristic_type").Include("element").Include("link_up");
             return View(homogeneous_characteristic.ToList());
@@ -25,9 +25,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /HomogeneousCharacteristic/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             homogeneous_characteristic homogeneous_characteristic = db.homogeneous_characteristic.Single(h => h.id == id);
+            if (homogeneous_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(homogeneous_characteristic);
         }
 
@@ -67,6 +71,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             homogeneous_characteristic homogeneous_characteristic = db.homogeneous_characteristic.Single(h => h.id == id);
+            if (homogeneous_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", homogeneous_characteristic.characteristic_type_id);
             ViewBag.element_id = new SelectList(db.element, "id", "value", homogeneous_characteristic.element_id);
             ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", homogeneous_characteristic.link_up_id);
@@ -98,6 +106,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(long id)
         {
             homogeneous_characteristic homogeneous_characteristic = db.homogeneous_characteristic.Single(h => h.id == id);
+            if (homogeneous_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(homogeneous_characteristic);
         }
 

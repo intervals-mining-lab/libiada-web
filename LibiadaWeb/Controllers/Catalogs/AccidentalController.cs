@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Accidental/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.accidental.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Accidental/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             accidental accidental = db.accidental.Single(a => a.id == id);
+            if (accidental == null)
+            {
+                return HttpNotFound();
+            }
             return View(accidental);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             accidental accidental = db.accidental.Single(a => a.id == id);
+            if (accidental == null)
+            {
+                return HttpNotFound();
+            }
             return View(accidental);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             accidental accidental = db.accidental.Single(a => a.id == id);
+            if (accidental == null)
+            {
+                return HttpNotFound();
+            }
             return View(accidental);
         }
 

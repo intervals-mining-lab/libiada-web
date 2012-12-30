@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /BinaryCharacteristic/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var binary_characteristic = db.binary_characteristic.Include("chain").Include("element").Include("link_up").Include("element1").Include("characteristic_type");
             return View(binary_characteristic.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /BinaryCharacteristic/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             binary_characteristic binary_characteristic = db.binary_characteristic.Single(b => b.id == id);
+            if (binary_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(binary_characteristic);
         }
 
@@ -66,6 +70,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             binary_characteristic binary_characteristic = db.binary_characteristic.Single(b => b.id == id);
+            if (binary_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", binary_characteristic.chain_id);
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
             ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", binary_characteristic.link_up_id);
@@ -101,6 +109,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(long id)
         {
             binary_characteristic binary_characteristic = db.binary_characteristic.Single(b => b.id == id);
+            if (binary_characteristic == null)
+            {
+                return HttpNotFound();
+            }
             return View(binary_characteristic);
         }
 

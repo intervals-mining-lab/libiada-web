@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Alphabet/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var alphabet = db.alphabet.Include("chain").Include("element");
             return View(alphabet.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Alphabet/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             alphabet alphabet = db.alphabet.Single(a => a.chain_id == id);
+            if (alphabet == null)
+            {
+                return HttpNotFound();
+            }
             return View(alphabet);
         }
 
@@ -60,6 +64,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             alphabet alphabet = db.alphabet.Single(a => a.chain_id == id);
+            if (alphabet == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", alphabet.chain_id);
             ViewBag.element_id = new SelectList(db.element, "id", "value", alphabet.element_id);
             return View(alphabet);
@@ -89,6 +97,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(long id)
         {
             alphabet alphabet = db.alphabet.Single(a => a.chain_id == id);
+            if (alphabet == null)
+            {
+                return HttpNotFound();
+            }
             return View(alphabet);
         }
 

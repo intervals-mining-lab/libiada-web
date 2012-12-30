@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /NoteSymbol/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.note_symbol.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /NoteSymbol/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             note_symbol note_symbol = db.note_symbol.Single(n => n.id == id);
+            if (note_symbol == null)
+            {
+                return HttpNotFound();
+            }
             return View(note_symbol);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             note_symbol note_symbol = db.note_symbol.Single(n => n.id == id);
+            if (note_symbol == null)
+            {
+                return HttpNotFound();
+            }
             return View(note_symbol);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             note_symbol note_symbol = db.note_symbol.Single(n => n.id == id);
+            if (note_symbol == null)
+            {
+                return HttpNotFound();
+            }
             return View(note_symbol);
         }
 

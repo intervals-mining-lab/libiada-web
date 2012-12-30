@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Notation/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var notation = db.notation.Include("nature");
             return View(notation.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /Notation/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             notation notation = db.notation.Single(n => n.id == id);
+            if (notation == null)
+            {
+                return HttpNotFound();
+            }
             return View(notation);
         }
 
@@ -59,6 +63,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             notation notation = db.notation.Single(n => n.id == id);
+            if (notation == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", notation.nature_id);
             return View(notation);
         }
@@ -86,6 +94,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             notation notation = db.notation.Single(n => n.id == id);
+            if (notation == null)
+            {
+                return HttpNotFound();
+            }
             return View(notation);
         }
 

@@ -99,22 +99,22 @@
     @Html.Label("Размер шага:")
     <input type ="number" id ="step" name = "step" value="2"/>
     <br/>
-    @Html.CheckBox("isDelta")
-    @Html.Label("isDelta", "Считать разницу между характеристиками")
-
     <br/>
-    @Html.CheckBox("isGrowingWindow")
-    @Html.Label("isGrowingWindow", "Считать увеличивающееся окно")
+    @Html.CheckBox("isDelta", "Считать разницу между характеристиками", null)
     <br/>
-    @Html.CheckBox("isFurie")
-    @Html.Label("isFurie", "Быстрое преобразование Фурье")
+    @Html.CheckBox("isGrowingWindow", "Считать увеличивающееся окно", null)
     <br/>
+    @Html.CheckBox("isFurie", "Быстрое преобразование Фурье", null)
+    <br/>
+    @Html.Label("Форма записи:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
         {
             <option value="@option.Value">@option.Text</option>
         }
     </select>
+    <br/>
+    <br/>
     <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
     <br/>
     <div id="characteristics_list"></div>

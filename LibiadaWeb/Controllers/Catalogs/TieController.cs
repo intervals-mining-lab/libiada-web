@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /tie/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.tie.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /tie/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             tie tie = db.tie.Single(s => s.id == id);
+            if (tie == null)
+            {
+                return HttpNotFound();
+            }
             return View(tie);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             tie tie = db.tie.Single(s => s.id == id);
+            if (tie == null)
+            {
+                return HttpNotFound();
+            }
             return View(tie);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             tie tie = db.tie.Single(s => s.id == id);
+            if (tie == null)
+            {
+                return HttpNotFound();
+            }
             return View(tie);
         }
 

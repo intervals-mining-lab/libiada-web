@@ -32,7 +32,7 @@ namespace TestLibiadaWeb.Controllers
             HomeController controller = new HomeController();
 
             // Действие
-            ViewResult result = controller.About() as ViewResult;
+            ActionResult result = controller.About() as ActionResult;
 
             // Утверждение
             Assert.IsNotNull(result);
@@ -45,7 +45,7 @@ namespace TestLibiadaWeb.Controllers
             HomeController controller = new HomeController();
 
             // Действие
-            ViewResult result = controller.Contact() as ViewResult;
+            ActionResult result = controller.Contact() as ActionResult;
 
             // Утверждение
             Assert.IsNotNull(result);

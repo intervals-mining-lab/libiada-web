@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /CharacteristicType/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var characteristic_type = db.characteristic_type.Include("characteristic_group").Include("characteristic_applicability");
             return View(characteristic_type.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /CharacteristicType/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             characteristic_type characteristic_type = db.characteristic_type.Single(c => c.id == id);
+            if (characteristic_type == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic_type);
         }
 
@@ -60,6 +64,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             characteristic_type characteristic_type = db.characteristic_type.Single(c => c.id == id);
+            if (characteristic_type == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
             ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability_id);
             return View(characteristic_type);
@@ -89,6 +97,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             characteristic_type characteristic_type = db.characteristic_type.Single(c => c.id == id);
+            if (characteristic_type == null)
+            {
+                return HttpNotFound();
+            }
             return View(characteristic_type);
         }
 

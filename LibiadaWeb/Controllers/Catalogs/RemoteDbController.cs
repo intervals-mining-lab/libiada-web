@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /RemoteDb/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.remote_db.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /RemoteDb/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             remote_db remote_db = db.remote_db.Single(r => r.id == id);
+            if (remote_db == null)
+            {
+                return HttpNotFound();
+            }
             return View(remote_db);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             remote_db remote_db = db.remote_db.Single(r => r.id == id);
+            if (remote_db == null)
+            {
+                return HttpNotFound();
+            }
             return View(remote_db);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             remote_db remote_db = db.remote_db.Single(r => r.id == id);
+            if (remote_db == null)
+            {
+                return HttpNotFound();
+            }
             return View(remote_db);
         }
 

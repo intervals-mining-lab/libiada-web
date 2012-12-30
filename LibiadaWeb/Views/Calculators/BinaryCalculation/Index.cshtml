@@ -60,7 +60,6 @@
     </table>
     <br/>
     @Html.Label("Характеристика:")
-    <br/>
     <select name="characteristicId" id="characteristicId">
         @foreach (var option in ViewBag.characteristicsList)
         {
@@ -69,7 +68,6 @@
     </select>
     <br/>
     @Html.Label("Привязка:")
-    <br/>
     <select name="linkUpId">
         @foreach (var option in ViewBag.linkUpsList)
         {
@@ -78,7 +76,6 @@
     </select>
     <br/>
     @Html.Label("Форма записи цепочки:")
-    <br/>
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
         {
@@ -86,8 +83,7 @@
         }
     </select>
     <br/>
-    @Html.Label(" Язык литературного произведения")
-    <br/>
+    @Html.Label("Язык литературного произведения:")
     <select name="languageId">
         @foreach (var option in ViewBag.language_id)
         {
@@ -95,12 +91,11 @@
         }
     </select>
     <br/>
-    @Html.CheckBox("filter")
-    @Html.Label("Фильтрация")
+    <br/>
+    @Html.CheckBox("filter", "Фильтрация", null)
     <br/>
     <div id="filter_div" hidden="true">
         @Html.Label("Число выводимых зависимостей")
-        <br/>
         <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
     </div>
     <br/>

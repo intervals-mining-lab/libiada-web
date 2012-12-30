@@ -16,7 +16,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Pitch/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var pitch = db.pitch.Include("note").Include("accidental").Include("note_symbol");
             return View(pitch.ToList());
@@ -25,9 +25,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Pitch/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             pitch pitch = db.pitch.Single(p => p.id == id);
+            if (pitch == null)
+            {
+                return HttpNotFound();
+            }
             return View(pitch);
         }
 
@@ -67,6 +71,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(int id)
         {
             pitch pitch = db.pitch.Single(p => p.id == id);
+            if (pitch == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
             ViewBag.accidental_id = new SelectList(db.accidental, "id", "name", pitch.accidental_id);
             ViewBag.note_symbol_id = new SelectList(db.note_symbol, "id", "name", pitch.note_symbol_id);
@@ -98,6 +106,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(int id)
         {
             pitch pitch = db.pitch.Single(p => p.id == id);
+            if (pitch == null)
+            {
+                return HttpNotFound();
+            }
             return View(pitch);
         }
 

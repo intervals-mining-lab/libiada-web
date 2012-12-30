@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Measure/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var measure = db.measure.Include("matter").Include("notation").Include("piece_type");
             return View(measure.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Measure/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             measure measure = db.measure.Single(m => m.id == id);
+            if (measure == null)
+            {
+                return HttpNotFound();
+            }
             return View(measure);
         }
 
@@ -61,6 +65,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Edit(long id)
         {
             measure measure = db.measure.Single(m => m.id == id);
+            if (measure == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
@@ -92,6 +100,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Delete(long id)
         {
             measure measure = db.measure.Single(m => m.id == id);
+            if (measure == null)
+            {
+                return HttpNotFound();
+            }
             return View(measure);
         }
 

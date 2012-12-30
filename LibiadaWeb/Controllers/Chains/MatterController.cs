@@ -30,7 +30,7 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Matter/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var matter = db.matter.Include("nature").Include("remote_db");
             return View(matter.ToList());
@@ -39,9 +39,13 @@ namespace LibiadaWeb.Controllers.Chains
         //
         // GET: /Matter/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             matter matter = db.matter.Single(m => m.id == id);
+            if (matter == null)
+            {
+                return HttpNotFound();
+            }
             return View(matter);
         }
 
@@ -209,6 +213,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Edit(long id)
         {
             matter matter = db.matter.Single(m => m.id == id);
+            if (matter == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
             ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", matter.remote_db_id);
             return View(matter);
@@ -238,6 +246,10 @@ namespace LibiadaWeb.Controllers.Chains
         public ActionResult Delete(long id)
         {
             matter matter = db.matter.Single(m => m.id == id);
+            if (matter == null)
+            {
+                return HttpNotFound();
+            }
             return View(matter);
         }
 

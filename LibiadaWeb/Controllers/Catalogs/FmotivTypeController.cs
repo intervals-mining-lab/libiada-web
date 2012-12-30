@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /FmotivType/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             return View(db.fmotiv_type.ToList());
         }
@@ -19,9 +19,13 @@ namespace LibiadaWeb.Controllers.Catalogs
         //
         // GET: /FmotivType/Details/5
 
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
             fmotiv_type fmotiv_type = db.fmotiv_type.Single(f => f.id == id);
+            if (fmotiv_type == null)
+            {
+                return HttpNotFound();
+            }
             return View(fmotiv_type);
         }
 
@@ -55,6 +59,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Edit(int id)
         {
             fmotiv_type fmotiv_type = db.fmotiv_type.Single(f => f.id == id);
+            if (fmotiv_type == null)
+            {
+                return HttpNotFound();
+            }
             return View(fmotiv_type);
         }
 
@@ -80,6 +88,10 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Delete(int id)
         {
             fmotiv_type fmotiv_type = db.fmotiv_type.Single(f => f.id == id);
+            if (fmotiv_type == null)
+            {
+                return HttpNotFound();
+            }
             return View(fmotiv_type);
         }
 

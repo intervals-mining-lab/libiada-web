@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Element/
 
-        public ViewResult Index()
+        public ActionResult Index()
         {
             var element = db.element.Include("notation");
             return View(element.ToList());
@@ -20,9 +20,13 @@ namespace LibiadaWeb.Controllers
         //
         // GET: /Element/Details/5
 
-        public ViewResult Details(long id)
+        public ActionResult Details(long id)
         {
             element element = db.element.Single(e => e.id == id);
+            if (element == null)
+            {
+                return HttpNotFound();
+            }
             return View(element);
         }
 
@@ -58,6 +62,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Edit(long id)
         {
             element element = db.element.Single(e => e.id == id);
+            if (element == null)
+            {
+                return HttpNotFound();
+            }
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
             return View(element);
         }
@@ -85,6 +93,10 @@ namespace LibiadaWeb.Controllers
         public ActionResult Delete(long id)
         {
             element element = db.element.Single(e => e.id == id);
+            if (element == null)
+            {
+                return HttpNotFound();
+            }
             return View(element);
         }
 
