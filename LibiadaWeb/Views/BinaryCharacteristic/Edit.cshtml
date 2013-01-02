@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.id)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.chain_id, "Цепочка")
+            @Html.LabelFor(model => model.chain_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("chain_id", String.Empty)
@@ -26,7 +26,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_type_id, "Тип характеристики")
+            @Html.LabelFor(model => model.characteristic_type_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("characteristic_type_id", String.Empty)
@@ -34,7 +34,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value, "Значение")
+            @Html.LabelFor(model => model.value)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value)
@@ -42,7 +42,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value_string, "Значение в виде строки")
+            @Html.LabelFor(model => model.value_string)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value_string)
@@ -50,7 +50,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.link_up_id, "Привязка")
+            @Html.LabelFor(model => model.link_up_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("link_up_id", String.Empty)
@@ -58,7 +58,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.creation_date, "Дата создания")
+            @Html.LabelFor(model => model.creation_date)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.creation_date)
@@ -66,7 +66,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.first_element_id, "Первый элемент")
+            @Html.LabelFor(model => model.first_element_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("first_element_id", String.Empty)
@@ -74,7 +74,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.second_element_id, "Второй элемент")
+            @Html.LabelFor(model => model.second_element_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("second_element_id", String.Empty)

@@ -9,17 +9,23 @@
 <fieldset>
     <legend>Форма записи</legend>
 
-    <div class="display-label">Название</div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.name)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
 
-    <div class="display-label">Описание</div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.description)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">Природа</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.nature_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.nature.name)
     </div>

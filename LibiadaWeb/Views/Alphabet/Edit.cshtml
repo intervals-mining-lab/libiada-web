@@ -13,21 +13,21 @@
         <legend>Алфавит</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.chain_id, "Принадлежит цепочке")
+            @Html.LabelFor(model => model.chain_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("chain_id", String.Empty)
             @Html.ValidationMessageFor(model => model.chain_id)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.element_id, "Элемент")
+            @Html.LabelFor(model => model.element_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("element_id", String.Empty)
             @Html.ValidationMessageFor(model => model.element_id)
         </div>
         <div class="editor-label">
-            @Html.LabelFor(model => model.number,"Номер")
+            @Html.LabelFor(model => model.number)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.number)

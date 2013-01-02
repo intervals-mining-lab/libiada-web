@@ -16,7 +16,7 @@
         <legend>Значение характеристики</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.chain_id, "Принадлежит цепочке:")
+            @Html.LabelFor(model => model.chain_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("chain_id", String.Empty)
@@ -24,7 +24,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_type_id, "Характеристика")
+            @Html.LabelFor(model => model.characteristic_type_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("characteristic_type_id", String.Empty)
@@ -32,7 +32,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value, "Числовое значение")
+            @Html.LabelFor(model => model.value)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value)
@@ -40,7 +40,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.value_string, "Строкове значение")
+            @Html.LabelFor(model => model.value_string)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.value_string)
@@ -48,7 +48,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.link_up_id, "Привязка")
+            @Html.LabelFor(model => model.link_up_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("link_up_id", String.Empty)

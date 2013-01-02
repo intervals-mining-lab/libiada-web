@@ -9,17 +9,23 @@
 <fieldset>
     <legend>Сторонняя БД</legend>
 
-    <div class="display-label">Название</div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.name)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
 
-    <div class="display-label">Описание</div>
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.description)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">url адрес</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.url)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.url)
     </div>

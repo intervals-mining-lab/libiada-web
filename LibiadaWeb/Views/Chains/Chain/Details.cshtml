@@ -21,22 +21,30 @@
         @ViewBag.stringChain
     </p>
 
-    <div class="display-label">Форма записи</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.notation_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.notation.name)
     </div>
 
-    <div class="display-label">Дата создания</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.creation_date)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>
 
-    <div class="display-label">Объект, которому принадлежит цепочка</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.matter_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.matter.name)
     </div>
 
-    <div class="display-label">Цепочка разнородная</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.dissimilar)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.dissimilar)
     </div>

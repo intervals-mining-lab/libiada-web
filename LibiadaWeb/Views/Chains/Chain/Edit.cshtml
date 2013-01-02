@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.id)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.building, "Строй")
+            @Html.LabelFor(model => model.building)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.building)
@@ -26,7 +26,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.notation_id, "Форма записи")
+            @Html.LabelFor(model => model.notation_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("notation_id", String.Empty)
@@ -34,7 +34,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.creation_date, "Дата создания")
+            @Html.LabelFor(model => model.creation_date)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.creation_date)
@@ -42,7 +42,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.matter_id, "Принадлежит объекту")
+            @Html.LabelFor(model => model.matter_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("matter_id", String.Empty)
@@ -50,7 +50,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.dissimilar, "Цепочка разнородная")
+            @Html.LabelFor(model => model.dissimilar)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.dissimilar)

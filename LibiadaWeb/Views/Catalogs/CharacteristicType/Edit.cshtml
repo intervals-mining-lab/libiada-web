@@ -18,7 +18,7 @@
         @Html.HiddenFor(model => model.id)
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.name, "Название")
+            @Html.LabelFor(model => model.name)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.name)
@@ -26,7 +26,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.description, "Описание")
+            @Html.LabelFor(model => model.description)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.description)
@@ -34,7 +34,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_group, "Группа характеристик")
+            @Html.LabelFor(model => model.characteristic_group)
         </div>
         <div class="editor-field">
             @Html.DropDownList("characteristic_group_id", String.Empty)
@@ -42,7 +42,7 @@
         </div>
         
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_applicability, "Применимость характеристики")
+            @Html.LabelFor(model => model.characteristic_applicability)
         </div>
         <div class="editor-field">
             @Html.DropDownList("characteristic_applicability_id", String.Empty)
@@ -50,7 +50,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.class_name, "Имя класса калькулятора")
+            @Html.LabelFor(model => model.class_name)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.class_name)

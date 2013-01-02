@@ -10,42 +10,58 @@
 <fieldset>
     <legend>Характеристика бинарных цепей</legend>
 
-    <div class="display-label">Цепочка</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.chain_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.chain.building)
     </div>
 
-    <div class="display-label">Тип характеристики</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.characteristic_type_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.characteristic_type.name)
     </div>
 
-    <div class="display-label">Значение</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">Значение в виде строки</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value_string)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value_string)
     </div>
 
-    <div class="display-label">Привязка</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.link_up_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.link_up.name)
     </div>
 
-    <div class="display-label">Дата создания</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.creation_date)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>
 
-    <div class="display-label">Первый элемент</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.first_element_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.element.value)
     </div>
 
-    <div class="display-label">Второй элемент</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.second_element_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.element1.value)
     </div>

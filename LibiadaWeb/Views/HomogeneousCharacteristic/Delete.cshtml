@@ -10,37 +10,51 @@
 <fieldset>
     <legend>homogeneous_characteristic</legend>
 
-    <div class="display-label">chain_id</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.chain_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.chain_id)
     </div>
 
-    <div class="display-label">characteristic_type</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.characteristic_type_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.characteristic_type.name)
     </div>
 
-    <div class="display-label">value</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">value_string</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value_string)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value_string)
     </div>
 
-    <div class="display-label">link_up</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.link_up_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.link_up.name)
     </div>
 
-    <div class="display-label">creation_date</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.creation_date)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>
 
-    <div class="display-label">element</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.element_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.element.value)
     </div>

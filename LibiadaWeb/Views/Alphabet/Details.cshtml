@@ -10,27 +10,27 @@
     <legend>Алфавит</legend>
     
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.chain_id)
+        @Html.DisplayNameFor(model => model.chain_id)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.chain_id)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.element_id)
+        @Html.DisplayNameFor(model => model.element_id)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.element_id)
     </div>
 
     <div class="display-label">
-         @Html.DisplayNameFor(model => model.number)
+        @Html.DisplayNameFor(model => model.number)
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.number)
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Редактировать", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Редактировать", "Edit", new { id=Model.id }) |
     @Html.ActionLink("Назад к списку", "Index")
 </p>

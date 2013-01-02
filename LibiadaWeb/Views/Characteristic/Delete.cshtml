@@ -10,32 +10,44 @@
 <fieldset>
     <legend>Значение характеристики</legend>
 
-    <div class="display-label">Принадлежит цепочке</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.chain_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.chain.building)
     </div>
 
-    <div class="display-label">Характеристика</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.characteristic_type_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.characteristic_type.name)
     </div>
 
-    <div class="display-label">Числовое значение</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">Строковое значение</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value_string)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value_string)
     </div>
 
-    <div class="display-label">Привязка</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.link_up_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.link_up.name)
     </div>
 
-    <div class="display-label">Дата создания</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.creation_date)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>

@@ -50,7 +50,7 @@
         <input type="file" name="file" id="file"/>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.notation_id, "Форма записи")
+            @Html.LabelFor(model => model.notation_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("notation_id", String.Empty)
@@ -58,7 +58,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.matter_id, "Принадлежит объекту исследования:")
+            @Html.LabelFor(model => model.matter_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("matter_id", String.Empty)
@@ -66,7 +66,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.dissimilar,"Цепочка разнородная")
+            @Html.LabelFor(model => model.dissimilar)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.dissimilar)
@@ -74,7 +74,7 @@
         </div>
         
         <div class="editor-label">
-            @Html.LabelFor(model => model.piece_type_id, "Тип фрагмента цепочки")
+            @Html.LabelFor(model => model.piece_type_id)
         </div>
         <div class="editor-field">
                 @Html.DropDownList("piece_type_id", String.Empty)

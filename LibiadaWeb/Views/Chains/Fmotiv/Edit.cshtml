@@ -19,7 +19,7 @@
 
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.notation_id, "notation")
+            @Html.LabelFor(model => model.notation_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("notation_id", String.Empty)
@@ -35,7 +35,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.matter_id, "matter")
+            @Html.LabelFor(model => model.matter_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("matter_id", String.Empty)
@@ -51,7 +51,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.piece_type_id, "piece_type")
+            @Html.LabelFor(model => model.piece_type_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("piece_type_id", String.Empty)
@@ -75,7 +75,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.description, "Описание")
+            @Html.LabelFor(model => model.description)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.description)
@@ -83,7 +83,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.name, "Название")
+            @Html.LabelFor(model => model.name)
         </div>
         <div class="editor-field">
             @Html.EditorFor(model => model.name)
@@ -91,7 +91,7 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.fmotiv_type_id, "fmotiv_type")
+            @Html.LabelFor(model => model.fmotiv_type_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("fmotiv_type_id", String.Empty)

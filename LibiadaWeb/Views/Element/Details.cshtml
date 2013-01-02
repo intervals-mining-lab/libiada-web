@@ -9,27 +9,37 @@
 <fieldset>
     <legend>Элемент</legend>
 
-    <div class="display-label">Значение</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.value)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.value)
     </div>
 
-    <div class="display-label">Описание</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.description)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">Название</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.name)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.name)
     </div>
 
-    <div class="display-label">Форма записи</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.notation_id)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.notation.name)
     </div>
 
-    <div class="display-label">Дата создания</div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.creation_date)
+    </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.creation_date)
     </div>
