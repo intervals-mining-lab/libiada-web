@@ -150,7 +150,7 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 for (int f = 0; f < matterIds.Length; f++)
                 {
-                    for (int p = 0; p < characteristics.Count; p++)
+                    for (int p = 0; p < characteristics[f].Count; p++)
                     {
                         SortKeyValuePairList(characteristics[f][p]);
                     }

@@ -28,32 +28,38 @@
             headers.push(tableHeaders[k].textContent);
         }
         var rows = $("#resultTable")[0].tBodies[0].rows;
-        for (var i = 1; i < rows.length; i++) {
+        for (var i = 0; i < rows.length; i++) {
             partNames.push(rows[i].cells[0].textContent);
         }
-
-        @for (int j = 0; j < ViewBag.characteristics[0].Count; j++)
+        @for (int k = 0; k < ViewBag.characteristics.Count; k++)
         {
             @: characteristics.push(new Array());
-
-            for (int i = 0; i < ViewBag.characteristics.Count; i++)
+            for (int j = 0; j < ViewBag.characteristics[k].Count; j++)
             {
-                String[] tempValue = ViewBag.characteristics[i][j].Value.ToString().Split(',');
-                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                int key = ViewBag.characteristics[i][j].Key;
-                @: characteristics[characteristics.length -1][@i] = {key: @key, value: @value} ;
+                @: characteristics[@k].push(new Array());
+
+                for (int i = 0; i < ViewBag.characteristics[k][j].Count; i++)
+                {
+                    String[] tempValue = ViewBag.characteristics[k][j][i].Value.ToString().Split(',');
+                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                    int key = ViewBag.characteristics[k][j][i].Key;
+                    @: characteristics[@k][@j][@i] = {key: @key, value: @value} ;
+                }
             }
         }
         @if (ViewBag.theoreticalRanks != null)
         {
-            for (int f = 0; f < ViewBag.theoreticalRanks.Count; f++)
+            for (int c = 0; c < ViewBag.theoreticalRanks.Count; c++)
             {
-                String[] tempValue = ViewBag.theoreticalRanks[f].ToString().Split(',');
-                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                @:theoreticalRanks.push(@value); 
+                @:theoreticalRanks.push(new Array()); 
+                for (int f = 0; f < ViewBag.theoreticalRanks[c].Count; f++)
+                {
+                    String[] tempValue = ViewBag.theoreticalRanks[c][f].ToString().Split(',');
+                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                    @:theoreticalRanks[@c].push(@value); 
+                }
             }
         }
-        
         $("table").dataTable({
             bJQueryUI: true,
             sPaginationType: "full_numbers"
@@ -85,57 +91,89 @@
     var maxZoomX;
     
     // заполнение данных для двумерного распределения
-    function FillSeries(characteristicId, characteristic2Id) {
-        var series = new Object();
-        series.data = new Array();
-        series.name = headers[characteristicId] + " и " + headers[characteristic2Id];
-        for (var i = 0; i < partNames.length; i++) {
-            var x =characteristics[i][characteristicId].value;
-            var y;
-            for(var j = 0; j < characteristics.length; j++ ) {
-                if(characteristics[i][characteristicId].key == characteristics[j][characteristic2Id].key) {
-                    y = characteristics[j][characteristic2Id].value;
-                    break;
+    function FillSeries(characteristicId, characteristic2Id, dataSeries) {
+        for (var k = 0; k < characteristics.length; k++) {
+            var series = new Object();
+            series.data = new Array();
+            series.name = headers[characteristicId] + " и " + headers[characteristic2Id];
+            for (var i = 0; i < partNames.length; i++) {
+                var x = characteristics[k][characteristicId][i].value;
+                var y;
+                for (var j = 0; j < characteristics[k][characteristic2Id].length; j++) {
+                    if (characteristics[k][characteristicId][i].key == characteristics[k][characteristic2Id][j].key) {
+                        y = characteristics[k][characteristic2Id][j].value;
+                        break;
+                    }
                 }
+                var pointName = partNames[characteristics[k][characteristicId][i].key];
+                series.data[i] = new Object();
+
+                series.data[i].x = x;
+                series.data[i].y = y;
+                series.data[i].name = pointName;
+                // массив для определения минимального значения для границ графика
+                xVals.push(x);
+                yVals.push(y);
             }
-            var pointName = partNames[characteristics[i][characteristicId].key];
-            series.data[i] = new Object();
-            
-            series.data[i].x = x;
-            series.data[i].y = y;
-            series.data[i].name = pointName;
-            // массив для определения минимального значения для границ графика
-            xVals.push(x);
-            yVals.push(y);
+            dataSeries.push(series);
         }
-        return series;
     }
 
     // заполнение данных для рангового распределения
-    function FillRankSeries(characteristicId, logarithmic) {
-        var series = new Object();
-        series.data = new Array();
-        series.type = 'area';
-        series.name = headers[characteristicId];
-        for (var i = 0; i < partNames.length; i++) {
-            var y = characteristics[i][characteristicId].value;
-            var pointName = partNames[characteristics[i][characteristicId].key];
-            series.data[i] = new Object();
-            if(logarithmic) {
-                series.data[i].x = Math.log(i + 1)/Math.log(10);
-                maxZoomX = 0.1;
-            } else {
-                series.data[i].x = i + 1;
-                maxZoomX = 3;
+    function FillRankSeries(characteristicId, logarithmic, dataSeries) {
+        for (var j = 0; j < characteristics.length; j++) {
+            var series = new Object();
+            series.data = new Array();
+            series.type = 'area';
+            series.name = headers[characteristicId];
+            for (var i = 0; i < partNames.length; i++) {
+                var y = characteristics[j][characteristicId][i].value;
+                var pointName = partNames[characteristics[j][characteristicId][i].key];
+                series.data[i] = new Object();
+                if (logarithmic) {
+                    series.data[i].x = Math.log(i + 1) / Math.log(10);
+                    maxZoomX = 0.1;
+                } else {
+                    series.data[i].x = i + 1;
+                    maxZoomX = 3;
+                }
+
+                series.data[i].y = y;
+                series.data[i].name = pointName;
+                // массив для определения минимального значения для границ графика
+                xVals.push(i);
+                yVals.push(y);
             }
-            
-            series.data[i].y = y;
-            series.data[i].name = pointName;
-            // массив для определения минимального значения для границ графика
-            xVals.push(i);
-            yVals.push(y);
+            dataSeries.push(series);
         }
-        return series;
+    }
+
+    function FillTheoreticalRanks(logarithmic, dataSeries) {
+        for (var j = 0; j < theoreticalRanks.length; j++) {
+            var series = new Object();
+            series.data = new Array();
+            series.type = 'area';
+            series.name = "Теоретическое распределение";
+            for (var i = 0; i < theoreticalRanks[j].length; i++) {
+                var y = theoreticalRanks[j][i];
+                var pointName = i + 1;
+                series.data[i] = new Object();
+                if (logarithmic) {
+                    series.data[i].x = Math.log(i + 1) / Math.log(10);
+                    maxZoomX = 0.1;
+                } else {
+                    series.data[i].x = i + 1;
+                    maxZoomX = 3;
+                }
+
+                series.data[i].y = y;
+                series.data[i].name = pointName;
+                // массив для определения минимального значения для границ графика
+                xVals.push(i);
+                yVals.push(y);
+            }
+            dataSeries.push(series);
+        }
     }
 
     function CreateChart(dataSeries, minY, minX, rank) {
@@ -162,31 +200,7 @@
         });
     }
     
-    function FillTheoreticalRanks(logarithmic) {
-        var series = new Object();
-        series.data = new Array();
-        series.type = 'area';
-        series.name = "Теоретическое распределение";
-        for (var i = 0; i < theoreticalRanks.length; i++) {
-            var y = theoreticalRanks[i];
-            var pointName = i + 1;
-            series.data[i] = new Object();
-            if(logarithmic) {
-                series.data[i].x = Math.log(i + 1)/Math.log(10);
-                maxZoomX = 0.1;
-            } else {
-                series.data[i].x = i + 1;
-                maxZoomX = 3;
-            }
-            
-            series.data[i].y = y;
-            series.data[i].name = pointName;
-            // массив для определения минимального значения для границ графика
-            xVals.push(i);
-            yVals.push(y);
-        }
-        return series;
-    }
+    
 
     function DrawChart() {
         xVals = new Array();
@@ -195,17 +209,20 @@
         var logarithmic = $("#logarithmicScale")[0].checked;
         if ($("#allGraphics")[0].checked) {
             for (var j = 0; j < $("#yaxis option").length; j++) {
-                dataSeries.push(FillRankSeries($("#yaxis option")[j].value, logarithmic));
+                FillRankSeries($("#yaxis option")[j].value, logarithmic,dataSeries);
             }
         } else {
             if($("#Rank")[0].checked) {
-                dataSeries.push(FillRankSeries($("#yaxis option:selected")[0].value, logarithmic));
+                for(var n = 0; n < series.length; n++) {
+                    FillRankSeries($("#yaxis option:selected")[0].value, logarithmic, dataSeries);
+                }
+                
             } else {
-                dataSeries.push(FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, logarithmic));
+                FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, logarithmic, dataSeries);
             }
         }
         if (theoreticalRanks.length > 0) {
-            dataSeries.push(FillTheoreticalRanks(logarithmic));
+            FillTheoreticalRanks(logarithmic, dataSeries);
         }
         CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked);
     }
