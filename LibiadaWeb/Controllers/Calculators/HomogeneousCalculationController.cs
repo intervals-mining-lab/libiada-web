@@ -46,48 +46,56 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
-            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.languagesList = new SelectList(db.language, "id", "name");
             
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int notationId, int languageId, bool isSort, bool theoretical)
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds, bool isSort, bool theoretical)
         {
 
             List<List<List<KeyValuePair<int, double>>>> characteristics = new List<List<List<KeyValuePair<int, double>>>>();
+            List<List<List<double>>> teoreticalRanks = new List<List<List<double>>>();
             List<string> chainNames = new List<string>();
             List<List<string>> elementNames = new List<List<string>>();
             List<string> characteristicNames = new List<string>();
-            List<Chain> libiadaChains = new List<Chain>();
 
+            bool isLiteratureChain = false;
+
+            //Перебор всех цепочек; первый уровень массива характеристик
             for (int w = 0; w < matterIds.Length; w++)
             {
                 long matterId = matterIds[w];
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 elementNames.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
+                teoreticalRanks.Add(new List<List<double>>());
 
-                chain dbChain;
-                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
-                {
-                    long chainId =
-                        db.literature_chain.Single(
-                            l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId)
-                          .id;
-                    dbChain = db.chain.Single(c => c.id == chainId);
-                }
-                else
-                {
-                    dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
-                }
-
-                matter matter = db.matter.Single(m => m.id == matterId);
-                chain chain = matter.chain.Single(c => c.notation_id == notationId);
-                libiadaChains.Add(chainRepository.FromDbChainToLibiadaChain(chain));
-
+                //Перебор всех характеристик и форм записи; второй уровень массива характеристик
                 for (int i = 0; i < characteristicIds.Length; i++)
                 {
+                    int notationId = notationIds[i];
+                    int languageId = languageIds[i];
+                    chain dbChain;
+                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    {
+                        isLiteratureChain = true;
+                        long chainId =
+                            db.literature_chain.Single(l => l.matter_id == matterId && 
+                                    l.notation_id == notationId 
+                                    && l.language_id == languageId).id;
+                        dbChain = db.chain.Single(c => c.id == chainId);
+                    }
+                    else
+                    {
+                        dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
+                    }
+
+                    matter matter = db.matter.Single(m => m.id == matterId);
+
+                    Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(dbChain);
+
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
                     int linkUpId = linkUpIds[i];
@@ -96,56 +104,117 @@ namespace LibiadaWeb.Controllers.Calculators
                     ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
 
-
-                    for (int j = 0; j < libiadaChains[w].Alphabet.Power; j++)
+                    int calculated = db.homogeneous_characteristic.Count(b => b.chain_id == dbChain.id &&
+                                                                              b.characteristic_type_id == characteristicId &&
+                                                                              b.link_up_id == linkUpId);
+                    if (calculated < libiadaChain.Alphabet.Power)
                     {
-                        long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
-
-                        UniformChain tempChain = libiadaChains[w].GetUniformChain(j);
-                        elementNames.Last().Add(libiadaChains[w].Alphabet[j].ToString());
-
-                        if (db.homogeneous_characteristic.Any(b =>
-                                                              b.chain_id == dbChain.id &&
-                                                              b.characteristic_type_id == characteristicId &&
-                                                              b.element_id == elementId && b.link_up_id == linkUpId))
+                        for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
                         {
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(j, (double)db.homogeneous_characteristic.Single(b =>
-                                                                                                                   b.chain_id == dbChain.id &&
-                                                                                                                   b.characteristic_type_id == characteristicId &&
-                                                                                                                   b.element_id ==elementId &&
-                                                                                                                   b.link_up_id == linkUpId).value));
+                            long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
+
+                            UniformChain tempChain = libiadaChain.GetUniformChain(j);
+
+                            if (!db.homogeneous_characteristic.Any(b =>
+                                                                   b.chain_id == dbChain.id &&
+                                                                   b.characteristic_type_id == characteristicId &&
+                                                                   b.element_id == elementId && b.link_up_id == linkUpId))
+                            {
+                                double value = calculator.Calculate(tempChain, linkUp);
+                                homogeneous_characteristic currentCharacteristic = new homogeneous_characteristic();
+                                currentCharacteristic.id =
+                                    db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                      .First();
+                                currentCharacteristic.chain_id = dbChain.id;
+                                currentCharacteristic.characteristic_type_id = characteristicId;
+                                currentCharacteristic.link_up_id = linkUpId;
+                                currentCharacteristic.element_id = elementId;
+                                currentCharacteristic.value = value;
+                                currentCharacteristic.value_string = value.ToString();
+                                currentCharacteristic.creation_date = DateTime.Now;
+                                db.homogeneous_characteristic.AddObject(currentCharacteristic);
+                                db.SaveChanges();
+                            }
                         }
-                        else
+                    }
+
+                    //Перебор всех элементов алфавита; третий уровень массива характеристик
+                    for (int d = 0; d < libiadaChain.Alphabet.Power; d++)
+                    {
+                        long elementId = dbChain.alphabet.Single(a => a.number == d + 1).element_id;
+
+                        double? characteristic = db.homogeneous_characteristic.Single(b =>
+                                    b.chain_id == dbChain.id &&
+                                    b.characteristic_type_id == characteristicId &&
+                                    b.element_id == elementId &&
+                                    b.link_up_id == linkUpId).value;
+                        
+                        characteristics.Last().Last().Add(
+                            new KeyValuePair<int, double>(d, (double)characteristic));
+
+                        if (i == 0)
                         {
-                            double value = calculator.Calculate(tempChain, linkUp);
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(j, value));
-                            homogeneous_characteristic currentCharacteristic = new homogeneous_characteristic();
-                            currentCharacteristic.id =
-                                db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')").First();
-                            currentCharacteristic.chain_id = dbChain.id;
-                            currentCharacteristic.characteristic_type_id = characteristicId;
-                            currentCharacteristic.link_up_id = linkUpId;
-                            currentCharacteristic.element_id = elementId;
-                            currentCharacteristic.value = value;
-                            currentCharacteristic.value_string = value.ToString();
-                            currentCharacteristic.creation_date = DateTime.Now;
-                            db.homogeneous_characteristic.AddObject(currentCharacteristic);
-                            db.SaveChanges();
+                            elementNames.Last().Add(libiadaChain.Alphabet[d].ToString());
+                        }
+                    }
+                    
+                    
+                    // теоретические частоты по критерию Орлова
+                    if (theoretical)
+                    {
+
+                        teoreticalRanks[w].Add(new List<double>());
+                        ICharacteristicCalculator countCalculator = CharacteristicsFactory.Create("Count");
+                        List<int> counts = new List<int>();
+                        for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                        {
+                            counts.Add((int)countCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                        }
+
+                        ICharacteristicCalculator frequencyCalculator = CharacteristicsFactory.Create("Probability");
+                        List<double> frequency = new List<double>();
+                        for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                        {
+                            frequency.Add(frequencyCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                        }
+
+                        double maxFrequency = frequency.Max();
+                        double K = 1/Math.Log(counts.Max());
+                        double B = (K/maxFrequency) - 1;
+                        int n = 1;
+                        double Plow = libiadaChain.Length;
+                        double P = K/(B + n);
+                        while (P >= (1/Plow))
+                        {
+                            teoreticalRanks.Last().Last().Add(P);
+                            n++;
+                            P = K/(B + n);
                         }
                     }
                 }
 
             }
 
+            // подписи для характеристик
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
                 int linkUpId = linkUpIds[k];
-                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                        db.link_up.Single(l => l.id == linkUpId).name + " " +
-                                        db.notation.Single(n => n.id == notationId).name);
+                int notationId = notationIds[k];
+                int languageId = languageIds[k];
+                if (isLiteratureChain)
+                {
+                    
+                }
+                characteristicNames.Add(db.characteristic_type.Single(
+                    c => c.id == characteristicId).name
+                    + " " + db.link_up.Single(l => l.id == linkUpId).name 
+                    + " " + db.notation.Single(n => n.id == notationId).name 
+                    + " " + db.language.Single(l => l.id == languageId).name
+                    );
             }
 
+            //ранговая сортировка
             if (isSort)
             {
                 for (int f = 0; f < matterIds.Length; f++)
@@ -158,42 +227,9 @@ namespace LibiadaWeb.Controllers.Calculators
                     
             }
 
-            List<List<double>> teoreticalRanks = new List<List<double>>();
+            
 
-            if (theoretical)
-            {
-                for (int g = 0; g < matterIds.Length; g++)
-                {
-                    teoreticalRanks.Add(new List<double>());
-                    ICharacteristicCalculator countCalculator = CharacteristicsFactory.Create("Count");
-                    List<int> counts = new List<int>();
-                    for (int f = 0; f < libiadaChains[g].Alphabet.Power; f++)
-                    {
-                        counts.Add((int)countCalculator.Calculate(libiadaChains[g].GetUniformChain(f), LinkUp.End));
-                    }
-
-                    ICharacteristicCalculator frequencyCalculator = CharacteristicsFactory.Create("Probability");
-                    List<double> frequency = new List<double>();
-                    for (int f = 0; f < libiadaChains[g].Alphabet.Power; f++)
-                    {
-                        frequency.Add(frequencyCalculator.Calculate(libiadaChains[g].GetUniformChain(f), LinkUp.End));
-                    }
-
-                    double maxFrequency = frequency.Max();
-                    double K = 1 / Math.Log(counts.Max());
-                    double B = (K / maxFrequency) - 1;
-                    int i = 1;
-                    double Plow = libiadaChains[g].Length;
-                    double P = K / (B + i);
-                    while (P >= (1 / Plow))
-                    {
-                        teoreticalRanks.Last().Add(P);
-                        i++;
-                        P = K / (B + i);
-                    }
-                }
-                
-            }
+            
 
             TempData["characteristics"] = characteristics;
             TempData["chainNames"] = chainNames;

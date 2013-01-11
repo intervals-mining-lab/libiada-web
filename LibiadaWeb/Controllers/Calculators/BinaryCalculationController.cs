@@ -72,9 +72,9 @@ namespace LibiadaWeb.Controllers.Calculators
 
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
             LinkUp linkUp = (LinkUp) linkUpId;
-            int calculated = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+            int calculated = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                  b.characteristic_type_id == characteristicId &&
-                                                                 b.link_up_id == linkUpId).Count();
+                                                                 b.link_up_id == linkUpId);
             if (calculated < currentChain.Length)
             {
                 for (int i = 0; i < currentChain.Alphabet.Power; i++)

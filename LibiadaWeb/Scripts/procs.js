@@ -10,3 +10,11 @@ function DeleteElementByName(elemName) {
     $('#' + elemName).remove();
     return false;
 }
+
+function CreateSelectList(options, name) {
+    var selectList = $('<select/>').attr('name', name);
+    for (var i = 0; i < options.length; i++) {
+        selectList.append(options[i]);
+    }
+    return selectList;
+}

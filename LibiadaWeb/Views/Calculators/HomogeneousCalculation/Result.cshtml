@@ -1,17 +1,18 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Характеристики однородных цепочек @ViewBag.chainName";
+    ViewBag.Title = "Характеристики однородных цепочек";
 }
 
-<h2>Характеристики однородных цепочек @ViewBag.chainName</h2>
+<h2>Характеристики однородных цепочек</h2>
 
 <script type='text/javascript'>
     var characteristics = new Array();
-    var partNames = new Array();
+    var elementNames = new Array();
     var colors = new Array();
-    var headers = new Array();
     var theoreticalRanks = new Array();
+    var characteristicNames = new Array();
+    var chainNames = new Array();
 
     $(document).ready(function() {
         colors.push('rgba(223, 83, 83, .5)');
@@ -21,45 +22,66 @@
         colors.push('rgba( 150, 0, 0, .5)');
         colors.push('rgba( 0, 150, 0, .5)');
         colors.push('rgba( 0, 0, 150  .5)');
-
-        var tableHeaders = $("#resultTable")[0].tBodies[0].rows[0].cells;
         
-        for (var k = 1; k < tableHeaders.length; k++) {
-            headers.push(tableHeaders[k].textContent);
-        }
-        var rows = $("#resultTable")[0].tBodies[0].rows;
-        for (var i = 0; i < rows.length; i++) {
-            partNames.push(rows[i].cells[0].textContent);
-        }
-        @for (int k = 0; k < ViewBag.characteristics.Count; k++)
-        {
-            @: characteristics.push(new Array());
-            for (int j = 0; j < ViewBag.characteristics[k].Count; j++)
+        @{
+            for (int r = 0; r < ViewBag.characteristicNames.Count; r++)
             {
-                @: characteristics[@k].push(new Array());
+                @: characteristicNames[@r] = "@ViewBag.characteristicNames[r]";
+            }
 
-                for (int i = 0; i < ViewBag.characteristics[k][j].Count; i++)
-                {
-                    String[] tempValue = ViewBag.characteristics[k][j][i].Value.ToString().Split(',');
-                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                    int key = ViewBag.characteristics[k][j][i].Key;
-                    @: characteristics[@k][@j][@i] = {key: @key, value: @value} ;
-                }
-            }
-        }
-        @if (ViewBag.theoreticalRanks != null)
-        {
-            for (int c = 0; c < ViewBag.theoreticalRanks.Count; c++)
+            for (int t = 0; t < ViewBag.elementNames.Count; t++)
             {
-                @:theoreticalRanks.push(new Array()); 
-                for (int f = 0; f < ViewBag.theoreticalRanks[c].Count; f++)
+                @: elementNames[@t] = new Array();
+                for (int y = 0; y < ViewBag.elementNames[t].Count; y++)
                 {
-                    String[] tempValue = ViewBag.theoreticalRanks[c][f].ToString().Split(',');
-                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                    @:theoreticalRanks[@c].push(@value); 
+                    @: elementNames[@t][@y] = "@ViewBag.elementNames[t][y]";
+                }
+            }
+
+            for (int h = 0; h < ViewBag.chainNames.Count; h++)
+            {
+                @: chainNames[@h] = "@ViewBag.chainNames[h]";
+            }
+
+            for (int k = 0; k < ViewBag.characteristics.Count; k++)
+            {
+                @: characteristics[@k] = new Array();
+                for (int j = 0; j < ViewBag.characteristics[k].Count; j++)
+                {
+                    @: characteristics[@k][@j] = new Array();
+
+                    for (int i = 0; i < ViewBag.characteristics[k][j].Count; i++)
+                    {
+                        String[] tempValue = ViewBag.characteristics[k][j][i].Value.ToString().Split(',');
+                        String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                        int key = ViewBag.characteristics[k][j][i].Key;
+                        @: characteristics[@k][@j][@i] = {key: @key, value: @value} ;
+                    }
+                }
+            }
+
+            if (ViewBag.theoreticalRanks != null)
+            {
+                for (int c = 0; c < ViewBag.theoreticalRanks.Count; c++)
+                {
+                    @:theoreticalRanks[@c] = new Array(); 
+                    for (int f = 0; f < ViewBag.theoreticalRanks[c].Count; f++)
+                    {
+                        @:theoreticalRanks[@c][@f] = new Array();
+                        for (int g = 0; g < ViewBag.theoreticalRanks[c][f].Count; g++)
+                        {
+                            String[] tempValue = ViewBag.theoreticalRanks[c][f][g].ToString().Split(',');
+                            String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                            @:theoreticalRanks[@c][@f][@g] = @value; 
+                        }
+                    }
                 }
             }
         }
+        
+
+        
+
         $("table").dataTable({
             bJQueryUI: true,
             sPaginationType: "full_numbers"
@@ -95,8 +117,8 @@
         for (var k = 0; k < characteristics.length; k++) {
             var series = new Object();
             series.data = new Array();
-            series.name = headers[characteristicId] + " и " + headers[characteristic2Id];
-            for (var i = 0; i < partNames.length; i++) {
+            series.name = characteristicNames[characteristicId] + " и " + characteristicNames[characteristic2Id];
+            for (var i = 0; i < characteristics[k][characteristicId].length; i++) {
                 var x = characteristics[k][characteristicId][i].value;
                 var y;
                 for (var j = 0; j < characteristics[k][characteristic2Id].length; j++) {
@@ -105,7 +127,7 @@
                         break;
                     }
                 }
-                var pointName = partNames[characteristics[k][characteristicId][i].key];
+                var pointName = elementNames[k][i];
                 series.data[i] = new Object();
 
                 series.data[i].x = x;
@@ -125,10 +147,10 @@
             var series = new Object();
             series.data = new Array();
             series.type = 'area';
-            series.name = headers[characteristicId];
-            for (var i = 0; i < partNames.length; i++) {
+            series.name = chainNames[j] + " " + characteristicNames[characteristicId];
+            for (var i = 0; i < characteristics[j][characteristicId].length; i++) {
                 var y = characteristics[j][characteristicId][i].value;
-                var pointName = partNames[characteristics[j][characteristicId][i].key];
+                var pointName = elementNames[j][i];
                 series.data[i] = new Object();
                 if (logarithmic) {
                     series.data[i].x = Math.log(i + 1) / Math.log(10);
@@ -148,14 +170,14 @@
         }
     }
 
-    function FillTheoreticalRanks(logarithmic, dataSeries) {
+    function FillTheoreticalRanks(characteristicId, logarithmic, dataSeries) {
         for (var j = 0; j < theoreticalRanks.length; j++) {
             var series = new Object();
             series.data = new Array();
             series.type = 'area';
-            series.name = "Теоретическое распределение";
-            for (var i = 0; i < theoreticalRanks[j].length; i++) {
-                var y = theoreticalRanks[j][i];
+            series.name = "Теоретическое распределение для " + characteristicNames[characteristicId];
+            for (var i = 0; i < theoreticalRanks[j][characteristicId].length; i++) {
+                var y = theoreticalRanks[j][characteristicId][i];
                 var pointName = i + 1;
                 series.data[i] = new Object();
                 if (logarithmic) {
@@ -184,7 +206,7 @@
 
             plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
-            title: { text: 'Характеристики однородных цепочек @ViewBag.chainName' },
+            title: { text: 'Характеристики однородных цепочек' },
 
             tooltip: {
                 formatter: function() {
@@ -199,41 +221,52 @@
             series: dataSeries
         });
     }
-    
-    
 
     function DrawChart() {
         xVals = new Array();
         yVals = new Array();
         var dataSeries = new Array();
         var logarithmic = $("#logarithmicScale")[0].checked;
+        var characteristicId;
         if ($("#allGraphics")[0].checked) {
+            //если нужно вывести распределения для всех характеристик
             for (var j = 0; j < $("#yaxis option").length; j++) {
-                FillRankSeries($("#yaxis option")[j].value, logarithmic,dataSeries);
+                characteristicId = $("#yaxis option")[j].value;
+
+                FillRankSeries(characteristicId, logarithmic, dataSeries);
+
+                if (theoreticalRanks[0].length > 0) {
+                    FillTheoreticalRanks(characteristicId, logarithmic, dataSeries);
+                }
             }
         } else {
-            if($("#Rank")[0].checked) {
-                for(var n = 0; n < series.length; n++) {
-                    FillRankSeries($("#yaxis option:selected")[0].value, logarithmic, dataSeries);
-                }
+            if ($("#Rank")[0].checked) {
+                // если нужно вывести графики для одной характерстики (ранговое распрделение)
+                characteristicId = $("#yaxis option:selected")[0].value;
                 
+                FillRankSeries(characteristicId, logarithmic, dataSeries);
+                
+                if (theoreticalRanks[0].length > 0) {
+                    FillTheoreticalRanks(characteristicId, logarithmic, dataSeries);
+                }
             } else {
-                FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, logarithmic, dataSeries);
+                //если нужно вывести графики для двух характеристик
+                FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, dataSeries);
             }
         }
-        if (theoreticalRanks.length > 0) {
-            FillTheoreticalRanks(logarithmic, dataSeries);
-        }
+
         CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked);
     }
+    
 </script>
 @for (int d = 0; d < ViewBag.characteristics.Count; d++)
 {
+    @ViewBag.chainNames[d]
     <table id="resultTable">
         <thead>
             <tr>
                 <th>
-                    Название цепочки
+                    Элемент
                 </th>
                 @foreach (var characteristicName in ViewBag.characteristicNames)
                 {
