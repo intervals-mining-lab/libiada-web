@@ -11,10 +11,16 @@
 
     var divCounter = 0;
 
-    $(document).ready(function () {
-        $("table").dataTable({
+    var formTable;
+
+    $(document).ready(function() {
+        formTable = $("table").dataTable({
             bJQueryUI: true,
             sPaginationType: "full_numbers"
+        });
+    
+        $('form').submit(function() {
+            $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
         });
 
         AddCharacteristic();

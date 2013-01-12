@@ -19,7 +19,8 @@ namespace LibiadaWeb
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryDataTables").Include(
-                        "~/Scripts/DataTables-1.9.4/media/js/jquery.dataTables.js"));
+                        "~/Scripts/DataTables-1.9.4/media/js/jquery.dataTables.js",
+                        "~/Scripts/datatables.plugins.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/HighCharts").Include(
                        "~/Scripts/Highcharts-2.2.1/js/highcharts.src.js"));
