@@ -15,7 +15,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
@@ -426,6 +426,11 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\datatables.plugins.js" />
+    <Content Include="Scripts\jquery-1.9.0-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.9.0.js" />
+    <Content Include="Scripts\jquery-1.9.0.min.js" />
+    <Content Include="Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\procs.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\doc.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\jquery.js" />
@@ -501,9 +506,6 @@
     <Content Include="Scripts\Highstock-1.2.5\themes\gray.js" />
     <Content Include="Scripts\Highstock-1.2.5\themes\grid.js" />
     <Content Include="Scripts\Highstock-1.2.5\themes\skies.js" />
-    <Content Include="Scripts\jquery-1.8.3-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.8.3.js" />
-    <Content Include="Scripts\jquery-1.8.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.js" />
     <Content Include="Scripts\jquery-ui-1.9.2.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -513,8 +515,6 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\knockout-2.2.0.debug.js" />
-    <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -726,6 +726,7 @@
     <Content Include="Views\Catalogs\CharacteristicApplicability\Create.cshtml" />
     <Content Include="Views\Catalogs\CharacteristicApplicability\Edit.cshtml" />
     <Content Include="Views\Catalogs\CharacteristicApplicability\Delete.cshtml" />
+    <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -745,7 +746,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>13231</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:13231/</IISUrl>
+          <IISUrl>http://localhost/LibiadaWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

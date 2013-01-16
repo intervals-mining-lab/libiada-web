@@ -83,6 +83,7 @@
         
 
         $("table").dataTable({
+            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
@@ -117,7 +118,7 @@
         for (var k = 0; k < characteristics.length; k++) {
             var series = new Object();
             series.data = new Array();
-            series.name = characteristicNames[characteristicId] + " и " + characteristicNames[characteristic2Id];
+            series.name = chainNames[k];
             for (var i = 0; i < characteristics[k][characteristicId].length; i++) {
                 var x = characteristics[k][characteristicId][i].value;
                 var y;
@@ -129,7 +130,7 @@
                 }
                 var pointName = elementNames[k][i];
                 series.data[i] = new Object();
-
+                maxZoomX = 0;
                 series.data[i].x = x;
                 series.data[i].y = y;
                 series.data[i].name = pointName;
@@ -147,7 +148,7 @@
             var series = new Object();
             series.data = new Array();
             series.type = 'area';
-            series.name = chainNames[j] + " " + characteristicNames[characteristicId];
+            series.name = chainNames[j];
             for (var i = 0; i < characteristics[j][characteristicId].length; i++) {
                 var y = characteristics[j][characteristicId][i].value;
                 var pointName = elementNames[j][i];
@@ -175,7 +176,7 @@
             var series = new Object();
             series.data = new Array();
             series.type = 'area';
-            series.name = "Теоретическое распределение для " + characteristicNames[characteristicId];
+            series.name = "Теоретическое распределение для " + chainNames[j];
             for (var i = 0; i < theoreticalRanks[j][characteristicId].length; i++) {
                 var y = theoreticalRanks[j][characteristicId][i];
                 var pointName = i + 1;
@@ -214,7 +215,7 @@
                 }
             },
 
-            xAxis: { min: minX, maxZoom: maxZoomX, title: { text: rank ? 'Фрагменты цепочки' : $("#xaxis option:selected")[0].text } },
+            xAxis: { min: minX, maxZoom: maxZoomX, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
 
             yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
@@ -251,7 +252,7 @@
                 }
             } else {
                 //если нужно вывести графики для двух характеристик
-                FillSeries($("#yaxis option:selected")[0].value, $("#xaxis option:selected")[0].value, dataSeries);
+                FillSeries($("#xaxis option:selected")[0].value, $("#yaxis option:selected")[0].value, dataSeries);
             }
         }
 
