@@ -198,19 +198,21 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
-                int linkUpId = linkUpIds[k];
-                int notationId = notationIds[k];
                 int languageId = languageIds[k];
                 if (isLiteratureChain)
                 {
-                    
+                    characteristicNames.Add(db.characteristic_type.Single(
+                        c => c.id == characteristicId).name
+                                            + " " + db.language.Single(l => l.id == languageId).name
+                        );
                 }
-                characteristicNames.Add(db.characteristic_type.Single(
-                    c => c.id == characteristicId).name
-                    + " " + db.link_up.Single(l => l.id == linkUpId).name 
-                    + " " + db.notation.Single(n => n.id == notationId).name 
-                    + " " + db.language.Single(l => l.id == languageId).name
-                    );
+                else
+                {
+                    characteristicNames.Add(db.characteristic_type.Single(
+                        c => c.id == characteristicId).name
+                        );
+                }
+
             }
 
             //ранговая сортировка

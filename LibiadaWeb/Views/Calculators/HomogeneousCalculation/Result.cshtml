@@ -203,7 +203,7 @@
         chart = new Highcharts.Chart({
             chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: rank ? 'x': 'xy' },
 
-            legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+            legend: { align: 'right', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 0, y: 50 },
 
             plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 

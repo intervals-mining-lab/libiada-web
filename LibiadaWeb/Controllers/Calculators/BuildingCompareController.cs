@@ -46,7 +46,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId1, long matterId2, int length)
+        public ActionResult Index(long matterId1, long matterId2, int length, bool homogeneous)
         {
             String chainName1 = db.matter.Single(m => m.id == matterId1).name;
             String chainName2 = db.matter.Single(m => m.id == matterId2).name;
@@ -57,8 +57,8 @@ namespace LibiadaWeb.Controllers.Calculators
             chain chain2 = matter2.chain.Single(c => c.notation_id == 1);
             Chain libiadaChain2 = chainRepository.FromDbChainToLibiadaChain(chain2);
 
-            Chain res1 = null;
-            Chain res2 = null;
+            BaseChain res1 = null;
+            BaseChain res2 = null;
 
             int i = 0;
             int j = 0;
@@ -74,11 +74,33 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     j++;
                     Chain tempChain2 = iter2.Current();
-                    if (CompareBuldings(tempChain2.Building, tempChain1.Building) && !tempChain1.Equals(tempChain2))
+
+                    if (homogeneous)
                     {
-                        res1 = tempChain1;
-                        res2 = tempChain2;
-                        duplicate = true;
+                        for (int a = 0; a < tempChain1.Alphabet.Power; a++)
+                        {
+                            UniformChain firstChain = tempChain1.GetUniformChain(a);
+                            for (int b = 0; b < tempChain2.Alphabet.Power; b++)
+                            {
+
+                                UniformChain secondChain = tempChain2.GetUniformChain(b);
+                                if (!firstChain.Equals(secondChain) && CompareBuldings(firstChain.Building, secondChain.Building))
+                                {
+                                    res1 = firstChain;
+                                    res2 = secondChain;
+                                    duplicate = true;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (!tempChain1.Equals(tempChain2) && CompareBuldings(tempChain2.Building, tempChain1.Building))
+                        {
+                            res1 = tempChain1;
+                            res2 = tempChain2;
+                            duplicate = true;
+                        }
                     }
                 }
             }
@@ -100,8 +122,8 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 ViewBag.chainName1 = TempData["chainName1"] as String;
                 ViewBag.chainName2 = TempData["chainName2"] as String;
-                ViewBag.res1 = TempData["res1"] as Chain;
-                ViewBag.res2 = TempData["res2"] as Chain;
+                ViewBag.res1 = TempData["res1"] as BaseChain;
+                ViewBag.res2 = TempData["res2"] as BaseChain;
                 ViewBag.pos1 = TempData["pos1"] is int ? (int)TempData["pos1"] : 0;
                 ViewBag.pos2 = TempData["pos2"] is int ? (int)TempData["pos2"] : 0;
             }
