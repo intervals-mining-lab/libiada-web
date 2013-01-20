@@ -111,7 +111,6 @@
 
     var xVals;
     var yVals;
-    var maxZoomX;
     
     // заполнение данных для двумерного распределения
     function FillSeries(characteristicId, characteristic2Id, dataSeries) {
@@ -130,7 +129,6 @@
                 }
                 var pointName = elementNames[k][i];
                 series.data[i] = new Object();
-                maxZoomX = 0;
                 series.data[i].x = x;
                 series.data[i].y = y;
                 series.data[i].name = pointName;
@@ -143,6 +141,7 @@
     }
 
     // заполнение данных для рангового распределения
+
     function FillRankSeries(characteristicId, logarithmic, dataSeries) {
         for (var j = 0; j < characteristics.length; j++) {
             var series = new Object();
@@ -153,13 +152,7 @@
                 var y = characteristics[j][characteristicId][i].value;
                 var pointName = elementNames[j][i];
                 series.data[i] = new Object();
-                if (logarithmic) {
-                    series.data[i].x = Math.log(i + 1) / Math.log(10);
-                    maxZoomX = 0.1;
-                } else {
-                    series.data[i].x = i + 1;
-                    maxZoomX = 3;
-                }
+                series.data[i].x = i + 1;
 
                 series.data[i].y = y;
                 series.data[i].name = pointName;
@@ -181,13 +174,7 @@
                 var y = theoreticalRanks[j][characteristicId][i];
                 var pointName = i + 1;
                 series.data[i] = new Object();
-                if (logarithmic) {
-                    series.data[i].x = Math.log(i + 1) / Math.log(10);
-                    maxZoomX = 0.1;
-                } else {
-                    series.data[i].x = i + 1;
-                    maxZoomX = 3;
-                }
+                series.data[i].x = i + 1;
 
                 series.data[i].y = y;
                 series.data[i].name = pointName;
@@ -199,7 +186,7 @@
         }
     }
 
-    function CreateChart(dataSeries, minY, minX, rank) {
+    function CreateChart(dataSeries, minY, minX, rank, logarithmic) {
         chart = new Highcharts.Chart({
             chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: rank ? 'x': 'xy' },
 
@@ -215,7 +202,7 @@
                 }
             },
 
-            xAxis: { min: minX, maxZoom: maxZoomX, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
+            xAxis: { min: logarithmic ? 1 : minX, type: logarithmic ? 'logarithmic':'linear', minorTickInterval:logarithmic ? 0.1 : 0, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
 
             yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
@@ -256,7 +243,7 @@
             }
         }
 
-        CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked);
+        CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked, logarithmic);
     }
     
 </script>

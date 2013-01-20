@@ -27,7 +27,14 @@
             $("#filter_div")[0].hidden = true;
         }
     }
-    
+
+    function FrequencySwitch() {
+        if ($("#frequency")[0].checked) {
+            $("#frequency_div")[0].hidden = false;
+        } else {
+            $("#frequency_div")[0].hidden = true;
+        }
+    }
 </script>
 
 <h2>Вычисление бинарных характеристик</h2>
@@ -96,11 +103,18 @@
     </select>
     <br/>
     <br/>
-    @Html.CheckBox("filter", "Фильтрация", null)
+    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object>() { { "onclick", "FiltrationSwitch()" } })
     <br/>
     <div id="filter_div" hidden="true">
         @Html.Label("Число выводимых зависимостей")
         <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
+    </div>
+    <br/>
+    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object>() { { "onclick", "FrequencySwitch()" } })
+    <br/>
+    <div id="frequency_div" hidden="true">
+        @Html.Label("X:")
+        <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
     </div>
     <br/>
     <input type="submit" value="Вычислить" />

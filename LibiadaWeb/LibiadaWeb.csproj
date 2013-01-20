@@ -188,6 +188,7 @@
     <Compile Include="Controllers\Catalogs\CharacteristicApplicabilityController.cs" />
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
+    <Compile Include="Controllers\Chains\ChainMixingController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\Catalogs\CharacteristicGroupController.cs" />
     <Compile Include="Controllers\Catalogs\CharacteristicTypeController.cs" />
@@ -727,6 +728,7 @@
     <Content Include="Views\Catalogs\CharacteristicApplicability\Edit.cshtml" />
     <Content Include="Views\Catalogs\CharacteristicApplicability\Delete.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
+    <Content Include="Views\Chains\ChainMixing\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
