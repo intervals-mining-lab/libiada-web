@@ -9,7 +9,11 @@ namespace LibiadaWeb
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/packed.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/menu").Include(
+                        "~/Scripts/tinydropdown.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
@@ -30,7 +34,7 @@ namespace LibiadaWeb
 
             bundles.Add(new ScriptBundle("~/bundles/Procedures").Include(
                       "~/Scripts/procs.js"));
-
+           
 
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
@@ -52,7 +56,9 @@ namespace LibiadaWeb
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css",
-                        "~/Content/DataTables-1.9.4/media/css/jquery.dataTables_themeroller.css"));
+                        "~/Content/DataTables-1.9.4/media/css/jquery.dataTables_themeroller.css",
+                        "~/Content/themes/base/tinydropdown.css"
+                        ));
         }
     }
 }

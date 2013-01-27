@@ -8,12 +8,13 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 #region Метаданные связи EDM
@@ -624,6 +625,7 @@ namespace LibiadaWeb
         private ObjectSet<characteristic_applicability> _characteristic_applicability;
 
         #endregion
+
         #region Методы AddTo
     
         /// <summary>
@@ -867,11 +869,11 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Сущности
     
     /// <summary>
@@ -898,7 +900,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -917,7 +920,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -942,7 +945,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -966,7 +969,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -976,7 +979,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -1002,6 +1005,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1032,7 +1036,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -1049,7 +1054,7 @@ namespace LibiadaWeb
             {
                 Onchain_idChanging(value);
                 ReportPropertyChanging("chain_id");
-                _chain_id = StructuralObject.SetValidValue(value);
+                _chain_id = StructuralObject.SetValidValue(value, "chain_id");
                 ReportPropertyChanged("chain_id");
                 Onchain_idChanged();
             }
@@ -1073,7 +1078,7 @@ namespace LibiadaWeb
             {
                 Onelement_idChanging(value);
                 ReportPropertyChanging("element_id");
-                _element_id = StructuralObject.SetValidValue(value);
+                _element_id = StructuralObject.SetValidValue(value, "element_id");
                 ReportPropertyChanged("element_id");
                 Onelement_idChanged();
             }
@@ -1097,7 +1102,7 @@ namespace LibiadaWeb
             {
                 OnnumberChanging(value);
                 ReportPropertyChanging("number");
-                _number = StructuralObject.SetValidValue(value);
+                _number = StructuralObject.SetValidValue(value, "number");
                 ReportPropertyChanged("number");
                 OnnumberChanged();
             }
@@ -1123,7 +1128,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -1134,7 +1139,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -1480,6 +1485,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1516,7 +1522,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -1535,7 +1542,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -1560,7 +1567,7 @@ namespace LibiadaWeb
             {
                 Onchain_idChanging(value);
                 ReportPropertyChanging("chain_id");
-                _chain_id = StructuralObject.SetValidValue(value);
+                _chain_id = StructuralObject.SetValidValue(value, "chain_id");
                 ReportPropertyChanged("chain_id");
                 Onchain_idChanged();
             }
@@ -1584,7 +1591,7 @@ namespace LibiadaWeb
             {
                 Oncharacteristic_type_idChanging(value);
                 ReportPropertyChanging("characteristic_type_id");
-                _characteristic_type_id = StructuralObject.SetValidValue(value);
+                _characteristic_type_id = StructuralObject.SetValidValue(value, "characteristic_type_id");
                 ReportPropertyChanged("characteristic_type_id");
                 Oncharacteristic_type_idChanged();
             }
@@ -1608,7 +1615,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value);
+                _value = StructuralObject.SetValidValue(value, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -1632,7 +1639,7 @@ namespace LibiadaWeb
             {
                 Onvalue_stringChanging(value);
                 ReportPropertyChanging("value_string");
-                _value_string = StructuralObject.SetValidValue(value, true);
+                _value_string = StructuralObject.SetValidValue(value, true, "value_string");
                 ReportPropertyChanged("value_string");
                 Onvalue_stringChanged();
             }
@@ -1656,7 +1663,7 @@ namespace LibiadaWeb
             {
                 Onlink_up_idChanging(value);
                 ReportPropertyChanging("link_up_id");
-                _link_up_id = StructuralObject.SetValidValue(value);
+                _link_up_id = StructuralObject.SetValidValue(value, "link_up_id");
                 ReportPropertyChanged("link_up_id");
                 Onlink_up_idChanged();
             }
@@ -1680,7 +1687,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -1704,7 +1711,7 @@ namespace LibiadaWeb
             {
                 Onfirst_element_idChanging(value);
                 ReportPropertyChanging("first_element_id");
-                _first_element_id = StructuralObject.SetValidValue(value);
+                _first_element_id = StructuralObject.SetValidValue(value, "first_element_id");
                 ReportPropertyChanged("first_element_id");
                 Onfirst_element_idChanged();
             }
@@ -1728,7 +1735,7 @@ namespace LibiadaWeb
             {
                 Onsecond_element_idChanging(value);
                 ReportPropertyChanging("second_element_id");
-                _second_element_id = StructuralObject.SetValidValue(value);
+                _second_element_id = StructuralObject.SetValidValue(value, "second_element_id");
                 ReportPropertyChanged("second_element_id");
                 Onsecond_element_idChanged();
             }
@@ -1738,7 +1745,7 @@ namespace LibiadaWeb
         partial void Onsecond_element_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -1932,6 +1939,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -1960,7 +1968,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -1979,7 +1988,7 @@ namespace LibiadaWeb
                 {
                     Onchain_idChanging(value);
                     ReportPropertyChanging("chain_id");
-                    _chain_id = StructuralObject.SetValidValue(value);
+                    _chain_id = StructuralObject.SetValidValue(value, "chain_id");
                     ReportPropertyChanged("chain_id");
                     Onchain_idChanged();
                 }
@@ -2006,7 +2015,7 @@ namespace LibiadaWeb
                 {
                     OnindexChanging(value);
                     ReportPropertyChanging("index");
-                    _index = StructuralObject.SetValidValue(value);
+                    _index = StructuralObject.SetValidValue(value, "index");
                     ReportPropertyChanged("index");
                     OnindexChanged();
                 }
@@ -2033,7 +2042,7 @@ namespace LibiadaWeb
                 {
                     OnnumberChanging(value);
                     ReportPropertyChanging("number");
-                    _number = StructuralObject.SetValidValue(value);
+                    _number = StructuralObject.SetValidValue(value, "number");
                     ReportPropertyChanged("number");
                     OnnumberChanged();
                 }
@@ -2044,7 +2053,7 @@ namespace LibiadaWeb
         partial void OnnumberChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -2086,6 +2095,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2112,7 +2122,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -2131,7 +2142,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -2156,7 +2167,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -2180,7 +2191,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -2190,7 +2201,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
     }
     
     /// <summary>
@@ -2227,7 +2238,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -2246,7 +2258,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -2271,7 +2283,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -2295,7 +2307,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -2319,7 +2331,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -2343,7 +2355,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -2367,7 +2379,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -2391,7 +2403,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -2401,7 +2413,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -2607,6 +2619,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2639,7 +2652,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -2658,7 +2672,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -2683,7 +2697,7 @@ namespace LibiadaWeb
             {
                 Onchain_idChanging(value);
                 ReportPropertyChanging("chain_id");
-                _chain_id = StructuralObject.SetValidValue(value);
+                _chain_id = StructuralObject.SetValidValue(value, "chain_id");
                 ReportPropertyChanged("chain_id");
                 Onchain_idChanged();
             }
@@ -2707,7 +2721,7 @@ namespace LibiadaWeb
             {
                 Oncharacteristic_type_idChanging(value);
                 ReportPropertyChanging("characteristic_type_id");
-                _characteristic_type_id = StructuralObject.SetValidValue(value);
+                _characteristic_type_id = StructuralObject.SetValidValue(value, "characteristic_type_id");
                 ReportPropertyChanged("characteristic_type_id");
                 Oncharacteristic_type_idChanged();
             }
@@ -2731,7 +2745,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value);
+                _value = StructuralObject.SetValidValue(value, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -2755,7 +2769,7 @@ namespace LibiadaWeb
             {
                 Onvalue_stringChanging(value);
                 ReportPropertyChanging("value_string");
-                _value_string = StructuralObject.SetValidValue(value, true);
+                _value_string = StructuralObject.SetValidValue(value, true, "value_string");
                 ReportPropertyChanged("value_string");
                 Onvalue_stringChanged();
             }
@@ -2779,7 +2793,7 @@ namespace LibiadaWeb
             {
                 Onlink_up_idChanging(value);
                 ReportPropertyChanging("link_up_id");
-                _link_up_id = StructuralObject.SetValidValue(value);
+                _link_up_id = StructuralObject.SetValidValue(value, "link_up_id");
                 ReportPropertyChanged("link_up_id");
                 Onlink_up_idChanged();
             }
@@ -2803,7 +2817,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -2813,7 +2827,7 @@ namespace LibiadaWeb
         partial void Oncreation_dateChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -2931,6 +2945,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -2957,7 +2972,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -2976,7 +2992,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -3001,7 +3017,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -3025,7 +3041,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -3035,7 +3051,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -3061,6 +3077,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3087,7 +3104,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -3106,7 +3124,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -3131,7 +3149,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -3155,7 +3173,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -3165,7 +3183,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -3191,6 +3209,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3221,7 +3240,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -3240,7 +3260,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -3265,7 +3285,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -3289,7 +3309,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -3313,7 +3333,7 @@ namespace LibiadaWeb
             {
                 Oncharacteristic_group_idChanging(value);
                 ReportPropertyChanging("characteristic_group_id");
-                _characteristic_group_id = StructuralObject.SetValidValue(value);
+                _characteristic_group_id = StructuralObject.SetValidValue(value, "characteristic_group_id");
                 ReportPropertyChanged("characteristic_group_id");
                 Oncharacteristic_group_idChanged();
             }
@@ -3337,7 +3357,7 @@ namespace LibiadaWeb
             {
                 Onclass_nameChanging(value);
                 ReportPropertyChanging("class_name");
-                _class_name = StructuralObject.SetValidValue(value, false);
+                _class_name = StructuralObject.SetValidValue(value, false, "class_name");
                 ReportPropertyChanged("class_name");
                 Onclass_nameChanged();
             }
@@ -3361,7 +3381,7 @@ namespace LibiadaWeb
             {
                 Oncharacteristic_applicability_idChanging(value);
                 ReportPropertyChanging("characteristic_applicability_id");
-                _characteristic_applicability_id = StructuralObject.SetValidValue(value);
+                _characteristic_applicability_id = StructuralObject.SetValidValue(value, "characteristic_applicability_id");
                 ReportPropertyChanged("characteristic_applicability_id");
                 Oncharacteristic_applicability_idChanged();
             }
@@ -3371,7 +3391,7 @@ namespace LibiadaWeb
         partial void Oncharacteristic_applicability_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -3517,6 +3537,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3553,7 +3574,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -3572,7 +3594,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -3597,7 +3619,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -3621,7 +3643,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -3645,7 +3667,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -3669,7 +3691,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -3693,7 +3715,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -3717,7 +3739,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -3741,7 +3763,7 @@ namespace LibiadaWeb
             {
                 Onfasta_headerChanging(value);
                 ReportPropertyChanging("fasta_header");
-                _fasta_header = StructuralObject.SetValidValue(value, true);
+                _fasta_header = StructuralObject.SetValidValue(value, true, "fasta_header");
                 ReportPropertyChanged("fasta_header");
                 Onfasta_headerChanged();
             }
@@ -3751,7 +3773,7 @@ namespace LibiadaWeb
         partial void Onfasta_headerChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -3957,6 +3979,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -3983,7 +4006,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -4002,7 +4026,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -4027,7 +4051,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value, true);
+                _value = StructuralObject.SetValidValue(value, true, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -4051,7 +4075,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -4075,7 +4099,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, true);
+                _name = StructuralObject.SetValidValue(value, true, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -4099,7 +4123,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -4123,7 +4147,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -4133,7 +4157,7 @@ namespace LibiadaWeb
         partial void Oncreation_dateChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -4263,6 +4287,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4301,7 +4326,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -4320,7 +4346,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -4345,7 +4371,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -4369,7 +4395,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -4393,7 +4419,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -4417,7 +4443,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -4441,7 +4467,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -4465,7 +4491,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -4489,7 +4515,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value, true);
+                _value = StructuralObject.SetValidValue(value, true, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -4513,7 +4539,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -4537,7 +4563,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, true);
+                _name = StructuralObject.SetValidValue(value, true, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -4561,7 +4587,7 @@ namespace LibiadaWeb
             {
                 Onfmotiv_type_idChanging(value);
                 ReportPropertyChanging("fmotiv_type_id");
-                _fmotiv_type_id = StructuralObject.SetValidValue(value);
+                _fmotiv_type_id = StructuralObject.SetValidValue(value, "fmotiv_type_id");
                 ReportPropertyChanged("fmotiv_type_id");
                 Onfmotiv_type_idChanged();
             }
@@ -4571,7 +4597,7 @@ namespace LibiadaWeb
         partial void Onfmotiv_type_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -4837,6 +4863,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -4863,7 +4890,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -4882,7 +4910,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -4907,7 +4935,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -4931,7 +4959,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -4941,7 +4969,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -4967,6 +4995,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5001,7 +5030,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5020,7 +5050,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -5045,7 +5075,7 @@ namespace LibiadaWeb
             {
                 Onchain_idChanging(value);
                 ReportPropertyChanging("chain_id");
-                _chain_id = StructuralObject.SetValidValue(value);
+                _chain_id = StructuralObject.SetValidValue(value, "chain_id");
                 ReportPropertyChanged("chain_id");
                 Onchain_idChanged();
             }
@@ -5069,7 +5099,7 @@ namespace LibiadaWeb
             {
                 Oncharacteristic_type_idChanging(value);
                 ReportPropertyChanging("characteristic_type_id");
-                _characteristic_type_id = StructuralObject.SetValidValue(value);
+                _characteristic_type_id = StructuralObject.SetValidValue(value, "characteristic_type_id");
                 ReportPropertyChanged("characteristic_type_id");
                 Oncharacteristic_type_idChanged();
             }
@@ -5093,7 +5123,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value);
+                _value = StructuralObject.SetValidValue(value, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -5117,7 +5147,7 @@ namespace LibiadaWeb
             {
                 Onvalue_stringChanging(value);
                 ReportPropertyChanging("value_string");
-                _value_string = StructuralObject.SetValidValue(value, true);
+                _value_string = StructuralObject.SetValidValue(value, true, "value_string");
                 ReportPropertyChanged("value_string");
                 Onvalue_stringChanged();
             }
@@ -5141,7 +5171,7 @@ namespace LibiadaWeb
             {
                 Onlink_up_idChanging(value);
                 ReportPropertyChanging("link_up_id");
-                _link_up_id = StructuralObject.SetValidValue(value);
+                _link_up_id = StructuralObject.SetValidValue(value, "link_up_id");
                 ReportPropertyChanged("link_up_id");
                 Onlink_up_idChanged();
             }
@@ -5165,7 +5195,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -5189,7 +5219,7 @@ namespace LibiadaWeb
             {
                 Onelement_idChanging(value);
                 ReportPropertyChanging("element_id");
-                _element_id = StructuralObject.SetValidValue(value);
+                _element_id = StructuralObject.SetValidValue(value, "element_id");
                 ReportPropertyChanged("element_id");
                 Onelement_idChanged();
             }
@@ -5199,7 +5229,7 @@ namespace LibiadaWeb
         partial void Onelement_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -5317,6 +5347,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5343,7 +5374,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5362,7 +5394,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -5387,7 +5419,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -5411,7 +5443,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -5421,7 +5453,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -5469,6 +5501,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5495,7 +5528,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5514,7 +5548,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -5539,7 +5573,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -5563,7 +5597,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -5573,7 +5607,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -5599,6 +5633,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5625,7 +5660,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5644,7 +5680,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -5669,7 +5705,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -5693,7 +5729,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -5703,7 +5739,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -5751,6 +5787,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -5791,7 +5828,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5810,7 +5848,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -5835,7 +5873,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -5859,7 +5897,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -5883,7 +5921,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -5907,7 +5945,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -5931,7 +5969,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -5955,7 +5993,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -5979,7 +6017,7 @@ namespace LibiadaWeb
             {
                 OnoriginalChanging(value);
                 ReportPropertyChanging("original");
-                _original = StructuralObject.SetValidValue(value);
+                _original = StructuralObject.SetValidValue(value, "original");
                 ReportPropertyChanged("original");
                 OnoriginalChanged();
             }
@@ -6003,7 +6041,7 @@ namespace LibiadaWeb
             {
                 Onlanguage_idChanging(value);
                 ReportPropertyChanging("language_id");
-                _language_id = StructuralObject.SetValidValue(value);
+                _language_id = StructuralObject.SetValidValue(value, "language_id");
                 ReportPropertyChanged("language_id");
                 Onlanguage_idChanged();
             }
@@ -6013,7 +6051,7 @@ namespace LibiadaWeb
         partial void Onlanguage_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -6279,6 +6317,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -6305,7 +6344,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -6324,7 +6364,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -6349,7 +6389,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, true);
+                _name = StructuralObject.SetValidValue(value, true, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -6373,7 +6413,7 @@ namespace LibiadaWeb
             {
                 Onnature_idChanging(value);
                 ReportPropertyChanging("nature_id");
-                _nature_id = StructuralObject.SetValidValue(value);
+                _nature_id = StructuralObject.SetValidValue(value, "nature_id");
                 ReportPropertyChanged("nature_id");
                 Onnature_idChanged();
             }
@@ -6397,7 +6437,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -6421,7 +6461,7 @@ namespace LibiadaWeb
             {
                 Onremote_db_idChanging(value);
                 ReportPropertyChanging("remote_db_id");
-                _remote_db_id = StructuralObject.SetValidValue(value);
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
                 ReportPropertyChanged("remote_db_id");
                 Onremote_db_idChanged();
             }
@@ -6445,7 +6485,7 @@ namespace LibiadaWeb
             {
                 Onid_in_remote_dbChanging(value);
                 ReportPropertyChanging("id_in_remote_db");
-                _id_in_remote_db = StructuralObject.SetValidValue(value, true);
+                _id_in_remote_db = StructuralObject.SetValidValue(value, true, "id_in_remote_db");
                 ReportPropertyChanged("id_in_remote_db");
                 Onid_in_remote_dbChanged();
             }
@@ -6455,7 +6495,7 @@ namespace LibiadaWeb
         partial void Onid_in_remote_dbChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -6667,6 +6707,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -6709,7 +6750,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -6728,7 +6770,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -6753,7 +6795,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -6777,7 +6819,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -6801,7 +6843,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -6825,7 +6867,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -6849,7 +6891,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -6873,7 +6915,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -6897,7 +6939,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value, true);
+                _value = StructuralObject.SetValidValue(value, true, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -6921,7 +6963,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -6945,7 +6987,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, true);
+                _name = StructuralObject.SetValidValue(value, true, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -6969,7 +7011,7 @@ namespace LibiadaWeb
             {
                 OnbeatsChanging(value);
                 ReportPropertyChanging("beats");
-                _beats = StructuralObject.SetValidValue(value);
+                _beats = StructuralObject.SetValidValue(value, "beats");
                 ReportPropertyChanged("beats");
                 OnbeatsChanged();
             }
@@ -6993,7 +7035,7 @@ namespace LibiadaWeb
             {
                 OnbeatbaseChanging(value);
                 ReportPropertyChanging("beatbase");
-                _beatbase = StructuralObject.SetValidValue(value);
+                _beatbase = StructuralObject.SetValidValue(value, "beatbase");
                 ReportPropertyChanged("beatbase");
                 OnbeatbaseChanged();
             }
@@ -7017,7 +7059,7 @@ namespace LibiadaWeb
             {
                 Onticks_per_beatChanging(value);
                 ReportPropertyChanging("ticks_per_beat");
-                _ticks_per_beat = StructuralObject.SetValidValue(value);
+                _ticks_per_beat = StructuralObject.SetValidValue(value, "ticks_per_beat");
                 ReportPropertyChanged("ticks_per_beat");
                 Onticks_per_beatChanged();
             }
@@ -7041,7 +7083,7 @@ namespace LibiadaWeb
             {
                 OnfifthsChanging(value);
                 ReportPropertyChanging("fifths");
-                _fifths = StructuralObject.SetValidValue(value);
+                _fifths = StructuralObject.SetValidValue(value, "fifths");
                 ReportPropertyChanged("fifths");
                 OnfifthsChanged();
             }
@@ -7051,7 +7093,7 @@ namespace LibiadaWeb
         partial void OnfifthsChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -7279,6 +7321,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7315,7 +7358,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -7334,7 +7378,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -7359,7 +7403,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -7383,7 +7427,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -7407,7 +7451,7 @@ namespace LibiadaWeb
             {
                 Onmatter_idChanging(value);
                 ReportPropertyChanging("matter_id");
-                _matter_id = StructuralObject.SetValidValue(value);
+                _matter_id = StructuralObject.SetValidValue(value, "matter_id");
                 ReportPropertyChanged("matter_id");
                 Onmatter_idChanged();
             }
@@ -7431,7 +7475,7 @@ namespace LibiadaWeb
             {
                 OndissimilarChanging(value);
                 ReportPropertyChanging("dissimilar");
-                _dissimilar = StructuralObject.SetValidValue(value);
+                _dissimilar = StructuralObject.SetValidValue(value, "dissimilar");
                 ReportPropertyChanged("dissimilar");
                 OndissimilarChanged();
             }
@@ -7455,7 +7499,7 @@ namespace LibiadaWeb
             {
                 Onpiece_type_idChanging(value);
                 ReportPropertyChanging("piece_type_id");
-                _piece_type_id = StructuralObject.SetValidValue(value);
+                _piece_type_id = StructuralObject.SetValidValue(value, "piece_type_id");
                 ReportPropertyChanged("piece_type_id");
                 Onpiece_type_idChanged();
             }
@@ -7479,7 +7523,7 @@ namespace LibiadaWeb
             {
                 Onpiece_positionChanging(value);
                 ReportPropertyChanging("piece_position");
-                _piece_position = StructuralObject.SetValidValue(value);
+                _piece_position = StructuralObject.SetValidValue(value, "piece_position");
                 ReportPropertyChanged("piece_position");
                 Onpiece_positionChanged();
             }
@@ -7503,7 +7547,7 @@ namespace LibiadaWeb
             {
                 Oninstrument_idChanging(value);
                 ReportPropertyChanging("instrument_id");
-                _instrument_id = StructuralObject.SetValidValue(value);
+                _instrument_id = StructuralObject.SetValidValue(value, "instrument_id");
                 ReportPropertyChanged("instrument_id");
                 Oninstrument_idChanged();
             }
@@ -7513,7 +7557,7 @@ namespace LibiadaWeb
         partial void Oninstrument_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -7779,6 +7823,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7805,7 +7850,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -7824,7 +7870,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -7849,7 +7895,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -7873,7 +7919,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -7883,7 +7929,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -7953,6 +7999,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -7981,7 +8028,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -8000,7 +8048,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -8025,7 +8073,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -8049,7 +8097,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -8073,7 +8121,7 @@ namespace LibiadaWeb
             {
                 Onnature_idChanging(value);
                 ReportPropertyChanging("nature_id");
-                _nature_id = StructuralObject.SetValidValue(value);
+                _nature_id = StructuralObject.SetValidValue(value, "nature_id");
                 ReportPropertyChanged("nature_id");
                 Onnature_idChanged();
             }
@@ -8083,7 +8131,7 @@ namespace LibiadaWeb
         partial void Onnature_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -8301,6 +8349,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8339,7 +8388,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -8358,7 +8408,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -8383,7 +8433,7 @@ namespace LibiadaWeb
             {
                 OnvalueChanging(value);
                 ReportPropertyChanging("value");
-                _value = StructuralObject.SetValidValue(value, true);
+                _value = StructuralObject.SetValidValue(value, true, "value");
                 ReportPropertyChanged("value");
                 OnvalueChanged();
             }
@@ -8407,7 +8457,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -8431,7 +8481,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, true);
+                _name = StructuralObject.SetValidValue(value, true, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -8455,7 +8505,7 @@ namespace LibiadaWeb
             {
                 Onnotation_idChanging(value);
                 ReportPropertyChanging("notation_id");
-                _notation_id = StructuralObject.SetValidValue(value);
+                _notation_id = StructuralObject.SetValidValue(value, "notation_id");
                 ReportPropertyChanged("notation_id");
                 Onnotation_idChanged();
             }
@@ -8479,7 +8529,7 @@ namespace LibiadaWeb
             {
                 Oncreation_dateChanging(value);
                 ReportPropertyChanging("creation_date");
-                _creation_date = StructuralObject.SetValidValue(value);
+                _creation_date = StructuralObject.SetValidValue(value, "creation_date");
                 ReportPropertyChanged("creation_date");
                 Oncreation_dateChanged();
             }
@@ -8503,7 +8553,7 @@ namespace LibiadaWeb
             {
                 OnnumeratorChanging(value);
                 ReportPropertyChanging("numerator");
-                _numerator = StructuralObject.SetValidValue(value);
+                _numerator = StructuralObject.SetValidValue(value, "numerator");
                 ReportPropertyChanged("numerator");
                 OnnumeratorChanged();
             }
@@ -8527,7 +8577,7 @@ namespace LibiadaWeb
             {
                 OndenominatorChanging(value);
                 ReportPropertyChanging("denominator");
-                _denominator = StructuralObject.SetValidValue(value);
+                _denominator = StructuralObject.SetValidValue(value, "denominator");
                 ReportPropertyChanged("denominator");
                 OndenominatorChanged();
             }
@@ -8551,7 +8601,7 @@ namespace LibiadaWeb
             {
                 OnticksChanging(value);
                 ReportPropertyChanging("ticks");
-                _ticks = StructuralObject.SetValidValue(value);
+                _ticks = StructuralObject.SetValidValue(value, "ticks");
                 ReportPropertyChanged("ticks");
                 OnticksChanged();
             }
@@ -8575,7 +8625,7 @@ namespace LibiadaWeb
             {
                 OnonumeratorChanging(value);
                 ReportPropertyChanging("onumerator");
-                _onumerator = StructuralObject.SetValidValue(value);
+                _onumerator = StructuralObject.SetValidValue(value, "onumerator");
                 ReportPropertyChanged("onumerator");
                 OnonumeratorChanged();
             }
@@ -8599,7 +8649,7 @@ namespace LibiadaWeb
             {
                 OnodenominatorChanging(value);
                 ReportPropertyChanging("odenominator");
-                _odenominator = StructuralObject.SetValidValue(value);
+                _odenominator = StructuralObject.SetValidValue(value, "odenominator");
                 ReportPropertyChanged("odenominator");
                 OnodenominatorChanged();
             }
@@ -8623,7 +8673,7 @@ namespace LibiadaWeb
             {
                 OntripletChanging(value);
                 ReportPropertyChanging("triplet");
-                _triplet = StructuralObject.SetValidValue(value);
+                _triplet = StructuralObject.SetValidValue(value, "triplet");
                 ReportPropertyChanged("triplet");
                 OntripletChanged();
             }
@@ -8647,7 +8697,7 @@ namespace LibiadaWeb
             {
                 OnpriorityChanging(value);
                 ReportPropertyChanging("priority");
-                _priority = StructuralObject.SetValidValue(value);
+                _priority = StructuralObject.SetValidValue(value, "priority");
                 ReportPropertyChanged("priority");
                 OnpriorityChanged();
             }
@@ -8671,7 +8721,7 @@ namespace LibiadaWeb
             {
                 Ontie_idChanging(value);
                 ReportPropertyChanging("tie_id");
-                _tie_id = StructuralObject.SetValidValue(value);
+                _tie_id = StructuralObject.SetValidValue(value, "tie_id");
                 ReportPropertyChanged("tie_id");
                 Ontie_idChanged();
             }
@@ -8681,7 +8731,7 @@ namespace LibiadaWeb
         partial void Ontie_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -8783,6 +8833,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8809,7 +8860,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -8828,7 +8880,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -8853,7 +8905,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -8877,7 +8929,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -8887,7 +8939,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -8913,6 +8965,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -8941,7 +8994,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -8960,7 +9014,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -8985,7 +9039,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -9009,7 +9063,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -9033,7 +9087,7 @@ namespace LibiadaWeb
             {
                 Onnature_idChanging(value);
                 ReportPropertyChanging("nature_id");
-                _nature_id = StructuralObject.SetValidValue(value);
+                _nature_id = StructuralObject.SetValidValue(value, "nature_id");
                 ReportPropertyChanged("nature_id");
                 Onnature_idChanged();
             }
@@ -9043,7 +9097,7 @@ namespace LibiadaWeb
         partial void Onnature_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -9217,6 +9271,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -9253,7 +9308,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -9272,7 +9328,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -9297,7 +9353,7 @@ namespace LibiadaWeb
             {
                 OnoctaveChanging(value);
                 ReportPropertyChanging("octave");
-                _octave = StructuralObject.SetValidValue(value);
+                _octave = StructuralObject.SetValidValue(value, "octave");
                 ReportPropertyChanged("octave");
                 OnoctaveChanged();
             }
@@ -9321,7 +9377,7 @@ namespace LibiadaWeb
             {
                 OnmidinumberChanging(value);
                 ReportPropertyChanging("midinumber");
-                _midinumber = StructuralObject.SetValidValue(value);
+                _midinumber = StructuralObject.SetValidValue(value, "midinumber");
                 ReportPropertyChanged("midinumber");
                 OnmidinumberChanged();
             }
@@ -9345,7 +9401,7 @@ namespace LibiadaWeb
             {
                 Oninstrument_idChanging(value);
                 ReportPropertyChanging("instrument_id");
-                _instrument_id = StructuralObject.SetValidValue(value);
+                _instrument_id = StructuralObject.SetValidValue(value, "instrument_id");
                 ReportPropertyChanged("instrument_id");
                 Oninstrument_idChanged();
             }
@@ -9369,7 +9425,7 @@ namespace LibiadaWeb
             {
                 Onnote_idChanging(value);
                 ReportPropertyChanging("note_id");
-                _note_id = StructuralObject.SetValidValue(value);
+                _note_id = StructuralObject.SetValidValue(value, "note_id");
                 ReportPropertyChanged("note_id");
                 Onnote_idChanged();
             }
@@ -9393,7 +9449,7 @@ namespace LibiadaWeb
             {
                 Onaccidental_idChanging(value);
                 ReportPropertyChanging("accidental_id");
-                _accidental_id = StructuralObject.SetValidValue(value);
+                _accidental_id = StructuralObject.SetValidValue(value, "accidental_id");
                 ReportPropertyChanged("accidental_id");
                 Onaccidental_idChanged();
             }
@@ -9417,7 +9473,7 @@ namespace LibiadaWeb
             {
                 Onnote_symbol_idChanging(value);
                 ReportPropertyChanging("note_symbol_id");
-                _note_symbol_id = StructuralObject.SetValidValue(value);
+                _note_symbol_id = StructuralObject.SetValidValue(value, "note_symbol_id");
                 ReportPropertyChanged("note_symbol_id");
                 Onnote_symbol_idChanged();
             }
@@ -9427,7 +9483,7 @@ namespace LibiadaWeb
         partial void Onnote_symbol_idChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -9583,6 +9639,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -9609,7 +9666,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -9628,7 +9686,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -9653,7 +9711,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -9677,7 +9735,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -9701,7 +9759,7 @@ namespace LibiadaWeb
             {
                 OnurlChanging(value);
                 ReportPropertyChanging("url");
-                _url = StructuralObject.SetValidValue(value, true);
+                _url = StructuralObject.SetValidValue(value, true, "url");
                 ReportPropertyChanged("url");
                 OnurlChanged();
             }
@@ -9711,7 +9769,7 @@ namespace LibiadaWeb
         partial void OnurlChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -9737,6 +9795,7 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
     
     /// <summary>
@@ -9763,7 +9822,8 @@ namespace LibiadaWeb
         }
 
         #endregion
-        #region Свойства-примитивы
+
+        #region Простые свойства
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -9782,7 +9842,7 @@ namespace LibiadaWeb
                 {
                     OnidChanging(value);
                     ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
+                    _id = StructuralObject.SetValidValue(value, "id");
                     ReportPropertyChanged("id");
                     OnidChanged();
                 }
@@ -9807,7 +9867,7 @@ namespace LibiadaWeb
             {
                 OnnameChanging(value);
                 ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false);
+                _name = StructuralObject.SetValidValue(value, false, "name");
                 ReportPropertyChanged("name");
                 OnnameChanged();
             }
@@ -9831,7 +9891,7 @@ namespace LibiadaWeb
             {
                 OndescriptionChanging(value);
                 ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true);
+                _description = StructuralObject.SetValidValue(value, true, "description");
                 ReportPropertyChanged("description");
                 OndescriptionChanged();
             }
@@ -9841,7 +9901,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
 
         #endregion
-    
+
         #region Свойства навигации
     
         /// <summary>
@@ -9867,8 +9927,9 @@ namespace LibiadaWeb
         }
 
         #endregion
+
     }
 
     #endregion
-    
+
 }
