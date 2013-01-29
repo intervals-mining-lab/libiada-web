@@ -34,8 +34,6 @@ namespace LibiadaWeb
             bundles.Add(new ScriptBundle("~/bundles/HighCharts").Include(
                        "~/Scripts/Highcharts-2.2.1/js/highcharts.src.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/HighStock").Include(
-                      "~/Scripts/Highstock-1.2.5/highstock.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/Procedures").Include(
                       "~/Scripts/procs.js"));
@@ -47,6 +45,9 @@ namespace LibiadaWeb
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/JQAllRange").Include("~/Content/themes/JQAllRange/classic.css",
+                                                                        "~/Content/themes/JQAllRange/iThing.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
