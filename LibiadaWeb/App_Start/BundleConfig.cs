@@ -12,6 +12,11 @@ namespace LibiadaWeb
                         "~/Scripts/jquery-{version}.js",
                         "~/Scripts/packed.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/Slider").Include(
+                        "~/Scripts/Slider/jQRangeSlider-min.js",
+                        "~/Scripts/Slider/jquery.mousewheel.min.js"
+                        ));
+
             bundles.Add(new ScriptBundle("~/bundles/menu").Include(
                         "~/Scripts/tinydropdown.js"));
 

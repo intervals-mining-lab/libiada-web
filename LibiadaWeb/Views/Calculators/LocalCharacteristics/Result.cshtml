@@ -6,6 +6,9 @@
 
 <h2>Локальные характеристики цепочки @ViewBag.chainName</h2>
 
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/Slider")
+
 <script type='text/javascript'>
     var characteristics = new Array();
     var partNames = new Array();
@@ -56,6 +59,16 @@
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
+        
+        var $container = $('#visualization_container')
+            .css('position', 'relative');
+        
+        var $detailContainer = $('<div id="detail-container">')
+            .appendTo($container);
+    
+        var $masterContainer = $('<div id="master-container">')
+            .css({ position: 'absolute', top: 300, height: 80, width: '100%' })
+            .appendTo($container);
     });
     
     var yVals;
@@ -81,29 +94,242 @@
         }
     }
 
+    var masterChart, detailedChart;
+
+    function createMaster(dataSeries) {
+        masterChart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'master-container',
+                reflow: false,
+                borderWidth: 0,
+                backgroundColor: null,
+                marginLeft: 50,
+                marginRight: 20,
+                zoomType: 'x',
+                events: {
+    
+                    // listen to the selection event on the master chart to update the
+                    // extremes of the detail chart
+                    selection: function(event) {
+                        var extremesObject = event.xAxis[0],
+                            min = extremesObject.min,
+                            max = extremesObject.max,
+                            detailData = [],
+                            xAxis = this.xAxis[0];
+    
+                        // reverse engineer the last part of the data
+                        jQuery.each(this.series[0].data, function(i, point) {
+                            if (point.x > min && point.x < max) {
+                                detailData.push({
+                                    x: point.x,
+                                    y: point.y
+                                });
+                            }
+                        });
+    
+                        // move the plot bands to reflect the new detail span
+                        xAxis.removePlotBand('mask-before');
+                        xAxis.addPlotBand({
+                            id: 'mask-before',
+                            from: Date.UTC(2006, 0, 1),
+                            to: min,
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        });
+    
+                        xAxis.removePlotBand('mask-after');
+                        xAxis.addPlotBand({
+                            id: 'mask-after',
+                            from: max,
+                            to: Date.UTC(2008, 11, 31),
+                            color: 'rgba(0, 0, 0, 0.2)'
+                        });
+    
+    
+                        detailChart.series[0].setData(detailData);
+    
+                        return false;
+                    }
+                }
+            },
+            title: {
+                text: null
+            },
+            
+            xAxis: {
+               // type: 'number',
+                showLastTickLabel: true,
+                maxZoom: 1, 
+                plotBands: [{
+                    id: 'mask-before',
+                    from: Date.UTC(2006, 0, 1),
+                    to: Date.UTC(2008, 7, 1),
+                    color: 'rgba(0, 0, 0, 0.2)'
+                }],
+                title: {
+                    text: null
+                }
+            },
+            yAxis: {
+                gridLineWidth: 0,
+                labels: {
+                    enabled: false
+                },
+                title: {
+                    text: null
+                },
+                showFirstLabel: false
+            },
+            tooltip: {
+                formatter: function() {
+                    return false;
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    fillColor: {
+                        linearGradient: [0, 0, 0, 70],
+                        stops: [
+                            [0, '#4572A7'],
+                            [1, 'rgba(0,0,0,0)']
+                        ]
+                    },
+                    lineWidth: 1,
+                    marker: {
+                        enabled: false
+                    },
+                    shadow: false,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    enableMouseTracking: false
+                }
+            },
+    
+            series: dataSeries,
+    
+            exporting: {
+                enabled: true
+            }
+    
+        }, function(masterChart) {
+            createDetail(masterChart,dataSeries);
+        });
+    }
+    //
+    function createDetail(masterChart,dataSeries) {
+    
+        // prepare the detail chart
+        var detailData = [],
+            detailStart = Date.UTC(2008, 7, 1);
+    
+        jQuery.each(masterChart.series[0].data, function(i, point) {
+            if (point.x >= detailStart) {
+                detailData.push(point.y);
+            }
+        });
+    
+        // create a detail chart referenced by a global variable
+        detailChart = new Highcharts.Chart({
+            chart: {
+                marginBottom: 120,
+                renderTo: 'detail-container',
+                reflow: false,
+                marginLeft: 50,
+                marginRight: 20,
+                style: {
+                    position: 'absolute'
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            title: {
+                text: 'Локальные характеристики цепочек'
+            },
+            subtitle: {
+                text: 'Выделите область'
+            },
+            xAxis: {
+                type: 'datetime'
+            },
+            yAxis: {
+                title: {
+                    text: null
+                },
+                maxZoom: 0.1
+            },
+            tooltip: {
+                formatter: function() {
+                    var point = this.points[0];
+                    return point.series.name + '<br/>' + this.y;
+                },
+                shared: true
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                series: {
+                    marker: {
+                        enabled: false,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                }
+            },
+            series: dataSeries,
+    
+            exporting: {
+                enabled: false
+            }
+    
+        });
+    }
+    //
+
+
+
+
+
     function CreateChart(dataSeries, minY) {
-        chart = new Highcharts.StockChart({
+        createMaster(dataSeries);
+        /*
+     
+        chart = new Highcharts.Chart( {
             chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: 'x' },
 
             legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
 
             plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
-            title: { text: 'Локальне характеристики цепочек' },
+            title: { text: 'Локальные характеристики цепочек' },
 
             tooltip: {
                 formatter: function() {
-                    return this.point.name + '<br/> ' + this.y;
+                    return  this.point.name + "<br/>" + this.y;
                 }
             },
-            
+           
             xAxis: { min: 0, maxZoom: 3, title: {text: 'Фрагменты цепочки'} },
 
             yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
             series: dataSeries
             
-        });
+    });
+    */
     }
 
     function DrawChart() {
