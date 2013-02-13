@@ -16,6 +16,7 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly MatterRepository matterRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
+        private readonly DnaChainRepository dnaChainRepository;
         private readonly AlphabetRepository alphabetRepository;
         private readonly Random rndGenerator = new Random();
 
@@ -24,6 +25,7 @@ namespace LibiadaWeb.Controllers.Chains
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
+            dnaChainRepository = new DnaChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
         }
 
@@ -74,7 +76,7 @@ namespace LibiadaWeb.Controllers.Chains
                 };
             db.matter.AddObject(result);
 
-            chain resultChain = new chain()
+            dna_chain resultChain = new dna_chain()
             {
                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                 dissimilar = false,
@@ -83,10 +85,10 @@ namespace LibiadaWeb.Controllers.Chains
                 creation_date = new DateTimeOffset(DateTime.Now)
             };
 
-            result.chain.Add(resultChain); //TODO: проверить, возможно одно из действий лишнее
-            db.chain.AddObject(resultChain);
+            result.dna_chain.Add(resultChain); //TODO: проверить, возможно одно из действий лишнее
+            db.dna_chain.AddObject(resultChain);
             IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
-            chainRepository.FromLibiadaBuildingToDbBuilding(resultChain, libiadaChain.Building);
+            dnaChainRepository.FromLibiadaBuildingToDbBuilding(resultChain, libiadaChain.Building);
             db.SaveChanges();
             return RedirectToAction("Index", "Matter");
         }

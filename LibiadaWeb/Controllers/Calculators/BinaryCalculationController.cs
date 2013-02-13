@@ -90,8 +90,8 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     for (int j = 0; j < frequencyCount; j++)
                     {
-                        int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key);
-                        int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key);
+                        int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key) + 1;
+                        int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
                         long firstElementId = dbChain.alphabet.Single(a => a.number == firstElementNumber).element_id;
                         long secondElementId = dbChain.alphabet.Single(a => a.number == secondElementNumber).element_id;
                         binary_characteristic currentCharacteristic;
