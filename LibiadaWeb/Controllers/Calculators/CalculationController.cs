@@ -45,6 +45,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.languagesList = new SelectList(db.language, "id", "name");
             return View();
         }
 
@@ -62,9 +63,19 @@ namespace LibiadaWeb.Controllers.Calculators
                 characteristics.Add(new List<Double>());
                 for (int i = 0; i < notationIds.Length; i++)
                 {
-                    matter matter = db.matter.Single(m => m.id == matterId);
-                    chain chain = matter.chain.Single(c => c.notation_id == notationIds[i]);
-                    long chainId = chain.id;
+                    int notationId = notationIds[i];
+                    int languageId = languageIds[i];
+                    long chainId;
+                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    {
+                        chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
+                                    l.notation_id == notationId
+                                    && l.language_id == languageId).id;
+                    }
+                    else
+                    {
+                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                    }
 
                     int characteristicId = characteristicIds[i];
                     int linkUpId = linkUpIds[i];

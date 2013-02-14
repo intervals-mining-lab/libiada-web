@@ -31,6 +31,7 @@
         var characteristicTypes = new Array();
         var linkUps = new Array();
         var notations = new Array();
+        var languages = new Array();
 
         @foreach (var option in ViewBag.characteristicsList)
         {
@@ -46,30 +47,26 @@
         {
             @:notations.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
         }
+        
+        @foreach (var option in ViewBag.languagesList)
+        {
+            @:languages.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+        }
 
         var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divCounter).attr('id', 'characteristic' + divCounter);
 
         $("#characteristics_list").append(characteristicsDiv);
         
-        var selectList = $('<select/>').attr('name', 'characteristicIds');
-        for (var i = 0; i < characteristicTypes.length; i++) 
-        {
-            selectList.append(characteristicTypes[i]);
-        }
+        var selectList = CreateSelectList(characteristicTypes, 'characteristicIds'); 
         characteristicsDiv.append(selectList);
         
-        selectList = $('<select/>').attr('name', 'linkUpIds');
-        for (var i = 0; i < linkUps.length; i++) 
-        {
-            selectList.append(linkUps[i]);
-        }
+        selectList = CreateSelectList(linkUps, 'linkUpIds');
         characteristicsDiv.append(selectList);
         
-        selectList = $('<select/>').attr('name', 'notationIds');
-        for (var i = 0; i < notations.length; i++) 
-        {
-            selectList.append(notations[i]);
-        }
+        selectList = CreateSelectList(notations, 'notationIds');
+        characteristicsDiv.append(selectList);
+
+        selectList = CreateSelectList(languages, 'languageIds');
         characteristicsDiv.append(selectList);
         
         //функция, возвращающая функцию для call back'а
