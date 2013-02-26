@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v2.2.1 (2012-03-15)
+ * @license Highcharts JS v2.3.5 (2012-12-19)
  * Prototype adapter
  *
  * @author Michael Nelson, Torstein Hønsi.
@@ -100,6 +100,19 @@ return {
 			});
 		}
 	},
+	
+	/**
+	 * Run a general method on the framework, following jQuery syntax
+	 * @param {Object} el The HTML element
+	 * @param {String} method Which method to run on the wrapped element
+	 */
+	adapterRun: function (el, method) {
+		
+		// This currently works for getting inner width and height. If adding
+		// more methods later, we need a conditional implementation for each.
+		return parseInt($(el).getStyle(method), 10);
+		
+	},
 
 	/**
 	 * Downloads a script and executes a callback when done.
@@ -187,6 +200,10 @@ return {
 	each: function (arr, fn) {
 		$A(arr).each(fn);
 	},
+	
+	inArray: function (item, arr) {
+		return arr.indexOf(item);
+	},
 
 	/**
 	 * Get the cumulative offset relative to the top left of the page. This method, unlike its
@@ -228,6 +245,10 @@ return {
 			HighchartsAdapter._extend(el);
 			el._highcharts_stop_observing(event, handler);
 		}
+	},
+	
+	washMouseEvent: function (e) {
+		return e;
 	},
 
 	// um, grep

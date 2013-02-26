@@ -32,7 +32,7 @@ namespace LibiadaWeb
                         "~/Scripts/datatables.plugins.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/HighCharts").Include(
-                       "~/Scripts/Highcharts-2.2.1/js/highcharts.src.js"));
+                       "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
 
 
             bundles.Add(new ScriptBundle("~/bundles/Procedures").Include(

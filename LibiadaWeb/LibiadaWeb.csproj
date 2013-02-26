@@ -49,27 +49,27 @@
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.2.1.13026\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.AspNet.4.2.2.13055\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.Core.4.2.1.13026\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OAuth, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.2.1.13026\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Core.4.2.2.13055\lib\net45-full\DotNetOpenAuth.OAuth.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OAuth.Consumer, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.2.1.13026\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.OAuth.Consumer.4.2.2.13055\lib\net45-full\DotNetOpenAuth.OAuth.Consumer.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.2.1.13026\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.2.2.13055\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.OpenId.RelyingParty, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.2.1.13026\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
+      <HintPath>..\packages\DotNetOpenAuth.OpenId.RelyingParty.4.2.2.13055\lib\net45-full\DotNetOpenAuth.OpenId.RelyingParty.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
@@ -485,6 +485,25 @@
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\copy document.psd" />
     <Content Include="Content\DataTables-1.9.4\extras\TableTools\media\images\psd\collection.psd" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\adapters\prototype-adapter.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\adapters\prototype-adapter.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\highcharts-more.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\highcharts-more.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\highcharts.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\highcharts.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\canvas-tools.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\canvas-tools.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\data.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\data.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\exporting.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\modules\exporting.src.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\themes\dark-blue.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\themes\dark-green.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\themes\gray.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\themes\grid.js" />
+    <Content Include="Scripts\Highcharts-2.3.5\themes\skies.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -496,21 +515,6 @@
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\procs.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\mootools-adapter.src.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\adapters\prototype-adapter.src.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\highcharts.src.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\modules\canvas-tools.src.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\modules\exporting.src.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-blue.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\themes\dark-green.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\themes\gray.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\themes\grid.js" />
-    <Content Include="Scripts\Highcharts-2.2.1\js\themes\skies.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -565,7 +569,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="LibiadaWeb.edmx">
