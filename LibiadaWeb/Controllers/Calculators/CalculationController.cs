@@ -150,6 +150,12 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristics = characteristics;
             ViewBag.chainNames = TempData["chainNames"] as List<String>;
             ViewBag.characteristicNames = characteristicNames;
+
+            foreach (String key in TempData.Keys)
+            {
+                TempData.Keep(key);
+            }
+
             return View();
         }
     }

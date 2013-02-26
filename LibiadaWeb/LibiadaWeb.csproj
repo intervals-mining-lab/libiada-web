@@ -226,6 +226,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />

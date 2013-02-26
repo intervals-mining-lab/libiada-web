@@ -156,6 +156,12 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = TempData["characteristics"] as List<List<Double>>;
             ViewBag.characteristicIds = new List<int>(characteristicIds);
+
+            foreach (String key in TempData.Keys)
+            {
+                TempData.Keep(key);
+            }
+
             return View();
         }
     }

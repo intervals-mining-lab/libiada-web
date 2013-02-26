@@ -259,6 +259,12 @@ namespace LibiadaWeb.Controllers.Calculators
                 ViewBag.characteristics = TempData["characteristics"] as List<binary_characteristic>;
                 ViewBag.elements = TempData["elements"] as List<element>;
             }
+
+            foreach (String key in TempData.Keys)
+            {
+                TempData.Keep(key);
+            }
+
             return View();
         }
     }

@@ -82,6 +82,12 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = characteristics;
             ViewBag.characteristicNames = characteristicNames;
+
+            foreach (String key in TempData.Keys)
+            {
+                TempData.Keep(key);
+            }
+
             return View();
         }
 
