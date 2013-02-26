@@ -46,8 +46,7 @@ namespace LibiadaWeb
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/JQAllRange").Include("~/Content/themes/JQAllRange/classic.css",
-                                                                        "~/Content/themes/JQAllRange/iThing.css"));
+            bundles.Add(new StyleBundle("~/Content/JQAllRange").Include("~/Content/themes/JQAllRange/iThing.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",

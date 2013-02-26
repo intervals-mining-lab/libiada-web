@@ -8,6 +8,7 @@
 
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/Slider")
+@Styles.Render("~/Content/JQAllRange")
 
 <script type='text/javascript'>
     var characteristics = new Array();
@@ -266,7 +267,19 @@
         });
     }
 
+    function shift(left,right) {
+  
+        $("#slider_container").rangeSlider("values", left , right);
+    }
 
+    function stepSlider(step) {
+        var min = $("#slider_container").rangeSlider("min");
+        var max = $("#slider_container").rangeSlider("max");
+        min =+min;
+        max =+max;
+        step =+step;
+        $("#slider_container").rangeSlider("values", min+step , max+step);
+    }
 
     var yVals;
 
@@ -320,7 +333,39 @@
     function DrawChart() {
         yVals = new Array();
         var dataSeries = new Array();
-        
+        slider = $("#slider_container").rangeSlider({
+            bounds:{min: 0, max: 1000},
+            defaultValues: {min: 0, max:25},
+            wheelMode: "zoom", 
+            valueLabels: "show",
+            step: false,
+            scales: [
+             // Primary scale
+            {
+                first: function(val){ return val; },
+                next: function(val){ return val + 10; },
+                stop: function(val){ return false; },
+                label: function(val){ return val; }
+            },
+            // Secondary scale
+             {
+                 first: function(val){ return val; },
+                 next: function(val){
+                     if (val % 10 === 9){
+                         return val + 2;
+                     }
+                     return val + 1;
+                 },
+                 stop: function(val){ return false; },
+                 label: function(){ return null; }
+             }]
+        });
+        $("#slider_container").bind("valuesChanging", function(e, data){
+            console.log("min: " + data.values.min + " max: " + data.values.max + " step: ");
+        });
+        $("#slider_container").bind("valuesChanging", function(){
+            createMaster(dataSeries);
+        });
         if ($("#allGraphics")[0].checked) {
             for (var j = 0; j < $("#yaxis option").length; j++) {
                 FillSeries($("#yaxis option")[j].value, dataSeries);
@@ -372,6 +417,26 @@
 <br/>
 <div id="visualization_container" style="width: 800px; height: 500px"></div>
 <br/>
+<div style="width: 800px; height: 30px;">
+    <div id="slider_container"> 
+    </div>
+</div>
+<div style="width: 800px; height: 200px;">
+    <div id="control-form" style ="clear:both"> 
+        <label>Шаг окна
+        <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
+        </label>
+        <label>Левая граница 
+        <input type="number" id="leftArrow" name="leftArrow" value="5" />
+         </label>
+        <label>Правая граница
+        <input type="number" id="rightArrow" name="rightArrow" value="10" />
+         </label>
+        <input type="button" value="сдвиг" onclick="stepSlider(stepOfWindow.value);"/>
+        <input type="button" value="значение" onclick="shift(leftArrow.value,rightArrow.value);"/>
+        
+    </div>
+</div>
 @Html.Label("Ось y")
 <select name="yaxis" id="yaxis">
     @foreach (var option in ViewBag.characteristicsList)
