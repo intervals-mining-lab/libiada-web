@@ -75,6 +75,38 @@
     
     var masterChart, detailChart;
 
+    function setScale(){
+        var min = $("#slider_container").rangeSlider("min");
+        var max = $("#slider_container").rangeSlider("max");
+          
+        var detailData = [];
+        var  xAxis = masterChart.xAxis[0];
+
+        min =+min;
+        max =+max; 
+
+        // reverse engineer the last part of the data
+        jQuery.each(masterChart.series[0].data, function(i, point) {
+            if (point.x > min && point.x < max) {
+                detailData.push({
+                    x: point.x,
+                    y: point.y
+                });
+            }
+        });
+    
+        // move the plot bands to reflect the new detail span
+        xAxis.removePlotBand('mask');
+        xAxis.addPlotBand({
+            id: 'mask',
+            from: min,
+            to: max,
+            color: 'rgba(0, 0, 0, 0.2)'
+        });
+
+        detailChart.series[0].setData(detailData);
+    }
+
     function createMaster(dataSeries) {
         masterChart = new Highcharts.Chart({
             chart: {
@@ -268,7 +300,6 @@
     }
 
     function shift(left,right) {
-  
         $("#slider_container").rangeSlider("values", left , right);
     }
 
@@ -364,7 +395,7 @@
             console.log("min: " + data.values.min + " max: " + data.values.max + " step: ");
         });
         $("#slider_container").bind("valuesChanging", function(){
-            createMaster(dataSeries);
+            setScale();
         });
         if ($("#allGraphics")[0].checked) {
             for (var j = 0; j < $("#yaxis option").length; j++) {
