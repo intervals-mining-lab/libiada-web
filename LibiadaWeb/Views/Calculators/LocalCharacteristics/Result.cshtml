@@ -116,7 +116,7 @@
                 backgroundColor: null,
                 marginLeft: 50,
                 marginRight: 20,
-                zoomType: 'x',
+                //zoomType: 'x',
                 events: {
     
                     // listen to the selection event on the master chart to update the
@@ -301,6 +301,7 @@
 
     function shift(left,right) {
         $("#slider_container").rangeSlider("values", left , right);
+        setScale();
     }
 
     function stepSlider(step) {
@@ -365,7 +366,7 @@
         yVals = new Array();
         var dataSeries = new Array();
         slider = $("#slider_container").rangeSlider({
-            bounds:{min: 0, max: 1000},
+            bounds:{min: 0, max: partNames[0].length},
             defaultValues: {min: 0, max:25},
             wheelMode: "zoom", 
             valueLabels: "show",
@@ -446,12 +447,13 @@
 }
 
 <br/>
-<div id="visualization_container" style="width: 800px; height: 500px"></div>
+<div id="visualization_container" style="width: 800px; height: 400px"></div>
 <br/>
-<div style="width: 800px; height: 30px;">
+<div style="width: 755px; height: 30px; margin-left: 35px">
     <div id="slider_container"> 
     </div>
 </div>
+<br/>
 <div style="width: 800px; height: 200px;">
     <div id="control-form" style ="clear:both"> 
         <label>Шаг окна
