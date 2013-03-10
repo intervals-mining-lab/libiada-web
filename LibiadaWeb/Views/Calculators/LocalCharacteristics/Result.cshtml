@@ -107,7 +107,7 @@
         detailChart.series[0].setData(detailData);
     }
 
-    function createMaster(dataSeries) {
+    function createMaster(dataSeries, yMin,yMax) {
         masterChart = new Highcharts.Chart({
             chart: {
                 renderTo: 'master-container',
@@ -220,12 +220,12 @@
             }
     
         }, function(masterChart) {
-            createDetail(masterChart,dataSeries)
+            createDetail(masterChart, dataSeries, yMin, yMax)
         });
     }
     
     // create the detail chart
-    function createDetail(masterChart,dataSeries) {
+    function createDetail(masterChart, dataSeries, yMin, yMax) {
     
         // prepare the detail chart
         var detailData = [],
@@ -265,7 +265,10 @@
                 title: {
                     text: null
                 },
-                maxZoom: 0.1
+                maxZoom: 0.1,
+                max:yMax,
+                min:yMin
+
             },
             tooltip: {
                 formatter: function() {
@@ -361,6 +364,20 @@
     });
     
     }
+    function getBorderOfArrows(){
+        var min = $("#slider_container").rangeSlider("min");
+        var max = $("#slider_container").rangeSlider("max");
+        $.ajax({
+            type:"GET",
+            //url
+            data:{"min":min, "max":max},
+            success:result
+        });
+        function result(data) {
+            alert(data);
+            return false;
+        }
+    }
 
     function DrawChart() {
         yVals = new Array();
@@ -405,7 +422,7 @@
         } else {
             FillSeries($("#yaxis option:selected")[0].value, dataSeries);
         }
-        createMaster(dataSeries, Math.min.apply(null, yVals));
+        createMaster(dataSeries, Math.min.apply(null, yVals), Math.max.apply(null, yVals));
     }
     
     
