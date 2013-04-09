@@ -13,46 +13,41 @@
 <script type='text/javascript'>
     var characteristics = new Array();
     var partNames = new Array();
-    var colors = new Array();
-    var headers = new Array();
+    var chainNames = new Array();
 
     $(document).ready(function() {
-        colors.push('rgba(223, 83, 83, .5)');
-        colors.push('rgba( 83, 223, 83, .5)');
-        colors.push('rgba( 83, 83, 223, .5)');
-        colors.push('rgba( 83, 83, 83, .5)');
-        colors.push('rgba( 150, 0, 0, .5)');
-        colors.push('rgba( 0, 150, 0, .5)');
-        colors.push('rgba( 0, 0, 150  .5)');
 
         for(var l = 0; l < $("table").length; l++) {
-            var tableHeaders = $("table")[l].tBodies[0].rows[0].cells;
-            headers.push(tableHeaders[0].textContent);
             partNames.push(new Array());
 
             var rows = $("table")[l].tBodies[0].rows;
-            for (var i = 1; i < rows.length; i++) {
+            for (var i = 0; i < rows.length; i++) {
                 partNames[l].push(rows[i].cells[0].textContent);
             }
         }
 
-
-        @for (int j = 0; j < ViewBag.characteristics.Count; j++)
-        {
-            @: characteristics.push(new Array());
-
-            var characteristicList = ViewBag.characteristics[j];
-            for (int i = 0; i < characteristicList.Count; i++)
+        @{
+            for (int j = 0; j < ViewBag.characteristics.Count; j++)
             {
-                @: characteristics[@j].push(new Array());
+                @: characteristics.push(new Array());
 
-                var characteristic = characteristicList[i];
-                for (int k = 0; k < characteristic.Count; k++)
+                var characteristicList = ViewBag.characteristics[j];
+                for (int i = 0; i < characteristicList.Count; i++)
                 {
-                    String[] tempValue = characteristic[k].ToString().Split(',');
-                    String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                    @: characteristics[@j][@i][@k] = @value;
+                    @: characteristics[@j].push(new Array());
+
+                    var characteristic = characteristicList[i];
+                    for (int k = 0; k < characteristic.Count; k++)
+                    {
+                        String[] tempValue = characteristic[k].ToString().Split(',');
+                        String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                        @: characteristics[@j][@i][@k] = @value;
+                    }
                 }
+            }
+            for (int k = 0; k < ViewBag.chainNames.Count; k++)
+            {
+                @:chainNames.push("@ViewBag.chainNames[k]");
             }
         }
         
@@ -62,15 +57,16 @@
         });
         
         // make the container smaller and add a second container for the master chart
-        var $container = $('#visualization_container')
+        var container = $('#visualization_container')
             .css('position', 'relative');
     
-        var $detailContainer = $('<div id="detail-container">')
-            .appendTo($container);
+        var detailContainer = $('<div id="detail-container">')
+            .css({ position: 'absolute', top: 0, height: 600, width: '100%' })
+            .appendTo(container);
     
-        var $mastrContainer = $('<div id="master-container">')
-            .css({ position: 'absolute', top: 300, height: 80, width: '100%' })
-            .appendTo($container);
+        var masterContainer = $('<div id="master-container">')
+            .css({ position: 'absolute', top: 500, height: 100, width: '100%' })
+            .appendTo(container);
     });
     
     var masterChart, detailChart;
@@ -86,14 +82,17 @@
         max =+max; 
 
         // reverse engineer the last part of the data
-        jQuery.each(masterChart.series[0].data, function(i, point) {
-            if (point.x > min && point.x < max) {
-                detailData.push({
-                    x: point.x,
-                    y: point.y
-                });
-            }
-        });
+        for (var k = 0; k < masterChart.series.length; k++) {
+            jQuery.each(masterChart.series[k].data, function(i, point) {
+                if (point.x > min && point.x < max) {
+                    detailData.push({
+                        x: point.x,
+                        y: point.y
+                    });
+                }
+            });
+        }
+        
     
         // move the plot bands to reflect the new detail span
         xAxis.removePlotBand('mask');
@@ -103,7 +102,6 @@
             to: max,
             color: 'rgba(0, 0, 0, 0.2)'
         });
-
         detailChart.series[0].setData(detailData);
     }
 
@@ -116,7 +114,6 @@
                 backgroundColor: null,
                 marginLeft: 50,
                 marginRight: 20,
-                //zoomType: 'x',
                 events: {
     
                     // listen to the selection event on the master chart to update the
@@ -146,10 +143,7 @@
                             to: max,
                             color: 'rgba(0, 0, 0, 0.2)'
                         });
-    
                         
-    
-    
                         detailChart.series[0].setData(detailData);
     
                         return false;
@@ -191,14 +185,9 @@
                 enabled: false
             },
             plotOptions: {
+                area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } },
                 series: {
-                    fillColor: {
-                        linearGradient: [0, 0, 0, 70],
-                        stops: [
-                            [0, '#4572A7'],
-                            [1, 'rgba(0,0,0,0)']
-                        ]
-                    },
+                    
                     lineWidth: 1,
                     marker: {
                         enabled: false
@@ -220,55 +209,38 @@
             }
     
         }, function(masterChart) {
-            createDetail(masterChart, dataSeries, yMin, yMax)
+            createDetail(masterChart, dataSeries, yMin, yMax);
         });
     }
     
     // create the detail chart
+
     function createDetail(masterChart, dataSeries, yMin, yMax) {
-    
+
         // prepare the detail chart
         var detailData = [],
             detailStart = 0;
-    
+
         jQuery.each(masterChart.series[0].data, function(i, point) {
             if (point.x >= detailStart) {
                 detailData.push(point.y);
             }
         });
-    
+
         // create a detail chart referenced by a global variable
         detailChart = new Highcharts.Chart({
-            chart: {
-                marginBottom: 120,
-                renderTo: 'detail-container',
-                reflow: false,
-                marginLeft: 50,
-                marginRight: 20,
-                style: {
-                    position: 'absolute'
-                }
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                text: 'Локальные характеристики цепочек'
-            },
-            subtitle: {
-                text: 'subtitle'
-            },
+            chart: { marginBottom: 120, renderTo: 'detail-container', reflow: false, marginLeft: 50, marginRight: 20, style: { position: 'absolute' } },
+            credits: { enabled: false },
+            title: { text: 'Локальные характеристики цепочек' },
             xAxis: {
+                title: { text: 'Фрагменты цепочки' },
                 type: 'number'
             },
             yAxis: {
-                title: {
-                    text: null
-                },
+                title: { text: $("#yaxis option:selected")[0].text },
                 maxZoom: 0.1,
-                max:yMax,
-                min:yMin
-
+                max: yMax,
+                min: yMin
             },
             tooltip: {
                 formatter: function() {
@@ -277,28 +249,14 @@
                 },
                 shared: true
             },
-            legend: {
-                enabled: false
-            },
+            legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
             plotOptions: {
-                series: {
-                    marker: {
-                        enabled: false,
-                        states: {
-                            hover: {
-                                enabled: true,
-                                radius: 3
-                            }
-                        }
-                    }
-                }
+                area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } },
+
+                series: { marker: { enabled: false, states: { hover: { enabled: true, radius: 3 } } } }
             },
             series: dataSeries,
-    
-            exporting: {
-                enabled: false
-            }
-    
+            exporting: { enabled: false }    
         });
     }
 
@@ -316,6 +274,16 @@
         $("#slider_container").rangeSlider("values", min+step , max+step);
     }
 
+    function GetMaxArrayLength(arrayOfArrays) {
+        var maxLength = 0;
+        for (var i = 0; i < arrayOfArrays.length; i++) {
+            if (arrayOfArrays[i].length > maxLength) {
+                maxLength = arrayOfArrays[i].length;
+            }
+        }
+        return maxLength;
+    }
+
     var yVals;
 
     function FillSeries(characteristicId, dataSeries) {
@@ -324,7 +292,7 @@
             var series = new Object();
             series.data = new Array();
             series.type = 'area';
-            series.name = headers[i];
+            series.name = chainNames[i];
             for (var j = 0; j < partNames[i].length; j++) {
                 var y = characteristics[i][j][characteristicId];
                 var pointName = partNames[i][j];
@@ -383,8 +351,8 @@
         yVals = new Array();
         var dataSeries = new Array();
         slider = $("#slider_container").rangeSlider({
-            bounds:{min: 0, max: partNames[0].length},
-            defaultValues: {min: 0, max:25},
+            bounds:{min: 0, max: GetMaxArrayLength(partNames)},
+            defaultValues: {min: 0, max:GetMaxArrayLength(partNames)},
             wheelMode: "zoom", 
             valueLabels: "show",
             step: false,
@@ -405,7 +373,7 @@
                      }
                      return val + 1;
                  },
-                 stop: function(val){ return false; },
+                 stop: function(){ return false; },
                  label: function(){ return null; }
              }]
         });
@@ -464,27 +432,33 @@
 }
 
 <br/>
-<div id="visualization_container" style="width: 800px; height: 400px"></div>
+<div id="visualization_container" style="width: 800px; height: 630px"></div>
 <br/>
 <div style="width: 755px; height: 30px; margin-left: 35px">
     <div id="slider_container"> 
     </div>
 </div>
 <br/>
-<div style="width: 800px; height: 200px;">
+<div style="width: 800px; height: 300px;">
     <div id="control-form" style ="clear:both"> 
-        <label>Шаг окна
-        <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
-        </label>
         <label>Левая граница 
-        <input type="number" id="leftArrow" name="leftArrow" value="5" />
-         </label>
+            <input type="number" id="leftArrow" name="leftArrow" value="5" />
+        </label>
         <label>Правая граница
-        <input type="number" id="rightArrow" name="rightArrow" value="10" />
-         </label>
+            <input type="number" id="rightArrow" name="rightArrow" value="10" />
+        </label>
         <input type="button" value="сдвиг" onclick="stepSlider(stepOfWindow.value);"/>
         <input type="button" value="значение" onclick="shift(leftArrow.value,rightArrow.value);"/>
-        
+    </div>
+    <div id="new-params" style ="clear:both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
+        <label>Изменить параметры разбиения</label>
+        <label>Шаг окна
+            <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
+        </label>
+        <label>Размер окна
+            <input type="number" id="widthOfWindow" name="" value="10">
+        </label>
+        <input type="button" value="значение" onclick="shift(stepOfWindow.value,widthOfWindow.value);"/>
     </div>
 </div>
 @Html.Label("Ось y")
