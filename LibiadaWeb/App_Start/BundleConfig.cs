@@ -17,9 +17,6 @@ namespace LibiadaWeb
                         "~/Scripts/Slider/jquery.mousewheel.min.js"
                         ));
 
-            bundles.Add(new ScriptBundle("~/bundles/menu").Include(
-                        "~/Scripts/tinydropdown.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
 
@@ -34,7 +31,6 @@ namespace LibiadaWeb
             bundles.Add(new ScriptBundle("~/bundles/HighCharts").Include(
                        "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
 
-
             bundles.Add(new ScriptBundle("~/bundles/Procedures").Include(
                       "~/Scripts/procs.js"));
            
@@ -47,6 +43,8 @@ namespace LibiadaWeb
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/JQAllRange").Include("~/Content/themes/JQAllRange/iThing.css"));
+
+          
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -62,7 +60,7 @@ namespace LibiadaWeb
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css",
                         "~/Content/DataTables-1.9.4/media/css/jquery.dataTables_themeroller.css",
-                        "~/Content/themes/base/tinydropdown.css"
+                        "~/Content/MenuStyle.css"
                         ));
         }
     }

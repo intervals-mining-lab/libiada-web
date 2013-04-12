@@ -1,0 +1,142 @@
+/*------------------------------------*\
+	СБРОС
+\*------------------------------------*/
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{
+	margin:0;
+	padding:0;
+}
+table{
+	border-collapse:collapse;
+	border-spacing:0;
+}
+fieldset,img{
+	border:0;
+}
+address,caption,cite,code,dfn,th,var{
+	font-style:normal;
+	font-weight:normal;
+}
+caption,th{
+	text-align:left;
+}
+h1,h2,h3,h4,h5,h6{
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after{
+	content:'';
+}
+abbr,acronym{
+	border:0;
+}
+
+
+
+
+
+/*------------------------------------*\
+	ОСНОВНЫЕ ПРАВИЛА
+\*------------------------------------*/
+html{
+	height:101%;
+	background:#fff url(/img/css/bg.gif) top left repeat-x;
+}
+body{
+	font-family:Arial,Verdana,sans-serif;
+	font-size:0.75em;
+	color:#333;
+	width:960px;
+	margin:0 auto;
+	padding:10px;
+}
+
+
+
+
+
+/*------------------------------------*\
+	НАВИГАЦИЯ
+\*------------------------------------*/
+#nav{
+	float:left;
+	width:100%;
+	list-style:none;
+	margin-bottom:10px;
+}
+#nav li{
+	float:left;
+	margin-right:10px;
+	position:relative;
+	display:block;
+    font-size: 15px;
+    top: 5px;
+}
+#nav li a{
+	display:block;
+	padding:5px;
+	color:#ffffff;
+	background:#333;
+	text-decoration:none;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+}
+#nav li a:hover{
+	color:#fff;
+	background:#6b0c36;
+	background:rgba(107,12,54,0.75); /* Выглядит полупрозрачным */
+	text-decoration:underline;
+}
+
+#nav li.rootMenu a:hover, #nav li.rootMenu a {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 0;
+}
+/*--- ВЫПАДАЮЩИЕ ПУНКТЫ ---*/
+#nav ul{
+	list-style:none;
+	position:absolute;
+	left:-9999px; /* Скрываем за экраном, когда не нужно (данный метод лучше, чем display:none;) */
+	-webkit-transition:0.25s linear opacity; /* В Webkit выпадающие пункты будут проявляться */
+}
+#nav ul li{
+	padding-top:1px; /* Вводим отступ между li чтобы создать иллюзию разделенных пунктов меню */
+	float:none;
+	background:url(dot.gif);
+}
+#nav ul a{
+	white-space:nowrap; /* Останавливаем перенос текста и создаем многострочный выпадающий пункт */
+	display:block;
+}
+#nav li:hover ul{ /* Выводим выпадающий пункт при наведении курсора */
+	left:0; /* Приносим его обратно на экран, когда нужно */
+	opacity:1; /* Делаем непрозрачным */
+}
+#nav li:hover a{ /* Устанавливаем стили для верхнего уровня, когда выводится выпадающий список */
+	background:#696969;
+	text-decoration:underline;
+}
+#nav li:hover ul a{ /* Изменяем некоторые стили верхнего уровня при выводе выпадающего пункта */
+	text-decoration:none;
+	-webkit-transition:-webkit-transform 0.075s linear;
+}
+#nav li:hover ul li a:hover{ /* Устанавливаем стили для выпадающих пунктов, когда курсор наводится на конкретный пункт */
+	background:#333;
+	background:rgba(51,51,51,0.75); /* Будет полупрозрачным */
+	text-decoration:underline;
+
+}
+
+
+
+
+
+/*------------------------------------*\
+	ТЕКСТ ДЕМОНСТРАЦИИ
+\*------------------------------------*/
+h1{
+	font-family:Calibri, Arial, Verdana, sans-serif;
+	font-size:2em;
+	width:520px;
+}
