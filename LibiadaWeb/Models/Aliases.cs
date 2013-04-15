@@ -1,13 +1,11 @@
-﻿namespace LibiadaWeb.Models
+﻿using System.Collections.Generic;
+
+namespace LibiadaWeb.Models
 {
     public static class Aliases
     {
         #region Language
 
-
-        public static readonly int RussianLanguage = 11;
-        public static readonly int EnglishLanguage = 12;
-        public static readonly int GermanLanguage = 13;
         public static readonly int LanguageRussian = 11;
         public static readonly int LanguageEnglish = 12;
         public static readonly int LanguageGerman = 13;
@@ -16,16 +14,23 @@
 
         #region Applicability
 
-        public static readonly int FullApplicability = 1;
-        public static readonly int HomogeneousApplicability = 2;
-        public static readonly int BinaryApplicability = 3;
-        public static readonly int ApplicabilityFull = 1;
-        public static readonly int ApplicabilityHomogeneous = 2;
-        public static readonly int ApplicabilityBinary = 3;
+        public static readonly int ApplicabilityOnlyFull = 1;
+        public static readonly int ApplicabilityOnlyHomogeneous = 2;
+        public static readonly int ApplicabilityOnlyBinary = 3;
         public static readonly int ApplicabilityFullHomogeneous = 4;
         public static readonly int ApplicabilityFullBinary = 5;
         public static readonly int ApplicabilityHomogeneousBinary = 6;
         public static readonly int ApplicabilityAll = 7;
+
+        public static readonly List<int> ApplicabilityFull = new List<int> 
+        { ApplicabilityOnlyFull, ApplicabilityFullHomogeneous, ApplicabilityFullBinary, ApplicabilityAll };
+
+        public static readonly List<int> ApplicabilityHomogeneous = new List<int> 
+        { ApplicabilityOnlyHomogeneous, ApplicabilityFullHomogeneous, ApplicabilityHomogeneousBinary, ApplicabilityAll };
+
+        public static readonly List<int> ApplicabilityBinary = new List<int> 
+        { ApplicabilityOnlyBinary, ApplicabilityFullBinary, ApplicabilityHomogeneousBinary, ApplicabilityAll };
+
 
         #endregion
 
