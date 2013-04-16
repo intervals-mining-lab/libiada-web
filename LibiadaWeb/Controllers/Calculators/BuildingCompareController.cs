@@ -124,14 +124,11 @@ namespace LibiadaWeb.Controllers.Calculators
                 ViewBag.chainName2 = TempData["chainName2"] as String;
                 ViewBag.res1 = TempData["res1"] as BaseChain;
                 ViewBag.res2 = TempData["res2"] as BaseChain;
-                ViewBag.pos1 = TempData["pos1"] is int ? (int)TempData["pos1"] : 0;
-                ViewBag.pos2 = TempData["pos2"] is int ? (int)TempData["pos2"] : 0;
+                ViewBag.pos1 = TempData["pos1"] is int ? (int) TempData["pos1"] : 0;
+                ViewBag.pos2 = TempData["pos2"] is int ? (int) TempData["pos2"] : 0;
             }
 
-            foreach (String key in TempData.Keys)
-            {
-                TempData.Keep(key);
-            }
+            TempData.Keep();
 
             return View();
         }

@@ -277,10 +277,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicNames = characteristicNames;
             ViewBag.theoreticalRanks = TempData["teoreticalRanks"];
 
-            foreach (String key in TempData.Keys)
-            {
-                TempData.Keep(key);
-            }
+            TempData.Keep();
 
             return View();
         }

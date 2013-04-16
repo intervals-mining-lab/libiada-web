@@ -35,6 +35,14 @@
             $("#frequency_div")[0].hidden = true;
         }
     }
+    
+    function OneWordSwitch() {
+        if ($("#oneWord")[0].checked) {
+            $("#one_word_div")[0].hidden = false;
+        } else {
+            $("#one_word_div")[0].hidden = true;
+        }
+    }
 </script>
 
 <h2>Вычисление бинарных характеристик</h2>
@@ -103,18 +111,29 @@
     </select>
     <br/>
     <br/>
-    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object>() { { "onclick", "FiltrationSwitch()" } })
+    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object>() {{"onclick", "FiltrationSwitch()"}})
     <br/>
-    <div id="filter_div" hidden="true">
+    <div id="filter_div" hidden>
         @Html.Label("Число выводимых зависимостей")
         <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object>() { { "onclick", "FrequencySwitch()" } })
+    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object>() {{"onclick", "FrequencySwitch()"}})
     <br/>
-    <div id="frequency_div" hidden="true">
+    <div id="frequency_div" hidden>
         @Html.Label("X:")
         <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
+    </div>
+    <br/>
+    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object>() {{"onclick", "OneWordSwitch()"}})
+    <br/>
+    <div id="one_word_div" hidden>
+        <select name="wordId">
+            @foreach (var option in ViewBag.wordsList)
+            {
+                <option value="@option.Value">@option.Text</option>
+            }
+        </select>
     </div>
     <br/>
     <input type="submit" value="Вычислить" />

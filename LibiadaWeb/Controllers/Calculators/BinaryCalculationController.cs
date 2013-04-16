@@ -6,6 +6,8 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.BinaryCalculators;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
+using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -19,6 +21,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
+        private readonly ElementRepository elementRepository;
 
         public BinaryCalculationController()
         {
@@ -27,6 +30,7 @@ namespace LibiadaWeb.Controllers.Calculators
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
+            elementRepository = new ElementRepository(db);
         }
 
         //
@@ -38,25 +42,31 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.language_id = new SelectList(db.language, "id", "name");
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
-                db.characteristic_type.Where(c => new List<int>{3,5,6,7}.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => Aliases.ApplicabilityBinary.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
+            ViewBag.wordsList = elementRepository.GetSelectListItems(null);
             return View();
         }
 
         [HttpPost]
         public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId, int languageId,
-                                  int filterSize, bool filter, bool frequency, int frequencyCount)
+                                  int filterSize, bool filter, 
+                                  bool frequency, int frequencyCount, 
+                                  bool oneWord, long wordId)
         {
             List<binary_characteristic> characteristics = new List<binary_characteristic>();
             List<element> elements = new List<element>();
             List<binary_characteristic> filteredResult = null;
+            List<binary_characteristic> filteredResult1 = null;
+            List<binary_characteristic> filteredResult2 = null;
             List<element> firstElements = new List<element>();
             List<element> secondElements = new List<element>();
+            String word = null;
 
             chain dbChain;
-            if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+            if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
             {
                 long chainId =
                     db.literature_chain.Single(
@@ -74,28 +84,189 @@ namespace LibiadaWeb.Controllers.Calculators
             IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
             LinkUp linkUp = (LinkUp) linkUpId;
 
-            if (frequency)
+            if (oneWord)
             {
-                //считаем частоты слов
-                List<KeyValuePair<IBaseObject,double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
-                for (int f = 0; f < currentChain.Alphabet.Power; f++)
+                word = OneWordCharacteristic(characteristicId, linkUpId, wordId, dbChain, currentChain, calculator, linkUp);
+
+                filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                  b.characteristic_type_id == characteristicId &&
+                                                                  b.link_up_id == linkUpId && b.first_element_id == wordId)
+                                .OrderBy(b => b.second_element_id)
+                                .ToList();
+
+                filteredResult2 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                  b.characteristic_type_id == characteristicId &&
+                                                                  b.link_up_id == linkUpId && b.second_element_id == wordId)
+                                .OrderBy(b => b.first_element_id)
+                                .ToList();
+
+                for (int l = 0; l < currentChain.Alphabet.Power; l++)
                 {
-                    Probability calc = new Probability();
-                    frequences.Add(new KeyValuePair<IBaseObject, double>(currentChain.Alphabet[f], calc.Calculate(currentChain.GetUniformChain(f), LinkUp.Both)));
+                    long elementId = filteredResult1[l].second_element_id;
+                    elements.Add(db.element.Single(e => e.id == elementId));
                 }
-                //сорьтруем алфавит по частоте
-                SortKeyValuePairList(frequences);
-                //для заданного числа слов с наибольшей частотой считаем зависимости
-                for (int i = 0; i < frequencyCount; i++)
+            }
+            else
+            {
+                if (frequency)
                 {
-                    for (int j = 0; j < frequencyCount; j++)
+                    FrequencyCharacteristic(characteristicId, linkUpId, frequencyCount, currentChain, dbChain,
+                                            calculator, linkUp);
+                }
+                else
+                {
+                    NotFrequencyCharacteristic(characteristicId, linkUpId, dbChain, currentChain, calculator, linkUp);
+                }
+
+                if (filter)
+                {
+                    filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                         b.characteristic_type_id == characteristicId &&
+                                                                         b.link_up_id == linkUpId)
+                                       .OrderByDescending(b => b.value)
+                                       .Take(filterSize).ToList();
+
+                    for (int l = 0; l < filterSize; l++)
                     {
-                        int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key) + 1;
-                        int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
-                        long firstElementId = dbChain.alphabet.Single(a => a.number == firstElementNumber).element_id;
-                        long secondElementId = dbChain.alphabet.Single(a => a.number == secondElementNumber).element_id;
-                        binary_characteristic currentCharacteristic;
-                        //проверяем не посчитана ли уже эта характеристика
+                        long firstElementId = filteredResult[l].first_element_id;
+                        firstElements.Add(db.element.Single(e => e.id == firstElementId));
+                    }
+                    for (int m = 0; m < filterSize; m++)
+                    {
+                        long secondElementId = filteredResult[m].second_element_id;
+                        secondElements.Add(db.element.Single(e => e.id == secondElementId));
+                    }
+                }
+                else
+                {
+                    characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                          b.characteristic_type_id == characteristicId &&
+                                                                          b.link_up_id == linkUpId)
+                                        .OrderBy(b => b.second_element_id)
+                                        .ThenBy(b => b.first_element_id)
+                                        .ToList();
+                    for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
+                    {
+                        long firstElementId = characteristics[m].first_element_id;
+                        elements.Add(db.element.Single(e => e.id == firstElementId));
+                    }
+                }
+            }
+
+            TempData["filter"] = filter;
+            TempData["filteredResult"] = filteredResult;
+            TempData["firstElements"] = firstElements;
+            TempData["secondElements"] = secondElements;
+            TempData["filtersize"] = filterSize;
+            TempData["characteristics"] = characteristics;
+            TempData["elements"] = elements;
+            TempData["characteristicName"] =
+                db.characteristic_type.Single(charact => charact.id == characteristicId).name;
+            TempData["chainName"] = db.matter.Single(m => m.id == matterId).name;
+            TempData["notationName"] = db.notation.Single(n => n.id == notationId).name;
+            TempData["filteredResult1"] = filteredResult1;
+            TempData["filteredResult2"] = filteredResult2;
+            TempData["oneWord"] = oneWord;
+            TempData["word"] = word;
+
+            return RedirectToAction("Result");
+        }
+
+        private String OneWordCharacteristic(int characteristicId, int linkUpId, long wordId, chain dbChain, Chain currentChain,
+                                           IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+        {
+            int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
+                                                                      b.characteristic_type_id == characteristicId &&
+                                                                      b.link_up_id == linkUpId && b.first_element_id == wordId);
+
+            if (calculatedCount < currentChain.Alphabet.Power)
+            {
+                int firstElementNumber = dbChain.alphabet.Single(a => a.element_id == wordId).number;
+                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                {
+                    long secondElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                    if (!db.binary_characteristic.Any(b =>
+                                                      b.chain_id == dbChain.id &&
+                                                      b.characteristic_type_id == characteristicId &&
+                                                      b.first_element_id == wordId &&
+                                                      b.second_element_id == secondElementId &&
+                                                      b.link_up_id == linkUpId))
+                    {
+                        binary_characteristic currentCharacteristic = new binary_characteristic();
+                        currentCharacteristic.id =
+                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                              .First();
+                        currentCharacteristic.chain_id = dbChain.id;
+                        currentCharacteristic.characteristic_type_id = characteristicId;
+                        currentCharacteristic.link_up_id = linkUpId;
+                        currentCharacteristic.first_element_id = wordId;
+                        currentCharacteristic.second_element_id = secondElementId;
+                        currentCharacteristic.value = calculator.Calculate(currentChain,
+                                                                           currentChain.Alphabet[firstElementNumber - 1],
+                                                                           currentChain.Alphabet[i], linkUp);
+                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
+                        currentCharacteristic.creation_date = DateTime.Now;
+                        db.binary_characteristic.AddObject(currentCharacteristic);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            
+
+            calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
+                                                                  b.characteristic_type_id == characteristicId &&
+                                                                  b.link_up_id == linkUpId && b.second_element_id == wordId);
+
+            if (calculatedCount < currentChain.Alphabet.Power)
+            {
+                int secondElementNumber = dbChain.alphabet.Single(a => a.element_id == wordId).number;
+                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                {
+                    long firstElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                    if (!db.binary_characteristic.Any(b =>
+                                                      b.chain_id == dbChain.id &&
+                                                      b.characteristic_type_id == characteristicId &&
+                                                      b.first_element_id == firstElementId &&
+                                                      b.second_element_id == wordId &&
+                                                      b.link_up_id == linkUpId))
+                    {
+                        binary_characteristic currentCharacteristic = new binary_characteristic();
+                        currentCharacteristic.id =
+                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                              .First();
+                        currentCharacteristic.chain_id = dbChain.id;
+                        currentCharacteristic.characteristic_type_id = characteristicId;
+                        currentCharacteristic.link_up_id = linkUpId;
+                        currentCharacteristic.first_element_id = firstElementId;
+                        currentCharacteristic.second_element_id = wordId;
+                        currentCharacteristic.value = calculator.Calculate(currentChain, currentChain.Alphabet[i],
+                                                                           currentChain.Alphabet[secondElementNumber - 1],
+                                                                           linkUp);
+                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
+                        currentCharacteristic.creation_date = DateTime.Now;
+                        db.binary_characteristic.AddObject(currentCharacteristic);
+                        db.SaveChanges();
+                    }
+                }
+            }
+            return db.element.Single(e => e.id == wordId).name;
+        }
+
+        private void NotFrequencyCharacteristic(int characteristicId, int linkUpId, chain dbChain, Chain currentChain,
+                                                IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+        {
+            int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
+                                                                 b.characteristic_type_id == characteristicId &&
+                                                                 b.link_up_id == linkUpId);
+            if (calculatedCount < currentChain.Alphabet.Power*currentChain.Alphabet.Power)
+            {
+                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                {
+                    for (int j = 0; j < currentChain.Alphabet.Power; j++)
+                    {
+                        long firstElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                        long secondElementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
                         if (!db.binary_characteristic.Any(b =>
                                                           b.chain_id == dbChain.id &&
                                                           b.characteristic_type_id == characteristicId &&
@@ -103,8 +274,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                                           b.second_element_id == secondElementId &&
                                                           b.link_up_id == linkUpId))
                         {
-                            //считаемхарактеристику 
-                            currentCharacteristic = new binary_characteristic();
+                            binary_characteristic currentCharacteristic = new binary_characteristic();
                             currentCharacteristic.id =
                                 db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
                                   .First();
@@ -119,113 +289,78 @@ namespace LibiadaWeb.Controllers.Calculators
                             currentCharacteristic.value_string = currentCharacteristic.value.ToString();
                             currentCharacteristic.creation_date = DateTime.Now;
                             db.binary_characteristic.AddObject(currentCharacteristic);
-                            //сохраняем её в базу
                             db.SaveChanges();
                         }
-                        else
-                        {
-                            //достаём характеристику из базы
-                            currentCharacteristic = db.binary_characteristic.Single(b =>
-                                                                                    b.chain_id == dbChain.id &&
-                                                                                    b.characteristic_type_id ==
-                                                                                    characteristicId &&
-                                                                                    b.first_element_id == firstElementId &&
-                                                                                    b.second_element_id ==
-                                                                                    secondElementId &&
-                                                                                    b.link_up_id == linkUpId);
-                        }
                     }
                 }
             }
-            else
+        }
+
+        private void FrequencyCharacteristic(int characteristicId, int linkUpId, int frequencyCount, Chain currentChain,
+                                             chain dbChain, IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+        {
+            //считаем частоты слов
+            List<KeyValuePair<IBaseObject, double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
+            for (int f = 0; f < currentChain.Alphabet.Power; f++)
             {
-                int calculated = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
-                                                                     b.characteristic_type_id == characteristicId &&
-                                                                     b.link_up_id == linkUpId);
-                if (calculated < currentChain.Alphabet.Power * currentChain.Alphabet.Power)
+                Probability calc = new Probability();
+                frequences.Add(new KeyValuePair<IBaseObject, double>(currentChain.Alphabet[f],
+                                                                     calc.Calculate(currentChain.GetUniformChain(f),
+                                                                                    LinkUp.Both)));
+            }
+            //сорьтруем алфавит по частоте
+            SortKeyValuePairList(frequences);
+            //для заданного числа слов с наибольшей частотой считаем зависимости
+            for (int i = 0; i < frequencyCount; i++)
+            {
+                for (int j = 0; j < frequencyCount; j++)
                 {
-                    for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                    int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key) + 1;
+                    int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
+                    long firstElementId = dbChain.alphabet.Single(a => a.number == firstElementNumber).element_id;
+                    long secondElementId = dbChain.alphabet.Single(a => a.number == secondElementNumber).element_id;
+                    binary_characteristic currentCharacteristic;
+                    //проверяем не посчитана ли уже эта характеристика
+                    if (!db.binary_characteristic.Any(b =>
+                                                      b.chain_id == dbChain.id &&
+                                                      b.characteristic_type_id == characteristicId &&
+                                                      b.first_element_id == firstElementId &&
+                                                      b.second_element_id == secondElementId &&
+                                                      b.link_up_id == linkUpId))
                     {
-                        for (int j = 0; j < currentChain.Alphabet.Power; j++)
-                        {
-                            long firstElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
-                            long secondElementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
-                            if (!db.binary_characteristic.Any(b =>
-                                                              b.chain_id == dbChain.id &&
-                                                              b.characteristic_type_id == characteristicId &&
-                                                              b.first_element_id == firstElementId &&
-                                                              b.second_element_id == secondElementId &&
-                                                              b.link_up_id == linkUpId))
-                            {
-                                binary_characteristic currentCharacteristic = new binary_characteristic();
-                                currentCharacteristic.id =
-                                    db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                      .First();
-                                currentCharacteristic.chain_id = dbChain.id;
-                                currentCharacteristic.characteristic_type_id = characteristicId;
-                                currentCharacteristic.link_up_id = linkUpId;
-                                currentCharacteristic.first_element_id = firstElementId;
-                                currentCharacteristic.second_element_id = secondElementId;
-                                currentCharacteristic.value = calculator.Calculate(currentChain,
-                                                                                   currentChain.Alphabet[i],
-                                                                                   currentChain.Alphabet[j], linkUp);
-                                currentCharacteristic.value_string = currentCharacteristic.value.ToString();
-                                currentCharacteristic.creation_date = DateTime.Now;
-                                db.binary_characteristic.AddObject(currentCharacteristic);
-                                db.SaveChanges();
-                            }
-                        }
+                        //считаемхарактеристику 
+                        currentCharacteristic = new binary_characteristic();
+                        currentCharacteristic.id =
+                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                              .First();
+                        currentCharacteristic.chain_id = dbChain.id;
+                        currentCharacteristic.characteristic_type_id = characteristicId;
+                        currentCharacteristic.link_up_id = linkUpId;
+                        currentCharacteristic.first_element_id = firstElementId;
+                        currentCharacteristic.second_element_id = secondElementId;
+                        currentCharacteristic.value = calculator.Calculate(currentChain,
+                                                                           currentChain.Alphabet[i],
+                                                                           currentChain.Alphabet[j], linkUp);
+                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
+                        currentCharacteristic.creation_date = DateTime.Now;
+                        db.binary_characteristic.AddObject(currentCharacteristic);
+                        //сохраняем её в базу
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        //достаём характеристику из базы
+                        currentCharacteristic = db.binary_characteristic.Single(b =>
+                                                                                b.chain_id == dbChain.id &&
+                                                                                b.characteristic_type_id ==
+                                                                                characteristicId &&
+                                                                                b.first_element_id == firstElementId &&
+                                                                                b.second_element_id ==
+                                                                                secondElementId &&
+                                                                                b.link_up_id == linkUpId);
                     }
                 }
             }
-
-            if (filter)
-            {
-                filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                     b.characteristic_type_id == characteristicId &&
-                                                                     b.link_up_id == linkUpId)
-                                   .OrderByDescending(b => b.value)
-                                   .Take(filterSize).ToList();
-
-                for (int l = 0; l < filterSize; l++)
-                {
-                    long firstElementId = filteredResult[l].first_element_id;
-                    firstElements.Add(db.element.Single(e => e.id == firstElementId));
-                }
-                for (int m = 0; m < filterSize; m++)
-                {
-                    long secondElementId = filteredResult[m].second_element_id;
-                    secondElements.Add(db.element.Single(e => e.id == secondElementId));
-                }
-            }
-            else
-            {
-                characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                      b.characteristic_type_id == characteristicId &&
-                                                                      b.link_up_id == linkUpId)
-                                    .OrderBy(b => b.second_element_id)
-                                    .ThenBy(b => b.first_element_id)
-                                    .ToList();
-                for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
-                {
-                    long firstElementId = characteristics[m].first_element_id;
-                    elements.Add(db.element.Single(e => e.id == firstElementId));
-                }
-            }
-
-            TempData["filter"] = filter;
-            TempData["filteredResult"] = filteredResult;
-            TempData["firstElements"] = firstElements;
-            TempData["secondElements"] = secondElements;
-            TempData["filtersize"] = filterSize;
-            TempData["characteristics"] = characteristics;
-            TempData["elements"] = elements;
-            TempData["characteristicName"] =
-                db.characteristic_type.Single(charact => charact.id == characteristicId).name;
-            TempData["chainName"] = db.matter.Single(m => m.id == matterId).name;
-            TempData["notationId"] = notationId;
-
-            return RedirectToAction("Result");
         }
 
         private void SortKeyValuePairList(List<KeyValuePair<IBaseObject, double>> arrayForSort)
@@ -243,27 +378,27 @@ namespace LibiadaWeb.Controllers.Calculators
         {
             ViewBag.chainName = TempData["chainName"] as String;
             ViewBag.characteristicName = TempData["characteristicName"] as String;
-            int notationId = (int) TempData["notationId"];
-            ViewBag.notationName = db.notation.Single(n => n.id == notationId).name;
+            ViewBag.notationName = TempData["notationName"];
             ViewBag.isFilter = TempData["filter"];
+            ViewBag.filteredResult1 = TempData["filteredResult1"];
+            ViewBag.filteredResult2 = TempData["filteredResult2"];
+            ViewBag.oneWord = TempData["oneWord"];
+            ViewBag.word = TempData["word"];
+            ViewBag.firstElements = TempData["firstElements"];
+            ViewBag.secondElements = TempData["secondElements"];
+            ViewBag.elements = TempData["elements"] as List<element>;
 
             if ((bool) TempData["filter"])
             {
                 ViewBag.filtersize = TempData["filtersize"];
                 ViewBag.filteredResult = TempData["filteredResult"] as List<binary_characteristic>;
-                ViewBag.firstElements = TempData["firstElements"];
-                ViewBag.secondElements = TempData["secondElements"];
             }
             else
             {
                 ViewBag.characteristics = TempData["characteristics"] as List<binary_characteristic>;
-                ViewBag.elements = TempData["elements"] as List<element>;
             }
 
-            foreach (String key in TempData.Keys)
-            {
-                TempData.Keep(key);
-            }
+            TempData.Keep();
 
             return View();
         }

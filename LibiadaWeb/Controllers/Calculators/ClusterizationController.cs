@@ -142,11 +142,11 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int i = 0; i < characteristicNames.Count; i++)
             {
                 characteristicsList.Add(new SelectListItem
-                {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
+                    {
+                        Value = i.ToString(),
+                        Text = characteristicNames[i],
+                        Selected = false
+                    });
             }
             ViewBag.chainNames = TempData["chainNames"] as List<String>;
             ViewBag.chainIds = TempData["chainIds"] as List<long>;
@@ -157,10 +157,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristics = TempData["characteristics"] as List<List<Double>>;
             ViewBag.characteristicIds = new List<int>(characteristicIds);
 
-            foreach (String key in TempData.Keys)
-            {
-                TempData.Keep(key);
-            }
+            TempData.Keep();
 
             return View();
         }
