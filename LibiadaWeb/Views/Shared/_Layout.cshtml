@@ -20,13 +20,7 @@
 		<header>
 			<div class="content-wrapper">
 				<div class="float-left">
-					<p class="site-title">@Html.ActionLink("ваша эмблема здесь", "Index", "Home")</p>
-				</div>
-				<div class="float-right">
-					<section id="login">
-						@Html.Partial("_LoginPartial")
-					</section>
-				    <nav>
+					<nav>
 				        <ul id="nav">
 				                <li class="rootMenu">@Html.ActionLink("Домашняя страница", "Index", "Home")</li>
 				                <li>Калькуляторы
@@ -64,6 +58,12 @@
 				                </li>
 				            </ul>
 				    </nav>
+				</div>
+				<div class="float-right">
+					<section id="login">
+						@Html.Partial("_LoginPartial")
+					</section>
+				    
 				</div>
 			</div>
 		</header>
