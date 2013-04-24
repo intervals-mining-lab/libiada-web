@@ -215,6 +215,7 @@
     <Compile Include="Controllers\Catalogs\RemoteDbController.cs" />
     <Compile Include="Controllers\Catalogs\TieController.cs" />
     <Compile Include="Controllers\Chains\TransformationController.cs" />
+    <Compile Include="Controllers\ChainElementsController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

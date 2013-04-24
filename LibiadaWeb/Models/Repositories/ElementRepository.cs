@@ -64,12 +64,12 @@ namespace LibiadaWeb.Models.Repositories
             db.Dispose();
         }
 
-        public List<SelectListItem> GetSelectListItems(IEnumerable<element> allElements, IEnumerable<element> selectedElement)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<element> allElements, IEnumerable<element> selectedElements)
         {
             HashSet<long> elementIds;
-            if (selectedElement != null)
+            if (selectedElements != null)
             {
-                elementIds = new HashSet<long>(selectedElement.Select(c => c.id));
+                elementIds = new HashSet<long>(selectedElements.Select(c => c.id));
             }
             else
             {

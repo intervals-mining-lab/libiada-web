@@ -21,7 +21,6 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
-        private readonly ElementRepository elementRepository;
 
         public BinaryCalculationController()
         {
@@ -30,7 +29,6 @@ namespace LibiadaWeb.Controllers.Calculators
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
-            elementRepository = new ElementRepository(db);
         }
 
         //
@@ -38,20 +36,32 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.matters = db.matter.ToList();
+            ViewBag.chains = db.chain.ToList();
+            List<literature_chain> literatureChains = new List<literature_chain>();
+            foreach (chain chain in ViewBag.chains)
+            {
+                if (chain.matter.nature.id == Aliases.NatureLiterature)
+                {
+                    literatureChains.Add(db.literature_chain.Single(l => l.id == chain.id));
+                }
+                else
+                {
+                    literatureChains.Add(null);
+                }
+            }
+            ViewBag.literatureChains = literatureChains;
             ViewBag.language_id = new SelectList(db.language, "id", "name");
-            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
+            ViewBag.chainsList = chainRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
                 db.characteristic_type.Where(c => Aliases.ApplicabilityBinary.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.wordsList = elementRepository.GetSelectListItems(null);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId, int characteristicId, int linkUpId, int notationId, int languageId,
+        public ActionResult Index(long chainId, int characteristicId, int linkUpId, int notationId, int languageId,
                                   int filterSize, bool filter, 
                                   bool frequency, int frequencyCount, 
                                   bool oneWord, long wordId)
@@ -65,18 +75,8 @@ namespace LibiadaWeb.Controllers.Calculators
             List<element> secondElements = new List<element>();
             String word = null;
 
-            chain dbChain;
-            if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
-            {
-                long chainId =
-                    db.literature_chain.Single(
-                        l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId).id;
-                dbChain = db.chain.Single(c => c.id == chainId);
-            }
-            else
-            {
-                dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
-            }
+            chain dbChain = db.chain.Single(c => c.id == chainId);
+
 
             Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
@@ -162,7 +162,7 @@ namespace LibiadaWeb.Controllers.Calculators
             TempData["elements"] = elements;
             TempData["characteristicName"] =
                 db.characteristic_type.Single(charact => charact.id == characteristicId).name;
-            TempData["chainName"] = db.matter.Single(m => m.id == matterId).name;
+            TempData["chainName"] = db.chain.Single(m => m.id == chainId).matter.name;
             TempData["notationName"] = db.notation.Single(n => n.id == notationId).name;
             TempData["filteredResult1"] = filteredResult1;
             TempData["filteredResult2"] = filteredResult2;
