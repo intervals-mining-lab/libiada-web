@@ -18,3 +18,11 @@ function CreateSelectList(options, name) {
     }
     return selectList;
 }
+
+function SwitchVisibility(element) {
+    if (element.hidden) {
+        element.hidden = false;
+    } else {
+        element.hidden = true;
+    }
+}

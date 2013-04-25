@@ -7,7 +7,6 @@ using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.BinaryCalculators;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
 using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -16,7 +15,6 @@ namespace LibiadaWeb.Controllers.Calculators
     public class BinaryCalculationController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
-        private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
@@ -24,7 +22,6 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public BinaryCalculationController()
         {
-            matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
@@ -61,7 +58,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long chainId, int characteristicId, int linkUpId, int notationId, int languageId,
+        public ActionResult Index(long chainId, int characteristicId, int linkUpId,
                                   int filterSize, bool filter, 
                                   bool frequency, int frequencyCount, 
                                   bool oneWord, long wordId)
@@ -163,7 +160,7 @@ namespace LibiadaWeb.Controllers.Calculators
             TempData["characteristicName"] =
                 db.characteristic_type.Single(charact => charact.id == characteristicId).name;
             TempData["chainName"] = db.chain.Single(m => m.id == chainId).matter.name;
-            TempData["notationName"] = db.notation.Single(n => n.id == notationId).name;
+            TempData["notationName"] = db.chain.Single(c => c.id == chainId).notation.name;
             TempData["filteredResult1"] = filteredResult1;
             TempData["filteredResult2"] = filteredResult2;
             TempData["oneWord"] = oneWord;
@@ -328,7 +325,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == secondElementId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        //считаемхарактеристику 
+                        //считаем характеристику 
                         currentCharacteristic = new binary_characteristic();
                         currentCharacteristic.id =
                             db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")

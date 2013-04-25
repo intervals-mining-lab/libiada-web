@@ -27,27 +27,15 @@
     });
 
     function FiltrationSwitch() {
-        if ($("#filter")[0].checked) {
-            $("#filterDiv")[0].hidden = false;
-        } else {
-            $("#filterDiv")[0].hidden = true;
-        }
+        SwitchVisibility($("#filterDiv")[0]);
     }
 
     function FrequencySwitch() {
-        if ($("#frequency")[0].checked) {
-            $("#frequencyDiv")[0].hidden = false;
-        } else {
-            $("#frequencyDiv")[0].hidden = true;
-        }
+        SwitchVisibility($("#frequencyDiv")[0]);
     }
     
     function OneWordSwitch() {
-        if ($("#oneWord")[0].checked) {
-            $("#oneWordDiv")[0].hidden = false;
-        } else {
-            $("#oneWordDiv")[0].hidden = true;
-        }
+        SwitchVisibility($("#oneWordDiv")[0]);
     }
 
     function GetChainElements(event) {
@@ -56,9 +44,11 @@
             type: "GET",
             success: function (elements) {
                 $("#oneWordDiv")[0].innerHTML = "";
+                
                 var table = $('<table/>').attr('id', 'elementsTable');
                 var header = $('<thead/>').append($('<tr/>').append($('<th/>').text('Элемент')));
                 var body = $('<tbody/>');
+                
                 $(elements).each(function (i, item) {
                     var checkbox = $('<label/>').html(item.Text).prepend($('<input/>').attr('type', "radio").attr('name', 'wordId').attr('value', item.Value));
                     body.append($('<tr/>').append($('<td/>').append(checkbox)));
@@ -130,22 +120,6 @@
     @Html.Label("Привязка:")
     <select name="linkUpId">
         @foreach (var option in ViewBag.linkUpsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br/>
-    @Html.Label("Форма записи цепочки:")
-    <select name="notationId">
-        @foreach (var option in ViewBag.notationsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br/>
-    @Html.Label("Язык литературного произведения:")
-    <select name="languageId">
-        @foreach (var option in ViewBag.language_id)
         {
             <option value="@option.Value">@option.Text</option>
         }

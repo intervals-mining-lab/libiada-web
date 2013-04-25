@@ -418,6 +418,12 @@ textarea {
         width: auto;
     }
 
+    input[type="radio"] {
+        background: transparent;
+        border: inherit;
+        width: auto;
+    }
+
     input[type="submit"],
     input[type="button"],
     button {
