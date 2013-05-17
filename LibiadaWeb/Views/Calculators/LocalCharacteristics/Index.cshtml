@@ -45,20 +45,12 @@
 
         $("#characteristics_list").append(characteristicsDiv);
         
-        var selectList = $('<select/>').attr('name', 'characteristicIds');
-        for (var i = 0; i < characteristicTypes.length; i++) 
-        {
-            selectList.append(characteristicTypes[i]);
-        }
+        var selectList = CreateSelectList(characteristicTypes, 'characteristicIds'); 
         characteristicsDiv.append(selectList);
         
-        selectList = $('<select/>').attr('name', 'linkUpIds');
-        for (var i = 0; i < linkUps.length; i++) 
-        {
-            selectList.append(linkUps[i]);
-        }
+        selectList = CreateSelectList(linkUps, 'linkUpIds');
         characteristicsDiv.append(selectList);
-        
+
         //функция, возвращающая функцию для call back'а
         var tempDeleteFunction = function(element) {
             return function() {
@@ -86,16 +78,16 @@
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
+    List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.mattersList);
 
-                foreach (var item in mattersList)
-                {
+    foreach (var item in mattersList)
+    {
                     <tr>
                         <td>
                             @item
                         </td>
                     </tr>
-                }
+    }
             }
         </tbody>
     </table>
@@ -115,6 +107,14 @@
     @Html.Label("Форма записи:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    @Html.Label("Язык:")
+    <select name="languageId">
+        @foreach (var option in ViewBag.languagesList)
         {
             <option value="@option.Value">@option.Text</option>
         }

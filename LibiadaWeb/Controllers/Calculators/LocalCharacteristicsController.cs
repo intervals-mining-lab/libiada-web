@@ -48,12 +48,13 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.languagesList = new SelectList(db.language, "id", "name");
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int notationId, int length,
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int languageId, int notationId, int length,
                                   int step, bool isDelta, bool isFurie, bool isGrowingWindow)
         {
 
@@ -65,14 +66,25 @@ namespace LibiadaWeb.Controllers.Calculators
 
             for (int k = 0; k < matterIds.Length; k++)
             {
-                long mattrId = matterIds[k];
-                chainNames.Add(db.matter.Single(m => m.id == mattrId).name);
+                long matterId = matterIds[k];
+                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 partNames.Add(new List<string>());
                 characteristics.Add(new List<List<double>>());
 
-                matter matter = db.matter.Single(m => m.id == mattrId);
-                chain chain = matter.chain.Single(c => c.notation_id == notationId);
-                Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chain);
+                matter matter = db.matter.Single(m => m.id == matterId);
+                long chainId;
+                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                {
+                    chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
+                                l.notation_id == notationId
+                                && l.language_id == languageId).id;
+                }
+                else
+                {
+                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                }
+
+                Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
 
                 //IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
                 CutRule cutRule = isGrowingWindow ? (CutRule) new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
