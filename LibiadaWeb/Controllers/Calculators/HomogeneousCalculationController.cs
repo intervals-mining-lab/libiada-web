@@ -112,7 +112,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         {
                             long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
 
-                            UniformChain tempChain = libiadaChain.GetUniformChain(j);
+                            UniformChain tempChain = libiadaChain.UniformChain(j);
 
                             if (!db.homogeneous_characteristic.Any(b =>
                                                                    b.chain_id == dbChain.id &&
@@ -167,14 +167,14 @@ namespace LibiadaWeb.Controllers.Calculators
                         List<int> counts = new List<int>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {
-                            counts.Add((int)countCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                            counts.Add((int)countCalculator.Calculate(libiadaChain.UniformChain(f), LinkUp.End));
                         }
 
                         ICharacteristicCalculator frequencyCalculator = CharacteristicsFactory.Create("Probability");
                         List<double> frequency = new List<double>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {
-                            frequency.Add(frequencyCalculator.Calculate(libiadaChain.GetUniformChain(f), LinkUp.End));
+                            frequency.Add(frequencyCalculator.Calculate(libiadaChain.UniformChain(f), LinkUp.End));
                         }
 
                         double maxFrequency = frequency.Max();
