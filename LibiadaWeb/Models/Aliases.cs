@@ -39,6 +39,8 @@ namespace LibiadaWeb.Models
         public static readonly int LinkUpStart = 1;
         public static readonly int LinkUpEnd = 2;
         public static readonly int LinkUpStartEnd = 3;
+        public static readonly int LinkUpCycle = 4;
+        public static readonly int LinkUpNone = 5;
 
         #endregion
 
