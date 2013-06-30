@@ -84,7 +84,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                        ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
+                        ICalculator calculator = CharacteristicsFactory.Create(className);
                         LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
                         characteristics.Last().Add(calculator.Calculate(tempChain, linkUp));
                     }

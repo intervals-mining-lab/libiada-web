@@ -78,7 +78,7 @@ namespace LibiadaWeb.Controllers.Calculators
             Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
-            IBinaryCharacteristicCalculator calculator = BinaryCharacteristicsFactory.Create(className);
+            IBinaryCalculator calculator = BinaryCharacteristicsFactory.Create(className);
             LinkUp linkUp = (LinkUp) linkUpId;
 
             if (oneWord)
@@ -170,7 +170,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         private String OneWordCharacteristic(int characteristicId, int linkUpId, long wordId, chain dbChain, Chain currentChain,
-                                           IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+                                           IBinaryCalculator calculator, LinkUp linkUp)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                       b.characteristic_type_id == characteristicId &&
@@ -251,7 +251,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         private void NotFrequencyCharacteristic(int characteristicId, int linkUpId, chain dbChain, Chain currentChain,
-                                                IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+                                                IBinaryCalculator calculator, LinkUp linkUp)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                  b.characteristic_type_id == characteristicId &&
@@ -294,7 +294,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         private void FrequencyCharacteristic(int characteristicId, int linkUpId, int frequencyCount, Chain currentChain,
-                                             chain dbChain, IBinaryCharacteristicCalculator calculator, LinkUp linkUp)
+                                             chain dbChain, IBinaryCalculator calculator, LinkUp linkUp)
         {
             //считаем частоты слов
             List<KeyValuePair<IBaseObject, double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
