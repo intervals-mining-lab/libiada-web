@@ -78,11 +78,11 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         for (int a = 0; a < tempChain1.Alphabet.Power; a++)
                         {
-                            UniformChain firstChain = tempChain1.UniformChain(a);
+                            CongenericChain firstChain = tempChain1.CongenericChain(a);
                             for (int b = 0; b < tempChain2.Alphabet.Power; b++)
                             {
 
-                                UniformChain secondChain = tempChain2.UniformChain(b);
+                                CongenericChain secondChain = tempChain2.CongenericChain(b);
                                 if (!firstChain.Equals(secondChain) && CompareBuldings(firstChain.Building, secondChain.Building))
                                 {
                                     res1 = firstChain;

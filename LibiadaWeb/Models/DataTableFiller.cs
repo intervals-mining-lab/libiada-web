@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NewClusterization.Classes.DataMining.Clusterization;
+using Clusterizator.Classes;
 
 namespace LibiadaWeb.Models
 {

@@ -302,7 +302,7 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 Probability calc = new Probability();
                 frequences.Add(new KeyValuePair<IBaseObject, double>(currentChain.Alphabet[f],
-                                                                     calc.Calculate(currentChain.UniformChain(f),
+                                                                     calc.Calculate(currentChain.CongenericChain(f),
                                                                                     LinkUp.Both)));
             }
             //сорьтруем алфавит по частоте
