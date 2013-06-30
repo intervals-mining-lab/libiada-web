@@ -100,7 +100,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     int linkUpId = linkUpIds[i];
 
                     String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    ICharacteristicCalculator calculator = CharacteristicsFactory.Create(className);
+                    ICalculator calculator = CalculatorsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
 
                     int calculated = db.homogeneous_characteristic.Count(b => b.chain_id == dbChain.id &&
@@ -163,14 +163,14 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
 
                         teoreticalRanks[w].Add(new List<double>());
-                        ICharacteristicCalculator countCalculator = CharacteristicsFactory.Create("Count");
+                        ICalculator countCalculator = CalculatorsFactory.Create("Count");
                         List<int> counts = new List<int>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {
                             counts.Add((int)countCalculator.Calculate(libiadaChain.UniformChain(f), LinkUp.End));
                         }
 
-                        ICharacteristicCalculator frequencyCalculator = CharacteristicsFactory.Create("Probability");
+                        ICalculator frequencyCalculator = CalculatorsFactory.Create("Probability");
                         List<double> frequency = new List<double>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {

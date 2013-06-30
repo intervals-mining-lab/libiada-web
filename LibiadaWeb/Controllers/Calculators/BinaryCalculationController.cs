@@ -78,7 +78,7 @@ namespace LibiadaWeb.Controllers.Calculators
             Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
-            IBinaryCalculator calculator = BinaryCharacteristicsFactory.Create(className);
+            IBinaryCalculator calculator = BinaryCalculatorsFactory.Create(className);
             LinkUp linkUp = (LinkUp) linkUpId;
 
             if (oneWord)
