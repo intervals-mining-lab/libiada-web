@@ -15,21 +15,21 @@ namespace LibiadaWeb.Models
         #region Applicability
 
         public static readonly int ApplicabilityOnlyFull = 1;
-        public static readonly int ApplicabilityOnlyHomogeneous = 2;
+        public static readonly int ApplicabilityOnlyCongeneric = 2;
         public static readonly int ApplicabilityOnlyBinary = 3;
-        public static readonly int ApplicabilityFullHomogeneous = 4;
+        public static readonly int ApplicabilityFullCongeneric = 4;
         public static readonly int ApplicabilityFullBinary = 5;
-        public static readonly int ApplicabilityHomogeneousBinary = 6;
+        public static readonly int ApplicabilityCongenericBinary = 6;
         public static readonly int ApplicabilityAll = 7;
 
         public static readonly List<int> ApplicabilityFull = new List<int> 
-        { ApplicabilityOnlyFull, ApplicabilityFullHomogeneous, ApplicabilityFullBinary, ApplicabilityAll };
+        { ApplicabilityOnlyFull, ApplicabilityFullCongeneric, ApplicabilityFullBinary, ApplicabilityAll };
 
-        public static readonly List<int> ApplicabilityHomogeneous = new List<int> 
-        { ApplicabilityOnlyHomogeneous, ApplicabilityFullHomogeneous, ApplicabilityHomogeneousBinary, ApplicabilityAll };
+        public static readonly List<int> ApplicabilityCongeneric = new List<int> 
+        { ApplicabilityOnlyCongeneric, ApplicabilityFullCongeneric, ApplicabilityCongenericBinary, ApplicabilityAll };
 
         public static readonly List<int> ApplicabilityBinary = new List<int> 
-        { ApplicabilityOnlyBinary, ApplicabilityFullBinary, ApplicabilityHomogeneousBinary, ApplicabilityAll };
+        { ApplicabilityOnlyBinary, ApplicabilityFullBinary, ApplicabilityCongenericBinary, ApplicabilityAll };
 
 
         #endregion

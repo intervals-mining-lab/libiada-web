@@ -23,7 +23,7 @@
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.Store.piece_type" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.Store.remote_db" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.Store.fmotiv" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="homogeneous_characteristic" EntityType="LibiadaWebModel.Store.homogeneous_characteristic" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="congeneric_characteristic" EntityType="LibiadaWebModel.Store.congeneric_characteristic" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="instrument" EntityType="LibiadaWebModel.Store.instrument" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="measure" EntityType="LibiadaWebModel.Store.measure" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="music_chain" EntityType="LibiadaWebModel.Store.music_chain" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -139,17 +139,17 @@
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="fmotiv" EntitySet="fmotiv" />
     </AssociationSet>
-    <AssociationSet Name="fk_homogeneous_characteristic_element" Association="LibiadaWebModel.Store.fk_homogeneous_characteristic_element">
+    <AssociationSet Name="fk_congeneric_characteristic_element" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_element">
       <End Role="element" EntitySet="element" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_homogeneous_characteristic_link_up" Association="LibiadaWebModel.Store.fk_homogeneous_characteristic_link_up">
+    <AssociationSet Name="fk_congeneric_characteristic_link_up" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_link_up">
       <End Role="link_up" EntitySet="link_up" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_homogeneous_characteristic_type" Association="LibiadaWebModel.Store.fk_homogeneous_characteristic_type">
+    <AssociationSet Name="fk_congeneric_characteristic_type" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_type">
       <End Role="characteristic_type" EntitySet="characteristic_type" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_music_chain_instrument" Association="LibiadaWebModel.Store.fk_music_chain_instrument">
       <End Role="instrument" EntitySet="instrument" />
@@ -450,7 +450,7 @@
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
   </EntityType>
-  <EntityType Name="homogeneous_characteristic">
+  <EntityType Name="congeneric_characteristic">
     <Key>
       <PropertyRef Name="id" />
     </Key>
@@ -879,14 +879,14 @@
     </ReferentialConstraint>
   </Association>
   
-  <Association Name="fk_homogeneous_characteristic_chain">
+  <Association Name="fk_congeneric_characteristic_chain">
     <End Role="chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -970,14 +970,14 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_dna_chain">
+  <Association Name="fk_congeneric_characteristic_dna_chain">
     <End Role="dna_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="dna_chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1009,14 +1009,14 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_literature_chain">
+  <Association Name="fk_congeneric_characteristic_literature_chain">
     <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="literature_chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1110,14 +1110,14 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_fmotiv">
+  <Association Name="fk_congeneric_characteristic_fmotiv">
     <End Role="fmotiv" Type="LibiadaWebModel.Store.fmotiv" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="fmotiv">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1149,38 +1149,38 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_element">
+  <Association Name="fk_congeneric_characteristic_element">
     <End Role="element" Type="LibiadaWebModel.Store.element" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="element">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="element_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_homogeneous_characteristic_link_up">
+  <Association Name="fk_congeneric_characteristic_link_up">
     <End Role="link_up" Type="LibiadaWebModel.Store.link_up" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="link_up">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="link_up_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_homogeneous_characteristic_type">
+  <Association Name="fk_congeneric_characteristic_type">
     <End Role="characteristic_type" Type="LibiadaWebModel.Store.characteristic_type" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="characteristic_type">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="characteristic_type_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1260,14 +1260,14 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_music_chain">
+  <Association Name="fk_congeneric_characteristic_music_chain">
     <End Role="music_chain" Type="LibiadaWebModel.Store.music_chain" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="music_chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1353,14 +1353,14 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_measure">
+  <Association Name="fk_congeneric_characteristic_measure">
     <End Role="measure" Type="LibiadaWebModel.Store.measure" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.Store.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="measure">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1533,7 +1533,7 @@
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.fmotiv" />
-    <EntitySet Name="homogeneous_characteristic" EntityType="LibiadaWebModel.homogeneous_characteristic" />
+    <EntitySet Name="congeneric_characteristic" EntityType="LibiadaWebModel.congeneric_characteristic" />
     <EntitySet Name="instrument" EntityType="LibiadaWebModel.instrument" />
     <EntitySet Name="measure" EntityType="LibiadaWebModel.measure" />
     <EntitySet Name="music_chain" EntityType="LibiadaWebModel.music_chain" />
@@ -1691,9 +1691,9 @@
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_literature_chain" Association="LibiadaWebModel.fk_homogeneous_characteristic_literature_chain">
+    <AssociationSet Name="fk_congeneric_characteristic_literature_chain" Association="LibiadaWebModel.fk_congeneric_characteristic_literature_chain">
       <End Role="literature_chain" EntitySet="literature_chain" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
     <AssociationSet Name="fk_building_literature_chain" Association="LibiadaWebModel.fk_building_literature_chain">
@@ -1730,9 +1730,9 @@
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_fmotiv" Association="LibiadaWebModel.fk_homogeneous_characteristic_fmotiv">
+    <AssociationSet Name="fk_congeneric_characteristic_fmotiv" Association="LibiadaWebModel.fk_congeneric_characteristic_fmotiv">
       <End Role="fmotiv" EntitySet="fmotiv" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
     <AssociationSet Name="fk_building_fmotiv" Association="LibiadaWebModel.fk_building_fmotiv">
@@ -1745,19 +1745,19 @@
       <End Role="characteristic" EntitySet="characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_type" Association="LibiadaWebModel.fk_homogeneous_characteristic_type">
+    <AssociationSet Name="fk_congeneric_characteristic_type" Association="LibiadaWebModel.fk_congeneric_characteristic_type">
       <End Role="characteristic_type" EntitySet="characteristic_type" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_element" Association="LibiadaWebModel.fk_homogeneous_characteristic_element">
+    <AssociationSet Name="fk_congeneric_characteristic_element" Association="LibiadaWebModel.fk_congeneric_characteristic_element">
       <End Role="element" EntitySet="element" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_link_up" Association="LibiadaWebModel.fk_homogeneous_characteristic_link_up">
+    <AssociationSet Name="fk_congeneric_characteristic_link_up" Association="LibiadaWebModel.fk_congeneric_characteristic_link_up">
       <End Role="link_up" EntitySet="link_up" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
     <AssociationSet Name="fk_music_chain_instrument" Association="LibiadaWebModel.fk_music_chain_instrument">
@@ -1789,9 +1789,9 @@
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_measure" Association="LibiadaWebModel.fk_homogeneous_characteristic_measure">
+    <AssociationSet Name="fk_congeneric_characteristic_measure" Association="LibiadaWebModel.fk_congeneric_characteristic_measure">
       <End Role="measure" EntitySet="measure" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
     <AssociationSet Name="fk_building_measure" Association="LibiadaWebModel.fk_building_measure">
@@ -1827,9 +1827,9 @@
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_homogeneous_characteristic_music_chain" Association="LibiadaWebModel.fk_homogeneous_characteristic_music_chain">
+    <AssociationSet Name="fk_congeneric_characteristic_music_chain" Association="LibiadaWebModel.fk_congeneric_characteristic_music_chain">
       <End Role="music_chain" EntitySet="music_chain" />
-      <End Role="homogeneous_characteristic" EntitySet="homogeneous_characteristic" />
+      <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
     <AssociationSet Name="fk_building_music_chain" Association="LibiadaWebModel.fk_building_music_chain">
@@ -2010,7 +2010,7 @@
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
     <NavigationProperty Name="characteristic_group" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
     <NavigationProperty Name="characteristic_applicability" Relationship="LibiadaWebModel.fk_characteristic_type_characteristic_applicability" FromRole="characteristic_type" ToRole="characteristic_applicability" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_type" FromRole="characteristic_type" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_type" FromRole="characteristic_type" ToRole="congeneric_characteristic" />
   </EntityType>
   <EntityType Name="dna_chain">
     <Key>
@@ -2046,7 +2046,7 @@
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_first_element" FromRole="element" ToRole="binary_characteristic" />
     <NavigationProperty Name="binary_characteristic1" Relationship="LibiadaWebModel.fk_binary_characteristic_second_element" FromRole="element" ToRole="binary_characteristic" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_element_notation" FromRole="element" ToRole="notation" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_element" FromRole="element" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_element" FromRole="element" ToRole="congeneric_characteristic" />
   </EntityType>
   <EntityType Name="language">
     <Key>
@@ -2083,7 +2083,7 @@
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_literature_chain" FromRole="literature_chain" ToRole="alphabet" />
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_literature_chain" FromRole="literature_chain" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_literature_chain" FromRole="literature_chain" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_literature_chain" FromRole="literature_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
     <NavigationProperty Name="language" Relationship="LibiadaWebModel.fk_literature_chain_language" FromRole="literature_chain" ToRole="language" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="literature_chain" ToRole="matter" />
@@ -2187,11 +2187,11 @@
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_fmotiv" FromRole="fmotiv" ToRole="alphabet" />
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_fmotiv" FromRole="fmotiv" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_fmotiv" FromRole="fmotiv" ToRole="binary_characteristic" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_fmotiv" FromRole="fmotiv" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_fmotiv" FromRole="fmotiv" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_fmotiv" FromRole="fmotiv" ToRole="characteristic" />
     <NavigationProperty Name="fmotiv_type" Relationship="LibiadaWebModel.fk_fmotiv_fmotiv_type" FromRole="fmotiv" ToRole="fmotiv_type" />
   </EntityType>
-  <EntityType Name="homogeneous_characteristic">
+  <EntityType Name="congeneric_characteristic">
     <Key>
       <PropertyRef Name="id" />
     </Key>
@@ -2203,9 +2203,9 @@
     <Property Name="link_up_id" Type="Int32" Nullable="false" />
     <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="element_id" Type="Int64" Nullable="false" />
-    <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_type" FromRole="homogeneous_characteristic" ToRole="characteristic_type" />
-    <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_element" FromRole="homogeneous_characteristic" ToRole="element" />
-    <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_link_up" FromRole="homogeneous_characteristic" ToRole="link_up" />
+    <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_congeneric_characteristic_type" FromRole="congeneric_characteristic" ToRole="characteristic_type" />
+    <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_congeneric_characteristic_element" FromRole="congeneric_characteristic" ToRole="element" />
+    <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_congeneric_characteristic_link_up" FromRole="congeneric_characteristic" ToRole="link_up" />
   </EntityType>
   <EntityType Name="instrument">
     <Key>
@@ -2241,7 +2241,7 @@
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_measure" FromRole="measure" ToRole="alphabet" />
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_measure" FromRole="measure" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_measure" FromRole="measure" ToRole="binary_characteristic" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_measure" FromRole="measure" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_measure" FromRole="measure" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_measure" FromRole="measure" ToRole="characteristic" />
   </EntityType>
   <EntityType Name="music_chain">
@@ -2263,7 +2263,7 @@
     <NavigationProperty Name="alphabet" Relationship="LibiadaWebModel.fk_alphabet_music_chain" FromRole="music_chain" ToRole="alphabet" />
     <NavigationProperty Name="building" Relationship="LibiadaWebModel.fk_building_music_chain" FromRole="music_chain" ToRole="building" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_music_chain" FromRole="music_chain" ToRole="binary_characteristic" />
-    <NavigationProperty Name="homogeneous_characteristic" Relationship="LibiadaWebModel.fk_homogeneous_characteristic_music_chain" FromRole="music_chain" ToRole="homogeneous_characteristic" />
+    <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_music_chain" FromRole="music_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_music_chain" FromRole="music_chain" ToRole="characteristic" />
   </EntityType>
   <EntityType Name="note">
@@ -2521,16 +2521,16 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_literature_chain">
+  <Association Name="fk_congeneric_characteristic_literature_chain">
     <End Role="literature_chain" Type="LibiadaWebModel.literature_chain" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="literature_chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -2897,16 +2897,16 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_fmotiv">
+  <Association Name="fk_congeneric_characteristic_fmotiv">
     <End Role="fmotiv" Type="LibiadaWebModel.fmotiv" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="fmotiv">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -2942,38 +2942,38 @@
     </ReferentialConstraint>
   </Association>
   
-  <Association Name="fk_homogeneous_characteristic_type">
+  <Association Name="fk_congeneric_characteristic_type">
     <End Role="characteristic_type" Type="LibiadaWebModel.characteristic_type" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="characteristic_type">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="characteristic_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_homogeneous_characteristic_element">
+  <Association Name="fk_congeneric_characteristic_element">
     <End Role="element" Type="LibiadaWebModel.element" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="element">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="element_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_homogeneous_characteristic_link_up">
+  <Association Name="fk_congeneric_characteristic_link_up">
     <End Role="link_up" Type="LibiadaWebModel.link_up" Multiplicity="1" />
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="link_up">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="link_up_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -3058,16 +3058,16 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_measure">
+  <Association Name="fk_congeneric_characteristic_measure">
     <End Role="measure" Type="LibiadaWebModel.measure" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="measure">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -3171,16 +3171,16 @@
     </ReferentialConstraint>
   </Association>
 
-  <Association Name="fk_homogeneous_characteristic_music_chain">
+  <Association Name="fk_congeneric_characteristic_music_chain">
     <End Role="music_chain" Type="LibiadaWebModel.music_chain" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
-    <End Role="homogeneous_characteristic" Type="LibiadaWebModel.homogeneous_characteristic" Multiplicity="*" />
+    <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="music_chain">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="homogeneous_characteristic">
+      <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="chain_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -3577,9 +3577,9 @@
       </EntityTypeMapping>
     </EntitySetMapping>
 
-    <EntitySetMapping Name="homogeneous_characteristic">
-      <EntityTypeMapping TypeName="LibiadaWebModel.homogeneous_characteristic">
-        <MappingFragment StoreEntitySet="homogeneous_characteristic">
+    <EntitySetMapping Name="congeneric_characteristic">
+      <EntityTypeMapping TypeName="LibiadaWebModel.congeneric_characteristic">
+        <MappingFragment StoreEntitySet="congeneric_characteristic">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="chain_id" ColumnName="chain_id" />
           <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
@@ -4016,7 +4016,7 @@
           <edmx:ConnectorPoint PointX="9.1770808333333331" PointY="25.206492513020834" />
           <edmx:ConnectorPoint PointX="12.75" PointY="25.206492513020834" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_music_chain">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_music_chain">
           <edmx:ConnectorPoint PointX="17.125" PointY="5.5862532552083337" />
           <edmx:ConnectorPoint PointX="20.0312525" PointY="5.5862532552083337" />
           <edmx:ConnectorPoint PointX="20.0312525" PointY="10.375" />
@@ -4053,7 +4053,7 @@
           <edmx:ConnectorPoint PointX="6.25" PointY="24.809736269531257" />
           <edmx:ConnectorPoint PointX="6.25" PointY="14.047587890625" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_literature_chain">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_literature_chain">
           <edmx:ConnectorPoint PointX="15.125" PointY="15.25" />
           <edmx:ConnectorPoint PointX="15.15982318490112" PointY="15.215176815098879" />
           <edmx:ConnectorPoint PointX="15.371428065098876" PointY="15.003571934901125" />
@@ -4177,7 +4177,7 @@
           <edmx:ConnectorPoint PointX="16.375" PointY="13.8125" />
           <edmx:ConnectorPoint PointX="16.375" PointY="13.13401367187501" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_measure">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_measure">
           <edmx:ConnectorPoint PointX="17.0625" PointY="14.875" />
           <edmx:ConnectorPoint PointX="17.0625" PointY="12.027377424479159" />
           <edmx:ConnectorPoint PointX="17.330729166666668" PointY="12.027377424479159" />
@@ -4342,7 +4342,7 @@
           <edmx:ConnectorPoint PointX="16.7499995" PointY="8.2074186197916674" />
           <edmx:ConnectorPoint PointX="16.7499995" PointY="7.9225065104166674" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_fmotiv">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_fmotiv">
           <edmx:ConnectorPoint PointX="15.312502499999999" PointY="21.125" />
           <edmx:ConnectorPoint PointX="15.312502499999999" PointY="12.836146647135415" />
           <edmx:ConnectorPoint PointX="15.416666666666666" PointY="12.836146647135415" />
@@ -4382,7 +4382,7 @@
           <edmx:ConnectorPoint PointX="7.416666666666667" PointY="12.417999674479166" />
           <edmx:ConnectorPoint PointX="7.25" PointY="12.417999674479166" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_link_up">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_link_up">
           <edmx:ConnectorPoint PointX="12.25" PointY="8.5237532552083337" />
           <edmx:ConnectorPoint PointX="13.479166666666666" PointY="8.5237532552083337" />
           <edmx:ConnectorPoint PointX="13.645833333333334" PointY="8.5237532552083337" />
@@ -4410,7 +4410,7 @@
           <edmx:ConnectorPoint PointX="7.541666666666667" PointY="4.6081721419270831" />
           <edmx:ConnectorPoint PointX="7" PointY="4.6081721419270831" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_type">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_type">
           <edmx:ConnectorPoint PointX="14.25" PointY="6.37474609375" />
           <edmx:ConnectorPoint PointX="14.322916666666666" PointY="6.3747460937499989" />
           <edmx:ConnectorPoint PointX="14.489583333333334" PointY="6.37474609375" />
@@ -4576,7 +4576,7 @@
           <edmx:ConnectorPoint PointX="14.67968625" PointY="4.4793285839843753" />
           <edmx:ConnectorPoint PointX="15.625" PointY="4.4793285839843753" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_homogeneous_characteristic_element">
+        <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_element">
           <edmx:ConnectorPoint PointX="9.531252" PointY="13.625" />
           <edmx:ConnectorPoint PointX="9.531252" PointY="11.942047526041662" />
           <edmx:ConnectorPoint PointX="10.041666666666666" PointY="11.942047526041662" />

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
-using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -46,7 +45,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long matterId1, long matterId2, int length, bool homogeneous)
+        public ActionResult Index(long matterId1, long matterId2, int length, bool congeneric)
         {
             String chainName1 = db.matter.Single(m => m.id == matterId1).name;
             String chainName2 = db.matter.Single(m => m.id == matterId2).name;
@@ -75,7 +74,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     j++;
                     Chain tempChain2 = iter2.Current();
 
-                    if (homogeneous)
+                    if (congeneric)
                     {
                         for (int a = 0; a < tempChain1.Alphabet.Power; a++)
                         {

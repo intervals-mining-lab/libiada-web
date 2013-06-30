@@ -10,7 +10,7 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
-    public class HomogeneousCalculationController : Controller
+    public class CongenericCalculationController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly MatterRepository matterRepository;
@@ -20,7 +20,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly ChainRepository chainRepository;
 
 
-        public HomogeneousCalculationController()
+        public CongenericCalculationController()
         {
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
@@ -103,7 +103,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     ICalculator calculator = CalculatorsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
 
-                    int calculated = db.homogeneous_characteristic.Count(b => b.chain_id == dbChain.id &&
+                    int calculated = db.congeneric_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_up_id == linkUpId);
                     if (calculated < libiadaChain.Alphabet.Power)
@@ -114,13 +114,13 @@ namespace LibiadaWeb.Controllers.Calculators
 
                             UniformChain tempChain = libiadaChain.UniformChain(j);
 
-                            if (!db.homogeneous_characteristic.Any(b =>
+                            if (!db.congeneric_characteristic.Any(b =>
                                                                    b.chain_id == dbChain.id &&
                                                                    b.characteristic_type_id == characteristicId &&
                                                                    b.element_id == elementId && b.link_up_id == linkUpId))
                             {
                                 double value = calculator.Calculate(tempChain, linkUp);
-                                homogeneous_characteristic currentCharacteristic = new homogeneous_characteristic();
+                                congeneric_characteristic currentCharacteristic = new congeneric_characteristic();
                                 currentCharacteristic.id =
                                     db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
                                       .First();
@@ -131,7 +131,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                 currentCharacteristic.value = value;
                                 currentCharacteristic.value_string = value.ToString();
                                 currentCharacteristic.creation_date = DateTime.Now;
-                                db.homogeneous_characteristic.AddObject(currentCharacteristic);
+                                db.congeneric_characteristic.AddObject(currentCharacteristic);
                                 db.SaveChanges();
                             }
                         }
@@ -142,7 +142,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         long elementId = dbChain.alphabet.Single(a => a.number == d + 1).element_id;
 
-                        double? characteristic = db.homogeneous_characteristic.Single(b =>
+                        double? characteristic = db.congeneric_characteristic.Single(b =>
                                     b.chain_id == dbChain.id &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.element_id == elementId &&

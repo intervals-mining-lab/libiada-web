@@ -4,12 +4,12 @@ using System.Linq.Expressions;
 
 namespace LibiadaWeb.Models.Repositories
 {
-    public interface IHomogeneousCharacteristicRepository : IDisposable
+    public interface ICongenericCharacteristicRepository : IDisposable
     {
-        IQueryable<homogeneous_characteristic> All { get; }
-        IQueryable<homogeneous_characteristic> AllIncluding(params Expression<Func<homogeneous_characteristic, object>>[] includeProperties);
-        homogeneous_characteristic Find(long id);
-        void InsertOrUpdate(homogeneous_characteristic homogeneous_characteristic);
+        IQueryable<congeneric_characteristic> All { get; }
+        IQueryable<congeneric_characteristic> AllIncluding(params Expression<Func<congeneric_characteristic, object>>[] includeProperties);
+        congeneric_characteristic Find(long id);
+        void InsertOrUpdate(congeneric_characteristic congeneric_characteristic);
         void Delete(long id);
         void Save();
     }

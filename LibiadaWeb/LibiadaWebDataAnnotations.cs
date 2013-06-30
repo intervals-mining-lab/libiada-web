@@ -201,12 +201,12 @@ namespace LibiadaWeb
     {
     }
 
-    [MetadataType(typeof (HomogeneousCharacteristicDataAnnotations))]
-    public partial class homogeneous_characteristic
+    [MetadataType(typeof (CongenericCharacteristicDataAnnotations))]
+    public partial class congeneric_characteristic
     {
     }
 
-    public class HomogeneousCharacteristicDataAnnotations : CharacteristicDataAnnotations
+    public class CongenericCharacteristicDataAnnotations : CharacteristicDataAnnotations
     {
         [Display(Name = "Элемент")]
         public int element_id { get; set; }
