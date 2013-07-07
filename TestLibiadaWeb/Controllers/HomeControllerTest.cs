@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using LibiadaWeb;
 using LibiadaWeb.Controllers;
 
 namespace TestLibiadaWeb.Controllers
@@ -32,7 +27,7 @@ namespace TestLibiadaWeb.Controllers
             HomeController controller = new HomeController();
 
             // Действие
-            ActionResult result = controller.About() as ActionResult;
+            ActionResult result = controller.About();
 
             // Утверждение
             Assert.IsNotNull(result);
@@ -45,7 +40,7 @@ namespace TestLibiadaWeb.Controllers
             HomeController controller = new HomeController();
 
             // Действие
-            ActionResult result = controller.Contact() as ActionResult;
+            ActionResult result = controller.Contact();
 
             // Утверждение
             Assert.IsNotNull(result);

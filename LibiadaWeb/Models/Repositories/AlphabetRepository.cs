@@ -76,8 +76,7 @@ namespace LibiadaWeb.Models.Repositories
         {
             IEnumerable<element> dbElements = dbAlphabet.Select(a => a.element);
 
-            Alphabet alphabet = new Alphabet();
-            alphabet.Add(NullValue.Instance());
+            Alphabet alphabet = new Alphabet {NullValue.Instance()};
             foreach (var element in dbElements)
             {
                 alphabet.Add(new ValueString(element.value));
@@ -101,8 +100,8 @@ namespace LibiadaWeb.Models.Repositories
 
                 if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElem)))
                 {
-                    element newElement = new element()
-                    {
+                    element newElement = new element
+                        {
                         value = strElem,
                         name = strElem,
                         notation_id = notationId,

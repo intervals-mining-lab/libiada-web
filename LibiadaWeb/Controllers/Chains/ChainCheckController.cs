@@ -21,7 +21,6 @@ namespace LibiadaWeb.Controllers.Chains
         [HttpPost]
         public ActionResult Index(string[] file)
         {
-            string stringChain = "";
             var myFile = Request.Files[0];
 
             var fileLen = myFile.ContentLength;
@@ -34,7 +33,7 @@ namespace LibiadaWeb.Controllers.Chains
             fileStream.Read(input, 0, fileLen);
 
             // Copy the byte array into a string.
-            stringChain = Encoding.ASCII.GetString(input);
+            string stringChain = Encoding.ASCII.GetString(input);
             var tempString = stringChain.Split('\n');
             String fastaHeader = tempString[0];
             stringChain = tempString[tempString.Length - 1];

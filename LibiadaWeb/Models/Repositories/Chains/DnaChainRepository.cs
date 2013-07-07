@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Chains
-{ 
+{
     public class DnaChainRepository : IDnaChainRepository
     {
         private readonly LibiadaWebEntities db;
@@ -60,40 +60,29 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
         {
-            HashSet<long> chainIds;
-            if (chains != null)
-            {
-                chainIds = new HashSet<long>(chains.Select(c => c.id));
-            }
-            else
-            {
-                chainIds = new HashSet<long>();
-            }
+            HashSet<long> chainIds = chains != null
+                                         ? new HashSet<long>(chains.Select(c => c.id))
+                                         : new HashSet<long>();
             var allChains = db.dna_chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem
-                {
-                    Value = chain.id.ToString(),
-                    Text = chain.matter.name,
-                    Selected = chainIds.Contains(chain.id)
-                });
+                    {
+                        Value = chain.id.ToString(),
+                        Text = chain.matter.name,
+                        Selected = chainIds.Contains(chain.id)
+                    });
             }
             return chainsList;
         }
 
-        public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains, IEnumerable<dna_chain> selectedChain)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains,
+                                                       IEnumerable<dna_chain> selectedChain)
         {
-            HashSet<long> chainIds;
-            if (selectedChain != null)
-            {
-                chainIds = new HashSet<long>(selectedChain.Select(c => c.id));
-            }
-            else
-            {
-                chainIds = new HashSet<long>();
-            }
+            HashSet<long> chainIds = selectedChain != null
+                                         ? new HashSet<long>(selectedChain.Select(c => c.id))
+                                         : new HashSet<long>();
             if (allChains == null)
             {
                 allChains = db.dna_chain.Include("matter");
@@ -102,11 +91,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem
-                {
-                    Value = chain.id.ToString(),
-                    Text = chain.matter.name,
-                    Selected = chainIds.Contains(chain.id)
-                });
+                    {
+                        Value = chain.id.ToString(),
+                        Text = chain.matter.name,
+                        Selected = chainIds.Contains(chain.id)
+                    });
             }
             return chainsList;
         }
@@ -132,7 +121,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 db.building.AddObject(result[i]);
 
                 //костыль чтобы БД реже умирала
-                if (i % 1000 == 0)
+                if (i%1000 == 0)
                 {
                     db.SaveChanges();
                 }
@@ -148,7 +137,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             db.SaveChanges();
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }

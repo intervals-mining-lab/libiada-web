@@ -60,16 +60,16 @@
         characteristicsDiv.append(selectList);
         
         selectList = $('<select/>').attr('name', 'linkUpIds');
-        for (var i = 0; i < linkUps.length; i++) 
+        for (var j = 0; j < linkUps.length; j++) 
         {
-            selectList.append(linkUps[i]);
+            selectList.append(linkUps[j]);
         }
         characteristicsDiv.append(selectList);
         
         selectList = $('<select/>').attr('name', 'notationIds');
-        for (var i = 0; i < notations.length; i++) 
+        for (var k = 0; k < notations.length; k++) 
         {
-            selectList.append(notations[i]);
+            selectList.append(notations[k]);
         }
         characteristicsDiv.append(selectList);
         
@@ -101,7 +101,6 @@
         <tbody>
             @{
                 List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.mattersList);
-                int i = 0;
 
                 foreach (var item in mattersList)
                 {

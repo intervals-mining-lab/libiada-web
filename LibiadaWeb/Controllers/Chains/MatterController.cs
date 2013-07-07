@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,6 +7,7 @@ using System.Xml;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaWeb.Helpers;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -83,21 +83,16 @@ namespace LibiadaWeb.Controllers.Chains
 
                 string stringChain;
                 // Copy the byte array into a string
-                if(matter.nature_id == 1)
-                {
-                    stringChain = Encoding.ASCII.GetString(input);
-                }
-                else
-                {
-                    stringChain = Encoding.UTF8.GetString(input);
-                }
+                stringChain = matter.nature_id == Aliases.NatureGenetic
+                                  ? Encoding.ASCII.GetString(input)
+                                  : Encoding.UTF8.GetString(input);
 
                 BaseChain libiadaChain;
                 int[] libiadaBuilding;
                 bool continueImport = db.matter.Any(m => m.name == matter.name);
                 switch (matter.nature_id)
                 {
-                    //генетическая цепочка
+                        //генетическая цепочка
                     case 1:
                         //отделяем заголовок fasta файла от цепочки
                         string[] splittedFasta = stringChain.Split('\n');
@@ -116,24 +111,29 @@ namespace LibiadaWeb.Controllers.Chains
                         {
                             db.matter.AddObject(matter);
 
-                            dbDnaChain = new dna_chain()
-                            {
-                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                                dissimilar = false,
-                                notation_id = notationId,
-                                fasta_header = fastaHeader,
-                                piece_type_id = 1,
-                                creation_date = new DateTimeOffset(DateTime.Now)
-                            };
+                            dbDnaChain = new dna_chain
+                                {
+                                    id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                    dissimilar = false,
+                                    notation_id = notationId,
+                                    fasta_header = fastaHeader,
+                                    piece_type_id = 1,
+                                    creation_date = new DateTimeOffset(DateTime.Now)
+                                };
 
                             matter.dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
                             db.dna_chain.AddObject(dbDnaChain);
 
-                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, dbDnaChain.id, false);
+                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
+                                                                               dbDnaChain.id, false);
                         }
                         else
                         {
-                            dbDnaChain = db.dna_chain.Single(c => c.matter_id == matter.id && c.notation_id == notationId && c.fasta_header == fastaHeader);
+                            dbDnaChain =
+                                db.dna_chain.Single(
+                                    c =>
+                                    c.matter_id == matter.id && c.notation_id == notationId &&
+                                    c.fasta_header == fastaHeader);
                         }
 
                         libiadaBuilding = libiadaChain.Building;
@@ -142,7 +142,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                         db.SaveChanges();
                         break;
-                    //музыкальная цепочка
+                        //музыкальная цепочка
                     case 2:
                         XmlDocument doc = new XmlDocument();
                         doc.LoadXml(stringChain);
@@ -151,7 +151,7 @@ namespace LibiadaWeb.Controllers.Chains
                         //ScoreTrack tempTrack = parser.ScoreModel;
 
                         break;
-                    //литературная цепочка
+                        //литературная цепочка
                     case 3:
                         string[] text = stringChain.Split('\n');
                         for (int l = 0; l < text.Length - 1; l++)
@@ -171,25 +171,31 @@ namespace LibiadaWeb.Controllers.Chains
                         {
                             db.matter.AddObject(matter);
 
-                            dbLiteratureChain = new literature_chain()
-                            {
-                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                                dissimilar = false,
-                                notation_id = notationId,
-                                language_id = languageId,
-                                original = original,
-                                piece_type_id = 1,
-                                creation_date = new DateTimeOffset(DateTime.Now)
-                            };
+                            dbLiteratureChain = new literature_chain
+                                {
+                                    id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                                    dissimilar = false,
+                                    notation_id = notationId,
+                                    language_id = languageId,
+                                    original = original,
+                                    piece_type_id = 1,
+                                    creation_date = new DateTimeOffset(DateTime.Now)
+                                };
 
-                            matter.literature_chain.Add(dbLiteratureChain); //TODO: проверить, возможно одно из действий лишнее
+                            matter.literature_chain.Add(dbLiteratureChain);
+                                //TODO: проверить, возможно одно из действий лишнее
                             db.literature_chain.AddObject(dbLiteratureChain);
 
-                            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, dbLiteratureChain.id, true);
+                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
+                                                                               dbLiteratureChain.id, true);
                         }
                         else
                         {
-                            dbLiteratureChain = db.literature_chain.Single(c => c.matter_id == matter.id && c.notation_id == notationId && c.language_id == languageId);
+                            dbLiteratureChain =
+                                db.literature_chain.Single(
+                                    c =>
+                                    c.matter_id == matter.id && c.notation_id == notationId &&
+                                    c.language_id == languageId);
                         }
 
                         libiadaBuilding = libiadaChain.Building;
@@ -273,7 +279,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult ImportFailure()
         {
-            ViewBag.failedElement = (String)TempData["failedElement"];
+            ViewBag.failedElement = TempData["failedElement"];
             return View();
         }
     }

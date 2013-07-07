@@ -6,7 +6,7 @@ namespace LibiadaWeb.Controllers.Catalogs
 { 
     public class FmotivTypeController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /FmotivType/

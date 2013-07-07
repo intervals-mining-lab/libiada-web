@@ -18,14 +18,14 @@ namespace LibiadaWeb.Models
         /// <returns>Таблица днных</returns>
         public static DataTable FillDataTable(long[] id, string[] characteristicsNames, List<List<double>> characteristics)
         {
-            DataTable TempTable = new DataTable();
+            DataTable tempTable = new DataTable();
             for (int j = 0; j < id.Length; j++)
             {
                 //формируются строки и добавляются в таблицу
-                TempTable.Add(FormDataObject(characteristics[j], characteristicsNames, id[j]));
+                tempTable.Add(FormDataObject(characteristics[j], characteristicsNames, id[j]));
             }
 
-            return TempTable;
+            return tempTable;
         }
 
         /// <summary>
@@ -35,16 +35,15 @@ namespace LibiadaWeb.Models
         /// <param name="characteristicsNames">Массив названий характеристик</param>
         /// <param name="id">Номер цепочки</param>
         /// <returns>Строка таблицы</returns>
-        public static DataObject FormDataObject(List<double> characteristics, string[] characteristicsNames, long id)
+        private static DataObject FormDataObject(List<double> characteristics, string[] characteristicsNames, long id)
         {
-            DataObject TempObject = new DataObject();
-            TempObject.Id = id;
+            DataObject tempObject = new DataObject {Id = id};
             for (int i = 0; i < characteristicsNames.Length; i++)
             {
                 //добавляется очередное значение характеристики
-                TempObject.Add(characteristicsNames[i], characteristics[i]);
+                tempObject.Add(characteristicsNames[i], characteristics[i]);
             }
-            return TempObject;
+            return tempObject;
         }
     }
 }

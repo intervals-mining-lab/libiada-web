@@ -9,7 +9,7 @@ using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.TheoryOfSet;
 
 namespace LibiadaWeb.Models.Repositories.Chains
-{ 
+{
     public class ChainRepository : IChainRepository
     {
         private readonly LibiadaWebEntities db;
@@ -29,7 +29,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public IQueryable<chain> AllIncluding(params Expression<Func<chain, object>>[] includeProperties)
         {
             IQueryable<chain> query = db.chain;
-            foreach (var includeProperty in includeProperties) {
+            foreach (var includeProperty in includeProperties)
+            {
                 query = query.Include(includeProperty);
             }
             return query;
@@ -42,10 +43,13 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void InsertOrUpdate(chain chain)
         {
-            if (chain.id == default(long)) {
+            if (chain.id == default(long))
+            {
                 // New entity
                 db.chain.AddObject(chain);
-            } else {
+            }
+            else
+            {
                 // Existing entity
                 db.chain.Attach(chain);
                 db.ObjectStateManager.ChangeObjectState(chain, EntityState.Modified);
@@ -65,25 +69,19 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> chains)
         {
-            HashSet<long> chainIds;
-            if (chains != null)
-            {
-                chainIds = new HashSet<long>(chains.Select(c => c.id));
-            }
-            else
-            {
-                chainIds = new HashSet<long>();
-            }
+            HashSet<long> chainIds = chains != null
+                                         ? new HashSet<long>(chains.Select(c => c.id))
+                                         : new HashSet<long>();
             var allChains = db.chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem
-                {
-                    Value = chain.id.ToString(),
-                    Text = chain.matter.name,
-                    Selected = chainIds.Contains(chain.id)
-                });
+                    {
+                        Value = chain.id.ToString(),
+                        Text = chain.matter.name,
+                        Selected = chainIds.Contains(chain.id)
+                    });
             }
             return chainsList;
         }
@@ -96,7 +94,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public BaseChain FromDbChainToLibiadaBaseChain(chain dbChain)
         {
-            Alphabet alphabet = alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
+            Alphabet alphabet =
+                alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
 
             int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
 
@@ -109,10 +108,10 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return FromDbChainToLibiadaChain(dbChain);
         }
 
-        //TODO: вытаскивать сразу и имеющиеся характеристики цепочки
         public Chain FromDbChainToLibiadaChain(chain dbChain)
         {
-            Alphabet alphabet = alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
+            Alphabet alphabet =
+                alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
 
             int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
 
@@ -126,18 +125,20 @@ namespace LibiadaWeb.Models.Repositories.Chains
             bool continueImport = db.matter.Any(m => m.name == parent.name);
             if (!continueImport)
             {
-                result = new chain()
+                result = new chain
                     {
-                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(), 
+                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                         dissimilar = false,
                         notation_id = notationId,
                         creation_date = DateTime.Now
                     };
 
-                IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, result.id, false);
+                IEnumerable<alphabet> alphabet =
+                    alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, result.id,
+                                                                       false);
 
                 result.alphabet.Attach(alphabet);
-                parent.chain.Add(result);//TODO: проверить, возможно одно из действий лишнее
+                parent.chain.Add(result); //TODO: проверить, возможно одно из действий лишнее
                 db.chain.AddObject(result);
 
                 db.SaveChanges();
@@ -156,7 +157,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return result;
         }
 
-        
+
 
         //TODO: создать репозиторий строя и перенести туда методы строя
         public int[] FromDbBuildingToLibiadaBuilding(chain dbChain)
@@ -175,11 +176,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 result[i].index = i;
                 result[i].number = libiadaBuilding[i];
 
-                parent.building.Add(result[i]);//TODO: проверить, возможно одно из действий лишнее
+                parent.building.Add(result[i]); //TODO: проверить, возможно одно из действий лишнее
                 db.building.AddObject(result[i]);
 
                 //костыль чтобы БД реже умирала
-                if (i % 1000 == 0)
+                if (i%1000 == 0)
                 {
                     db.SaveChanges();
                 }
@@ -190,7 +191,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return result;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }

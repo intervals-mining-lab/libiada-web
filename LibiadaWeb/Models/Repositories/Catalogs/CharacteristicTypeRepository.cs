@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Catalogs
-{ 
+{
     public class CharacteristicTypeRepository : ICharacteristicTypeRepository
     {
         private readonly LibiadaWebEntities db;
@@ -22,10 +22,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             get { return db.characteristic_type; }
         }
 
-        public IQueryable<characteristic_type> AllIncluding(params Expression<Func<characteristic_type, object>>[] includeProperties)
+        public IQueryable<characteristic_type> AllIncluding(
+            params Expression<Func<characteristic_type, object>>[] includeProperties)
         {
             IQueryable<characteristic_type> query = db.characteristic_type;
-            foreach (var includeProperty in includeProperties) {
+            foreach (var includeProperty in includeProperties)
+            {
                 query = query.Include(includeProperty);
             }
             return query;
@@ -38,10 +40,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public void InsertOrUpdate(characteristic_type characteristic_type)
         {
-            if (characteristic_type.id == default(int)) {
+            if (characteristic_type.id == default(int))
+            {
                 // New entity
                 db.characteristic_type.AddObject(characteristic_type);
-            } else {
+            }
+            else
+            {
                 // Existing entity
                 db.characteristic_type.Attach(characteristic_type);
                 db.ObjectStateManager.ChangeObjectState(characteristic_type, EntityState.Modified);
@@ -61,30 +66,25 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> characteristicTypes)
         {
-            HashSet<int> characteristicTypeIds;
-            if (characteristicTypes != null)
-            {
-                characteristicTypeIds = new HashSet<int>(characteristicTypes.Select(c => c.id));
-            }
-            else
-            {
-                characteristicTypeIds = new HashSet<int>();
-            }
+            HashSet<int> characteristicTypeIds = characteristicTypes != null
+                                                ? new HashSet<int>(characteristicTypes.Select(c => c.id))
+                                                : new HashSet<int>();
             var allCharacteristicTypes = db.characteristic_type;
             var characteristicTypesList = new List<SelectListItem>();
             foreach (var characteristicType in allCharacteristicTypes)
             {
                 characteristicTypesList.Add(new SelectListItem
-                {
-                    Value = characteristicType.id.ToString(),
-                    Text = characteristicType.name,
-                    Selected = characteristicTypeIds.Contains(characteristicType.id)
-                });
+                    {
+                        Value = characteristicType.id.ToString(),
+                        Text = characteristicType.name,
+                        Selected = characteristicTypeIds.Contains(characteristicType.id)
+                    });
             }
             return characteristicTypesList;
         }
 
-        public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> allcharacteristicTypes, IEnumerable<characteristic_type> selectedCharacteristicTypes)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> allcharacteristicTypes,
+                                                       IEnumerable<characteristic_type> selectedCharacteristicTypes)
         {
             HashSet<int> characteristicTypeIds;
             if (selectedCharacteristicTypes != null)
@@ -103,16 +103,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             foreach (var characteristicType in allcharacteristicTypes)
             {
                 characteristicTypesList.Add(new SelectListItem
-                {
-                    Value = characteristicType.id.ToString(),
-                    Text = characteristicType.name,
-                    Selected = characteristicTypeIds.Contains(characteristicType.id)
-                });
+                    {
+                        Value = characteristicType.id.ToString(),
+                        Text = characteristicType.name,
+                        Selected = characteristicTypeIds.Contains(characteristicType.id)
+                    });
             }
             return characteristicTypesList;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }

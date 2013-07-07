@@ -6,7 +6,7 @@ namespace LibiadaWeb.Controllers.Catalogs
 { 
     public class AccidentalController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /Accidental/

@@ -91,8 +91,6 @@ namespace LibiadaWeb.Controllers.Calculators
                         dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
                     }
 
-                    matter matter = db.matter.Single(m => m.id == matterId);
-
                     Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(dbChain);
 
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
@@ -120,17 +118,19 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                    b.element_id == elementId && b.link_up_id == linkUpId))
                             {
                                 double value = calculator.Calculate(tempChain, linkUp);
-                                congeneric_characteristic currentCharacteristic = new congeneric_characteristic();
-                                currentCharacteristic.id =
-                                    db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                      .First();
-                                currentCharacteristic.chain_id = dbChain.id;
-                                currentCharacteristic.characteristic_type_id = characteristicId;
-                                currentCharacteristic.link_up_id = linkUpId;
-                                currentCharacteristic.element_id = elementId;
-                                currentCharacteristic.value = value;
-                                currentCharacteristic.value_string = value.ToString();
-                                currentCharacteristic.creation_date = DateTime.Now;
+                                congeneric_characteristic currentCharacteristic = new congeneric_characteristic
+                                    {
+                                        id =
+                                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                              .First(),
+                                        chain_id = dbChain.id,
+                                        characteristic_type_id = characteristicId,
+                                        link_up_id = linkUpId,
+                                        element_id = elementId,
+                                        value = value,
+                                        value_string = value.ToString(),
+                                        creation_date = DateTime.Now
+                                    };
                                 db.congeneric_characteristic.AddObject(currentCharacteristic);
                                 db.SaveChanges();
                             }

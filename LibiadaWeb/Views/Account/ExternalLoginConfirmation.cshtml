@@ -8,7 +8,7 @@
     <h2>Свяжите свою учетную запись в @ViewBag.ProviderDisplayName.</h2>
 </hgroup>
 
-@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new { ReturnUrl = ViewBag.ReturnUrl })) {
+@using (Html.BeginForm("ExternalLoginConfirmation", "Account", new {ViewBag.ReturnUrl })) {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 

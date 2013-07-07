@@ -6,7 +6,7 @@ namespace LibiadaWeb.Controllers
 { 
     public class CongenericCharacteristicController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /CongenericCharacteristic/

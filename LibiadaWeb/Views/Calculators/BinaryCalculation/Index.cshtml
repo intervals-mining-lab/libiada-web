@@ -101,7 +101,7 @@
                         <td>
                             @if(ViewBag.literatureChains[i] != null)
                             {
-                                @ViewBag.literatureChains[i].language.name;
+                                @ViewBag.literatureChains[i].language.name
                             }
                         </td>
                     </tr>
@@ -127,21 +127,21 @@
     </select>
     <br/>
     <br/>
-    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object>() {{"onclick", "FiltrationSwitch()"}})
+    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object> {{"onclick", "FiltrationSwitch()"}})
     <br/>
     <div id="filterDiv" hidden>
         @Html.Label("Число выводимых зависимостей")
         <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object>() {{"onclick", "FrequencySwitch()"}})
+    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object> {{"onclick", "FrequencySwitch()"}})
     <br/>
     <div id="frequencyDiv" hidden>
         @Html.Label("X:")
         <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object>() {{"onclick", "OneWordSwitch()"}})
+    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object> {{"onclick", "OneWordSwitch()"}})
     <br/>
     <div id="oneWordDiv" hidden>
         

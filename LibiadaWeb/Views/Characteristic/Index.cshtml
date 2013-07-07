@@ -68,9 +68,9 @@
                     @Html.DisplayFor(modelItem => item.creation_date)
                 </td>
                 <td>
-                    @Html.ActionLink("Редактировать", "Edit", new {id = item.id}) |
-                    @Html.ActionLink("Подробности", "Details", new {id = item.id}) |
-                    @Html.ActionLink("Удалить", "Delete", new {id = item.id})
+                    @Html.ActionLink("Редактировать", "Edit", new {item.id}) |
+                    @Html.ActionLink("Подробности", "Details", new {item.id}) |
+                    @Html.ActionLink("Удалить", "Delete", new {item.id})
                 </td>
             </tr>
         }

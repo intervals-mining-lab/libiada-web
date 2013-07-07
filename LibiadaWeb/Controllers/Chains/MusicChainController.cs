@@ -6,7 +6,7 @@ namespace LibiadaWeb.Controllers.Chains
 { 
     public class MusicChainController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
         // GET: /MusicChain/

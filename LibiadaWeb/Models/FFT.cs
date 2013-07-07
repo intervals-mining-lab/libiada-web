@@ -3,18 +3,18 @@ using System.Numerics;
 
 namespace LibiadaWeb.Models
 {
-    public class FFT
+    public static class FFT
     {
         /// <summary>
         /// Вычисление поворачивающего модуля e^(-i*2*PI*k/N)
         /// </summary>
         /// <param name="k"></param>
-        /// <param name="N"></param>
+        /// <param name="n"></param>
         /// <returns></returns>
-        private static Complex w(int k, int N)
+        private static Complex W(int k, int n)
         {
-            if (k % N == 0) return 1;
-            double arg = -2 * Math.PI * k / N;
+            if (k % n == 0) return 1;
+            double arg = -2 * Math.PI * k / n;
             return new Complex(Math.Cos(arg), Math.Sin(arg));
         }
         /// <summary>
@@ -24,49 +24,33 @@ namespace LibiadaWeb.Models
         /// <returns>Массив со значениями спектра сигнала</returns>
         public static Complex[] Fft(Complex[] x)
         {
-            Complex[] X;
-            int N = x.Length;
-            if (N == 2)
+            Complex[] result;
+            int n = x.Length;
+            if (n == 2)
             {
-                X = new Complex[2];
-                X[0] = x[0] + x[1];
-                X[1] = x[0] - x[1];
+                result = new Complex[2];
+                result[0] = x[0] + x[1];
+                result[1] = x[0] - x[1];
             }
             else
             {
-                Complex[] x_even = new Complex[N / 2];
-                Complex[] x_odd = new Complex[N / 2];
-                for (int i = 0; i < N / 2; i++)
+                Complex[] xEven = new Complex[n / 2];
+                Complex[] xOdd = new Complex[n / 2];
+                for (int i = 0; i < n / 2; i++)
                 {
-                    x_even[i] = x[2 * i];
-                    x_odd[i] = x[2 * i + 1];
+                    xEven[i] = x[2 * i];
+                    xOdd[i] = x[2 * i + 1];
                 }
-                Complex[] X_even = Fft(x_even);
-                Complex[] X_odd = Fft(x_odd);
-                X = new Complex[N];
-                for (int i = 0; i < N / 2; i++)
+                xEven = Fft(xEven);
+                xOdd = Fft(xOdd);
+                result = new Complex[n];
+                for (int i = 0; i < n / 2; i++)
                 {
-                    X[i] = X_even[i] + w(i, N) * X_odd[i];
-                    X[i + N / 2] = X_even[i] - w(i, N) * X_odd[i];
+                    result[i] = xEven[i] + W(i, n) * xOdd[i];
+                    result[i + n / 2] = xEven[i] - W(i, n) * xOdd[i];
                 }
             }
-            return X;
-        }
-        /// <summary>
-        /// Центровка массива значений полученных в fft (спектральная составляющая при нулевой частоте будет в центре массива)
-        /// </summary>
-        /// <param name="X">Массив значений полученный в fft</param>
-        /// <returns></returns>
-        public static Complex[] nfft(Complex[] X)
-        {
-            int N = X.Length;
-            Complex[] X_n = new Complex[N];
-            for (int i = 0; i < N / 2; i++)
-            {
-                X_n[i] = X[N / 2 + i];
-                X_n[N / 2 + i] = X[i];
-            }
-            return X_n;
+            return result;
         }
     }
 }

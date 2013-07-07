@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories
-{ 
+{
     public class ElementRepository : IElementRepository
     {
         private readonly LibiadaWebEntities db;
@@ -25,7 +25,8 @@ namespace LibiadaWeb.Models.Repositories
         public IQueryable<element> AllIncluding(params Expression<Func<element, object>>[] includeProperties)
         {
             IQueryable<element> query = db.element;
-            foreach (var includeProperty in includeProperties) {
+            foreach (var includeProperty in includeProperties)
+            {
                 query = query.Include(includeProperty);
             }
             return query;
@@ -38,10 +39,13 @@ namespace LibiadaWeb.Models.Repositories
 
         public void InsertOrUpdate(element element)
         {
-            if (element.id == default(long)) {
+            if (element.id == default(long))
+            {
                 // New entity
                 db.element.AddObject(element);
-            } else {
+            }
+            else
+            {
                 // Existing entity
                 db.element.Attach(element);
                 db.ObjectStateManager.ChangeObjectState(element, EntityState.Modified);
@@ -59,22 +63,17 @@ namespace LibiadaWeb.Models.Repositories
             db.SaveChanges();
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }
 
-        public List<SelectListItem> GetSelectListItems(IEnumerable<element> allElements, IEnumerable<element> selectedElements)
+        public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<element> allElements,
+                                                              IEnumerable<element> selectedElements)
         {
-            HashSet<long> elementIds;
-            if (selectedElements != null)
-            {
-                elementIds = new HashSet<long>(selectedElements.Select(c => c.id));
-            }
-            else
-            {
-                elementIds = new HashSet<long>();
-            }
+            HashSet<long> elementIds = selectedElements != null
+                                     ? new HashSet<long>(selectedElements.Select(c => c.id))
+                                     : new HashSet<long>();
             if (allElements == null)
             {
                 allElements = db.element;
@@ -83,36 +82,30 @@ namespace LibiadaWeb.Models.Repositories
             foreach (var element in allElements)
             {
                 elementsList.Add(new SelectListItem
-                {
-                    Value = element.id.ToString(),
-                    Text = element.name,
-                    Selected = elementIds.Contains(element.id)
-                });
+                    {
+                        Value = element.id.ToString(),
+                        Text = element.name,
+                        Selected = elementIds.Contains(element.id)
+                    });
             }
             return elementsList;
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<element> elements)
         {
-            HashSet<long> elementIds;
-            if (elements != null)
-            {
-                elementIds = new HashSet<long>(elements.Select(c => c.id));
-            }
-            else
-            {
-                elementIds = new HashSet<long>();
-            }
+            HashSet<long> elementIds = elements != null
+                                           ? new HashSet<long>(elements.Select(c => c.id))
+                                           : new HashSet<long>();
             var allElements = db.element;
             var elementsList = new List<SelectListItem>();
             foreach (var element in allElements)
             {
                 elementsList.Add(new SelectListItem
-                {
-                    Value = element.id.ToString(),
-                    Text = element.name,
-                    Selected = elementIds.Contains(element.id)
-                });
+                    {
+                        Value = element.id.ToString(),
+                        Text = element.name,
+                        Selected = elementIds.Contains(element.id)
+                    });
             }
             return elementsList;
         }

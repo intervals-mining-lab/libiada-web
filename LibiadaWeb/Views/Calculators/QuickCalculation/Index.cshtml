@@ -1,5 +1,4 @@
-﻿@using LibiadaWeb.Helpers
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Вычисление характеристик произвольной цепочки";
@@ -43,9 +42,9 @@
         characteristicsDiv.append(selectList);
         
         selectList = $('<select/>').attr('name', 'linkUpIds');
-        for (var i = 0; i < linkUps.length; i++) 
+        for (var j = 0; j < linkUps.length; j++) 
         {
-            selectList.append(linkUps[i]);
+            selectList.append(linkUps[j]);
         }
         characteristicsDiv.append(selectList);
         

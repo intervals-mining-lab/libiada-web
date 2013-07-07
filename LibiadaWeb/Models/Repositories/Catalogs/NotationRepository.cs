@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Catalogs
-{ 
+{
     public class NotationRepository : INotationRepository
     {
         private readonly LibiadaWebEntities db;
@@ -25,7 +25,8 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public IQueryable<notation> AllIncluding(params Expression<Func<notation, object>>[] includeProperties)
         {
             IQueryable<notation> query = db.notation;
-            foreach (var includeProperty in includeProperties) {
+            foreach (var includeProperty in includeProperties)
+            {
                 query = query.Include(includeProperty);
             }
             return query;
@@ -38,10 +39,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public void InsertOrUpdate(notation notation)
         {
-            if (notation.id == default(int)) {
+            if (notation.id == default(int))
+            {
                 // New entity
                 db.notation.AddObject(notation);
-            } else {
+            }
+            else
+            {
                 // Existing entity
                 db.notation.Attach(notation);
                 db.ObjectStateManager.ChangeObjectState(notation, EntityState.Modified);
@@ -61,30 +65,24 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<notation> notations)
         {
-            HashSet<int> notationIds;
-            if (notations != null)
-            {
-                notationIds = new HashSet<int>(notations.Select(c => c.id));
-            }
-            else
-            {
-                notationIds = new HashSet<int>();
-            }
+            HashSet<int> notationIds = notations != null
+                                           ? new HashSet<int>(notations.Select(c => c.id))
+                                           : new HashSet<int>();
             var allNotations = db.notation;
             var notationsList = new List<SelectListItem>();
             foreach (var notation in allNotations)
             {
                 notationsList.Add(new SelectListItem
-                {
-                    Value = notation.id.ToString(),
-                    Text = notation.name,
-                    Selected = notationIds.Contains(notation.id)
-                });
+                    {
+                        Value = notation.id.ToString(),
+                        Text = notation.name,
+                        Selected = notationIds.Contains(notation.id)
+                    });
             }
             return notationsList;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }

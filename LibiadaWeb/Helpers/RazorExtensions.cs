@@ -10,13 +10,13 @@ namespace LibiadaWeb.Helpers
     {
         public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.CheckBoxList(name, listInfo, ((IDictionary<string, object>)null));
+            return htmlHelper.CheckBoxList(name, listInfo, null);
         }
 
         public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.CheckBoxList(name, listInfo, ((IDictionary<string, object>)new RouteValueDictionary(htmlAttributes)));
+            return htmlHelper.CheckBoxList(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
         public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
@@ -40,13 +40,13 @@ namespace LibiadaWeb.Helpers
 
         public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.CheckBoxGroup(name, listInfo, ((IDictionary<string, object>)null));
+            return htmlHelper.CheckBoxGroup(name, listInfo, null);
         }
 
         public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.CheckBoxGroup(name, listInfo, ((IDictionary<string, object>)new RouteValueDictionary(htmlAttributes)));
+            return htmlHelper.CheckBoxGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
         public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
@@ -69,13 +69,13 @@ namespace LibiadaWeb.Helpers
 
         public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.RadioButtonGroup(name, listInfo, ((IDictionary<string, object>)null));
+            return htmlHelper.RadioButtonGroup(name, listInfo, null);
         }
 
         public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.RadioButtonGroup(name, listInfo, ((IDictionary<string, object>)new RouteValueDictionary(htmlAttributes)));
+            return htmlHelper.RadioButtonGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
         public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
@@ -103,7 +103,7 @@ namespace LibiadaWeb.Helpers
             {
                 elementBuilder.MergeAttribute("checked", "checked");
             }
-            elementBuilder.MergeAttributes<string, object>(htmlAttributes);
+            elementBuilder.MergeAttributes(htmlAttributes);
             elementBuilder.MergeAttribute("type", type);
             elementBuilder.MergeAttribute("value", info.Value);
             elementBuilder.MergeAttribute("name", name);
@@ -115,7 +115,7 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString CheckBox(this HtmlHelper htmlHelper, String name, String label, IDictionary<string, object> htmlAttributes)
         {
             TagBuilder elementBuilder = new TagBuilder("input");
-            elementBuilder.MergeAttributes<string, object>(htmlAttributes);
+            elementBuilder.MergeAttributes(htmlAttributes);
             elementBuilder.MergeAttribute("type", "checkbox");
             elementBuilder.MergeAttribute("value", "true");
             elementBuilder.MergeAttribute("name", name);

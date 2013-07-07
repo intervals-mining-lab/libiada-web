@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models.Repositories;
@@ -76,8 +74,8 @@ namespace LibiadaWeb.Controllers.Chains
                 };
             db.matter.AddObject(result);
 
-            dna_chain resultChain = new dna_chain()
-            {
+            dna_chain resultChain = new dna_chain
+                {
                 id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                 dissimilar = false,
                 notation_id = notationId,
@@ -87,7 +85,7 @@ namespace LibiadaWeb.Controllers.Chains
 
             result.dna_chain.Add(resultChain); //TODO: проверить, возможно одно из действий лишнее
             db.dna_chain.AddObject(resultChain);
-            IEnumerable<alphabet> alphabet = alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
+            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
             dnaChainRepository.FromLibiadaBuildingToDbBuilding(resultChain, libiadaChain.Building);
             db.SaveChanges();
             return RedirectToAction("Index", "Matter");

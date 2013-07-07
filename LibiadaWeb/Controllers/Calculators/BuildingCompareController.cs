@@ -116,7 +116,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            ViewBag.duplicate = TempData["duplicate"] is bool ? (bool) TempData["duplicate"] : false;
+            ViewBag.duplicate = TempData["duplicate"] ;
             if (ViewBag.duplicate)
             {
                 ViewBag.chainName1 = TempData["chainName1"] as String;

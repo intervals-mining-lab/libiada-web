@@ -96,13 +96,15 @@ namespace LibiadaWeb.Controllers.Calculators
                         ICalculator calculator = CalculatorsFactory.Create(className);
                         LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
                         double characteristicValue = calculator.Calculate(tempChain, linkUp);
-                        characteristic dbCharacteristic = new characteristic();
-                        dbCharacteristic.chain_id = chainId;
-                        dbCharacteristic.characteristic_type_id = characteristicIds[i];
-                        dbCharacteristic.link_up_id = linkUpId;
-                        dbCharacteristic.value = characteristicValue;
-                        dbCharacteristic.value_string = characteristicValue.ToString();
-                        dbCharacteristic.creation_date = DateTime.Now;
+                        characteristic dbCharacteristic = new characteristic
+                            {
+                                chain_id = chainId,
+                                characteristic_type_id = characteristicIds[i],
+                                link_up_id = linkUpId,
+                                value = characteristicValue,
+                                value_string = characteristicValue.ToString(),
+                                creation_date = DateTime.Now
+                            };
                         db.characteristic.AddObject(dbCharacteristic);
                         db.SaveChanges();
                         characteristics.Last().Add(characteristicValue);

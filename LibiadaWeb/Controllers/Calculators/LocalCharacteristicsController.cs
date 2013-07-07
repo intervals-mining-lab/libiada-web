@@ -71,7 +71,6 @@ namespace LibiadaWeb.Controllers.Calculators
                 partNames.Add(new List<string>());
                 characteristics.Add(new List<List<double>>());
 
-                matter matter = db.matter.Single(m => m.id == matterId);
                 long chainId;
                 if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                 {
@@ -88,18 +87,18 @@ namespace LibiadaWeb.Controllers.Calculators
 
                 //IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
                 CutRule cutRule = isGrowingWindow ? (CutRule) new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
-                CutRuleIterator iter = cutRule.getIterator();
+                CutRuleIterator iter = cutRule.GetIterator();
                
-                while (iter.next())
+                while (iter.Next())
                 {
                     characteristics.Last().Add(new List<Double>());
                     //Chain tempChain = cutRule.Current();
                     Chain tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.getStopPos() - iter.getStartPos());
+                    tempChain.ClearAndSetNewLength(iter.GetStopPos() - iter.GetStartPos());
 
-                    for (int i = 0; iter.getStartPos() + i < iter.getStopPos(); i++)
+                    for (int i = 0; iter.GetStartPos() + i < iter.GetStopPos(); i++)
                     {
-                        tempChain.Add(libiadaChain[iter.getStartPos() + i], i);
+                        tempChain.Add(libiadaChain[iter.GetStartPos() + i], i);
                     }
                     partNames.Last().Add(tempChain.ToString());
                     for (int i = 0; i < characteristicIds.Length; i++)
@@ -136,7 +135,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
                         List<Complex> comp = new List<Complex>();
-                        int j = 0;
+                        int j;
 
                         //Для всех фрагментов цепочек
                         for (j = 0; j < characteristics.Last().Count; j++)

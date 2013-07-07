@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.DataTransformators;
 using LibiadaCore.Classes.Root;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -35,32 +36,18 @@ namespace LibiadaWeb.Controllers.Chains
         [HttpPost]
         public ActionResult Index(long[] chainIds, bool toAmino)
         {
-            int notationId;
-            if (toAmino)
-            {
-                notationId = 3;
-            }
-            else
-            {
-                notationId = 2;
-            }
+            int notationId = toAmino ? Aliases.NotationAminoAcid : Aliases.NotationTriplet;
 
             foreach (var chainId in chainIds)
             {
                 dna_chain dbParentChain = db.dna_chain.Single(c => c.id == chainId);
                 Chain tempChain = new Chain(dnaChainRepository.FromDbBuildingToLibiadaBuilding(dbParentChain),
                                             alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbParentChain.id));
-                BaseChain transformedChain;
-                if (toAmino)
-                {
-                    transformedChain = DnaTransformator.Encode(tempChain);
-                }
-                else
-                {
-                    transformedChain = DnaTransformator.EncodeTriplets(tempChain);
-                }
+                BaseChain transformedChain = toAmino
+                                                 ? DnaTransformator.Encode(tempChain)
+                                                 : DnaTransformator.EncodeTriplets(tempChain);
 
-                dna_chain result = new dna_chain()
+                dna_chain result = new dna_chain
                     {
                         id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
                         matter = dbParentChain.matter,

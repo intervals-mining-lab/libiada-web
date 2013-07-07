@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Catalogs
-{ 
+{
     public class LinkUpRepository : ILinkUpRepository
     {
         private readonly LibiadaWebEntities db;
@@ -17,6 +17,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             this.db = db;
         }
+
         public IQueryable<link_up> All
         {
             get { return db.link_up; }
@@ -25,7 +26,8 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public IQueryable<link_up> AllIncluding(params Expression<Func<link_up, object>>[] includeProperties)
         {
             IQueryable<link_up> query = db.link_up;
-            foreach (var includeProperty in includeProperties) {
+            foreach (var includeProperty in includeProperties)
+            {
                 query = query.Include(includeProperty);
             }
             return query;
@@ -38,10 +40,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public void InsertOrUpdate(link_up link_up)
         {
-            if (link_up.id == default(int)) {
+            if (link_up.id == default(int))
+            {
                 // New entity
                 db.link_up.AddObject(link_up);
-            } else {
+            }
+            else
+            {
                 // Existing entity
                 db.link_up.Attach(link_up);
                 db.ObjectStateManager.ChangeObjectState(link_up, EntityState.Modified);
@@ -61,30 +66,24 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<link_up> linkUps)
         {
-            HashSet<int> linkUpIds;
-            if (linkUps != null)
-            {
-                linkUpIds = new HashSet<int>(linkUps.Select(c => c.id));
-            }
-            else
-            {
-                linkUpIds = new HashSet<int>();
-            }
+            HashSet<int> linkUpIds = linkUps != null
+                                         ? new HashSet<int>(linkUps.Select(c => c.id))
+                                         : new HashSet<int>();
             var allLinkUps = db.link_up;
             var linkUpsList = new List<SelectListItem>();
             foreach (var linkUp in allLinkUps)
             {
                 linkUpsList.Add(new SelectListItem
-                {
-                    Value = linkUp.id.ToString(),
-                    Text = linkUp.name,
-                    Selected = linkUpIds.Contains(linkUp.id)
-                });
+                    {
+                        Value = linkUp.id.ToString(),
+                        Text = linkUp.name,
+                        Selected = linkUpIds.Contains(linkUp.id)
+                    });
             }
             return linkUpsList;
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }

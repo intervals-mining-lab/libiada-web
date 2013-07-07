@@ -37,14 +37,9 @@ namespace LibiadaWeb.Controllers.Calculators
             List<literature_chain> literatureChains = new List<literature_chain>();
             foreach (chain chain in ViewBag.chains)
             {
-                if (chain.matter.nature.id == Aliases.NatureLiterature)
-                {
-                    literatureChains.Add(db.literature_chain.Single(l => l.id == chain.id));
-                }
-                else
-                {
-                    literatureChains.Add(null);
-                }
+                literatureChains.Add(chain.matter.nature.id == Aliases.NatureLiterature
+                                         ? db.literature_chain.Single(l => l.id == chain.id)
+                                         : null);
             }
             ViewBag.literatureChains = literatureChains;
             ViewBag.language_id = new SelectList(db.language, "id", "name");
@@ -189,18 +184,19 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == secondElementId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        binary_characteristic currentCharacteristic = new binary_characteristic();
-                        currentCharacteristic.id =
-                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                              .First();
-                        currentCharacteristic.chain_id = dbChain.id;
-                        currentCharacteristic.characteristic_type_id = characteristicId;
-                        currentCharacteristic.link_up_id = linkUpId;
-                        currentCharacteristic.first_element_id = wordId;
-                        currentCharacteristic.second_element_id = secondElementId;
-                        currentCharacteristic.value = calculator.Calculate(currentChain,
-                                                                           currentChain.Alphabet[firstElementNumber - 1],
-                                                                           currentChain.Alphabet[i], linkUp);
+                        binary_characteristic currentCharacteristic = new binary_characteristic
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                       .First(),
+                                chain_id = dbChain.id,
+                                characteristic_type_id = characteristicId,
+                                link_up_id = linkUpId,
+                                first_element_id = wordId,
+                                second_element_id = secondElementId,
+                                value = calculator.Calculate(currentChain,
+                                                             currentChain.Alphabet[firstElementNumber - 1],
+                                                             currentChain.Alphabet[i], linkUp)
+                            };
                         currentCharacteristic.value_string = currentCharacteristic.value.ToString();
                         currentCharacteristic.creation_date = DateTime.Now;
                         db.binary_characteristic.AddObject(currentCharacteristic);
@@ -228,18 +224,19 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == wordId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        binary_characteristic currentCharacteristic = new binary_characteristic();
-                        currentCharacteristic.id =
-                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                              .First();
-                        currentCharacteristic.chain_id = dbChain.id;
-                        currentCharacteristic.characteristic_type_id = characteristicId;
-                        currentCharacteristic.link_up_id = linkUpId;
-                        currentCharacteristic.first_element_id = firstElementId;
-                        currentCharacteristic.second_element_id = wordId;
-                        currentCharacteristic.value = calculator.Calculate(currentChain, currentChain.Alphabet[i],
-                                                                           currentChain.Alphabet[secondElementNumber - 1],
-                                                                           linkUp);
+                        binary_characteristic currentCharacteristic = new binary_characteristic
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                       .First(),
+                                chain_id = dbChain.id,
+                                characteristic_type_id = characteristicId,
+                                link_up_id = linkUpId,
+                                first_element_id = firstElementId,
+                                second_element_id = wordId,
+                                value = calculator.Calculate(currentChain, currentChain.Alphabet[i],
+                                                             currentChain.Alphabet[secondElementNumber - 1],
+                                                             linkUp)
+                            };
                         currentCharacteristic.value_string = currentCharacteristic.value.ToString();
                         currentCharacteristic.creation_date = DateTime.Now;
                         db.binary_characteristic.AddObject(currentCharacteristic);
@@ -271,18 +268,19 @@ namespace LibiadaWeb.Controllers.Calculators
                                                           b.second_element_id == secondElementId &&
                                                           b.link_up_id == linkUpId))
                         {
-                            binary_characteristic currentCharacteristic = new binary_characteristic();
-                            currentCharacteristic.id =
-                                db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                  .First();
-                            currentCharacteristic.chain_id = dbChain.id;
-                            currentCharacteristic.characteristic_type_id = characteristicId;
-                            currentCharacteristic.link_up_id = linkUpId;
-                            currentCharacteristic.first_element_id = firstElementId;
-                            currentCharacteristic.second_element_id = secondElementId;
-                            currentCharacteristic.value = calculator.Calculate(currentChain,
-                                                                               currentChain.Alphabet[i],
-                                                                               currentChain.Alphabet[j], linkUp);
+                            binary_characteristic currentCharacteristic = new binary_characteristic
+                                {
+                                    id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                           .First(),
+                                    chain_id = dbChain.id,
+                                    characteristic_type_id = characteristicId,
+                                    link_up_id = linkUpId,
+                                    first_element_id = firstElementId,
+                                    second_element_id = secondElementId,
+                                    value = calculator.Calculate(currentChain,
+                                                                 currentChain.Alphabet[i],
+                                                                 currentChain.Alphabet[j], linkUp)
+                                };
                             currentCharacteristic.value_string = currentCharacteristic.value.ToString();
                             currentCharacteristic.creation_date = DateTime.Now;
                             db.binary_characteristic.AddObject(currentCharacteristic);
@@ -316,7 +314,6 @@ namespace LibiadaWeb.Controllers.Calculators
                     int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
                     long firstElementId = dbChain.alphabet.Single(a => a.number == firstElementNumber).element_id;
                     long secondElementId = dbChain.alphabet.Single(a => a.number == secondElementNumber).element_id;
-                    binary_characteristic currentCharacteristic;
                     //проверяем не посчитана ли уже эта характеристика
                     if (!db.binary_characteristic.Any(b =>
                                                       b.chain_id == dbChain.id &&
@@ -326,35 +323,24 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.link_up_id == linkUpId))
                     {
                         //считаем характеристику 
-                        currentCharacteristic = new binary_characteristic();
-                        currentCharacteristic.id =
-                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                              .First();
-                        currentCharacteristic.chain_id = dbChain.id;
-                        currentCharacteristic.characteristic_type_id = characteristicId;
-                        currentCharacteristic.link_up_id = linkUpId;
-                        currentCharacteristic.first_element_id = firstElementId;
-                        currentCharacteristic.second_element_id = secondElementId;
-                        currentCharacteristic.value = calculator.Calculate(currentChain,
-                                                                           currentChain.Alphabet[i],
-                                                                           currentChain.Alphabet[j], linkUp);
+                        binary_characteristic currentCharacteristic = new binary_characteristic
+                            {
+                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
+                                       .First(),
+                                chain_id = dbChain.id,
+                                characteristic_type_id = characteristicId,
+                                link_up_id = linkUpId,
+                                first_element_id = firstElementId,
+                                second_element_id = secondElementId,
+                                value = calculator.Calculate(currentChain,
+                                                             currentChain.Alphabet[i],
+                                                             currentChain.Alphabet[j], linkUp)
+                            };
                         currentCharacteristic.value_string = currentCharacteristic.value.ToString();
                         currentCharacteristic.creation_date = DateTime.Now;
                         db.binary_characteristic.AddObject(currentCharacteristic);
                         //сохраняем её в базу
                         db.SaveChanges();
-                    }
-                    else
-                    {
-                        //достаём характеристику из базы
-                        currentCharacteristic = db.binary_characteristic.Single(b =>
-                                                                                b.chain_id == dbChain.id &&
-                                                                                b.characteristic_type_id ==
-                                                                                characteristicId &&
-                                                                                b.first_element_id == firstElementId &&
-                                                                                b.second_element_id ==
-                                                                                secondElementId &&
-                                                                                b.link_up_id == linkUpId);
                     }
                 }
             }

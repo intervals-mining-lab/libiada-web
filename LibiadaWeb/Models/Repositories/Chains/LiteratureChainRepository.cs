@@ -66,25 +66,19 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<literature_chain> chains)
         {
-            HashSet<long> chainIds;
-            if (chains != null)
-            {
-                chainIds = new HashSet<long>(chains.Select(c => c.id));
-            }
-            else
-            {
-                chainIds = new HashSet<long>();
-            }
+            HashSet<long> chainIds = chains != null
+                                         ? new HashSet<long>(chains.Select(c => c.id))
+                                         : new HashSet<long>();
             var allChains = db.literature_chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem
-                {
-                    Value = chain.id.ToString(),
-                    Text = chain.matter.name,
-                    Selected = chainIds.Contains(chain.id)
-                });
+                    {
+                        Value = chain.id.ToString(),
+                        Text = chain.matter.name,
+                        Selected = chainIds.Contains(chain.id)
+                    });
             }
             return chainsList;
         }
