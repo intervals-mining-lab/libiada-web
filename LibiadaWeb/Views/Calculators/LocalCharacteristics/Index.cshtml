@@ -105,6 +105,20 @@
     <br/>
     @Html.CheckBox("isFurie", "Быстрое преобразование Фурье", null)
     <br/>
+    @Html.CheckBox("isMoveCoordinate", "Подвижное начало координат", null)
+    <br/>
+   
+    @Html.Label("Начало координат относительно блока")
+    <input type ="number" id ="startCoordinate" name = "startCoordinate" value="2"/>
+    <br/>
+    @Html.CheckBox("isSetBeginAndEnd", "Задать начало и конец цепочки", null)
+    <div>
+        @Html.Label("Начало:")
+        <input type ="number" id ="beginOfChain" name = "beginOfChain" value="100"/>
+        @Html.Label("Конец:")
+        <input type ="number" id ="endOfChain" name = "endOfChain" value="1000"/>
+        <br/>
+    </div>
     @Html.Label("Форма записи:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)

@@ -55,10 +55,12 @@ namespace LibiadaWeb.Controllers.Calculators
 
         [HttpPost]
         public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int languageId, int notationId, int length,
-                                  int step, bool isDelta, bool isFurie, bool isGrowingWindow)
+                                  int step, int startCoordinate, int beginOfChain, int endOfChain, bool isDelta, bool isFurie, bool isGrowingWindow, bool isMoveCoordinate, bool isSetBeginAndEnd)
         {
 
-            List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
+            List<List<List<Double>>> characteristics = CalculateCharacteristics(matterIds, isSetBeginAndEnd, isGrowingWindow,
+                                             notationId, languageId, length, characteristicIds, linkUpIds, step, beginOfChain, endOfChain);
+   
             List<String> chainNames = new List<string>();
             List<string> characteristicNames = new List<string>();
             List<List<String>> partNames = new List<List<String>>();
@@ -69,7 +71,6 @@ namespace LibiadaWeb.Controllers.Calculators
                 long matterId = matterIds[k];
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 partNames.Add(new List<string>());
-                characteristics.Add(new List<List<double>>());
 
                 long chainId;
                 if (db.matter.Single(m => m.id == matterId).nature_id == 3)
@@ -84,15 +85,21 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
 
                 Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                
+                CutRule cutRule;
+                if (isSetBeginAndEnd)
+                {
 
-                //IteratorStart<Chain, Chain> iter = new IteratorStart<Chain, Chain>(libiadaChain, length, step);
-                CutRule cutRule = isGrowingWindow ? (CutRule) new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRuleWithBeginEnd(endOfChain - beginOfChain, step, beginOfChain) : new SimpleCutRuleWithBeginEnd(endOfChain - beginOfChain, step, length, beginOfChain);
+                }
+                else
+                {
+                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                }
                 CutRuleIterator iter = cutRule.GetIterator();
                
                 while (iter.Next())
                 {
-                    characteristics.Last().Add(new List<Double>());
-                    //Chain tempChain = cutRule.Current();
                     Chain tempChain = new Chain();
                     tempChain.ClearAndSetNewLength(iter.GetStopPos() - iter.GetStartPos());
 
@@ -101,16 +108,22 @@ namespace LibiadaWeb.Controllers.Calculators
                         tempChain.Add(libiadaChain[iter.GetStartPos() + i], i);
                     }
                     partNames.Last().Add(tempChain.ToString());
-                    for (int i = 0; i < characteristicIds.Length; i++)
+                }
+                if (isMoveCoordinate)
+                {
+                    List<List<List<Double>>> characteristicsParts = CalculateCharacteristics(matterIds, isSetBeginAndEnd,isGrowingWindow,
+                                             notationId, languageId, startCoordinate, characteristicIds, linkUpIds, step, beginOfChain, endOfChain);
+                    for (int i = 0; i < characteristics.Count; i++)
                     {
-                        int characteristicId = characteristicIds[i];
-                        int linkUpId = linkUpIds[i];
-                        String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-
-                        ICalculator calculator = CalculatorsFactory.Create(className);
-                        LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
-                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, linkUp));
+                        for (int j = 0; j < characteristics[i].Count; j++)
+                        {
+                            for (int l = 0; l < characteristics[i][j].Count; l++)
+                            {
+                                characteristics[i][j][l] -= characteristicsParts[i][j][l];
+                            }
+                        }
                     }
+                    
                 }
 
                 if (isDelta)
@@ -135,7 +148,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
                         List<Complex> comp = new List<Complex>();
-                        int j;
+                        int j = 0;
 
                         //Для всех фрагментов цепочек
                         for (j = 0; j < characteristics.Last().Count; j++)
@@ -166,8 +179,6 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
             }
 
-            
-
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 int characteristicId = characteristicIds[i];
@@ -183,6 +194,68 @@ namespace LibiadaWeb.Controllers.Calculators
             TempData["characteristicNames"] = characteristicNames;
             TempData["chainIds"] = matterIds;
             return RedirectToAction("Result");
+        }
+
+        private List<List<List<Double>>> CalculateCharacteristics(long[] matterIds, bool isSetBeginAndEnd,
+                                                                  bool isGrowingWindow, int notationId, int languageId,
+                                                                  int length, int[] characteristicIds, int[] linkUpIds, int step, int beginOfChain, int endOfChain)
+        {
+            List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
+            for (int k = 0; k < matterIds.Length; k++)
+            {
+                long matterId = matterIds[k];
+                characteristics.Add(new List<List<double>>());
+
+                long chainId;
+                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                {
+                    chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
+                                                              l.notation_id == notationId
+                                                              && l.language_id == languageId).id;
+                }
+                else
+                {
+                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                }
+
+                Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+
+                CutRule cutRule;
+                if (isSetBeginAndEnd)
+                {
+
+                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRuleWithBeginEnd(endOfChain - beginOfChain, step, beginOfChain) : new SimpleCutRuleWithBeginEnd(endOfChain - beginOfChain, step, length, beginOfChain);
+                }
+                else
+                {
+                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                }
+                CutRuleIterator iter = cutRule.GetIterator();
+               
+
+                while (iter.Next())
+                {
+                    characteristics.Last().Add(new List<Double>());
+                    Chain tempChain = new Chain();
+                    tempChain.ClearAndSetNewLength(iter.GetStopPos() - iter.GetStartPos());
+
+                    for (int i = 0; iter.GetStartPos() + i < iter.GetStopPos(); i++)
+                    {
+                        tempChain.Add(libiadaChain[iter.GetStartPos() + i], i);
+                    }
+                    for (int i = 0; i < characteristicIds.Length; i++)
+                    {
+                        int characteristicId = characteristicIds[i];
+                        int linkUpId = linkUpIds[i];
+                        String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+
+                        ICalculator calculator = CalculatorsFactory.Create(className);
+                        LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
+                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, linkUp));
+                    }
+                }
+            }
+            return characteristics;
         }
 
         public ActionResult Result()
