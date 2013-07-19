@@ -46,6 +46,24 @@ namespace LibiadaWeb.Models.Repositories
             }
         }
 
+        public Int64 CreateBinaryCharacteristic(Int64 chainId, int characteristicId, int linkUpId, Int64 firstElementId, Int64 secondElementId, double value)
+        {
+            binary_characteristic characteristic = new binary_characteristic
+            {
+                chain_id = chainId,
+                characteristic_type_id = characteristicId,
+                link_up_id = linkUpId,
+                first_element_id = firstElementId,
+                second_element_id = secondElementId,
+                creation_date = DateTime.Now,
+                value = value,
+                value_string = value.ToString()
+            };
+            db.binary_characteristic.AddObject(characteristic);
+            db.SaveChanges();
+            return characteristic.id;
+        }
+
         public void Delete(long id)
         {
             var binary_characteristic = Find(id);

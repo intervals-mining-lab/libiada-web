@@ -2028,7 +2028,7 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 number
         {
@@ -2038,14 +2038,11 @@ namespace LibiadaWeb
             }
             set
             {
-                if (_number != value)
-                {
-                    OnnumberChanging(value);
-                    ReportPropertyChanging("number");
-                    _number = StructuralObject.SetValidValue(value, "number");
-                    ReportPropertyChanged("number");
-                    OnnumberChanged();
-                }
+                OnnumberChanging(value);
+                ReportPropertyChanging("number");
+                _number = StructuralObject.SetValidValue(value, "number");
+                ReportPropertyChanged("number");
+                OnnumberChanged();
             }
         }
         private global::System.Int32 _number;

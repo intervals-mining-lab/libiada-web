@@ -245,7 +245,7 @@
     <Compile Include="Models\FFT.cs" />
     <Compile Include="Models\Repositories\Chains\FmotivRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FmotivTypeRepository.cs" />
-    <Compile Include="Models\Repositories\HomogeneousCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAccidentalRepository.cs" />
     <Compile Include="Models\Repositories\IAlphabetRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
@@ -257,7 +257,7 @@
     <Compile Include="Models\Repositories\IElementRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IFmotivRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IFmotivTypeRepository.cs" />
-    <Compile Include="Models\Repositories\IHomogeneousCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\ICongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IInstrumentRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ILinkUpRepository.cs" />
     <Compile Include="Models\Repositories\Chains\ILiteratureChainRepository.cs" />
@@ -505,17 +505,23 @@
     <Content Include="Scripts\Highcharts-2.3.5\themes\gray.js" />
     <Content Include="Scripts\Highcharts-2.3.5\themes\grid.js" />
     <Content Include="Scripts\Highcharts-2.3.5\themes\skies.js" />
-    <None Include="Scripts\jquery-2.0.2.intellisense.js" />
-    <Content Include="Scripts\jquery-2.0.2.js" />
-    <Content Include="Scripts\jquery-2.0.2.min.js" />
-    <Content Include="Scripts\jquery-2.0.2.min.map" />
+    <EntityDeploy Include="LibiadaWeb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.js" />
     <Content Include="Scripts\jquery-ui-1.10.3.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout-2.3.0.debug.js" />
+    <Content Include="Scripts\knockout-2.3.0.js" />
     <Content Include="Scripts\procs.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -573,12 +579,6 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <EntityDeploy Include="LibiadaWeb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Catalogs\Accidental\Create.cshtml" />

@@ -7,6 +7,7 @@ using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.BinaryCalculators;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -19,6 +20,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
+        private readonly BinaryCharacteristicRepository binaryCharacteristicRepository;
 
         public BinaryCalculationController()
         {
@@ -26,6 +28,7 @@ namespace LibiadaWeb.Controllers.Calculators
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
+            binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
         }
 
         //
@@ -56,7 +59,7 @@ namespace LibiadaWeb.Controllers.Calculators
         public ActionResult Index(long chainId, int characteristicId, int linkUpId,
                                   int filterSize, bool filter, 
                                   bool frequency, int frequencyCount, 
-                                  bool oneWord, long wordId)
+                                  bool oneWord, long wordId = 0)
         {
             List<binary_characteristic> characteristics = new List<binary_characteristic>();
             List<element> elements = new List<element>();
@@ -184,23 +187,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == secondElementId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        binary_characteristic currentCharacteristic = new binary_characteristic
-                            {
-                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                       .First(),
-                                chain_id = dbChain.id,
-                                characteristic_type_id = characteristicId,
-                                link_up_id = linkUpId,
-                                first_element_id = wordId,
-                                second_element_id = secondElementId,
-                                value = calculator.Calculate(currentChain,
-                                                             currentChain.Alphabet[firstElementNumber - 1],
-                                                             currentChain.Alphabet[i], linkUp)
-                            };
-                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
-                        currentCharacteristic.creation_date = DateTime.Now;
-                        db.binary_characteristic.AddObject(currentCharacteristic);
-                        db.SaveChanges();
+                        double result = calculator.Calculate(currentChain, currentChain.Alphabet[firstElementNumber - 1],
+                                                             currentChain.Alphabet[i],
+                                                             linkUp);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkUpId,
+                                                                                  wordId, secondElementId, result);
+
                     }
                 }
             }
@@ -224,23 +216,11 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == wordId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        binary_characteristic currentCharacteristic = new binary_characteristic
-                            {
-                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                       .First(),
-                                chain_id = dbChain.id,
-                                characteristic_type_id = characteristicId,
-                                link_up_id = linkUpId,
-                                first_element_id = firstElementId,
-                                second_element_id = wordId,
-                                value = calculator.Calculate(currentChain, currentChain.Alphabet[i],
-                                                             currentChain.Alphabet[secondElementNumber - 1],
-                                                             linkUp)
-                            };
-                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
-                        currentCharacteristic.creation_date = DateTime.Now;
-                        db.binary_characteristic.AddObject(currentCharacteristic);
-                        db.SaveChanges();
+                        double result = calculator.Calculate(currentChain, currentChain.Alphabet[secondElementNumber - 1],
+                                                             currentChain.Alphabet[i],
+                                                             linkUp);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkUpId,
+                                                                                  firstElementId, wordId, result);
                     }
                 }
             }
@@ -268,23 +248,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                           b.second_element_id == secondElementId &&
                                                           b.link_up_id == linkUpId))
                         {
-                            binary_characteristic currentCharacteristic = new binary_characteristic
-                                {
-                                    id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                           .First(),
-                                    chain_id = dbChain.id,
-                                    characteristic_type_id = characteristicId,
-                                    link_up_id = linkUpId,
-                                    first_element_id = firstElementId,
-                                    second_element_id = secondElementId,
-                                    value = calculator.Calculate(currentChain,
+                            double result = calculator.Calculate(currentChain,
                                                                  currentChain.Alphabet[i],
-                                                                 currentChain.Alphabet[j], linkUp)
-                                };
-                            currentCharacteristic.value_string = currentCharacteristic.value.ToString();
-                            currentCharacteristic.creation_date = DateTime.Now;
-                            db.binary_characteristic.AddObject(currentCharacteristic);
-                            db.SaveChanges();
+                                                                 currentChain.Alphabet[j], linkUp);
+                            binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId,
+                                                                                      linkUpId, firstElementId,
+                                                                                      secondElementId, result);
                         }
                     }
                 }
@@ -322,25 +291,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == secondElementId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        //считаем характеристику 
-                        binary_characteristic currentCharacteristic = new binary_characteristic
-                            {
-                                id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                       .First(),
-                                chain_id = dbChain.id,
-                                characteristic_type_id = characteristicId,
-                                link_up_id = linkUpId,
-                                first_element_id = firstElementId,
-                                second_element_id = secondElementId,
-                                value = calculator.Calculate(currentChain,
-                                                             currentChain.Alphabet[i],
-                                                             currentChain.Alphabet[j], linkUp)
-                            };
-                        currentCharacteristic.value_string = currentCharacteristic.value.ToString();
-                        currentCharacteristic.creation_date = DateTime.Now;
-                        db.binary_characteristic.AddObject(currentCharacteristic);
-                        //сохраняем её в базу
-                        db.SaveChanges();
+                        double result = calculator.Calculate(currentChain,
+                                                                 currentChain.Alphabet[i],
+                                                                 currentChain.Alphabet[j], linkUp);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId,
+                                                                                  linkUpId, firstElementId,
+                                                                                  secondElementId, result);
                     }
                 }
             }
@@ -349,12 +305,8 @@ namespace LibiadaWeb.Controllers.Calculators
         private void SortKeyValuePairList(List<KeyValuePair<IBaseObject, double>> arrayForSort)
         {
             arrayForSort.Sort(
-                delegate(KeyValuePair<IBaseObject, double> firstPair,
-                         KeyValuePair<IBaseObject, double> nextPair)
-                {
-                    return nextPair.Value.CompareTo(firstPair.Value);
-                }
-                );
+                delegate(KeyValuePair<IBaseObject, double> firstPair, KeyValuePair<IBaseObject, double> nextPair)
+                    { return nextPair.Value.CompareTo(firstPair.Value); });
         }
 
         public ActionResult Result()

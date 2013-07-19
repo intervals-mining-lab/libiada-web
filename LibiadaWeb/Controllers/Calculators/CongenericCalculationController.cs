@@ -120,9 +120,6 @@ namespace LibiadaWeb.Controllers.Calculators
                                 double value = calculator.Calculate(tempChain, linkUp);
                                 congeneric_characteristic currentCharacteristic = new congeneric_characteristic
                                     {
-                                        id =
-                                            db.ExecuteStoreQuery<long>("SELECT seq_next_value('characteristics_id_seq')")
-                                              .First(),
                                         chain_id = dbChain.id,
                                         characteristic_type_id = characteristicId,
                                         link_up_id = linkUpId,

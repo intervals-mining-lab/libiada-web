@@ -252,7 +252,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
@@ -266,7 +266,6 @@
     <Key>
       <PropertyRef Name="chain_id" />
       <PropertyRef Name="index" />
-      <PropertyRef Name="number" />
     </Key>
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="index" Type="int4" Nullable="false" />
@@ -454,7 +453,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="chain_id" Type="int8" Nullable="false" />
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
@@ -1919,7 +1918,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="chain_id" Type="Int64" Nullable="false" />
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
@@ -1938,7 +1937,6 @@
     <Key>
       <PropertyRef Name="chain_id" />
       <PropertyRef Name="index" />
-      <PropertyRef Name="number" />
     </Key>
     <Property Name="chain_id" Type="Int64" Nullable="false" />
     <Property Name="index" Type="Int32" Nullable="false" />
@@ -2195,7 +2193,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="chain_id" Type="Int64" Nullable="false" />
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
