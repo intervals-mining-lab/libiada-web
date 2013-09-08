@@ -21,7 +21,7 @@ namespace LibiadaWeb.Helpers
         public static string CleanFastaFile(string file)
         {
             string[] splittedFile = file.Split('\0');
-            file = "";
+            file = string.Empty;
 
             for (int k = 0; k < splittedFile.Length; k++)
             {
@@ -29,7 +29,7 @@ namespace LibiadaWeb.Helpers
             }
 
             splittedFile = file.Split('\t');
-            file = "";
+            file = string.Empty;
 
             for (int l = 0; l < splittedFile.Length; l++)
             {

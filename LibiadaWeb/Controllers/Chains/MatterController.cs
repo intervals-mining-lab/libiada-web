@@ -81,7 +81,7 @@ namespace LibiadaWeb.Controllers.Chains
                 // Read the file into the byte array
                 fileStream.Read(input, 0, fileLen);
 
-                string stringChain;
+                string stringChain = string.Empty;
                 // Copy the byte array into a string
                 stringChain = matter.nature_id == Aliases.NatureGenetic
                                   ? Encoding.ASCII.GetString(input)
@@ -95,17 +95,17 @@ namespace LibiadaWeb.Controllers.Chains
                         //генетическая цепочка
                     case 1:
                         //отделяем заголовок fasta файла от цепочки
-                        string[] splittedFasta = stringChain.Split('\n');
-                        stringChain = "";
+                        string[] splittedFasta = stringChain.Split(new [] { '\n' , '\r' });
+                        StringBuilder chainStringBuilder = new StringBuilder();
                         String fastaHeader = splittedFasta[0];
                         for (int j = 1; j < splittedFasta.Length; j++)
                         {
-                            stringChain += splittedFasta[j];
+                            chainStringBuilder.Append(splittedFasta[j]);
                         }
 
-                        stringChain = DataTransformators.CleanFastaFile(stringChain);
+                        string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
 
-                        libiadaChain = new BaseChain(stringChain);
+                        libiadaChain = new BaseChain(resultStringChain);
                         dna_chain dbDnaChain;
                         if (!continueImport)
                         {

@@ -151,17 +151,17 @@ namespace LibiadaWeb.Controllers.Chains
                         //генетическая цепочка
                     case 1:
                         //отделяем заголовок fasta файла от цепочки
-                        string[] splittedFasta = stringChain.Split('\n');
-                        stringChain = "";
+                        string[] splittedFasta = stringChain.Split(new[] { '\n', '\r' });
+                        StringBuilder chainStringBuilder = new StringBuilder();
                         String fastaHeader = splittedFasta[0];
                         for (int j = 1; j < splittedFasta.Length; j++)
                         {
-                            stringChain += splittedFasta[j];
+                            chainStringBuilder.Append(splittedFasta[j]);
                         }
 
-                        stringChain = DataTransformators.CleanFastaFile(stringChain);
+                        string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
 
-                        libiadaChain = new BaseChain(stringChain);
+                        libiadaChain = new BaseChain(resultStringChain);
 
                         dna_chain dbDnaChain;
                         bool continueImport =
