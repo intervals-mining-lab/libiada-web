@@ -20,23 +20,16 @@ namespace LibiadaWeb.Helpers
 
         public static string CleanFastaFile(string file)
         {
-            string[] splittedFile = file.Split('\0');
-            file = string.Empty;
+            string[] splittedFile = file.Split(new [] { '\0', '\t'});
+            
+            StringBuilder result = new StringBuilder();
 
             for (int k = 0; k < splittedFile.Length; k++)
             {
-                file += splittedFile[k];
+                result.Append(splittedFile[k]);
             }
 
-            splittedFile = file.Split('\t');
-            file = string.Empty;
-
-            for (int l = 0; l < splittedFile.Length; l++)
-            {
-                file += splittedFile[l];
-            }
-
-            return file;
+            return result.ToString();
         }
     }
 }
