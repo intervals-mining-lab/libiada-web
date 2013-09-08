@@ -121,8 +121,7 @@ namespace LibiadaWeb.Controllers.Chains
                                     creation_date = new DateTimeOffset(DateTime.Now)
                                 };
 
-                            matter.dna_chain.Add(dbDnaChain); //TODO: проверить, возможно одно из действий лишнее
-                            db.dna_chain.AddObject(dbDnaChain);
+                            matter.dna_chain.Add(dbDnaChain);
 
                             alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
                                                                                dbDnaChain.id, false);
@@ -183,8 +182,6 @@ namespace LibiadaWeb.Controllers.Chains
                                 };
 
                             matter.literature_chain.Add(dbLiteratureChain);
-                                //TODO: проверить, возможно одно из действий лишнее
-                            db.literature_chain.AddObject(dbLiteratureChain);
 
                             alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
                                                                                dbLiteratureChain.id, true);

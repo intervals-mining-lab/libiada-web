@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -33,13 +34,9 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.characteristics = db.characteristic_type.ToList();
-
-            ViewBag.linkUps = db.link_up.ToList();
-            ViewBag.notations = db.notation.ToList();
             ViewBag.objects = db.matter.Include("chain").ToList();
             IEnumerable<characteristic_type> characteristics =
-                db.characteristic_type.Where(c => new List<int> { 1, 4, 5, 7 }.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);

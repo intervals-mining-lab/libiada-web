@@ -83,8 +83,8 @@ namespace LibiadaWeb.Controllers.Chains
                 creation_date = new DateTimeOffset(DateTime.Now)
             };
 
-            result.dna_chain.Add(resultChain); //TODO: проверить, возможно одно из действий лишнее
-            db.dna_chain.AddObject(resultChain);
+            result.dna_chain.Add(resultChain); 
+
             alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
             dnaChainRepository.FromLibiadaBuildingToDbBuilding(resultChain, libiadaChain.Building);
             db.SaveChanges();

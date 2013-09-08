@@ -107,18 +107,14 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.ExecuteStoreQuery<int>(query).ToArray();
         }
 
-        public IEnumerable<building> FromLibiadaBuildingToDbBuilding(dna_chain parent, int[] libiadaBuilding)
+        public void FromLibiadaBuildingToDbBuilding(dna_chain parent, int[] libiadaBuilding)
         {
-            List<building> result = db.building.Where(b => b.chain_id == parent.id).OrderBy(b => b.index).ToList();
-            int createdCount = result.Count;
+            int createdCount = db.ExecuteStoreQuery<int>("SELECT get_building_count('" + parent.id + "')").First();
             for (int i = createdCount; i < libiadaBuilding.Length; i++)
             {
-                result.Add(new building());
-                result[i].index = i;
-                result[i].number = libiadaBuilding[i];
+                building elem = new building {index = i, number = libiadaBuilding[i]};
 
-                parent.building.Add(result[i]); //TODO: проверить, возможно одно из действий лишнее
-                db.building.AddObject(result[i]);
+                parent.building.Add(elem);
 
                 //костыль чтобы Ѕƒ реже умирала
                 if (i%1000 == 0)
@@ -128,8 +124,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             }
 
             db.SaveChanges();
-
-            return result;
         }
 
         public void Save()

@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -40,7 +41,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.notations = db.notation.ToList();
             ViewBag.objects = db.matter.Include("chain").ToList();
             IEnumerable<characteristic_type> characteristics =
-                db.characteristic_type.Where(c => new List<int> { 2, 4, 6, 7 }.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => Aliases.ApplicabilityCongeneric.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
@@ -196,20 +197,16 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 int characteristicId = characteristicIds[k];
                 int languageId = languageIds[k];
+                string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
                 if (isLiteratureChain)
                 {
-                    characteristicNames.Add(db.characteristic_type.Single(
-                        c => c.id == characteristicId).name
-                                            + " " + db.language.Single(l => l.id == languageId).name
-                        );
+                    string language = db.language.Single(l => l.id == languageId).name;
+                    characteristicNames.Add(characteristicType + " " + language);
                 }
                 else
                 {
-                    characteristicNames.Add(db.characteristic_type.Single(
-                        c => c.id == characteristicId).name
-                        );
+                    characteristicNames.Add(characteristicType);
                 }
-
             }
 
             //ранговая сортировка
@@ -225,15 +222,10 @@ namespace LibiadaWeb.Controllers.Calculators
                     
             }
 
-            
-
-            
-
             TempData["characteristics"] = characteristics;
             TempData["chainNames"] = chainNames;
             TempData["elementNames"] = elementNames;
             TempData["characteristicNames"] = characteristicNames;
-            TempData["characteristicIds"] = characteristicIds;
             TempData["matterIds"] = matterIds;
             TempData["teoreticalRanks"] = teoreticalRanks;
             return RedirectToAction("Result");
@@ -241,20 +233,13 @@ namespace LibiadaWeb.Controllers.Calculators
 
         private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
         {
-            arrayForSort.Sort(
-                delegate(KeyValuePair<int, double> firstPair,
-                         KeyValuePair<int, double> nextPair)
-                    {
-                        return nextPair.Value.CompareTo(firstPair.Value);
-                    }
-                );
+            arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
         }
 
         public ActionResult Result()
         {
             List<List<List<KeyValuePair<int, double>>>> characteristics = TempData["characteristics"] as List<List<List<KeyValuePair<int, double>>>>;
             List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
-            int[] characteristicIds = TempData["characteristicIds"] as int[];
             List<SelectListItem> characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicNames.Count; i++)
             {
@@ -266,7 +251,6 @@ namespace LibiadaWeb.Controllers.Calculators
                 });
             }
             ViewBag.matterIds = TempData["matterIds"];
-            ViewBag.characteristicIds = new List<int>(characteristicIds);
             ViewBag.characteristicsList = characteristicsList;
             ViewBag.characteristics = characteristics;
             ViewBag.chainNames = TempData["chainNames"];
