@@ -84,6 +84,19 @@ namespace LibiadaWeb.Models.Repositories
             return alphabet;
         }
 
+        public bool CheckAlphabetElementsInDb(Alphabet alphabet, int notationId)
+        {
+            for (int i = 0; i < alphabet.Power; i++)
+            {
+                String strElement = alphabet[i].ToString();
+                if (!db.element.Any(e => e.notation_id == notationId && e.value.Equals(strElement)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        } 
+
         public IEnumerable<alphabet> FromLibiadaAlphabetToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId, bool createElements)
         {
             List<alphabet> dbAlphabet = new List<alphabet>();

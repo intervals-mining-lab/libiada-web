@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Chains
@@ -109,21 +110,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void FromLibiadaBuildingToDbBuilding(dna_chain parent, int[] libiadaBuilding)
         {
-            int createdCount = db.ExecuteStoreQuery<int>("SELECT get_building_count('" + parent.id + "')").First();
-            for (int i = createdCount; i < libiadaBuilding.Length; i++)
-            {
-                building elem = new building {index = i, number = libiadaBuilding[i]};
-
-                parent.building.Add(elem);
-
-                //костыль чтобы БД реже умирала
-                if (i%1000 == 0)
-                {
-                    db.SaveChanges();
-                }
-            }
-
-            db.SaveChanges();
+            String aggregatedBuilding = libiadaBuilding.Aggregate(new StringBuilder(),(a, b) => 
+                                                                  a.Append(", " + b.ToString()),
+                                                                  a => a.Remove(0, 2).ToString());
+            String query = "SELECT create_building_from_string(" + parent.id + ", '" + aggregatedBuilding + "')";
+            db.ExecuteStoreQuery<String>(query);
         }
 
         public void Save()

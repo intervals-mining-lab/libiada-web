@@ -73,6 +73,16 @@ namespace LibiadaWeb.Controllers.Chains
                 var file = Request.Files[0];
 
                 int fileLen = file.ContentLength;
+                if (fileLen == 0)
+                {
+                    ViewBag.nature_id = new SelectList(db.nature, "id", "name");
+                    ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+                    ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+                    ViewBag.language_id = new SelectList(db.language, "id", "name");
+                    ModelState.AddModelError("Error", "Файл цепочки не задан");
+                    return View(matter);
+                }
+
                 byte[] input = new byte[fileLen];
 
                 // Initialize the stream
@@ -109,6 +119,15 @@ namespace LibiadaWeb.Controllers.Chains
                         dna_chain dbDnaChain;
                         if (!continueImport)
                         {
+                            if (!alphabetRepository.CheckAlphabetElementsInDb(libiadaChain.Alphabet, notationId))
+                            {
+                                ViewBag.nature_id = new SelectList(db.nature, "id", "name");
+                                ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+                                ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+                                ViewBag.language_id = new SelectList(db.language, "id", "name");
+                                ModelState.AddModelError("Error", "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                                return View(matter);
+                            }
                             db.matter.AddObject(matter);
 
                             dbDnaChain = new dna_chain

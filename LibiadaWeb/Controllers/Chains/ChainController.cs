@@ -82,46 +82,6 @@ namespace LibiadaWeb.Controllers.Chains
         // POST: /Chain/Create
 
         [HttpPost]
-        public ActionResult Segmentated(chain chain, String stringChain)
-        {
-            if (ModelState.IsValid)
-            {
-                //отделяем заголовок fasta файла от цепочки
-                string[] splittedChain = stringChain.Split('-');
-                BaseChain libiadaChain = new BaseChain(splittedChain.Length);
-                for (int k = 0; k < splittedChain.Length; k++)
-                {
-                    libiadaChain.Add(new ValueString(splittedChain[k]), k);
-                }
-
-                dna_chain dbDnaChain = new dna_chain
-                    {
-                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                        dissimilar = false,
-                        notation_id = 6,
-                        fasta_header = "",
-                        piece_type_id = 1,
-                        piece_position = 0,
-                        creation_date = DateTime.Now
-                    };
-
-                db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
-                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain.notation_id,
-                                                                   dbDnaChain.id, true);
-                dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaChain.Building);
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            return View(chain);
-        }
-
-        //
-        // POST: /Chain/Create
-
-        [HttpPost]
         public ActionResult Create(chain chain, int languageId, bool original)
         {
             if (ModelState.IsValid)
@@ -129,6 +89,15 @@ namespace LibiadaWeb.Controllers.Chains
                 var file = Request.Files[0];
 
                 int fileLen = file.ContentLength;
+                if (fileLen == 0)
+                {
+                    ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+                    ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+                    ViewBag.language_id = new SelectList(db.language, "id", "name");
+                    ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+                    ModelState.AddModelError("Error", "Файл цепочки не задан");
+                    return View(chain);
+                }
                 byte[] input = new byte[fileLen];
 
                 // Initialize the stream
@@ -169,6 +138,15 @@ namespace LibiadaWeb.Controllers.Chains
                                 d.fasta_header == fastaHeader);
                         if (!continueImport)
                         {
+                            if (!alphabetRepository.CheckAlphabetElementsInDb(libiadaChain.Alphabet, chain.notation_id))
+                            {
+                                ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+                                ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+                                ViewBag.language_id = new SelectList(db.language, "id", "name");
+                                ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+                                ModelState.AddModelError("Error", "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                                return View(chain);
+                            }
                             dbDnaChain = new dna_chain
                                 {
                                     id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
@@ -265,6 +243,46 @@ namespace LibiadaWeb.Controllers.Chains
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
+            return View(chain);
+        }
+
+        //
+        // POST: /Chain/Segmentated
+
+        [HttpPost]
+        public ActionResult Segmentated(chain chain, String stringChain)
+        {
+            if (ModelState.IsValid)
+            {
+                //отделяем заголовок fasta файла от цепочки
+                string[] splittedChain = stringChain.Split('-');
+                BaseChain libiadaChain = new BaseChain(splittedChain.Length);
+                for (int k = 0; k < splittedChain.Length; k++)
+                {
+                    libiadaChain.Add(new ValueString(splittedChain[k]), k);
+                }
+
+                dna_chain dbDnaChain = new dna_chain
+                {
+                    id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
+                    dissimilar = false,
+                    notation_id = 6,
+                    fasta_header = "",
+                    piece_type_id = 1,
+                    piece_position = 0,
+                    creation_date = DateTime.Now
+                };
+
+                db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
+                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain.notation_id,
+                                                                   dbDnaChain.id, true);
+                dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaChain.Building);
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
             return View(chain);
         }
 
