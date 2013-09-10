@@ -12,10 +12,12 @@ namespace LibiadaWeb.Models.Repositories.Chains
     public class DnaChainRepository : IDnaChainRepository
     {
         private readonly LibiadaWebEntities db;
+        private readonly BuildingRepository buildingRepository;
 
         public DnaChainRepository(LibiadaWebEntities db)
         {
             this.db = db;
+            buildingRepository = new BuildingRepository(db);
         }
 
         public IQueryable<dna_chain> All
@@ -99,22 +101,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
                     });
             }
             return chainsList;
-        }
-
-        //TODO: создать репозиторий строя и перенести туда методы строя
-        public int[] FromDbBuildingToLibiadaBuilding(dna_chain dbChain)
-        {
-            String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
-            return db.ExecuteStoreQuery<int>(query).ToArray();
-        }
-
-        public void FromLibiadaBuildingToDbBuilding(dna_chain parent, int[] libiadaBuilding)
-        {
-            String aggregatedBuilding = libiadaBuilding.Aggregate(new StringBuilder(),(a, b) => 
-                                                                  a.Append(", " + b.ToString()),
-                                                                  a => a.Remove(0, 2).ToString());
-            String query = "SELECT create_building_from_string(" + parent.id + ", '" + aggregatedBuilding + "')";
-            db.ExecuteStoreQuery<String>(query);
         }
 
         public void Save()

@@ -16,15 +16,15 @@ namespace LibiadaWeb.Controllers.Chains
     public class MatterController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
-        private readonly LiteratureChainRepository literatureChainRepository;
-        private readonly DnaChainRepository dnaChainRepository;
         private readonly AlphabetRepository alphabetRepository;
+        private readonly BuildingRepository buildingRepository;
+        private readonly ElementRepository elementRepository;
 
         public MatterController()
         {
-            literatureChainRepository = new LiteratureChainRepository(db);
-            dnaChainRepository = new DnaChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
+            buildingRepository = new BuildingRepository(db);
+            elementRepository = new ElementRepository(db);
         }
 
         //
@@ -98,7 +98,6 @@ namespace LibiadaWeb.Controllers.Chains
                                   : Encoding.UTF8.GetString(input);
 
                 BaseChain libiadaChain;
-                int[] libiadaBuilding;
                 bool continueImport = db.matter.Any(m => m.name == matter.name);
                 switch (matter.nature_id)
                 {
@@ -119,7 +118,7 @@ namespace LibiadaWeb.Controllers.Chains
                         dna_chain dbDnaChain;
                         if (!continueImport)
                         {
-                            if (!alphabetRepository.CheckAlphabetElementsInDb(libiadaChain.Alphabet, notationId))
+                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, notationId))
                             {
                                 ViewBag.nature_id = new SelectList(db.nature, "id", "name");
                                 ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
@@ -142,7 +141,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                             matter.dna_chain.Add(dbDnaChain);
 
-                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
+                            alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, notationId,
                                                                                dbDnaChain.id, false);
                         }
                         else
@@ -154,9 +153,7 @@ namespace LibiadaWeb.Controllers.Chains
                                     c.fasta_header == fastaHeader);
                         }
 
-                        libiadaBuilding = libiadaChain.Building;
-
-                        dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaBuilding);
+                        buildingRepository.ToDbBuilding(dbDnaChain.id, libiadaChain.Building);
 
                         db.SaveChanges();
                         break;
@@ -202,7 +199,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                             matter.literature_chain.Add(dbLiteratureChain);
 
-                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId,
+                            alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, notationId,
                                                                                dbLiteratureChain.id, true);
                         }
                         else
@@ -214,9 +211,7 @@ namespace LibiadaWeb.Controllers.Chains
                                     c.language_id == languageId);
                         }
 
-                        libiadaBuilding = libiadaChain.Building;
-
-                        literatureChainRepository.FromLibiadaBuildingToDbBuilding(dbLiteratureChain, libiadaBuilding);
+                        buildingRepository.ToDbBuilding(dbLiteratureChain.id, libiadaChain.Building);
 
                         db.SaveChanges();
                         break;

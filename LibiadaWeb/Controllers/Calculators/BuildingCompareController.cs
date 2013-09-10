@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -50,11 +51,11 @@ namespace LibiadaWeb.Controllers.Calculators
             String chainName1 = db.matter.Single(m => m.id == matterId1).name;
             String chainName2 = db.matter.Single(m => m.id == matterId2).name;
             matter matter1 = db.matter.Single(m => m.id == matterId1);
-            chain chain1 = matter1.chain.Single(c => c.notation_id == 1);
-            Chain libiadaChain1 = chainRepository.FromDbChainToLibiadaChain(chain1);
+            long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+            Chain libiadaChain1 = chainRepository.FromDbChainToLibiadaChain(chainId1);
             matter matter2 = db.matter.Single(m => m.id == matterId2);
-            chain chain2 = matter2.chain.Single(c => c.notation_id == 1);
-            Chain libiadaChain2 = chainRepository.FromDbChainToLibiadaChain(chain2);
+            long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+            Chain libiadaChain2 = chainRepository.FromDbChainToLibiadaChain(chainId2);
 
             BaseChain res1 = null;
             BaseChain res2 = null;

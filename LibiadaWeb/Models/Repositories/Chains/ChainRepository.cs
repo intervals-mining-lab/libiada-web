@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.TheoryOfSet;
@@ -15,11 +14,13 @@ namespace LibiadaWeb.Models.Repositories.Chains
     {
         private readonly LibiadaWebEntities db;
         private readonly AlphabetRepository alphabetRepository;
+        private readonly BuildingRepository buildingRepository;
 
         public ChainRepository(LibiadaWebEntities db)
         {
             this.db = db;
             alphabetRepository = new AlphabetRepository(db);
+            buildingRepository = new BuildingRepository(db);
         }
 
         public IQueryable<chain> All
@@ -89,90 +90,16 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public BaseChain FromDbChainToLibiadaBaseChain(long chainId)
         {
-            chain dbChain = db.chain.Single(c => c.id == chainId);
-            return FromDbChainToLibiadaBaseChain(dbChain);
-        }
-
-        public BaseChain FromDbChainToLibiadaBaseChain(chain dbChain)
-        {
-            Alphabet alphabet =
-                alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
-
-            int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
-
+            Alphabet alphabet = alphabetRepository.ToLibiadaAlphabet(chainId);
+            int[] building = buildingRepository.ToArray(chainId);
             return new BaseChain(building, alphabet);
         }
 
         public Chain FromDbChainToLibiadaChain(long chainId)
         {
-            chain dbChain = db.chain.Single(c => c.id == chainId);
-            return FromDbChainToLibiadaChain(dbChain);
-        }
-
-        public Chain FromDbChainToLibiadaChain(chain dbChain)
-        {
-            Alphabet alphabet =
-                alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbChain.alphabet.OrderBy(a => a.number));
-
-            int[] building = FromDbBuildingToLibiadaBuilding(dbChain);
-
+            Alphabet alphabet = alphabetRepository.ToLibiadaAlphabet(chainId);
+            int[] building = buildingRepository.ToArray(chainId);
             return new Chain(building, alphabet);
-        }
-
-        public chain FromLibiadaBaseChainToDbChain(BaseChain libiadaChain, int notationId, matter parent)
-        {
-            chain result;
-
-            bool continueImport = db.matter.Any(m => m.name == parent.name);
-            if (!continueImport)
-            {
-                result = new chain
-                    {
-                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                        dissimilar = false,
-                        notation_id = notationId,
-                        creation_date = DateTime.Now
-                    };
-
-                IEnumerable<alphabet> alphabet =
-                    alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, result.id,
-                                                                       false);
-
-                result.alphabet.Attach(alphabet);
-                parent.chain.Add(result);
-
-                db.SaveChanges();
-            }
-            else
-            {
-                result = db.chain.Single(c => c.matter_id == parent.id);
-            }
-
-            int[] libiadaBuilding = libiadaChain.Building;
-
-            FromLibiadaBuildingToDbBuilding(result, libiadaBuilding);
-
-            db.SaveChanges();
-
-            return result;
-        }
-
-
-
-        //TODO: создать репозиторий строя и перенести туда методы строя
-        public int[] FromDbBuildingToLibiadaBuilding(chain dbChain)
-        {
-            String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
-            return db.ExecuteStoreQuery<int>(query).ToArray();
-        }
-
-        public void FromLibiadaBuildingToDbBuilding(chain parent, int[] libiadaBuilding)
-        {
-            String aggregatedBuilding = libiadaBuilding.Aggregate(new StringBuilder(), (a, b) =>
-                                                                  a.Append(", " + b.ToString()),
-                                                                  a => a.Remove(0, 2).ToString());
-            String query = "SELECT create_building_from_string(" + parent.id + ", '" + aggregatedBuilding + "')";
-            db.ExecuteStoreQuery<String>(query);
         }
 
         public void Dispose()

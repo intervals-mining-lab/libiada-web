@@ -15,11 +15,13 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly DnaChainRepository dnaChainRepository;
         private readonly AlphabetRepository alphabetRepository;
+        private readonly BuildingRepository buildingRepository;
 
         public TransformationController()
         {
             dnaChainRepository = new DnaChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
+            buildingRepository = new BuildingRepository(db);
         }
 
         //
@@ -41,8 +43,8 @@ namespace LibiadaWeb.Controllers.Chains
             foreach (var chainId in chainIds)
             {
                 dna_chain dbParentChain = db.dna_chain.Single(c => c.id == chainId);
-                Chain tempChain = new Chain(dnaChainRepository.FromDbBuildingToLibiadaBuilding(dbParentChain),
-                                            alphabetRepository.FromDbAlphabetToLibiadaAlphabet(dbParentChain.id));
+                Chain tempChain = new Chain(buildingRepository.ToArray(dbParentChain.id),
+                                            alphabetRepository.ToLibiadaAlphabet(dbParentChain.id));
                 BaseChain transformedChain = toAmino
                                                  ? DnaTransformator.Encode(tempChain)
                                                  : DnaTransformator.EncodeTriplets(tempChain);
@@ -56,9 +58,9 @@ namespace LibiadaWeb.Controllers.Chains
                         creation_date = DateTime.Now
                     };
                 db.dna_chain.AddObject(result);
-                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(transformedChain.Alphabet, notationId, result.id,
+                alphabetRepository.ToDbAlphabet(transformedChain.Alphabet, notationId, result.id,
                                                                    false);
-                dnaChainRepository.FromLibiadaBuildingToDbBuilding(result, transformedChain.Building);
+                buildingRepository.ToDbBuilding(result.id, transformedChain.Building);
                 db.SaveChanges();
             }
             return RedirectToAction("Index", "Chain");

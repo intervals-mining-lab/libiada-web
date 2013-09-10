@@ -14,8 +14,8 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly MatterRepository matterRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
-        private readonly DnaChainRepository dnaChainRepository;
         private readonly AlphabetRepository alphabetRepository;
+        private readonly BuildingRepository buildingRepository;
         private readonly Random rndGenerator = new Random();
 
         public ChainMixingController()
@@ -23,8 +23,8 @@ namespace LibiadaWeb.Controllers.Chains
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
-            dnaChainRepository = new DnaChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
+            buildingRepository = new BuildingRepository(db);
         }
 
         //
@@ -85,8 +85,8 @@ namespace LibiadaWeb.Controllers.Chains
 
             result.dna_chain.Add(resultChain); 
 
-            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
-            dnaChainRepository.FromLibiadaBuildingToDbBuilding(resultChain, libiadaChain.Building);
+            alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, notationId, resultChain.id, false);
+            buildingRepository.ToDbBuilding(resultChain.id, libiadaChain.Building);
             db.SaveChanges();
             return RedirectToAction("Index", "Matter");
         }

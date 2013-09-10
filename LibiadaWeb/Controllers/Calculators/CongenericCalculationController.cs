@@ -77,22 +77,21 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     int notationId = notationIds[i];
                     int languageId = languageIds[i];
-                    chain dbChain;
+                    long chainId;
                     if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                     {
                         isLiteratureChain = true;
-                        long chainId =
+                        chainId =
                             db.literature_chain.Single(l => l.matter_id == matterId && 
                                     l.notation_id == notationId 
                                     && l.language_id == languageId).id;
-                        dbChain = db.chain.Single(c => c.id == chainId);
                     }
                     else
                     {
-                        dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
+                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                     }
 
-                    Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(dbChain);
+                    Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
 
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
@@ -102,26 +101,26 @@ namespace LibiadaWeb.Controllers.Calculators
                     ICalculator calculator = CalculatorsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
 
-                    int calculated = db.congeneric_characteristic.Count(b => b.chain_id == dbChain.id &&
+                    int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_up_id == linkUpId);
                     if (calculated < libiadaChain.Alphabet.Power)
                     {
                         for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
                         {
-                            long elementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
+                            long elementId = db.alphabet.Single(a => a.chain_id == chainId && a.number == j + 1).element_id;
 
                             CongenericChain tempChain = libiadaChain.CongenericChain(j);
 
                             if (!db.congeneric_characteristic.Any(b =>
-                                                                   b.chain_id == dbChain.id &&
+                                                                   b.chain_id == chainId &&
                                                                    b.characteristic_type_id == characteristicId &&
                                                                    b.element_id == elementId && b.link_up_id == linkUpId))
                             {
                                 double value = calculator.Calculate(tempChain, linkUp);
                                 congeneric_characteristic currentCharacteristic = new congeneric_characteristic
                                     {
-                                        chain_id = dbChain.id,
+                                        chain_id = chainId,
                                         characteristic_type_id = characteristicId,
                                         link_up_id = linkUpId,
                                         element_id = elementId,
@@ -138,10 +137,10 @@ namespace LibiadaWeb.Controllers.Calculators
                     //Перебор всех элементов алфавита; третий уровень массива характеристик
                     for (int d = 0; d < libiadaChain.Alphabet.Power; d++)
                     {
-                        long elementId = dbChain.alphabet.Single(a => a.number == d + 1).element_id;
+                        long elementId = db.alphabet.Single(a => a.chain_id == chainId && a.number == d + 1).element_id;
 
                         double? characteristic = db.congeneric_characteristic.Single(b =>
-                                    b.chain_id == dbChain.id &&
+                                    b.chain_id == chainId &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.element_id == elementId &&
                                     b.link_up_id == linkUpId).value;

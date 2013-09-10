@@ -5,6 +5,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using LibiadaCore.Classes.Root;
+using LibiadaCore.Classes.TheoryOfSet;
 
 namespace LibiadaWeb.Models.Repositories
 {
@@ -66,6 +68,45 @@ namespace LibiadaWeb.Models.Repositories
         public void Dispose()
         {
             db.Dispose();
+        }
+
+        public bool ElementInDb(IBaseObject element, int notationId)
+        {
+            String stringElement = element.ToString();
+            return db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+        }
+
+        public bool ElementsInDb(Alphabet alphabet, int notationId)
+        {
+            for (int i = 0; i < alphabet.Power; i++)
+            {
+                if (!ElementInDb(alphabet[i], notationId))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
+        {
+            for (int j = 0; j < libiadaAlphabet.Power; j++)
+            {
+                String strElem = libiadaAlphabet[j].ToString();
+
+                if (!ElementInDb(libiadaAlphabet[j], notationId))
+                {
+                    element newElement = new element
+                    {
+                        value = strElem,
+                        name = strElem,
+                        notation_id = notationId,
+                        creation_date = DateTime.Now
+                    };
+                    db.element.AddObject(newElement);
+                }
+            }
+            db.SaveChanges();
         }
 
         public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<element> allElements,

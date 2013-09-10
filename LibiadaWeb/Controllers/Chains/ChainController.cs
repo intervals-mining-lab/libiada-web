@@ -16,17 +16,17 @@ namespace LibiadaWeb.Controllers.Chains
     public class ChainController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
-        private readonly DnaChainRepository dnaChainRepository;
-        private readonly LiteratureChainRepository literatureChainRepository;
         private readonly ChainRepository chainRepository;
         private readonly AlphabetRepository alphabetRepository;
+        private readonly BuildingRepository buildingRepository;
+        private readonly ElementRepository elementRepository;
 
         public ChainController()
         {
-            dnaChainRepository = new DnaChainRepository(db);
-            literatureChainRepository = new LiteratureChainRepository(db);
             chainRepository = new ChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
+            buildingRepository = new BuildingRepository(db);
+            elementRepository = new ElementRepository(db);
         }
 
         //
@@ -138,7 +138,7 @@ namespace LibiadaWeb.Controllers.Chains
                                 d.fasta_header == fastaHeader);
                         if (!continueImport)
                         {
-                            if (!alphabetRepository.CheckAlphabetElementsInDb(libiadaChain.Alphabet, chain.notation_id))
+                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
                             {
                                 ViewBag.matter_id = new SelectList(db.matter, "id", "name");
                                 ViewBag.notation_id = new SelectList(db.notation, "id", "name");
@@ -158,7 +158,7 @@ namespace LibiadaWeb.Controllers.Chains
                                 };
 
                             db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
-                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
+                            alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
                                                                                dbDnaChain.id, false);
 
                         }
@@ -174,7 +174,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                         libiadaBuilding = libiadaChain.Building;
 
-                        dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaBuilding);
+                        buildingRepository.ToDbBuilding(dbDnaChain.id, libiadaBuilding);
 
                         db.SaveChanges();
                         break;
@@ -218,7 +218,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                             db.matter.Single(m => m.id == chain.matter_id).literature_chain.Add(dbLiteratureChain);
 
-                            alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
+                            alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, chain.notation_id,
                                                                                dbLiteratureChain.id, true);
                         }
                         else
@@ -232,7 +232,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                         libiadaBuilding = libiadaChain.Building;
 
-                        literatureChainRepository.FromLibiadaBuildingToDbBuilding(dbLiteratureChain, libiadaBuilding);
+                        buildingRepository.ToDbBuilding(dbLiteratureChain.id, libiadaBuilding);
 
                         db.SaveChanges();
                         break;
@@ -274,9 +274,9 @@ namespace LibiadaWeb.Controllers.Chains
                 };
 
                 db.matter.Single(m => m.id == chain.matter_id).dna_chain.Add(dbDnaChain);
-                alphabetRepository.FromLibiadaAlphabetToDbAlphabet(libiadaChain.Alphabet, dbDnaChain.notation_id,
+                alphabetRepository.ToDbAlphabet(libiadaChain.Alphabet, dbDnaChain.notation_id,
                                                                    dbDnaChain.id, true);
-                dnaChainRepository.FromLibiadaBuildingToDbBuilding(dbDnaChain, libiadaChain.Building);
+                buildingRepository.ToDbBuilding(dbDnaChain.id, libiadaChain.Building);
                 db.SaveChanges();
 
                 return RedirectToAction("Index");

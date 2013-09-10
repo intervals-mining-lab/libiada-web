@@ -83,32 +83,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return chainsList;
         }
 
-        //TODO: создать репозиторий стро€ и перенести туда методы стро€
-        public int[] FromDbBuildingToLibiadaBuilding(literature_chain dbChain)
-        {
-            String query = "SELECT number FROM building WHERE chain_id = " + dbChain.id + " ORDER BY index";
-            return db.ExecuteStoreQuery<int>(query).ToArray();
-        }
-
-        public void FromLibiadaBuildingToDbBuilding(literature_chain parent, int[] libiadaBuilding)
-        {
-            int createdCount = db.ExecuteStoreQuery<int>("SELECT get_building_count('" + parent.id + "')").First();
-            for (int i = createdCount; i < libiadaBuilding.Length; i++)
-            {
-                building elem = new building { index = i, number = libiadaBuilding[i] };
-
-                parent.building.Add(elem);
-
-                //костыль чтобы Ѕƒ реже умирала
-                if (i % 1000 == 0)
-                {
-                    db.SaveChanges();
-                }
-            }
-
-            db.SaveChanges();
-        }
-
         public void Dispose()
         {
             db.Dispose();

@@ -235,10 +235,12 @@
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\Repositories\AlphabetRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\AlphabetRepository.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\BuildingRepository.cs" />
     <Compile Include="Models\Repositories\Chains\ChainRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicGroupRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IBuildingRepository.cs" />
     <Compile Include="Models\Repositories\CharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
     <Compile Include="Models\DataTableFiller.cs" />
