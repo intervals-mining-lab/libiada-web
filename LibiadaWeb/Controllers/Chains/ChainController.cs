@@ -15,7 +15,7 @@ namespace LibiadaWeb.Controllers.Chains
 {
     public class ChainController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly ChainRepository chainRepository;
         private readonly AlphabetRepository alphabetRepository;
         private readonly BuildingRepository buildingRepository;
@@ -23,6 +23,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ChainController()
         {
+            db = new LibiadaWebEntities();
             chainRepository = new ChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
             buildingRepository = new BuildingRepository(db);
@@ -48,7 +49,7 @@ namespace LibiadaWeb.Controllers.Chains
             {
                 return HttpNotFound();
             }
-            Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(id);
+            Chain libiadaChain = chainRepository.ToLibiadaChain(id);
 
             ViewBag.stringChain = libiadaChain.ToString();
             return View(chain);

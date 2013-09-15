@@ -15,7 +15,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class BinaryCalculationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly LinkUpRepository linkUpRepository;
         private readonly NotationRepository notationRepository;
@@ -24,6 +24,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public BinaryCalculationController()
         {
+            db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkUpRepository = new LinkUpRepository(db);
             notationRepository = new NotationRepository(db);
@@ -73,7 +74,7 @@ namespace LibiadaWeb.Controllers.Calculators
             chain dbChain = db.chain.Single(c => c.id == chainId);
 
 
-            Chain currentChain = chainRepository.FromDbChainToLibiadaChain(dbChain.id);
+            Chain currentChain = chainRepository.ToLibiadaChain(dbChain.id);
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
             IBinaryCalculator calculator = BinaryCalculatorsFactory.Create(className);

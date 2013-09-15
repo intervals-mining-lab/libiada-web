@@ -15,13 +15,14 @@ namespace LibiadaWeb.Controllers.Chains
 {
     public class MatterController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly AlphabetRepository alphabetRepository;
         private readonly BuildingRepository buildingRepository;
         private readonly ElementRepository elementRepository;
 
         public MatterController()
         {
+            db = new LibiadaWebEntities();
             alphabetRepository = new AlphabetRepository(db);
             buildingRepository = new BuildingRepository(db);
             elementRepository = new ElementRepository(db);
@@ -91,9 +92,7 @@ namespace LibiadaWeb.Controllers.Chains
                 // Read the file into the byte array
                 fileStream.Read(input, 0, fileLen);
 
-                string stringChain = string.Empty;
-                // Copy the byte array into a string
-                stringChain = matter.nature_id == Aliases.NatureGenetic
+                string stringChain =  matter.nature_id == Aliases.NatureGenetic
                                   ? Encoding.ASCII.GetString(input)
                                   : Encoding.UTF8.GetString(input);
 

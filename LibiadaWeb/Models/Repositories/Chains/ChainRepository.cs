@@ -88,14 +88,14 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return chainsList;
         }
 
-        public BaseChain FromDbChainToLibiadaBaseChain(long chainId)
+        public BaseChain ToLBaseChain(long chainId)
         {
             Alphabet alphabet = alphabetRepository.ToLibiadaAlphabet(chainId);
             int[] building = buildingRepository.ToArray(chainId);
             return new BaseChain(building, alphabet);
         }
 
-        public Chain FromDbChainToLibiadaChain(long chainId)
+        public Chain ToLibiadaChain(long chainId)
         {
             Alphabet alphabet = alphabetRepository.ToLibiadaAlphabet(chainId);
             int[] building = buildingRepository.ToArray(chainId);

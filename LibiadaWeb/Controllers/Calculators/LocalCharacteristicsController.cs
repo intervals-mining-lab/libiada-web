@@ -15,7 +15,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class LocalCharacteristicsController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
@@ -25,6 +25,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public LocalCharacteristicsController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -84,7 +85,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                 }
 
-                Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
                 
                 CutRule cutRule;
                 if (isSetBeginAndEnd)
@@ -148,7 +149,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
                         List<Complex> comp = new List<Complex>();
-                        int j = 0;
+                        int j;
 
                         //Для всех фрагментов цепочек
                         for (j = 0; j < characteristics.Last().Count; j++)
@@ -218,7 +219,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                 }
 
-                Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
 
                 CutRule cutRule;
                 if (isSetBeginAndEnd)

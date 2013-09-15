@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class CalculationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
@@ -22,6 +22,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public CalculationController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -86,7 +87,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     }
                     else
                     {
-                        Chain tempChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                        Chain tempChain = chainRepository.ToLibiadaChain(chainId);
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;

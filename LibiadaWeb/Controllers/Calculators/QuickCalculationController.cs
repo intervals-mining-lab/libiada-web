@@ -11,12 +11,13 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class QuickCalculationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly LinkUpRepository linkUpRepository;
 
         public QuickCalculationController()
         {
+            db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkUpRepository = new LinkUpRepository(db);
         }

@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Models.Repositories.Chains
@@ -12,12 +11,10 @@ namespace LibiadaWeb.Models.Repositories.Chains
     public class DnaChainRepository : IDnaChainRepository
     {
         private readonly LibiadaWebEntities db;
-        private readonly BuildingRepository buildingRepository;
 
         public DnaChainRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            buildingRepository = new BuildingRepository(db);
         }
 
         public IQueryable<dna_chain> All

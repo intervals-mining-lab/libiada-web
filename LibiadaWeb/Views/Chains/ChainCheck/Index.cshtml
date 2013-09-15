@@ -11,6 +11,13 @@
     <fieldset>
         <legend>Цепочка</legend>
 
+        <div class="editor-label">
+            @Html.Label("цепочка")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("matterId", String.Empty)
+        </div>
+
         <input type="file" name="file" id="file"/>
 
         <p>

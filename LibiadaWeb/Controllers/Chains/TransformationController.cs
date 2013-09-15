@@ -5,20 +5,20 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.DataTransformators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
     public class TransformationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly DnaChainRepository dnaChainRepository;
         private readonly AlphabetRepository alphabetRepository;
         private readonly BuildingRepository buildingRepository;
 
         public TransformationController()
         {
+            db = new LibiadaWebEntities();
             dnaChainRepository = new DnaChainRepository(db);
             alphabetRepository = new AlphabetRepository(db);
             buildingRepository = new BuildingRepository(db);

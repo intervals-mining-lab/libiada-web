@@ -11,7 +11,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class BuildingCompareController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
@@ -20,6 +20,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public BuildingCompareController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -52,10 +53,10 @@ namespace LibiadaWeb.Controllers.Calculators
             String chainName2 = db.matter.Single(m => m.id == matterId2).name;
             matter matter1 = db.matter.Single(m => m.id == matterId1);
             long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain1 = chainRepository.FromDbChainToLibiadaChain(chainId1);
+            Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
             matter matter2 = db.matter.Single(m => m.id == matterId2);
             long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain2 = chainRepository.FromDbChainToLibiadaChain(chainId2);
+            Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
 
             BaseChain res1 = null;
             BaseChain res2 = null;

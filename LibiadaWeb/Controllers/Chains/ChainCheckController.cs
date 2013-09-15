@@ -3,27 +3,44 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
+using LibiadaWeb.Helpers;
+using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
     public class ChainCheckController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
+        private readonly ChainRepository chainRepository;
+
+        public ChainCheckController()
+        {
+            db = new LibiadaWebEntities();
+            chainRepository = new ChainRepository(db);
+        }
 
         //
         // GET: /ChainCheck/
 
         public ActionResult Index()
         {
+            ViewBag.matterId = new SelectList(db.matter, "id", "name");
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(string[] file)
+        public ActionResult Index(long matterId, string[] file)
         {
             var myFile = Request.Files[0];
 
             var fileLen = myFile.ContentLength;
+
+            if (fileLen == 0)
+            {
+                ModelState.AddModelError("Error", "Файл цепочки не задан");
+                return View();
+            }
+
             byte[] input = new byte[fileLen];
 
             // Initialize the stream.
@@ -34,61 +51,77 @@ namespace LibiadaWeb.Controllers.Chains
 
             // Copy the byte array into a string.
             string stringChain = Encoding.ASCII.GetString(input);
-            var tempString = stringChain.Split('\n');
-            String fastaHeader = tempString[0];
-            stringChain = tempString[tempString.Length - 1];
-            BaseChain libiadaChain = new BaseChain(stringChain);
+            string[] tempString = stringChain.Split(new[] { '\n', '\r' });
 
-            if (!db.matter.Any(m => m.description == fastaHeader))
+            StringBuilder chainStringBuilder = new StringBuilder();
+            String fastaHeader = tempString[0];
+            for (int j = 1; j < tempString.Length; j++)
+            {
+                chainStringBuilder.Append(tempString[j]);
+            }
+
+            string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
+
+            BaseChain libiadaChain = new BaseChain(resultStringChain);
+
+            long chainId = db.chain.Single(c => c.matter_id == matterId).id;
+
+            if (!db.dna_chain.Any(d => d.fasta_header.Equals(fastaHeader)))
             {
                 TempData["message"] = "объекта с заголовком " + fastaHeader + " не существует";
                 return RedirectToAction("Result");
             }
-            Int64 matterId = db.matter.Single(m => m.description == fastaHeader).id;
-            chain dbChain = db.chain.Single(c => c.matter_id == matterId);
-            for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+            BaseChain dbChain = chainRepository.ToLBaseChain(chainId);
+            if (dbChain.Equals(libiadaChain))
             {
-                String libiadaElement = libiadaChain.Alphabet[i].ToString();
-                if(!db.element.Any(e => e.value == libiadaElement && e.notation_id == 1))
+                TempData["message"] = "Цепочки в БД и в файле идентичны";
+            }
+            else
+            {
+                if (libiadaChain.Alphabet.Power != dbChain.Alphabet.Power)
                 {
-                    TempData["message"] = " В БД нет элемента: " + libiadaElement;
+                    TempData["message"] = " Размеры алфавитов не совпадают. В базе - " + dbChain.Alphabet.Power 
+                                          + ". В файле - " + libiadaChain.Alphabet.Power;
                     return RedirectToAction("Result");
                 }
-                element dbElement = db.element.Single(e => e.value == libiadaElement && e.notation_id == 1);
-                if (!db.alphabet.Any(a => a.chain_id == dbChain.id && a.element_id == dbElement.id))
+                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
                 {
-                    TempData["message"] = " В БД не найден элемент алфавита: " + libiadaElement;
-                    return RedirectToAction("Result");
+                    if (!libiadaChain.Alphabet[i].ToString().Equals(dbChain.Alphabet[i].ToString()))
+                    {
+                        TempData["message"] = i + " элементы алфавитов не равны. В базе - " + 
+                                              dbChain.Alphabet[i] + ". В файле -" + libiadaChain.Alphabet[i];
+                        return RedirectToAction("Result");
+                    }
+                }
+                
+                
+                if (libiadaChain.Length != dbChain.Length)
+                {
+                    TempData["message"] = "Длина цепочки в базе " + dbChain.Length + 
+                                          ", а длина цепочки из файла " + libiadaChain.Length;
+                }
+
+                for (int j = 0; j < libiadaChain.Length; j++)
+                {
+                    int[] libiadaBuilding = libiadaChain.Building;
+                    int[] dbBuilding = dbChain.Building;
+                    if (libiadaBuilding[j] != dbBuilding[j])
+                    {
+                        TempData["message"] = j + " элементы цепочек не совпадают. В базе " + 
+                                              dbBuilding[j] + ". В файле " + libiadaBuilding[j];
+                        return RedirectToAction("Result");
+                    }
+                    TempData["message"] = "Цепочки Шрёдингера - они равны и неравны одновременно";
                 }
             }
-            int dbChainLength = db.building.Count(b => b.chain_id == dbChain.id);
-            if (libiadaChain.Building.Length != dbChainLength)
-            {
-                TempData["message"] = "Длина цепочки в базе " + dbChainLength + ", а длина цепочки из файла " + libiadaChain.Building.Length;
-                return RedirectToAction("Result");
-            }
-            /*for (int j = 0; j < libiadaChain.Building.Length; j++)
-            {
-                if (!db.building.Any(b => b.chain_id == dbChain.id && b.index == j))
-                {
-                    TempData["message"] = " В БД не найден " + j + " элемент строя";
-                    return RedirectToAction("Result");
-                }
-                int dbElementNumber = db.building.Single(b => b.chain_id == dbChain.id && b.index == j).number;
-                if (dbElementNumber != libiadaChain.Building[j])
-                {
-                    TempData["message"] = " В БД на " + j + " позиции находится " + dbElementNumber +
-                                          ", а в цепочке из файла " + libiadaChain[j];
-                    return RedirectToAction("Result");
-                }
-            }*/
-            TempData["message"] = "Цепочки в БД и в файле идентичны";
+            
             return RedirectToAction("Result");
         }
 
         public ActionResult Result()
         {
             ViewBag.message = TempData["message"] as String;
+            TempData.Keep();
             return View();
         }
     }

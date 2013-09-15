@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
-using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -10,7 +9,7 @@ namespace LibiadaWeb.Controllers.Chains
 {
     public class ChainMixingController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
@@ -20,6 +19,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ChainMixingController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
@@ -56,7 +56,7 @@ namespace LibiadaWeb.Controllers.Chains
             {
                 dbChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
             }
-            BaseChain libiadaChain = chainRepository.FromDbChainToLibiadaBaseChain(dbChain.id);
+            BaseChain libiadaChain = chainRepository.ToLBaseChain(dbChain.id);
             for (int i = 0; i < mixes; i++)
             {
                 int firstIndex = rndGenerator.Next(libiadaChain.Length);

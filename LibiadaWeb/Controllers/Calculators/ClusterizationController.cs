@@ -15,7 +15,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class ClusterizationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly ChainRepository chainRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
@@ -24,6 +24,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ClusterizationController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             chainRepository = new ChainRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
@@ -79,7 +80,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     }
                     else
                     {
-                        Chain tempChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                        Chain tempChain = chainRepository.ToLibiadaChain(chainId);
 
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;

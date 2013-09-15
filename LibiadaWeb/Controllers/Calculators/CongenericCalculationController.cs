@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers.Calculators
 {
     public class CongenericCalculationController : Controller
     {
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
@@ -23,6 +23,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public CongenericCalculationController()
         {
+            db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -91,7 +92,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                     }
 
-                    Chain libiadaChain = chainRepository.FromDbChainToLibiadaChain(chainId);
+                    Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
 
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
