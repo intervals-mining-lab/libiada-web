@@ -44,13 +44,13 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.ExecuteStoreQuery<int>(query).ToArray();
         }
 
-        public void ToDbBuilding(long chainId, int[] libiadaBuilding)
+        public int ToDbBuilding(long chainId, int[] libiadaBuilding)
         {
             String aggregatedBuilding = libiadaBuilding.Aggregate(new StringBuilder(), (a, b) =>
                                                                   a.Append("," + b.ToString()),
                                                                   a => a.Remove(0, 1).ToString());
             String query = "SELECT create_building_from_string(" + chainId + ", '" + aggregatedBuilding + "')";
-            db.ExecuteStoreQuery<String>(query);
+            return db.ExecuteStoreQuery<int>(query).First();
         }
 
         public void Dispose()

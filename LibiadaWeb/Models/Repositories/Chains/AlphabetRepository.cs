@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
 
@@ -86,7 +85,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return alphabet;
         }
 
-        public void ToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId,
+        public int ToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId,
                                                   bool createElements)
         {
             if (!createElements && !elementRepository.ElementsInDb(libiadaAlphabet, notationId))
@@ -106,7 +105,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                                                   a.Append("," + b.ToString()),
                                                                   a => a.Remove(0, 1).ToString());
             String query = "SELECT create_alphabet_from_string(" + chainId + ", '" + aggregatedElements + "')";
-            db.ExecuteStoreQuery<String>(query);
+            return db.ExecuteStoreQuery<int>(query).First();
         }
 
         

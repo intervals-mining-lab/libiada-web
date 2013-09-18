@@ -251,7 +251,7 @@
     <Compile Include="Models\Repositories\Catalogs\FmotivTypeRepository.cs" />
     <Compile Include="Models\Repositories\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAccidentalRepository.cs" />
-    <Compile Include="Models\Repositories\IAlphabetRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IAlphabetRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IChainRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicGroupRepository.cs" />
