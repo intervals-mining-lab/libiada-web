@@ -77,5 +77,13 @@ namespace LibiadaWeb.Models
 
         #endregion
 
+        #region PieceType
+
+        public const int PieceTypeFullGenome = 1;
+        public const int PieceTypeFullText = 7;
+        public const int PieceTypeFuulSong = 8;
+
+        #endregion
+
     }
 }
