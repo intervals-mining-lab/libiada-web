@@ -88,12 +88,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public int ToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId,
                                                   bool createElements)
         {
-            if (!createElements && !elementRepository.ElementsInDb(libiadaAlphabet, notationId))
+            bool elementsMissing = !elementRepository.ElementsInDb(libiadaAlphabet, notationId);
+            if (!createElements && elementsMissing)
             {
                 throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
             }
-
-            elementRepository.CreateLackingElements(libiadaAlphabet, notationId);
+            if (createElements && elementsMissing)
+            {
+                elementRepository.CreateLackingElements(libiadaAlphabet, notationId);
+            }
 
             List<long> elementIds = new List<long>();
             for (int i = 0; i < libiadaAlphabet.Power; i++)
