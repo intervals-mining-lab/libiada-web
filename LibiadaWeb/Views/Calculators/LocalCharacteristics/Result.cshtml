@@ -14,6 +14,7 @@
     var characteristics = new Array();
     var partNames = new Array();
     var chainNames = new Array();
+    var points = new Array();
 
     $(document).ready(function() {
 
@@ -29,19 +30,22 @@
         @{
             for (int j = 0; j < ViewBag.characteristics.Count; j++)
             {
+                @: points.push(new Array());
                 @: characteristics.push(new Array());
-
+                
                 var characteristicList = ViewBag.characteristics[j];
                 for (int i = 0; i < characteristicList.Count; i++)
                 {
+                    @: points[@j].push(new Array());
                     @: characteristics[@j].push(new Array());
-
+                
                     var characteristic = characteristicList[i];
                     for (int k = 0; k < characteristic.Count; k++)
                     {
                         String[] tempValue = characteristic[k].ToString().Split(',');
                         String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                         @: characteristics[@j][@i][@k] = @value;
+                        @: points[@j][@i][@k] = {x: @i, y: @value};
                     }
                 }
             }
@@ -56,7 +60,7 @@
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
-        
+
         // make the container smaller and add a second container for the master chart
         var container = $('#visualization_container')
             .css('position', 'relative');
@@ -70,159 +74,43 @@
             .appendTo(container);
     });
     
-    var masterChart, detailChart;
+    var detailChart;
 
     function setScale(){
         var min = $("#slider_container").rangeSlider("min");
         var max = $("#slider_container").rangeSlider("max");
           
         var detailData = [];
-        var  xAxis = masterChart.xAxis[0];
 
         min =+min;
         max =+max; 
 
         // reverse engineer the last part of the data
-        for (var k = 0; k < masterChart.series.length; k++) {
-            jQuery.each(masterChart.series[k].data, function(i, point) {
-                if (point.x > min && point.x < max) {
-                    detailData.push({
-                        x: point.x,
-                        y: point.y
-                    });
-                }
-            });
+        for (var i = 0; i < points.length; i++) {
+            for (var k = 0; k < points[i].length; k++) {
+                jQuery.each(points[i][k], function(zero, point) {
+                    if (point.x > min && point.x < max) {
+                        detailData.push({
+                            x: point.x,
+                            y: point.y
+                        });
+                    }
+                });
+            }
         }
         
-    
-        // move the plot bands to reflect the new detail span
-        xAxis.removePlotBand('mask');
-        xAxis.addPlotBand({
-            id: 'mask',
-            from: min,
-            to: max,
-            color: 'rgba(0, 0, 0, 0.2)'
-        });
         detailChart.series[0].setData(detailData);
-    }
-
-    function createMaster(dataSeries, yMin,yMax) {
-        masterChart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'master-container',
-                reflow: false,
-                borderWidth: 0,
-                backgroundColor: null,
-                marginLeft: 50,
-                marginRight: 20,
-                events: {
-    
-                    // listen to the selection event on the master chart to update the
-                    // extremes of the detail chart
-                    selection: function(event) {
-                        var extremesObject = event.xAxis[0],
-                            min = extremesObject.min,
-                            max = extremesObject.max,
-                            detailData = [],
-                            xAxis = this.xAxis[0];
-    
-                        // reverse engineer the last part of the data
-                        jQuery.each(this.series[0].data, function(i, point) {
-                            if (point.x > min && point.x < max) {
-                                detailData.push({
-                                    x: point.x,
-                                    y: point.y
-                                });
-                            }
-                        });
-    
-                        // move the plot bands to reflect the new detail span
-                        xAxis.removePlotBand('mask');
-                        xAxis.addPlotBand({
-                            id: 'mask',
-                            from: min,
-                            to: max,
-                            color: 'rgba(0, 0, 0, 0.2)'
-                        });
-                        
-                        detailChart.series[0].setData(detailData);
-    
-                        return false;
-                    }
-                }
-            },
-            title: {
-                text: null
-            },
-            xAxis: {
-                type: 'number',
-                showLastTickLabel: true,
-                maxZoom: 3, // 
-               
-                title: {
-                    text: null
-                }
-            },
-            yAxis: {
-                gridLineWidth: 0,
-                labels: {
-                    enabled: false
-                },
-                title: {
-                    text: null
-                },
-                min: 0.6,
-                showFirstLabel: false
-            },
-            tooltip: {
-                formatter: function() {
-                    return false;
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } },
-                series: {
-                    
-                    lineWidth: 1,
-                    marker: {
-                        enabled: false
-                    },
-                    shadow: false,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    enableMouseTracking: false
-                }
-            },
-    
-            series: dataSeries,
-    
-            exporting: {
-                enabled: true
-            }
-    
-        }, function(masterChart) {
-            createDetail(masterChart, dataSeries, yMin, yMax);
-        });
     }
     
     // create the detail chart
 
-    function createDetail(masterChart, dataSeries, yMin, yMax) {
+    function createDetail(dataSeries, yMin, yMax) {
 
         // prepare the detail chart
         var detailData = [],
             detailStart = 0;
 
-        jQuery.each(masterChart.series[0].data, function(i, point) {
+        jQuery.each(dataSeries[0].data, function(i, point) {
             if (point.x >= detailStart) {
                 detailData.push(point.y);
             }
@@ -338,7 +226,6 @@
         var max = $("#slider_container").rangeSlider("max");
         $.ajax({
             type:"GET",
-            //url
             data:{"min":min, "max":max},
             success:result
         });
@@ -379,9 +266,6 @@
              }]
         });
         $("#slider_container").bind("valuesChanging", function(e, data){
-            console.log("min: " + data.values.min + " max: " + data.values.max + " step: ");
-        });
-        $("#slider_container").bind("valuesChanging", function(){
             setScale();
         });
         if ($("#allGraphics")[0].checked) {
@@ -391,7 +275,7 @@
         } else {
             FillSeries($("#yaxis option:selected")[0].value, dataSeries);
         }
-        createMaster(dataSeries, Math.min.apply(null, yVals), Math.max.apply(null, yVals));
+        createDetail(dataSeries, Math.min.apply(null, yVals), Math.max.apply(null, yVals));
     }
     
     
@@ -462,6 +346,7 @@
         <input type="button" value="значение" onclick="shift(stepOfWindow.value,widthOfWindow.value);"/>
     </div>
 </div>
+<br/>
 @Html.Label("Ось y")
 <select name="yaxis" id="yaxis">
     @foreach (var option in ViewBag.characteristicsList)

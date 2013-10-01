@@ -56,7 +56,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         [HttpPost]
         public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int languageId, int notationId, int length,
-                                  int step, int startCoordinate, int beginOfChain, int endOfChain, bool isDelta, bool isFurie, bool isGrowingWindow, bool isMoveCoordinate, bool isSetBeginAndEnd)
+                                  int step, int startCoordinate, int beginOfChain, int endOfChain, bool isDelta, bool isFurie, bool isGrowingWindow, bool isMoveCoordinate, bool isSetBeginAndEnd, bool isAutocorelation)
         {
 
             List<List<List<Double>>> characteristics = CalculateCharacteristics(matterIds, isSetBeginAndEnd, isGrowingWindow,
@@ -179,7 +179,26 @@ namespace LibiadaWeb.Controllers.Calculators
                     }
                 }
             }
+            if (isAutocorelation)
+            {
+                AutoCorrelation autoCorellation = new AutoCorrelation();
+                for (int i = 0; i < characteristics.Last().Last().Count; i++)
+                {
+                    double[] temp = new double[characteristics.Last().Count];
+                    //Для всех фрагментов цепочек
+                    for (int j = 0; j < characteristics.Last().Count; j++)
+                    {
+                        temp[j] = characteristics.Last()[j][i];
+                    }
 
+                    double[] res = autoCorellation.Execute(temp);
+                    for (int j = 0; j < res.Length; j++)
+                    {
+                        characteristics.Last()[j][i] = res[j];
+                    }
+                    characteristics.Last().RemoveRange(res.Length, characteristics.Last().Count - res.Length);
+                }
+            }
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 int characteristicId = characteristicIds[i];
