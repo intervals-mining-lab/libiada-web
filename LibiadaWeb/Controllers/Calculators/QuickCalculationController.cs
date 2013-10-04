@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
 using LibiadaCore.Classes.Root.Characteristics.Calculators;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 
 namespace LibiadaWeb.Controllers.Calculators
@@ -27,10 +28,10 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.characteristics = db.characteristic_type.ToList();
+            IEnumerable<characteristic_type> characteristicsList =
+                db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
-            ViewBag.linkUps = db.link_up.ToList();
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             return View();
         }

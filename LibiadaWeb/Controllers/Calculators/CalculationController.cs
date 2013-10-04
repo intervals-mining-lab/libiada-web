@@ -35,11 +35,14 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.objects = db.matter.Include("chain").ToList();
-            IEnumerable<characteristic_type> characteristics =
+            List<matter> matters = db.matter.ToList();
+            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
+            ViewBag.matters = matters;
+
+            IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
-            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
+
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
             ViewBag.languagesList = new SelectList(db.language, "id", "name");

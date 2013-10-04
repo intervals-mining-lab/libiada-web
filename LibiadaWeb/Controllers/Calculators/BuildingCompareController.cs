@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.Iterators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
@@ -13,18 +12,12 @@ namespace LibiadaWeb.Controllers.Calculators
     {
         private readonly LibiadaWebEntities db;
         private readonly MatterRepository matterRepository;
-        private readonly CharacteristicTypeRepository characteristicRepository;
-        private readonly NotationRepository notationRepository;
-        private readonly LinkUpRepository linkUpRepository;
         private readonly ChainRepository chainRepository;
 
         public BuildingCompareController()
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
-            notationRepository = new NotationRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
             chainRepository = new ChainRepository(db);
         }
 
@@ -33,15 +26,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.characteristics = db.characteristic_type.ToList();
-
-            ViewBag.linkUps = db.link_up.ToList();
-            ViewBag.notations = db.notation.ToList();
-            ViewBag.objects = db.matter.Include("chain").ToList();
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(null);
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
 
             return View();
         }

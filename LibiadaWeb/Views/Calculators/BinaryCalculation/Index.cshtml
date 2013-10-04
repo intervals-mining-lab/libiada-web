@@ -19,12 +19,11 @@
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
-
-        $('form').submit(function() {
+        
+        $('form').submit(function () {
+            //сабмитим скрытые отмеченные чекбоксы
             $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
         });
-
-        
     });
 
     function FiltrationSwitch() {

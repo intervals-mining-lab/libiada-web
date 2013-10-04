@@ -22,43 +22,18 @@
 
         @foreach (var option in ViewBag.characteristicsList)
         {
-            @:characteristicTypes.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+            @:characteristicTypes.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
         }
 
         @foreach (var option in ViewBag.linkUpsList)
         {
-            @:linkUps.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+            @:linkUps.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
         }
 
-        var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divCounter).attr('id', 'characteristic' + divCounter);
-
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, characteristicTypes, linkUps);
         $("#characteristics_list").append(characteristicsDiv);
-        
-        var selectList = $('<select/>').attr('name', 'characteristicIds');
-        for (var i = 0; i < characteristicTypes.length; i++) 
-        {
-            selectList.append(characteristicTypes[i]);
-        }
-        characteristicsDiv.append(selectList);
-        
-        selectList = $('<select/>').attr('name', 'linkUpIds');
-        for (var j = 0; j < linkUps.length; j++) 
-        {
-            selectList.append(linkUps[j]);
-        }
-        characteristicsDiv.append(selectList);
-        
-        //функция, возвращающая функцию для call back'а
-        var tempDeleteFunction = function(element) {
-            return function() {
-                DeleteElementByName(element.elemName);
-            };
-        };
-        var callBackDeleteFunction = tempDeleteFunction({ elemName: 'characteristic' + divCounter });
-        characteristicsDiv.append($('<input/>').attr('type', 'button').attr('value','Удалить').click(callBackDeleteFunction));
-        AppendBr(characteristicsDiv);
-        
         divCounter++;
+        
         return false;
     }
 </script>

@@ -63,13 +63,22 @@ namespace LibiadaWeb.Models.Repositories.Chains
             db.SaveChanges();
         }
 
-        public List<SelectListItem> GetSelectListItems(IEnumerable<chain> matters)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<matter> selectedMatters)
         {
-            HashSet<long> matterIds = matters != null
-                                          ? new HashSet<long>(matters.Select(c => c.id))
+            return GetSelectListItems(db.matter, selectedMatters);
+        }
+
+        public List<SelectListItem> GetSelectListItems(IEnumerable<matter> allMatters, IEnumerable<matter> selectedMatters)
+        {
+
+            HashSet<long> matterIds = selectedMatters != null
+                                          ? new HashSet<long>(selectedMatters.Select(c => c.id))
                                           : new HashSet<long>();
-            var allMatters = db.matter;
             var mattersList = new List<SelectListItem>();
+            if (allMatters == null)
+            {
+                allMatters = db.matter;
+            }
             foreach (var matter in allMatters)
             {
                 mattersList.Add(new SelectListItem

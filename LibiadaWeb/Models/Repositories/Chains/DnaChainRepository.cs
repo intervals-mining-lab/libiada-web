@@ -60,21 +60,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
         {
-            HashSet<long> chainIds = chains != null
-                                         ? new HashSet<long>(chains.Select(c => c.id))
-                                         : new HashSet<long>();
-            var allChains = db.dna_chain.Include("matter");
-            var chainsList = new List<SelectListItem>();
-            foreach (var chain in allChains)
-            {
-                chainsList.Add(new SelectListItem
-                    {
-                        Value = chain.id.ToString(),
-                        Text = chain.matter.name,
-                        Selected = chainIds.Contains(chain.id)
-                    });
-            }
-            return chainsList;
+            return GetSelectListItems(db.dna_chain.ToList(), chains);
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains,

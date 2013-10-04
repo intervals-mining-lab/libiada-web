@@ -34,35 +34,18 @@
 
         @foreach (var option in ViewBag.characteristicsList)
         {
-            @:characteristicTypes.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+            @:characteristicTypes.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
         }
 
         @foreach (var option in ViewBag.linkUpsList)
         {
-            @:linkUps.push($("<option></option>").attr("value",@option.Value).text('@option.Text'));
+            @:linkUps.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
         }
 
-        var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divCounter).attr('id', 'characteristic' + divCounter);
-
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, characteristicTypes, linkUps);
         $("#characteristics_list").append(characteristicsDiv);
-        
-        var selectList = CreateSelectList(characteristicTypes, 'characteristicIds'); 
-        characteristicsDiv.append(selectList);
-        
-        selectList = CreateSelectList(linkUps, 'linkUpIds');
-        characteristicsDiv.append(selectList);
-
-        //функция, возвращающая функцию для call back'а
-        var tempDeleteFunction = function(element) {
-            return function() {
-                DeleteElementByName(element.elemName);
-            };
-        };
-        var callBackDeleteFunction = tempDeleteFunction({ elemName: 'characteristic' + divCounter });
-        characteristicsDiv.append($('<input/>').attr('type', 'button').attr('value','Удалить').click(callBackDeleteFunction));
-        AppendBr(characteristicsDiv);
-        
         divCounter++;
+        
         return false;
     }
 </script>
@@ -72,23 +55,36 @@
     <table>
         <thead>
             <tr>
-                <th>
+                 <th>
                     Название объекта
+                </th>
+                <th>
+                    Описание
+                </th>
+                <th>
+                    id
                 </th>
             </tr>
         </thead>
         <tbody>
             @{
-    List<MvcHtmlString> mattersList = Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.mattersList);
+                List<MvcHtmlString> matterCheckBoxes =
+                    Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.matterCheckBoxes);
 
-    foreach (var item in mattersList)
-    {
+                for (int i = 0; i < matterCheckBoxes.Count; i++)
+                {
                     <tr>
                         <td>
-                            @item
+                            @matterCheckBoxes[i]
+                        </td>
+                        <td>
+                            @ViewBag.matters[i].description
+                        </td>
+                        <td>
+                            @ViewBag.matters[i].id_in_remote_db
                         </td>
                     </tr>
-    }
+                }
             }
         </tbody>
     </table>
