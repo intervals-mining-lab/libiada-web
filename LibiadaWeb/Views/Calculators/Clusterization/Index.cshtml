@@ -29,26 +29,14 @@
 
     function AddCharacteristic() {
 
-        var characteristicTypes = new Array();
-        var linkUps = new Array();
-        var notations = new Array();
-
-        @foreach (var option in ViewBag.characteristicsList)
-        {
-            @:characteristicTypes.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-
-        @foreach (var option in ViewBag.linkUpsList)
-        {
-            @:linkUps.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
+        var paramsList = new Object();
         
-        @foreach (var option in ViewBag.notationsList)
-        {
-            @:notations.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
+        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
+        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
+        @Helpers.FillParamsList("notationIds", ViewBag.notationsList)
+        @Helpers.FillParamsList("languageIds", ViewBag.languagesList)
 
-        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, characteristicTypes, linkUps, notations);
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);
         divCounter++;
         

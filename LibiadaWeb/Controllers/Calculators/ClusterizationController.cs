@@ -47,11 +47,14 @@ namespace LibiadaWeb.Controllers.Calculators
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.languagesList = new SelectList(db.language, "id", "name");
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int clustersCount, double powerWeight, double normalizedDistanseWeight, double distanseWeight)
+        public ActionResult Index(long[] matterIds, 
+            int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds, 
+            int clustersCount, double powerWeight, double normalizedDistanseWeight, double distanseWeight)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
             List<String> characteristicNames = new List<string>();

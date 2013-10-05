@@ -28,32 +28,14 @@
     });
 
     function AddCharacteristic() {
-        var characteristicTypes = new Array();
-        var linkUps = new Array();
-        var notations = new Array();
-        var languages = new Array();
+        var paramsList = new Object();
 
-        @foreach (var option in ViewBag.characteristicsList)
-        {
-            @:characteristicTypes.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
+        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
+        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
+        @Helpers.FillParamsList("notationIds", ViewBag.notationsList)
+        @Helpers.FillParamsList("languageIds", ViewBag.languagesList)
 
-        @foreach (var option in ViewBag.linkUpsList)
-        {
-            @:linkUps.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-        
-        @foreach (var option in ViewBag.notationsList)
-        {
-            @:notations.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-        
-        @foreach (var option in ViewBag.languagesList)
-        {
-            @:languages.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-
-        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, characteristicTypes, linkUps, notations, languages);
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);
         divCounter++;
         
@@ -100,7 +82,7 @@
         </tbody>
     </table>
     <br/>
-    <input type="button" onclick=" AddCharacteristic() " value="Добавить характеристику"/>
+    <input type="button" onclick="AddCharacteristic() " value="Добавить характеристику"/>
     <div id="characteristics_list"></div>
     <br/>
     <br/>

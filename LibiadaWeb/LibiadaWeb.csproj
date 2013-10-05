@@ -514,6 +514,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="App_Code\Helpers.cshtml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />

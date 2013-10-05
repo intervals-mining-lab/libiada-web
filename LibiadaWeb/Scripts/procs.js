@@ -11,6 +11,10 @@ function DeleteElementByName(elemName) {
     return false;
 }
 
+function CreateOption(value, text) {
+    return $('<option/>').attr('value', value).text(text);
+}
+
 function CreateSelectList(options, name) {
     var selectList = $('<select/>').attr('name', name);
     for (var i = 0; i < options.length; i++) {
@@ -27,25 +31,12 @@ function SwitchVisibility(element) {
     }
 }
 
-function CreateCharacteristicsBlock(divNumber, characteristicTypes, linkUps, notations, languages) {
+function CreateCharacteristicsBlock(divNumber, paramsList) {
     var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divNumber).attr('id', 'characteristic' + divNumber);
 
-
-    //TODO: свернять это всё в вызов одной функции (заодно свернуть принимаемые параметры в один объект)
-    var selectList = CreateSelectList(characteristicTypes, 'characteristicIds');
-    characteristicsDiv.append(selectList);
-
-    selectList = CreateSelectList(linkUps, 'linkUpIds');
-    characteristicsDiv.append(selectList);
-
-    if (notations != undefined) {
-        selectList = CreateSelectList(notations, 'notationIds');
-        characteristicsDiv.append(selectList);
-    }
-
-    if (languages != undefined) {
-        selectList = CreateSelectList(languages, 'languageIds');
-        characteristicsDiv.append(selectList);
+    for(var name in paramsList) {
+        var selectList = CreateSelectList(paramsList[name], name);
+        characteristicsDiv.append(selectList); 
     }
 
     //функция, возвращающая функцию для call back'а

@@ -36,7 +36,7 @@ namespace LibiadaWeb.Models
             double sum = 0;
 
             for (int i = 0; i < data.Length; i++)
-                sum += System.Math.Pow((data[i] - avg), 2);
+                sum += Math.Pow((data[i] - avg), 2);
 
             return sum / len;
         }
@@ -65,7 +65,7 @@ namespace LibiadaWeb.Models
 
         public double[] GetAutoCorrelationOfSeries(double[] x)
         {
-            int half = (int)x.Length / 2;
+            int half = x.Length / 2;
             double[] autoCorrelation = new double[half];
             double[] a = new double[half];
             double[] b = new double[half];

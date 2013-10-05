@@ -50,7 +50,8 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds)
+        public ActionResult Index(long[] matterIds, 
+            int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
             List<String> chainNames = new List<string>();

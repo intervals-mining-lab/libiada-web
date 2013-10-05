@@ -28,24 +28,16 @@
     });
 
     function AddCharacteristic() {
+
+        var paramsList = new Object();
         
-        var characteristicTypes = new Array();
-        var linkUps = new Array();
+        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
+        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
 
-        @foreach (var option in ViewBag.characteristicsList)
-        {
-            @:characteristicTypes.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-
-        @foreach (var option in ViewBag.linkUpsList)
-        {
-            @:linkUps.push($("<option/>").attr("value", @option.Value).text('@option.Text'));
-        }
-
-        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, characteristicTypes, linkUps);
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);
         divCounter++;
-        
+
         return false;
     }
 </script>
@@ -55,68 +47,65 @@
     <table>
         <thead>
             <tr>
-                 <th>
-                    Название объекта
+                <th>Название объекта
                 </th>
-                <th>
-                    Описание
+                <th>Описание
                 </th>
-                <th>
-                    id
+                <th>id
                 </th>
             </tr>
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> matterCheckBoxes =
-                    Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.matterCheckBoxes);
+    List<MvcHtmlString> matterCheckBoxes =
+        Html.CheckBoxGroup("matterIds", (List<SelectListItem>)ViewBag.matterCheckBoxes);
 
-                for (int i = 0; i < matterCheckBoxes.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @matterCheckBoxes[i]
-                        </td>
-                        <td>
-                            @ViewBag.matters[i].description
-                        </td>
-                        <td>
-                            @ViewBag.matters[i].id_in_remote_db
-                        </td>
-                    </tr>
-                }
+    for (int i = 0; i < matterCheckBoxes.Count; i++)
+    {
+                <tr>
+                    <td>
+                        @matterCheckBoxes[i]
+                    </td>
+                    <td>
+                        @ViewBag.matters[i].description
+                    </td>
+                    <td>
+                        @ViewBag.matters[i].id_in_remote_db
+                    </td>
+                </tr>
+    }
             }
         </tbody>
     </table>
-    <br/>
+    <br />
     @Html.Label("Размер окна:")
-    <input type ="number" id ="length" name = "length" value="50"/>
+    <input type="number" id="length" name="length" value="50" />
     @Html.Label("Размер шага:")
-    <input type ="number" id ="step" name = "step" value="2"/>
-    <br/>
-    <br/>
+    <input type="number" id="step" name="step" value="2" />
+    <br />
+    <br />
     @Html.CheckBox("isDelta", "Считать разницу между характеристиками", null)
-    <br/>
+    <br />
     @Html.CheckBox("isGrowingWindow", "Считать увеличивающееся окно", null)
-    <br/>
+    <br />
     @Html.CheckBox("isFurie", "Быстрое преобразование Фурье", null)
-    <br/>
+    <br />
     @Html.CheckBox("isAutocorelation", "Вычислить авторикорреляционную функцию", null)
-    <br/>
+    <br />
     @Html.CheckBox("isMoveCoordinate", "Подвижное начало координат", null)
-    <br/>
+    <br />
   
    
     @Html.Label("Начало координат относительно блока")
-    <input type ="number" id ="startCoordinate" name = "startCoordinate" value="2"/>
-    <br/>
+    <input type="number" id="startCoordinate" name="startCoordinate" value="2" />
+    <br />
     @Html.CheckBox("isSetBeginAndEnd", "Задать начало и конец цепочки", null)
     <div>
         @Html.Label("Начало:")
-        <input type ="number" id ="beginOfChain" name = "beginOfChain" value="100"/>
+        <input type="number" id="beginOfChain" name="beginOfChain" value="100" />
         @Html.Label("Конец:")
-        <input type ="number" id ="endOfChain" name = "endOfChain" value="1000"/>
-        <br/>
+        <input type="number" id="endOfChain" name="endOfChain" value="1000" />
+        <br />
     </div>
     @Html.Label("Форма записи:")
     <select name="notationId">
@@ -125,7 +114,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
+    <br />
     @Html.Label("Язык:")
     <select name="languageId">
         @foreach (var option in ViewBag.languagesList)
@@ -133,12 +122,12 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
-    <br/>
-    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
-    <br/>
+    <br />
+    <br />
+    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику" />
+    <br />
     <div id="characteristics_list"></div>
-    <br/>
-    <br/>
+    <br />
+    <br />
     <input type="submit" value="Вычислить" />
 }
