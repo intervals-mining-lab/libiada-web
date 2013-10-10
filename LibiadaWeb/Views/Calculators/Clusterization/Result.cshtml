@@ -22,6 +22,7 @@
         colors.push('rgba( 0, 150, 0, .5)');
         colors.push('rgba( 0, 0, 150  .5)');
 
+        //TODO: брать данные прямо из viewbag, т.к. в таблице другой порядок
         var rows = $("#resultTable")[0].tBodies[0].rows;
         var clusterNumber = 0;
         for (var i = 1; i < rows.length; i++) {
