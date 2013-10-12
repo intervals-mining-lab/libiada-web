@@ -86,7 +86,7 @@
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> chainsList = Html.RadioButtonGroup("chainId", (List<SelectListItem>) ViewBag.chainsList);
+                List<MvcHtmlString> chainsList = Html.RadioButtonList("chainId", (List<SelectListItem>) ViewBag.chainsList);
 
                 for (int i = 0; i < chainsList.Count; i++)
                 {

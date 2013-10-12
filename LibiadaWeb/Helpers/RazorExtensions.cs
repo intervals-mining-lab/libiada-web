@@ -8,18 +8,18 @@ namespace LibiadaWeb.Helpers
 {
     public static class RazorExtensions
     {
-        public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.CheckBoxList(name, listInfo, null);
+            return htmlHelper.CheckBoxGroup(name, listInfo, null);
         }
 
-        public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.CheckBoxList(name, listInfo, new RouteValueDictionary(htmlAttributes));
+            return htmlHelper.CheckBoxGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
-        public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           IDictionary<string, object> htmlAttributes)
         {
             if (String.IsNullOrEmpty(name))
@@ -31,25 +31,25 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                sb.Append(htmlHelper.CreateInputElement(info, name, "checkbox", htmlAttributes));
+                sb.Append(htmlHelper.InputElement(info, name, "checkbox", htmlAttributes));
             }
 
             return MvcHtmlString.Create(sb.ToString());
         }
 
 
-        public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
+        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.CheckBoxGroup(name, listInfo, null);
+            return htmlHelper.CheckBoxList(name, listInfo, null);
         }
 
-        public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.CheckBoxGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
+            return htmlHelper.CheckBoxList(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
-        public static List<MvcHtmlString> CheckBoxGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           IDictionary<string, object> htmlAttributes)
         {
             if (String.IsNullOrEmpty(name))
@@ -61,24 +61,24 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                result.Add(htmlHelper.CreateInputElement(info, name, "checkbox", htmlAttributes));
+                result.Add(htmlHelper.InputElement(info, name, "checkbox", htmlAttributes));
             }
 
             return result;
         }
 
-        public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
+        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo)
         {
-            return htmlHelper.RadioButtonGroup(name, listInfo, null);
+            return htmlHelper.RadioButtonList(name, listInfo, null);
         }
 
-        public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           object htmlAttributes)
         {
-            return htmlHelper.RadioButtonGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
+            return htmlHelper.RadioButtonList(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
-        public static List<MvcHtmlString> RadioButtonGroup(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
+        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper htmlHelper, string name, IEnumerable<SelectListItem> listInfo,
                                           IDictionary<string, object> htmlAttributes)
         {
             if (String.IsNullOrEmpty(name))
@@ -90,13 +90,13 @@ namespace LibiadaWeb.Helpers
 
             foreach (SelectListItem info in listInfo)
             {
-                result.Add(htmlHelper.CreateInputElement(info, name, "radio", htmlAttributes));
+                result.Add(htmlHelper.InputElement(info, name, "radio", htmlAttributes));
             }
 
             return result;
         }
 
-        public static MvcHtmlString CreateInputElement(this HtmlHelper htmlHelper, SelectListItem info, String name, String type, IDictionary<string, object> htmlAttributes)
+        public static MvcHtmlString InputElement(this HtmlHelper htmlHelper, SelectListItem info, String name, String type, IDictionary<string, object> htmlAttributes)
         {
             TagBuilder elementBuilder = new TagBuilder("input");
             if (info.Selected)
@@ -112,6 +112,15 @@ namespace LibiadaWeb.Helpers
             return MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) + "<br />");
         }
 
+        /// <summary>
+        /// Костыль чтобы чекбоксы правильно передавались в контроллер.
+        /// без него при неотмеченном чекбоксе в контроллер придёт null и он умрёт.
+        /// </summary>
+        /// <param name="htmlHelper"></param>
+        /// <param name="name">Имя и идентификатор</param>
+        /// <param name="label">Текст рядом с галочкой</param>
+        /// <param name="htmlAttributes">дополнительные аттрибуты</param>
+        /// <returns></returns>
         public static MvcHtmlString CheckBox(this HtmlHelper htmlHelper, String name, String label, IDictionary<string, object> htmlAttributes)
         {
             TagBuilder elementBuilder = new TagBuilder("input");
@@ -128,6 +137,34 @@ namespace LibiadaWeb.Helpers
             hiddenElement.MergeAttribute("name", name);
 
             return MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) + hiddenElement.ToString(TagRenderMode.Normal) + "<br />");
+        }
+
+        public static MvcHtmlString MattersTable(this HtmlHelper htmlHelper, List<SelectListItem> listInfo, List<matter> data)
+        {
+            List<MvcHtmlString> checkBoxes = htmlHelper.CheckBoxList("matterIds", listInfo);
+            String br = Environment.NewLine;
+
+            TagBuilder name = new TagBuilder("th") {InnerHtml = "Название" };
+            TagBuilder description = new TagBuilder("th") { InnerHtml = "Описание" };
+            TagBuilder id = new TagBuilder("th") { InnerHtml = "id" };
+            TagBuilder headRow = new TagBuilder("tr") { InnerHtml = br + name + br + description + br + id + br };
+            TagBuilder header = new TagBuilder("thead") { InnerHtml = br + headRow + br };
+
+            TagBuilder body = new TagBuilder("tbody");
+
+            for (int i = 0; i < checkBoxes.Count; i++)
+            {
+
+                TagBuilder nameCell = new TagBuilder("td") { InnerHtml = checkBoxes[i].ToString() };
+                TagBuilder descriptionCell = new TagBuilder("td") { InnerHtml = data[i].description };
+                TagBuilder idCell = new TagBuilder("td") { InnerHtml = data[i].id_in_remote_db };
+                TagBuilder bodyRow = new TagBuilder("tr") { InnerHtml = br + nameCell + br + descriptionCell + br + idCell + br };
+                body.InnerHtml += br + bodyRow + br;
+            }
+
+            TagBuilder table = new TagBuilder("table") { InnerHtml = br + header + br + body + br };
+
+            return MvcHtmlString.Create(br + table + br);
         }
     }
 }

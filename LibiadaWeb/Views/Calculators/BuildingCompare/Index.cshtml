@@ -40,8 +40,8 @@
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> mattersList1 = Html.RadioButtonGroup("matterId1", (List<SelectListItem>) ViewBag.mattersList);
-                List<MvcHtmlString> mattersList2 = Html.RadioButtonGroup("matterId2", (List<SelectListItem>) ViewBag.mattersList);
+                List<MvcHtmlString> mattersList1 = Html.RadioButtonList("matterId1", (List<SelectListItem>) ViewBag.mattersList);
+                List<MvcHtmlString> mattersList2 = Html.RadioButtonList("matterId2", (List<SelectListItem>) ViewBag.mattersList);
 
                 for (int i = 0; i < mattersList1.Count; i++)
                 {

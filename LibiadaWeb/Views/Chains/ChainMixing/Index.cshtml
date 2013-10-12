@@ -39,10 +39,10 @@
         </thead>
         <tbody>
             @{
-    List<MvcHtmlString> mattersList = Html.RadioButtonGroup("matterId", (List<SelectListItem>)ViewBag.mattersList);
+                List<MvcHtmlString> mattersList = Html.RadioButtonList("matterId", (List<SelectListItem>) ViewBag.mattersList);
 
-    for (int i = 0; i < mattersList.Count; i++)
-    {
+                for (int i = 0; i < mattersList.Count; i++)
+                {
                     <tr>
                         <td>
                             @mattersList[i]
@@ -51,7 +51,7 @@
                             @ViewBag.matters[i].nature.name
                         </td>
                     </tr>
-    }
+                }
             }
         </tbody>
     </table>

@@ -40,7 +40,7 @@
         </thead>
         <tbody>
             @{
-                List<MvcHtmlString> chainsList = Html.CheckBoxGroup("chainIds", (List<SelectListItem>) ViewBag.chainsList);
+                List<MvcHtmlString> chainsList = Html.CheckBoxList("chainIds", (List<SelectListItem>) ViewBag.chainsList);
 
                 for (int i = 0; i < chainsList.Count; i++)
                 {

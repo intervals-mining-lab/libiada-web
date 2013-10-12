@@ -1,4 +1,5 @@
-﻿@using LibiadaWeb.Helpers
+﻿@using LibiadaWeb
+@using LibiadaWeb.Helpers
 @model dynamic
 
 @{
@@ -46,42 +47,8 @@
 
 @using (Html.BeginForm())
 {
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    Название объекта
-                </th>
-                <th>
-                    Описание
-                </th>
-                <th>
-                    id
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                List<MvcHtmlString> matterCheckBoxes = 
-                    Html.CheckBoxGroup("matterIds", (List<SelectListItem>) ViewBag.matterCheckBoxes);
-
-                for (int i = 0; i < matterCheckBoxes.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @matterCheckBoxes[i]
-                        </td>
-                        <td>
-                            @ViewBag.matters[i].description
-                        </td>
-                        <td>
-                            @ViewBag.matters[i].id_in_remote_db
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+    @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<matter>)ViewBag.matters)
+    <br/>
     @Html.Label("Количество таксонов")
     <input class="text-box single-line" id="clustersCount" name="clustersCount" type="number" value="2" />
     <br/>
