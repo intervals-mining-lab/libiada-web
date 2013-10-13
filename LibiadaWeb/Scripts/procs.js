@@ -51,3 +51,19 @@ function CreateCharacteristicsBlock(divNumber, paramsList) {
 
     return characteristicsDiv;
 }
+
+function AddDataTables() {
+    window.formTable = $("table").dataTable({
+        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
+        bJQueryUI: true,
+        sPaginationType: "full_numbers"
+    });
+}
+
+function AddDataTablesWithSubmit() {
+    AddDataTables();
+
+    $('form').submit(function () {
+        $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
+    });
+}

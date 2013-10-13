@@ -108,18 +108,18 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString InputElement(this HtmlHelper helper, SelectListItem info, String name,
                                                  String type, IDictionary<string, object> htmlAttributes)
         {
-            TagBuilder elementBuilder = new TagBuilder("input");
+            TagBuilder inputElement = new TagBuilder("input");
             if (info.Selected)
             {
-                elementBuilder.MergeAttribute("checked", "checked");
+                inputElement.MergeAttribute("checked", "checked");
             }
-            elementBuilder.MergeAttributes(htmlAttributes);
-            elementBuilder.MergeAttribute("type", type);
-            elementBuilder.MergeAttribute("value", info.Value);
-            elementBuilder.MergeAttribute("name", name);
-            elementBuilder.InnerHtml = info.Text;
+            inputElement.MergeAttributes(htmlAttributes);
+            inputElement.MergeAttribute("type", type);
+            inputElement.MergeAttribute("value", info.Value);
+            inputElement.MergeAttribute("name", name);
+            inputElement.InnerHtml = info.Text;
 
-            return MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) + "<br />");
+            return MvcHtmlString.Create(inputElement.ToString(TagRenderMode.Normal) + br);
         }
 
         /// <summary>
@@ -134,13 +134,16 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString CheckBox(this HtmlHelper helper, String name, String label,
                                              IDictionary<string, object> htmlAttributes)
         {
-            TagBuilder elementBuilder = new TagBuilder("input");
-            elementBuilder.MergeAttributes(htmlAttributes);
-            elementBuilder.MergeAttribute("type", "checkbox");
-            elementBuilder.MergeAttribute("value", "true");
-            elementBuilder.MergeAttribute("name", name);
-            elementBuilder.MergeAttribute("id", name);
-            elementBuilder.InnerHtml = label;
+            TagBuilder checkBoxElement = new TagBuilder("input");
+            checkBoxElement.MergeAttributes(htmlAttributes);
+            checkBoxElement.MergeAttribute("type", "checkbox");
+            checkBoxElement.MergeAttribute("value", "true");
+            checkBoxElement.MergeAttribute("name", name);
+            checkBoxElement.MergeAttribute("id", name);
+
+            TagBuilder labelElement = new TagBuilder("label");
+            labelElement.MergeAttribute("for", name);
+            labelElement.InnerHtml = label;
 
             TagBuilder hiddenElement = new TagBuilder("input");
             hiddenElement.MergeAttribute("type", "hidden");
@@ -148,8 +151,8 @@ namespace LibiadaWeb.Helpers
             hiddenElement.MergeAttribute("name", name);
 
             return
-                MvcHtmlString.Create(elementBuilder.ToString(TagRenderMode.Normal) +
-                                     hiddenElement.ToString(TagRenderMode.Normal) + "<br />");
+                MvcHtmlString.Create(checkBoxElement.ToString(TagRenderMode.Normal) + labelElement.ToString(TagRenderMode.Normal) +
+                                     hiddenElement.ToString(TagRenderMode.Normal) + br);
         }
 
         public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,

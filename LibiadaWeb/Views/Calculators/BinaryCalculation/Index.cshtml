@@ -7,23 +7,12 @@
 
 <script type="text/javascript">
 
-    var formTable;
-
     $(document).ready(function () {
         $('input[name="chainId"]').each(function (i, item) {
             $(item).click(GetChainElements);
         });
 
-        formTable = $("table").dataTable({
-            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
-            bJQueryUI: true,
-            sPaginationType: "full_numbers"
-        });
-        
-        $('form').submit(function () {
-            //сабмитим скрытые отмеченные чекбоксы
-            $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
-        });
+        AddDataTablesWithSubmit();
     });
 
     function FiltrationSwitch() {

@@ -15,6 +15,7 @@
     var partNames = new Array();
     var chainNames = new Array();
     var points = new Array();
+    var slider;
 
     $(document).ready(function() {
 
@@ -55,11 +56,7 @@
             }
         }
         
-        $("table").dataTable({
-            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
-            bJQueryUI: true,
-            sPaginationType: "full_numbers"
-        });
+        AddDataTables();
 
         // make the container smaller and add a second container for the master chart
         var container = $('#visualization_container')
@@ -355,6 +352,7 @@
     }
 </select>
 <br/>
-<input type="checkbox" name = "allGraphics" id="allGraphics" value="true" >Вывести все графики сразу</input>
+<input type="checkbox" name = "allGraphics" id="allGraphics" value="true" />
+<label for = "allGraphics">Вывести все графики сразу</label>
 <br/>
 <button onclick="DrawChart()" >Отобразить разбиение</button>
