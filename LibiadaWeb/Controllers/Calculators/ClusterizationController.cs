@@ -37,7 +37,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            List<matter> matters = db.matter.ToList();
+            List<matter> matters = db.matter.Include("nature").ToList();
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
