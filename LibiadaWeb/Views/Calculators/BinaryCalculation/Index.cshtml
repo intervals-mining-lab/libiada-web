@@ -15,18 +15,6 @@
         AddDataTablesWithSubmit();
     });
 
-    function FiltrationSwitch() {
-        SwitchVisibility($("#filterDiv")[0]);
-    }
-
-    function FrequencySwitch() {
-        SwitchVisibility($("#frequencyDiv")[0]);
-    }
-    
-    function OneWordSwitch() {
-        SwitchVisibility($("#oneWordDiv")[0]);
-    }
-
     function GetChainElements(event) {
         $.ajax({
             url: "/api/ChainElements/" + event.target.value,
@@ -115,21 +103,21 @@
     </select>
     <br/>
     <br/>
-    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object> {{"onclick", "FiltrationSwitch()"}})
+    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object> {{"onclick", "SwitchVisibilityByName('filterDiv')"}})
     <br/>
     <div id="filterDiv" hidden>
         @Html.Label("Число выводимых зависимостей")
         <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object> {{"onclick", "FrequencySwitch()"}})
+    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object> {{"onclick", "SwitchVisibilityByName('frequencyDiv')"}})
     <br/>
     <div id="frequencyDiv" hidden>
         @Html.Label("X:")
         <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object> {{"onclick", "OneWordSwitch()"}})
+    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object> {{"onclick", "SwitchVisibilityByName('oneWordDiv')"}})
     <br/>
     <div id="oneWordDiv" hidden>
         

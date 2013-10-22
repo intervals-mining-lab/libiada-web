@@ -31,6 +31,11 @@ function SwitchVisibility(element) {
     }
 }
 
+function SwitchVisibilityByName(name) {
+    var element = $("#" + name)[0];
+    SwitchVisibility(element);
+}
+
 function CreateCharacteristicsBlock(divNumber, paramsList) {
     var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divNumber).attr('id', 'characteristic' + divNumber);
 
