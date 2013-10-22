@@ -3732,7 +3732,7 @@
 <edmx:Connection><edmx:DesignerInfoPropertySet><edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" /></edmx:DesignerInfoPropertySet></edmx:Connection>
 <edmx:Options />
 <edmx:Diagrams>
-  <edmx:Diagram Name="LibiadaWeb" ZoomLevel="64">
+  <edmx:Diagram Name="LibiadaWeb" ZoomLevel="109">
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.alphabet" Width="1.5" PointX="5.75" PointY="11.875" Height="1.9802864583333353" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.binary_characteristic" Width="1.875" PointX="12.875" PointY="8.625" Height="3.7109993489583317" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.catalog_table" Width="1.5" PointX="3.25" PointY="3.875" Height="1.5956835937499996" IsExpanded="true" />

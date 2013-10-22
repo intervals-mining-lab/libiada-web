@@ -73,13 +73,13 @@
         var min = $("#slider_container").rangeSlider("min");
         var max = $("#slider_container").rangeSlider("max");
           
-        var detailData = [];
+        
 
         min =+min;
         max =+max; 
 
-        // reverse engineer the last part of the data
         for (var i = 0; i < points.length; i++) {
+            var detailData = [];
             for (var k = 0; k < points[i].length; k++) {
                 jQuery.each(points[i][k], function(zero, point) {
                     if (point.x > min && point.x < max) {
@@ -89,10 +89,12 @@
                         });
                     }
                 });
+                
             }
+            detailChart.series[i].setData(detailData);
         }
         
-        detailChart.series[0].setData(detailData);
+        
     }
     
     // create the detail chart
@@ -260,6 +262,7 @@
         });
         $("#slider_container").bind("valuesChanging", function(e, data){
             setScale();
+
         });
         if ($("#allGraphics")[0].checked) {
             for (var j = 0; j < $("#yaxis option").length; j++) {
@@ -318,7 +321,7 @@
 </div>
 <br/>
 <div style="width: 800px; height: 300px;">
-    <div id="control-form" style ="clear:both"> 
+    <div id="control-form" style ="clear: both"> 
         <label>Левая граница 
             <input type="number" id="leftArrow" name="leftArrow" value="5" />
         </label>
@@ -351,4 +354,4 @@
 <input type="checkbox" name = "allGraphics" id="allGraphics" value="true" />
 <label for = "allGraphics">Вывести все графики сразу</label>
 <br/>
-<button onclick="DrawChart()" >Отобразить разбиение</button>
+<button onclick="DrawChart()">Отобразить разбиение</button>
