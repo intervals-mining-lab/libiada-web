@@ -37,22 +37,29 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            ViewBag.chains = db.chain.ToList();
-            List<literature_chain> literatureChains = new List<literature_chain>();
+            List<chain> chains = db.chain.Include("matter").ToList();
+            ViewBag.chainCheckBoxes = chainRepository.GetSelectListItems(chains, null);
+            ViewBag.chains = chains;
+            List<String> languages = new List<String>();
+            List<String> fastaHeaders = new List<String>();
             foreach (chain chain in ViewBag.chains)
             {
-                literatureChains.Add(chain.matter.nature.id == Aliases.NatureLiterature
-                                         ? db.literature_chain.Single(l => l.id == chain.id)
+                languages.Add(chain.matter.nature.id == Aliases.NatureLiterature
+                                         ? db.literature_chain.Single(l => l.id == chain.id).language.name
                                          : null);
+                fastaHeaders.Add(chain.matter.nature.id == Aliases.NatureGenetic
+                                         ? db.dna_chain.Single(l => l.id == chain.id).fasta_header
+                                         : null);
+
             }
-            ViewBag.literatureChains = literatureChains;
-            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.languages = languages;
+            ViewBag.fastaHeaders = fastaHeaders;
+
             ViewBag.chainsList = chainRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
                 db.characteristic_type.Where(c => Aliases.ApplicabilityBinary.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();
         }
 

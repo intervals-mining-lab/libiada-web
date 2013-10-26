@@ -8,7 +8,7 @@ namespace LibiadaWeb.Helpers
 {
     public static class RazorExtensions
     {
-        private static readonly String br = Environment.NewLine;
+        private static readonly String Br = Environment.NewLine;
 
         public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name,
                                                   IEnumerable<SelectListItem> listInfo)
@@ -119,7 +119,7 @@ namespace LibiadaWeb.Helpers
             inputElement.MergeAttribute("name", name);
             inputElement.InnerHtml = info.Text;
 
-            return MvcHtmlString.Create(inputElement.ToString(TagRenderMode.Normal) + br);
+            return MvcHtmlString.Create(inputElement.ToString(TagRenderMode.Normal) + Br);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace LibiadaWeb.Helpers
 
             return
                 MvcHtmlString.Create(checkBoxElement.ToString(TagRenderMode.Normal) + labelElement.ToString(TagRenderMode.Normal) +
-                                     hiddenElement.ToString(TagRenderMode.Normal) + br);
+                                     hiddenElement.ToString(TagRenderMode.Normal) + Br);
         }
 
         public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
@@ -177,7 +177,33 @@ namespace LibiadaWeb.Helpers
             return helper.Table(headers, bodyData);
         }
 
-        public static MvcHtmlString Table(this HtmlHelper helper, List<String> headers,
+        public static MvcHtmlString ChainsTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
+                                                 List<chain> chains, List<String> languages, List<String> fastaHeaders)
+        {
+            List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
+
+            List<String> headers = new List<String> { "Название", "Форма записи", "Дата создания", "Тип фрагмента", "Позиция фрагмента", "Язык", "Заголовок fasta файла" };
+
+            List<List<String>> bodyData = new List<List<String>>();
+
+            for (int i = 0; i < checkBoxes.Count; i++)
+            {
+                bodyData.Add(new List<String>());
+
+                bodyData[i].Add(checkBoxes[i].ToString());
+                bodyData[i].Add(chains[i].notation.name);
+                bodyData[i].Add(chains[i].creation_date.ToString());
+                bodyData[i].Add(chains[i].piece_type.name);
+                bodyData[i].Add(chains[i].piece_position.ToString());
+                bodyData[i].Add(languages[i]);
+                bodyData[i].Add(fastaHeaders[i]);
+
+            }
+
+            return helper.Table(headers, bodyData);
+        }
+
+        public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers,
                                           List<List<String>> data)
         {
             TagBuilder header = new TagBuilder("thead")
@@ -199,27 +225,27 @@ namespace LibiadaWeb.Helpers
 
             TagBuilder table = new TagBuilder("table")
                 {
-                    InnerHtml = br + header + br + body + br
+                    InnerHtml = Br + header + Br + body + Br
                 };
             
-            return MvcHtmlString.Create(br + table + br);
+            return MvcHtmlString.Create(Br + table + Br);
         }
 
-        private static String TableRow(List<String> data, bool header)
+        private static String TableRow(IEnumerable<string> cells, bool header)
         {
             String cellType = header ? "th" : "td";
 
-            StringBuilder builder = new StringBuilder(br);
+            StringBuilder builder = new StringBuilder(Br);
 
-            for (int i = 0; i < data.Count; i++)
+            foreach (string cell in cells)
             {
-                TagBuilder dataCell = new TagBuilder(cellType) {InnerHtml = data[i] };
+                TagBuilder dataCell = new TagBuilder(cellType) {InnerHtml = cell };
                 builder.AppendLine(dataCell.ToString());
             }
 
-            TagBuilder dataRow = new TagBuilder("tr") { InnerHtml = builder.ToString() };
+            TagBuilder result = new TagBuilder("tr") { InnerHtml = builder.ToString() };
 
-            return br + dataRow + br;
+            return Br + result + Br;
         }
     }
 }

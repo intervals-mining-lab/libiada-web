@@ -100,11 +100,10 @@ namespace LibiadaWeb.Controllers.Chains
                     TempData["message"] = "Длина цепочки в базе " + dbChain.Length + 
                                           ", а длина цепочки из файла " + libiadaChain.Length;
                 }
-
+                int[] libiadaBuilding = libiadaChain.Building;
+                int[] dbBuilding = dbChain.Building;
                 for (int j = 0; j < libiadaChain.Length; j++)
                 {
-                    int[] libiadaBuilding = libiadaChain.Building;
-                    int[] dbBuilding = dbChain.Building;
                     if (libiadaBuilding[j] != dbBuilding[j])
                     {
                         TempData["message"] = j + " элементы цепочек не совпадают. В базе " + 

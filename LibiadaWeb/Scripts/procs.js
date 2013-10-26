@@ -65,10 +65,10 @@ function AddDataTables() {
     });
 }
 
-function AddDataTablesWithSubmit() {
+function AddDataTablesWithSubmit(name) {
     AddDataTables();
-
-    $('form').submit(function () {
+    name = name || 'form';
+    $(name).submit(function () {
         $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
     });
 }
