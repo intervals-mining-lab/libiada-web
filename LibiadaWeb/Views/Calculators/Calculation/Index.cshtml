@@ -1,4 +1,5 @@
-﻿@using LibiadaWeb
+﻿@using System.Web.Script.Serialization
+@using LibiadaWeb
 @using LibiadaWeb.Helpers
 @model dynamic
 
@@ -12,19 +13,82 @@
 
     var divCounter = 0;
 
+    function Characteristic(characteristicType, linkUp, notation, language) {
+        var self = this;
+        self.characteristicType = ko.observable(characteristicType);
+        self.linkUp = ko.observable(linkUp);
+        self.notation = ko.observable(notation);
+        self.language = ko.observable(language);
+    }
+
+    function CharacteristicsViewModel() {
+        var self = this;
+        self.characteristicTypes = @Html.Raw(Json.Encode(ViewBag.characteristicsList)) ;
+        self.linkUps = @Html.Raw(Json.Encode(ViewBag.linkUpsList)) ;
+        self.notations = @Html.Raw(Json.Encode(ViewBag.notationsList)) ;
+        self.languages = @Html.Raw(Json.Encode(ViewBag.languagesList)) ;
+        
+        // Editable data
+        self.characteristics = ko.observableArray([
+            new Characteristic(self.characteristicTypes[0],self.linkUps[0],self.notations[0],self.languages[0])
+        ]);
+
+        self.characteristicIds = ko.computed(function() {
+            var ids = new Array();
+            for (var i = 0; i < self.characteristics().length; i++) {
+                ids.push(self.characteristics()[i].characteristicType().Value);
+            }
+            return ids;
+        });
+        
+        self.linkUpIds = ko.computed(function() {
+            var ids = new Array();
+            for (var i = 0; i < self.characteristics().length; i++) {
+                ids.push(self.characteristics()[i].linkUp().Value);
+            }
+            return ids;
+        });
+        
+        self.notationIds = ko.computed(function() {
+            var ids = new Array();
+            for (var i = 0; i < self.characteristics().length; i++) {
+                ids.push(self.characteristics()[i].notation().Value);
+            }
+            return ids;
+        });
+        
+        self.languageIds = ko.computed(function() {
+            var ids = new Array();
+            for (var i = 0; i < self.characteristics().length; i++) {
+                ids.push(self.characteristics()[i].language().Value);
+            }
+            return ids;
+        });
+
+        
+        
+        self.AddCharacteristic = function() {
+            self.characteristics.push(
+                new Characteristic(self.characteristicTypes[0],self.linkUps[0],self.notations[0],self.languages[0])
+            );
+        };
+
+        self.DeleteCharacteristic = function(characteristic) { self.characteristics.remove(characteristic); };
+    }
+
+    
+
+
     $(document).ready(function () {
         AddDataTablesWithSubmit();
-
-        AddCharacteristic();
+        ko.applyBindings(new CharacteristicsViewModel());
+ //       AddCharacteristic();
     });
 
     function AddCharacteristic() {
         var paramsList = new Object();
 
-        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
-        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
-        @Helpers.FillParamsList("notationIds", ViewBag.notationsList)
-        @Helpers.FillParamsList("languageIds", ViewBag.languagesList)
+        
 
         var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);
@@ -36,10 +100,41 @@
 
 @using (Html.BeginForm())
 {
-    @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<matter>)ViewBag.matters)
+    @Html.MattersTable((List<SelectListItem>) ViewBag.matterCheckBoxes, (List<matter>) ViewBag.matters)
     <br/>
-    <input type="button" onclick="AddCharacteristic() " value="Добавить характеристику"/>
-    <div id="characteristics_list"></div>
+    <button data-bind="click: AddCharacteristic">Добавить характеристику</button>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Характеристика</th>
+                <th>привязка</th>
+                <th>Форма записи</th>
+                <th>Язык</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: characteristics">
+            <tr>
+                <td>
+                    <select name="characteristicIds" data-bind="options: $root.characteristicTypes, optionsText: 'Text', optionsValue: 'Value'"></select>
+                </td>
+                <td>
+                    <select name="linkUpIds" data-bind="options: $root.linkUps, optionsText: 'Text', optionsValue: 'Value'"></select>
+                </td>
+                <td>
+                    <select name="notationIds" data-bind="options: $root.notations, optionsText: 'Text', optionsValue: 'Value'"></select>
+                </td>
+                <td>
+                    <select name="languageIds" data-bind="options: $root.languages, optionsText: 'Text', optionsValue: 'Value'"></select>
+                </td>
+                <td>
+                    <button data-bind="click: $root.DeleteCharacteristic">Удалить</button>
+                </td>
+            </tr>    
+        </tbody>
+    </table>
+
     <br/>
     <br/>
     <input type="submit" value="Вычислить" />

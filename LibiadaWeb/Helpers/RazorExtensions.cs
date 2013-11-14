@@ -26,16 +26,13 @@ namespace LibiadaWeb.Helpers
                                                   IEnumerable<SelectListItem> listInfo,
                                                   IDictionary<string, object> htmlAttributes)
         {
-            if (String.IsNullOrEmpty(name))
-                throw new ArgumentException("The argument must have a value", "name");
-            if (listInfo == null)
-                throw new ArgumentNullException("listInfo");
+            List<MvcHtmlString> checkBoxList = helper.CheckBoxList(name, listInfo, htmlAttributes);
 
             StringBuilder sb = new StringBuilder();
 
-            foreach (SelectListItem info in listInfo)
+            foreach (MvcHtmlString checkBox in checkBoxList)
             {
-                sb.Append(helper.InputElement(info, name, "checkbox", htmlAttributes));
+                sb.Append(checkBox);
             }
 
             return MvcHtmlString.Create(sb.ToString());
