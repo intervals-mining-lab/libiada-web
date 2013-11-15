@@ -31,7 +31,7 @@ namespace LibiadaWeb
                         "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
-                        "~/Scripts/procs.js"));
+                        "~/Scripts/procedures.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout.js").Include(
                         "~/Scripts/knockout-{version}.js"));

@@ -223,8 +223,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CheckBoxGroupHelper.cs" />
+    <Compile Include="Helpers\CheckBoxListHelper.cs" />
     <Compile Include="Helpers\DataTransformators.cs" />
-    <Compile Include="Helpers\RazorExtensions.cs" />
+    <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="Helpers\JavaScriptHelper.cs" />
+    <Compile Include="Helpers\RadioButtonListHelper.cs" />
+    <Compile Include="Helpers\TableHelper.cs" />
     <Compile Include="LibiadaWeb.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -514,7 +519,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="App_Code\Helpers.cshtml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jQAllRangeSliders-withRuler-min.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -529,7 +533,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\knockout-3.0.0.debug.js" />
     <Content Include="Scripts\knockout-3.0.0.js" />
-    <Content Include="Scripts\procs.js" />
+    <Content Include="Scripts\procedures.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -578,6 +582,7 @@
     <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Code\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

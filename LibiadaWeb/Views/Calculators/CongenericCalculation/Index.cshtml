@@ -22,10 +22,10 @@
         
         var paramsList = new Object();
         
-        @Helpers.FillOptionsList("characteristicIds", ViewBag.characteristicsList)
-        @Helpers.FillOptionsList("linkUpIds",  ViewBag.linkUpsList)
-        @Helpers.FillOptionsList("notationIds", ViewBag.notationsList)
-        @Helpers.FillOptionsList("languageIds", ViewBag.languagesList)
+        @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
+        @Html.FillOptionsList("linkUpIds",  (IEnumerable<SelectListItem>)ViewBag.linkUpsList)
+        @Html.FillOptionsList("notationIds", (IEnumerable<SelectListItem>)ViewBag.notationsList)
+        @Html.FillOptionsList("languageIds", (IEnumerable<SelectListItem>)ViewBag.languagesList)
 
         var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);
