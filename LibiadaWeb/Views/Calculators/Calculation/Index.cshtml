@@ -10,36 +10,56 @@
 
 <script type="text/javascript">
 
-    var divCounter = 0;
+    function Characteristic(characteristicType, linkUp, notation, language) {
+        var self = this;
+        self.characteristicType = ko.observable(characteristicType);
+        self.linkUp = ko.observable(linkUp);
+        self.notation = ko.observable(notation);
+        self.language = ko.observable(language);
+    }
+
+    function CharacteristicsViewModel() {
+        var self = this;
+        
+        self.characteristicTypes = @Html.Raw(Json.Encode(ViewBag.characteristicsList)) ;
+        self.linkUps = @Html.Raw(Json.Encode(ViewBag.linkUpsList)) ;
+        self.notations = @Html.Raw(Json.Encode(ViewBag.notationsList)) ;
+        self.languages = @Html.Raw(Json.Encode(ViewBag.languagesList)) ;
+        
+        
+        self.characteristics = ko.observableArray([
+            new Characteristic(self.characteristicTypes[0],self.linkUps[0],self.notations[0],self.languages[0])
+        ]);
+        
+        self.AddCharacteristic = function() {
+            self.characteristics.push(
+                new Characteristic(self.characteristicTypes[0],self.linkUps[0],self.notations[0],self.languages[0])
+            );
+        };
+
+        self.DeleteCharacteristic = function(characteristic) { self.characteristics.remove(characteristic); };
+    }
 
     $(document).ready(function () {
         AddDataTablesWithSubmit();
-
-        AddCharacteristic();
+        ko.applyBindings(new CharacteristicsViewModel());
     });
-
-    function AddCharacteristic() {
-        var paramsList = new Object();
-
-        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
-        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
-        @Helpers.FillParamsList("notationIds", ViewBag.notationsList)
-        @Helpers.FillParamsList("languageIds", ViewBag.languagesList)
-
-        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
-        $("#characteristics_list").append(characteristicsDiv);
-        divCounter++;
-        
-        return false;
-    }
 </script>
 
 @using (Html.BeginForm())
 {
-    @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<matter>)ViewBag.matters)
+    @Html.MattersTable((List<SelectListItem>) ViewBag.matterCheckBoxes, (List<matter>) ViewBag.matters)
     <br/>
-    <input type="button" onclick="AddCharacteristic() " value="Добавить характеристику"/>
-    <div id="characteristics_list"></div>
+    <button data-bind="click: AddCharacteristic">Добавить характеристику</button>
+    <br/>
+    <div data-bind="foreach: characteristics">
+        <select name="characteristicIds" title="Характеристика" data-bind="options: $root.characteristicTypes, optionsText: 'Text', optionsValue: 'Value'"></select>
+        <select name="linkUpIds" title="Привязка" data-bind="options: $root.linkUps, optionsText: 'Text', optionsValue: 'Value'"></select>
+        <select name="notationIds" title="Форма записи" data-bind="options: $root.notations, optionsText: 'Text', optionsValue: 'Value'"></select>
+        <select name="languageIds" title="Язык" data-bind="options: $root.languages, optionsText: 'Text', optionsValue: 'Value'"></select>
+        <button data-bind="click: $root.DeleteCharacteristic, enable: $root.characteristics().length > 1">Удалить</button>
+        <br/>
+    </div>
     <br/>
     <br/>
     <input type="submit" value="Вычислить" />

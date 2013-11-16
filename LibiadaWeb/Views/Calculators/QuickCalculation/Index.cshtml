@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using LibiadaWeb.Helpers
+@model dynamic
 
 @{
     ViewBag.Title = "Вычисление характеристик произвольной цепочки";
@@ -19,8 +20,8 @@
         
         var paramsList = new Object();
         
-        @Helpers.FillParamsList("characteristicIds", ViewBag.characteristicsList)
-        @Helpers.FillParamsList("linkUpIds",  ViewBag.linkUpsList)
+        @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
+        @Html.FillOptionsList("linkUpIds",  (IEnumerable<SelectListItem>)ViewBag.linkUpsList)
 
         var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);

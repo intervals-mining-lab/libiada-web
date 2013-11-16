@@ -3,10 +3,18 @@
 	НАВИГАЦИЯ
 \*------------------------------------*/
 
-#nav ul {
+#nav ul
+{
     z-index: 1000;
-    margin:0;
-	padding:0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    left: -9999px; /* Скрываем за экраном, когда не нужно (данный метод лучше, чем display:none;) */
+    -webkit-transition: 0.25s linear opacity;
+    -moz-transition: 0.25s linear opacity;
+    -o-transition: 0.25s linear opacity;
+    transition: 0.25s linear opacity; /* В Webkit выпадающие пункты будут проявляться */
 }
 
 #nav {
@@ -48,16 +56,9 @@
     padding: 0;
 }
 /*--- ВЫПАДАЮЩИЕ ПУНКТЫ ---*/
-#nav ul{
-	list-style:none;
-	position:absolute;
-	left:-9999px; /* Скрываем за экраном, когда не нужно (данный метод лучше, чем display:none;) */
-	-webkit-transition:0.25s linear opacity; /* В Webkit выпадающие пункты будут проявляться */
-}
 #nav ul li{
 	padding-top:1px; /* Вводим отступ между li чтобы создать иллюзию разделенных пунктов меню */
 	float:none;
-	background:url(dot.gif);
 }
 #nav ul a{
 	white-space:nowrap; /* Останавливаем перенос текста и создаем многострочный выпадающий пункт */
@@ -71,9 +72,13 @@
 	background:#696969;
 	text-decoration:underline;
 }
-#nav li:hover ul a{ /* Изменяем некоторые стили верхнего уровня при выводе выпадающего пункта */
-	text-decoration:none;
-	-webkit-transition:-webkit-transform 0.075s linear;
+#nav li:hover ul a
+{ /* Изменяем некоторые стили верхнего уровня при выводе выпадающего пункта */
+    text-decoration: none;
+    -webkit-transition: -webkit-transform 0.075s linear;
+    -moz-transition: -webkit-transform 0.075s linear;
+    -o-transition: -webkit-transform 0.075s linear;
+    transition: -webkit-transform 0.075s linear;
 }
 #nav li:hover ul li a:hover{ /* Устанавливаем стили для выпадающих пунктов, когда курсор наводится на конкретный пункт */
 	background:#333;
