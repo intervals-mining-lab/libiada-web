@@ -18,7 +18,6 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly LibiadaWebEntities db;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly LinkUpRepository linkUpRepository;
-        private readonly NotationRepository notationRepository;
         private readonly ChainRepository chainRepository;
         private readonly BinaryCharacteristicRepository binaryCharacteristicRepository;
 
@@ -27,7 +26,6 @@ namespace LibiadaWeb.Controllers.Calculators
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkUpRepository = new LinkUpRepository(db);
-            notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
         }
@@ -160,7 +158,7 @@ namespace LibiadaWeb.Controllers.Calculators
             TempData["filteredResult"] = filteredResult;
             TempData["firstElements"] = firstElements;
             TempData["secondElements"] = secondElements;
-            TempData["filtersize"] = filterSize;
+            TempData["filterSize"] = filterSize;
             TempData["characteristics"] = characteristics;
             TempData["elements"] = elements;
             TempData["characteristicName"] =
@@ -313,8 +311,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private void SortKeyValuePairList(List<KeyValuePair<IBaseObject, double>> arrayForSort)
         {
             arrayForSort.Sort(
-                delegate(KeyValuePair<IBaseObject, double> firstPair, KeyValuePair<IBaseObject, double> nextPair)
-                    { return nextPair.Value.CompareTo(firstPair.Value); });
+                (firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
         }
 
         public ActionResult Result()
@@ -333,7 +330,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
             if ((bool) TempData["filter"])
             {
-                ViewBag.filtersize = TempData["filtersize"];
+                ViewBag.filtersize = TempData["filterSize"];
                 ViewBag.filteredResult = TempData["filteredResult"] as List<binary_characteristic>;
             }
             else
