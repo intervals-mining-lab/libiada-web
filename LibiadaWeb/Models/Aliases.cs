@@ -6,9 +6,9 @@ namespace LibiadaWeb.Models
     {
         #region Language
 
-        public const int LanguageRussian = 11;
-        public const int LanguageEnglish = 12;
-        public const int LanguageGerman = 13;
+        public const int LanguageRussian = 1;
+        public const int LanguageEnglish = 2;
+        public const int LanguageGerman = 3;
 
         #endregion
 
@@ -57,31 +57,32 @@ namespace LibiadaWeb.Models
         public const int NotationNucleotide = 1;
         public const int NotationTriplet = 2;
         public const int NotationAminoAcid = 3;
-        public const int NotationSegmented = 6;
-        public const int NotationWords = 15;
-        public const int NotationFmotivs = 16;
-        public const int NotationMeasures = 18;
-        public const int NotationNotes = 19;
+        public const int NotationSegmented = 4;
+        public const int NotationWords = 5;
+        public const int NotationFmotivs = 6;
+        public const int NotationMeasures = 7;
+        public const int NotationNotes = 8;
+        public const int NotationLetters = 9;
 
         #endregion
 
         #region NoteSymbol
 
-        public const int NoteSymbolA = 25;
-        public const int NoteSymbolB = 26;
-        public const int NoteSymbolC = 27;
-        public const int NoteSymbolD = 28;
-        public const int NoteSymbolE = 29;
-        public const int NoteSymbolF = 30;
-        public const int NoteSymbolG = 31;
+        public const int NoteSymbolA = 1;
+        public const int NoteSymbolB = 2;
+        public const int NoteSymbolC = 3;
+        public const int NoteSymbolD = 4;
+        public const int NoteSymbolE = 5;
+        public const int NoteSymbolF = 6;
+        public const int NoteSymbolG = 7;
 
         #endregion
 
         #region PieceType
 
         public const int PieceTypeFullGenome = 1;
-        public const int PieceTypeFullText = 7;
-        public const int PieceTypeFuulSong = 8;
+        public const int PieceTypeFullText = 2;
+        public const int PieceTypeFuulSong = 3;
 
         #endregion
 

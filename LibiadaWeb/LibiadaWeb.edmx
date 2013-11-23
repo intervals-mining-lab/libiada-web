@@ -7,7 +7,6 @@
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.Store.alphabet" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.Store.binary_characteristic" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="building" EntityType="LibiadaWebModel.Store.building" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.Store.catalog_table" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.Store.chain" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.Store.characteristic" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="characteristic_group" EntityType="LibiadaWebModel.Store.characteristic_group" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -271,14 +270,6 @@
     <Property Name="index" Type="int4" Nullable="false" />
     <Property Name="number" Type="int4" Nullable="false" />
   </EntityType>
-  <EntityType Name="catalog_table">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
-  </EntityType>
   <EntityType Name="chain">
     <Key>
       <PropertyRef Name="id" />
@@ -360,7 +351,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -409,7 +400,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
@@ -466,7 +457,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -541,7 +532,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -568,7 +559,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="None" />
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
@@ -1516,7 +1507,6 @@
     <EntitySet Name="alphabet" EntityType="LibiadaWebModel.alphabet" />
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.binary_characteristic" />
     <EntitySet Name="building" EntityType="LibiadaWebModel.building" />
-    <EntitySet Name="catalog_table" EntityType="LibiadaWebModel.catalog_table" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.chain" />
     <EntitySet Name="characteristic" EntityType="LibiadaWebModel.characteristic" />
     <EntitySet Name="characteristic_group" EntityType="LibiadaWebModel.characteristic_group" />
@@ -1943,14 +1933,6 @@
     <Property Name="number" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_building_chain" FromRole="building" ToRole="chain" />
   </EntityType>
-  <EntityType Name="catalog_table">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-  </EntityType>
   <EntityType Name="chain">
     <Key>
       <PropertyRef Name="id" />
@@ -2050,7 +2032,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_language" FromRole="language" ToRole="literature_chain" />
@@ -2122,7 +2104,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
@@ -2209,7 +2191,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="instrument" ToRole="music_chain" />
@@ -2307,7 +2289,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_accidental" FromRole="accidental" ToRole="pitch" />
@@ -2337,7 +2319,7 @@
     <Key>
       <PropertyRef Name="id" />
     </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_tie" FromRole="tie" ToRole="note" />
@@ -3389,16 +3371,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-
-    <EntitySetMapping Name="catalog_table">
-      <EntityTypeMapping TypeName="LibiadaWebModel.catalog_table">
-        <MappingFragment StoreEntitySet="catalog_table">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="description" ColumnName="description" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="chain">
       <EntityTypeMapping TypeName="LibiadaWebModel.chain">
         <MappingFragment StoreEntitySet="chain">
@@ -3735,7 +3707,6 @@
   <edmx:Diagram Name="LibiadaWeb" ZoomLevel="60">
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.alphabet" Width="1.5" PointX="5.75" PointY="11.875" Height="1.9802864583333353" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.binary_characteristic" Width="1.875" PointX="12.875" PointY="8.625" Height="3.7109993489583317" IsExpanded="true" />
-    <edmx:EntityTypeShape EntityType="LibiadaWebModel.catalog_table" Width="1.5" PointX="3.25" PointY="3.875" Height="1.5956835937499996" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.chain" Width="1.5" PointX="5.625" PointY="7" Height="3.7109993489583335" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.characteristic" Width="1.5" PointX="10" PointY="5" Height="2.9417936197916674" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.characteristic_group" Width="1.75" PointX="11.875" PointY="2.5" Height="1.7879850260416674" IsExpanded="true" />

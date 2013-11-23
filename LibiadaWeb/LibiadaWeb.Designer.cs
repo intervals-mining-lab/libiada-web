@@ -195,22 +195,6 @@ namespace LibiadaWeb
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        public ObjectSet<catalog_table> catalog_table
-        {
-            get
-            {
-                if ((_catalog_table == null))
-                {
-                    _catalog_table = base.CreateObjectSet<catalog_table>("catalog_table");
-                }
-                return _catalog_table;
-            }
-        }
-        private ObjectSet<catalog_table> _catalog_table;
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
         public ObjectSet<chain> chain
         {
             get
@@ -650,14 +634,6 @@ namespace LibiadaWeb
         public void AddTobuilding(building building)
         {
             base.AddObject("building", building);
-        }
-    
-        /// <summary>
-        /// Устаревший метод для добавления новых объектов в набор EntitySet catalog_table. Взамен можно использовать метод .Add связанного свойства ObjectSet&lt;T&gt;.
-        /// </summary>
-        public void AddTocatalog_table(catalog_table catalog_table)
-        {
-            base.AddObject("catalog_table", catalog_table);
         }
     
         /// <summary>
@@ -2090,112 +2066,6 @@ namespace LibiadaWeb
                 }
             }
         }
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// Нет доступной документации по метаданным.
-    /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="catalog_table")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class catalog_table : EntityObject
-    {
-        #region Фабричный метод
-    
-        /// <summary>
-        /// Создание нового объекта catalog_table.
-        /// </summary>
-        /// <param name="id">Исходное значение свойства id.</param>
-        /// <param name="name">Исходное значение свойства name.</param>
-        public static catalog_table Createcatalog_table(global::System.Int32 id, global::System.String name)
-        {
-            catalog_table catalog_table = new catalog_table();
-            catalog_table.id = id;
-            catalog_table.name = name;
-            return catalog_table;
-        }
-
-        #endregion
-
-        #region Простые свойства
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                if (_id != value)
-                {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value, "id");
-                    ReportPropertyChanged("id");
-                    OnidChanged();
-                }
-            }
-        }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                OnnameChanging(value);
-                ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false, "name");
-                ReportPropertyChanged("name");
-                OnnameChanged();
-            }
-        }
-        private global::System.String _name;
-        partial void OnnameChanging(global::System.String value);
-        partial void OnnameChanged();
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                OndescriptionChanging(value);
-                ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true, "description");
-                ReportPropertyChanged("description");
-                OndescriptionChanged();
-            }
-        }
-        private global::System.String _description;
-        partial void OndescriptionChanging(global::System.String value);
-        partial void OndescriptionChanged();
 
         #endregion
 

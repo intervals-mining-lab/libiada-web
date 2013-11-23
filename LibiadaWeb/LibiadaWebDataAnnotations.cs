@@ -3,12 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LibiadaWeb
 {
-    [MetadataType(typeof (CatalogTableDataAnnotations))]
-    public partial class catalog_table
-    {
-    }
-
-    public class CatalogTableDataAnnotations
+    public class CommonDataAnnotations
     {
         [Display(Name = "Название")]
         public string name { get; set; }
@@ -22,7 +17,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class AccidentalDataAnnotations : CatalogTableDataAnnotations
+    public class AccidentalDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -114,7 +109,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class CharacteristicApplicabilityDataAnnotations : CatalogTableDataAnnotations
+    public class CharacteristicApplicabilityDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -123,7 +118,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class CharacteristicGroupDataAnnotations : CatalogTableDataAnnotations
+    public class CharacteristicGroupDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -132,7 +127,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class CharacteristicTypeDataAnnotations : CatalogTableDataAnnotations
+    public class CharacteristicTypeDataAnnotations : CommonDataAnnotations
     {
         [Display(Name = "Группа характеристик")]
         public int characteristic_group_id { get; set; }
@@ -160,7 +155,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class ElementDataAnnotations : CatalogTableDataAnnotations
+    public class ElementDataAnnotations : CommonDataAnnotations
     {
         [Display(Name = "Значение")]
         public string value { get; set; }
@@ -197,7 +192,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class FmotivTypeDataAnnotations : CatalogTableDataAnnotations
+    public class FmotivTypeDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -217,7 +212,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class InstrumentDataAnnotations : CatalogTableDataAnnotations
+    public class InstrumentDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -226,7 +221,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class LanguageDataAnnotations : CatalogTableDataAnnotations
+    public class LanguageDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -235,7 +230,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class LinkUpDataAnnotations : CatalogTableDataAnnotations
+    public class LinkUpDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -258,7 +253,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class MatterDataAnnotations : CatalogTableDataAnnotations
+    public class MatterDataAnnotations : CommonDataAnnotations
     {
         [Display(Name = "Природа")]
         public int nature_id { get; set; }
@@ -315,7 +310,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class NatureDataAnnotations : CatalogTableDataAnnotations
+    public class NatureDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -324,7 +319,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class NotationDataAnnotations : CatalogTableDataAnnotations
+    public class NotationDataAnnotations : CommonDataAnnotations
     {
         [Display(Name = "Природа")]
         public int nature_id { get; set; }
@@ -367,7 +362,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class NoteSymbolDataAnnotations : CatalogTableDataAnnotations
+    public class NoteSymbolDataAnnotations : CommonDataAnnotations
     {
     }
 
@@ -411,7 +406,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class RemoteDbDataAnnotations : CatalogTableDataAnnotations
+    public class RemoteDbDataAnnotations : CommonDataAnnotations
     {
         [Display(Name = "url адрес")]
         public string url { get; set; }
@@ -422,7 +417,7 @@ namespace LibiadaWeb
     {
     }
 
-    public class TieDataAnnotations : CatalogTableDataAnnotations
+    public class TieDataAnnotations : CommonDataAnnotations
     {
     }
 }

@@ -45,7 +45,6 @@ namespace LibiadaWeb.Controllers.Catalogs
         {
             if (ModelState.IsValid)
             {
-                language.id = (int)db.ExecuteStoreQuery<long>("SELECT seq_next_value('catalog_table_id_seq')").First();
                 db.language.AddObject(language);
                 db.SaveChanges();
                 return RedirectToAction("Index");  
