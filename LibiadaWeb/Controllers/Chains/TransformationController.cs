@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using LibiadaCore.Classes.Misc.DataTransformators;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models;
+using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
@@ -13,15 +14,15 @@ namespace LibiadaWeb.Controllers.Chains
     {
         private readonly LibiadaWebEntities db;
         private readonly DnaChainRepository dnaChainRepository;
-        private readonly AlphabetRepository alphabetRepository;
-        private readonly BuildingRepository buildingRepository;
+        private readonly ChainRepository chainRepository;
+        private readonly ElementRepository elementRepository;
 
         public TransformationController()
         {
             db = new LibiadaWebEntities();
             dnaChainRepository = new DnaChainRepository(db);
-            alphabetRepository = new AlphabetRepository(db);
-            buildingRepository = new BuildingRepository(db);
+            chainRepository = new ChainRepository(db);
+            elementRepository = new ElementRepository(db);
         }
 
         //
@@ -42,26 +43,24 @@ namespace LibiadaWeb.Controllers.Chains
 
             foreach (var chainId in chainIds)
             {
-                dna_chain dbParentChain = db.dna_chain.Single(c => c.id == chainId);
-                Chain tempChain = new Chain(buildingRepository.ToArray(dbParentChain.id),
-                                            alphabetRepository.ToLibiadaAlphabet(dbParentChain.id));
+                chain dbChain = chainRepository.Find(chainId);
+                Chain sourceChain = chainRepository.ToLibiadaChain(chainId);
+                
                 BaseChain transformedChain = toAmino
-                                                 ? DnaTransformator.Encode(tempChain)
-                                                 : DnaTransformator.EncodeTriplets(tempChain);
+                                                 ? DnaTransformator.Encode(sourceChain)
+                                                 : DnaTransformator.EncodeTriplets(sourceChain);
 
                 dna_chain result = new dna_chain
                     {
-                        id = db.ExecuteStoreQuery<long>("SELECT seq_next_value('chains_id_seq')").First(),
-                        matter = dbParentChain.matter,
+                        matter_id = dbChain.matter_id,
                         dissimilar = false,
                         notation_id = notationId,
-                        creation_date = DateTime.Now
+                        creation_date = DateTime.Now,
+                        piece_type_id = Aliases.PieceTypeFullGenome,
+                        piece_position = 0
                     };
-                db.dna_chain.AddObject(result);
-                alphabetRepository.ToDbAlphabet(transformedChain.Alphabet, notationId, result.id,
-                                                                   false);
-                buildingRepository.ToDbBuilding(result.id, transformedChain.Building);
-                db.SaveChanges();
+                long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
+                dnaChainRepository.Insert(result, alphabet, transformedChain.Building);
             }
             return RedirectToAction("Index", "Chain");
         }

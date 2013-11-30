@@ -1,5 +1,9 @@
-﻿using System.Text;
+﻿using System.Data.Objects;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 using System.Web.Mvc;
+using Npgsql;
 
 namespace LibiadaWeb.Helpers
 {
@@ -30,6 +34,18 @@ namespace LibiadaWeb.Helpers
             }
 
             return result.ToString();
+        }
+
+        public static long GetLongSequenceValue(LibiadaWebEntities db, string name)
+        {
+            //TODO: сделать нормальный вызов функции. Проверить, нужна ли @ в имени параметра
+            object[] param = { new NpgsqlParameter("@name", name) };
+            return db.ExecuteStoreQuery<long>("SELECT seq_next_value(@name);", param).First();
+        }
+
+        public static int GetIntSequenceValue(LibiadaWebEntities db, string name)
+        {
+            return (int)GetLongSequenceValue(db, name);
         }
     }
 }

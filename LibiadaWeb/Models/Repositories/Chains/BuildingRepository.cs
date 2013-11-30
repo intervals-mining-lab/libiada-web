@@ -38,21 +38,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             db.SaveChanges();
         }
 
-        public int[] ToArray(long chainId)
-        {
-            String query = "SELECT number FROM building WHERE chain_id = " + chainId + " ORDER BY index";
-            return db.ExecuteStoreQuery<int>(query).ToArray();
-        }
-
-        public int ToDbBuilding(long chainId, int[] libiadaBuilding)
-        {
-            String aggregatedBuilding = libiadaBuilding.Aggregate(new StringBuilder(), (a, b) =>
-                                                                  a.Append("," + b.ToString()),
-                                                                  a => a.Remove(0, 1).ToString());
-            String query = "SELECT create_building_from_string(" + chainId + ", '" + aggregatedBuilding + "')";
-            return db.ExecuteStoreQuery<int>(query).First();
-        }
-
         public void Dispose()
         {
             db.Dispose();

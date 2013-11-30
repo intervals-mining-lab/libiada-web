@@ -50,8 +50,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, 
-            int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds)
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
             List<String> chainNames = new List<string>();
@@ -67,7 +66,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     int notationId = notationIds[i];
                     int languageId = languageIds[i];
                     long chainId;
-                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
                     {
                         chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
                                     l.notation_id == notationId

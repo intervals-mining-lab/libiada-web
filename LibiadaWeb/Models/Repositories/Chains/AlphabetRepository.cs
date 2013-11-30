@@ -13,12 +13,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
     public class AlphabetRepository : IAlphabetRepository
     {
         private readonly LibiadaWebEntities db;
-        private readonly ElementRepository elementRepository;
 
         public AlphabetRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            elementRepository = new ElementRepository(db);
+            new ElementRepository(db);
         }
 
         public IQueryable<alphabet> All
@@ -71,46 +70,5 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             db.Dispose();
         }
-
-        public Alphabet ToLibiadaAlphabet(long chainId)
-        {
-            element[] dbElements = db.alphabet.Where(a => a.chain_id == chainId).OrderBy(a => a.number)
-                                    .Select(a => a.element).ToArray();
-
-            Alphabet alphabet = new Alphabet {NullValue.Instance()};
-            for (int i = 0; i < dbElements.Length; i++)
-            {
-                alphabet.Add(new ValueString(dbElements[i].value));
-            }
-            return alphabet;
-        }
-
-        public int ToDbAlphabet(Alphabet libiadaAlphabet, int notationId, long chainId,
-                                                  bool createElements)
-        {
-            bool elementsMissing = !elementRepository.ElementsInDb(libiadaAlphabet, notationId);
-            if (!createElements && elementsMissing)
-            {
-                throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
-            }
-            if (createElements && elementsMissing)
-            {
-                elementRepository.CreateLackingElements(libiadaAlphabet, notationId);
-            }
-
-            List<long> elementIds = new List<long>();
-            for (int i = 0; i < libiadaAlphabet.Power; i++)
-            {
-                String stringElement = libiadaAlphabet[i].ToString();
-                elementIds.Add(db.element.Single(e => e.notation_id == notationId && e.value.Equals(stringElement)).id);
-            }
-            String aggregatedElements = elementIds.Aggregate(new StringBuilder(), (a, b) =>
-                                                                  a.Append("," + b.ToString()),
-                                                                  a => a.Remove(0, 1).ToString());
-            String query = "SELECT create_alphabet_from_string(" + chainId + ", '" + aggregatedElements + "')";
-            return db.ExecuteStoreQuery<int>(query).First();
-        }
-
-        
     }
 }

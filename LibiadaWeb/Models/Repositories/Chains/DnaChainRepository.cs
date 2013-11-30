@@ -5,6 +5,9 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using LibiadaWeb.Helpers;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
@@ -37,12 +40,107 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.dna_chain.Single(x => x.id == id);
         }
 
+        public void Insert(chain chain, string fastaHeader, long[] alphabet, int[] building)
+        {
+            dna_chain dnaChain = new dna_chain
+            {
+                id = chain.id,
+                dissimilar = chain.dissimilar,
+                notation_id = chain.notation_id,
+                matter_id = chain.matter_id,
+                fasta_header = fastaHeader,
+                piece_type_id = chain.piece_type_id,
+                creation_date = DateTime.Now,
+                piece_position = chain.piece_position
+            };
+
+            Insert(dnaChain, alphabet, building);
+        }
+
+
+        public void Insert(dna_chain chain, long[] alphabet, int[] building)
+        {
+            if (chain.id == 0)
+            {
+                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
+            }
+
+            NpgsqlParameter[] parameters =
+                {
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@id",
+                            NpgsqlDbType = NpgsqlDbType.Bigint,
+                            Value = chain.id
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@notation_id",
+                            NpgsqlDbType = NpgsqlDbType.Integer,
+                            Value = chain.notation_id
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@matter_id",
+                            NpgsqlDbType = NpgsqlDbType.Bigint,
+                            Value = chain.matter_id
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@piece_type_id",
+                            NpgsqlDbType = NpgsqlDbType.Integer,
+                            Value = chain.piece_type_id
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@fasta_header",
+                            NpgsqlDbType = NpgsqlDbType.Varchar,
+                            Value = chain.fasta_header
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@alphabet",
+                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
+                            Value = alphabet
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@building",
+                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
+                            Value = building
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@creation_date",
+                            NpgsqlDbType = NpgsqlDbType.TimestampTZ,
+                            Value = DateTime.Now
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@piece_position",
+                            NpgsqlDbType = NpgsqlDbType.Integer,
+                            Value = chain.piece_position
+                        },
+                    new NpgsqlParameter
+                        {
+                            ParameterName = "@dissimilar",
+                            NpgsqlDbType = NpgsqlDbType.Boolean,
+                            Value = chain.dissimilar
+                        }
+
+                };
+
+            String query =
+                "SELECT create_dna_chain(@id,@notation_id,@matter_id,@piece_type_id,@fasta_header,@alphabet,@building,@creation_date,@piece_position,@dissimilar);";
+            db.ExecuteStoreCommand(query, parameters);
+        }
+
         public void InsertOrUpdate(dna_chain chain)
         {
             if (chain.id == default(long))
             {
                 // New entity
-                db.dna_chain.AddObject(chain);
+                throw new NotSupportedException("Для добавления новых записей следует использовать метод Insert.");
             }
             else
             {

@@ -38,7 +38,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (music_chain.id == default(long)) {
                 // New entity
-                db.music_chain.AddObject(music_chain);
+                throw new NotSupportedException("Для добавления новых записей следует использовать метод Insert.");
             } else {
                 // Existing entity
                 db.music_chain.Attach(music_chain);

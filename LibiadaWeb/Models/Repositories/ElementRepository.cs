@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
+using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaCore.Classes.TheoryOfSet;
 
 namespace LibiadaWeb.Models.Repositories
@@ -107,6 +108,41 @@ namespace LibiadaWeb.Models.Repositories
                 }
             }
             db.SaveChanges();
+        }
+
+        public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
+        {
+            bool elementsMissing = !ElementsInDb(alphabet, notationId);
+            if (!createElements && elementsMissing)
+            {
+                throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
+            }
+            if (createElements && elementsMissing)
+            {
+                CreateLackingElements(alphabet, notationId);
+            }
+
+            long[] elementIds = new long[alphabet.Power];
+            for (int i = 0; i < alphabet.Power; i++)
+            {
+                String stringElement = alphabet[i].ToString();
+                elementIds[i] = db.element.Single(e => e.notation_id == notationId 
+                                                       && e.value.Equals(stringElement)).id;
+            }
+
+            return elementIds;
+        }
+
+        public Alphabet ToLibiadaAlphabet(long[] elementIds)
+        {
+            Alphabet alphabet = new Alphabet { NullValue.Instance() };
+            for (int i = 0; i < elementIds.Length; i++)
+            {
+                long elementId = elementIds[i];
+                element el = db.element.Single(e => e.id == elementId);
+                alphabet.Add(new ValueString(el.value));
+            }
+            return alphabet;
         }
 
         public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<element> allElements,
