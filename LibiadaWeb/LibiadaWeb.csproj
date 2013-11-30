@@ -446,6 +446,7 @@
     <Content Include="Content\themes\JQAllRange\iThing-min.css" />
     <Content Include="Content\themes\JQAllRange\iThing.css" />
     <Content Include="Db\Changelog.sql" />
+    <Content Include="Db\Current.sql" />
     <Content Include="Db\InitialDb.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
