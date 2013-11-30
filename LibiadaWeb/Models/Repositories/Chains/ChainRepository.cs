@@ -169,11 +169,23 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return chainsList;
         }
 
+        public List<element> GetChainElements(long chainId)
+        {
+            
+            List<long> elementIds = GetChainElementIds(chainId);
+            return elementRepository.GetElements(elementIds);
+        }
+
         public Alphabet GetChainAlphabet(long chainId)
         {
-            const string query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            long[] elements = db.ExecuteStoreQuery<long>(query, new NpgsqlParameter("@id", chainId)).ToArray();
+            List<long> elements = GetChainElementIds(chainId);
             return elementRepository.ToLibiadaAlphabet(elements);
+        }
+
+        public List<long> GetChainElementIds(long chainId)
+        {
+            const string query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
+            return db.ExecuteStoreQuery<long>(query, new NpgsqlParameter("@id", chainId)).ToList();
         }
 
         public int[] GetChainBuilding(long chainId)

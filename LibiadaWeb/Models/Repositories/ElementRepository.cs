@@ -133,10 +133,10 @@ namespace LibiadaWeb.Models.Repositories
             return elementIds;
         }
 
-        public Alphabet ToLibiadaAlphabet(long[] elementIds)
+        public Alphabet ToLibiadaAlphabet(List<long> elementIds)
         {
             Alphabet alphabet = new Alphabet { NullValue.Instance() };
-            for (int i = 0; i < elementIds.Length; i++)
+            for (int i = 0; i < elementIds.Count; i++)
             {
                 long elementId = elementIds[i];
                 element el = db.element.Single(e => e.id == elementId);
@@ -144,6 +144,18 @@ namespace LibiadaWeb.Models.Repositories
             }
             return alphabet;
         }
+
+        public List<element> GetElements(List<long> elementIds)
+        {
+            List<element> elements = new List<element>();
+            for (int i = 0; i < elementIds.Count(); i++)
+            {
+                long elementId = elementIds[i];
+                elements.Add(db.element.Single(e => e.id == elementId));
+                
+            }
+            return elements;
+        } 
 
         public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<element> allElements,
                                                               IEnumerable<element> selectedElements)

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.Mvc;
 using LibiadaWeb.Models.Repositories;
+using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers
 {
@@ -10,17 +11,18 @@ namespace LibiadaWeb.Controllers
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
         private readonly ElementRepository elementRepository;
+        private readonly ChainRepository chainRepository;
 
         public ChainElementsController()
         {
             elementRepository = new ElementRepository(db);
+            chainRepository = new ChainRepository(db);
         }
 
         // GET api/webapi/5
         public IEnumerable<SelectListItem> Get(int id)
         {
-            IQueryable<alphabet> chainAlphabet = db.alphabet.Where(a => a.chain_id == id);
-            IQueryable<element> chainElements = chainAlphabet.Select(a => a.element);
+            List<element> chainElements = chainRepository.GetChainElements(id);
             return elementRepository.GetSelectListItems(chainElements, null);
         }
     }

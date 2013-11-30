@@ -10,14 +10,6 @@
 <fieldset>
     <legend>Цепочка</legend>
 
-    <div class="display-label">Строй</div>
-    <div class="display-field">
-        @{
-            string shortBuilding = Model.building.ToString().Substring(0, 20) + "...";
-        }
-        @shortBuilding
-    </div>
-
     <div class="display-label">
         @Html.DisplayNameFor(model => model.notation_id)
     </div>

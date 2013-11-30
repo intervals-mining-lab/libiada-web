@@ -25,9 +25,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.chain_id)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.characteristic_type_id)
             </th>
             <th>
@@ -49,9 +46,6 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.chain.building)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.characteristic_type.name)
                 </td>

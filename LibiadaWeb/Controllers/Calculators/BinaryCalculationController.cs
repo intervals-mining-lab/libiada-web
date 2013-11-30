@@ -179,13 +179,15 @@ namespace LibiadaWeb.Controllers.Calculators
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                       b.characteristic_type_id == characteristicId &&
                                                                       b.link_up_id == linkUpId && b.first_element_id == wordId);
-
+            List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
             if (calculatedCount < currentChain.Alphabet.Power)
             {
-                int firstElementNumber = dbChain.alphabet.Single(a => a.element_id == wordId).number;
+                //TODO: проверить что + - 1 нигде к индексам не надо добавлять
+                
+                int firstElementNumber = chainElements.IndexOf(wordId);
                 for (int i = 0; i < currentChain.Alphabet.Power; i++)
                 {
-                    long secondElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                    long secondElementId = chainElements[i];
                     if (!db.binary_characteristic.Any(b =>
                                                       b.chain_id == dbChain.id &&
                                                       b.characteristic_type_id == characteristicId &&
@@ -193,7 +195,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.second_element_id == secondElementId &&
                                                       b.link_up_id == linkUpId))
                     {
-                        double result = calculator.Calculate(currentChain, currentChain.Alphabet[firstElementNumber - 1],
+                        double result = calculator.Calculate(currentChain, currentChain.Alphabet[firstElementNumber],
                                                              currentChain.Alphabet[i],
                                                              linkUp);
                         binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkUpId,
@@ -211,10 +213,10 @@ namespace LibiadaWeb.Controllers.Calculators
 
             if (calculatedCount < currentChain.Alphabet.Power)
             {
-                int secondElementNumber = dbChain.alphabet.Single(a => a.element_id == wordId).number;
+                int secondElementNumber = chainElements.IndexOf(wordId);
                 for (int i = 0; i < currentChain.Alphabet.Power; i++)
                 {
-                    long firstElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
+                    long firstElementId = chainElements[i];
                     if (!db.binary_characteristic.Any(b =>
                                                       b.chain_id == dbChain.id &&
                                                       b.characteristic_type_id == characteristicId &&
@@ -241,12 +243,13 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                  b.link_up_id == linkUpId);
             if (calculatedCount < currentChain.Alphabet.Power*currentChain.Alphabet.Power)
             {
+                List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
                 for (int i = 0; i < currentChain.Alphabet.Power; i++)
                 {
                     for (int j = 0; j < currentChain.Alphabet.Power; j++)
                     {
-                        long firstElementId = dbChain.alphabet.Single(a => a.number == i + 1).element_id;
-                        long secondElementId = dbChain.alphabet.Single(a => a.number == j + 1).element_id;
+                        long firstElementId = chainElements[i];
+                        long secondElementId = chainElements[i];
                         if (!db.binary_characteristic.Any(b =>
                                                           b.chain_id == dbChain.id &&
                                                           b.characteristic_type_id == characteristicId &&
@@ -269,6 +272,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private void FrequencyCharacteristic(int characteristicId, int linkUpId, int frequencyCount, Chain currentChain,
                                              chain dbChain, IBinaryCalculator calculator, LinkUp linkUp)
         {
+            List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
             //считаем частоты слов
             List<KeyValuePair<IBaseObject, double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
             for (int f = 0; f < currentChain.Alphabet.Power; f++)
@@ -278,7 +282,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                      calc.Calculate(currentChain.CongenericChain(f),
                                                                                     LinkUp.Both)));
             }
-            //сорьтруем алфавит по частоте
+            //сортируем алфавит по частоте
             SortKeyValuePairList(frequences);
             //для заданного числа слов с наибольшей частотой считаем зависимости
             for (int i = 0; i < frequencyCount; i++)
@@ -287,8 +291,8 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key) + 1;
                     int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
-                    long firstElementId = dbChain.alphabet.Single(a => a.number == firstElementNumber).element_id;
-                    long secondElementId = dbChain.alphabet.Single(a => a.number == secondElementNumber).element_id;
+                    long firstElementId = chainElements[firstElementNumber];
+                    long secondElementId = chainElements[secondElementNumber];
                     //проверяем не посчитана ли уже эта характеристика
                     if (!db.binary_characteristic.Any(b =>
                                                       b.chain_id == dbChain.id &&

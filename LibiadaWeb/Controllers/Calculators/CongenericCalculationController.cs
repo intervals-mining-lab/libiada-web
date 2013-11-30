@@ -100,15 +100,16 @@ namespace LibiadaWeb.Controllers.Calculators
                     String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                     ICalculator calculator = CalculatorsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
-
+                    List<long> chainElements = chainRepository.GetChainElementIds(chainId);
                     int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_up_id == linkUpId);
                     if (calculated < libiadaChain.Alphabet.Power)
                     {
+                        
                         for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
                         {
-                            long elementId = db.alphabet.Single(a => a.chain_id == chainId && a.number == j + 1).element_id;
+                            long elementId = chainElements[j];
 
                             CongenericChain tempChain = libiadaChain.CongenericChain(j);
 
@@ -137,7 +138,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     //Перебор всех элементов алфавита; третий уровень массива характеристик
                     for (int d = 0; d < libiadaChain.Alphabet.Power; d++)
                     {
-                        long elementId = db.alphabet.Single(a => a.chain_id == chainId && a.number == d + 1).element_id;
+                        long elementId = chainElements[d];
 
                         double? characteristic = db.congeneric_characteristic.Single(b =>
                                     b.chain_id == chainId &&

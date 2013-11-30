@@ -4,7 +4,6 @@
   <edmx:Designer>
     <edmx:Diagrams>
   <edmx:Diagram Name="LibiadaWeb" ZoomLevel="60">
-    <edmx:EntityTypeShape EntityType="LibiadaWebModel.alphabet" Width="1.5" PointX="5.75" PointY="11.875" Height="1.9802864583333353" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.binary_characteristic" Width="1.875" PointX="12.875" PointY="8.625" Height="3.7109993489583317" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.chain" Width="1.5" PointX="5.625" PointY="7" Height="3.7109993489583335" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.characteristic" Width="1.5" PointX="10" PointY="5" Height="2.9417936197916674" IsExpanded="true" />
@@ -16,18 +15,6 @@
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.nature" Width="1.5" PointX="2" PointY="14.625" Height="2.1725878906249996" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.notation" Width="1.5" PointX="4.25" PointY="14.5" Height="2.3648893229166674" IsExpanded="true" />
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.remote_db" Width="1.5" PointX="0.625" PointY="7.25" Height="1.9802864583333388" IsExpanded="true" />
-    <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_chain" ManuallyRouted="false">
-      <edmx:ConnectorPoint PointX="6.4375" PointY="11.480205078125001" />
-      <edmx:ConnectorPoint PointX="6.4375" PointY="11.875" />
-    </edmx:AssociationConnector>
-    <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_element" ManuallyRouted="false">
-      <edmx:ConnectorPoint PointX="8.375" PointY="13.8362939453125" />
-      <edmx:ConnectorPoint PointX="8.2083333333333339" PointY="13.8362939453125" />
-      <edmx:ConnectorPoint PointX="8.0416666666666661" PointY="13.8362939453125" />
-          <edmx:ConnectorPoint PointX="7.770833333333333" PointY="13.836293945312498" />
-          <edmx:ConnectorPoint PointX="7.416666666666667" PointY="13.8362939453125" />
-          <edmx:ConnectorPoint PointX="7.25" PointY="13.8362939453125" />
-    </edmx:AssociationConnector>
     <edmx:AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_chain" ManuallyRouted="false">
       <edmx:ConnectorPoint PointX="7.125" PointY="11.463400065104167" />
       <edmx:ConnectorPoint PointX="7.291666666666667" PointY="11.463400065104166" />
@@ -151,11 +138,6 @@
       <edmx:ConnectorPoint PointX="7.5" PointY="9.297841796875" />
     </edmx:AssociationConnector>
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.piece_type" Width="1.5" PointX="8.375" PointY="8.25" Height="2.5571907552083317" />
-    <edmx:EntityTypeShape EntityType="LibiadaWebModel.building" Width="1.5" PointX="5.5" PointY="4.375" Height="1.7879850260416657" />
-    <edmx:AssociationConnector Association="LibiadaWebModel.fk_building_chain">
-      <edmx:ConnectorPoint PointX="6.3125" PointY="7" />
-      <edmx:ConnectorPoint PointX="6.3125" PointY="6.1629850260416656" />
-    </edmx:AssociationConnector>
     <edmx:EntityTypeShape EntityType="LibiadaWebModel.dna_information" Width="1.5" PointX="0.625" PointY="9.5" Height="1.9802864583333317" />
     <edmx:AssociationConnector Association="LibiadaWebModel.fk_dna_information_chain">
       <edmx:ConnectorPoint PointX="6.25" PointY="9.1151432291666659" />
@@ -314,13 +296,6 @@
           <edmx:ConnectorPoint PointX="10.3593725" PointY="8.5667936197916674" />
           <edmx:ConnectorPoint PointX="10.3593725" PointY="7.9417936197916674" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_fmotiv">
-          <edmx:ConnectorPoint PointX="12.75" PointY="24.809736269531257" />
-          <edmx:ConnectorPoint PointX="9.1770808333333331" PointY="24.809736269531257" />
-          <edmx:ConnectorPoint PointX="9.0104141666666653" PointY="24.809736269531257" />
-          <edmx:ConnectorPoint PointX="6.25" PointY="24.809736269531257" />
-          <edmx:ConnectorPoint PointX="6.25" PointY="14.047587890625" />
-        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_literature_chain">
           <edmx:ConnectorPoint PointX="15.125" PointY="15.25" />
           <edmx:ConnectorPoint PointX="15.15982318490112" PointY="15.215176815098879" />
@@ -336,31 +311,6 @@
           <edmx:ConnectorPoint PointX="17.682291666666668" PointY="11.406250499999999" />
           <edmx:ConnectorPoint PointX="17.848958333333332" PointY="11.406250499999999" />
           <edmx:ConnectorPoint PointX="18.875" PointY="11.406250499999999" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_building_measure">
-          <edmx:ConnectorPoint PointX="16.625" PointY="16.418700620605478" />
-          <edmx:ConnectorPoint PointX="15.5625" PointY="16.418700620605478" />
-          <edmx:ConnectorPoint PointX="15.5625" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="15.505208333333334" PointY="14.953124999999998" />
-          <edmx:ConnectorPoint PointX="14.776039166666665" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="14.270833333333334" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="14.104166666666666" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="13.997393333333333" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="13.830726666666665" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="13.098958333333334" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="12.932291666666666" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="12.34375" PointY="14.953125" />
-          <edmx:ConnectorPoint PointX="12.34375" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="10.755208333333334" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="10.572916666666666" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.770833333333333" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.541666666666667" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.4375" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.4375" PointY="6.734375" />
-          <edmx:ConnectorPoint PointX="6.687502" PointY="6.734375" />
-          <edmx:ConnectorPoint PointX="6.687502" PointY="6.1629850260416656" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_characteristic_dna_chain">
           <edmx:ConnectorPoint PointX="10.65625" PointY="12.5" />
@@ -515,62 +465,6 @@
           <edmx:ConnectorPoint PointX="13.479166666666666" PointY="7.9081454036458343" />
           <edmx:ConnectorPoint PointX="11.5" PointY="7.9081454036458343" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_building_fmotiv">
-          <edmx:ConnectorPoint PointX="15.21874875" PointY="21.125" />
-          <edmx:ConnectorPoint PointX="15.21874875" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="15.161460833333335" PointY="4.7812499999999991" />
-          <edmx:ConnectorPoint PointX="14.994794166666667" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="14.489583333333334" PointY="4.7812499999999991" />
-          <edmx:ConnectorPoint PointX="14.322916666666666" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="13.020833333333334" PointY="4.7812499999999991" />
-          <edmx:ConnectorPoint PointX="12.854166666666666" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="10.833333333333334" PointY="4.7812499999999991" />
-          <edmx:ConnectorPoint PointX="10.666666666666666" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="8.5833333333333339" PointY="4.7812499999999991" />
-          <edmx:ConnectorPoint PointX="8.4166666666666661" PointY="4.78125" />
-          <edmx:ConnectorPoint PointX="7" PointY="4.78125" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_music_chain">
-          <edmx:ConnectorPoint PointX="16.1562505" PointY="7.9225065104166674" />
-          <edmx:ConnectorPoint PointX="16.1562505" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="15.583333333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="15.416666666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="15.395835833333333" PointY="13.086293945312498" />
-          <edmx:ConnectorPoint PointX="14.776039166666667" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="14.270833333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="14.104166666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.997393333333333" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.830726666666665" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.786458333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.619791666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.302083333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.135416666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="13.098958333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="12.932291666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="12.708333333333334" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="12.541666666666666" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="12.5" PointY="13.0862939453125" />
-          <edmx:ConnectorPoint PointX="12.5" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="12.489583333333334" PointY="12.249999999999998" />
-          <edmx:ConnectorPoint PointX="12.104166666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="11.505210333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="11.338543666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.755208333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.557291666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.208333333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.041666666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.6145853333333342" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.4479186666666664" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.2083333333333339" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.0416666666666661" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.75" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.75" PointY="12.700585908203129" />
-          <edmx:ConnectorPoint PointX="7.708333333333333" PointY="12.700585908203127" />
-          <edmx:ConnectorPoint PointX="7.416666666666667" PointY="12.700585908203129" />
-          <edmx:ConnectorPoint PointX="7.25" PointY="12.700585908203129" />
-        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_music_chain_matter">
           <edmx:ConnectorPoint PointX="4.25" PointY="11.121686029666773" />
           <edmx:ConnectorPoint PointX="4.4244785416666668" PointY="11.121686029666773" />
@@ -629,27 +523,6 @@
           <edmx:ConnectorPoint PointX="18.059897833333334" PointY="12.836146647135415" />
           <edmx:ConnectorPoint PointX="18.875" PointY="12.836146647135415" />
         </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_literature_chain">
-          <edmx:ConnectorPoint PointX="14.96875" PointY="15.25" />
-          <edmx:ConnectorPoint PointX="14.96875" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="14.942705833333333" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="14.776039166666665" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="12.833333333333334" PointY="12.417999674479164" />
-          <edmx:ConnectorPoint PointX="12.104166666666666" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="10.458333333333334" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="10.291666666666666" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="10.208333333333334" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="10.041666666666666" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="9.6145853333333342" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="9.4479186666666664" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="9.2083333333333339" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="9.0416666666666661" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="7.833333333333333" PointY="12.417999674479164" />
-          <edmx:ConnectorPoint PointX="7.416666666666667" PointY="12.417999674479166" />
-          <edmx:ConnectorPoint PointX="7.25" PointY="12.417999674479166" />
-        </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_link_up">
           <edmx:ConnectorPoint PointX="12.25" PointY="8.5237532552083337" />
           <edmx:ConnectorPoint PointX="13.479166666666666" PointY="8.5237532552083337" />
@@ -666,17 +539,6 @@
           <edmx:ConnectorPoint PointX="17.848958333333332" PointY="8.5237532552083337" />
           <edmx:ConnectorPoint PointX="19.2187475" PointY="8.5237532552083337" />
           <edmx:ConnectorPoint PointX="19.2187475" PointY="10.375" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_building_literature_chain">
-          <edmx:ConnectorPoint PointX="15.0781275" PointY="15.25" />
-          <edmx:ConnectorPoint PointX="15.0781275" PointY="4.6081721419270831" />
-          <edmx:ConnectorPoint PointX="13.020833333333334" PointY="4.6081721419270822" />
-          <edmx:ConnectorPoint PointX="12.854166666666666" PointY="4.6081721419270831" />
-          <edmx:ConnectorPoint PointX="8.5833333333333339" PointY="4.6081721419270822" />
-          <edmx:ConnectorPoint PointX="8.4166666666666661" PointY="4.6081721419270831" />
-          <edmx:ConnectorPoint PointX="7.708333333333333" PointY="4.6081721419270822" />
-          <edmx:ConnectorPoint PointX="7.541666666666667" PointY="4.6081721419270831" />
-          <edmx:ConnectorPoint PointX="7" PointY="4.6081721419270831" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_type">
           <edmx:ConnectorPoint PointX="14.25" PointY="6.37474609375" />
@@ -696,43 +558,6 @@
           <edmx:ConnectorPoint PointX="17.848958333333332" PointY="8.5475065104166674" />
           <edmx:ConnectorPoint PointX="19.625" PointY="8.5475065104166674" />
           <edmx:ConnectorPoint PointX="19.625" PointY="10.375" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_measure">
-          <edmx:ConnectorPoint PointX="16.625" PointY="18.024905241210945" />
-          <edmx:ConnectorPoint PointX="15.375" PointY="18.024905241210945" />
-          <edmx:ConnectorPoint PointX="15.375" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="15.364583333333334" PointY="14.984374999999998" />
-          <edmx:ConnectorPoint PointX="14.776039166666665" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="14.606769583333334" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="14.440102916666666" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="14.270833333333334" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="14.104166666666666" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="13.997393333333333" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="13.830726666666665" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="13.098958333333334" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="12.932291666666666" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="12.4375" PointY="14.984375" />
-          <edmx:ConnectorPoint PointX="12.4375" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="12.427083333333334" PointY="12.249999999999998" />
-          <edmx:ConnectorPoint PointX="12.104166666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="11.505210333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="11.338543666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.755208333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.557291666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.208333333333334" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="10.041666666666666" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.6145853333333342" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.4479186666666664" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.2083333333333339" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="9.0416666666666661" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.770833333333333" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.604166666666667" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.5625" PointY="12.25" />
-          <edmx:ConnectorPoint PointX="7.5625" PointY="14.547587890625" />
-          <edmx:ConnectorPoint PointX="6.6249994999999995" PointY="14.547587890625" />
-          <edmx:ConnectorPoint PointX="6.6249994999999995" PointY="14.047587890625" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_note_notation">
           <edmx:ConnectorPoint PointX="5.75" PointY="17.759348958333334" />
@@ -878,39 +703,6 @@
           <edmx:ConnectorPoint PointX="17.682291666666668" PointY="10.859373250000004" />
           <edmx:ConnectorPoint PointX="17.848958333333332" PointY="10.859373250000004" />
           <edmx:ConnectorPoint PointX="18.875" PointY="10.859373250000004" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_building_dna_chain">
-          <edmx:ConnectorPoint PointX="10.625" PointY="14.916789893880205" />
-          <edmx:ConnectorPoint PointX="10.458333333333334" PointY="14.916789893880205" />
-          <edmx:ConnectorPoint PointX="10.291666666666666" PointY="14.916789893880205" />
-          <edmx:ConnectorPoint PointX="10.125" PointY="14.916789893880205" />
-          <edmx:ConnectorPoint PointX="10.125" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.770833333333333" PointY="11.624999999999998" />
-          <edmx:ConnectorPoint PointX="7.416666666666667" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.375" PointY="11.625" />
-          <edmx:ConnectorPoint PointX="7.375" PointY="6.75" />
-          <edmx:ConnectorPoint PointX="6.395833333333333" PointY="6.7499999999999991" />
-          <edmx:ConnectorPoint PointX="6.229166666666667" PointY="6.75" />
-          <edmx:ConnectorPoint PointX="5.874998" PointY="6.75" />
-          <edmx:ConnectorPoint PointX="5.874998" PointY="6.1629850260416656" />
-        </edmx:AssociationConnector>
-        <edmx:AssociationConnector Association="LibiadaWebModel.fk_alphabet_dna_chain">
-          <edmx:ConnectorPoint PointX="10.625" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="10.458333333333334" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="10.291666666666666" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="10.208333333333334" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="10.041666666666666" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="9.6145853333333342" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="9.4479186666666664" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="9.2083333333333339" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="9.0416666666666661" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="8.8333338333333327" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="8.6666671666666648" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="7.770833333333333" PointY="12.98317214192709" />
-          <edmx:ConnectorPoint PointX="7.416666666666667" PointY="12.983172141927092" />
-          <edmx:ConnectorPoint PointX="7.25" PointY="12.983172141927092" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_literature_chain_notation">
           <edmx:ConnectorPoint PointX="5" PointY="18.018697916666667" />

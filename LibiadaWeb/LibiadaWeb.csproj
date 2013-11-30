@@ -191,7 +191,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AlphabetController.cs" />
     <Compile Include="Controllers\Calculators\BinaryCalculationController.cs" />
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Calculators\BuildingCompareController.cs" />
@@ -249,12 +248,9 @@
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\Repositories\Chains\AlphabetRepository.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\BuildingRepository.cs" />
     <Compile Include="Models\Repositories\Chains\ChainRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicGroupRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\IBuildingRepository.cs" />
     <Compile Include="Models\Repositories\CharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
     <Compile Include="Models\DataTableFiller.cs" />
@@ -265,7 +261,6 @@
     <Compile Include="Models\Repositories\Catalogs\FmotivTypeRepository.cs" />
     <Compile Include="Models\Repositories\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAccidentalRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\IAlphabetRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IChainRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicGroupRepository.cs" />
@@ -609,11 +604,6 @@
     <Content Include="Views\Catalogs\Accidental\Details.cshtml" />
     <Content Include="Views\Catalogs\Accidental\Edit.cshtml" />
     <Content Include="Views\Catalogs\Accidental\Index.cshtml" />
-    <Content Include="Views\Alphabet\Create.cshtml" />
-    <Content Include="Views\Alphabet\Delete.cshtml" />
-    <Content Include="Views\Alphabet\Details.cshtml" />
-    <Content Include="Views\Alphabet\Edit.cshtml" />
-    <Content Include="Views\Alphabet\Index.cshtml" />
     <Content Include="Views\Calculators\BinaryCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\BinaryCalculation\Result.cshtml" />
     <Content Include="Views\BinaryCharacteristic\Create.cshtml" />
