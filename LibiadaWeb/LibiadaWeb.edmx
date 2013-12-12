@@ -107,9 +107,29 @@
       <End Role="nature" EntitySet="nature" />
       <End Role="matter" EntitySet="matter" />
     </AssociationSet>
-    <AssociationSet Name="fk_matter_remote_db" Association="LibiadaWebModel.Store.fk_matter_remote_db">
+    <AssociationSet Name="fk_chain_remote_db" Association="LibiadaWebModel.Store.fk_chain_remote_db">
       <End Role="remote_db" EntitySet="remote_db" />
-      <End Role="matter" EntitySet="matter" />
+      <End Role="chain" EntitySet="chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_remote_db" Association="LibiadaWebModel.Store.fk_dna_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_remote_db" Association="LibiadaWebModel.Store.fk_literature_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_music_chain_remote_db" Association="LibiadaWebModel.Store.fk_music_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="music_chain" EntitySet="music_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_fmotiv_remote_db" Association="LibiadaWebModel.Store.fk_fmotiv_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="fmotiv" EntitySet="fmotiv" />
+    </AssociationSet>
+    <AssociationSet Name="fk_measure_remote_db" Association="LibiadaWebModel.Store.fk_measure_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="measure" EntitySet="measure" />
     </AssociationSet>
     <AssociationSet Name="fk_notation_nature" Association="LibiadaWebModel.Store.fk_notation_nature">
       <End Role="nature" EntitySet="nature" />
@@ -142,10 +162,6 @@
     <AssociationSet Name="fk_congeneric_characteristic_type" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_type">
       <End Role="characteristic_type" EntitySet="characteristic_type" />
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
-    </AssociationSet>
-    <AssociationSet Name="fk_music_chain_instrument" Association="LibiadaWebModel.Store.fk_music_chain_instrument">
-      <End Role="instrument" EntitySet="instrument" />
-      <End Role="music_chain" EntitySet="music_chain" />
     </AssociationSet>
 
     <AssociationSet Name="fk_music_chain_matter" Association="LibiadaWebModel.Store.fk_music_chain_matter">
@@ -227,6 +243,8 @@
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -281,6 +299,8 @@
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="fasta_header" Type="varchar" MaxLength="255" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
   <EntityType Name="element">
     <Key>
@@ -322,6 +342,8 @@
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="original" Type="bool" Nullable="false" />
     <Property Name="language_id" Type="int4" Nullable="false" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
   <EntityType Name="matter">
     <Key>
@@ -331,8 +353,7 @@
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
     <Property Name="description" Type="varchar" MaxLength="255" />
-    <Property Name="remote_db_id" Type="int4" />
-    <Property Name="id_in_remote_db" Type="varchar" MaxLength="255" />
+    
   </EntityType>
   <EntityType Name="nature">
     <Key>
@@ -385,6 +406,8 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
   <EntityType Name="congeneric_characteristic">
     <Key>
@@ -426,6 +449,8 @@
     <Property Name="beatbase" Type="int4" Nullable="false" />
     <Property Name="ticks_per_beat" Type="int4" />
     <Property Name="fifths" Type="int4" Nullable="false" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
   <EntityType Name="music_chain">
     <Key>
@@ -438,7 +463,8 @@
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
-    <Property Name="instrument_id" Type="int4" />
+    <Property Name="remote_id" Type="varchar" MaxLength="255" />
+    <Property Name="remote_db_id" Type="int4" />
   </EntityType>
 
   <EntityType Name="note">
@@ -737,14 +763,74 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_matter_remote_db">
+  <Association Name="fk_chain_remote_db">
     <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
-    <End Role="matter" Type="LibiadaWebModel.Store.matter" Multiplicity="*" />
+    <End Role="chain" Type="LibiadaWebModel.Store.chain" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="remote_db">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="matter">
+      <Dependent Role="chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_dna_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_music_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
+    <End Role="music_chain" Type="LibiadaWebModel.Store.music_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="music_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+    <Association Name="fk_fmotiv_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
+    <End Role="fmotiv" Type="LibiadaWebModel.Store.fmotiv" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fmotiv">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+        <Association Name="fk_measure_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="0..1" />
+    <End Role="measure" Type="LibiadaWebModel.Store.measure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="measure">
         <PropertyRef Name="remote_db_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1000,18 +1086,6 @@
       </Principal>
       <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="characteristic_type_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="fk_music_chain_instrument">
-    <End Role="instrument" Type="LibiadaWebModel.Store.instrument" Multiplicity="0..1" />
-    <End Role="music_chain" Type="LibiadaWebModel.Store.music_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="instrument">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="music_chain">
-        <PropertyRef Name="instrument_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1347,9 +1421,29 @@
       <End Role="nature" EntitySet="nature" />
       <End Role="matter" EntitySet="matter" />
     </AssociationSet>
-    <AssociationSet Name="fk_matter_remote_db" Association="LibiadaWebModel.fk_matter_remote_db">
+    <AssociationSet Name="fk_chain_remote_db" Association="LibiadaWebModel.fk_chain_remote_db">
       <End Role="remote_db" EntitySet="remote_db" />
-      <End Role="matter" EntitySet="matter" />
+      <End Role="chain" EntitySet="chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_remote_db" Association="LibiadaWebModel.fk_dna_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_remote_db" Association="LibiadaWebModel.fk_literature_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_music_chain_remote_db" Association="LibiadaWebModel.fk_music_chain_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="music_chain" EntitySet="music_chain" />
+    </AssociationSet>
+      <AssociationSet Name="fk_fmotiv_remote_db" Association="LibiadaWebModel.fk_fmotiv_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="fmotiv" EntitySet="fmotiv" />
+    </AssociationSet>
+    <AssociationSet Name="fk_measure_remote_db" Association="LibiadaWebModel.fk_measure_remote_db">
+      <End Role="remote_db" EntitySet="remote_db" />
+      <End Role="measure" EntitySet="measure" />
     </AssociationSet>
     <AssociationSet Name="fk_notation_nature" Association="LibiadaWebModel.fk_notation_nature">
       <End Role="nature" EntitySet="nature" />
@@ -1438,11 +1532,6 @@
     <AssociationSet Name="fk_congeneric_characteristic_link_up" Association="LibiadaWebModel.fk_congeneric_characteristic_link_up">
       <End Role="link_up" EntitySet="link_up" />
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
-    </AssociationSet>
-
-    <AssociationSet Name="fk_music_chain_instrument" Association="LibiadaWebModel.fk_music_chain_instrument">
-      <End Role="instrument" EntitySet="instrument" />
-      <End Role="music_chain" EntitySet="music_chain" />
     </AssociationSet>
 
     <AssociationSet Name="fk_measure_matter" Association="LibiadaWebModel.fk_measure_matter">
@@ -1573,11 +1662,14 @@
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="chain" ToRole="piece_type" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_chain" FromRole="chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_chain" FromRole="chain" ToRole="characteristic" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_chain_remote_db" FromRole="chain" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -1630,12 +1722,15 @@
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_dna_chain_notation" FromRole="dna_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_dna_chain_piece_type" FromRole="dna_chain" ToRole="piece_type" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_dna_chain_remote_db" FromRole="dna_chain" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="element">
     <Key>
@@ -1684,6 +1779,8 @@
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="original" Type="Boolean" Nullable="false" />
     <Property Name="language_id" Type="Int32" Nullable="false" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_literature_chain" FromRole="literature_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
@@ -1691,6 +1788,7 @@
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="literature_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_literature_chain_notation" FromRole="literature_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_literature_chain_piece_type" FromRole="literature_chain" ToRole="piece_type" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_literature_chain_remote_db" FromRole="literature_chain" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="matter">
     <Key>
@@ -1700,13 +1798,10 @@
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="remote_db_id" Type="Int32" />
-    <Property Name="id_in_remote_db" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="matter" ToRole="chain" />
     <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="matter" ToRole="dna_chain" />
     <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="matter" ToRole="literature_chain" />
     <NavigationProperty Name="nature" Relationship="LibiadaWebModel.fk_matter_nature" FromRole="matter" ToRole="nature" />
-    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_matter_remote_db" FromRole="matter" ToRole="remote_db" />
     <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_fmotiv_matter" FromRole="matter" ToRole="fmotiv" />
     <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_measure_matter" FromRole="matter" ToRole="measure" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_matter" FromRole="matter" ToRole="music_chain" />
@@ -1765,7 +1860,12 @@
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_matter_remote_db" FromRole="remote_db" ToRole="matter" />
+    <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_remote_db" FromRole="remote_db" ToRole="chain" />
+  <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_remote_db" FromRole="remote_db" ToRole="dna_chain" />
+  <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_remote_db" FromRole="remote_db" ToRole="literature_chain" />
+  <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_remote_db" FromRole="remote_db" ToRole="music_chain" />
+  <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_fmotiv_remote_db" FromRole="remote_db" ToRole="fmotiv" />
+    <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_measure_remote_db" FromRole="remote_db" ToRole="measure" />
   </EntityType>
 
   <EntityType Name="fmotiv">
@@ -1783,6 +1883,8 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fmotiv_type_id" Type="Int32" Nullable="false" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_fmotiv_matter" FromRole="fmotiv" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_fmotiv_notation" FromRole="fmotiv" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_fmotiv_piece_type" FromRole="fmotiv" ToRole="piece_type" />
@@ -1790,6 +1892,7 @@
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_fmotiv" FromRole="fmotiv" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_fmotiv" FromRole="fmotiv" ToRole="characteristic" />
     <NavigationProperty Name="fmotiv_type" Relationship="LibiadaWebModel.fk_fmotiv_fmotiv_type" FromRole="fmotiv" ToRole="fmotiv_type" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_fmotiv_remote_db" FromRole="fmotiv" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="congeneric_characteristic">
     <Key>
@@ -1814,7 +1917,6 @@
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="instrument" ToRole="music_chain" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_instrument" FromRole="instrument" ToRole="pitch" />
   </EntityType>
   <EntityType Name="measure">
@@ -1835,12 +1937,15 @@
     <Property Name="beatbase" Type="Int32" Nullable="false" />
     <Property Name="ticks_per_beat" Type="Int32" />
     <Property Name="fifths" Type="Int32" Nullable="false" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_measure_matter" FromRole="measure" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_measure_notation" FromRole="measure" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_measure_piece_type" FromRole="measure" ToRole="piece_type" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_measure" FromRole="measure" ToRole="binary_characteristic" />
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_measure" FromRole="measure" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_measure" FromRole="measure" ToRole="characteristic" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_measure_remote_db" FromRole="measure" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="music_chain">
     <Key>
@@ -1853,14 +1958,15 @@
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
-    <Property Name="instrument_id" Type="Int32" />
-    <NavigationProperty Name="instrument" Relationship="LibiadaWebModel.fk_music_chain_instrument" FromRole="music_chain" ToRole="instrument" />
+    <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_music_chain_matter" FromRole="music_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_music_chain_notation" FromRole="music_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_music_chain_piece_type" FromRole="music_chain" ToRole="piece_type" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_music_chain" FromRole="music_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_music_chain" FromRole="music_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_music_chain" FromRole="music_chain" ToRole="characteristic" />
+    <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_music_chain_remote_db" FromRole="music_chain" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="note">
     <Key>
@@ -2284,14 +2390,74 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_matter_remote_db">
+  <Association Name="fk_dna_chain_remote_db">
     <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
-    <End Role="matter" Type="LibiadaWebModel.matter" Multiplicity="*" />
+    <End Role="dna_chain" Type="LibiadaWebModel.dna_chain" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="remote_db">
         <PropertyRef Name="id" />
       </Principal>
-      <Dependent Role="matter">
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
+    <End Role="chain" Type="LibiadaWebModel.chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_music_chain_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
+    <End Role="music_chain" Type="LibiadaWebModel.music_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="music_chain">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+    <Association Name="fk_fmotiv_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
+    <End Role="fmotiv" Type="LibiadaWebModel.fmotiv" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="fmotiv">
+        <PropertyRef Name="remote_db_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+    <Association Name="fk_measure_remote_db">
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="0..1" />
+    <End Role="measure" Type="LibiadaWebModel.measure" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="remote_db">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="measure">
         <PropertyRef Name="remote_db_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -2436,19 +2602,6 @@
       </Principal>
       <Dependent Role="congeneric_characteristic">
         <PropertyRef Name="link_up_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-
-  <Association Name="fk_music_chain_instrument">
-    <End Role="instrument" Type="LibiadaWebModel.instrument" Multiplicity="0..1" />
-    <End Role="music_chain" Type="LibiadaWebModel.music_chain" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="instrument">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="music_chain">
-        <PropertyRef Name="instrument_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2759,6 +2912,8 @@
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2807,6 +2962,8 @@
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2852,6 +3009,8 @@
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="original" ColumnName="original" />
           <ScalarProperty Name="language_id" ColumnName="language_id" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2862,8 +3021,6 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="nature_id" ColumnName="nature_id" />
           <ScalarProperty Name="description" ColumnName="description" />
-          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-          <ScalarProperty Name="id_in_remote_db" ColumnName="id_in_remote_db" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2921,6 +3078,8 @@
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="fmotiv_type_id" ColumnName="fmotiv_type_id" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2967,6 +3126,8 @@
           <ScalarProperty Name="beatbase" ColumnName="beatbase" />
           <ScalarProperty Name="ticks_per_beat" ColumnName="ticks_per_beat" />
           <ScalarProperty Name="fifths" ColumnName="fifths" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2981,7 +3142,8 @@
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-          <ScalarProperty Name="instrument_id" ColumnName="instrument_id" />
+          <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+          <ScalarProperty Name="remote_id" ColumnName="remote_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -30,19 +30,6 @@
         @Html.DisplayFor(model => model.description)
     </div>
 
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.remote_db_id)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.remote_db.name)
-    </div>
-
-    <div class="display-label">
-        @Html.DisplayNameFor(model => model.id_in_remote_db)
-    </div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.id_in_remote_db)
-    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Редактировать", "Edit", new { Model.id }) |

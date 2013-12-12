@@ -34,7 +34,8 @@ namespace LibiadaWeb
                         "~/Scripts/procedures.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout.js").Include(
-                        "~/Scripts/knockout-{version}.js"));
+                        "~/Scripts/knockout-{version}.js",
+                        "~/Scripts/knockout.mapping-latest.js"));
            
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.

@@ -8,7 +8,6 @@ CREATE EXTENSION IF NOT EXISTS plv8 WITH SCHEMA pg_catalog;
 
 COMMENT ON EXTENSION plv8 IS 'PL/JavaScript (v8) trusted procedural language';
 
-SET search_path = public, pg_catalog;
 
 CREATE FUNCTION check_building(arr integer[]) RETURNS integer
     LANGUAGE plpgsql
@@ -174,53 +173,53 @@ $$;
 
 ALTER FUNCTION public.copy_triggers(srcoid oid, dstoid oid) OWNER TO postgres;
 
-CREATE FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице chain.';
+COMMENT ON FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице chain.';
 
-CREATE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar,	piece_type_id,	piece_position, fasta_header, alphabet, building) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице dna_chain.';
+COMMENT ON FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице dna_chain.';
 
-CREATE FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO fmotiv (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building) VALUES ($1,6,$2,508,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO fmotiv (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,6,$2,508,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице fmotiv.';
+COMMENT ON FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице fmotiv.';
 
-CREATE FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO literature_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar,	piece_type_id,	piece_position, original, language_id, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO literature_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице literature_chain.';
+COMMENT ON FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице literature_chain.';
 
-CREATE FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO measure (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building) VALUES ($1,7,$2,509,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO measure (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id) VALUES ($1,7,$2,509,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице measure.';
+COMMENT ON FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице measure.';
 
-CREATE FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
+CREATE FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO music_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)',[id, notation_id, creation_date, matter_id, dissimilar,	piece_type_id,	piece_position, alphabet, building]);$_$;
+    AS $_$plv8.execute('INSERT INTO music_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
+ALTER FUNCTION public.create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
-COMMENT ON FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице music_chain.';
+COMMENT ON FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице music_chain.';
 
 CREATE FUNCTION db_integrity_test() RETURNS void
     LANGUAGE plv8
@@ -470,7 +469,7 @@ CREATE TABLE accidental (
     description character varying(255)
 );
 
-ALTER TABLE public.accidental OWNER TO postgres;
+
 
 COMMENT ON TABLE accidental IS 'Справочная таблица знаков альтерации.';
 
@@ -487,7 +486,7 @@ CREATE SEQUENCE accidental_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.accidental_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE accidental_id_seq OWNED BY accidental.id;
 
@@ -503,7 +502,7 @@ CREATE TABLE binary_characteristic (
     second_element_id bigint NOT NULL
 );
 
-ALTER TABLE public.binary_characteristic OWNER TO postgres;
+
 
 COMMENT ON TABLE binary_characteristic IS 'Таблица со значениями характеристик зависимостей элементов.';
 
@@ -532,7 +531,7 @@ CREATE SEQUENCE binary_characteristic_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.binary_characteristic_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE binary_characteristic_id_seq OWNED BY binary_characteristic.id;
 
@@ -546,11 +545,13 @@ CREATE TABLE chain (
     piece_position bigint DEFAULT 0 NOT NULL,
     alphabet bigint[] NOT NULL,
     building integer[] NOT NULL,
+    remote_id character varying(255),
+    remote_db_id integer,
     CONSTRAINT chk_chain_building_alphabet_length CHECK ((check_building(building) = array_length(alphabet, 1))),
     CONSTRAINT chk_chain_building_starts_from_1 CHECK ((building[0] = 1))
 );
 
-ALTER TABLE public.chain OWNER TO postgres;
+
 
 COMMENT ON TABLE chain IS 'Таблица строёв цепочек и других параметров.';
 
@@ -572,6 +573,10 @@ COMMENT ON COLUMN chain.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN chain.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN chain.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
 CREATE SEQUENCE chain_id_seq
     START WITH 1
     INCREMENT BY 1
@@ -579,7 +584,7 @@ CREATE SEQUENCE chain_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.chain_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE chain_id_seq OWNED BY chain.id;
 
@@ -587,7 +592,7 @@ CREATE TABLE chain_key (
     id bigint NOT NULL
 );
 
-ALTER TABLE public.chain_key OWNER TO postgres;
+
 
 COMMENT ON TABLE chain_key IS 'Суррогатная таблица, хрянящая ключи всех таблиц-цепочек.';
 
@@ -603,7 +608,7 @@ CREATE TABLE characteristic (
     creation_date timestamp with time zone DEFAULT now() NOT NULL
 );
 
-ALTER TABLE public.characteristic OWNER TO postgres;
+
 
 COMMENT ON TABLE characteristic IS 'Таблица со значениями различных характеристик цепочек.';
 
@@ -627,7 +632,7 @@ CREATE TABLE characteristic_applicability (
     description character varying(255)
 );
 
-ALTER TABLE public.characteristic_applicability OWNER TO postgres;
+
 
 COMMENT ON TABLE characteristic_applicability IS 'Справочная таблица применимости характеристик к тем или иным типам цепочек (однородным, бинарным или полным).';
 
@@ -644,7 +649,7 @@ CREATE SEQUENCE characteristic_applicability_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.characteristic_applicability_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE characteristic_applicability_id_seq OWNED BY characteristic_applicability.id;
 
@@ -654,7 +659,7 @@ CREATE TABLE characteristic_group (
     description character varying(255)
 );
 
-ALTER TABLE public.characteristic_group OWNER TO postgres;
+
 
 COMMENT ON TABLE characteristic_group IS 'Справочник принадлежности характеристик той или иной группе.';
 
@@ -671,7 +676,7 @@ CREATE SEQUENCE characteristic_group_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.characteristic_group_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE characteristic_group_id_seq OWNED BY characteristic_group.id;
 
@@ -684,7 +689,7 @@ CREATE TABLE characteristic_type (
     characteristic_applicability_id integer DEFAULT 1 NOT NULL
 );
 
-ALTER TABLE public.characteristic_type OWNER TO postgres;
+
 
 COMMENT ON TABLE characteristic_type IS 'Таблица видов характеристик';
 
@@ -707,7 +712,7 @@ CREATE SEQUENCE characteristic_type_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.characteristic_type_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE characteristic_type_id_seq OWNED BY characteristic_type.id;
 
@@ -718,7 +723,7 @@ CREATE SEQUENCE characteristics_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.characteristics_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE characteristics_id_seq OWNED BY characteristic.id;
 
@@ -733,7 +738,7 @@ CREATE TABLE congeneric_characteristic (
     element_id bigint NOT NULL
 );
 
-ALTER TABLE public.congeneric_characteristic OWNER TO postgres;
+
 
 COMMENT ON TABLE congeneric_characteristic IS 'Таблица хранящая характеристики однородных цепочек.
 Не используется прямое наследование чтобы избежать выборки одноимённых однородных характеристик вместе с характеристиками полных цепей.';
@@ -761,16 +766,17 @@ CREATE SEQUENCE congeneric_characteristic_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.congeneric_characteristic_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE congeneric_characteristic_id_seq OWNED BY congeneric_characteristic.id;
 
 CREATE TABLE dna_chain (
-    fasta_header character varying(255)
+    fasta_header character varying(255),
+    web_api_id integer
 )
 INHERITS (chain);
 
-ALTER TABLE public.dna_chain OWNER TO postgres;
+
 
 COMMENT ON TABLE dna_chain IS 'Таблица содержащая цепочки ДНК, наследованная от таблицы chain.';
 
@@ -794,6 +800,12 @@ COMMENT ON COLUMN dna_chain.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN dna_chain.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN dna_chain.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN dna_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN dna_chain.web_api_id IS 'id цепочки в удалённой БД.';
+
 CREATE TABLE element (
     id bigint NOT NULL,
     value character varying(255),
@@ -803,7 +815,7 @@ CREATE TABLE element (
     creation_date timestamp with time zone DEFAULT now()
 );
 
-ALTER TABLE public.element OWNER TO postgres;
+
 
 COMMENT ON TABLE element IS 'Элементы цепочек.';
 
@@ -823,7 +835,7 @@ CREATE TABLE element_key (
     id bigint NOT NULL
 );
 
-ALTER TABLE public.element_key OWNER TO postgres;
+
 
 COMMENT ON TABLE element_key IS 'Таблица, содаржащая id всех таблиц элементов.';
 
@@ -836,7 +848,7 @@ CREATE SEQUENCE elements_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.elements_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE elements_id_seq OWNED BY element.id;
 
@@ -848,7 +860,7 @@ CREATE TABLE fmotiv (
 )
 INHERITS (chain, element);
 
-ALTER TABLE public.fmotiv OWNER TO postgres;
+
 
 COMMENT ON TABLE fmotiv IS 'Таблица ф-мотивов.';
 
@@ -878,13 +890,17 @@ COMMENT ON COLUMN fmotiv.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN fmotiv.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN fmotiv.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN fmotiv.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
 CREATE TABLE fmotiv_type (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
     description character varying(255)
 );
 
-ALTER TABLE public.fmotiv_type OWNER TO postgres;
+
 
 COMMENT ON TABLE fmotiv_type IS 'Справочная таблица типов ф-мотивов.';
 
@@ -901,7 +917,7 @@ CREATE SEQUENCE fmotiv_type_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.fmotiv_type_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE fmotiv_type_id_seq OWNED BY fmotiv_type.id;
 
@@ -911,7 +927,7 @@ CREATE TABLE instrument (
     description character varying(255)
 );
 
-ALTER TABLE public.instrument OWNER TO postgres;
+
 
 COMMENT ON TABLE instrument IS 'Справочня таблица инструментов.';
 
@@ -928,7 +944,7 @@ CREATE SEQUENCE instrument_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.instrument_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE instrument_id_seq OWNED BY instrument.id;
 
@@ -938,7 +954,7 @@ CREATE TABLE language (
     description character varying(255)
 );
 
-ALTER TABLE public.language OWNER TO postgres;
+
 
 COMMENT ON TABLE language IS 'Язык литературных текстов.';
 
@@ -955,7 +971,7 @@ CREATE SEQUENCE language_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.language_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE language_id_seq OWNED BY language.id;
 
@@ -965,7 +981,7 @@ CREATE TABLE link_up (
     description character varying(255)
 );
 
-ALTER TABLE public.link_up OWNER TO postgres;
+
 
 COMMENT ON TABLE link_up IS 'Таблица видов привязки.';
 
@@ -982,7 +998,7 @@ CREATE SEQUENCE link_up_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.link_up_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE link_up_id_seq OWNED BY link_up.id;
 
@@ -992,7 +1008,7 @@ CREATE TABLE literature_chain (
 )
 INHERITS (chain);
 
-ALTER TABLE public.literature_chain OWNER TO postgres;
+
 
 COMMENT ON TABLE literature_chain IS 'Таблица с литературными текстами, наследованная от chain.';
 
@@ -1018,16 +1034,18 @@ COMMENT ON COLUMN literature_chain.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN literature_chain.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN literature_chain.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN literature_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
 CREATE TABLE matter (
     id bigint NOT NULL,
     name character varying(255) NOT NULL,
     nature_id integer NOT NULL,
-    description character varying(255),
-    remote_db_id integer,
-    id_in_remote_db character varying(255)
+    description character varying(255)
 );
 
-ALTER TABLE public.matter OWNER TO postgres;
+
 
 COMMENT ON TABLE matter IS 'Таблица объектов исследований, сущностей и т.п.';
 
@@ -1046,7 +1064,7 @@ CREATE SEQUENCE matter_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.matter_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE matter_id_seq OWNED BY matter.id;
 
@@ -1062,7 +1080,7 @@ CREATE TABLE measure (
 )
 INHERITS (chain, element);
 
-ALTER TABLE public.measure OWNER TO postgres;
+
 
 COMMENT ON TABLE measure IS 'Таблица цепочек-элементов - тактов музыкального произведения.';
 
@@ -1100,11 +1118,15 @@ COMMENT ON COLUMN measure.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN measure.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN measure.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN measure.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
 CREATE TABLE music_chain (
 )
 INHERITS (chain);
 
-ALTER TABLE public.music_chain OWNER TO postgres;
+
 
 COMMENT ON TABLE music_chain IS 'Таблица музыкальных цепочек.';
 
@@ -1126,13 +1148,17 @@ COMMENT ON COLUMN music_chain.alphabet IS 'Алфавит цепочки.';
 
 COMMENT ON COLUMN music_chain.building IS 'Строй цепочки.';
 
+COMMENT ON COLUMN music_chain.remote_id IS 'id цепочки в удалённой БД.';
+
+COMMENT ON COLUMN music_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
 CREATE TABLE nature (
     id integer NOT NULL,
     name character varying(100),
     description character varying(255)
 );
 
-ALTER TABLE public.nature OWNER TO postgres;
+
 
 COMMENT ON TABLE nature IS 'Список возможной природы объектов исследований.';
 
@@ -1149,7 +1175,7 @@ CREATE SEQUENCE nature_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.nature_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE nature_id_seq OWNED BY nature.id;
 
@@ -1160,7 +1186,7 @@ CREATE TABLE notation (
     nature_id integer NOT NULL
 );
 
-ALTER TABLE public.notation OWNER TO postgres;
+
 
 COMMENT ON TABLE notation IS 'таблица с перечнем форм записи цепочек.';
 
@@ -1179,7 +1205,7 @@ CREATE SEQUENCE notation_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.notation_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE notation_id_seq OWNED BY notation.id;
 
@@ -1196,7 +1222,7 @@ CREATE TABLE note (
 )
 INHERITS (element);
 
-ALTER TABLE public.note OWNER TO postgres;
+
 
 COMMENT ON TABLE note IS 'Таблица элементов-нот.';
 
@@ -1234,7 +1260,7 @@ CREATE TABLE note_symbol (
     description character varying(255)
 );
 
-ALTER TABLE public.note_symbol OWNER TO postgres;
+
 
 COMMENT ON TABLE note_symbol IS 'Справочная таблица буквенных обозначений нот.';
 
@@ -1251,7 +1277,7 @@ CREATE SEQUENCE note_symbol_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.note_symbol_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE note_symbol_id_seq OWNED BY note_symbol.id;
 
@@ -1262,7 +1288,7 @@ CREATE TABLE piece_type (
     nature_id integer NOT NULL
 );
 
-ALTER TABLE public.piece_type OWNER TO postgres;
+
 
 COMMENT ON TABLE piece_type IS 'Справочная таблица с типами фрагментов цепочек.';
 
@@ -1281,7 +1307,7 @@ CREATE SEQUENCE piece_type_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.piece_type_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE piece_type_id_seq OWNED BY piece_type.id;
 
@@ -1295,7 +1321,7 @@ CREATE TABLE pitch (
     note_symbol_id integer NOT NULL
 );
 
-ALTER TABLE public.pitch OWNER TO postgres;
+
 
 COMMENT ON TABLE pitch IS 'Высота ноты.';
 
@@ -1320,7 +1346,7 @@ CREATE SEQUENCE pitch_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.pitch_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE pitch_id_seq OWNED BY pitch.id;
 
@@ -1331,7 +1357,7 @@ CREATE TABLE remote_db (
     url character varying(255)
 );
 
-ALTER TABLE public.remote_db OWNER TO postgres;
+
 
 COMMENT ON TABLE remote_db IS 'Таблица со списком баз данных из которых брались цепочки.';
 
@@ -1350,7 +1376,7 @@ CREATE SEQUENCE remote_db_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.remote_db_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE remote_db_id_seq OWNED BY remote_db.id;
 
@@ -1360,7 +1386,7 @@ CREATE TABLE tie (
     description character varying(255)
 );
 
-ALTER TABLE public.tie OWNER TO postgres;
+
 
 COMMENT ON TABLE tie IS 'Справочная таблица лиг.';
 
@@ -1377,7 +1403,7 @@ CREATE SEQUENCE tie_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.tie_id_seq OWNER TO postgres;
+
 
 ALTER SEQUENCE tie_id_seq OWNED BY tie.id;
 
@@ -1406,6 +1432,8 @@ ALTER TABLE ONLY dna_chain ALTER COLUMN dissimilar SET DEFAULT false;
 ALTER TABLE ONLY dna_chain ALTER COLUMN piece_type_id SET DEFAULT 1;
 
 ALTER TABLE ONLY dna_chain ALTER COLUMN piece_position SET DEFAULT 0;
+
+ALTER TABLE ONLY dna_chain ALTER COLUMN remote_db_id SET DEFAULT 1;
 
 ALTER TABLE ONLY element ALTER COLUMN id SET DEFAULT nextval('elements_id_seq'::regclass);
 
@@ -1769,14 +1797,6 @@ CREATE INDEX ix_matter_nature ON matter USING btree (nature_id);
 
 COMMENT ON INDEX ix_matter_nature IS 'Индекс по природе таблицы matter.';
 
-CREATE INDEX ix_matter_remote_db ON matter USING btree (remote_db_id);
-
-COMMENT ON INDEX ix_matter_remote_db IS 'Индекс по удалнным БД таблицы matter.';
-
-CREATE INDEX ix_matter_remote_db_id ON matter USING btree (remote_db_id, id_in_remote_db);
-
-COMMENT ON INDEX ix_matter_remote_db_id IS 'Индекс по индексам в удалённых БД таблицы matter.';
-
 CREATE INDEX ix_measure_id ON measure USING btree (id);
 
 CREATE INDEX ix_measure_matter_id ON measure USING btree (matter_id);
@@ -1979,6 +1999,9 @@ ALTER TABLE ONLY chain
 ALTER TABLE ONLY chain
     ADD CONSTRAINT fk_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY chain
+    ADD CONSTRAINT fk_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY characteristic
     ADD CONSTRAINT fk_characterisric_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
@@ -2021,6 +2044,9 @@ ALTER TABLE ONLY dna_chain
 ALTER TABLE ONLY dna_chain
     ADD CONSTRAINT fk_dna_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY dna_chain
+    ADD CONSTRAINT fk_dna_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY element
     ADD CONSTRAINT fk_element_element_key FOREIGN KEY (id) REFERENCES element_key(id);
 
@@ -2045,6 +2071,9 @@ ALTER TABLE ONLY fmotiv
 ALTER TABLE ONLY fmotiv
     ADD CONSTRAINT fk_fmotiv_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY fmotiv
+    ADD CONSTRAINT fk_fmotiv_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY literature_chain
     ADD CONSTRAINT fk_literature_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id);
 
@@ -2060,11 +2089,11 @@ ALTER TABLE ONLY literature_chain
 ALTER TABLE ONLY literature_chain
     ADD CONSTRAINT fk_literature_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
-ALTER TABLE ONLY matter
-    ADD CONSTRAINT fk_matter_nature FOREIGN KEY (nature_id) REFERENCES nature(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY literature_chain
+    ADD CONSTRAINT fk_literature_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY matter
-    ADD CONSTRAINT fk_matter_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
+    ADD CONSTRAINT fk_matter_nature FOREIGN KEY (nature_id) REFERENCES nature(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY measure
     ADD CONSTRAINT fk_measure_chain_key FOREIGN KEY (id) REFERENCES chain_key(id);
@@ -2081,6 +2110,9 @@ ALTER TABLE ONLY measure
 ALTER TABLE ONLY measure
     ADD CONSTRAINT fk_measure_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY measure
+    ADD CONSTRAINT fk_measure_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY music_chain
     ADD CONSTRAINT fk_music_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id);
 
@@ -2092,6 +2124,9 @@ ALTER TABLE ONLY music_chain
 
 ALTER TABLE ONLY music_chain
     ADD CONSTRAINT fk_music_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
+
+ALTER TABLE ONLY music_chain
+    ADD CONSTRAINT fk_music_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY notation
     ADD CONSTRAINT fk_notation_nature FOREIGN KEY (nature_id) REFERENCES nature(id) ON UPDATE CASCADE;
@@ -2125,14 +2160,6 @@ REVOKE ALL ON SCHEMA public FROM postgres;
 GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
-SET search_path = public, pg_catalog;
 
 INSERT INTO accidental (id, name, description) VALUES (1, '-2', 'Дубль-бемоль');
 INSERT INTO accidental (id, name, description) VALUES (2, '-1', 'Бемоль');
@@ -2235,6 +2262,8 @@ INSERT INTO piece_type (id, name, description, nature_id) VALUES (2, 'Полны
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (3, 'Всё произведение', 'Вся цепочка без потерянных фрагментов', 2);
 
 SELECT pg_catalog.setval('piece_type_id_seq', 3, true);
+
+SELECT pg_catalog.setval('pitch_id_seq', 1, false);
 
 INSERT INTO remote_db (id, name, description, url) VALUES (1, 'NCBI', 'Нициональный центр биотехнологической информации', 'http://www.ncbi.nlm.nih.gov');
 

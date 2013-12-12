@@ -63,14 +63,6 @@
             @Html.ValidationMessageFor(model => model.piece_position)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.instrument_id)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("instrument_id", String.Empty)
-            @Html.ValidationMessageFor(model => model.instrument_id)
-        </div>
-
         <p>
             <input type="submit" value="Создать" />
         </p>

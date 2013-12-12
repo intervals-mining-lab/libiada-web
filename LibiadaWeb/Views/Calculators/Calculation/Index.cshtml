@@ -18,15 +18,9 @@
         self.language = ko.observable(language);
     }
 
-    function CharacteristicsViewModel() {
-        var self = this;
-        
-        self.characteristicTypes = @Html.Raw(Json.Encode(ViewBag.characteristicsList)) ;
-        self.linkUps = @Html.Raw(Json.Encode(ViewBag.linkUpsList)) ;
-        self.notations = @Html.Raw(Json.Encode(ViewBag.notationsList)) ;
-        self.languages = @Html.Raw(Json.Encode(ViewBag.languagesList)) ;
-        
-        
+    function CreateCharacteristicsViewModel(data) {
+        var characteristicsViewModel = ko.mapping.fromJS(data);
+        var self = characteristicsViewModel;
         self.characteristics = ko.observableArray([
             new Characteristic(self.characteristicTypes[0],self.linkUps[0],self.notations[0],self.languages[0])
         ]);
@@ -37,18 +31,43 @@
             );
         };
 
-        self.DeleteCharacteristic = function(characteristic) { self.characteristics.remove(characteristic); };
+        self.DeleteCharacteristic = function(characteristic) {
+            self.characteristics.remove(characteristic);
+        };
+
+        return self;
     }
 
     $(document).ready(function () {
+        
+        var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
+
+        ko.applyBindings(CreateCharacteristicsViewModel(data));
         AddDataTablesWithSubmit();
-        ko.applyBindings(new CharacteristicsViewModel());
     });
 </script>
 
 @using (Html.BeginForm())
 {
-    @Html.MattersTable((List<SelectListItem>) ViewBag.matterCheckBoxes, (List<matter>) ViewBag.matters)
+    <table>
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Природа</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: matters">
+            <tr>
+                <td >
+                    <input type="checkbox" name="matterIds" data-bind="value: checkBox.Value, text: checkBox.Text, checked: checkBox.Selected"/>
+                    <span data-bind="text: checkBox.Text"></span>
+                </td>
+                <td data-bind="text: description"></td>
+                <td data-bind="text: nature"></td>
+            </tr>
+        </tbody>
+    </table>
     <br/>
     <button data-bind="click: AddCharacteristic">Добавить характеристику</button>
     <br/>

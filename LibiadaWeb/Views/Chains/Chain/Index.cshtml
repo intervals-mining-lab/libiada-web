@@ -37,6 +37,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.dissimilar)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.remote_id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.remote_db.name)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,6 +61,12 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.dissimilar)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.remote_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.remote_db_id)
                 </td>
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new {item.id}) |

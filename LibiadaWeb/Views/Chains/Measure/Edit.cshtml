@@ -120,6 +120,22 @@
             @Html.EditorFor(model => model.fifths)
             @Html.ValidationMessageFor(model => model.fifths)
         </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.remote_db_id)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("remote_db_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.remote_db_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.remote_id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.remote_id)
+            @Html.ValidationMessageFor(model => model.remote_id)
+        </div>
 
         <p>
             <input type="submit" value="Сохранить" />

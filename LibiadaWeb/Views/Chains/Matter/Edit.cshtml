@@ -41,22 +41,6 @@
             @Html.ValidationMessageFor(model => model.description)
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.remote_db_id)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("remote_db_id", String.Empty)
-            @Html.ValidationMessageFor(model => model.remote_db_id)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.id_in_remote_db)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.id_in_remote_db)
-            @Html.ValidationMessageFor(model => model.id_in_remote_db)
-        </div>
-
         <p>
             <input type="submit" value="Сохранить" />
         </p>

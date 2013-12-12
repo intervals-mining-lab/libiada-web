@@ -22,7 +22,7 @@ namespace LibiadaWeb.Controllers
         // GET api/webapi/5
         public IEnumerable<SelectListItem> Get(int id)
         {
-            List<element> chainElements = chainRepository.GetChainElements(id);
+            List<element> chainElements = chainRepository.GetElements(id);
             return elementRepository.GetSelectListItems(chainElements, null);
         }
     }

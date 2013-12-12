@@ -42,8 +42,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.piece_position)
             </th>
+             <th>
+                @Html.DisplayNameFor(model => model.remote_id)
+            </th>
             <th>
-                @Html.DisplayNameFor(model => model.instrument_id)
+                @Html.DisplayNameFor(model => model.remote_db.name)
             </th>
             <th></th>
         </tr>
@@ -71,7 +74,10 @@
                     @Html.DisplayFor(modelItem => item.piece_position)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.instrument.name)
+                    @Html.DisplayFor(modelItem => item.remote_id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.remote_db_id)
                 </td>
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new {item.id}) |

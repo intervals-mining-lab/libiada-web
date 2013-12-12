@@ -38,7 +38,12 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_notation_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.notation), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_piece_type_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.piece_type), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
@@ -57,7 +62,6 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_type", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_link_up", "link_up", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.link_up), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_instrument", "instrument", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.instrument), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
@@ -1582,6 +1586,54 @@ namespace LibiadaWeb
         private global::System.Int64 _piece_position;
         partial void Onpiece_positionChanging(global::System.Int64 value);
         partial void Onpiece_positionChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> remote_db_id
+        {
+            get
+            {
+                return _remote_db_id;
+            }
+            set
+            {
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String remote_id
+        {
+            get
+            {
+                return _remote_id;
+            }
+            set
+            {
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
+            }
+        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
 
         #endregion
 
@@ -1741,6 +1793,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_chain", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_chain_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_chain_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_chain_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_chain_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_chain_remote_db", "remote_db", value);
                 }
             }
         }
@@ -3232,6 +3322,54 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Int32> remote_db_id
+        {
+            get
+            {
+                return _remote_db_id;
+            }
+            set
+            {
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String remote_id
+        {
+            get
+            {
+                return _remote_id;
+            }
+            set
+            {
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
+            }
+        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String fasta_header
         {
             get
@@ -3409,6 +3547,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<piece_type>("LibiadaWebModel.fk_dna_chain_piece_type", "piece_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_dna_chain_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_dna_chain_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_dna_chain_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_dna_chain_remote_db", "remote_db", value);
                 }
             }
         }
@@ -4008,6 +4184,54 @@ namespace LibiadaWeb
         private global::System.Int32 _fmotiv_type_id;
         partial void Onfmotiv_type_idChanging(global::System.Int32 value);
         partial void Onfmotiv_type_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> remote_db_id
+        {
+            get
+            {
+                return _remote_db_id;
+            }
+            set
+            {
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String remote_id
+        {
+            get
+            {
+                return _remote_id;
+            }
+            set
+            {
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
+            }
+        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
 
         #endregion
 
@@ -4227,6 +4451,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<fmotiv_type>("LibiadaWebModel.fk_fmotiv_fmotiv_type", "fmotiv_type", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_fmotiv_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_fmotiv_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_fmotiv_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_fmotiv_remote_db", "remote_db", value);
                 }
             }
         }
@@ -4472,28 +4734,6 @@ namespace LibiadaWeb
         #endregion
 
         #region Свойства навигации
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_instrument", "music_chain")]
-        public EntityCollection<music_chain> music_chain
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_instrument", "music_chain");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_instrument", "music_chain", value);
-                }
-            }
-        }
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -5066,6 +5306,54 @@ namespace LibiadaWeb
         private global::System.Int32 _language_id;
         partial void Onlanguage_idChanging(global::System.Int32 value);
         partial void Onlanguage_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> remote_db_id
+        {
+            get
+            {
+                return _remote_db_id;
+            }
+            set
+            {
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String remote_id
+        {
+            get
+            {
+                return _remote_id;
+            }
+            set
+            {
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
+            }
+        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
 
         #endregion
 
@@ -5288,6 +5576,44 @@ namespace LibiadaWeb
                 }
             }
         }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_literature_chain_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_literature_chain_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_literature_chain_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_literature_chain_remote_db", "remote_db", value);
+                }
+            }
+        }
 
         #endregion
 
@@ -5418,54 +5744,6 @@ namespace LibiadaWeb
         private global::System.String _description;
         partial void OndescriptionChanging(global::System.String value);
         partial void OndescriptionChanged();
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.Int32> remote_db_id
-        {
-            get
-            {
-                return _remote_db_id;
-            }
-            set
-            {
-                Onremote_db_idChanging(value);
-                ReportPropertyChanging("remote_db_id");
-                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
-                ReportPropertyChanged("remote_db_id");
-                Onremote_db_idChanged();
-            }
-        }
-        private Nullable<global::System.Int32> _remote_db_id;
-        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
-        partial void Onremote_db_idChanged();
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String id_in_remote_db
-        {
-            get
-            {
-                return _id_in_remote_db;
-            }
-            set
-            {
-                Onid_in_remote_dbChanging(value);
-                ReportPropertyChanging("id_in_remote_db");
-                _id_in_remote_db = StructuralObject.SetValidValue(value, true, "id_in_remote_db");
-                ReportPropertyChanged("id_in_remote_db");
-                Onid_in_remote_dbChanged();
-            }
-        }
-        private global::System.String _id_in_remote_db;
-        partial void Onid_in_remote_dbChanging(global::System.String value);
-        partial void Onid_in_remote_dbChanged();
 
         #endregion
 
@@ -5571,44 +5849,6 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<nature>("LibiadaWebModel.fk_matter_nature", "nature", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_matter_remote_db", "remote_db")]
-        public remote_db remote_db
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_matter_remote_db", "remote_db").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_matter_remote_db", "remote_db").Value = value;
-            }
-        }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<remote_db> remote_dbReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_matter_remote_db", "remote_db");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_matter_remote_db", "remote_db", value);
                 }
             }
         }
@@ -6064,6 +6304,54 @@ namespace LibiadaWeb
         private global::System.Int32 _fifths;
         partial void OnfifthsChanging(global::System.Int32 value);
         partial void OnfifthsChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> remote_db_id
+        {
+            get
+            {
+                return _remote_db_id;
+            }
+            set
+            {
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String remote_id
+        {
+            get
+            {
+                return _remote_id;
+            }
+            set
+            {
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
+            }
+        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
 
         #endregion
 
@@ -6245,6 +6533,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_measure", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_measure_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_measure_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_measure_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_measure_remote_db", "remote_db", value);
                 }
             }
         }
@@ -6466,66 +6792,52 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> instrument_id
+        public Nullable<global::System.Int32> remote_db_id
         {
             get
             {
-                return _instrument_id;
+                return _remote_db_id;
             }
             set
             {
-                Oninstrument_idChanging(value);
-                ReportPropertyChanging("instrument_id");
-                _instrument_id = StructuralObject.SetValidValue(value, "instrument_id");
-                ReportPropertyChanged("instrument_id");
-                Oninstrument_idChanged();
+                Onremote_db_idChanging(value);
+                ReportPropertyChanging("remote_db_id");
+                _remote_db_id = StructuralObject.SetValidValue(value, "remote_db_id");
+                ReportPropertyChanged("remote_db_id");
+                Onremote_db_idChanged();
             }
         }
-        private Nullable<global::System.Int32> _instrument_id;
-        partial void Oninstrument_idChanging(Nullable<global::System.Int32> value);
-        partial void Oninstrument_idChanged();
-
-        #endregion
-
-        #region Свойства навигации
+        private Nullable<global::System.Int32> _remote_db_id;
+        partial void Onremote_db_idChanging(Nullable<global::System.Int32> value);
+        partial void Onremote_db_idChanged();
     
         /// <summary>
         /// Нет доступной документации по метаданным.
         /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_instrument", "instrument")]
-        public instrument instrument
+        public global::System.String remote_id
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument").Value;
+                return _remote_id;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument").Value = value;
+                Onremote_idChanging(value);
+                ReportPropertyChanging("remote_id");
+                _remote_id = StructuralObject.SetValidValue(value, true, "remote_id");
+                ReportPropertyChanged("remote_id");
+                Onremote_idChanged();
             }
         }
-        /// <summary>
-        /// Нет доступной документации по метаданным.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<instrument> instrumentReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<instrument>("LibiadaWebModel.fk_music_chain_instrument", "instrument", value);
-                }
-            }
-        }
+        private global::System.String _remote_id;
+        partial void Onremote_idChanging(global::System.String value);
+        partial void Onremote_idChanged();
+
+        #endregion
+
+        #region Свойства навигации
     
         /// <summary>
         /// Нет доступной документации по метаданным.
@@ -6703,6 +7015,44 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic>("LibiadaWebModel.fk_characteristic_music_chain", "characteristic", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_remote_db", "remote_db")]
+        public remote_db remote_db
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_music_chain_remote_db", "remote_db").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_music_chain_remote_db", "remote_db").Value = value;
+            }
+        }
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<remote_db> remote_dbReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<remote_db>("LibiadaWebModel.fk_music_chain_remote_db", "remote_db");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<remote_db>("LibiadaWebModel.fk_music_chain_remote_db", "remote_db", value);
                 }
             }
         }
@@ -8663,18 +9013,128 @@ namespace LibiadaWeb
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_matter_remote_db", "matter")]
-        public EntityCollection<matter> matter
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_chain_remote_db", "chain")]
+        public EntityCollection<chain> chain
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<matter>("LibiadaWebModel.fk_matter_remote_db", "matter");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<chain>("LibiadaWebModel.fk_chain_remote_db", "chain");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<matter>("LibiadaWebModel.fk_matter_remote_db", "matter", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<chain>("LibiadaWebModel.fk_chain_remote_db", "chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_dna_chain_remote_db", "dna_chain")]
+        public EntityCollection<dna_chain> dna_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_remote_db", "dna_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dna_chain>("LibiadaWebModel.fk_dna_chain_remote_db", "dna_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_literature_chain_remote_db", "literature_chain")]
+        public EntityCollection<literature_chain> literature_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_remote_db", "literature_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<literature_chain>("LibiadaWebModel.fk_literature_chain_remote_db", "literature_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_music_chain_remote_db", "music_chain")]
+        public EntityCollection<music_chain> music_chain
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_remote_db", "music_chain");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<music_chain>("LibiadaWebModel.fk_music_chain_remote_db", "music_chain", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_fmotiv_remote_db", "fmotiv")]
+        public EntityCollection<fmotiv> fmotiv
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_remote_db", "fmotiv");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<fmotiv>("LibiadaWebModel.fk_fmotiv_remote_db", "fmotiv", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_measure_remote_db", "measure")]
+        public EntityCollection<measure> measure
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<measure>("LibiadaWebModel.fk_measure_remote_db", "measure");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<measure>("LibiadaWebModel.fk_measure_remote_db", "measure", value);
                 }
             }
         }

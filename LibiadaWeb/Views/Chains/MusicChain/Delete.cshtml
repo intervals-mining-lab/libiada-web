@@ -39,10 +39,17 @@
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.instrument_id)
+        @Html.DisplayNameFor(model => model.remote_db_id)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.instrument.name)
+        @Html.DisplayFor(model => model.remote_db.name)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.remote_id)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.remote_id)
     </div>
 </fieldset>
 @using (Html.BeginForm()) {

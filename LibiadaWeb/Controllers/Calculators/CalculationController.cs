@@ -35,17 +35,34 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            List<matter> matters = db.matter.Include("nature").ToList();
-            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
-            ViewBag.matters = matters;
+            var checkBoxes = matterRepository.GetSelectListItems(db.matter, null);
+            var matters = db.matter.ToArray();
+            var mattersArray = new object[matters.Count()];
+            for (int i = 0; i < matters.Count(); i++)
+            {
+                
+                mattersArray[i] = new
+                    {
+                        id = matters[i].id,
+                        name = matters[i].name,
+                        description = matters[i].description,
+                        nature = matters[i].nature.name,
+                        checkBox = checkBoxes.Single(c => c.Value == matters[i].id.ToString())
+
+                    };
+            }
 
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
-            ViewBag.languagesList = new SelectList(db.language, "id", "name");
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    {"matters", mattersArray},
+                    {"characteristicTypes", characteristicRepository.GetSelectListItems(characteristicsList, null)},
+                    {"notations", notationRepository.GetSelectListItems(null)},
+                    {"linkUps", linkUpRepository.GetSelectListItems(null)},
+                    {"languages", new SelectList(db.language, "id", "name")}
+                };
             return View();
         }
 

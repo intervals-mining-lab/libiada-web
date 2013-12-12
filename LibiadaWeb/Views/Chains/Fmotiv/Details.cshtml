@@ -78,6 +78,19 @@
     <div class="display-field">
         @Html.DisplayFor(model => model.fmotiv_type.name)
     </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.remote_db_id)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.remote_db.name)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.remote_id)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.remote_id)
+    </div>
 </fieldset>
 <p>
     @Html.ActionLink("Edit", "Edit", new { Model.id }) |

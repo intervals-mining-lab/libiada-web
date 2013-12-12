@@ -371,4 +371,107 @@ LANGUAGE plv8 VOLATILE NOT LEAKPROOF;
 
 COMMENT ON FUNCTION public.trigger_check_alphabet() IS 'Триггерная функция, проверяющая что все элементы алфавита добавляемой цепочки есть в базе.';
 
+
+
+-- 08.12.2013
+
+-- id сторонних БД перенесены из объектов исследования в цепочки.
+-- Добеавлено поле внутреннего id в сторонней БД для генетических цепочек.
+-- Изменены функции создания новых цепочек.
+
+ALTER TABLE chain ADD COLUMN remote_id character varying(255);
+ALTER TABLE chain ADD COLUMN remote_db_id integer;
+COMMENT ON COLUMN chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+ALTER TABLE dna_chain ALTER COLUMN remote_db_id SET DEFAULT 1;
+ALTER TABLE dna_chain ADD COLUMN web_api_id integer;
+COMMENT ON COLUMN dna_chain.web_api_id IS 'id цепочки в удалённой БД.';
+
+ALTER TABLE chain ADD CONSTRAINT fk_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE dna_chain ADD CONSTRAINT fk_dna_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE literature_chain ADD CONSTRAINT fk_literature_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE music_chain ADD CONSTRAINT fk_music_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE fmotiv ADD CONSTRAINT fk_fmotiv_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE measure ADD CONSTRAINT fk_measure_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+UPDATE chain SET chain.remote_id = matter.id_in_remote_db, chain.remote_db_id = matter.remote_db_id FROM matter WHERE chain.matter_id = matter.id;
+
+ALTER TABLE matter DROP CONSTRAINT fk_matter_remote_db;
+
+ALTER TABLE matter DROP COLUMN remote_db_id;
+ALTER TABLE matter DROP COLUMN id_in_remote_db;
+
+
+DROP FUNCTION create_chain(bigint, integer, bigint, integer, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_chain(bigint, integer, bigint, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице chain.';
+
+
+DROP FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице dna_chain.';
+
+
+DROP FUNCTION create_fmotiv(bigint, integer, character varying, character varying, character varying, integer, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO fmotiv (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,6,$2,508,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_fmotiv(bigint, integer, character varying, character varying, character varying, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице fmotiv.';
+
+
+DROP FUNCTION create_literature_chain(bigint, integer, bigint, integer, boolean, integer, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO literature_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_literature_chain(bigint, integer, bigint, integer, boolean, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице literature_chain.';
+
+
+DROP FUNCTION create_measure(bigint, integer, character varying, character varying, character varying, integer, integer, integer, integer, boolean, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO measure (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id) VALUES ($1,7,$2,509,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_measure(bigint, integer, character varying, character varying, character varying, integer, integer, integer, integer, boolean, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице measure.';
+
+
+DROP FUNCTION create_music_chain(bigint, integer, bigint, integer, bigint[], integer[], timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO music_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$BODY$
+  LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION create_music_chain(bigint, integer, bigint, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице music_chain.';
+
+COMMENT ON COLUMN chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN dna_chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN dna_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN literature_chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN literature_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN music_chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN music_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN fmotiv.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN fmotiv.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+COMMENT ON COLUMN measure.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN measure.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+
+
 COMMIT;

@@ -179,7 +179,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                       b.characteristic_type_id == characteristicId &&
                                                                       b.link_up_id == linkUpId && b.first_element_id == wordId);
-            List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
+            List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             if (calculatedCount < currentChain.Alphabet.Power)
             {
                 //TODO: проверить что + - 1 нигде к индексам не надо добавлять
@@ -243,7 +243,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                  b.link_up_id == linkUpId);
             if (calculatedCount < currentChain.Alphabet.Power*currentChain.Alphabet.Power)
             {
-                List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
+                List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
                 for (int i = 0; i < currentChain.Alphabet.Power; i++)
                 {
                     for (int j = 0; j < currentChain.Alphabet.Power; j++)
@@ -272,7 +272,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private void FrequencyCharacteristic(int characteristicId, int linkUpId, int frequencyCount, Chain currentChain,
                                              chain dbChain, IBinaryCalculator calculator, LinkUp linkUp)
         {
-            List<long> chainElements = chainRepository.GetChainElementIds(dbChain.id);
+            List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             //считаем частоты слов
             List<KeyValuePair<IBaseObject, double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
             for (int f = 0; f < currentChain.Alphabet.Power; f++)

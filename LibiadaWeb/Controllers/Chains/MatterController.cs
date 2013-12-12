@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -53,10 +54,14 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult Create()
         {
-            ViewBag.nature_id = new SelectList(db.nature, "id", "name");
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
-            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    {"natureIds", new SelectList(db.nature, "id", "name")},
+                    {"notationIds", new SelectList(db.notation, "id", "name")},
+                    {"languageIds", new SelectList(db.language, "id", "name")},
+                    {"NotationNature", Aliases.NotationNatureName},
+                    {"matter", new matter()}
+                };
             return View();
         }
 
@@ -193,7 +198,6 @@ namespace LibiadaWeb.Controllers.Chains
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", matter.remote_db_id);
             return View(matter);
         }
 
@@ -208,7 +212,6 @@ namespace LibiadaWeb.Controllers.Chains
                 return HttpNotFound();
             }
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", matter.remote_db_id);
             return View(matter);
         }
 
@@ -226,7 +229,6 @@ namespace LibiadaWeb.Controllers.Chains
                 return RedirectToAction("Index");
             }
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", matter.remote_db_id);
             return View(matter);
         }
 

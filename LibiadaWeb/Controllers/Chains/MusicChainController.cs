@@ -54,7 +54,6 @@ namespace LibiadaWeb.Controllers.Chains
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
-            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
@@ -71,7 +70,6 @@ namespace LibiadaWeb.Controllers.Chains
             {
                 return HttpNotFound();
             }
-            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
@@ -91,7 +89,6 @@ namespace LibiadaWeb.Controllers.Chains
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", music_chain.instrument_id);
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);

@@ -76,6 +76,12 @@ namespace LibiadaWeb
 
         [Display(Name = "Позиция с которой начинается цепочка")]
         public long piece_position { get; set; }
+
+        [Display(Name = "Сторонняя БД")]
+        public int remote_db_id { get; set; }
+
+        [Display(Name = "id в сторонней БД")]
+        public string remote_id { get; set; }
     }
 
     [MetadataType(typeof (CharacteristicDataAnnotations))]
@@ -258,11 +264,7 @@ namespace LibiadaWeb
         [Display(Name = "Природа")]
         public int nature_id { get; set; }
 
-        [Display(Name = "Сторонняя БД")]
-        public int remote_db_id { get; set; }
-
-        [Display(Name = "id в сторонней БД")]
-        public string id_in_remote_db { get; set; }
+        
     }
 
     [MetadataType(typeof (MeasureDataAnnotations))]

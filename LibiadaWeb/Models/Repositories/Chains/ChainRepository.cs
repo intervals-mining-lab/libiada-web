@@ -7,20 +7,16 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.TheoryOfSet;
-using LibiadaWeb.Helpers;
 using Npgsql;
-using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
-    public class ChainRepository : IChainRepository
+    public class ChainRepository :ChainImporter, IChainRepository
     {
-        private readonly LibiadaWebEntities db;
         private readonly ElementRepository elementRepository;
 
-        public ChainRepository(LibiadaWebEntities db)
+        public ChainRepository(LibiadaWebEntities db) : base(db)
         {
-            this.db = db;
             elementRepository = new ElementRepository(db);
         }
 
@@ -46,72 +42,20 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(chain chain, long[] alphabet, int[] building)
         {
-            if (chain.id == 0)
-            {
-                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
-            }
+            var parameters = FillParams(chain, alphabet, building);
 
-            NpgsqlParameter[] parameters =
-                {
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@notation_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.notation_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@matter_id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.matter_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_type_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_type_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@alphabet",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                            Value = alphabet
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@building",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                            Value = building
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@creation_date",
-                            NpgsqlDbType = NpgsqlDbType.TimestampTZ,
-                            Value = DateTime.Now
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_position",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_position
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@dissimilar",
-                            NpgsqlDbType = NpgsqlDbType.Boolean,
-                            Value = chain.dissimilar
-                        }
-
-                };
-
-            String query =
-                "SELECT create_chain(@id,@notation_id,@matter_id,@piece_type_id,@alphabet,@building,@creation_date,@piece_position,@dissimilar);";
+            String query = @"SELECT create_chain(
+                                    @id,
+                                    @notation_id,
+                                    @matter_id,
+                                    @piece_type_id,
+                                    @alphabet,
+                                    @building,
+                                    @remote_id,
+                                    @remote_db_id,
+                                    @creation_date,
+                                    @piece_position,
+                                    @dissimilar);";
             db.ExecuteStoreCommand(query, parameters);
         }
 
@@ -169,26 +113,26 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return chainsList;
         }
 
-        public List<element> GetChainElements(long chainId)
+        public List<element> GetElements(long chainId)
         {
             
-            List<long> elementIds = GetChainElementIds(chainId);
+            List<long> elementIds = GetElementIds(chainId);
             return elementRepository.GetElements(elementIds);
         }
 
-        public Alphabet GetChainAlphabet(long chainId)
+        public Alphabet GetAlphabet(long chainId)
         {
-            List<long> elements = GetChainElementIds(chainId);
+            List<long> elements = GetElementIds(chainId);
             return elementRepository.ToLibiadaAlphabet(elements);
         }
 
-        public List<long> GetChainElementIds(long chainId)
+        public List<long> GetElementIds(long chainId)
         {
             const string query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
             return db.ExecuteStoreQuery<long>(query, new NpgsqlParameter("@id", chainId)).ToList();
         }
 
-        public int[] GetChainBuilding(long chainId)
+        public int[] GetBuilding(long chainId)
         {
             const string query = "SELECT unnest(building) FROM chain WHERE id = @id";
             return db.ExecuteStoreQuery<int>(query, new NpgsqlParameter("@id", chainId)).ToArray();
@@ -196,12 +140,12 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public BaseChain ToLBaseChain(long chainId)
         {
-            return new BaseChain(GetChainBuilding(chainId), GetChainAlphabet(chainId));
+            return new BaseChain(GetBuilding(chainId), GetAlphabet(chainId));
         }
 
         public Chain ToLibiadaChain(long chainId)
         {
-            return new Chain(GetChainBuilding(chainId), GetChainAlphabet(chainId));
+            return new Chain(GetBuilding(chainId), GetAlphabet(chainId));
         }
 
         public void Dispose()

@@ -14,7 +14,7 @@ namespace LibiadaWeb.Helpers
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            List<String> headers = new List<String> { "Название", "Описание", "Природа", "id удалённой БД" };
+            List<String> headers = new List<String> { "Название", "Описание", "Природа"};
 
             List<List<String>> bodyData = new List<List<String>>();
 
@@ -25,18 +25,27 @@ namespace LibiadaWeb.Helpers
                 bodyData[i].Add(checkBoxes[i].ToString());
                 bodyData[i].Add(matters[i].description);
                 bodyData[i].Add(matters[i].nature.name);
-                bodyData[i].Add(matters[i].id_in_remote_db);
             }
 
             return helper.Table(headers, bodyData);
         }
 
         public static MvcHtmlString ChainsTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
-                                                 List<chain> chains, List<String> languages, List<String> fastaHeaders)
+                                                 List<chain> chains, List<String> languages, List<String> fastaHeaders, List<String> remoteIds )
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            List<String> headers = new List<String> { "Название", "Форма записи", "Дата создания", "Тип фрагмента", "Позиция фрагмента", "Язык", "Заголовок fasta файла" };
+            List<String> headers = new List<String>
+                {
+                    "Название", 
+                    "Форма записи", 
+                    "Дата создания", 
+                    "Тип фрагмента", 
+                    "Позиция фрагмента", 
+                    "Язык", 
+                    "Заголовок fasta файла",
+                    "id удалённой БД"
+                };
 
             List<List<String>> bodyData = new List<List<String>>();
 
@@ -51,6 +60,7 @@ namespace LibiadaWeb.Helpers
                 bodyData[i].Add(chains[i].piece_position.ToString());
                 bodyData[i].Add(languages[i]);
                 bodyData[i].Add(fastaHeaders[i]);
+                bodyData[i].Add(remoteIds[i]);
 
             }
 

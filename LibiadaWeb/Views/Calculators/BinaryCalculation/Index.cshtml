@@ -45,7 +45,7 @@
 @using (Html.BeginForm())
 {
     
-    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<chain>)ViewBag.chains, (List<String>)ViewBag.languages, (List<String>)ViewBag.fastaHeaders)
+    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<chain>)ViewBag.chains, (List<String>)ViewBag.languages, (List<String>)ViewBag.fastaHeaders, (List<String>)ViewBag.remoteIds)
     <br/>
     @Html.Label("Характеристика:")
     <select name="characteristicId" id="characteristicId">

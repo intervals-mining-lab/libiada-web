@@ -11,13 +11,10 @@ using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
-    public class LiteratureChainRepository : ILiteratureChainRepository
+    public class LiteratureChainRepository : ChainImporter, ILiteratureChainRepository
     {
-        private readonly LibiadaWebEntities db;
-
-        public LiteratureChainRepository(LibiadaWebEntities db)
+        public LiteratureChainRepository(LibiadaWebEntities db) : base(db)
         {
-            this.db = db;
         }
 
         public IQueryable<literature_chain> All
@@ -43,108 +40,52 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(chain chain, bool original, int languageId, long[] alphabet, int[] building)
         {
-            literature_chain literatureChain = new literature_chain
+            var parameters = FillParams(chain, alphabet, building);
+            parameters.Add(new NpgsqlParameter
             {
-                id = chain.id,
-                dissimilar = chain.dissimilar,
-                notation_id = chain.notation_id,
-                matter_id = chain.matter_id,
-                original = original,
-                language_id = languageId,
-                piece_type_id = chain.piece_type_id,
-                creation_date = DateTime.Now,
-                piece_position = chain.piece_position
-            };
+                ParameterName = "@original",
+                NpgsqlDbType = NpgsqlDbType.Boolean,
+                Value = original
+            });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "@language_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = languageId
+            });
 
-            Insert(literatureChain, alphabet, building);
+            String query = @"SELECT create_literature_chain(
+                                    @id,
+                                    @notation_id,
+                                    @matter_id,
+                                    @piece_type_id,
+                                    @original,
+                                    @language_id
+                                    @alphabet,
+                                    @building,
+                                    @remote_id,
+                                    @remote_db_id,
+                                    @creation_date,
+                                    @piece_position,
+                                    @dissimilar);";
+            db.ExecuteStoreCommand(query, parameters);
         }
 
 
         public void Insert(literature_chain chain, long[] alphabet, int[] building)
         {
-            if (chain.id == 0)
+            var literatureChain = new chain
             {
-                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
-            }
+                id = chain.id,
+                dissimilar = chain.dissimilar,
+                notation_id = chain.notation_id,
+                matter_id = chain.matter_id,
+                piece_type_id = chain.piece_type_id,
+                creation_date = DateTime.Now,
+                piece_position = chain.piece_position
+            };
 
-            if (chain.id == 0)
-            {
-                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
-            }
-
-            NpgsqlParameter[] parameters =
-                {
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@notation_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.notation_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@matter_id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.matter_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_type_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_type_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@original",
-                            NpgsqlDbType = NpgsqlDbType.Boolean,
-                            Value = chain.original
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@language_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.language_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@alphabet",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                            Value = alphabet
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@building",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                            Value = building
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@creation_date",
-                            NpgsqlDbType = NpgsqlDbType.TimestampTZ,
-                            Value = DateTime.Now
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_position",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_position
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@dissimilar",
-                            NpgsqlDbType = NpgsqlDbType.Boolean,
-                            Value = chain.dissimilar
-                        }
-                };
-
-            String query =
-                "SELECT create_literature_chain(@id,@notation_id,@matter_id,@piece_type_id,@original,@language_id,@alphabet,@building,@creation_date,@piece_position,@dissimilar);";
-            db.ExecuteStoreCommand(query, parameters);
+            Insert(literatureChain, chain.original, chain.language_id, alphabet, building);
         }
 
         public void InsertOrUpdate(literature_chain literature_chain)

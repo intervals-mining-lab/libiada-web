@@ -100,7 +100,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                     ICalculator calculator = CalculatorsFactory.Create(className);
                     LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
-                    List<long> chainElements = chainRepository.GetChainElementIds(chainId);
+                    List<long> chainElements = chainRepository.GetElementIds(chainId);
                     int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_up_id == linkUpId);

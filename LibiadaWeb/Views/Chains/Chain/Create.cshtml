@@ -3,66 +3,91 @@
 @{
     ViewBag.Title = "Цепочки";
 }
-@Html.ValidationMessage("Error")
+
 <h2>Создание цепочки</h2>
+
+@Html.ValidationMessage("Error")
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
 
-<script language="javascript">
+<script>
 
-    function SelectChainType(event) {
-        switch (event.target.value) {
-            case "1":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "2":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "3":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "6":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "15":
-                $("#literatureChain")[0].hidden = false;
-                break;
-            default:
-        }
+    function CreateChainViewModel(data) {
+        var chainViewModel = ko.mapping.fromJS(data);
+        var self = chainViewModel;
 
+        self.remoteDbs.push('');
+        self.localFile = ko.observable(true);
+
+        self.matterNature = ko.computed(function() {
+            var matter = ko.utils.arrayFirst(self.matters(), function(item) {
+                return item.Value() == self.chain.matter_id();
+            });
+            matter = matter || { Nature: function() { return 0; } };
+            return matter.Nature();
+        });
+
+        self.filteredNotations = ko.computed(function() {
+            return ko.utils.arrayFilter(self.notations(), function(item) {
+                return item.Nature() == self.matterNature();
+            });
+        });
+
+        self.filteredpieceTypes = ko.computed(function() {
+            return ko.utils.arrayFilter(self.pieceTypes(), function(item) {
+                return item.Nature() == self.matterNature();
+            });
+        });
+
+        self.isLiteratureChain = ko.computed(function() {
+            return self.NatureLiterature() == self.matterNature();
+        });
+
+        return self;
     }
 
     $(document).ready(function () {
-        var notationId = $("[name='notation_id']")[0];
-        notationId.onclick = SelectChainType;
+        var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
+
+        ko.applyBindings(CreateChainViewModel(data));
+
     });
     
 </script>
 
-@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new { enctype = "multipart/form-data" })) 
+@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new {enctype = "multipart/form-data"}))
 {
     @Html.ValidationSummary(true)
     <fieldset>
         <legend>Цепочка</legend>
-
-        <input type="file" name="file" id="file"/>
+        <div class="editor-label">
+            <label>Загружать цепочку из локального файла</label>
+        </div>
+        <input type="checkbox" data-bind="checked: localFile" />
+        <input type="hidden" name="localFile" value="false" />
+        <div id="globalFileDiv" data-bind="visible: !localFile()">
+            <input type="text" id="fileId" name="fileId"/>
+        </div>
+        <div id="localFileDiv" data-bind="visible: localFile()">
+            <input type="file" name="file" id="file"/>
+        </div>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.matter_id)
+        </div>
+        <div class="editor-field">
+            <select name="matter_id" data-bind="value: chain.matter_id, options: $root.matters, optionsText: 'Text', optionsValue: 'Value'"></select>
+            @Html.ValidationMessageFor(model => model.matter_id)
+        </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.notation_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("notation_id", String.Empty)
+            <select name="notation_id" data-bind="value: chain.notation_id, options: $root.filteredNotations, optionsText: 'Text', optionsValue: 'Value'"></select>
             @Html.ValidationMessageFor(model => model.notation_id)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.matter_id)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("matter_id", String.Empty)
-            @Html.ValidationMessageFor(model => model.matter_id)
         </div>
 
         <div class="editor-label">
@@ -77,27 +102,36 @@
             @Html.LabelFor(model => model.piece_type_id)
         </div>
         <div class="editor-field">
-                @Html.DropDownList("piece_type_id", String.Empty)
-                @Html.ValidationMessageFor(model => model.piece_type_id)
+            <select name="piece_type_id" data-bind="value: chain.piece_type_id, options: $root.filteredpieceTypes, optionsText: 'Text', optionsValue: 'Value'"></select>
+            @Html.ValidationMessageFor(model => model.piece_type_id)
         </div>
-
-        <div id="literatureChain" hidden="true">
         <div class="editor-label">
-           <label>Язык литературного произведения</label>
+            @Html.LabelFor(model => model.remote_db_id)
         </div>
-        <select name="languageId">
-        @foreach (var option in ViewBag.language_id)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-        </select>
+        <div class="editor-field">
+            <select name="remote_db_id" data-bind="value: chain.remote_db_id, options: $root.remoteDbs, optionsText: 'Text', optionsValue: 'Value'"></select>
+            @Html.ValidationMessageFor(model => model.remote_db_id)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.remote_id)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.remote_id)
+            @Html.ValidationMessageFor(model => model.remote_id)
+        </div>
 
+        <div data-bind="visible: isLiteratureChain()">
+            <div class="editor-label">
+                <label>Язык литературного произведения</label>
+            </div>
+            <div class="editor-field">
+                <select name="language_id" data-bind="options: $root.languages, optionsText: 'Text', optionsValue: 'Value'"></select>
+            </div>
             <div class="editor-label">
                 <label>Произведение является оригиналом, а не переводом</label>
             </div>
-
-        <input type="checkbox" name="original" id="original" value="true" />
-        <input type="hidden" name="original" value="false" />
+            <input type="checkbox" name="original" id="original" value="true" />
+            <input type="hidden" name="original" value="false" />
         </div>
         <p>
             <input type="submit" value="Создать" />

@@ -11,13 +11,10 @@ using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
-    public class DnaChainRepository : IDnaChainRepository
+    public class DnaChainRepository : ChainImporter, IDnaChainRepository
     {
-        private readonly LibiadaWebEntities db;
-
-        public DnaChainRepository(LibiadaWebEntities db)
+        public DnaChainRepository(LibiadaWebEntities db) : base(db)
         {
-            this.db = db;
         }
 
         public IQueryable<dna_chain> All
@@ -42,97 +39,48 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(chain chain, string fastaHeader, long[] alphabet, int[] building)
         {
-            dna_chain dnaChain = new dna_chain
-            {
-                id = chain.id,
-                dissimilar = chain.dissimilar,
-                notation_id = chain.notation_id,
-                matter_id = chain.matter_id,
-                fasta_header = fastaHeader,
-                piece_type_id = chain.piece_type_id,
-                creation_date = DateTime.Now,
-                piece_position = chain.piece_position
-            };
+            var parameters = FillParams(chain, alphabet, building);
+            parameters.Add(new NpgsqlParameter
+                {
+                    ParameterName = "@fasta_header",
+                    NpgsqlDbType = NpgsqlDbType.Varchar,
+                    Value = fastaHeader
+                });
 
-            Insert(dnaChain, alphabet, building);
+            String query = @"SELECT create_dna_chain(
+                                    @id,
+                                    @notation_id,
+                                    @matter_id,
+                                    @piece_type_id,
+                                    @fasta_header,
+                                    @alphabet,
+                                    @building,
+                                    @remote_id,
+                                    @remote_db_id,
+                                    @creation_date,
+                                    @piece_position,
+                                    @dissimilar);";
+            db.ExecuteStoreCommand(query, parameters.ToArray());
+
         }
 
 
         public void Insert(dna_chain chain, long[] alphabet, int[] building)
         {
-            if (chain.id == 0)
+            var dnaChain = new chain
             {
-                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
-            }
+                id = chain.id,
+                dissimilar = chain.dissimilar,
+                notation_id = chain.notation_id,
+                matter_id = chain.matter_id,
+                piece_type_id = chain.piece_type_id,
+                creation_date = DateTime.Now,
+                piece_position = chain.piece_position
+            };
 
-            NpgsqlParameter[] parameters =
-                {
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@notation_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.notation_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@matter_id",
-                            NpgsqlDbType = NpgsqlDbType.Bigint,
-                            Value = chain.matter_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_type_id",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_type_id
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@fasta_header",
-                            NpgsqlDbType = NpgsqlDbType.Varchar,
-                            Value = chain.fasta_header
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@alphabet",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
-                            Value = alphabet
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@building",
-                            NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
-                            Value = building
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@creation_date",
-                            NpgsqlDbType = NpgsqlDbType.TimestampTZ,
-                            Value = DateTime.Now
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@piece_position",
-                            NpgsqlDbType = NpgsqlDbType.Integer,
-                            Value = chain.piece_position
-                        },
-                    new NpgsqlParameter
-                        {
-                            ParameterName = "@dissimilar",
-                            NpgsqlDbType = NpgsqlDbType.Boolean,
-                            Value = chain.dissimilar
-                        }
+            
 
-                };
-
-            String query =
-                "SELECT create_dna_chain(@id,@notation_id,@matter_id,@piece_type_id,@fasta_header,@alphabet,@building,@creation_date,@piece_position,@dissimilar);";
-            db.ExecuteStoreCommand(query, parameters);
+            Insert(dnaChain, chain.fasta_header, alphabet, building);
         }
 
         public void InsertOrUpdate(dna_chain chain)
