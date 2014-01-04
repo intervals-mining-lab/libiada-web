@@ -10,6 +10,7 @@ using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
+using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
@@ -19,12 +20,16 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly LibiadaWebEntities db;
         private readonly ElementRepository elementRepository;
         private readonly DnaChainRepository dnaChainRepository;
+        private readonly NotationRepository notationRepository;
+        private readonly PieceTypeRepository pieceTypeRepository;
 
         public MatterController()
         {
             db = new LibiadaWebEntities();
             elementRepository = new ElementRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
+            notationRepository = new NotationRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
         }
 
         //
@@ -32,7 +37,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult Index()
         {
-            var matter = db.matter.Include("nature").Include("remote_db");
+            var matter = db.matter.Include("nature");
             return View(matter.ToList());
         }
 
@@ -56,11 +61,12 @@ namespace LibiadaWeb.Controllers.Chains
         {
             ViewBag.data = new Dictionary<string, object>
                 {
-                    {"natureIds", new SelectList(db.nature, "id", "name")},
-                    {"notationIds", new SelectList(db.notation, "id", "name")},
-                    {"languageIds", new SelectList(db.language, "id", "name")},
-                    {"NotationNature", Aliases.NotationNatureName},
-                    {"matter", new matter()}
+                    {"notations", notationRepository.GetSelectListWithNature()},
+                    {"pieceTypes", pieceTypeRepository.GetSelectListWithNature()},
+                    {"languages", new SelectList(db.language, "id", "name")},
+                    {"remoteDbs", new SelectList(db.remote_db, "id", "name")},
+                    {"natures", new SelectList(db.nature, "id", "name")},
+                    {"natureLiterature", Aliases.NatureLiterature}
                 };
             return View();
         }
@@ -69,7 +75,7 @@ namespace LibiadaWeb.Controllers.Chains
         // POST: /Matter/Create
 
         [HttpPost]
-        public ActionResult Create(matter matter, int notationId, int languageId, bool original)
+        public ActionResult Create(matter matter, int notationId, int? remoteDbId, String remoteId, int languageId, bool original)
         {
 
             if (ModelState.IsValid)

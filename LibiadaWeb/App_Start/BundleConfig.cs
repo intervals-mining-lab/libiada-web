@@ -33,10 +33,10 @@ namespace LibiadaWeb
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
                         "~/Scripts/procedures.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/knockout.js").Include(
-                        "~/Scripts/knockout-{version}.js",
-                        "~/Scripts/knockout.mapping-latest.js"));
-           
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                        "~/Scripts/angular.min.js",
+                        "~/Scripts/angular-mocks.js"));
+
             // Используйте версию Modernizr для разработчиков, чтобы учиться работать. Когда вы будете готовы перейти к работе,
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-*"));

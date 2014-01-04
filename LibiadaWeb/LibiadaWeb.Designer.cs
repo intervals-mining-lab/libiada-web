@@ -3346,6 +3346,30 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public Nullable<global::System.Int32> web_api_id
+        {
+            get
+            {
+                return _web_api_id;
+            }
+            set
+            {
+                Onweb_api_idChanging(value);
+                ReportPropertyChanging("web_api_id");
+                _web_api_id = StructuralObject.SetValidValue(value, "web_api_id");
+                ReportPropertyChanged("web_api_id");
+                Onweb_api_idChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _web_api_id;
+        partial void Onweb_api_idChanging(Nullable<global::System.Int32> value);
+        partial void Onweb_api_idChanged();
+    
+        /// <summary>
+        /// Нет доступной документации по метаданным.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String remote_id
         {
             get

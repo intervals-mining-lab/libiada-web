@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -7,26 +8,26 @@ namespace LibiadaWeb.Helpers
 {
     public static class NcbiHelper
     {
-        public const String baseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+        public const String BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
-        public static long GetId(string id)
+        public static String GetId(string id)
         {
-            String idUrl = baseUrl + @"esearch.fcgi?db=nucleotide&term=" + id;
+            var idUrl = BaseUrl + @"esearch.fcgi?db=nucleotide&term=" + id;
             var idRequest = WebRequest.Create(idUrl);
             var response = idRequest.GetResponse();
             var stream = response.GetResponseStream();
-            var memoiryStream = new MemoryStream();
+            var memoryStream = new MemoryStream();
             var doc = new XmlDocument();
             try
             {
-                stream.CopyTo(memoiryStream);
-                memoiryStream.Position = 0;
-                doc.Load(memoiryStream);
+                stream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+                doc.Load(memoryStream);
 
             }
             finally
             {
-                memoiryStream.Close();
+                memoryStream.Close();
                 stream.Close();
             }
 
@@ -36,18 +37,13 @@ namespace LibiadaWeb.Helpers
             {
                 throw new Exception("Количество идентификаторов цепочек для заданного запроса не равно 1.");
             }
-            return Convert.ToInt64(elemList[0].InnerText);
+            return elemList[0].InnerText;
         }
 
-        public static Stream GetFile(String externalId)
-        {
-            return GetFile(GetId(externalId));
-        }
-
-        public static Stream GetFile(long id)
+        public static Stream GetFile(string id)
         {
             
-            String fileUrl = baseUrl + @"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id;
+            var fileUrl = BaseUrl + @"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id;
             var fileRequest = WebRequest.Create(fileUrl);
             var fileResponse = fileRequest.GetResponse();
             var fileStream = fileResponse.GetResponseStream();
@@ -57,6 +53,39 @@ namespace LibiadaWeb.Helpers
             fileStream.Close();
             fileMemoryStream.Position = 0;
             return fileMemoryStream;
+        }
+
+        public static Stream GetGenes(String id)
+        {
+
+            var fileUrl = BaseUrl + @"elink.fcgi?dbfrom=nuccore&db=gene&id=" + id;
+            var fileRequest = WebRequest.Create(fileUrl);
+            var fileResponse = fileRequest.GetResponse();
+            var stream = fileResponse.GetResponseStream();
+            var memoryStream = new MemoryStream();
+            var doc = new XmlDocument();
+            try
+            {
+                stream.CopyTo(memoryStream);
+                memoryStream.Position = 0;
+                doc.Load(memoryStream);
+
+            }
+            finally
+            {
+                memoryStream.Close();
+                stream.Close();
+            }
+
+            XmlNodeList elemList = doc.GetElementsByTagName("LinkSetDb");
+            var ids = new List<string>();
+            foreach (XmlNode item in elemList)
+            {
+                ids.Add(item.FirstChild.Value);
+            }
+
+            return GetFile(string.Join(",", ids.ToArray()));
+            
         }
     }
 }

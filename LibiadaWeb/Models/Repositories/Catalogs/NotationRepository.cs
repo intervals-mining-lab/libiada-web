@@ -82,6 +82,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return notationsList;
         }
 
+        public IEnumerable<object> GetSelectListWithNature()
+        {
+            return db.notation.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = false,
+                Nature = n.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(int selectedNotation)
+        {
+            return db.notation.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = n.id == selectedNotation,
+                Nature = n.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(List<int> selectedNotations)
+        {
+            return db.notation.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = selectedNotations.Contains(n.id),
+                Nature = n.nature_id
+            });
+        }
+
         public void Dispose()
         {
             db.Dispose();

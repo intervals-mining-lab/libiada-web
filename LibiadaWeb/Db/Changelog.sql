@@ -474,4 +474,21 @@ COMMENT ON COLUMN measure.remote_id IS 'id цепочки в удалённой БД.';
 COMMENT ON COLUMN measure.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
 
 
+
+-- 12.12.2013
+
+-- Забыл добавить аргумент web_api_id в функцию импорта цепочек.
+
+DROP FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+
+CREATE OR REPLACE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, web_api_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false)
+  RETURNS void AS
+$BODY$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, $13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id]);$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+ALTER FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], character varying, integer, integer, timestamp with time zone, integer, boolean)
+  OWNER TO postgres;
+COMMENT ON FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], character varying, integer, integer, timestamp with time zone, integer, boolean) IS 'Функция для создания записей в таблице dna_chain.';
+
+
 COMMIT;

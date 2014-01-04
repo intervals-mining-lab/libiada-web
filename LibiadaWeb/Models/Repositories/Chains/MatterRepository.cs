@@ -91,6 +91,39 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return mattersList;
         }
 
+        public IEnumerable<object> GetSelectListWithNature()
+        {
+            return db.matter.Select(m => new
+            {
+                Value = m.id,
+                Text = m.name,
+                Selected = false,
+                Nature = m.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(long selectedMatter)
+        {
+            return db.matter.Select(m => new
+            {
+                Value = m.id,
+                Text = m.name,
+                Selected = m.id == selectedMatter,
+                Nature = m.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(IEnumerable<long> selectedMatters)
+        {
+            return db.matter.Select(m => new
+            {
+                Value = m.id,
+                Text = m.name,
+                Selected = selectedMatters.Contains(m.id),
+                Nature = m.nature_id
+            });
+        }
+
         public void Dispose()
         {
             db.Dispose();

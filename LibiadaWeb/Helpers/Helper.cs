@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Helpers
@@ -13,7 +11,7 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString InputElement(this HtmlHelper helper, SelectListItem info, String name,
                                                  String type, IDictionary<string, object> htmlAttributes)
         {
-            TagBuilder inputElement = new TagBuilder("input");
+            var inputElement = new TagBuilder("input");
             if (info.Selected)
             {
                 inputElement.MergeAttribute("checked", "checked");
@@ -39,25 +37,26 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString CheckBox(this HtmlHelper helper, String name, String label,
                                              IDictionary<string, object> htmlAttributes)
         {
-            TagBuilder checkBoxElement = new TagBuilder("input");
+            var checkBoxElement = new TagBuilder("input");
             checkBoxElement.MergeAttributes(htmlAttributes);
             checkBoxElement.MergeAttribute("type", "checkbox");
             checkBoxElement.MergeAttribute("value", "true");
             checkBoxElement.MergeAttribute("name", name);
             checkBoxElement.MergeAttribute("id", name);
 
-            TagBuilder labelElement = new TagBuilder("label");
+            var labelElement = new TagBuilder("label");
             labelElement.MergeAttribute("for", name);
             labelElement.InnerHtml = label;
 
-            TagBuilder hiddenElement = new TagBuilder("input");
+            var hiddenElement = new TagBuilder("input");
             hiddenElement.MergeAttribute("type", "hidden");
             hiddenElement.MergeAttribute("value", "false");
             hiddenElement.MergeAttribute("name", name);
 
             return
-                MvcHtmlString.Create(checkBoxElement.ToString(TagRenderMode.Normal) + labelElement.ToString(TagRenderMode.Normal) +
-                                     hiddenElement.ToString(TagRenderMode.Normal) + Br);
+                MvcHtmlString.Create(checkBoxElement.ToString(TagRenderMode.Normal) + 
+                                    labelElement.ToString(TagRenderMode.Normal) +
+                                    hiddenElement.ToString(TagRenderMode.Normal) + Br);
         }
 
         

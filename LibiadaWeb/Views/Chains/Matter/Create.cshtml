@@ -11,34 +11,50 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
-<script language="javascript">
+<script>
+    var app = angular.module('CreateMatter', []);
 
-    function SelectChainType(event) {
-        switch (event.target.value) {
-            case "1":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "2":
-                $("#literatureChain")[0].hidden = true;
-                break;
-            case "3":
-                $("#literatureChain")[0].hidden = false;
-                break;
-            default:
+    app.controller('CreateMatterCtrl', ['$scope', 'filterFilter', function($scope, filterFilter) {
+
+        var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
+        
+        for(var param in data) {
+            $scope[param] = data[param];
         }
-    }
+        
+        $scope.localFile = true;
 
-    $(document).ready(function() {
-        var natureSelect = $("[name='nature_id']")[0];
-        natureSelect.onclick = SelectChainType;
-    });
+        $scope.language = $scope.languages[0];
+
+        $scope.nature = $scope.natures[0].Value;
+
+        var filterByNature = function(natureId) {
+            $scope.filteredNotations = filterFilter($scope.notations, { Nature: natureId });
+            $scope.filteredPieceTypes = filterFilter($scope.pieceTypes, { Nature: natureId });
+
+            $scope.notation = $scope.filteredNotations[0];
+            $scope.pieceType = $scope.filteredPieceTypes[0];
+        };
+
+        filterByNature($scope.nature);
+
+        $scope.$watch('nature', filterByNature, true);
+
+        $scope.isLiteratureChain = function() {
+            return $scope.natureLiterature == $scope.nature;
+        };
+    }]);
     
 </script>
 
-@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new
+    {
+        enctype = "multipart/form-data",
+        data_ng_app = "CreateMatter"
+    }))
 {
     @Html.ValidationSummary(true)
-    <fieldset>
+    <fieldset data-ng-controller="CreateMatterCtrl">
         <legend>Объект</legend>
 
         <div class="editor-label">
@@ -48,32 +64,7 @@
             @Html.EditorFor(model => model.name)
             @Html.ValidationMessageFor(model => model.name)
         </div>
-         
-        <div class="editor-label">
-            @Html.Label("Файл цепочки")
-        </div>
-        <div class="editor-field">
-            <input type="file" name="file" id="file"/>
-        </div>
-
-        <div class="editor-label">
-            <label>Форма записи цепочки</label>
-        </div>
-        <select name="notationId">
-            @foreach (var option in ViewBag.notation_id)
-            {
-                <option value="@option.Value">@option.Text</option>
-            }
-        </select>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.nature_id)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("nature_id")
-            @Html.ValidationMessageFor(model => model.nature_id)
-        </div>
-
+        
         <div class="editor-label">
             @Html.LabelFor(model => model.description)
         </div>
@@ -81,19 +72,83 @@
             @Html.EditorFor(model => model.description)
             @Html.ValidationMessageFor(model => model.description)
         </div>
+         
+        <div class="editor-label">
+            @Html.Label("Загружать цепочку из локального файла")
+        </div>
 
-        <div id="literatureChain" hidden="true">
-            <div class="editor-label">
-                <label>Язык литературного произведения</label>
-            </div>
-            <select name="languageId">
-                @foreach (var option in ViewBag.language_id)
+        @Html.CheckBox("localFile", new {data_ng_model="localFile"})
+        
+        <br/>
+        <input type="file" name="file" id="file" data-ng-show="localFile"/>
+        
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nature_id)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("nature_id", new SelectListItem[0], new
                 {
-                    <option value="@option.Value">@option.Text</option>
-                }
-            </select>
-            <br/>
-            @Html.CheckBox("original", "Произведение является оригиналом, а не переводом", null)
+                    data_ng_model="nature", 
+                    data_ng_options="n.Value as n.Text for n in natures"
+                })
+            @Html.ValidationMessageFor(model => model.nature_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Форма записи цепочки")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("notationId", new SelectListItem[0], new
+                {
+                    data_ng_model = "notation",
+                    data_ng_options = "n.Text for n in filteredNotations"
+                })
+        </div>
+         <div class="editor-label">
+            @Html.Label("Тип цепочки")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("piece_type_id", new SelectListItem[0], new
+                {
+                    data_ng_model = "pieceType",
+                    data_ng_options = "p.Text for p in filteredPieceTypes"
+                })
+        </div>
+        
+        <div class="editor-label">
+            @Html.Label("Стороняя БД")
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("remoteDbId", new SelectListItem[0], new
+                {
+                    data_ng_model = "remoteDb", ng_options = "r.Text for r in remoteDbs"
+                })
+        </div>
+        <div>
+            <div class="editor-label">
+                @Html.Label("id в сторонней БД")
+            </div>
+            <div class="editor-field">
+                @Html.Editor("remoteId")
+            </div>
+        </div>
+        
+
+        <div data-ng-show="isLiteratureChain()">
+            <div class="editor-label">
+                @Html.Label("Язык литературного произведения")
+            </div>
+            <div class="editor-field">
+                @Html.DropDownList("languageId", new SelectListItem[0], new
+                    {
+                        data_ng_model = "language", ng_options = "l.Text for l in languages"
+                    })
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Произведение является оригиналом, а не переводом")
+            </div>
+            @Html.CheckBox("original")
         </div>
 
         <p>

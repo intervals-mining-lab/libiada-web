@@ -37,7 +37,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.dna_chain.Single(x => x.id == id);
         }
 
-        public void Insert(chain chain, string fastaHeader, long[] alphabet, int[] building)
+        public void Insert(chain chain, string fastaHeader, int? webApiId, long[] alphabet, int[] building)
         {
             var parameters = FillParams(chain, alphabet, building);
             parameters.Add(new NpgsqlParameter
@@ -46,6 +46,12 @@ namespace LibiadaWeb.Models.Repositories.Chains
                     NpgsqlDbType = NpgsqlDbType.Varchar,
                     Value = fastaHeader
                 });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "@web_api_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = webApiId
+            });
 
             String query = @"SELECT create_dna_chain(
                                     @id,
@@ -57,6 +63,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     @building,
                                     @remote_id,
                                     @remote_db_id,
+                                    @web_api_id,
                                     @creation_date,
                                     @piece_position,
                                     @dissimilar);";
@@ -78,9 +85,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 piece_position = chain.piece_position
             };
 
-            
-
-            Insert(dnaChain, chain.fasta_header, alphabet, building);
+            Insert(dnaChain, chain.fasta_header, chain.web_api_id, alphabet, building);
         }
 
         public void InsertOrUpdate(dna_chain chain)

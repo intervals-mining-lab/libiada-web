@@ -68,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     @creation_date,
                                     @piece_position,
                                     @dissimilar);";
-            db.ExecuteStoreCommand(query, parameters);
+            db.ExecuteStoreCommand(query, parameters.ToArray());
         }
 
 

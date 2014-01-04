@@ -86,5 +86,11 @@ namespace LibiadaWeb.Models
 
         #endregion
 
+        #region RemoteDb
+
+        public const int RemoteDbNcbi = 1;
+
+        #endregion
+
     }
 }

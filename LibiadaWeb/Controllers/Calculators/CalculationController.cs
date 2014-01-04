@@ -69,9 +69,9 @@ namespace LibiadaWeb.Controllers.Calculators
         [HttpPost]
         public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds)
         {
-            List<List<Double>> characteristics = new List<List<Double>>();
-            List<String> chainNames = new List<string>();
-            List<String> characteristicNames = new List<string>();
+            var characteristics = new List<List<Double>>();
+            var chainNames = new List<string>();
+            var characteristicNames = new List<string>();
 
             foreach (var matterId in matterIds)
             {
@@ -112,9 +112,9 @@ namespace LibiadaWeb.Controllers.Calculators
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
-                        double characteristicValue = calculator.Calculate(tempChain, linkUp);
-                        characteristic dbCharacteristic = new characteristic
+                        var linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
+                        var characteristicValue = calculator.Calculate(tempChain, linkUp);
+                        var dbCharacteristic = new characteristic
                             {
                                 chain_id = chainId,
                                 characteristic_type_id = characteristicIds[i],
@@ -150,11 +150,11 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            List<List<double>> characteristics = TempData["characteristics"] as List<List<double>>;
-            List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
+            var characteristics = TempData["characteristics"];
+            var characteristicNames = TempData["characteristicNames"] as List<String>;
             ViewBag.chainIds = TempData["chainIds"] as List<long>;
-            int[] characteristicIds = TempData["characteristicIds"] as int[];
-            List<SelectListItem> characteristicsList = new List<SelectListItem>();
+            var characteristicIds = TempData["characteristicIds"] as int[];
+            var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicNames.Count; i++)
             {
                 characteristicsList.Add(new SelectListItem
@@ -169,7 +169,6 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristics = characteristics;
             ViewBag.chainNames = TempData["chainNames"] as List<String>;
             ViewBag.characteristicNames = characteristicNames;
-
             TempData.Keep();
 
             return View();

@@ -199,6 +199,7 @@
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\Chains\ChainMixingController.cs" />
+    <Compile Include="Controllers\Chains\GenesImportController.cs" />
     <Compile Include="Controllers\CharacteristicController.cs" />
     <Compile Include="Controllers\Catalogs\CharacteristicGroupController.cs" />
     <Compile Include="Controllers\Catalogs\CharacteristicTypeController.cs" />
@@ -245,6 +246,8 @@
     </Compile>
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\AutoCorelation.cs" />
+    <Compile Include="Models\Repositories\Catalogs\IPieceTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />
@@ -452,6 +455,9 @@
     <Content Include="Db\InitialDb.sql" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\doc.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\jquery.js" />
     <Content Include="Scripts\DataTables-1.9.4\docs\media\js\shBrushJScript.js" />
@@ -530,6 +536,7 @@
     <Content Include="LibiadaWeb.edmx.diagram">
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\jQAllRangeSliders-withRuler-min.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -542,10 +549,6 @@
     <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\knockout-3.0.0.debug.js" />
-    <Content Include="Scripts\knockout-3.0.0.js" />
-    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
-    <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\procedures.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -593,6 +596,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Chains\GenesImport\Index.cshtml" />
+    <Content Include="Views\Chains\GenesImport\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

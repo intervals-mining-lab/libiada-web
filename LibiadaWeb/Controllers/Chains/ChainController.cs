@@ -11,6 +11,7 @@ using LibiadaCore.Classes.Root.SimpleTypes;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
+using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
@@ -22,6 +23,9 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly ElementRepository elementRepository;
         private readonly DnaChainRepository dnaChainRepository;
         private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly MatterRepository matterRepository;
+        private readonly PieceTypeRepository pieceTypeRepository;
+        private readonly NotationRepository notationRepository;
 
         public ChainController()
         {
@@ -30,6 +34,9 @@ namespace LibiadaWeb.Controllers.Chains
             elementRepository = new ElementRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
+            notationRepository = new NotationRepository(db);
         }
 
         //
@@ -62,37 +69,14 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult Create()
         {  
-            var pieceTypes = db.piece_type.Select(p => new
-                {
-                    Value = p.id,
-                    Text = p.name,
-                    Selected = false,
-                    Nature = p.nature_id
-                });
-            var notations = db.notation.Select(n => new
-                {
-                    Value = n.id,
-                    Text = n.name,
-                    Selected = false,
-                    Nature = n.nature_id
-                });
-            var matters = db.matter.Select(m => new
-                {
-                    Value = m.id,
-                    Text = m.name,
-                    Selected = false,
-                    Nature = m.nature_id
-                });
- 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    {"matters", matters},
-                    {"notations", notations},
+                    {"matters", matterRepository.GetSelectListWithNature()},
+                    {"notations", notationRepository.GetSelectListWithNature()},
                     {"languages", new SelectList(db.language, "id", "name")},
-                    {"pieceTypes", pieceTypes},
+                    {"pieceTypes", pieceTypeRepository.GetSelectListWithNature()},
                     {"remoteDbs", new SelectList(db.remote_db, "id", "name")},
-                    {"NatureLiterature", Aliases.NatureLiterature},
-                    {"chain", new chain{notation_id = Aliases.NotationNucleotide}}
+                    {"natureLiterature", Aliases.NatureLiterature}
                 };
             return View();
         }
@@ -114,12 +98,13 @@ namespace LibiadaWeb.Controllers.Chains
         // POST: /Chain/Create
 
         [HttpPost]
-        public ActionResult Create(chain chain, string fileId, bool localFile, int? languageId, bool? original)
+        public ActionResult Create(chain chain, bool localFile, int languageId, bool original)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    String webApiId = String.Empty;
                     // Initialize the stream
                     Stream fileStream;
                     if (localFile)
@@ -134,10 +119,11 @@ namespace LibiadaWeb.Controllers.Chains
                     }
                     else
                     {
-                        fileStream = NcbiHelper.GetFile(fileId);
+                        webApiId = NcbiHelper.GetId(chain.remote_id);
+                        fileStream = NcbiHelper.GetFile(webApiId);
                     }
                    
-                    byte[] input = new byte[fileStream.Length];
+                    var input = new byte[fileStream.Length];
 
                     
 
@@ -173,7 +159,7 @@ namespace LibiadaWeb.Controllers.Chains
                             }
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, false);
-                            dnaChainRepository.Insert(chain, fastaHeader, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(chain, fastaHeader, Convert.ToInt32(webApiId), alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             break;
@@ -194,7 +180,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, true);
 
-                            literatureChainRepository.Insert(chain,  (bool)original , (int)languageId, alphabet, libiadaChain.Building);
+                            literatureChainRepository.Insert(chain, original, languageId, alphabet, libiadaChain.Building);
 
                             db.SaveChanges();
                             break;

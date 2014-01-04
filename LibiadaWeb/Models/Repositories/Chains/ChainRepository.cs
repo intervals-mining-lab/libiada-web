@@ -56,7 +56,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     @creation_date,
                                     @piece_position,
                                     @dissimilar);";
-            db.ExecuteStoreCommand(query, parameters);
+            db.ExecuteStoreCommand(query, parameters.ToArray());
         }
 
         public void InsertOrUpdate(chain chain)
@@ -87,20 +87,20 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> selectedChains)
         {
-            return GetSelectListItems(db.chain.Include("matter"), selectedChains);
+            return GetSelectListItems(null, selectedChains);
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> allChains, IEnumerable<chain> selectedChains)
         {
-
-            HashSet<long> chainIds = selectedChains != null
-                                          ? new HashSet<long>(selectedChains.Select(c => c.id))
-                                          : new HashSet<long>();
-            var chainsList = new List<SelectListItem>();
             if (allChains == null)
             {
                 allChains = db.chain.Include("matter");
             }
+            HashSet<long> chainIds = selectedChains != null
+                                          ? new HashSet<long>(selectedChains.Select(c => c.id))
+                                          : new HashSet<long>();
+            var chainsList = new List<SelectListItem>();
+            
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem

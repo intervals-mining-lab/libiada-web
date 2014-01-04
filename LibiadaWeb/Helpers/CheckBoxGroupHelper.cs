@@ -25,7 +25,7 @@ namespace LibiadaWeb.Helpers
         {
             List<MvcHtmlString> checkBoxList = helper.CheckBoxList(name, listInfo, htmlAttributes);
 
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             foreach (MvcHtmlString checkBox in checkBoxList)
             {

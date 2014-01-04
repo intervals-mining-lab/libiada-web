@@ -7,16 +7,16 @@ namespace LibiadaWeb.Helpers
 {
     public static class TableHelper
     {
-        private static string Br = Environment.NewLine;
+        private static readonly string Br = Environment.NewLine;
 
         public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
                                                 List<matter> matters)
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            List<String> headers = new List<String> { "Название", "Описание", "Природа"};
+            var headers = new List<String> { "Название", "Описание", "Природа"};
 
-            List<List<String>> bodyData = new List<List<String>>();
+            var bodyData = new List<List<String>>();
 
             for (int i = 0; i < checkBoxes.Count; i++)
             {
@@ -35,7 +35,7 @@ namespace LibiadaWeb.Helpers
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            List<String> headers = new List<String>
+            var headers = new List<String>
                 {
                     "Название", 
                     "Форма записи", 
@@ -47,7 +47,7 @@ namespace LibiadaWeb.Helpers
                     "id удалённой БД"
                 };
 
-            List<List<String>> bodyData = new List<List<String>>();
+            var bodyData = new List<List<String>>();
 
             for (int i = 0; i < checkBoxes.Count; i++)
             {
@@ -70,24 +70,24 @@ namespace LibiadaWeb.Helpers
         public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers,
                                           List<List<String>> data)
         {
-            TagBuilder header = new TagBuilder("thead")
+            var header = new TagBuilder("thead")
             {
                 InnerHtml = TableRow(headers, true)
             };
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
 
             for (int i = 0; i < data.Count; i++)
             {
                 builder.Append(TableRow(data[i], false));
             }
 
-            TagBuilder body = new TagBuilder("tbody")
+            var body = new TagBuilder("tbody")
             {
                 InnerHtml = builder.ToString()
             };
 
-            TagBuilder table = new TagBuilder("table")
+            var table = new TagBuilder("table")
             {
                 InnerHtml = Br + header + Br + body + Br
             };
@@ -97,17 +97,17 @@ namespace LibiadaWeb.Helpers
 
         private static String TableRow(IEnumerable<string> cells, bool header)
         {
-            String cellType = header ? "th" : "td";
+            var cellType = header ? "th" : "td";
 
-            StringBuilder builder = new StringBuilder(Br);
+            var builder = new StringBuilder(Br);
 
             foreach (string cell in cells)
             {
-                TagBuilder dataCell = new TagBuilder(cellType) { InnerHtml = cell };
+                var dataCell = new TagBuilder(cellType) { InnerHtml = cell };
                 builder.AppendLine(dataCell.ToString());
             }
 
-            TagBuilder result = new TagBuilder("tr") { InnerHtml = builder.ToString() };
+            var result = new TagBuilder("tr") { InnerHtml = builder.ToString() };
 
             return Br + result + Br;
         }

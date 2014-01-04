@@ -301,6 +301,7 @@
     <Property Name="fasta_header" Type="varchar" MaxLength="255" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="web_api_id" Type="int4" />
   </EntityType>
   <EntityType Name="element">
     <Key>
@@ -1723,6 +1724,7 @@
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="web_api_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
@@ -2964,6 +2966,7 @@
           <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

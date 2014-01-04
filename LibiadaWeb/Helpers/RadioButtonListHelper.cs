@@ -29,7 +29,7 @@ namespace LibiadaWeb.Helpers
             if (listInfo == null)
                 throw new ArgumentNullException("listInfo");
 
-            List<MvcHtmlString> result = new List<MvcHtmlString>();
+            var result = new List<MvcHtmlString>();
 
             foreach (SelectListItem info in listInfo)
             {

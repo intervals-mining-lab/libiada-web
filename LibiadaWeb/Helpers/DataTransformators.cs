@@ -11,11 +11,11 @@ namespace LibiadaWeb.Helpers
         {
             string[] splittedFile = file.Split(new [] { '\0', '\t'});
             
-            StringBuilder result = new StringBuilder();
+            var result = new StringBuilder();
 
-            for (int k = 0; k < splittedFile.Length; k++)
+            foreach (string line in splittedFile)
             {
-                result.Append(splittedFile[k]);
+                result.Append(line);
             }
 
             return result.ToString();

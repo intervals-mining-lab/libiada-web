@@ -10,7 +10,7 @@ namespace LibiadaWeb.Helpers
     {
         public static MvcHtmlString FillOptionsList(this HtmlHelper helper, String paramName, IEnumerable<SelectListItem> array)
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.AppendFormat("var {0} = new Array();", paramName).AppendLine();
 
             foreach (var option in array)
