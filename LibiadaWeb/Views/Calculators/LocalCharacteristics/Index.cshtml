@@ -23,7 +23,7 @@
         var paramsList = new Object();
         
         @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
-        @Html.FillOptionsList("linkUpIds",  (IEnumerable<SelectListItem>)ViewBag.linkUpsList)
+        @Html.FillOptionsList("linkIds",  (IEnumerable<SelectListItem>)ViewBag.linksList)
 
         var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
         $("#characteristics_list").append(characteristicsDiv);

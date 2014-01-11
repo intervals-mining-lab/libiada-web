@@ -19,7 +19,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly MatterRepository matterRepository;
         private readonly ChainRepository chainRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
-        private readonly LinkUpRepository linkUpRepository;
+        private readonly LinkRepository linkRepository;
         private readonly NotationRepository notationRepository;
 
         public ClusterizationController()
@@ -28,7 +28,7 @@ namespace LibiadaWeb.Controllers.Calculators
             matterRepository = new MatterRepository(db);
             chainRepository = new ChainRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
+            linkRepository = new LinkRepository(db);
             notationRepository = new NotationRepository(db);
         }
 
@@ -46,14 +46,14 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             ViewBag.languagesList = new SelectList(db.language, "id", "name");
             return View();
         }
 
         [HttpPost]
         public ActionResult Index(long[] matterIds, 
-            int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds, 
+            int[] characteristicIds, int[] linkIds, int[] notationIds, int[] languageIds, 
             int clustersCount, double powerWeight, double normalizedDistanseWeight, double distanseWeight)
         {
             List<List<Double>> characteristics = new List<List<Double>>();
@@ -69,15 +69,15 @@ namespace LibiadaWeb.Controllers.Calculators
                         chain.Single(c => c.notation_id == notationIds[i]).id;
 
                     int characteristicId = characteristicIds[i];
-                    int linkUpId = linkUpIds[i];
+                    int linkId = linkIds[i];
                     if (db.characteristic.Any(charact =>
-                        linkUpId == charact.link_up.id &&
+                        linkId == charact.link.id &&
                         charact.chain_id == chainId &&
                         charact.characteristic_type_id == characteristicId))
                     {
                         characteristics.Last().
                         Add((double)db.characteristic.Single(charact =>
-                            linkUpIds[i] == charact.link_up.id &&
+                            linkIds[i] == charact.link.id &&
                             charact.chain_id == chainId &&
                             charact.characteristic_type_id == characteristicIds[i]).value);
                     }
@@ -88,8 +88,8 @@ namespace LibiadaWeb.Controllers.Calculators
                         String className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        LinkUp linkUp = (LinkUp)db.link_up.Single(l => l.id == linkUpId).id;
-                        characteristics.Last().Add(calculator.Calculate(tempChain, linkUp));
+                        Link link = (Link)db.link.Single(l => l.id == linkId).id;
+                        characteristics.Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
             }
@@ -97,10 +97,10 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
-                int linkUpId = linkUpIds[k];
+                int linkId = linkIds[k];
                 int notationId = notationIds[k];
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                    db.link_up.Single(l => l.id == linkUpId).name + " " +
+                    db.link.Single(l => l.id == linkId).name + " " +
                     db.notation.Single(n => n.id == notationId).name);
             }
 

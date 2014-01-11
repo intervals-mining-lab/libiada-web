@@ -79,7 +79,7 @@ namespace LibiadaWeb.Controllers.Chains
                 dissimilar = false,
                 notation_id = notationId,
                 piece_type_id = 1,
-                creation_date = new DateTimeOffset(DateTime.Now)
+                created = new DateTimeOffset(DateTime.Now)
             };
 
             result.dna_chain.Add(resultChain);

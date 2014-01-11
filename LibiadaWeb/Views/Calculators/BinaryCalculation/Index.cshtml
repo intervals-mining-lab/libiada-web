@@ -56,8 +56,8 @@
     </select>
     <br/>
     @Html.Label("Привязка:")
-    <select name="linkUpId">
-        @foreach (var option in ViewBag.linkUpsList)
+    <select name="linkId">
+        @foreach (var option in ViewBag.linksList)
         {
             <option value="@option.Value">@option.Text</option>
         }

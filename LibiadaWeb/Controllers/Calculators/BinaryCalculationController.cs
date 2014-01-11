@@ -17,7 +17,7 @@ namespace LibiadaWeb.Controllers.Calculators
     {
         private readonly LibiadaWebEntities db;
         private readonly CharacteristicTypeRepository characteristicRepository;
-        private readonly LinkUpRepository linkUpRepository;
+        private readonly LinkRepository linkRepository;
         private readonly ChainRepository chainRepository;
         private readonly BinaryCharacteristicRepository binaryCharacteristicRepository;
 
@@ -25,7 +25,7 @@ namespace LibiadaWeb.Controllers.Calculators
         {
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
+            linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
         }
@@ -57,23 +57,23 @@ namespace LibiadaWeb.Controllers.Calculators
             IEnumerable<characteristic_type> characteristics =
                 db.characteristic_type.Where(c => Aliases.ApplicabilityBinary.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long chainId, int characteristicId, int linkUpId,
+        public ActionResult Index(long chainId, int characteristicId, int linkId,
                                   int filterSize, bool filter, 
                                   bool frequency, int frequencyCount, 
                                   bool oneWord, long wordId = 0)
         {
-            List<binary_characteristic> characteristics = new List<binary_characteristic>();
-            List<element> elements = new List<element>();
+            var characteristics = new List<binary_characteristic>();
+            var elements = new List<element>();
             List<binary_characteristic> filteredResult = null;
             List<binary_characteristic> filteredResult1 = null;
             List<binary_characteristic> filteredResult2 = null;
-            List<element> firstElements = new List<element>();
-            List<element> secondElements = new List<element>();
+            var firstElements = new List<element>();
+            var secondElements = new List<element>();
             String word = null;
 
             chain dbChain = db.chain.Single(c => c.id == chainId);
@@ -83,21 +83,21 @@ namespace LibiadaWeb.Controllers.Calculators
             String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
             IBinaryCalculator calculator = BinaryCalculatorsFactory.Create(className);
-            LinkUp linkUp = (LinkUp) linkUpId;
+            Link link = (Link) linkId;
 
             if (oneWord)
             {
-                word = OneWordCharacteristic(characteristicId, linkUpId, wordId, dbChain, currentChain, calculator, linkUp);
+                word = OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain, calculator, link);
 
                 filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                   b.characteristic_type_id == characteristicId &&
-                                                                  b.link_up_id == linkUpId && b.first_element_id == wordId)
+                                                                  b.link_id == linkId && b.first_element_id == wordId)
                                 .OrderBy(b => b.second_element_id)
                                 .ToList();
 
                 filteredResult2 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                   b.characteristic_type_id == characteristicId &&
-                                                                  b.link_up_id == linkUpId && b.second_element_id == wordId)
+                                                                  b.link_id == linkId && b.second_element_id == wordId)
                                 .OrderBy(b => b.first_element_id)
                                 .ToList();
 
@@ -111,19 +111,19 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 if (frequency)
                 {
-                    FrequencyCharacteristic(characteristicId, linkUpId, frequencyCount, currentChain, dbChain,
-                                            calculator, linkUp);
+                    FrequencyCharacteristic(characteristicId, linkId, frequencyCount, currentChain, dbChain,
+                                            calculator, link);
                 }
                 else
                 {
-                    NotFrequencyCharacteristic(characteristicId, linkUpId, dbChain, currentChain, calculator, linkUp);
+                    NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator, link);
                 }
 
                 if (filter)
                 {
                     filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                          b.characteristic_type_id == characteristicId &&
-                                                                         b.link_up_id == linkUpId)
+                                                                         b.link_id == linkId)
                                        .OrderByDescending(b => b.value)
                                        .Take(filterSize).ToList();
 
@@ -142,7 +142,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 {
                     characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                           b.characteristic_type_id == characteristicId &&
-                                                                          b.link_up_id == linkUpId)
+                                                                          b.link_id == linkId)
                                         .OrderBy(b => b.second_element_id)
                                         .ThenBy(b => b.first_element_id)
                                         .ToList();
@@ -173,12 +173,12 @@ namespace LibiadaWeb.Controllers.Calculators
             return RedirectToAction("Result");
         }
 
-        private String OneWordCharacteristic(int characteristicId, int linkUpId, long wordId, chain dbChain, Chain currentChain,
-                                           IBinaryCalculator calculator, LinkUp linkUp)
+        private String OneWordCharacteristic(int characteristicId, int linkId, long wordId, chain dbChain, Chain currentChain,
+                                           IBinaryCalculator calculator, Link link)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                       b.characteristic_type_id == characteristicId &&
-                                                                      b.link_up_id == linkUpId && b.first_element_id == wordId);
+                                                                      b.link_id == linkId && b.first_element_id == wordId);
             List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             if (calculatedCount < currentChain.Alphabet.Power)
             {
@@ -193,12 +193,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.characteristic_type_id == characteristicId &&
                                                       b.first_element_id == wordId &&
                                                       b.second_element_id == secondElementId &&
-                                                      b.link_up_id == linkUpId))
+                                                      b.link_id == linkId))
                     {
                         double result = calculator.Calculate(currentChain, currentChain.Alphabet[firstElementNumber],
                                                              currentChain.Alphabet[i],
-                                                             linkUp);
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkUpId,
+                                                             link);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkId,
                                                                                   wordId, secondElementId, result);
 
                     }
@@ -209,7 +209,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
             calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                   b.characteristic_type_id == characteristicId &&
-                                                                  b.link_up_id == linkUpId && b.second_element_id == wordId);
+                                                                  b.link_id == linkId && b.second_element_id == wordId);
 
             if (calculatedCount < currentChain.Alphabet.Power)
             {
@@ -222,12 +222,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.characteristic_type_id == characteristicId &&
                                                       b.first_element_id == firstElementId &&
                                                       b.second_element_id == wordId &&
-                                                      b.link_up_id == linkUpId))
+                                                      b.link_id == linkId))
                     {
                         double result = calculator.Calculate(currentChain, currentChain.Alphabet[secondElementNumber - 1],
                                                              currentChain.Alphabet[i],
-                                                             linkUp);
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkUpId,
+                                                             link);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId, linkId,
                                                                                   firstElementId, wordId, result);
                     }
                 }
@@ -235,12 +235,12 @@ namespace LibiadaWeb.Controllers.Calculators
             return db.element.Single(e => e.id == wordId).name;
         }
 
-        private void NotFrequencyCharacteristic(int characteristicId, int linkUpId, chain dbChain, Chain currentChain,
-                                                IBinaryCalculator calculator, LinkUp linkUp)
+        private void NotFrequencyCharacteristic(int characteristicId, int linkId, chain dbChain, Chain currentChain,
+                                                IBinaryCalculator calculator, Link link)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                  b.characteristic_type_id == characteristicId &&
-                                                                 b.link_up_id == linkUpId);
+                                                                 b.link_id == linkId);
             if (calculatedCount < currentChain.Alphabet.Power*currentChain.Alphabet.Power)
             {
                 List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
@@ -255,13 +255,13 @@ namespace LibiadaWeb.Controllers.Calculators
                                                           b.characteristic_type_id == characteristicId &&
                                                           b.first_element_id == firstElementId &&
                                                           b.second_element_id == secondElementId &&
-                                                          b.link_up_id == linkUpId))
+                                                          b.link_id == linkId))
                         {
                             double result = calculator.Calculate(currentChain,
                                                                  currentChain.Alphabet[i],
-                                                                 currentChain.Alphabet[j], linkUp);
+                                                                 currentChain.Alphabet[j], link);
                             binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId,
-                                                                                      linkUpId, firstElementId,
+                                                                                      linkId, firstElementId,
                                                                                       secondElementId, result);
                         }
                     }
@@ -269,8 +269,8 @@ namespace LibiadaWeb.Controllers.Calculators
             }
         }
 
-        private void FrequencyCharacteristic(int characteristicId, int linkUpId, int frequencyCount, Chain currentChain,
-                                             chain dbChain, IBinaryCalculator calculator, LinkUp linkUp)
+        private void FrequencyCharacteristic(int characteristicId, int linkId, int frequencyCount, Chain currentChain,
+                                             chain dbChain, IBinaryCalculator calculator, Link link)
         {
             List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             //считаем частоты слов
@@ -280,7 +280,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 Probability calc = new Probability();
                 frequences.Add(new KeyValuePair<IBaseObject, double>(currentChain.Alphabet[f],
                                                                      calc.Calculate(currentChain.CongenericChain(f),
-                                                                                    LinkUp.Both)));
+                                                                                    Link.Both)));
             }
             //сортируем алфавит по частоте
             SortKeyValuePairList(frequences);
@@ -299,13 +299,13 @@ namespace LibiadaWeb.Controllers.Calculators
                                                       b.characteristic_type_id == characteristicId &&
                                                       b.first_element_id == firstElementId &&
                                                       b.second_element_id == secondElementId &&
-                                                      b.link_up_id == linkUpId))
+                                                      b.link_id == linkId))
                     {
                         double result = calculator.Calculate(currentChain,
                                                                  currentChain.Alphabet[i],
-                                                                 currentChain.Alphabet[j], linkUp);
+                                                                 currentChain.Alphabet[j], link);
                         binaryCharacteristicRepository.CreateBinaryCharacteristic(dbChain.id, characteristicId,
-                                                                                  linkUpId, firstElementId,
+                                                                                  linkId, firstElementId,
                                                                                   secondElementId, result);
                     }
                 }

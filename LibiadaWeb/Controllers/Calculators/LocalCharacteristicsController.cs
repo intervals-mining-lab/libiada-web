@@ -19,7 +19,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
-        private readonly LinkUpRepository linkUpRepository;
+        private readonly LinkRepository linkRepository;
         private readonly ChainRepository chainRepository;
 
 
@@ -29,7 +29,7 @@ namespace LibiadaWeb.Controllers.Calculators
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
+            linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
         }
 
@@ -47,23 +47,23 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             ViewBag.languagesList = new SelectList(db.language, "id", "name");
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int languageId, int notationId, int length,
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkIds, int languageId, int notationId, int length,
                                   int step, int startCoordinate, int beginOfChain, int endOfChain, bool isDelta, bool isFurie, bool isGrowingWindow, bool isMoveCoordinate, bool isSetBeginAndEnd, bool isAutocorelation)
         {
 
             List<List<List<Double>>> characteristics = CalculateCharacteristics(matterIds, isSetBeginAndEnd, isGrowingWindow,
-                                             notationId, languageId, length, characteristicIds, linkUpIds, step, beginOfChain, endOfChain);
+                                             notationId, languageId, length, characteristicIds, linkIds, step, beginOfChain, endOfChain);
    
-            List<String> chainNames = new List<string>();
-            List<string> characteristicNames = new List<string>();
-            List<List<String>> partNames = new List<List<String>>();
+            var chainNames = new List<string>();
+            var characteristicNames = new List<string>();
+            var partNames = new List<List<String>>();
 
 
             for (int k = 0; k < matterIds.Length; k++)
@@ -100,19 +100,19 @@ namespace LibiadaWeb.Controllers.Calculators
                
                 while (iter.Next())
                 {
-                    Chain tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.GetStopPos() - iter.GetStartPos());
+                    var tempChain = new Chain();
+                    tempChain.ClearAndSetNewLength(iter.GetStopPosition() - iter.GetStartPosition());
 
-                    for (int i = 0; iter.GetStartPos() + i < iter.GetStopPos(); i++)
+                    for (int i = 0; iter.GetStartPosition() + i < iter.GetStopPosition(); i++)
                     {
-                        tempChain.Add(libiadaChain[iter.GetStartPos() + i], i);
+                        tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
                     }
                     partNames.Last().Add(tempChain.ToString());
                 }
                 if (isMoveCoordinate)
                 {
                     List<List<List<Double>>> characteristicsParts = CalculateCharacteristics(matterIds, isSetBeginAndEnd,isGrowingWindow,
-                                             notationId, languageId, startCoordinate, characteristicIds, linkUpIds, step, beginOfChain, endOfChain);
+                                             notationId, languageId, startCoordinate, characteristicIds, linkIds, step, beginOfChain, endOfChain);
                     for (int i = 0; i < characteristics.Count; i++)
                     {
                         for (int j = 0; j < characteristics[i].Count; j++)
@@ -201,9 +201,9 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 int characteristicId = characteristicIds[i];
-                int linkUpId = linkUpIds[i];
+                int linkId = linkIds[i];
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                            db.link_up.Single(l => l.id == linkUpId).name);
+                                            db.link.Single(l => l.id == linkId).name);
             }
 
             TempData["characteristics"] = characteristics;
@@ -217,9 +217,9 @@ namespace LibiadaWeb.Controllers.Calculators
 
         private List<List<List<Double>>> CalculateCharacteristics(long[] matterIds, bool isSetBeginAndEnd,
                                                                   bool isGrowingWindow, int notationId, int languageId,
-                                                                  int length, int[] characteristicIds, int[] linkUpIds, int step, int beginOfChain, int endOfChain)
+                                                                  int length, int[] characteristicIds, int[] linkIds, int step, int beginOfChain, int endOfChain)
         {
-            List<List<List<Double>>> characteristics = new List<List<List<Double>>>();
+            var characteristics = new List<List<List<Double>>>();
             for (int k = 0; k < matterIds.Length; k++)
             {
                 long matterId = matterIds[k];
@@ -255,22 +255,22 @@ namespace LibiadaWeb.Controllers.Calculators
                 while (iter.Next())
                 {
                     characteristics.Last().Add(new List<Double>());
-                    Chain tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.GetStopPos() - iter.GetStartPos());
+                    var tempChain = new Chain();
+                    tempChain.ClearAndSetNewLength(iter.GetStopPosition() - iter.GetStartPosition());
 
-                    for (int i = 0; iter.GetStartPos() + i < iter.GetStopPos(); i++)
+                    for (int i = 0; iter.GetStartPosition() + i < iter.GetStopPosition(); i++)
                     {
-                        tempChain.Add(libiadaChain[iter.GetStartPos() + i], i);
+                        tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
                     }
                     for (int i = 0; i < characteristicIds.Length; i++)
                     {
                         int characteristicId = characteristicIds[i];
-                        int linkUpId = linkUpIds[i];
+                        int linkId = linkIds[i];
                         String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
-                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, linkUp));
+                        Link link = (Link) db.link.Single(l => l.id == linkId).id;
+                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
             }
@@ -279,11 +279,11 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            List<List<List<double>>> characteristics = TempData["characteristics"] as List<List<List<double>>>;
+            var characteristics = TempData["characteristics"] as List<List<List<double>>>;
             ViewBag.chainIds = TempData["chainIds"] as List<long>;
             int[] characteristicIds = TempData["characteristicIds"] as int[];
-            List<string> characteristicNames = TempData["characteristicNames"] as List<string>;
-            List<SelectListItem> characteristicsList = new List<SelectListItem>();
+            var characteristicNames = TempData["characteristicNames"] as List<string>;
+            var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 characteristicsList.Add(new SelectListItem

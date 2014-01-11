@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Index()
         {
-            var characteristic = db.characteristic.Include("chain").Include("link_up").Include("characteristic_type");
+            var characteristic = db.characteristic.Include("chain").Include("link").Include("characteristic_type");
             return View(characteristic.ToList());
         }
 
@@ -36,7 +36,7 @@ namespace LibiadaWeb.Controllers
         public ActionResult Create()
         {
             ViewBag.chain_id = new SelectList(db.chain, "id", "building");
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name");
+            ViewBag.link_id = new SelectList(db.link, "id", "name");
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name");
             return View();
         } 
@@ -55,7 +55,7 @@ namespace LibiadaWeb.Controllers
             }
 
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", characteristic.chain_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }
@@ -71,7 +71,7 @@ namespace LibiadaWeb.Controllers
                 return HttpNotFound();
             }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", characteristic.chain_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }
@@ -90,7 +90,7 @@ namespace LibiadaWeb.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", characteristic.chain_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }

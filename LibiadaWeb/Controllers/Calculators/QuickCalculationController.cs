@@ -14,13 +14,13 @@ namespace LibiadaWeb.Controllers.Calculators
     {
         private readonly LibiadaWebEntities db;
         private readonly CharacteristicTypeRepository characteristicRepository;
-        private readonly LinkUpRepository linkUpRepository;
+        private readonly LinkRepository linkRepository;
 
         public QuickCalculationController()
         {
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
+            linkRepository = new LinkRepository(db);
         }
 
         //
@@ -32,12 +32,12 @@ namespace LibiadaWeb.Controllers.Calculators
                 db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(int[] characteristicIds, int[] linkUpIds, String chain)
+        public ActionResult Index(int[] characteristicIds, int[] linkIds, String chain)
         {
             List<Double> characteristics = new List<Double>();
             List<String> characteristicNames = new List<string>();
@@ -46,7 +46,7 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 int characteristicId = characteristicIds[i];
-                int linkUpId = linkUpIds[i];
+                int linkId = linkIds[i];
 
                 Chain tempChain = new Chain(chain);
 
@@ -54,9 +54,9 @@ namespace LibiadaWeb.Controllers.Calculators
                 String className =
                     db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                 ICalculator calculator = CalculatorsFactory.Create(className);
-                LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
+                Link link = (Link) db.link.Single(l => l.id == linkId).id;
 
-                characteristics.Add(calculator.Calculate(tempChain, linkUp));
+                characteristics.Add(calculator.Calculate(tempChain, link));
             }
 
             TempData["characteristics"] = characteristics;

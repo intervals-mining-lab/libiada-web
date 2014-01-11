@@ -102,7 +102,7 @@ namespace LibiadaWeb.Models.Repositories
                         value = strElem,
                         name = strElem,
                         notation_id = notationId,
-                        creation_date = DateTime.Now
+                        created = DateTime.Now
                     };
                     db.element.AddObject(newElement);
                 }

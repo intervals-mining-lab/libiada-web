@@ -1,10 +1,10 @@
-﻿@model LibiadaWeb.link_up
+﻿@model LibiadaWeb.link
 
 @{
     ViewBag.Title = "Привязки";
 }
 
-<h2>Создание</h2>
+<h2>Редактирование</h2>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -15,7 +15,9 @@
     <fieldset>
         <legend>Привязка</legend>
 
-         <div class="editor-label">
+        @Html.HiddenFor(model => model.id)
+
+        <div class="editor-label">
             @Html.LabelFor(model => model.name)
         </div>
         <div class="editor-field">
@@ -32,7 +34,7 @@
         </div>
 
         <p>
-            <input type="submit" value="Создать" />
+            <input type="submit" value="Сохранить" />
         </p>
     </fieldset>
 }

@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Index()
         {
-            var congeneric_characteristic = db.congeneric_characteristic.Include("characteristic_type").Include("element").Include("link_up");
+            var congeneric_characteristic = db.congeneric_characteristic.Include("characteristic_type").Include("element").Include("link");
             return View(congeneric_characteristic.ToList());
         }
 
@@ -37,7 +37,7 @@ namespace LibiadaWeb.Controllers
         {
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name");
             ViewBag.element_id = new SelectList(db.element, "id", "value");
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name");
+            ViewBag.link_id = new SelectList(db.link, "id", "name");
             return View();
         } 
 
@@ -56,7 +56,7 @@ namespace LibiadaWeb.Controllers
 
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
             ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", congeneric_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
         
@@ -72,7 +72,7 @@ namespace LibiadaWeb.Controllers
             }
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
             ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", congeneric_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
 
@@ -91,7 +91,7 @@ namespace LibiadaWeb.Controllers
             }
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
             ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", congeneric_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
 

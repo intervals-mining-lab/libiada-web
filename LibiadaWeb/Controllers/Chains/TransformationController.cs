@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Misc.DataTransformators;
+using LibiadaCore.Classes.Misc.DataTransformers;
 using LibiadaCore.Classes.Root;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
@@ -47,15 +47,15 @@ namespace LibiadaWeb.Controllers.Chains
                 Chain sourceChain = chainRepository.ToLibiadaChain(chainId);
                 
                 BaseChain transformedChain = toAmino
-                                                 ? DnaTransformator.Encode(sourceChain)
-                                                 : DnaTransformator.EncodeTriplets(sourceChain);
+                                                 ? DnaTransformer.Encode(sourceChain)
+                                                 : DnaTransformer.EncodeTriplets(sourceChain);
 
                 dna_chain result = new dna_chain
                     {
                         matter_id = dbChain.matter_id,
                         dissimilar = false,
                         notation_id = notationId,
-                        creation_date = DateTime.Now,
+                        created = DateTime.Now,
                         piece_type_id = Aliases.PieceTypeFullGenome,
                         piece_position = 0
                     };

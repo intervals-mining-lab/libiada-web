@@ -53,7 +53,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     @building,
                                     @remote_id,
                                     @remote_db_id,
-                                    @creation_date,
+                                    @created,
                                     @piece_position,
                                     @dissimilar);";
             db.ExecuteStoreCommand(query, parameters.ToArray());

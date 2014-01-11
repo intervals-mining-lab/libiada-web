@@ -136,7 +136,7 @@ namespace LibiadaWeb.Controllers.Chains
                                         notation_id = notationId,
                                         fasta_header = fastaHeader,
                                         piece_type_id = Aliases.PieceTypeFullGenome,
-                                        creation_date = new DateTimeOffset(DateTime.Now),
+                                        created = new DateTimeOffset(DateTime.Now),
                                         matter_id = matter.id
                                     };
 
@@ -178,7 +178,7 @@ namespace LibiadaWeb.Controllers.Chains
                                         language_id = languageId,
                                         original = original,
                                         piece_type_id = Aliases.PieceTypeFullText,
-                                        creation_date = new DateTimeOffset(DateTime.Now)
+                                        created = new DateTimeOffset(DateTime.Now)
                                     };
 
                                 matter.literature_chain.Add(dbLiteratureChain);

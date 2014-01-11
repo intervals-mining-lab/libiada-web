@@ -13,7 +13,7 @@ namespace LibiadaWeb.Controllers
 
         public ActionResult Index()
         {
-            var binary_characteristic = db.binary_characteristic.Include("chain").Include("element").Include("link_up").Include("element1").Include("characteristic_type");
+            var binary_characteristic = db.binary_characteristic.Include("chain").Include("element").Include("link").Include("element1").Include("characteristic_type");
             return View(binary_characteristic.ToList());
         }
 
@@ -37,7 +37,7 @@ namespace LibiadaWeb.Controllers
         {
             ViewBag.chain_id = new SelectList(db.chain, "id", "building");
             ViewBag.first_element_id = new SelectList(db.element, "id", "value");
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name");
+            ViewBag.link_id = new SelectList(db.link, "id", "name");
             ViewBag.second_element_id = new SelectList(db.element, "id", "value");
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name");
             return View();
@@ -58,7 +58,7 @@ namespace LibiadaWeb.Controllers
 
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", binary_characteristic.chain_id);
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", binary_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", binary_characteristic.link_id);
             ViewBag.second_element_id = new SelectList(db.element, "id", "value", binary_characteristic.second_element_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", binary_characteristic.characteristic_type_id);
             return View(binary_characteristic);
@@ -76,7 +76,7 @@ namespace LibiadaWeb.Controllers
             }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", binary_characteristic.chain_id);
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", binary_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", binary_characteristic.link_id);
             ViewBag.second_element_id = new SelectList(db.element, "id", "value", binary_characteristic.second_element_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", binary_characteristic.characteristic_type_id);
             return View(binary_characteristic);
@@ -97,7 +97,7 @@ namespace LibiadaWeb.Controllers
             }
             ViewBag.chain_id = new SelectList(db.chain, "id", "building", binary_characteristic.chain_id);
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
-            ViewBag.link_up_id = new SelectList(db.link_up, "id", "name", binary_characteristic.link_up_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", binary_characteristic.link_id);
             ViewBag.second_element_id = new SelectList(db.element, "id", "value", binary_characteristic.second_element_id);
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", binary_characteristic.characteristic_type_id);
             return View(binary_characteristic);

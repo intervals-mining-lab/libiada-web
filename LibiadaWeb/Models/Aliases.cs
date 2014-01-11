@@ -34,13 +34,13 @@ namespace LibiadaWeb.Models
 
         #endregion
 
-        #region LinkUp
+        #region Link
 
-        public const int LinkUpStart = 1;
-        public const int LinkUpEnd = 2;
-        public const int LinkUpStartEnd = 3;
-        public const int LinkUpCycle = 4;
-        public const int LinkUpNone = 5;
+        public const int LinkStart = 1;
+        public const int LinkEnd = 2;
+        public const int LinkStartEnd = 3;
+        public const int LinkCycle = 4;
+        public const int LinkNone = 5;
 
         #endregion
 

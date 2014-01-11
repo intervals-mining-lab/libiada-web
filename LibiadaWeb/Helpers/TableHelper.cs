@@ -55,7 +55,7 @@ namespace LibiadaWeb.Helpers
 
                 bodyData[i].Add(checkBoxes[i].ToString());
                 bodyData[i].Add(chains[i].notation.name);
-                bodyData[i].Add(chains[i].creation_date.ToString());
+                bodyData[i].Add(chains[i].created.ToString());
                 bodyData[i].Add(chains[i].piece_type.name);
                 bodyData[i].Add(chains[i].piece_position.ToString());
                 bodyData[i].Add(languages[i]);

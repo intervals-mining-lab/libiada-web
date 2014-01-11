@@ -4,33 +4,33 @@ using System.Web.Mvc;
 
 namespace LibiadaWeb.Controllers.Catalogs
 { 
-    public class LinkUpController : Controller
+    public class LinkController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         //
-        // GET: /LinkUp/
+        // GET: /Link/
 
         public ActionResult Index()
         {
-            return View(db.link_up.ToList());
+            return View(db.link.ToList());
         }
 
         //
-        // GET: /LinkUp/Details/5
+        // GET: /Link/Details/5
 
         public ActionResult Details(int id)
         {
-            link_up link_up = db.link_up.Single(l => l.id == id);
-            if (link_up == null)
+            link link = db.link.Single(l => l.id == id);
+            if (link == null)
             {
                 return HttpNotFound();
             }
-            return View(link_up);
+            return View(link);
         }
 
         //
-        // GET: /LinkUp/Create
+        // GET: /Link/Create
 
         public ActionResult Create()
         {
@@ -38,71 +38,71 @@ namespace LibiadaWeb.Controllers.Catalogs
         } 
 
         //
-        // POST: /LinkUp/Create
+        // POST: /Link/Create
 
         [HttpPost]
-        public ActionResult Create(link_up link_up)
+        public ActionResult Create(link link)
         {
             if (ModelState.IsValid)
             {
-                db.link_up.AddObject(link_up);
+                db.link.AddObject(link);
                 db.SaveChanges();
                 return RedirectToAction("Index");  
             }
 
-            return View(link_up);
+            return View(link);
         }
         
         //
-        // GET: /LinkUp/Edit/5
+        // GET: /Link/Edit/5
  
         public ActionResult Edit(int id)
         {
-            link_up link_up = db.link_up.Single(l => l.id == id);
-            if (link_up == null)
+            link link = db.link.Single(l => l.id == id);
+            if (link == null)
             {
                 return HttpNotFound();
             }
-            return View(link_up);
+            return View(link);
         }
 
         //
-        // POST: /LinkUp/Edit/5
+        // POST: /Link/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(link_up link_up)
+        public ActionResult Edit(link link)
         {
             if (ModelState.IsValid)
             {
-                db.link_up.Attach(link_up);
-                db.ObjectStateManager.ChangeObjectState(link_up, EntityState.Modified);
+                db.link.Attach(link);
+                db.ObjectStateManager.ChangeObjectState(link, EntityState.Modified);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(link_up);
+            return View(link);
         }
 
         //
-        // GET: /LinkUp/Delete/5
+        // GET: /Link/Delete/5
  
         public ActionResult Delete(int id)
         {
-            link_up link_up = db.link_up.Single(l => l.id == id);
-            if (link_up == null)
+            link link = db.link.Single(l => l.id == id);
+            if (link == null)
             {
                 return HttpNotFound();
             }
-            return View(link_up);
+            return View(link);
         }
 
         //
-        // POST: /LinkUp/Delete/5
+        // POST: /Link/Delete/5
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {            
-            link_up link_up = db.link_up.Single(l => l.id == id);
-            db.link_up.DeleteObject(link_up);
+            link link = db.link.Single(l => l.id == id);
+            db.link.DeleteObject(link);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

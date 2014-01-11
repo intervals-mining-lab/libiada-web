@@ -44,7 +44,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult Index()
         {
-            var chain = db.chain.OrderBy(c => c.creation_date).Include("matter").Include("notation");
+            var chain = db.chain.OrderBy(c => c.created).Include("matter").Include("notation");
             return View(chain.ToList());
         }
 
@@ -230,7 +230,7 @@ namespace LibiadaWeb.Controllers.Chains
                     fasta_header = "",
                     piece_type_id = Aliases.PieceTypeFullGenome,
                     piece_position = 0,
-                    creation_date = DateTime.Now
+                    created = DateTime.Now
                 };
 
                 long[] alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dbDnaChain.notation_id, true);

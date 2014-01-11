@@ -25,7 +25,7 @@
         $scope.addCharacteristic = function() {
             $scope.characteristics.push({ 
                 characteristicType:$scope.characteristicTypes[0], 
-                linkUp:$scope.linkUps[0], 
+                link:$scope.links[0], 
                 notation:$scope.notations[0], 
                 language:$scope.languages[0] 
             });
@@ -80,11 +80,11 @@
                     data_ng_model = "characteristic.characteristicType",
                     data_ng_options = "c.Text for c in characteristicTypes"
                 })
-            @Html.DropDownList("linkUpIds", new SelectListItem[0], new
+            @Html.DropDownList("linkIds", new SelectListItem[0], new
                 {
                     title = "Привязка",
-                    data_ng_model = "characteristic.linkUp",
-                    data_ng_options = "l.Text for l in linkUps"
+                    data_ng_model = "characteristic.link",
+                    data_ng_options = "l.Text for l in links"
                 })
             @Html.DropDownList("notationIds", new SelectListItem[0], new
                 {

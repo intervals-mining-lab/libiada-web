@@ -37,10 +37,10 @@
                 @Html.DisplayNameFor(model => model.value_string)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.link_up_id)
+                @Html.DisplayNameFor(model => model.link_id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.creation_date)
+                @Html.DisplayNameFor(model => model.created)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.element_id)
@@ -65,10 +65,10 @@
                     @Html.DisplayFor(modelItem => item.value_string)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.link_up.name)
+                    @Html.DisplayFor(modelItem => item.link.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.creation_date)
+                    @Html.DisplayFor(modelItem => item.created)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.element.value)

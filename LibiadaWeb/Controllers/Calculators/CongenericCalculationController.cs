@@ -17,7 +17,7 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
-        private readonly LinkUpRepository linkUpRepository;
+        private readonly LinkRepository linkRepository;
         private readonly ChainRepository chainRepository;
 
 
@@ -27,7 +27,7 @@ namespace LibiadaWeb.Controllers.Calculators
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            linkUpRepository = new LinkUpRepository(db);
+            linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
         }
 
@@ -45,14 +45,14 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linkUpsList = linkUpRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             ViewBag.languagesList = new SelectList(db.language, "id", "name");
             
             return View();
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkUpIds, int[] notationIds, int[] languageIds, bool isSort, bool theoretical)
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkIds, int[] notationIds, int[] languageIds, bool isSort, bool theoretical)
         {
 
             List<List<List<KeyValuePair<int, double>>>> characteristics = new List<List<List<KeyValuePair<int, double>>>>();
@@ -95,15 +95,15 @@ namespace LibiadaWeb.Controllers.Calculators
 
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
-                    int linkUpId = linkUpIds[i];
+                    int linkId = linkIds[i];
 
                     String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                     ICalculator calculator = CalculatorsFactory.Create(className);
-                    LinkUp linkUp = (LinkUp) db.link_up.Single(l => l.id == linkUpId).id;
+                    Link link = (Link) db.link.Single(l => l.id == linkId).id;
                     List<long> chainElements = chainRepository.GetElementIds(chainId);
                     int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
-                                                                              b.link_up_id == linkUpId);
+                                                                              b.link_id == linkId);
                     if (calculated < libiadaChain.Alphabet.Power)
                     {
                         
@@ -116,18 +116,18 @@ namespace LibiadaWeb.Controllers.Calculators
                             if (!db.congeneric_characteristic.Any(b =>
                                                                    b.chain_id == chainId &&
                                                                    b.characteristic_type_id == characteristicId &&
-                                                                   b.element_id == elementId && b.link_up_id == linkUpId))
+                                                                   b.element_id == elementId && b.link_id == linkId))
                             {
-                                double value = calculator.Calculate(tempChain, linkUp);
+                                double value = calculator.Calculate(tempChain, link);
                                 congeneric_characteristic currentCharacteristic = new congeneric_characteristic
                                     {
                                         chain_id = chainId,
                                         characteristic_type_id = characteristicId,
-                                        link_up_id = linkUpId,
+                                        link_id = linkId,
                                         element_id = elementId,
                                         value = value,
                                         value_string = value.ToString(),
-                                        creation_date = DateTime.Now
+                                        created = DateTime.Now
                                     };
                                 db.congeneric_characteristic.AddObject(currentCharacteristic);
                                 db.SaveChanges();
@@ -144,7 +144,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                     b.chain_id == chainId &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.element_id == elementId &&
-                                    b.link_up_id == linkUpId).value;
+                                    b.link_id == linkId).value;
                         
                         characteristics.Last().Last().Add(
                             new KeyValuePair<int, double>(d, (double)characteristic));
@@ -165,14 +165,14 @@ namespace LibiadaWeb.Controllers.Calculators
                         List<int> counts = new List<int>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {
-                            counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), LinkUp.End));
+                            counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                         }
 
                         ICalculator frequencyCalculator = CalculatorsFactory.Create("Probability");
                         List<double> frequency = new List<double>();
                         for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
                         {
-                            frequency.Add(frequencyCalculator.Calculate(libiadaChain.CongenericChain(f), LinkUp.End));
+                            frequency.Add(frequencyCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                         }
 
                         double maxFrequency = frequency.Max();

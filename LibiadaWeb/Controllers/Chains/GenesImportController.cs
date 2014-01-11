@@ -77,7 +77,7 @@ namespace LibiadaWeb.Controllers.Chains
                 /*var resultChain = new chain
                     {
                         notation_id = parentChain.notation_id,
-                        creation_date = DateTime.Now,
+                        created = DateTime.Now,
                         matter_id = parentChain.matter_id,
                         dissimilar = false,
                         piece_type_id = !!!!!!!,

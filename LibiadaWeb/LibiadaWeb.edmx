@@ -2,7 +2,7 @@
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
 <edmx:Runtime>
   <edmx:StorageModels>
-<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="npgsql" ProviderManifestToken="9.2.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="LibiadaWebModel.Store" Alias="Self" Provider="Npgsql" ProviderManifestToken="9.2.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="LibiadaWebModelStoreContainer">
     <EntitySet Name="binary_characteristic" EntityType="LibiadaWebModel.Store.binary_characteristic" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="chain" EntityType="LibiadaWebModel.Store.chain" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -12,7 +12,7 @@
     <EntitySet Name="dna_chain" EntityType="LibiadaWebModel.Store.dna_chain" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.Store.element" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="language" EntityType="LibiadaWebModel.Store.language" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-    <EntitySet Name="link_up" EntityType="LibiadaWebModel.Store.link_up" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="link" EntityType="LibiadaWebModel.Store.link" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="literature_chain" EntityType="LibiadaWebModel.Store.literature_chain" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="matter" EntityType="LibiadaWebModel.Store.matter" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.Store.nature" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -35,8 +35,8 @@
       <End Role="element" EntitySet="element" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_binary_characteristic_link_up" Association="LibiadaWebModel.Store.fk_binary_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_binary_characteristic_link" Association="LibiadaWebModel.Store.fk_binary_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_binary_characteristic_second_element" Association="LibiadaWebModel.Store.fk_binary_characteristic_second_element">
@@ -59,8 +59,8 @@
       <End Role="characteristic_group" EntitySet="characteristic_group" />
       <End Role="characteristic_type" EntitySet="characteristic_type" />
     </AssociationSet>
-    <AssociationSet Name="fk_characteristic_link_up" Association="LibiadaWebModel.Store.fk_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_characteristic_link" Association="LibiadaWebModel.Store.fk_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="characteristic" EntitySet="characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_characteristic_type" Association="LibiadaWebModel.Store.fk_characteristic_type">
@@ -155,8 +155,8 @@
       <End Role="element" EntitySet="element" />
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_congeneric_characteristic_link_up" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_congeneric_characteristic_link" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_congeneric_characteristic_type" Association="LibiadaWebModel.Store.fk_congeneric_characteristic_type">
@@ -227,10 +227,11 @@
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
     <Property Name="value_string" Type="text" />
-    <Property Name="link_up_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="link_id" Type="int4" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="first_element_id" Type="int8" Nullable="false" />
     <Property Name="second_element_id" Type="int8" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="chain">
     <Key>
@@ -238,13 +239,14 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -255,8 +257,9 @@
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
     <Property Name="value_string" Type="text" />
-    <Property Name="link_up_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="link_id" Type="int4" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="characteristic_group">
     <Key>
@@ -276,6 +279,7 @@
     <Property Name="characteristic_group_id" Type="int4" />
     <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
     <Property Name="characteristic_applicability_id" Nullable="false" Type="int4" />
+    <Property Name="linkable" Type="bool" Nullable="false" />
   </EntityType>
 
   <EntityType Name="characteristic_applicability">
@@ -293,7 +297,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
@@ -302,6 +306,7 @@
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
     <Property Name="web_api_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="element">
     <Key>
@@ -312,7 +317,8 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="language">
     <Key>
@@ -322,7 +328,7 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
   </EntityType>
-  <EntityType Name="link_up">
+  <EntityType Name="link">
     <Key>
       <PropertyRef Name="id" />
     </Key>
@@ -336,7 +342,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
@@ -345,6 +351,7 @@
     <Property Name="language_id" Type="int4" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="matter">
     <Key>
@@ -354,7 +361,8 @@
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
     <Property Name="description" Type="varchar" MaxLength="255" />
-    
+    <Property Name="created" Type="timestamptz" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="nature">
     <Key>
@@ -390,6 +398,7 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="url" Type="varchar" MaxLength="255" />
+    <Property Name="nature_id" Type="int4" Nullable="false" />
   </EntityType>
 
   <EntityType Name="fmotiv">
@@ -398,7 +407,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
@@ -409,6 +418,7 @@
     <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="congeneric_characteristic">
     <Key>
@@ -419,9 +429,10 @@
     <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
     <Property Name="value" Type="float8" />
     <Property Name="value_string" Type="text" />
-    <Property Name="link_up_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="link_id" Type="int4" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="element_id" Type="int8" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="instrument">
     <Key>
@@ -438,7 +449,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
@@ -452,6 +463,7 @@
     <Property Name="fifths" Type="int4" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
   <EntityType Name="music_chain">
     <Key>
@@ -459,13 +471,14 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
 
   <EntityType Name="note">
@@ -477,7 +490,7 @@
     <Property Name="description" Type="varchar" MaxLength="255" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
-    <Property Name="creation_date" Type="timestamptz" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="numerator" Type="int4" Nullable="false" />
     <Property Name="denominator" Type="int4" Nullable="false" />
     <Property Name="ticks" Type="int4" />
@@ -486,6 +499,7 @@
     <Property Name="triplet" Type="bool" Nullable="false" />
     <Property Name="priority" Type="int4" />
     <Property Name="tie_id" Type="int4" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
 
   <EntityType Name="pitch">
@@ -499,6 +513,8 @@
     <Property Name="note_id" Type="int8" Nullable="false" />
     <Property Name="accidental_id" Type="int4" Nullable="false" />
     <Property Name="note_symbol_id" Type="int4" Nullable="false" />
+    <Property Name="created" Type="timestamptz" Nullable="false" />
+    <Property Name="modified" Type="timestamptz"/>
   </EntityType>
 
   <EntityType Name="accidental">
@@ -548,15 +564,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_binary_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.Store.link_up" Multiplicity="1" />
+  <Association Name="fk_binary_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.Store.link" Multiplicity="0..1" />
     <End Role="binary_characteristic" Type="LibiadaWebModel.Store.binary_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="binary_characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -620,15 +636,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.Store.link_up" Multiplicity="1" />
+  <Association Name="fk_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.Store.link" Multiplicity="0..1" />
     <End Role="characteristic" Type="LibiadaWebModel.Store.characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -760,6 +776,18 @@
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="matter">
+        <PropertyRef Name="nature_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_remote_db_nature">
+    <End Role="nature" Type="LibiadaWebModel.Store.nature" Multiplicity="1" />
+    <End Role="remote_db" Type="LibiadaWebModel.Store.remote_db" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="nature">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="remote_db">
         <PropertyRef Name="nature_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -1066,15 +1094,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_congeneric_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.Store.link_up" Multiplicity="1" />
+  <Association Name="fk_congeneric_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.Store.link" Multiplicity="0..1" />
     <End Role="congeneric_characteristic" Type="LibiadaWebModel.Store.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="congeneric_characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1327,7 +1355,7 @@
     <EntitySet Name="dna_chain" EntityType="LibiadaWebModel.dna_chain" />
     <EntitySet Name="element" EntityType="LibiadaWebModel.element" />
     <EntitySet Name="language" EntityType="LibiadaWebModel.language" />
-    <EntitySet Name="link_up" EntityType="LibiadaWebModel.link_up" />
+    <EntitySet Name="link" EntityType="LibiadaWebModel.link" />
     <EntitySet Name="literature_chain" EntityType="LibiadaWebModel.literature_chain" />
     <EntitySet Name="matter" EntityType="LibiadaWebModel.matter" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.nature" />
@@ -1350,8 +1378,8 @@
       <End Role="element" EntitySet="element" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
-    <AssociationSet Name="fk_binary_characteristic_link_up" Association="LibiadaWebModel.fk_binary_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_binary_characteristic_link" Association="LibiadaWebModel.fk_binary_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="binary_characteristic" EntitySet="binary_characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_binary_characteristic_second_element" Association="LibiadaWebModel.fk_binary_characteristic_second_element">
@@ -1374,8 +1402,8 @@
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="chain" EntitySet="chain" />
     </AssociationSet>
-    <AssociationSet Name="fk_characteristic_link_up" Association="LibiadaWebModel.fk_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_characteristic_link" Association="LibiadaWebModel.fk_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="characteristic" EntitySet="characteristic" />
     </AssociationSet>
     <AssociationSet Name="fk_characteristic_type" Association="LibiadaWebModel.fk_characteristic_type">
@@ -1530,8 +1558,8 @@
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
-    <AssociationSet Name="fk_congeneric_characteristic_link_up" Association="LibiadaWebModel.fk_congeneric_characteristic_link_up">
-      <End Role="link_up" EntitySet="link_up" />
+    <AssociationSet Name="fk_congeneric_characteristic_link" Association="LibiadaWebModel.fk_congeneric_characteristic_link">
+      <End Role="link" EntitySet="link" />
       <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
     </AssociationSet>
 
@@ -1642,12 +1670,13 @@
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
     <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <Property Name="link_up_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="link_id" Type="Int32" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="first_element_id" Type="Int64" Nullable="false" />
     <Property Name="second_element_id" Type="Int64" Nullable="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_binary_characteristic_first_element" FromRole="binary_characteristic" ToRole="element" />
-    <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_binary_characteristic_link_up" FromRole="binary_characteristic" ToRole="link_up" />
+    <NavigationProperty Name="link" Relationship="LibiadaWebModel.fk_binary_characteristic_link" FromRole="binary_characteristic" ToRole="link" />
     <NavigationProperty Name="element1" Relationship="LibiadaWebModel.fk_binary_characteristic_second_element" FromRole="binary_characteristic" ToRole="element" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_binary_characteristic_chain" FromRole="binary_characteristic" ToRole="chain" />
     <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_characteristic_type1" FromRole="binary_characteristic" ToRole="characteristic_type" />
@@ -1658,12 +1687,13 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
@@ -1681,9 +1711,10 @@
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
     <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <Property Name="link_up_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
-    <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_characteristic_link_up" FromRole="characteristic" ToRole="link_up" />
+    <Property Name="link_id" Type="Int32" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+    <NavigationProperty Name="link" Relationship="LibiadaWebModel.fk_characteristic_link" FromRole="characteristic" ToRole="link" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_characteristic_chain" FromRole="characteristic" ToRole="chain" />
     <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic" ToRole="characteristic_type" />
   </EntityType>
@@ -1706,6 +1737,7 @@
     <Property Name="characteristic_group_id" Type="Int32" />
     <Property Name="class_name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="characteristic_applicability_id" Nullable="false" Type="Int32" />
+    <Property Name="linkable" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_characteristic_type1" FromRole="characteristic_type" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
     <NavigationProperty Name="characteristic_group" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
@@ -1718,7 +1750,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
@@ -1727,6 +1759,7 @@
     <Property Name="web_api_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
@@ -1743,7 +1776,8 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_first_element" FromRole="element" ToRole="binary_characteristic" />
     <NavigationProperty Name="binary_characteristic1" Relationship="LibiadaWebModel.fk_binary_characteristic_second_element" FromRole="element" ToRole="binary_characteristic" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_element_notation" FromRole="element" ToRole="notation" />
@@ -1758,15 +1792,15 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_language" FromRole="language" ToRole="literature_chain" />
   </EntityType>
-  <EntityType Name="link_up">
+  <EntityType Name="link">
     <Key>
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_link_up" FromRole="link_up" ToRole="binary_characteristic" />
-    <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_link_up" FromRole="link_up" ToRole="characteristic" />
+    <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_link" FromRole="link" ToRole="binary_characteristic" />
+    <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_link" FromRole="link" ToRole="characteristic" />
   </EntityType>
   <EntityType Name="literature_chain">
     <Key>
@@ -1774,7 +1808,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
@@ -1783,6 +1817,7 @@
     <Property Name="language_id" Type="Int32" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_literature_chain" FromRole="literature_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
@@ -1800,6 +1835,8 @@
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="matter" ToRole="chain" />
     <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="matter" ToRole="dna_chain" />
     <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="matter" ToRole="literature_chain" />
@@ -1862,6 +1899,7 @@
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="nature_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_remote_db" FromRole="remote_db" ToRole="chain" />
   <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_remote_db" FromRole="remote_db" ToRole="dna_chain" />
   <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_remote_db" FromRole="remote_db" ToRole="literature_chain" />
@@ -1876,7 +1914,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
@@ -1887,6 +1925,7 @@
     <Property Name="fmotiv_type_id" Type="Int32" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_fmotiv_matter" FromRole="fmotiv" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_fmotiv_notation" FromRole="fmotiv" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_fmotiv_piece_type" FromRole="fmotiv" ToRole="piece_type" />
@@ -1905,12 +1944,13 @@
     <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
     <Property Name="value" Type="Double" />
     <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-    <Property Name="link_up_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="link_id" Type="Int32" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="element_id" Type="Int64" Nullable="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_congeneric_characteristic_type" FromRole="congeneric_characteristic" ToRole="characteristic_type" />
     <NavigationProperty Name="element" Relationship="LibiadaWebModel.fk_congeneric_characteristic_element" FromRole="congeneric_characteristic" ToRole="element" />
-    <NavigationProperty Name="link_up" Relationship="LibiadaWebModel.fk_congeneric_characteristic_link_up" FromRole="congeneric_characteristic" ToRole="link_up" />
+    <NavigationProperty Name="link" Relationship="LibiadaWebModel.fk_congeneric_characteristic_link" FromRole="congeneric_characteristic" ToRole="link" />
   </EntityType>
   <EntityType Name="instrument">
     <Key>
@@ -1927,7 +1967,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
@@ -1941,6 +1981,7 @@
     <Property Name="fifths" Type="Int32" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_measure_matter" FromRole="measure" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_measure_notation" FromRole="measure" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_measure_piece_type" FromRole="measure" ToRole="piece_type" />
@@ -1955,13 +1996,14 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_music_chain_matter" FromRole="music_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_music_chain_notation" FromRole="music_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_music_chain_piece_type" FromRole="music_chain" ToRole="piece_type" />
@@ -1979,7 +2021,7 @@
     <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
-    <Property Name="creation_date" Type="DateTimeOffset" Precision="7" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="numerator" Type="Int32" Nullable="false" />
     <Property Name="denominator" Type="Int32" Nullable="false" />
     <Property Name="ticks" Type="Int32" />
@@ -1988,6 +2030,7 @@
     <Property Name="triplet" Type="Boolean" Nullable="false" />
     <Property Name="priority" Type="Int32" />
     <Property Name="tie_id" Type="Int32" Nullable="false" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_note_notation" FromRole="note" ToRole="notation" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_note" FromRole="note" ToRole="pitch" />
     <NavigationProperty Name="tie" Relationship="LibiadaWebModel.fk_note_tie" FromRole="note" ToRole="tie" />
@@ -2003,6 +2046,8 @@
     <Property Name="note_id" Type="Int64" Nullable="false" />
     <Property Name="accidental_id" Type="Int32" Nullable="false" />
     <Property Name="note_symbol_id" Type="Int32" Nullable="false" />
+    <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+    <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_pitch_note" FromRole="pitch" ToRole="note" />
     <NavigationProperty Name="instrument" Relationship="LibiadaWebModel.fk_pitch_instrument" FromRole="pitch" ToRole="instrument" />
     <NavigationProperty Name="accidental" Relationship="LibiadaWebModel.fk_pitch_accidental" FromRole="pitch" ToRole="accidental" />
@@ -2176,15 +2221,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_binary_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.link_up" Multiplicity="1" />
+  <Association Name="fk_binary_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.link" Multiplicity="0..1" />
     <End Role="binary_characteristic" Type="LibiadaWebModel.binary_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="binary_characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2248,15 +2293,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.link_up" Multiplicity="1" />
+  <Association Name="fk_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.link" Multiplicity="0..1" />
     <End Role="characteristic" Type="LibiadaWebModel.characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2388,6 +2433,18 @@
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="matter">
+        <PropertyRef Name="nature_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_remote_db_nature">
+    <End Role="nature" Type="LibiadaWebModel.nature" Multiplicity="1" />
+    <End Role="remote_db" Type="LibiadaWebModel.remote_db" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="nature">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="remote_db">
         <PropertyRef Name="nature_id" />
       </Dependent>
     </ReferentialConstraint>
@@ -2595,15 +2652,15 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="fk_congeneric_characteristic_link_up">
-    <End Role="link_up" Type="LibiadaWebModel.link_up" Multiplicity="1" />
+  <Association Name="fk_congeneric_characteristic_link">
+    <End Role="link" Type="LibiadaWebModel.link" Multiplicity="0..1" />
     <End Role="congeneric_characteristic" Type="LibiadaWebModel.congeneric_characteristic" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="link_up">
+      <Principal Role="link">
         <PropertyRef Name="id" />
       </Principal>
       <Dependent Role="congeneric_characteristic">
-        <PropertyRef Name="link_up_id" />
+        <PropertyRef Name="link_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2897,10 +2954,11 @@
           <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
           <ScalarProperty Name="value" ColumnName="value" />
           <ScalarProperty Name="value_string" ColumnName="value_string" />
-          <ScalarProperty Name="link_up_id" ColumnName="link_up_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="link_id" ColumnName="link_id" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="first_element_id" ColumnName="first_element_id" />
           <ScalarProperty Name="second_element_id" ColumnName="second_element_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2909,13 +2967,14 @@
         <MappingFragment StoreEntitySet="chain">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2927,8 +2986,9 @@
           <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
           <ScalarProperty Name="value" ColumnName="value" />
           <ScalarProperty Name="value_string" ColumnName="value_string" />
-          <ScalarProperty Name="link_up_id" ColumnName="link_up_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="link_id" ColumnName="link_id" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2950,6 +3010,7 @@
           <ScalarProperty Name="characteristic_group_id" ColumnName="characteristic_group_id" />
           <ScalarProperty Name="class_name" ColumnName="class_name" />
           <ScalarProperty Name="characteristic_applicability_id" ColumnName="characteristic_applicability_id" />
+          <ScalarProperty Name="linkable" ColumnName="linkable" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2958,7 +3019,7 @@
         <MappingFragment StoreEntitySet="dna_chain">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
@@ -2967,6 +3028,7 @@
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
           <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2978,7 +3040,8 @@
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2991,9 +3054,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="link_up">
-      <EntityTypeMapping TypeName="LibiadaWebModel.link_up">
-        <MappingFragment StoreEntitySet="link_up">
+    <EntitySetMapping Name="link">
+      <EntityTypeMapping TypeName="LibiadaWebModel.link">
+        <MappingFragment StoreEntitySet="link">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
@@ -3005,7 +3068,7 @@
         <MappingFragment StoreEntitySet="literature_chain">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
@@ -3014,6 +3077,7 @@
           <ScalarProperty Name="language_id" ColumnName="language_id" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3024,6 +3088,8 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="nature_id" ColumnName="nature_id" />
           <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3063,6 +3129,7 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="url" ColumnName="url" />
+          <ScalarProperty Name="nature_id" ColumnName="nature_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3072,7 +3139,7 @@
         <MappingFragment StoreEntitySet="fmotiv">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
@@ -3083,6 +3150,7 @@
           <ScalarProperty Name="fmotiv_type_id" ColumnName="fmotiv_type_id" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3095,9 +3163,10 @@
           <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
           <ScalarProperty Name="value" ColumnName="value" />
           <ScalarProperty Name="value_string" ColumnName="value_string" />
-          <ScalarProperty Name="link_up_id" ColumnName="link_up_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="link_id" ColumnName="link_id" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="element_id" ColumnName="element_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3117,7 +3186,7 @@
         <MappingFragment StoreEntitySet="measure">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
@@ -3131,6 +3200,7 @@
           <ScalarProperty Name="fifths" ColumnName="fifths" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3140,13 +3210,14 @@
         <MappingFragment StoreEntitySet="music_chain">
           <ScalarProperty Name="id" ColumnName="id" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3159,7 +3230,7 @@
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-          <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+          <ScalarProperty Name="created" ColumnName="created" />
           <ScalarProperty Name="numerator" ColumnName="numerator" />
           <ScalarProperty Name="denominator" ColumnName="denominator" />
           <ScalarProperty Name="ticks" ColumnName="ticks" />
@@ -3168,6 +3239,7 @@
           <ScalarProperty Name="triplet" ColumnName="triplet" />
           <ScalarProperty Name="priority" ColumnName="priority" />
           <ScalarProperty Name="tie_id" ColumnName="tie_id" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3182,6 +3254,8 @@
           <ScalarProperty Name="note_id" ColumnName="note_id" />
           <ScalarProperty Name="accidental_id" ColumnName="accidental_id" />
           <ScalarProperty Name="note_symbol_id" ColumnName="note_symbol_id" />
+          <ScalarProperty Name="created" ColumnName="created" />
+          <ScalarProperty Name="modified" ColumnName="modified" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -46,16 +46,16 @@ namespace LibiadaWeb.Models.Repositories
             }
         }
 
-        public Int64 CreateBinaryCharacteristic(Int64 chainId, int characteristicId, int linkUpId, Int64 firstElementId, Int64 secondElementId, double value)
+        public Int64 CreateBinaryCharacteristic(Int64 chainId, int characteristicId, int linkId, Int64 firstElementId, Int64 secondElementId, double value)
         {
             binary_characteristic characteristic = new binary_characteristic
             {
                 chain_id = chainId,
                 characteristic_type_id = characteristicId,
-                link_up_id = linkUpId,
+                link_id = linkId,
                 first_element_id = firstElementId,
                 second_element_id = secondElementId,
-                creation_date = DateTime.Now,
+                created = DateTime.Now,
                 value = value,
                 value_string = value.ToString()
             };

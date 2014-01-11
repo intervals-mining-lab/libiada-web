@@ -65,7 +65,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     @building,
                                     @remote_id,
                                     @remote_db_id,
-                                    @creation_date,
+                                    @created,
                                     @piece_position,
                                     @dissimilar);";
             db.ExecuteStoreCommand(query, parameters.ToArray());
@@ -81,7 +81,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 notation_id = chain.notation_id,
                 matter_id = chain.matter_id,
                 piece_type_id = chain.piece_type_id,
-                creation_date = DateTime.Now,
+                created = DateTime.Now,
                 piece_position = chain.piece_position
             };
 

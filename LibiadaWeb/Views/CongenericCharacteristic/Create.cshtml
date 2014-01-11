@@ -48,19 +48,19 @@
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.link_up_id)
+            @Html.LabelFor(model => model.link_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("link_up_id", String.Empty)
-            @Html.ValidationMessageFor(model => model.link_up_id)
+            @Html.DropDownList("link_id", String.Empty)
+            @Html.ValidationMessageFor(model => model.link_id)
         </div>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.creation_date)
+            @Html.LabelFor(model => model.created)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.creation_date)
-            @Html.ValidationMessageFor(model => model.creation_date)
+            @Html.EditorFor(model => model.created)
+            @Html.ValidationMessageFor(model => model.created)
         </div>
 
         <div class="editor-label">

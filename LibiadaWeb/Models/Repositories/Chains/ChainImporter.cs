@@ -19,7 +19,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (chain.id == default(long))
             {
-                chain.id = DataTransformators.GetLongSequenceValue(db, "chain_id_seq");
+                chain.id = DataTransformators.GetLongSequenceValue(db, "elements_id_seq");
             }
 
             var parameters = new List<object>
@@ -74,7 +74,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                         },
                     new NpgsqlParameter
                         {
-                            ParameterName = "@creation_date",
+                            ParameterName = "@created",
                             NpgsqlDbType = NpgsqlDbType.TimestampTZ,
                             Value = DateTime.Now
                         },

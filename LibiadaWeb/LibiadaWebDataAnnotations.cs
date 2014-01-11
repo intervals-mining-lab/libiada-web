@@ -63,7 +63,7 @@ namespace LibiadaWeb
         public long notation_id { get; set; }
 
         [Display(Name = "Дата создания")]
-        public DateTimeOffset creation_date { get; set; }
+        public DateTimeOffset created { get; set; }
 
         [Display(Name = "Принадлежит объекту исследования")]
         public long matter_id { get; set; }
@@ -104,10 +104,10 @@ namespace LibiadaWeb
         public string value_string { get; set; }
 
         [Display(Name = "Привязка")]
-        public int link_up_id { get; set; }
+        public int link_id { get; set; }
 
         [Display(Name = "Дата создания")]
-        public DateTimeOffset creation_date { get; set; }
+        public DateTimeOffset created { get; set; }
     }
 
     [MetadataType(typeof (CharacteristicApplicabilityDataAnnotations))]
@@ -170,7 +170,7 @@ namespace LibiadaWeb
         public long notation_id { get; set; }
 
         [Display(Name = "Дата создания")]
-        public DateTimeOffset creation_date { get; set; }
+        public DateTimeOffset created { get; set; }
     }
 
     [MetadataType(typeof (FmotivDataAnnotations))]
@@ -231,12 +231,12 @@ namespace LibiadaWeb
     {
     }
 
-    [MetadataType(typeof (LinkUpDataAnnotations))]
-    public partial class link_up
+    [MetadataType(typeof (LinkDataAnnotations))]
+    public partial class link
     {
     }
 
-    public class LinkUpDataAnnotations : CommonDataAnnotations
+    public class LinkDataAnnotations : CommonDataAnnotations
     {
     }
 
