@@ -110,15 +110,6 @@ namespace LibiadaWeb
         public DateTimeOffset created { get; set; }
     }
 
-    [MetadataType(typeof (CharacteristicApplicabilityDataAnnotations))]
-    public partial class characteristic_applicability
-    {
-    }
-
-    public class CharacteristicApplicabilityDataAnnotations : CommonDataAnnotations
-    {
-    }
-
     [MetadataType(typeof (CharacteristicGroupDataAnnotations))]
     public partial class characteristic_group
     {
@@ -138,11 +129,20 @@ namespace LibiadaWeb
         [Display(Name = "Группа характеристик")]
         public int characteristic_group_id { get; set; }
 
-        [Display(Name = "Название класса")]
+        [Display(Name = "Класс-калькулятор")]
         public string class_name { get; set; }
 
-        [Display(Name = "Применимость характеристики")]
-        public int characteristic_applicability_id { get; set; }
+        [Display(Name = "Привязываемость")]
+        public int linkable { get; set; }
+
+        [Display(Name = "Применимо к полным цепочкам")]
+        public int full_chain_applicable { get; set; }
+
+        [Display(Name = "Применимо к бинарным цепочкам")]
+        public int binary_chain_applicable { get; set; }
+
+        [Display(Name = "Применимо к однородным цепочкам")]
+        public int congeneric_chain_applicable { get; set; }
     }
 
     [MetadataType(typeof (DnaChainDataAnnotations))]

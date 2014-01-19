@@ -32,10 +32,32 @@
     </div>
     
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.characteristic_applicability_id)
+        @Html.DisplayNameFor(model => model.linkable)
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.characteristic_applicability.name)
+        @Html.DisplayFor(model => model.linkable)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayName("Применимость характеристики")
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.full_chain_applicable)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.full_chain_applicable)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.binary_chain_applicable)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.binary_chain_applicable)
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.congeneric_chain_applicable)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.congeneric_chain_applicable)
     </div>
 
     <div class="display-label">

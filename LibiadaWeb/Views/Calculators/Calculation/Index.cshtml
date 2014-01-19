@@ -1,6 +1,4 @@
-﻿@using LibiadaWeb
-@using LibiadaWeb.Helpers
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Вычисление характеристик";
@@ -12,7 +10,7 @@
 
     var app = angular.module('Calculation', []);
 
-    app.controller('CalculationCtrl', ['$scope', 'filterFilter', function($scope, filterFilter) {
+    app.controller('CalculationCtrl', ['$scope', 'filterFilter',  function($scope, filterFilter) {
 
         var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
         
@@ -21,36 +19,60 @@
         }
         
         $scope.characteristics = [];
-        
+        $scope.filteredNotations = [];
+
         $scope.addCharacteristic = function() {
             $scope.characteristics.push({ 
-                characteristicType:$scope.characteristicTypes[0], 
-                link:$scope.links[0], 
-                notation:$scope.notations[0], 
-                language:$scope.languages[0] 
+                characteristicType: $scope.characteristicTypes[0], 
+                link: $scope.links[0], 
+                notation: $scope.filteredNotations[0],
+                language: $scope.languages[0] 
             });
         };
 
-        $scope.addCharacteristic();
+        var filterByNature = function() {
+            $scope.filteredNotations = filterFilter($scope.notations, { Nature: $scope.nature });
+            var notation = $scope.filteredNotations[0];
+            $scope.characteristics.forEach(function(characteristic) {
+                characteristic.notation = notation;
+            });
+            
+        };
+
+        $scope.nature = $scope.natures[0].Value;
+
+        $scope.$watch('nature', filterByNature, true);
+
         $scope.addCharacteristic();
 
         $scope.DeleteCharacteristic = function(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         };
+
+        $scope.isLiteratureNature = function() {
+            return $scope.natureLiterature == $scope.nature;
+        };
+
+        $scope.isLinkable = function(characteristic) {
+            return characteristic.characteristicType.Linkable;
+        };
     }]);
-    
-    $(document).ready(function () {
-        AddDataTablesWithSubmit();
-    });
 </script>
 
 @using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new
-    {
-        enctype = "multipart/form-data",
-        data_ng_app = "Calculation"
-    }))
 {
-    <div data-ng-controller="CalculationCtrl">
+    enctype = "multipart/form-data",
+    data_ng_app = "Calculation"
+}))
+{
+    <fieldset data-ng-controller="CalculationCtrl">
+        <legend>Характеристики полных цепочек</legend>
+        @Html.DropDownList("natureId", new SelectListItem[0], new
+            {
+                title = "Природа объктов",
+                data_ng_model = "nature",
+                data_ng_options = "n.Value as n.Text for n in natures"
+            })
         <table>
             <thead>
                 <tr>
@@ -60,49 +82,51 @@
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="matter in matters">
-                    <td >
-                        <input type="checkbox" name="matterIds" data-ng-model="matter.checkBox"/>
+                <tr data-ng-repeat="matter in matters | filter:{Nature.Value: nature}">
+                    <td>
+                        <input type="checkbox" name="matterIds" data-ng-model="matter.checkBox" />
                         <span>{{matter.name}}</span>
                     </td>
                     <td>{{matter.description}}</td>
-                    <td>{{matter.nature}}</td>
+                    <td>{{matter.Nature.Text}}</td>
                 </tr>
             </tbody>
         </table>
-        <br/>
+        <br />
         <button type="button" data-ng-click="addCharacteristic()">Добавить характеристику</button>
-        <br/>
+        <br />
         <div data-ng-repeat="characteristic in characteristics">
             @Html.DropDownList("characteristicIds", new SelectListItem[0], new
-                {
-                    title = "Характеристика",
-                    data_ng_model = "characteristic.characteristicType",
-                    data_ng_options = "c.Text for c in characteristicTypes"
-                })
+            {
+                title = "Характеристика",
+                data_ng_model = "characteristic.characteristicType",
+                data_ng_options = "c.Text for c in characteristicTypes"
+            })
             @Html.DropDownList("linkIds", new SelectListItem[0], new
-                {
-                    title = "Привязка",
-                    data_ng_model = "characteristic.link",
-                    data_ng_options = "l.Text for l in links"
-                })
+            {
+                title = "Привязка",
+                data_ng_model = "characteristic.link",
+                data_ng_options = "l.Text for l in links",
+                data_ng_show = "isLinkable(characteristic)"
+            })
             @Html.DropDownList("notationIds", new SelectListItem[0], new
-                {
-                    title = "Форма записи",
-                    data_ng_model = "characteristic.notation",
-                    data_ng_options = "n.Text for n in notations"
-                })
+            {
+                title = "Форма записи",
+                data_ng_model = "characteristic.notation",
+                data_ng_options = "n.Text for n in filteredNotations"
+            })
             @Html.DropDownList("languageIds", new SelectListItem[0], new
-                {
-                    title = "Язык",
-                    data_ng_model = "characteristic.language",
-                    data_ng_options = "l.Text for l in languages"
-                })
+            {
+                title = "Язык",
+                data_ng_model = "characteristic.language",
+                data_ng_options = "l.Text for l in languages",
+                data_ng_show = "isLiteratureNature()"
+            })
             <button type="button" data-ng-click="DeleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
-            <br/>
+            <br />
         </div>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <input type="submit" value="Вычислить" />
-    </div>
+    </fieldset>
 }

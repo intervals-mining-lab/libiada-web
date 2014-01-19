@@ -43,7 +43,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.matters = matters;
 
             IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => Aliases.ApplicabilityCongeneric.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => c.full_chain_applicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);

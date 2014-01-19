@@ -4,33 +4,21 @@ namespace LibiadaWeb.Models
 {
     public static class Aliases
     {
+        #region Accidental
+
+        public const int AccidentalDoubleFlat = 1;
+        public const int AccidentalFlat = 2;
+        public const int AccidentalBekar = 3;
+        public const int AccidentalSharp = 4;
+        public const int AccidentalDoubleSharp = 5;
+
+        #endregion
+
         #region Language
 
         public const int LanguageRussian = 1;
         public const int LanguageEnglish = 2;
         public const int LanguageGerman = 3;
-
-        #endregion
-
-        #region Applicability
-
-        public const int ApplicabilityOnlyFull = 1;
-        public const int ApplicabilityOnlyCongeneric = 2;
-        public const int ApplicabilityOnlyBinary = 3;
-        public const int ApplicabilityFullCongeneric = 4;
-        public const int ApplicabilityFullBinary = 5;
-        public const int ApplicabilityCongenericBinary = 6;
-        public const int ApplicabilityAll = 7;
-
-        public static readonly List<int> ApplicabilityFull = new List<int> 
-        { ApplicabilityOnlyFull, ApplicabilityFullCongeneric, ApplicabilityFullBinary, ApplicabilityAll };
-
-        public static readonly List<int> ApplicabilityCongeneric = new List<int> 
-        { ApplicabilityOnlyCongeneric, ApplicabilityFullCongeneric, ApplicabilityCongenericBinary, ApplicabilityAll };
-
-        public static readonly List<int> ApplicabilityBinary = new List<int> 
-        { ApplicabilityOnlyBinary, ApplicabilityFullBinary, ApplicabilityCongenericBinary, ApplicabilityAll };
-
 
         #endregion
 

@@ -55,7 +55,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
             ViewBag.chainsList = chainRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
-                db.characteristic_type.Where(c => Aliases.ApplicabilityBinary.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => c.binary_chain_applicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();

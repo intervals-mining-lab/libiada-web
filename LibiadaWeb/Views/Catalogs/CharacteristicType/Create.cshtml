@@ -38,13 +38,37 @@
             @Html.DropDownList("characteristic_group_id", String.Empty)
             @Html.ValidationMessageFor(model => model.characteristic_group)
         </div>
-        
         <div class="editor-label">
-            @Html.LabelFor(model => model.characteristic_applicability)
+            @Html.LabelFor(model => model.linkable)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("characteristic_applicability_id", String.Empty)
-            @Html.ValidationMessageFor(model => model.characteristic_applicability)
+            @Html.CheckBoxFor(model => model.linkable)
+            @Html.ValidationMessageFor(model => model.linkable)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Применимость характеристики:")
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.full_chain_applicable)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.full_chain_applicable)
+            @Html.ValidationMessageFor(model => model.full_chain_applicable)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.binary_chain_applicable)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.binary_chain_applicable)
+            @Html.ValidationMessageFor(model => model.binary_chain_applicable)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.congeneric_chain_applicable)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.congeneric_chain_applicable)
+            @Html.ValidationMessageFor(model => model.congeneric_chain_applicable)
         </div>
 
         <div class="editor-label">

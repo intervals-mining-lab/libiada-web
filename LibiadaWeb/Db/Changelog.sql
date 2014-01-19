@@ -1210,4 +1210,74 @@ CREATE TRIGGER tgi_measure_building_check BEFORE INSERT  ON measure FOR EACH ROW
 COMMENT ON TRIGGER tgi_measure_building_check ON measure IS 'Триггер, проверяющий строй цепочки.';
 
 
+-- 12.01.2014
+
+-- Изменен подход к определению применимости характеристик.
+-- Теперь в таблице characteristic_type есть 3 булевых флага, определяющих применимость характеристики к тому или иному типу цепочки.
+
+ALTER TABLE characteristic_type ADD COLUMN full_chain_applicable boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN characteristic_type.full_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к полным цепочкам.';
+
+ALTER TABLE characteristic_type ADD COLUMN congeneric_chain_applicable boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN characteristic_type.congeneric_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к однородным цепочкам.';
+
+ALTER TABLE characteristic_type ADD COLUMN binary_chain_applicable boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN characteristic_type.binary_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к бинарным цепочкам.';
+
+UPDATE characteristic_type SET full_chain_applicable = true WHERE characteristic_applicability_id IN (1,4,5,7);
+
+UPDATE characteristic_type SET congeneric_chain_applicable = true WHERE characteristic_applicability_id IN (2,4,6,7);
+
+UPDATE characteristic_type SET binary_chain_applicable = true WHERE characteristic_applicability_id IN (3,5,6,7);
+
+ALTER TABLE characteristic_type DROP CONSTRAINT fk_characteristic_type_characteristic_applicability;
+
+ALTER TABLE characteristic_type DROP COLUMN characteristic_applicability_id;
+
+DROP TABLE characteristic_applicability;
+
+CREATE OR REPLACE FUNCTION trigger_check_applicability()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var applicabilityOk = plv8.execute('SELECT ', ARGV[0], ' AS result FROM characteristic_type WHERE id = $1;', [NEW.characteristic_type_id])[0].result;
+	if(applicabilityOk){
+		return NEW;
+	}
+	else{
+		plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
+}$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+
+COMMENT ON FUNCTION trigger_check_applicability() IS 'Триггерная функция, проверяющая, что характеристика может быть вычислена для такого типа цепочки';
+
+
+CREATE TRIGGER tgiu_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('full_chain_applicable');
+COMMENT ON TRIGGER tgiu_characteristic_applicability ON characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к полным цепочкам.';
+
+CREATE TRIGGER tgiu_binary_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
+COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('congeneric_chain_applicable');
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к однородным цепочкам.';
+
+ALTER TABLE characteristic_type ADD CONSTRAINT chk_characteristic_applicable CHECK (full_chain_applicable OR binary_chain_applicable OR congeneric_chain_applicable);
+COMMENT ON CONSTRAINT chk_characteristic_applicable ON characteristic_type IS 'Проверяет что характеристика применима хотя бы к одному типу цепочек.';
+
+-- 19.01.2014
+
+-- Указал привязываемость характеристик в characteristic_type
+
+UPDATE characteristic_type SET linkable = false WHERE id IN (1,4,5,6,12,15,16);
+
 COMMIT;

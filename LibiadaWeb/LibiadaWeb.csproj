@@ -195,7 +195,6 @@
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Calculators\BuildingCompareController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
-    <Compile Include="Controllers\Catalogs\CharacteristicApplicabilityController.cs" />
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\Chains\ChainMixingController.cs" />
@@ -248,8 +247,6 @@
     <Compile Include="Models\AutoCorelation.cs" />
     <Compile Include="Models\Repositories\Catalogs\IPieceTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\CharacteristicApplicabilityRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\ICharacteristicApplicabilityRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AccidentalRepository.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
@@ -742,11 +739,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Chains\Chain\Segmentated.cshtml" />
-    <Content Include="Views\Catalogs\CharacteristicApplicability\Index.cshtml" />
-    <Content Include="Views\Catalogs\CharacteristicApplicability\Details.cshtml" />
-    <Content Include="Views\Catalogs\CharacteristicApplicability\Create.cshtml" />
-    <Content Include="Views\Catalogs\CharacteristicApplicability\Edit.cshtml" />
-    <Content Include="Views\Catalogs\CharacteristicApplicability\Delete.cshtml" />
     <Content Include="Views\Chains\ChainMixing\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>

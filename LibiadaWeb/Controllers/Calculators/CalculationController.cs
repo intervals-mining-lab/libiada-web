@@ -46,22 +46,24 @@ namespace LibiadaWeb.Controllers.Calculators
                         id = matters[i].id,
                         name = matters[i].name,
                         description = matters[i].description,
-                        nature = matters[i].nature.name,
+                        Nature = new { Value = matters[i].nature.id, Text = matters[i].nature.name },
                         checkBox = checkBoxes.Single(c => c.Value == matters[i].id.ToString())
 
                     };
             }
 
             IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => Aliases.ApplicabilityFull.Contains(c.characteristic_applicability_id));
+                db.characteristic_type.Where(c => c.full_chain_applicable);
 
             ViewBag.data = new Dictionary<string, object>
                 {
                     {"matters", mattersArray},
-                    {"characteristicTypes", characteristicRepository.GetSelectListItems(characteristicsList, null)},
-                    {"notations", notationRepository.GetSelectListItems(null)},
+                    {"characteristicTypes", characteristicRepository.GetSelectListWithLinkable(characteristicsList)},
+                    {"notations", notationRepository.GetSelectListWithNature()},
+                    {"natures", new SelectList(db.nature, "id", "name")},
                     {"links", linkRepository.GetSelectListItems(null)},
-                    {"languages", new SelectList(db.language, "id", "name")}
+                    {"languages", new SelectList(db.language, "id", "name")},
+                    {"natureLiterature", Aliases.NatureLiterature}
                 };
             return View();
         }

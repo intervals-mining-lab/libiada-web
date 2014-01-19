@@ -81,7 +81,6 @@ using System.Xml.Serialization;
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note_symbol), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_tie", "tie", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.tie), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_instrument", "instrument", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.instrument), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type_characteristic_applicability", "characteristic_applicability", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_applicability), "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
 [assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_remote_db_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.remote_db), true)]
 
 #endregion
@@ -549,22 +548,6 @@ namespace LibiadaWeb
             }
         }
         private ObjectSet<tie> _tie;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<characteristic_applicability> characteristic_applicability
-        {
-            get
-            {
-                if ((_characteristic_applicability == null))
-                {
-                    _characteristic_applicability = base.CreateObjectSet<characteristic_applicability>("characteristic_applicability");
-                }
-                return _characteristic_applicability;
-            }
-        }
-        private ObjectSet<characteristic_applicability> _characteristic_applicability;
 
         #endregion
 
@@ -776,14 +759,6 @@ namespace LibiadaWeb
         public void AddTotie(tie tie)
         {
             base.AddObject("tie", tie);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the characteristic_applicability EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTocharacteristic_applicability(characteristic_applicability characteristic_applicability)
-        {
-            base.AddObject("characteristic_applicability", characteristic_applicability);
         }
 
         #endregion
@@ -2237,138 +2212,6 @@ namespace LibiadaWeb
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="characteristic_applicability")]
-    [Serializable()]
-    [DataContractAttribute(IsReference=true)]
-    public partial class characteristic_applicability : EntityObject
-    {
-        #region Factory Method
-    
-        /// <summary>
-        /// Create a new characteristic_applicability object.
-        /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
-        /// <param name="name">Initial value of the name property.</param>
-        public static characteristic_applicability Createcharacteristic_applicability(global::System.Int32 id, global::System.String name)
-        {
-            characteristic_applicability characteristic_applicability = new characteristic_applicability();
-            characteristic_applicability.id = id;
-            characteristic_applicability.name = name;
-            return characteristic_applicability;
-        }
-
-        #endregion
-
-        #region Simple Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 id
-        {
-            get
-            {
-                return _id;
-            }
-            set
-            {
-                if (_id != value)
-                {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value, "id");
-                    ReportPropertyChanged("id");
-                    OnidChanged();
-                }
-            }
-        }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                OnnameChanging(value);
-                ReportPropertyChanging("name");
-                _name = StructuralObject.SetValidValue(value, false, "name");
-                ReportPropertyChanged("name");
-                OnnameChanged();
-            }
-        }
-        private global::System.String _name;
-        partial void OnnameChanging(global::System.String value);
-        partial void OnnameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String description
-        {
-            get
-            {
-                return _description;
-            }
-            set
-            {
-                OndescriptionChanging(value);
-                ReportPropertyChanging("description");
-                _description = StructuralObject.SetValidValue(value, true, "description");
-                ReportPropertyChanged("description");
-                OndescriptionChanged();
-            }
-        }
-        private global::System.String _description;
-        partial void OndescriptionChanging(global::System.String value);
-        partial void OndescriptionChanged();
-
-        #endregion
-
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_type_characteristic_applicability", "characteristic_type")]
-        public EntityCollection<characteristic_type> characteristic_type
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<characteristic_type>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_type");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<characteristic_type>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_type", value);
-                }
-            }
-        }
-
-        #endregion
-
-    }
-    
-    /// <summary>
-    /// No Metadata Documentation available.
-    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="characteristic_group")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -2514,16 +2357,20 @@ namespace LibiadaWeb
         /// <param name="id">Initial value of the id property.</param>
         /// <param name="name">Initial value of the name property.</param>
         /// <param name="class_name">Initial value of the class_name property.</param>
-        /// <param name="characteristic_applicability_id">Initial value of the characteristic_applicability_id property.</param>
         /// <param name="linkable">Initial value of the linkable property.</param>
-        public static characteristic_type Createcharacteristic_type(global::System.Int32 id, global::System.String name, global::System.String class_name, global::System.Int32 characteristic_applicability_id, global::System.Boolean linkable)
+        /// <param name="full_chain_applicable">Initial value of the full_chain_applicable property.</param>
+        /// <param name="congeneric_chain_applicable">Initial value of the congeneric_chain_applicable property.</param>
+        /// <param name="binary_chain_applicable">Initial value of the binary_chain_applicable property.</param>
+        public static characteristic_type Createcharacteristic_type(global::System.Int32 id, global::System.String name, global::System.String class_name, global::System.Boolean linkable, global::System.Boolean full_chain_applicable, global::System.Boolean congeneric_chain_applicable, global::System.Boolean binary_chain_applicable)
         {
             characteristic_type characteristic_type = new characteristic_type();
             characteristic_type.id = id;
             characteristic_type.name = name;
             characteristic_type.class_name = class_name;
-            characteristic_type.characteristic_applicability_id = characteristic_applicability_id;
             characteristic_type.linkable = linkable;
+            characteristic_type.full_chain_applicable = full_chain_applicable;
+            characteristic_type.congeneric_chain_applicable = congeneric_chain_applicable;
+            characteristic_type.binary_chain_applicable = binary_chain_applicable;
             return characteristic_type;
         }
 
@@ -2659,30 +2506,6 @@ namespace LibiadaWeb
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 characteristic_applicability_id
-        {
-            get
-            {
-                return _characteristic_applicability_id;
-            }
-            set
-            {
-                Oncharacteristic_applicability_idChanging(value);
-                ReportPropertyChanging("characteristic_applicability_id");
-                _characteristic_applicability_id = StructuralObject.SetValidValue(value, "characteristic_applicability_id");
-                ReportPropertyChanged("characteristic_applicability_id");
-                Oncharacteristic_applicability_idChanged();
-            }
-        }
-        private global::System.Int32 _characteristic_applicability_id;
-        partial void Oncharacteristic_applicability_idChanging(global::System.Int32 value);
-        partial void Oncharacteristic_applicability_idChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
         public global::System.Boolean linkable
         {
             get
@@ -2701,6 +2524,78 @@ namespace LibiadaWeb
         private global::System.Boolean _linkable;
         partial void OnlinkableChanging(global::System.Boolean value);
         partial void OnlinkableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean full_chain_applicable
+        {
+            get
+            {
+                return _full_chain_applicable;
+            }
+            set
+            {
+                Onfull_chain_applicableChanging(value);
+                ReportPropertyChanging("full_chain_applicable");
+                _full_chain_applicable = StructuralObject.SetValidValue(value, "full_chain_applicable");
+                ReportPropertyChanged("full_chain_applicable");
+                Onfull_chain_applicableChanged();
+            }
+        }
+        private global::System.Boolean _full_chain_applicable;
+        partial void Onfull_chain_applicableChanging(global::System.Boolean value);
+        partial void Onfull_chain_applicableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean congeneric_chain_applicable
+        {
+            get
+            {
+                return _congeneric_chain_applicable;
+            }
+            set
+            {
+                Oncongeneric_chain_applicableChanging(value);
+                ReportPropertyChanging("congeneric_chain_applicable");
+                _congeneric_chain_applicable = StructuralObject.SetValidValue(value, "congeneric_chain_applicable");
+                ReportPropertyChanged("congeneric_chain_applicable");
+                Oncongeneric_chain_applicableChanged();
+            }
+        }
+        private global::System.Boolean _congeneric_chain_applicable;
+        partial void Oncongeneric_chain_applicableChanging(global::System.Boolean value);
+        partial void Oncongeneric_chain_applicableChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean binary_chain_applicable
+        {
+            get
+            {
+                return _binary_chain_applicable;
+            }
+            set
+            {
+                Onbinary_chain_applicableChanging(value);
+                ReportPropertyChanging("binary_chain_applicable");
+                _binary_chain_applicable = StructuralObject.SetValidValue(value, "binary_chain_applicable");
+                ReportPropertyChanged("binary_chain_applicable");
+                Onbinary_chain_applicableChanged();
+            }
+        }
+        private global::System.Boolean _binary_chain_applicable;
+        partial void Onbinary_chain_applicableChanging(global::System.Boolean value);
+        partial void Onbinary_chain_applicableChanged();
 
         #endregion
 
@@ -2784,44 +2679,6 @@ namespace LibiadaWeb
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<characteristic_group>("LibiadaWebModel.fk_characteristic_group", "characteristic_group", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LibiadaWebModel", "fk_characteristic_type_characteristic_applicability", "characteristic_applicability")]
-        public characteristic_applicability characteristic_applicability
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_applicability>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_applicability").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_applicability>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_applicability").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<characteristic_applicability> characteristic_applicabilityReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<characteristic_applicability>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_applicability");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<characteristic_applicability>("LibiadaWebModel.fk_characteristic_type_characteristic_applicability", "characteristic_applicability", value);
                 }
             }
         }

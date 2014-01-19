@@ -34,7 +34,10 @@
                 @Html.DisplayNameFor(model => model.characteristic_group_id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.characteristic_applicability_id)
+                @Html.DisplayNameFor(model => model.linkable)
+            </th>
+            <th>
+                @Html.DisplayName("Применимость характеристики")
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.class_name)
@@ -56,7 +59,12 @@
                     @Html.DisplayFor(modelItem => item.characteristic_group.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.characteristic_applicability.name)
+                    @Html.DisplayFor(modelItem => item.linkable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.full_chain_applicable)
+                    @Html.DisplayFor(modelItem => item.binary_chain_applicable)
+                    @Html.DisplayFor(modelItem => item.congeneric_chain_applicable)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.class_name)

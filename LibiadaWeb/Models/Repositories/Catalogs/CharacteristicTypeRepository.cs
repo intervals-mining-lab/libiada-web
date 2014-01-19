@@ -116,5 +116,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             db.Dispose();
         }
+
+        public IEnumerable<object> GetSelectListWithLinkable(IEnumerable<characteristic_type> characteristicTypes)
+        {
+            return db.characteristic_type.Where(c => characteristicTypes.Contains(c)).Select(c => new
+            {
+                Value = c.id,
+                Text = c.name,
+                Selected = false,
+                Linkable = c.linkable
+            });
+        }
     }
 }

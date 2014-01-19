@@ -36,7 +36,6 @@ namespace LibiadaWeb.Controllers.Catalogs
         public ActionResult Create()
         {
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name");
-            ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name");
             return View();
         } 
 
@@ -54,7 +53,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             }
 
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
-            ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability_id);
             return View(characteristic_type);
         }
         
@@ -69,7 +67,6 @@ namespace LibiadaWeb.Controllers.Catalogs
                 return HttpNotFound();
             }
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
-            ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability_id);
             return View(characteristic_type);
         }
 
@@ -87,7 +84,6 @@ namespace LibiadaWeb.Controllers.Catalogs
                 return RedirectToAction("Index");
             }
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
-            ViewBag.characteristic_applicability_id = new SelectList(db.characteristic_applicability, "id", "name", characteristic_type.characteristic_applicability_id);
             return View(characteristic_type);
         }
 

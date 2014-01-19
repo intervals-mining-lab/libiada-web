@@ -1,3 +1,4 @@
+--19.01.2014 14:30:42
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -7,8 +8,6 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 CREATE EXTENSION IF NOT EXISTS plv8 WITH SCHEMA pg_catalog;
 
 COMMENT ON EXTENSION plv8 IS 'PL/JavaScript (v8) trusted procedural language';
-
-SET search_path = public, pg_catalog;
 
 CREATE FUNCTION check_building(arr integer[]) RETURNS integer
     LANGUAGE plpgsql
@@ -28,8 +27,6 @@ BEGIN
     RETURN max;
 END;$$;
 
-ALTER FUNCTION public.check_building(arr integer[]) OWNER TO postgres;
-
 COMMENT ON FUNCTION check_building(arr integer[]) IS 'Функция, проверяющая что все элементы строя увеличиваются не более чем на 1 от предыдущего максимального значения. Возвращает -1 в случае неправильного строя. Если ошибок нет, то возвращает максимальное значение в строе.';
 
 CREATE FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) RETURNS boolean
@@ -38,8 +35,6 @@ CREATE FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) RE
 var result = plan.execute([chain_id, element_id])[0].result;
 plan.free();
 return result; $_$;
-
-ALTER FUNCTION public.check_element_in_alphabet(chain_id bigint, element_id bigint) OWNER TO postgres;
 
 COMMENT ON FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) IS 'Функция для проверки наличия элемента с указанным id в алфавите указанной цепочки.';
 
@@ -50,8 +45,6 @@ begin
   return copy_constraints(src::regclass::oid, dst::regclass::oid);
 end;
 $$;
-
-ALTER FUNCTION public.copy_constraints(src text, dst text) OWNER TO postgres;
 
 CREATE FUNCTION copy_constraints(srcoid oid, dstoid oid) RETURNS integer
     LANGUAGE plpgsql
@@ -83,8 +76,6 @@ exception when undefined_table then
 end;
 $$;
 
-ALTER FUNCTION public.copy_constraints(srcoid oid, dstoid oid) OWNER TO postgres;
-
 CREATE FUNCTION copy_indexes(src text, dst text) RETURNS integer
     LANGUAGE plpgsql IMMUTABLE
     AS $$
@@ -92,8 +83,6 @@ begin
   return copy_indexes(src::regclass::oid, dst::regclass::oid);
 end;
 $$;
-
-ALTER FUNCTION public.copy_indexes(src text, dst text) OWNER TO postgres;
 
 CREATE FUNCTION copy_indexes(srcoid oid, dstoid oid) RETURNS integer
     LANGUAGE plpgsql
@@ -127,8 +116,6 @@ exception when undefined_table then
 end;
 $$;
 
-ALTER FUNCTION public.copy_indexes(srcoid oid, dstoid oid) OWNER TO postgres;
-
 CREATE FUNCTION copy_triggers(src text, dst text) RETURNS integer
     LANGUAGE plpgsql IMMUTABLE
     AS $$
@@ -136,8 +123,6 @@ begin
   return copy_triggers(src::regclass::oid, dst::regclass::oid);
 end;
 $$;
-
-ALTER FUNCTION public.copy_triggers(src text, dst text) OWNER TO postgres;
 
 CREATE FUNCTION copy_triggers(srcoid oid, dstoid oid) RETURNS integer
     LANGUAGE plpgsql
@@ -172,13 +157,9 @@ exception when undefined_table then
 end;
 $$;
 
-ALTER FUNCTION public.copy_triggers(srcoid oid, dstoid oid) OWNER TO postgres;
-
 CREATE FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
-
-ALTER FUNCTION public.create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
 COMMENT ON FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице chain.';
 
@@ -186,15 +167,11 @@ CREATE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigin
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, $13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id]);$_$;
 
-ALTER FUNCTION public.create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, web_api_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
-
 COMMENT ON FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, web_api_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице dna_chain.';
 
 CREATE FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO fmotiv (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,6,$2,508,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id]);$_$;
-
-ALTER FUNCTION public.create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
 COMMENT ON FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице fmotiv.';
 
@@ -202,23 +179,17 @@ CREATE FUNCTION create_literature_chain(id bigint, notation_id integer, matter_i
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO literature_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
-
 COMMENT ON FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице literature_chain.';
 
 CREATE FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO measure (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id) VALUES ($1,7,$2,509,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id]);$_$;
 
-ALTER FUNCTION public.create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
-
 COMMENT ON FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице measure.';
 
 CREATE FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
     LANGUAGE plv8
     AS $_$plv8.execute('INSERT INTO music_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
-
-ALTER FUNCTION public.create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) OWNER TO postgres;
 
 COMMENT ON FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице music_chain.';
 
@@ -284,8 +255,6 @@ function db_integrity_test() {
 
 db_integrity_test();$$;
 
-ALTER FUNCTION public.db_integrity_test() OWNER TO postgres;
-
 COMMENT ON FUNCTION db_integrity_test() IS 'Функция для проверки целостности данных в базе.';
 
 CREATE FUNCTION seq_next_value(seq_name text) RETURNS bigint
@@ -293,8 +262,6 @@ CREATE FUNCTION seq_next_value(seq_name text) RETURNS bigint
     AS $$BEGIN
 	return nextval(seq_name::regclass);
 END;$$;
-
-ALTER FUNCTION public.seq_next_value(seq_name text) OWNER TO postgres;
 
 COMMENT ON FUNCTION seq_next_value(seq_name text) IS 'Функция возвращающая следующее значение указанной последовательности.';
 
@@ -328,8 +295,6 @@ if (TG_OP == "INSERT"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операции добавления записей в таблице с полем building.');
 }$$;
 
-ALTER FUNCTION public.trigger_building_check() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_building_check() IS 'Триггерная функция, проверяющая что строй соответствует ограничениям накладываемым на строй.';
 
 CREATE FUNCTION trigger_chain_key_bound() RETURNS trigger
@@ -353,8 +318,6 @@ else if (TG_OP == "UPDATE" && NEW.id != OLD.id){
 	return OLD;
 }$_$;
 
-ALTER FUNCTION public.trigger_chain_key_bound() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_chain_key_bound() IS 'Триггерная функция связывающая действия с указанной таблицей (добавление, обновление, удаление) с таблицей chain_key.';
 
 CREATE FUNCTION trigger_chain_key_insert() RETURNS trigger
@@ -375,8 +338,6 @@ if (TG_OP == "INSERT"){
 } else{
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операции добавления записей в таблице с полем id.');
 }$_$;
-
-ALTER FUNCTION public.trigger_chain_key_insert() OWNER TO postgres;
 
 CREATE FUNCTION trigger_characteristics_link() RETURNS trigger
     LANGUAGE plv8
@@ -399,8 +360,6 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id и link_id');
 }$_$;
 
-ALTER FUNCTION public.trigger_characteristics_link() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_characteristics_link() IS 'Триггерная функция, проверяющая что у характеристики не задана привязка если она непривязываема, и задана любая привязка если она необходима.';
 
 CREATE FUNCTION trigger_check_alphabet() RETURNS trigger
@@ -421,9 +380,30 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полем alphabet.');
 }$$;
 
-ALTER FUNCTION public.trigger_check_alphabet() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_check_alphabet() IS 'Триггерная функция, проверяющая что все элементы алфавита добавляемой цепочки есть в базе.';
+
+CREATE FUNCTION trigger_check_applicability() RETURNS trigger
+    LANGUAGE plv8
+    AS $_$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var applicabilityOk = plv8.execute('SELECT ', ARGV[0], ' AS result FROM characteristic_type WHERE id = $1;', [NEW.characteristic_type_id])[0].result;
+	if(applicabilityOk){
+		return NEW;
+	}
+	else{
+		plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
+}$_$;
+
+COMMENT ON FUNCTION trigger_check_applicability() IS 'Триггерная функция, проверяющая, что характеристика может быть вычислена для такого типа цепочки';
 
 CREATE FUNCTION trigger_check_element_in_alphabet() RETURNS trigger
     LANGUAGE plv8
@@ -445,8 +425,6 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 } else{
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями chain_id и element_id');
 }$$;
-
-ALTER FUNCTION public.trigger_check_element_in_alphabet() OWNER TO postgres;
 
 COMMENT ON FUNCTION trigger_check_element_in_alphabet() IS 'Триггерная функция, проверяющая что элемент для которого вычислена характеристика однородной цепи есть в алфавите указанной цепочки. По сути замена для внешнего ключа ссылающегося на алфавит.';
 
@@ -474,8 +452,6 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями chain_id, first_element_id и second_element_id');
 }$$;
 
-ALTER FUNCTION public.trigger_check_elements_in_alphabet() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_check_elements_in_alphabet() IS 'Триггерная функция, проверяющая что элементы для которых вычислен коэффициент зависимости присутствуют в алфавите указанной цепочки. По сути замена для внешних ключей ссылающихся на алфавит.';
 
 CREATE FUNCTION trigger_delete_chain_characteristics() RETURNS trigger
@@ -494,8 +470,6 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 }
 
 $$;
-
-ALTER FUNCTION public.trigger_delete_chain_characteristics() OWNER TO postgres;
 
 COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Триггерная функция, удаляющая все характеристики при удалении или изменении цепочки.';
 
@@ -519,8 +493,6 @@ if (TG_OP == "DELETE"){
 	plv8.elog(ERROR, 'Неизвестная операция. данный триггер нработает только с опредацией удаления из таблиц, имеющих поле id. TG_OP = ', TG_OP);
 }$_$;
 
-ALTER FUNCTION public.trigger_element_delete_alphabet_bound() OWNER TO postgres;
-
 CREATE FUNCTION trigger_element_key_bound() RETURNS trigger
     LANGUAGE plv8
     AS $_$
@@ -541,8 +513,6 @@ else if (TG_OP == "UPDATE" && NEW.id != OLD.id){
 	plv8.execute( 'DELETE FROM element_key WHERE id = $1', [OLD.id] );
 	return OLD;
 }$_$;
-
-ALTER FUNCTION public.trigger_element_key_bound() OWNER TO postgres;
 
 COMMENT ON FUNCTION trigger_element_key_bound() IS 'Триггерная функция связывающая действия с указанной таблицей (добавление, обновление) с таблицей element_key.';
 
@@ -565,8 +535,6 @@ if (TG_OP == "INSERT"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операции добавления записей в таблице с полем id.');
 }$_$;
 
-ALTER FUNCTION public.trigger_element_key_insert() OWNER TO postgres;
-
 CREATE FUNCTION trigger_element_update_alphabet() RETURNS trigger
     LANGUAGE plv8
     AS $_$
@@ -585,8 +553,6 @@ if (TG_OP == "UPDATE"){
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полем id.');
 }$_$;
 
-ALTER FUNCTION public.trigger_element_update_alphabet() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_element_update_alphabet() IS 'Автоматически обновляет алфавит при обновлении элементов.';
 
 CREATE FUNCTION trigger_set_modified() RETURNS trigger
@@ -601,8 +567,6 @@ CREATE FUNCTION trigger_set_modified() RETURNS trigger
     END;
 $$;
 
-ALTER FUNCTION public.trigger_set_modified() OWNER TO postgres;
-
 COMMENT ON FUNCTION trigger_set_modified() IS 'Триггерная функция, добавляющая текущее время и дату в поле modified.';
 
 SET default_tablespace = '';
@@ -614,8 +578,6 @@ CREATE TABLE accidental (
     name character varying(100) NOT NULL,
     description character varying(255)
 );
-
-ALTER TABLE public.accidental OWNER TO postgres;
 
 COMMENT ON TABLE accidental IS 'Справочная таблица знаков альтерации.';
 
@@ -632,8 +594,6 @@ CREATE SEQUENCE accidental_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.accidental_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE accidental_id_seq OWNED BY accidental.id;
 
 CREATE TABLE binary_characteristic (
@@ -648,8 +608,6 @@ CREATE TABLE binary_characteristic (
     second_element_id bigint NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
-
-ALTER TABLE public.binary_characteristic OWNER TO postgres;
 
 COMMENT ON TABLE binary_characteristic IS 'Таблица со значениями характеристик зависимостей элементов.';
 
@@ -680,8 +638,6 @@ CREATE SEQUENCE binary_characteristic_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.binary_characteristic_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE binary_characteristic_id_seq OWNED BY binary_characteristic.id;
 
 CREATE TABLE element (
@@ -693,8 +649,6 @@ CREATE TABLE element (
     created timestamp with time zone DEFAULT now(),
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
-
-ALTER TABLE public.element OWNER TO postgres;
 
 COMMENT ON TABLE element IS 'Элементы цепочек.';
 
@@ -719,8 +673,6 @@ CREATE SEQUENCE elements_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.elements_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE elements_id_seq OWNED BY element.id;
 
 CREATE TABLE chain (
@@ -738,8 +690,6 @@ CREATE TABLE chain (
     modified timestamp with time zone DEFAULT now() NOT NULL,
     CONSTRAINT chk_chain_building_alphabet_length CHECK ((check_building(building) = array_length(alphabet, 1)))
 );
-
-ALTER TABLE public.chain OWNER TO postgres;
 
 COMMENT ON TABLE chain IS 'Таблица строёв цепочек и других параметров.';
 
@@ -771,8 +721,6 @@ CREATE TABLE chain_key (
     id bigint NOT NULL
 );
 
-ALTER TABLE public.chain_key OWNER TO postgres;
-
 COMMENT ON TABLE chain_key IS 'Суррогатная таблица, хрянящая ключи всех таблиц-цепочек.';
 
 COMMENT ON COLUMN chain_key.id IS 'Уникальный идентификатор цепочки.';
@@ -787,8 +735,6 @@ CREATE TABLE characteristic (
     created timestamp with time zone DEFAULT now() NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
-
-ALTER TABLE public.characteristic OWNER TO postgres;
 
 COMMENT ON TABLE characteristic IS 'Таблица со значениями различных характеристик цепочек.';
 
@@ -808,40 +754,11 @@ COMMENT ON COLUMN characteristic.created IS 'Дата вычисления ха�
 
 COMMENT ON COLUMN characteristic.modified IS 'Дата и время последнего изменения записи в таблице.';
 
-CREATE TABLE characteristic_applicability (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL,
-    description character varying(255)
-);
-
-ALTER TABLE public.characteristic_applicability OWNER TO postgres;
-
-COMMENT ON TABLE characteristic_applicability IS 'Справочная таблица применимости характеристик к тем или иным типам цепочек (однородным, бинарным или полным).';
-
-COMMENT ON COLUMN characteristic_applicability.id IS 'Уникальный внутренний идентификатор.';
-
-COMMENT ON COLUMN characteristic_applicability.name IS 'Название.';
-
-COMMENT ON COLUMN characteristic_applicability.description IS 'Описание применимости.';
-
-CREATE SEQUENCE characteristic_applicability_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-ALTER TABLE public.characteristic_applicability_id_seq OWNER TO postgres;
-
-ALTER SEQUENCE characteristic_applicability_id_seq OWNED BY characteristic_applicability.id;
-
 CREATE TABLE characteristic_group (
     id integer NOT NULL,
     name character varying(100),
     description character varying(255)
 );
-
-ALTER TABLE public.characteristic_group OWNER TO postgres;
 
 COMMENT ON TABLE characteristic_group IS 'Справочник принадлежности характеристик той или иной группе.';
 
@@ -858,8 +775,6 @@ CREATE SEQUENCE characteristic_group_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.characteristic_group_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE characteristic_group_id_seq OWNED BY characteristic_group.id;
 
 CREATE TABLE characteristic_type (
@@ -868,11 +783,12 @@ CREATE TABLE characteristic_type (
     description character varying(255),
     characteristic_group_id integer,
     class_name character varying(255) NOT NULL,
-    characteristic_applicability_id integer DEFAULT 1 NOT NULL,
-    linkable boolean DEFAULT true NOT NULL
+    linkable boolean DEFAULT true NOT NULL,
+    full_chain_applicable boolean DEFAULT false NOT NULL,
+    congeneric_chain_applicable boolean DEFAULT false NOT NULL,
+    binary_chain_applicable boolean DEFAULT false NOT NULL,
+    CONSTRAINT chk_characteristic_applicable CHECK (((full_chain_applicable OR binary_chain_applicable) OR congeneric_chain_applicable))
 );
-
-ALTER TABLE public.characteristic_type OWNER TO postgres;
 
 COMMENT ON TABLE characteristic_type IS 'Таблица видов характеристик';
 
@@ -886,9 +802,15 @@ COMMENT ON COLUMN characteristic_type.characteristic_group_id IS 'Группа �
 
 COMMENT ON COLUMN characteristic_type.class_name IS 'Название класса калькулятора.';
 
-COMMENT ON COLUMN characteristic_type.characteristic_applicability_id IS 'Применимость характеристики.';
-
 COMMENT ON COLUMN characteristic_type.linkable IS 'Флаг, определяющий, ипользуется ли привязка при вычислении данной характерристики.';
+
+COMMENT ON COLUMN characteristic_type.full_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к полным цепочкам.';
+
+COMMENT ON COLUMN characteristic_type.congeneric_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к однородным цепочкам.';
+
+COMMENT ON COLUMN characteristic_type.binary_chain_applicable IS 'Флаг ,указывающий, что данная характеристика применима к бинарным цепочкам.';
+
+COMMENT ON CONSTRAINT chk_characteristic_applicable ON characteristic_type IS 'Проверяет что характеристика применима хотя бы к одному типу цепочек.';
 
 CREATE SEQUENCE characteristic_type_id_seq
     START WITH 1
@@ -896,8 +818,6 @@ CREATE SEQUENCE characteristic_type_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-ALTER TABLE public.characteristic_type_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE characteristic_type_id_seq OWNED BY characteristic_type.id;
 
@@ -907,8 +827,6 @@ CREATE SEQUENCE characteristics_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-ALTER TABLE public.characteristics_id_seq OWNER TO postgres;
 
 ALTER SEQUENCE characteristics_id_seq OWNED BY characteristic.id;
 
@@ -923,8 +841,6 @@ CREATE TABLE congeneric_characteristic (
     element_id bigint NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
-
-ALTER TABLE public.congeneric_characteristic OWNER TO postgres;
 
 COMMENT ON TABLE congeneric_characteristic IS 'Таблица хранящая характеристики однородных цепочек.
 Не используется прямое наследование чтобы избежать выборки одноимённых однородных характеристик вместе с характеристиками полных цепей.';
@@ -954,8 +870,6 @@ CREATE SEQUENCE congeneric_characteristic_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.congeneric_characteristic_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE congeneric_characteristic_id_seq OWNED BY congeneric_characteristic.id;
 
 CREATE TABLE dna_chain (
@@ -963,8 +877,6 @@ CREATE TABLE dna_chain (
     web_api_id integer
 )
 INHERITS (chain);
-
-ALTER TABLE public.dna_chain OWNER TO postgres;
 
 COMMENT ON TABLE dna_chain IS 'Таблица содержащая цепочки ДНК, наследованная от таблицы chain.';
 
@@ -998,8 +910,6 @@ CREATE TABLE element_key (
     id bigint NOT NULL
 );
 
-ALTER TABLE public.element_key OWNER TO postgres;
-
 COMMENT ON TABLE element_key IS 'Таблица, содаржащая id всех таблиц элементов.';
 
 COMMENT ON COLUMN element_key.id IS 'Уникальный идентификатор.';
@@ -1014,8 +924,6 @@ CREATE TABLE fmotiv (
     fmotiv_type_id integer NOT NULL
 )
 INHERITS (chain, element);
-
-ALTER TABLE public.fmotiv OWNER TO postgres;
 
 COMMENT ON TABLE fmotiv IS 'Таблица ф-мотивов.';
 
@@ -1055,8 +963,6 @@ CREATE TABLE fmotiv_type (
     description character varying(255)
 );
 
-ALTER TABLE public.fmotiv_type OWNER TO postgres;
-
 COMMENT ON TABLE fmotiv_type IS 'Справочная таблица типов ф-мотивов.';
 
 COMMENT ON COLUMN fmotiv_type.id IS 'Уникальный внутренний идентификатор.';
@@ -1072,8 +978,6 @@ CREATE SEQUENCE fmotiv_type_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.fmotiv_type_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE fmotiv_type_id_seq OWNED BY fmotiv_type.id;
 
 CREATE TABLE instrument (
@@ -1081,8 +985,6 @@ CREATE TABLE instrument (
     name character varying(100) NOT NULL,
     description character varying(255)
 );
-
-ALTER TABLE public.instrument OWNER TO postgres;
 
 COMMENT ON TABLE instrument IS 'Справочня таблица инструментов.';
 
@@ -1099,8 +1001,6 @@ CREATE SEQUENCE instrument_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.instrument_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE instrument_id_seq OWNED BY instrument.id;
 
 CREATE TABLE language (
@@ -1108,8 +1008,6 @@ CREATE TABLE language (
     name character varying(100) NOT NULL,
     description character varying(255)
 );
-
-ALTER TABLE public.language OWNER TO postgres;
 
 COMMENT ON TABLE language IS 'Язык литературных текстов.';
 
@@ -1126,8 +1024,6 @@ CREATE SEQUENCE language_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.language_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE language_id_seq OWNED BY language.id;
 
 CREATE TABLE link (
@@ -1135,8 +1031,6 @@ CREATE TABLE link (
     name character varying(100),
     description character varying(255)
 );
-
-ALTER TABLE public.link OWNER TO postgres;
 
 COMMENT ON TABLE link IS 'Таблица видов привязки.';
 
@@ -1153,8 +1047,6 @@ CREATE SEQUENCE link_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.link_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE link_id_seq OWNED BY link.id;
 
 CREATE TABLE literature_chain (
@@ -1162,8 +1054,6 @@ CREATE TABLE literature_chain (
     language_id integer NOT NULL
 )
 INHERITS (chain);
-
-ALTER TABLE public.literature_chain OWNER TO postgres;
 
 COMMENT ON TABLE literature_chain IS 'Таблица с литературными текстами, наследованная от chain.';
 
@@ -1202,8 +1092,6 @@ CREATE TABLE matter (
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
 
-ALTER TABLE public.matter OWNER TO postgres;
-
 COMMENT ON TABLE matter IS 'Таблица объектов исследований, сущностей и т.п.';
 
 COMMENT ON COLUMN matter.id IS 'Уникальный внутренний идентификатор.';
@@ -1225,8 +1113,6 @@ CREATE SEQUENCE matter_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.matter_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE matter_id_seq OWNED BY matter.id;
 
 CREATE TABLE measure (
@@ -1243,8 +1129,6 @@ CREATE TABLE measure (
     major boolean NOT NULL
 )
 INHERITS (chain, element);
-
-ALTER TABLE public.measure OWNER TO postgres;
 
 COMMENT ON TABLE measure IS 'Таблица цепочек-элементов - тактов музыкального произведения.';
 
@@ -1290,8 +1174,6 @@ CREATE TABLE music_chain (
 )
 INHERITS (chain);
 
-ALTER TABLE public.music_chain OWNER TO postgres;
-
 COMMENT ON TABLE music_chain IS 'Таблица музыкальных цепочек.';
 
 COMMENT ON COLUMN music_chain.id IS 'Уникальный внутренний идентификатор.';
@@ -1322,8 +1204,6 @@ CREATE TABLE nature (
     description character varying(255)
 );
 
-ALTER TABLE public.nature OWNER TO postgres;
-
 COMMENT ON TABLE nature IS 'Список возможной природы объектов исследований.';
 
 COMMENT ON COLUMN nature.id IS 'Уникальный внутренний идентификатор.';
@@ -1339,8 +1219,6 @@ CREATE SEQUENCE nature_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.nature_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE nature_id_seq OWNED BY nature.id;
 
 CREATE TABLE notation (
@@ -1349,8 +1227,6 @@ CREATE TABLE notation (
     description character varying(255),
     nature_id integer NOT NULL
 );
-
-ALTER TABLE public.notation OWNER TO postgres;
 
 COMMENT ON TABLE notation IS 'таблица с перечнем форм записи цепочек.';
 
@@ -1369,8 +1245,6 @@ CREATE SEQUENCE notation_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.notation_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE notation_id_seq OWNED BY notation.id;
 
 CREATE TABLE note (
@@ -1386,8 +1260,6 @@ CREATE TABLE note (
 )
 INHERITS (element);
 
-ALTER TABLE public.note OWNER TO postgres;
-
 COMMENT ON TABLE note IS 'Таблица элементов-нот.';
 
 COMMENT ON COLUMN note.id IS 'Уникальный внутренний идентификатор.';
@@ -1401,6 +1273,8 @@ COMMENT ON COLUMN note.name IS 'Название.';
 COMMENT ON COLUMN note.notation_id IS 'Форма записи. Рудиментное поле, которое всегда принимает значение 8.';
 
 COMMENT ON COLUMN note.created IS 'Дата создания.';
+
+COMMENT ON COLUMN note.modified IS 'Дата и время последнего изменения записи в таблице.';
 
 COMMENT ON COLUMN note.numerator IS 'Числитель в дроби доли.';
 
@@ -1418,15 +1292,11 @@ COMMENT ON COLUMN note.priority IS 'Ритмический приоритет.';
 
 COMMENT ON COLUMN note.tie_id IS 'Лига.';
 
-COMMENT ON COLUMN note.modified IS 'Дата и время последнего изменения записи в таблице.';
-
 CREATE TABLE note_symbol (
     id integer NOT NULL,
     name character varying(100),
     description character varying(255)
 );
-
-ALTER TABLE public.note_symbol OWNER TO postgres;
 
 COMMENT ON TABLE note_symbol IS 'Справочная таблица буквенных обозначений нот.';
 
@@ -1443,8 +1313,6 @@ CREATE SEQUENCE note_symbol_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.note_symbol_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE note_symbol_id_seq OWNED BY note_symbol.id;
 
 CREATE TABLE piece_type (
@@ -1453,8 +1321,6 @@ CREATE TABLE piece_type (
     description character varying(255),
     nature_id integer NOT NULL
 );
-
-ALTER TABLE public.piece_type OWNER TO postgres;
 
 COMMENT ON TABLE piece_type IS 'Справочная таблица с типами фрагментов цепочек.';
 
@@ -1473,8 +1339,6 @@ CREATE SEQUENCE piece_type_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.piece_type_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE piece_type_id_seq OWNED BY piece_type.id;
 
 CREATE TABLE pitch (
@@ -1488,8 +1352,6 @@ CREATE TABLE pitch (
     created timestamp with time zone DEFAULT now() NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
-
-ALTER TABLE public.pitch OWNER TO postgres;
 
 COMMENT ON TABLE pitch IS 'Высота ноты.';
 
@@ -1518,8 +1380,6 @@ CREATE SEQUENCE pitch_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.pitch_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE pitch_id_seq OWNED BY pitch.id;
 
 CREATE TABLE remote_db (
@@ -1529,8 +1389,6 @@ CREATE TABLE remote_db (
     url character varying(255),
     nature_id integer NOT NULL
 );
-
-ALTER TABLE public.remote_db OWNER TO postgres;
 
 COMMENT ON TABLE remote_db IS 'Таблица со списком баз данных из которых брались цепочки.';
 
@@ -1551,8 +1409,6 @@ CREATE SEQUENCE remote_db_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.remote_db_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE remote_db_id_seq OWNED BY remote_db.id;
 
 CREATE TABLE tie (
@@ -1560,8 +1416,6 @@ CREATE TABLE tie (
     name character varying(100),
     description character varying(255)
 );
-
-ALTER TABLE public.tie OWNER TO postgres;
 
 COMMENT ON TABLE tie IS 'Справочная таблица лиг.';
 
@@ -1578,8 +1432,6 @@ CREATE SEQUENCE tie_id_seq
     NO MAXVALUE
     CACHE 1;
 
-ALTER TABLE public.tie_id_seq OWNER TO postgres;
-
 ALTER SEQUENCE tie_id_seq OWNED BY tie.id;
 
 ALTER TABLE ONLY accidental ALTER COLUMN id SET DEFAULT nextval('accidental_id_seq'::regclass);
@@ -1587,8 +1439,6 @@ ALTER TABLE ONLY accidental ALTER COLUMN id SET DEFAULT nextval('accidental_id_s
 ALTER TABLE ONLY binary_characteristic ALTER COLUMN id SET DEFAULT nextval('binary_characteristic_id_seq'::regclass);
 
 ALTER TABLE ONLY characteristic ALTER COLUMN id SET DEFAULT nextval('characteristics_id_seq'::regclass);
-
-ALTER TABLE ONLY characteristic_applicability ALTER COLUMN id SET DEFAULT nextval('characteristic_applicability_id_seq'::regclass);
 
 ALTER TABLE ONLY characteristic_group ALTER COLUMN id SET DEFAULT nextval('characteristic_group_id_seq'::regclass);
 
@@ -1701,9 +1551,6 @@ ALTER TABLE ONLY chain_key
 ALTER TABLE ONLY characteristic
     ADD CONSTRAINT pk_characteristic PRIMARY KEY (id);
 
-ALTER TABLE ONLY characteristic_applicability
-    ADD CONSTRAINT pk_characteristic_applicability PRIMARY KEY (id);
-
 ALTER TABLE ONLY characteristic_group
     ADD CONSTRAINT pk_characteristic_groups PRIMARY KEY (id);
 
@@ -1778,9 +1625,6 @@ ALTER TABLE ONLY accidental
 
 ALTER TABLE ONLY binary_characteristic
     ADD CONSTRAINT uk_binary_characteristic_value UNIQUE (chain_id, characteristic_type_id, link_id, first_element_id, second_element_id);
-
-ALTER TABLE ONLY characteristic_applicability
-    ADD CONSTRAINT uk_characteristic_applicability_name UNIQUE (name);
 
 ALTER TABLE ONLY characteristic_group
     ADD CONSTRAINT uk_characteristic_group_name UNIQUE (name);
@@ -1871,10 +1715,6 @@ COMMENT ON INDEX ix_chain_notation_id IS 'Индекс по формам зап�
 CREATE INDEX ix_chain_piece_type_id ON chain USING btree (piece_type_id);
 
 COMMENT ON INDEX ix_chain_piece_type_id IS 'Индекс по типам частей цепочек.';
-
-CREATE INDEX ix_characteristic_applicability_id ON characteristic_applicability USING btree (id);
-
-CREATE INDEX ix_characteristic_applicability_name ON characteristic_applicability USING btree (name);
 
 CREATE INDEX ix_characteristic_chain_id ON characteristic USING btree (chain_id);
 
@@ -2114,6 +1954,10 @@ CREATE TRIGGER tgiu_binary_charaacteristic_link BEFORE INSERT OR UPDATE OF chara
 
 COMMENT ON TRIGGER tgiu_binary_charaacteristic_link ON binary_characteristic IS 'Триггер, проверяющий правильность привязки.';
 
+CREATE TRIGGER tgiu_binary_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
+
+COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
 CREATE TRIGGER tgiu_binary_characteristic_modified BEFORE INSERT OR UPDATE ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
 COMMENT ON TRIGGER tgiu_binary_characteristic_modified ON binary_characteristic IS 'Тригер для вставки даты последнего изменения записи.';
@@ -2134,6 +1978,10 @@ CREATE TRIGGER tgiu_charaacteristic_link BEFORE INSERT OR UPDATE OF characterist
 
 COMMENT ON TRIGGER tgiu_charaacteristic_link ON characteristic IS 'Триггер, проверяющий правильность привязки.';
 
+CREATE TRIGGER tgiu_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('full_chain_applicable');
+
+COMMENT ON TRIGGER tgiu_characteristic_applicability ON characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к полным цепочкам.';
+
 CREATE TRIGGER tgiu_characteristic_modified BEFORE INSERT OR UPDATE ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
 COMMENT ON TRIGGER tgiu_characteristic_modified ON characteristic IS 'Тригер для вставки даты последнего изменения записи.';
@@ -2141,6 +1989,10 @@ COMMENT ON TRIGGER tgiu_characteristic_modified ON characteristic IS 'Триге
 CREATE TRIGGER tgiu_congeneric_charaacteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
 
 COMMENT ON TRIGGER tgiu_congeneric_charaacteristic_link ON congeneric_characteristic IS 'Триггер, проверяющий правильность привязки.';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('congeneric_chain_applicable');
+
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к однородным цепочкам.';
 
 CREATE TRIGGER tgiu_congeneric_characteristic_modified BEFORE INSERT OR UPDATE ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
@@ -2340,9 +2192,6 @@ ALTER TABLE ONLY characteristic
 ALTER TABLE ONLY binary_characteristic
     ADD CONSTRAINT fk_characteristic_type FOREIGN KEY (characteristic_type_id) REFERENCES characteristic_type(id) ON UPDATE CASCADE;
 
-ALTER TABLE ONLY characteristic_type
-    ADD CONSTRAINT fk_characteristic_type_characteristic_applicability FOREIGN KEY (characteristic_applicability_id) REFERENCES characteristic_applicability(id) ON UPDATE CASCADE;
-
 ALTER TABLE ONLY congeneric_characteristic
     ADD CONSTRAINT fk_congeneric_characteristic_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
@@ -2481,8 +2330,6 @@ ALTER TABLE ONLY pitch
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT fk_remote_db_nature FOREIGN KEY (nature_id) REFERENCES nature(id);
 
-
-
 INSERT INTO accidental (id, name, description) VALUES (1, '-2', 'Дубль-бемоль');
 INSERT INTO accidental (id, name, description) VALUES (2, '-1', 'Бемоль');
 INSERT INTO accidental (id, name, description) VALUES (3, '0', 'Бекар');
@@ -2491,45 +2338,35 @@ INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-ди�
 
 SELECT pg_catalog.setval('accidental_id_seq', 23, true);
 
-INSERT INTO characteristic_applicability (id, name, description) VALUES (1, 'Полные цепочки', 'Характеристика может быть вычислены только для полной цепочки');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (2, 'Однородные цепочки', 'Характеристика может быть вычислена только для однородных цепочек');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (3, 'Бинарные цепочки', 'Характерстика может быть вычислена только для бинарно-однородных цепочек');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (4, 'Полные и однородные цепочки', 'Характеристика может быть вычислена для полных и однородных цепочек');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (5, 'Полные и бинарные цепочки', 'Характеристика может быть вычислена для полных и бинарных цепочек');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (6, 'Однородные и бинарные', 'Характеристика может быть вычислена для однородных и бинарных цепочек');
-INSERT INTO characteristic_applicability (id, name, description) VALUES (7, 'Все цепочки', 'Характеристика может быть вычислена для любых типов цепочек');
-
-SELECT pg_catalog.setval('characteristic_applicability_id_seq', 7, true);
-
 SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
 
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (1, 'Мощность алфавита', NULL, NULL, 'AlphabetPower', 1, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', 1, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (6, 'Энтропия словаря по Садовскому', NULL, NULL, 'CutLengthVocabularyEntropy', 1, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (15, 'Число возможных цепочек', NULL, NULL, 'PhantomMessagesCount', 1, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (19, 'Бинарная среднегеометрическая удалённость', 'Среднегеометрическая удалённость между парой элементов', NULL, 'BinaryGeometricMean', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (24, 'Нормализованный коэффициент частичной зависимости', NULL, NULL, 'NormalizedPartialDependenceCoefficient', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (21, 'Коэффициент частичной зависимости', NULL, NULL, 'PartialDependenceCoefficient', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (22, 'Коэффициент взвешенной частичной зависимости ', 'Степень зависимости одной цепи от другой, с учетом «полноты её участия» в составе обеих однородных цепей', NULL, 'InvolvedPartialDependenceCoefficient', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (16, 'Частота', 'Или вероятность', NULL, 'Probability', 2, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (8, 'Глубина', NULL, NULL, 'Depth', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (12, 'Длина', 'Количество позиций для элементов в цепочке', NULL, 'Length', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (20, 'Избыточность', 'Избыточность кодировки второго элемента относительно себя по сравнению с кодированием относительно первого элемента', NULL, 'Redundancy', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (10, 'Количество идентифицирующих информаций', NULL, NULL, 'IdentificationInformation', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (11, 'Количество интервалов', NULL, NULL, 'IntervalsCount', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', 2, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (23, 'Коэффициент взаимной зависимости', NULL, NULL, 'MutualDependenceCoefficient', 3, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (18, 'Объём цепи', NULL, NULL, 'Volume', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (14, 'Периодичность', NULL, NULL, 'Periodicity', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (17, 'Регулярность', NULL, NULL, 'Regularity', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (3, 'Средняя удалённость', NULL, NULL, 'AverageRemoteness', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (9, 'Среднегеометрический интервал', NULL, NULL, 'GeometricMean', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (2, 'Среднее арифметическое', NULL, NULL, 'ArithmeticMean', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (7, 'Число описательных информаций', NULL, NULL, 'DescriptiveInformation', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (13, 'Нормализованная глубина', 'Глубина, приходящаяся на один элемент цепочки', NULL, 'NormalizedDepth', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (25, 'Сумма интервалов', 'Суммарная длина интервалов данной цепи с учётом привязки', NULL, 'IntervalsSum', 4, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (26, 'Алфавитная удалённость', 'Вычисляет удалённость с логарифмом основание которого равно мощности алфавита полной цепи', NULL, 'AlphabeticAverageRemoteness', 1, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, characteristic_applicability_id, linkable) VALUES (27, 'Алфавитная глубина', 'Вычисляет глубину c основание логарифма равным мощности алфавита полной цепи', NULL, 'AlphabeticDepth', 1, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (1, 'Мощность алфавита', NULL, NULL, 'AlphabetPower', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (6, 'Энтропия словаря по Садовскому', NULL, NULL, 'CutLengthVocabularyEntropy', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (12, 'Длина', 'Количество позиций для элементов в цепочке', NULL, 'Length', false, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (15, 'Число возможных цепочек', NULL, NULL, 'PhantomMessagesCount', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (16, 'Частота', 'Или вероятность', NULL, 'Probability', false, false, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (26, 'Алфавитная удалённость', 'Вычисляет удалённость с логарифмом основание которого равно мощности алфавита полной цепи', NULL, 'AlphabeticAverageRemoteness', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (27, 'Алфавитная глубина', 'Вычисляет глубину c основание логарифма равным мощности алфавита полной цепи', NULL, 'AlphabeticDepth', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (8, 'Глубина', NULL, NULL, 'Depth', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (10, 'Количество идентифицирующих информаций', NULL, NULL, 'IdentificationInformation', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (11, 'Количество интервалов', NULL, NULL, 'IntervalsCount', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (18, 'Объём цепи', NULL, NULL, 'Volume', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (14, 'Периодичность', NULL, NULL, 'Periodicity', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (17, 'Регулярность', NULL, NULL, 'Regularity', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (3, 'Средняя удалённость', NULL, NULL, 'AverageRemoteness', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (9, 'Среднегеометрический интервал', NULL, NULL, 'GeometricMean', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (2, 'Среднее арифметическое', NULL, NULL, 'ArithmeticMean', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (7, 'Число описательных информаций', NULL, NULL, 'DescriptiveInformation', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (13, 'Нормализованная глубина', 'Глубина, приходящаяся на один элемент цепочки', NULL, 'NormalizedDepth', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (25, 'Сумма интервалов', 'Суммарная длина интервалов данной цепи с учётом привязки', NULL, 'IntervalsSum', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (19, 'Бинарная среднегеометрическая удалённость', 'Среднегеометрическая удалённость между парой элементов', NULL, 'BinaryGeometricMean', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (24, 'Нормализованный коэффициент частичной зависимости', NULL, NULL, 'NormalizedPartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (21, 'Коэффициент частичной зависимости', NULL, NULL, 'PartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (22, 'Коэффициент взвешенной частичной зависимости ', 'Степень зависимости одной цепи от другой, с учетом «полноты её участия» в составе обеих однородных цепей', NULL, 'InvolvedPartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (20, 'Избыточность', 'Избыточность кодировки второго элемента относительно себя по сравнению с кодированием относительно первого элемента', NULL, 'Redundancy', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (23, 'Коэффициент взаимной зависимости', NULL, NULL, 'MutualDependenceCoefficient', true, false, false, true);
 
 SELECT pg_catalog.setval('characteristic_type_id_seq', 27, true);
 
@@ -2592,3 +2429,4 @@ SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
 COMMIT;
+--19.01.2014 14:30:42
