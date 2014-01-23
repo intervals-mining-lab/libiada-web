@@ -54,20 +54,33 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = languageId
             });
 
-            String query = @"SELECT create_literature_chain(
-                                    @id,
-                                    @notation_id,
-                                    @matter_id,
-                                    @piece_type_id,
-                                    @original,
-                                    @language_id
-                                    @alphabet,
-                                    @building,
-                                    @remote_id,
-                                    @remote_db_id,
-                                    @created,
-                                    @piece_position,
-                                    @dissimilar);";
+            String query = @"INSERT INTO dna_chain (
+                                        id, 
+                                        notation_id,
+                                        matter_id, 
+                                        dissimilar, 
+                                        piece_type_id, 
+                                        piece_position, 
+                                        alphabet, 
+                                        building, 
+                                        remote_id, 
+                                        remote_db_id,
+                                        original,
+                                        language_id
+                                    ) VALUES (
+                                        @id, 
+                                        @notation_id,
+                                        @matter_id, 
+                                        @dissimilar, 
+                                        @piece_type_id, 
+                                        @piece_position, 
+                                        @alphabet, 
+                                        @building, 
+                                        @remote_id, 
+                                        @remote_db_id,
+                                        @original,
+                                        @language_id
+                                    );";
             db.ExecuteStoreCommand(query, parameters.ToArray());
         }
 

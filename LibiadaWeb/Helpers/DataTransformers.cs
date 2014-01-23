@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using System.Text;
-using System.Web.Mvc;
 using Npgsql;
 
 namespace LibiadaWeb.Helpers
 {
-    public static class DataTransformators
+    public static class DataTransformers
     {
         public static string CleanFastaFile(string file)
         {

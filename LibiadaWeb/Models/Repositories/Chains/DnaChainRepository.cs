@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using LibiadaWeb.Helpers;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -53,20 +52,33 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = webApiId
             });
 
-            String query = @"SELECT create_dna_chain(
-                                    @id,
-                                    @notation_id,
-                                    @matter_id,
-                                    @piece_type_id,
-                                    @fasta_header,
-                                    @alphabet,
-                                    @building,
-                                    @remote_id,
-                                    @remote_db_id,
-                                    @web_api_id,
-                                    @created,
-                                    @piece_position,
-                                    @dissimilar);";
+            String query = @"INSERT INTO dna_chain (
+                                        id, 
+                                        notation_id,
+                                        matter_id, 
+                                        dissimilar, 
+                                        piece_type_id, 
+                                        piece_position, 
+                                        fasta_header, 
+                                        alphabet, 
+                                        building, 
+                                        remote_id, 
+                                        remote_db_id, 
+                                        web_api_id
+                                    ) VALUES (
+                                        @id, 
+                                        @notation_id,
+                                        @matter_id, 
+                                        @dissimilar, 
+                                        @piece_type_id, 
+                                        @piece_position, 
+                                        @fasta_header, 
+                                        @alphabet, 
+                                        @building, 
+                                        @remote_id, 
+                                        @remote_db_id, 
+                                        @web_api_id
+                                    );";
             db.ExecuteStoreCommand(query, parameters.ToArray());
 
         }

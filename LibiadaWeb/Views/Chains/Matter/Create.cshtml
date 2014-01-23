@@ -14,45 +14,44 @@
 <script>
     var app = angular.module('CreateMatter', []);
 
-    app.controller('CreateMatterCtrl', ['$scope', 'filterFilter', function($scope, filterFilter) {
+    app.controller('CreateMatterCtrl', ['$scope', 'filterFilter', '$http', function($scope, filterFilter, $http) {
 
         var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
-        
+
         for(var param in data) {
             $scope[param] = data[param];
         }
-        
-        $scope.localFile = true;
 
-        $scope.language = $scope.languages[0];
+        $scope.formData = {original: false};
 
-        $scope.nature = $scope.natures[0].Value;
+        $scope.formData.localFile = true;
 
-        var filterByNature = function(natureId) {
-            $scope.filteredNotations = filterFilter($scope.notations, { Nature: natureId });
-            $scope.filteredPieceTypes = filterFilter($scope.pieceTypes, { Nature: natureId });
+        $scope.formData.languageId = $scope.languages[0].Value;
 
-            $scope.notation = $scope.filteredNotations[0];
-            $scope.pieceType = $scope.filteredPieceTypes[0];
+        $scope.formData.nature_id = $scope.natures[0].Value;
+
+        var filterByNature = function() {
+            $scope.filteredNotations = filterFilter($scope.notations, { Nature: $scope.formData.nature_id });
+            $scope.filteredPieceTypes = filterFilter($scope.pieceTypes, { Nature: $scope.formData.nature_id });
+
+            $scope.formData.notationId = $scope.filteredNotations[0].Value;
+            $scope.formData.pieceTypeId = $scope.filteredPieceTypes[0].Value;
         };
 
-        filterByNature($scope.nature);
-
-        $scope.$watch('nature', filterByNature, true);
+        $scope.$watch('formData.nature_id', filterByNature, true);
 
         $scope.isLiteratureChain = function() {
-            return $scope.natureLiterature == $scope.nature;
+            return $scope.natureLiterature == $scope.formData.nature_id;
+        };
+
+        $scope.submit = function() {
+            $http.post('', $scope.formData);
         };
     }]);
     
 </script>
 
-@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new
-    {
-        enctype = "multipart/form-data",
-        data_ng_app = "CreateMatter"
-    }))
-{
+<form enctype="multipart/form-data" data-ng-app="CreateMatter">
     @Html.ValidationSummary(true)
     <fieldset data-ng-controller="CreateMatterCtrl">
         <legend>Объект</legend>
@@ -61,35 +60,35 @@
             @Html.LabelFor(model => model.name)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.name)
+            <input type="text" data-ng-model="formData.name" />
             @Html.ValidationMessageFor(model => model.name)
         </div>
-        
+
         <div class="editor-label">
             @Html.LabelFor(model => model.description)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.description)
+            <input type="text" data-ng-model="formData.description" />
             @Html.ValidationMessageFor(model => model.description)
         </div>
-         
+
         <div class="editor-label">
             @Html.Label("Загружать цепочку из локального файла")
         </div>
 
-        @Html.CheckBox("localFile", new {data_ng_model="localFile"})
-        
-        <br/>
-        <input type="file" name="file" id="file" data-ng-show="localFile"/>
-        
+        @Html.CheckBox("localFile", new { data_ng_model = "formData.localFile" })
+
+        <br />
+        <input type="file" name="file" id="file" data-ng-show="formData.localFile" />
+
         <div class="editor-label">
             @Html.LabelFor(model => model.nature_id)
         </div>
         <div class="editor-field">
             @Html.DropDownList("nature_id", new SelectListItem[0], new
                 {
-                    data_ng_model="nature", 
-                    data_ng_options="n.Value as n.Text for n in natures"
+                    data_ng_model = "formData.nature_id",
+                    data_ng_options = "n.Value as n.Text for n in natures"
                 })
             @Html.ValidationMessageFor(model => model.nature_id)
         </div>
@@ -100,28 +99,29 @@
         <div class="editor-field">
             @Html.DropDownList("notationId", new SelectListItem[0], new
                 {
-                    data_ng_model = "notation",
-                    data_ng_options = "n.Text for n in filteredNotations"
+                    data_ng_model = "formData.notationId",
+                    data_ng_options = "n.Value as n.Text for n in filteredNotations"
                 })
         </div>
-         <div class="editor-label">
+        <div class="editor-label">
             @Html.Label("Тип цепочки")
         </div>
         <div class="editor-field">
-            @Html.DropDownList("piece_type_id", new SelectListItem[0], new
+            @Html.DropDownList("pieceTypeId", new SelectListItem[0], new
                 {
-                    data_ng_model = "pieceType",
-                    data_ng_options = "p.Text for p in filteredPieceTypes"
+                    data_ng_model = "formData.pieceTypeId",
+                    data_ng_options = "p.Value as p.Text for p in filteredPieceTypes"
                 })
         </div>
-        
+
         <div class="editor-label">
             @Html.Label("Стороняя БД")
         </div>
         <div class="editor-field">
             @Html.DropDownList("remoteDbId", new SelectListItem[0], new
                 {
-                    data_ng_model = "remoteDb", ng_options = "r.Text for r in remoteDbs"
+                    data_ng_model = "formData.remoteDbId",
+                    ng_options = "r.Value as r.Text for r in remoteDbs"
                 })
         </div>
         <div>
@@ -129,10 +129,10 @@
                 @Html.Label("id в сторонней БД")
             </div>
             <div class="editor-field">
-                @Html.Editor("remoteId")
+                <input type="text" data-ng-model="formData.remoteId"/> 
             </div>
         </div>
-        
+
 
         <div data-ng-show="isLiteratureChain()">
             <div class="editor-label">
@@ -141,21 +141,22 @@
             <div class="editor-field">
                 @Html.DropDownList("languageId", new SelectListItem[0], new
                     {
-                        data_ng_model = "language", ng_options = "l.Text for l in languages"
+                        data_ng_model = "formData.languageId",
+                        ng_options = "l.Value as l.Text for l in languages"
                     })
             </div>
 
             <div class="editor-label">
                 @Html.Label("Произведение является оригиналом, а не переводом")
             </div>
-            @Html.CheckBox("original")
+            @Html.CheckBox("original", new { data_ng_model = "formData.original" })
         </div>
 
         <p>
-            <input type="submit" value="Создать" />
+            <input type="submit" value="Создать" data-ng-click="submit()" />
         </p>
     </fieldset>
-}
+</form>
 
 <div>
     @Html.ActionLink("Назад к списку", "Index")

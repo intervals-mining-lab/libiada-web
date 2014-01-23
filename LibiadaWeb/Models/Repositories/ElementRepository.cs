@@ -89,7 +89,7 @@ namespace LibiadaWeb.Models.Repositories
             return true;
         }
 
-        public void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
+        private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
         {
             for (int j = 0; j < libiadaAlphabet.Power; j++)
             {
@@ -97,7 +97,7 @@ namespace LibiadaWeb.Models.Repositories
 
                 if (!ElementInDb(libiadaAlphabet[j], notationId))
                 {
-                    element newElement = new element
+                    var newElement = new element
                     {
                         value = strElem,
                         name = strElem,
@@ -112,17 +112,19 @@ namespace LibiadaWeb.Models.Repositories
 
         public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
         {
-            bool elementsMissing = !ElementsInDb(alphabet, notationId);
-            if (!createElements && elementsMissing)
+            if (!ElementsInDb(alphabet, notationId))
             {
-                throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
-            }
-            if (createElements && elementsMissing)
-            {
-                CreateLackingElements(alphabet, notationId);
+                if (createElements)
+                {
+                    CreateLackingElements(alphabet, notationId);
+                }
+                else
+                {
+                    throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
+                }
             }
 
-            long[] elementIds = new long[alphabet.Power];
+            var elementIds = new long[alphabet.Power];
             for (int i = 0; i < alphabet.Power; i++)
             {
                 String stringElement = alphabet[i].ToString();
@@ -135,10 +137,9 @@ namespace LibiadaWeb.Models.Repositories
 
         public Alphabet ToLibiadaAlphabet(List<long> elementIds)
         {
-            Alphabet alphabet = new Alphabet { NullValue.Instance() };
-            for (int i = 0; i < elementIds.Count; i++)
+            var alphabet = new Alphabet { NullValue.Instance() };
+            foreach (long elementId in elementIds)
             {
-                long elementId = elementIds[i];
                 element el = db.element.Single(e => e.id == elementId);
                 alphabet.Add(new ValueString(el.value));
             }
@@ -147,7 +148,7 @@ namespace LibiadaWeb.Models.Repositories
 
         public List<element> GetElements(List<long> elementIds)
         {
-            List<element> elements = new List<element>();
+            var elements = new List<element>();
             for (int i = 0; i < elementIds.Count(); i++)
             {
                 long elementId = elementIds[i];

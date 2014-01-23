@@ -142,14 +142,14 @@ namespace LibiadaWeb.Controllers.Chains
                         case Aliases.NatureGenetic:
                             //отделяем заголовок fasta файла от цепочки
                             string[] splittedFasta = stringChain.Split(new[] {'\n', '\r'});
-                            StringBuilder chainStringBuilder = new StringBuilder();
+                            var chainStringBuilder = new StringBuilder();
                             String fastaHeader = splittedFasta[0];
                             for (int j = 1; j < splittedFasta.Length; j++)
                             {
                                 chainStringBuilder.Append(splittedFasta[j]);
                             }
 
-                            string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
+                            string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
 
                             libiadaChain = new BaseChain(resultStringChain);
 
@@ -173,6 +173,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                             libiadaChain = new BaseChain(text.Length - 1);
                             // в конце файла всегда пустая строка поэтому последний элемент не считаем
+                            //TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце а лучше сделать нормальный trim
                             for (int i = 0; i < text.Length - 1; i++)
                             {
                                 libiadaChain.Add(new ValueString(text[i]), i);
@@ -181,8 +182,6 @@ namespace LibiadaWeb.Controllers.Chains
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, true);
 
                             literatureChainRepository.Insert(chain, original, languageId, alphabet, libiadaChain.Building);
-
-                            db.SaveChanges();
                             break;
                     }
                 }

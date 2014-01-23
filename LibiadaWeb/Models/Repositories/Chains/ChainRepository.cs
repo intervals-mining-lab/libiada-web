@@ -44,18 +44,29 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             var parameters = FillParams(chain, alphabet, building);
 
-            String query = @"SELECT create_chain(
-                                    @id,
-                                    @notation_id,
-                                    @matter_id,
-                                    @piece_type_id,
-                                    @alphabet,
-                                    @building,
-                                    @remote_id,
-                                    @remote_db_id,
-                                    @created,
-                                    @piece_position,
-                                    @dissimilar);";
+            String query = @"INSERT INTO dna_chain (
+                                        id, 
+                                        notation_id,
+                                        matter_id, 
+                                        dissimilar, 
+                                        piece_type_id, 
+                                        piece_position, 
+                                        alphabet, 
+                                        building, 
+                                        remote_id, 
+                                        remote_db_id
+                                    ) VALUES (
+                                        @id, 
+                                        @notation_id,
+                                        @matter_id, 
+                                        @dissimilar, 
+                                        @piece_type_id, 
+                                        @piece_position,
+                                        @alphabet, 
+                                        @building, 
+                                        @remote_id, 
+                                        @remote_db_id
+                                    );";
             db.ExecuteStoreCommand(query, parameters.ToArray());
         }
 

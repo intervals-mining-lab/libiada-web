@@ -1,4 +1,4 @@
---19.01.2014 14:30:42
+--24.01.2014 2:59:51
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -8,26 +8,6 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 CREATE EXTENSION IF NOT EXISTS plv8 WITH SCHEMA pg_catalog;
 
 COMMENT ON EXTENSION plv8 IS 'PL/JavaScript (v8) trusted procedural language';
-
-CREATE FUNCTION check_building(arr integer[]) RETURNS integer
-    LANGUAGE plpgsql
-    AS $$DECLARE
-    element integer;
-    max integer := 0;
-BEGIN
-    FOREACH element IN ARRAY arr
-    LOOP
-	IF element > max + 1 THEN
-		RETURN -1;
-	END IF;
-	IF element = max + 1 THEN
-		max := element;
-	END IF;
-    END LOOP;
-    RETURN max;
-END;$$;
-
-COMMENT ON FUNCTION check_building(arr integer[]) IS 'Функция, проверяющая что все элементы строя увеличиваются не более чем на 1 от предыдущего максимального значения. Возвращает -1 в случае неправильного строя. Если ошибок нет, то возвращает максимальное значение в строе.';
 
 CREATE FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) RETURNS boolean
     LANGUAGE plv8
@@ -156,42 +136,6 @@ exception when undefined_table then
   return null;
 end;
 $$;
-
-CREATE FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
-
-COMMENT ON FUNCTION create_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице chain.';
-
-CREATE FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, web_api_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO dna_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, $13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, fasta_header, alphabet, building, remote_id, remote_db_id, web_api_id]);$_$;
-
-COMMENT ON FUNCTION create_dna_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, fasta_header character varying, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, web_api_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице dna_chain.';
-
-CREATE FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO fmotiv (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,6,$2,508,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, fmotiv_type_id, alphabet, building, remote_id, remote_db_id]);$_$;
-
-COMMENT ON FUNCTION create_fmotiv(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, fmotiv_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице fmotiv.';
-
-CREATE FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO literature_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, original, language_id, alphabet, building, remote_id, remote_db_id]);$_$;
-
-COMMENT ON FUNCTION create_literature_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, original boolean, language_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице literature_chain.';
-
-CREATE FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO measure (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id) VALUES ($1,7,$2,509,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)',[id, creation_date, dissimilar, piece_type_id, piece_position, value, description, name, beats, beatbase, ticks_per_beat, fifths, major, alphabet, building, remote_id, remote_db_id]);$_$;
-
-COMMENT ON FUNCTION create_measure(id bigint, piece_type_id integer, value character varying, description character varying, name character varying, beats integer, beatbase integer, ticks_per_beat integer, fifths integer, major boolean, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице measure.';
-
-CREATE FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone DEFAULT now(), piece_position integer DEFAULT 0, dissimilar boolean DEFAULT false) RETURNS void
-    LANGUAGE plv8
-    AS $_$plv8.execute('INSERT INTO music_chain (id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)',[id, notation_id, creation_date, matter_id, dissimilar, piece_type_id, piece_position, alphabet, building, remote_id, remote_db_id]);$_$;
-
-COMMENT ON FUNCTION create_music_chain(id bigint, notation_id integer, matter_id bigint, piece_type_id integer, alphabet bigint[], building integer[], remote_id character varying, remote_db_id integer, creation_date timestamp with time zone, piece_position integer, dissimilar boolean) IS 'Функция для создания записей в таблице music_chain.';
 
 CREATE FUNCTION db_integrity_test() RETURNS void
     LANGUAGE plv8
@@ -559,7 +503,7 @@ CREATE FUNCTION trigger_set_modified() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
     BEGIN
-        IF (TG_OP = 'DELETE' OR TG_OP = 'UPDATE') THEN
+        IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
             NEW.modified := now();
             RETURN NEW;
         END IF;
@@ -646,7 +590,7 @@ CREATE TABLE element (
     description character varying(255),
     name character varying(255),
     notation_id integer NOT NULL,
-    created timestamp with time zone DEFAULT now(),
+    created timestamp with time zone DEFAULT now() NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
 
@@ -687,8 +631,7 @@ CREATE TABLE chain (
     building integer[] NOT NULL,
     remote_id character varying(255),
     remote_db_id integer,
-    modified timestamp with time zone DEFAULT now() NOT NULL,
-    CONSTRAINT chk_chain_building_alphabet_length CHECK ((check_building(building) = array_length(alphabet, 1)))
+    modified timestamp with time zone DEFAULT now() NOT NULL
 );
 
 COMMENT ON TABLE chain IS 'Таблица строёв цепочек и других параметров.';
@@ -2126,30 +2069,6 @@ CREATE TRIGGER tgu_music_chain_characteristics AFTER UPDATE ON music_chain FOR E
 
 COMMENT ON TRIGGER tgu_music_chain_characteristics ON music_chain IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
 
-CREATE TRIGGER tgud_chain_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_chain_characteristic_delete ON chain IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
-CREATE TRIGGER tgud_dna_chain_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON dna_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_dna_chain_characteristic_delete ON dna_chain IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
-CREATE TRIGGER tgud_fmotiv_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON fmotiv FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_fmotiv_characteristic_delete ON fmotiv IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
-CREATE TRIGGER tgud_literature_chain_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_literature_chain_characteristic_delete ON literature_chain IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
-CREATE TRIGGER tgud_measure_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON measure FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_measure_characteristic_delete ON measure IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
-CREATE TRIGGER tgud_music_chain_characteristic_delete BEFORE DELETE OR UPDATE OF alphabet, building ON music_chain FOR EACH ROW EXECUTE PROCEDURE trigger_delete_chain_characteristics();
-
-COMMENT ON TRIGGER tgud_music_chain_characteristic_delete ON music_chain IS 'Триггер, удаляющий все характеристки данной цепочки при её обновлении или удалении.';
-
 ALTER TABLE ONLY binary_characteristic
     ADD CONSTRAINT fk_binary_characteristic_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
@@ -2429,4 +2348,4 @@ SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
 COMMIT;
---19.01.2014 14:30:42
+--24.01.2014 2:59:51

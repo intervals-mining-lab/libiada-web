@@ -3,14 +3,16 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using Npgsql;
+using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 { 
-    public class MusicChainRepository : IMusicChainRepository
+    public class MusicChainRepository : ChainImporter, IMusicChainRepository
     {
         private readonly LibiadaWebEntities db;
 
-        public MusicChainRepository(LibiadaWebEntities db)
+        public MusicChainRepository(LibiadaWebEntities db) : base(db)
         {
             this.db = db;
         }
@@ -32,6 +34,53 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public music_chain Find(long id)
         {
             return db.music_chain.Single(x => x.id == id);
+        }
+
+        public void Insert(chain chain, string fastaHeader, int? webApiId, long[] alphabet, int[] building)
+        {
+            var parameters = FillParams(chain, alphabet, building);
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "@fasta_header",
+                NpgsqlDbType = NpgsqlDbType.Varchar,
+                Value = fastaHeader
+            });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "@web_api_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = webApiId
+            });
+
+            String query = @"INSERT INTO dna_chain (
+                                        id, 
+                                        notation_id,
+                                        matter_id, 
+                                        dissimilar, 
+                                        piece_type_id, 
+                                        piece_position, 
+                                        fasta_header, 
+                                        alphabet, 
+                                        building, 
+                                        remote_id, 
+                                        remote_db_id, 
+                                        web_api_id
+                                    ) VALUES (
+                                        @id, 
+                                        @notation_id,
+                                        @matter_id, 
+                                        @dissimilar, 
+                                        @piece_type_id, 
+                                        @piece_position, 
+                                        @fasta_header, 
+                                        @alphabet, 
+                                        @building, 
+                                        @remote_id, 
+                                        @remote_db_id, 
+                                        @web_api_id
+                                    );";
+            db.ExecuteStoreCommand(query, parameters.ToArray());
+
         }
 
         public void InsertOrUpdate(music_chain music_chain)

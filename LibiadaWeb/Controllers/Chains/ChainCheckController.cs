@@ -60,7 +60,7 @@ namespace LibiadaWeb.Controllers.Chains
                 chainStringBuilder.Append(tempString[j]);
             }
 
-            string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
+            string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
 
             BaseChain libiadaChain = new BaseChain(resultStringChain);
 

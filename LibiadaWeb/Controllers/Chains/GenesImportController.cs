@@ -67,7 +67,7 @@ namespace LibiadaWeb.Controllers.Chains
                     chainStringBuilder.Append(splittedFasta[j]);
                 }
 
-                string resultStringChain = DataTransformators.CleanFastaFile(chainStringBuilder.ToString());
+                string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
 
                 var libiadaChain = new BaseChain(resultStringChain);
                 if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, parentChain.notation_id))

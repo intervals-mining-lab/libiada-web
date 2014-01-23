@@ -937,7 +937,7 @@ COMMENT ON COLUMN note.modified IS 'Дата и время последнего изменения записи в т
 
 CREATE OR REPLACE FUNCTION trigger_set_modified() RETURNS TRIGGER AS $BODY$
     BEGIN
-        IF (TG_OP = 'DELETE' OR TG_OP = 'UPDATE') THEN
+        IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
             NEW.modified := now();
             RETURN NEW;
         END IF;
@@ -1274,10 +1274,43 @@ COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_ch
 ALTER TABLE characteristic_type ADD CONSTRAINT chk_characteristic_applicable CHECK (full_chain_applicable OR binary_chain_applicable OR congeneric_chain_applicable);
 COMMENT ON CONSTRAINT chk_characteristic_applicable ON characteristic_type IS 'Проверяет что характеристика применима хотя бы к одному типу цепочек.';
 
+
 -- 19.01.2014
 
 -- Указал привязываемость характеристик в characteristic_type
 
 UPDATE characteristic_type SET linkable = false WHERE id IN (1,4,5,6,12,15,16);
+
+
+-- 22.01.2014
+
+-- Добавлена дата создания тем элементам у которых её не было.
+-- Удалены функциии создания цепочек.
+
+UPDATE element SET created = modified WHERE created IS NULL;
+ALTER TABLE element ALTER COLUMN created SET NOT NULL;
+COMMENT ON COLUMN element.created IS 'Дата создания записи.';
+
+DROP FUNCTION create_chain(bigint, integer, bigint, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+DROP FUNCTION create_dna_chain(bigint, integer, bigint, integer, character varying, bigint[], integer[], character varying, integer, integer, timestamp with time zone, integer, boolean);
+DROP FUNCTION create_fmotiv(bigint, integer, character varying, character varying, character varying, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+DROP FUNCTION create_literature_chain(bigint, integer, bigint, integer, boolean, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+DROP FUNCTION create_measure(bigint, integer, character varying, character varying, character varying, integer, integer, integer, integer, boolean, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+DROP FUNCTION create_music_chain(bigint, integer, bigint, integer, bigint[], integer[], character varying, integer, timestamp with time zone, integer, boolean);
+
+
+-- 23.01.2014
+
+-- Удалены лишние триггеры, функции и ключи.
+
+ALTER TABLE chain DROP CONSTRAINT chk_chain_building_alphabet_length;
+DROP FUNCTION check_building(integer[]);
+DROP TRIGGER tgud_chain_characteristic_delete ON chain;
+DROP TRIGGER tgud_dna_chain_characteristic_delete ON dna_chain;
+DROP TRIGGER tgud_fmotiv_characteristic_delete ON fmotiv;
+DROP TRIGGER tgud_literature_chain_characteristic_delete ON literature_chain;
+DROP TRIGGER tgud_measure_characteristic_delete ON measure;
+DROP TRIGGER tgud_music_chain_characteristic_delete ON music_chain;
+
 
 COMMIT;
