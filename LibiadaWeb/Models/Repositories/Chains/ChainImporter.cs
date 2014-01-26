@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LibiadaWeb.Helpers;
+using System.Linq;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -18,68 +18,68 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (chain.id == default(long))
             {
-                chain.id = DataTransformers.GetLongSequenceValue(db, "elements_id_seq");
+                chain.id = db.ExecuteStoreQuery<long>("SELECT nextval('elements_id_seq');").First();
             }
 
             var parameters = new List<object>
             {
                 new NpgsqlParameter
                 {
-                    ParameterName = "@id",
+                    ParameterName = "id",
                     NpgsqlDbType = NpgsqlDbType.Bigint,
                     Value = chain.id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@notation_id",
+                    ParameterName = "notation_id",
                     NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = chain.notation_id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@matter_id",
+                    ParameterName = "matter_id",
                     NpgsqlDbType = NpgsqlDbType.Bigint,
                     Value = chain.matter_id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@piece_type_id",
+                    ParameterName = "piece_type_id",
                     NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = chain.piece_type_id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@alphabet",
+                    ParameterName = "alphabet",
                     NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
                     Value = alphabet
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@building",
+                    ParameterName = "building",
                     NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
                     Value = building
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@remote_id",
+                    ParameterName = "remote_id",
                     NpgsqlDbType = NpgsqlDbType.Varchar,
                     Value = chain.remote_id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@remote_db_id",
+                    ParameterName = "remote_db_id",
                     NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = chain.remote_db_id
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@piece_position",
+                    ParameterName = "piece_position",
                     NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = chain.piece_position
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "@dissimilar",
+                    ParameterName = "dissimilar",
                     NpgsqlDbType = NpgsqlDbType.Boolean,
                     Value = chain.dissimilar
                 }

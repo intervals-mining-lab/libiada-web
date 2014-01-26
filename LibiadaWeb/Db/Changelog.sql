@@ -1313,4 +1313,13 @@ DROP TRIGGER tgud_measure_characteristic_delete ON measure;
 DROP TRIGGER tgud_music_chain_characteristic_delete ON music_chain;
 
 
+-- 25.01.2014
+
+-- Добавлена проверка цепочек: если указана удалённая БД, то должен быть указан id в этой БД,
+-- если же БД не указана то и стороннего id быть не должно.
+-- Также удалена не нужная теперь функция seq_next_value.
+
+ALTER TABLE chain ADD CONSTRAINT chk_remote_id CHECK ((remote_db_id IS NULL AND remote_id IS NULL) OR (remote_db_id IS NOT NULL AND remote_id IS NOT NULL));
+DROP FUNCTION seq_next_value(text);
+
 COMMIT;

@@ -24,6 +24,7 @@ namespace LibiadaWeb.Controllers.Chains
         private readonly NotationRepository notationRepository;
         private readonly PieceTypeRepository pieceTypeRepository;
         private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly RemoteDbRepository remoteDbRepository;
 
         public MatterController()
         {
@@ -33,6 +34,7 @@ namespace LibiadaWeb.Controllers.Chains
             notationRepository = new NotationRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
+            remoteDbRepository = new RemoteDbRepository(db);
         }
 
         //
@@ -67,7 +69,7 @@ namespace LibiadaWeb.Controllers.Chains
                     {"notations", notationRepository.GetSelectListWithNature()},
                     {"pieceTypes", pieceTypeRepository.GetSelectListWithNature()},
                     {"languages", new SelectList(db.language, "id", "name")},
-                    {"remoteDbs", new SelectList(db.remote_db, "id", "name")},
+                    {"remoteDbs", remoteDbRepository.GetSelectListWithNature()},
                     {"natures", new SelectList(db.nature, "id", "name")},
                     {"natureLiterature", Aliases.NatureLiterature}
                 };
@@ -78,14 +80,16 @@ namespace LibiadaWeb.Controllers.Chains
         // POST: /Matter/Create
 
         [HttpPost]
-        public ActionResult Create(matter matter, int notationId, int pieceTypeId, int? remoteDbId, String remoteId, bool localFile, int? languageId, bool? original)
+        public ActionResult Create(matter matter, int notationId, int pieceTypeId, int? remoteDbId, String remoteId,
+            bool localFile, int languageId, bool original)
         {
 
             if (ModelState.IsValid)
             {
+                bool matterCreated = false;
                 try
                 {
-                    String webApiId = String.Empty;
+                    int? webApiId = null;
                     // Initialize the stream
                     Stream fileStream;
                     if (localFile)
@@ -94,14 +98,14 @@ namespace LibiadaWeb.Controllers.Chains
 
                         if (file == null || file.ContentLength == 0)
                         {
-                            throw new ArgumentNullException("Файл цепочки не задан или пуст");
+                            throw new ArgumentNullException("Chain file is null or empty");
                         }
                         fileStream = file.InputStream;
                     }
                     else
                     {
                         webApiId = NcbiHelper.GetId(remoteId);
-                        fileStream = NcbiHelper.GetFile(webApiId);
+                        fileStream = NcbiHelper.GetFile(webApiId.ToString());
                     }
 
                     var input = new byte[fileStream.Length];
@@ -134,29 +138,26 @@ namespace LibiadaWeb.Controllers.Chains
 
                             if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, notationId))
                             {
-                                throw new Exception(
-                                    "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                                throw new Exception("At least one element of new chain missing in db.");
                             }
-
-
 
                             db.matter.AddObject(matter);
                             db.SaveChanges();
+
+                            matterCreated = true;
 
                             var dnaChain = new chain
                             {
                                 dissimilar = false,
                                 notation_id = notationId,
                                 piece_type_id = pieceTypeId,
-                                created = new DateTimeOffset(DateTime.Now),
                                 matter_id = matter.id,
                                 remote_db_id = remoteDbId,
                                 remote_id = remoteId
                             };
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
-                            dnaChainRepository.Insert(dnaChain, fastaHeader, Convert.ToInt32(webApiId), alphabet,
-                                libiadaChain.Building);
+                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             var doc = new XmlDocument();
@@ -189,32 +190,45 @@ namespace LibiadaWeb.Controllers.Chains
                                 dissimilar = false,
                                 notation_id = notationId,
                                 piece_type_id = pieceTypeId,
-                                created = new DateTimeOffset(DateTime.Now),
                                 matter_id = matter.id,
                                 remote_db_id = remoteDbId,
                                 remote_id = remoteId
                             };
 
-                            alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, literatureChain.notation_id, true);
+                            alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, literatureChain.notation_id,
+                                true);
 
-                            literatureChainRepository.Insert(literatureChain, (bool)original, (int)languageId, alphabet, libiadaChain.Building);
+                            literatureChainRepository.Insert(literatureChain, original, languageId, alphabet,
+                                libiadaChain.Building);
 
                             break;
                     }
+                    return RedirectToAction("Index");
                 }
                 catch (Exception e)
                 {
-                    ViewBag.nature_id = new SelectList(db.nature, "id", "name");
-                    ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
-                    ViewBag.notation_id = new SelectList(db.notation, "id", "name");
-                    ViewBag.language_id = new SelectList(db.language, "id", "name");
-                    ModelState.AddModelError("Error", e.Message);
-                    return View(matter);
+                    
+
+                    string error = (matterCreated
+                        ? "Объект исследования успешно добавлен в БД, однако при создании цепочки произошла ошибка: "
+                        : "Не удалось создать объект исследования: ") + e.Message;
+
+                    ModelState.AddModelError("Error", error);
                 }
-                return RedirectToAction("Index");
+                
             }
 
-            ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
+            ViewBag.data = new Dictionary<string, object>
+                    {
+                        {"notations", notationRepository.GetSelectListWithNature(notationId)},
+                        {"pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeId)},
+                        {"languages", new SelectList(db.language, "id", "name", languageId)},
+                        {"remoteDbs", remoteDbId == null ? 
+                            remoteDbRepository.GetSelectListWithNature() : 
+                            remoteDbRepository.GetSelectListWithNature((int)remoteDbId)},
+                        {"natures", new SelectList(db.nature, "id", "name", matter.nature_id)},
+                        {"natureLiterature", Aliases.NatureLiterature}
+                    };
             return View(matter);
         }
 

@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using LibiadaWeb.Helpers;
 using Npgsql;
 using NpgsqlTypes;
 
@@ -41,20 +40,21 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public void Insert(chain chain, bool original, int languageId, long[] alphabet, int[] building)
         {
             var parameters = FillParams(chain, alphabet, building);
+
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "@original",
+                ParameterName = "original",
                 NpgsqlDbType = NpgsqlDbType.Boolean,
                 Value = original
             });
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "@language_id",
+                ParameterName = "language_id",
                 NpgsqlDbType = NpgsqlDbType.Integer,
                 Value = languageId
             });
 
-            String query = @"INSERT INTO dna_chain (
+            const string query = @"INSERT INTO dna_chain (
                                         id, 
                                         notation_id,
                                         matter_id, 
@@ -87,18 +87,20 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(literature_chain chain, long[] alphabet, int[] building)
         {
-            var literatureChain = new chain
-            {
-                id = chain.id,
-                dissimilar = chain.dissimilar,
-                notation_id = chain.notation_id,
-                matter_id = chain.matter_id,
-                piece_type_id = chain.piece_type_id,
-                created = DateTime.Now,
-                piece_position = chain.piece_position
-            };
+            Insert(ToChain(chain), chain.original, chain.language_id, alphabet, building);
+        }
 
-            Insert(literatureChain, chain.original, chain.language_id, alphabet, building);
+        public chain ToChain(literature_chain source)
+        {
+            return new chain
+            {
+                id = source.id,
+                dissimilar = source.dissimilar,
+                notation_id = source.notation_id,
+                matter_id = source.matter_id,
+                piece_type_id = source.piece_type_id,
+                piece_position = source.piece_position
+            };
         }
 
         public void InsertOrUpdate(literature_chain literature_chain)

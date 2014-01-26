@@ -19,70 +19,76 @@
 
         var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
         
-        for(var param in data) {
-            $scope[param] = data[param];
-        }
+        MapModelFromJson($scope, data);
         
+        $scope.original = false; 
         $scope.localFile = true;
-
-        $scope.language = $scope.languages[0];
-
-        $scope.matter = $scope.matters[0];
+        $scope.languageId = $scope.languages[0].Value;
+        $scope.natureId = $scope.natures[0].Value;
 
         var filterByNature = function() {
-            $scope.notation = filterFilter($scope.notations, { Nature: $scope.matter.Nature })[0];
-            $scope.pieceType = filterFilter($scope.pieceTypes, { Nature: $scope.matter.Nature })[0];
+            var arraysForFiltration = ["notations", "pieceTypes", "remoteDbs", "matters"];
+
+            arraysForFiltration.forEach(function(array)
+            {
+                FilterOptionsByNature($scope, filterFilter, array);
+            });
+
+            $scope.notationId = $scope.notationsFiltered[0].Value;
+            $scope.pieceTypeId = $scope.pieceTypesFiltered[0].Value;
+            $scope.matterId = $scope.mattersFiltered[0].Value;
         };
 
-        filterByNature();
-
-        $scope.$watch('matter.Nature', filterByNature, true);
+        $scope.$watch('natureId', filterByNature, true);
 
         $scope.isLiteratureChain = function() {
-            return $scope.natureLiterature == $scope.matter.Nature;
+            return $scope.natureLiterature == $scope.natureId;
         };
     }]);
     
 </script>
 
 @using (Html.BeginForm("Create", "Chain", FormMethod.Post, new
-    {
-        enctype = "multipart/form-data",
-        data_ng_app = "CreateChain"
-    }))
+{
+    enctype = "multipart/form-data",
+    data_ng_app = "CreateChain"
+}))
 {
     @Html.ValidationSummary(true)
     <fieldset data-ng-controller="CreateChainCtrl">
         <legend>Цепочка</legend>
-
+        
         <div class="editor-label">
-            @Html.Label("Загружать цепочку из локального файла")
+            @Html.LabelFor(model => model.matter.nature_id)
         </div>
-        @Html.CheckBox("localFile", new {data_ng_model = "localFile"})
-        <br/>
-        <input type="file" name="file" id="file" data-ng-show="localFile"/>
+        <div class="editor-field">
+            <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
+            @Html.ValidationMessageFor(model => model.matter.nature_id)
+        </div>
         
         <div class="editor-label">
             @Html.LabelFor(model => model.matter_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("matter_id", new SelectListItem[0], new
-                {
-                    data_ng_model = "matter",
-                    data_ng_options = "m.Text for m in matters"
-                })
+            <select data-ng-model="matterId" data-ng-options="m.Value as m.Text for m in mattersFiltered"></select>
+            <input type="hidden" name="matter_id" value="{{matterId}}" />
             @Html.ValidationMessageFor(model => model.matter_id)
+        </div>
+
+        <div class="editor-label">
+            @Html.Label("Загружать цепочку из локального файла")
+            @Html.CheckBox("localFile", new {data_ng_model = "localFile"})
+        </div>
+        <div class="editor-field" data-ng-show="localFile">
+            <input type="file" name="file" id="file" />
         </div>
 
         <div class="editor-label">
             @Html.LabelFor(model => model.notation_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("notation_id", new SelectListItem[0], new
-                {
-                    data_ng_model = "notation",
-                    data_ng_options = "n.Text for n in notations | filter:{Nature: matter.Nature}"
-                })
+            <select data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
+            <input type="hidden" name="notation_id" value="{{notationId}}" />
             @Html.ValidationMessageFor(model => model.notation_id)
         </div>
 
@@ -98,11 +104,8 @@
             @Html.LabelFor(model => model.piece_type_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("piece_type_id", new SelectListItem[0], new
-                {
-                    data_ng_model = "pieceType",
-                    data_ng_options = "p.Text for p in pieceTypes | filter:{Nature: matter.Nature}"
-                })
+            <select data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
+            <input type="hidden" name="piece_type_id" value="{{pieceTypeId}}" />
             @Html.ValidationMessageFor(model => model.piece_type_id)
         </div>
 
@@ -110,10 +113,8 @@
             @Html.LabelFor(model => model.remote_db_id)
         </div>
         <div class="editor-field">
-            @Html.DropDownList("remote_db_id", new SelectListItem[0], new
-                {
-                    data_ng_model = "remoteDb", ng_options = "r.Text for r in remoteDbs"
-                })
+            <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
+            <input type="hidden" name="remote_db_id" value="{{remoteDbId}}" />
             @Html.ValidationMessageFor(model => model.remote_db_id)
         </div>
 
@@ -130,17 +131,16 @@
                 @Html.Label("Язык литературного произведения")
             </div>
             <div class="editor-field">
-                @Html.DropDownList("languageId", new SelectListItem[0], new
-                    {
-                        data_ng_model = "language", ng_options = "l.Text for l in languages"
-                    })
+                <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
+                <input type="hidden" name="languageId" value="{{languageId}}" />
             </div>
 
             <div class="editor-label">
                 @Html.Label("Произведение является оригиналом, а не переводом")
             </div>
-
-            @Html.CheckBox("original")
+            <div class="editor-field">
+                @Html.CheckBox("original")
+            </div>
         </div>
         <p>
             <input type="submit" value="Создать" />

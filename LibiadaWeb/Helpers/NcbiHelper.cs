@@ -10,7 +10,7 @@ namespace LibiadaWeb.Helpers
     {
         public const String BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
-        public static String GetId(string id)
+        public static int GetId(string id)
         {
             var idUrl = BaseUrl + @"esearch.fcgi?db=nucleotide&term=" + id;
             var idRequest = WebRequest.Create(idUrl);
@@ -37,7 +37,7 @@ namespace LibiadaWeb.Helpers
             {
                 throw new Exception("Количество идентификаторов цепочек для заданного запроса не равно 1.");
             }
-            return elemList[0].InnerText;
+            return int.Parse(elemList[0].InnerText);
         }
 
         public static Stream GetFile(string id)

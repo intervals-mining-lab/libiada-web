@@ -1,4 +1,4 @@
---24.01.2014 2:59:51
+--27.01.2014 2:02:54
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -200,14 +200,6 @@ function db_integrity_test() {
 db_integrity_test();$$;
 
 COMMENT ON FUNCTION db_integrity_test() IS 'Функция для проверки целостности данных в базе.';
-
-CREATE FUNCTION seq_next_value(seq_name text) RETURNS bigint
-    LANGUAGE plpgsql
-    AS $$BEGIN
-	return nextval(seq_name::regclass);
-END;$$;
-
-COMMENT ON FUNCTION seq_next_value(seq_name text) IS 'Функция возвращающая следующее значение указанной последовательности.';
 
 CREATE FUNCTION trigger_building_check() RETURNS trigger
     LANGUAGE plv8
@@ -631,7 +623,8 @@ CREATE TABLE chain (
     building integer[] NOT NULL,
     remote_id character varying(255),
     remote_db_id integer,
-    modified timestamp with time zone DEFAULT now() NOT NULL
+    modified timestamp with time zone DEFAULT now() NOT NULL,
+    CONSTRAINT chk_remote_id CHECK ((((remote_db_id IS NULL) AND (remote_id IS NULL)) OR ((remote_db_id IS NOT NULL) AND (remote_id IS NOT NULL))))
 );
 
 COMMENT ON TABLE chain IS 'Таблица строёв цепочек и других параметров.';
@@ -2348,4 +2341,4 @@ SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
 COMMIT;
---24.01.2014 2:59:51
+--27.01.2014 2:02:54

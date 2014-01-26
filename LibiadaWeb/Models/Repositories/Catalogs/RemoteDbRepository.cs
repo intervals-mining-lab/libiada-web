@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -44,6 +45,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 db.remote_db.Attach(remote_db);
                 db.ObjectStateManager.ChangeObjectState(remote_db, EntityState.Modified);
             }
+        }
+
+        public IEnumerable<object> GetSelectListWithNature()
+        {
+            return db.remote_db.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = false,
+                Nature = n.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(int selectedDb)
+        {
+            return db.remote_db.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = n.id == selectedDb,
+                Nature = n.nature_id
+            });
+        }
+
+        public IEnumerable<object> GetSelectListWithNature(List<int> selectedDbs)
+        {
+            return db.remote_db.Select(n => new
+            {
+                Value = n.id,
+                Text = n.name,
+                Selected = selectedDbs.Contains(n.id),
+                Nature = n.nature_id
+            });
         }
 
         public void Delete(int id)

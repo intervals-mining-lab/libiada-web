@@ -40,19 +40,19 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             var parameters = FillParams(chain, alphabet, building);
             parameters.Add(new NpgsqlParameter
-                {
-                    ParameterName = "@fasta_header",
-                    NpgsqlDbType = NpgsqlDbType.Varchar,
-                    Value = fastaHeader
-                });
+            {
+                ParameterName = "fasta_header",
+                NpgsqlDbType = NpgsqlDbType.Varchar,
+                Value = fastaHeader
+            });
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "@web_api_id",
+                ParameterName = "web_api_id",
                 NpgsqlDbType = NpgsqlDbType.Integer,
                 Value = webApiId
             });
 
-            String query = @"INSERT INTO dna_chain (
+            const string query = @"INSERT INTO dna_chain (
                                         id, 
                                         notation_id,
                                         matter_id, 
@@ -86,18 +86,20 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(dna_chain chain, long[] alphabet, int[] building)
         {
-            var dnaChain = new chain
-            {
-                id = chain.id,
-                dissimilar = chain.dissimilar,
-                notation_id = chain.notation_id,
-                matter_id = chain.matter_id,
-                piece_type_id = chain.piece_type_id,
-                created = DateTime.Now,
-                piece_position = chain.piece_position
-            };
+            Insert(ToChain(chain), chain.fasta_header, chain.web_api_id, alphabet, building);
+        }
 
-            Insert(dnaChain, chain.fasta_header, chain.web_api_id, alphabet, building);
+        public chain ToChain(dna_chain source)
+        {
+            return new chain
+            {
+                id = source.id,
+                dissimilar = source.dissimilar,
+                notation_id = source.notation_id,
+                matter_id = source.matter_id,
+                piece_type_id = source.piece_type_id,
+                piece_position = source.piece_position
+            };
         }
 
         public void InsertOrUpdate(dna_chain chain)
@@ -127,11 +129,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
         }
 
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains,
-                                                       IEnumerable<dna_chain> selectedChain)
+            IEnumerable<dna_chain> selectedChain)
         {
             HashSet<long> chainIds = selectedChain != null
-                                         ? new HashSet<long>(selectedChain.Select(c => c.id))
-                                         : new HashSet<long>();
+                ? new HashSet<long>(selectedChain.Select(c => c.id))
+                : new HashSet<long>();
             if (allChains == null)
             {
                 allChains = db.dna_chain.Include("matter");
@@ -140,11 +142,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
             foreach (var chain in allChains)
             {
                 chainsList.Add(new SelectListItem
-                    {
-                        Value = chain.id.ToString(),
-                        Text = chain.matter.name,
-                        Selected = chainIds.Contains(chain.id)
-                    });
+                {
+                    Value = chain.id.ToString(),
+                    Text = chain.matter.name,
+                    Selected = chainIds.Contains(chain.id)
+                });
             }
             return chainsList;
         }

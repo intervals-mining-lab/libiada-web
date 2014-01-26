@@ -72,3 +72,13 @@ function AddDataTablesWithSubmit(name) {
         $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
     });
 }
+
+function FilterOptionsByNature($scope, filterFilter, arrayName) {
+    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.natureId });
+}
+
+function MapModelFromJson($scope, data) {
+    for (var param in data) {
+        $scope[param] = data[param];
+    }
+}
