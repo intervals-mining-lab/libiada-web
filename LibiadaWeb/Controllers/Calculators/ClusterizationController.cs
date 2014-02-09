@@ -37,17 +37,21 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            List<matter> matters = db.matter.Include("nature").ToList();
-            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
-            ViewBag.matters = matters;
-
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.full_chain_applicable);
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linksList = linkRepository.GetSelectListItems(null);
-            ViewBag.languagesList = new SelectList(db.language, "id", "name");
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    {"matters", matterRepository.GetSelectListWithNature()},
+                    {"characteristicTypes", characteristicTypes},
+                    {"notations", notationRepository.GetSelectListWithNature()},
+                    {"natures", new SelectList(db.nature, "id", "name")},
+                    {"links", new SelectList(db.link, "id", "name")},
+                    {"languages", new SelectList(db.language, "id", "name")},
+                    {"natureLiterature", Aliases.NatureLiterature}
+                };
             return View();
         }
 
@@ -56,9 +60,9 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] characteristicIds, int[] linkIds, int[] notationIds, int[] languageIds, 
             int clustersCount, double powerWeight, double normalizedDistanseWeight, double distanseWeight)
         {
-            List<List<Double>> characteristics = new List<List<Double>>();
-            List<String> characteristicNames = new List<string>();
-            List<String> chainNames = new List<string>();
+            var characteristics = new List<List<Double>>();
+            var characteristicNames = new List<string>();
+            var chainNames = new List<string>();
             foreach (var matterId in matterIds)
             {
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
@@ -105,9 +109,9 @@ namespace LibiadaWeb.Controllers.Calculators
             }
 
             DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
-            AlternativeKRAB clusterizator = new AlternativeKRAB(data, powerWeight, normalizedDistanseWeight, distanseWeight);
+            var clusterizator = new AlternativeKRAB(data, powerWeight, normalizedDistanseWeight, distanseWeight);
             ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
-            List<List<long>> clusters = new List<List<long>>();
+            var clusters = new List<List<long>>();
             for (int i = 0; i < result.Clusters.Count; i++)
             {
                 clusters.Add(new List<long>());
@@ -127,9 +131,9 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            List<List<long>> clusters = TempData["clusters"] as List<List<long>>;
+            var clusters = TempData["clusters"] as List<List<long>>;
 
-            List<List<String>> clusterNames = new List<List<string>>();
+            var clusterNames = new List<List<string>>();
             foreach (var cluster in clusters)
             {
                 clusterNames.Add(new List<string>());
@@ -138,10 +142,10 @@ namespace LibiadaWeb.Controllers.Calculators
                     clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
                 }
             }
-            List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
+            var characteristicNames = TempData["characteristicNames"] as List<String>;
 
             int[] characteristicIds = TempData["characteristicIds"] as int[];
-            List<SelectListItem> characteristicsList = new List<SelectListItem>();
+            var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicNames.Count; i++)
             {
                 characteristicsList.Add(new SelectListItem

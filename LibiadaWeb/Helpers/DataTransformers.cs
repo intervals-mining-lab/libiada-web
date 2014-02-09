@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Text;
-using Npgsql;
+﻿using System.Text;
 
 namespace LibiadaWeb.Helpers
 {

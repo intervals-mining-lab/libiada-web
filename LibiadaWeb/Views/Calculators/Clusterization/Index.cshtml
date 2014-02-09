@@ -1,6 +1,4 @@
-﻿@using LibiadaWeb
-@using LibiadaWeb.Helpers
-
+﻿
 @model dynamic
 
 @{
@@ -10,51 +8,71 @@
 <h2>Кластеризация</h2>
 
 <script type="text/javascript">
+    "use strict";
 
-    var divCounter = 0;
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-    $(document).ready(function() {
-        AddDataTablesWithSubmit();
+    var app = angular.module('Clusterization', []);
 
-        AddCharacteristic();
-    });
-
-    function AddCharacteristic() {
-
-        var paramsList = new Object();
-        
-        @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
-        @Html.FillOptionsList("linkIds",  (IEnumerable<SelectListItem>)ViewBag.linksList)
-        @Html.FillOptionsList("notationIds", (IEnumerable<SelectListItem>)ViewBag.notationsList)
-        @Html.FillOptionsList("languageIds", (IEnumerable<SelectListItem>)ViewBag.languagesList)
-
-        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
-        $("#characteristics_list").append(characteristicsDiv);
-        divCounter++;
-        
-        return false;
-    }
 </script>
 
-@using (Html.BeginForm())
+@Scripts.Render("~/bundles/controllers/calculation")
+
+@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new
 {
-    @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<matter>)ViewBag.matters)
-    <br/>
-    @Html.Label("Количество таксонов")
-    <input class="text-box single-line" id="clustersCount" name="clustersCount" type="number" value="2" />
-    <br/>
-    @Html.Label("Вес равномощности таксонов")
-    <input class="text-box single-line" id="powerWeight" name="powerWeight" type="number" value="4" />
-    <br/>
-    @Html.Label("Вес нормализованного расстояния")
-    <input class="text-box single-line" id="normalizedDistanseWeight" name="normalizedDistanseWeight" type="number" value="2" />
-    <br/>
-    @Html.Label("Вес расстояния")
-    <input class="text-box single-line" id="distanseWeight" name="distanseWeight" type="number" value="1" />
-    <br/>
-    <br/>
-    <input type="button" onclick=" AddCharacteristic() " value="Добавить характеристику"/>
-    <div id="characteristics_list"></div>
-    <br/>
-    <input type="submit" value="Группировать" />
+    enctype = "multipart/form-data",
+    data_ng_app = "Clusterization"
+}))
+{
+    <fieldset data-ng-controller="CalculationCtrl">
+        <legend>Характеристики полных цепочек</legend>
+        <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="matter in matters | filter:{Nature: natureId}">
+                    <td>
+                        <input type="checkbox" name="matterIds" value="{{matter.Value}}" />
+                        <span>{{matter.Text}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
+        <br />
+        <div data-ng-repeat="characteristic in characteristics">
+            <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
+            <input type="hidden" name="characteristicIds" value="{{characteristic.characteristicType.Value}}" />
+
+            <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
+            <input type="hidden" name="linkIds" value="{{characteristic.link.Value}}" />
+
+            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
+            <input type="hidden" name="notationIds" value="{{characteristic.notation.Value}}" />
+
+            <select title="Язык" data-ng-show="isLiteratureNature()" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
+            <input type="hidden" name="languageIds" value="{{characteristic.language.Value}}" />
+
+            <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
+            <br />
+        </div>
+        @Html.Label("Количество таксонов")
+        <input class="text-box single-line" id="clustersCount" name="clustersCount" type="number" value="2" />
+        <br />
+        @Html.Label("Вес равномощности таксонов")
+        <input class="text-box single-line" id="powerWeight" name="powerWeight" type="number" value="4" />
+        <br />
+        @Html.Label("Вес нормализованного расстояния")
+        <input class="text-box single-line" id="normalizedDistanseWeight" name="normalizedDistanseWeight" type="number" value="2" />
+        <br />
+        @Html.Label("Вес расстояния")
+        <input class="text-box single-line" id="distanseWeight" name="distanseWeight" type="number" value="1" />
+        <br />
+        <input type="submit" value="Группировать" />
+    </fieldset>
 }

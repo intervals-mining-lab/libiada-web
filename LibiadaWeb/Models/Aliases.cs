@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
     public static class Aliases
     {

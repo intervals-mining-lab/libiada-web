@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
 using LibiadaWeb.Helpers;
+using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
@@ -48,13 +48,68 @@ namespace LibiadaWeb.Controllers.Chains
             Stream stream = NcbiHelper.GetGenes(parentChain.web_api_id.ToString());
             byte[] input = new byte[stream.Length];
 
-
-
             // Read the file into the byte array
             stream.Read(input, 0, (int)stream.Length);
 
             string data = Encoding.ASCII.GetString(input);
 
+            data = data.Split(new[] { "ORIGIN" }, StringSplitOptions.RemoveEmptyEntries)[0];
+            string[] temp = data.Split(new[] { "FEATURES" }, StringSplitOptions.RemoveEmptyEntries);
+            string information = temp[0];
+            string[] genes = temp[1].Split(new[] { "gene            ", "repeat_region   " }, StringSplitOptions.RemoveEmptyEntries);
+            var coordinates = new List<int[]>();
+            for (int i = 1; i < genes.Length; i++)
+            {
+                var dnaChain = new dna_chain
+                {
+                    matter_id = parentChain.matter_id,
+                    notation_id = Aliases.NotationNucleotide,
+                    dissimilar = false,
+                    remote_db_id = Aliases.RemoteDbNcbi,
+                    partial = false
+                };
+
+                String[] temp2 = genes[i].Split(new[] { '\n', '\r' });
+                bool complement = temp2[0].StartsWith("complement");
+                string temp3 = complement
+                                   ? temp2[0].Split(new[] {"complement"}, StringSplitOptions.RemoveEmptyEntries)[0]
+                                   : temp2[0];
+                string start = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[0];
+                String stop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                dnaChain.piece_position = Convert.ToInt32(start);
+                dnaChain.complement = complement;
+                coordinates.Add(new[]
+                    {
+                        Convert.ToInt32(start), 
+                        Convert.ToInt32(stop)
+                    });
+                var sequenceType = temp2[3];
+                if (sequenceType.StartsWith("CDS"))
+                {
+                    var proteinId = genes[i].Substring(genes[i].IndexOf("/protein_id=\"") + "/protein_id=\"".Length,genes[i].IndexOf("/db_xref=\""));
+                    var dbXref = genes[i].Substring(genes[i].IndexOf("/db_xref=\"GI:") + "/db_xref=\"GI:".Length, genes[i].IndexOf("/translation=\""));
+                    dnaChain.remote_id = proteinId;
+                    dnaChain.web_api_id = Convert.ToInt32(dbXref);
+
+                }
+                else if (sequenceType.StartsWith("tRNA"))
+                {
+                    var product = genes[i].Substring(genes[i].IndexOf("/product=\"") + "/product=\"".Length,genes[i].IndexOf("/inference=\""));
+                    dnaChain.description = product;
+                }
+                else if (sequenceType.StartsWith("rRNA"))
+                {
+                    var product = genes[i].Substring(genes[i].IndexOf("/product=\"") + "/product=\"".Length,genes[i].IndexOf("/inference=\""));
+                    dnaChain.description = product;
+                }
+                else if (sequenceType.StartsWith("/rpt_type=tandem"))
+                {
+
+                }
+
+            }
+
+            /*
             string[] chains = data.Split('>');
 
             for (int i = 0; i < chains.Length; i++)
@@ -74,7 +129,7 @@ namespace LibiadaWeb.Controllers.Chains
                 {
                     throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                 }
-                /*var resultChain = new chain
+                var resultChain = new chain
                     {
                         notation_id = parentChain.notation_id,
                         created = DateTime.Now,
@@ -88,7 +143,8 @@ namespace LibiadaWeb.Controllers.Chains
 
                 long[] alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, parentChain.notation_id, false);
                 dnaChainRepository.Insert(resultChain, fastaHeader, Convert.ToInt32(webApiId), alphabet, libiadaChain.Building);
-            */}
+            
+        }*/
 
             return RedirectToAction("Result");
         }

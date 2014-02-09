@@ -41,7 +41,7 @@
                 @Html.DisplayNameFor(model => model.remote_id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.remote_db.name)
+                @Html.DisplayNameFor(model => model.remote_db_id)
             </th>
             <th></th>
         </tr>
@@ -66,7 +66,7 @@
                     @Html.DisplayFor(modelItem => item.remote_id)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.remote_db_id)
+                    @Html.DisplayFor(modelItem => item.remote_db.name)
                 </td>
                 <td>
                     @Html.ActionLink("Редактировать", "Edit", new {item.id}) |

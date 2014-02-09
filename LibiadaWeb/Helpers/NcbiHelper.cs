@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -58,34 +57,16 @@ namespace LibiadaWeb.Helpers
         public static Stream GetGenes(String id)
         {
 
-            var fileUrl = BaseUrl + @"elink.fcgi?dbfrom=nuccore&db=gene&id=" + id;
+            var fileUrl = BaseUrl + @"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + id;
             var fileRequest = WebRequest.Create(fileUrl);
             var fileResponse = fileRequest.GetResponse();
-            var stream = fileResponse.GetResponseStream();
-            var memoryStream = new MemoryStream();
-            var doc = new XmlDocument();
-            try
-            {
-                stream.CopyTo(memoryStream);
-                memoryStream.Position = 0;
-                doc.Load(memoryStream);
+            var fileStream = fileResponse.GetResponseStream();
 
-            }
-            finally
-            {
-                memoryStream.Close();
-                stream.Close();
-            }
-
-            XmlNodeList elemList = doc.GetElementsByTagName("LinkSetDb");
-            var ids = new List<string>();
-            foreach (XmlNode item in elemList)
-            {
-                ids.Add(item.FirstChild.Value);
-            }
-
-            return GetFile(string.Join(",", ids.ToArray()));
-            
+            var fileMemoryStream = new MemoryStream();
+            fileStream.CopyTo(fileMemoryStream);
+            fileStream.Close();
+            fileMemoryStream.Position = 0;
+            return fileMemoryStream;
         }
     }
 }

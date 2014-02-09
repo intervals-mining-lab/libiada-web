@@ -28,10 +28,7 @@ namespace LibiadaWeb
                         "~/Scripts/datatables.plugins.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/highCharts").Include(
-                        "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
-                        "~/Scripts/procedures.js"));
+                        "~/Scripts/Highcharts-2.3.5/highcharts.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                         "~/Scripts/angular.min.js",
@@ -41,6 +38,11 @@ namespace LibiadaWeb
             // используйте средство построения на сайте http://modernizr.com, чтобы выбрать только нужные тесты.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include("~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
+                        "~/Scripts/procedures.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
+                        "~/Scripts/Controllers/calculation.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
@@ -62,6 +64,8 @@ namespace LibiadaWeb
                         "~/Content/themes/base/jquery.ui.theme.css",
                         "~/Content/DataTables-1.9.4/media/css/jquery.dataTables_themeroller.css",
                         "~/Content/MenuStyle.css"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }

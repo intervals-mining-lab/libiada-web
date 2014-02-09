@@ -1656,6 +1656,30 @@ namespace LibiadaWeb
         private global::System.String _remote_id;
         partial void Onremote_idChanging(global::System.String value);
         partial void Onremote_idChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true, "description");
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
 
         #endregion
 
@@ -3103,7 +3127,9 @@ namespace LibiadaWeb
         /// <param name="dissimilar">Initial value of the dissimilar property.</param>
         /// <param name="piece_type_id">Initial value of the piece_type_id property.</param>
         /// <param name="piece_position">Initial value of the piece_position property.</param>
-        public static dna_chain Createdna_chain(global::System.Int64 id, global::System.Int32 notation_id, global::System.DateTimeOffset created, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position)
+        /// <param name="complement">Initial value of the complement property.</param>
+        /// <param name="partial">Initial value of the partial property.</param>
+        public static dna_chain Createdna_chain(global::System.Int64 id, global::System.Int32 notation_id, global::System.DateTimeOffset created, global::System.Int64 matter_id, global::System.Boolean dissimilar, global::System.Int32 piece_type_id, global::System.Int64 piece_position, global::System.Boolean complement, global::System.Boolean partial)
         {
             dna_chain dna_chain = new dna_chain();
             dna_chain.id = id;
@@ -3113,6 +3139,8 @@ namespace LibiadaWeb
             dna_chain.dissimilar = dissimilar;
             dna_chain.piece_type_id = piece_type_id;
             dna_chain.piece_position = piece_position;
+            dna_chain.complement = complement;
+            dna_chain.partial = partial;
             return dna_chain;
         }
 
@@ -3410,6 +3438,78 @@ namespace LibiadaWeb
         private Nullable<global::System.DateTimeOffset> _modified;
         partial void OnmodifiedChanging(Nullable<global::System.DateTimeOffset> value);
         partial void OnmodifiedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean complement
+        {
+            get
+            {
+                return _complement;
+            }
+            set
+            {
+                OncomplementChanging(value);
+                ReportPropertyChanging("complement");
+                _complement = StructuralObject.SetValidValue(value, "complement");
+                ReportPropertyChanged("complement");
+                OncomplementChanged();
+            }
+        }
+        private global::System.Boolean _complement;
+        partial void OncomplementChanging(global::System.Boolean value);
+        partial void OncomplementChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean partial
+        {
+            get
+            {
+                return _partial;
+            }
+            set
+            {
+                OnpartialChanging(value);
+                ReportPropertyChanging("partial");
+                _partial = StructuralObject.SetValidValue(value, "partial");
+                ReportPropertyChanged("partial");
+                OnpartialChanged();
+            }
+        }
+        private global::System.Boolean _partial;
+        partial void OnpartialChanging(global::System.Boolean value);
+        partial void OnpartialChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true, "description");
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
 
         #endregion
 
@@ -5450,6 +5550,30 @@ namespace LibiadaWeb
         private Nullable<global::System.DateTimeOffset> _modified;
         partial void OnmodifiedChanging(Nullable<global::System.DateTimeOffset> value);
         partial void OnmodifiedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true, "description");
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
 
         #endregion
 
@@ -7028,6 +7152,30 @@ namespace LibiadaWeb
         private Nullable<global::System.DateTimeOffset> _modified;
         partial void OnmodifiedChanging(Nullable<global::System.DateTimeOffset> value);
         partial void OnmodifiedChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                OndescriptionChanging(value);
+                ReportPropertyChanging("description");
+                _description = StructuralObject.SetValidValue(value, true, "description");
+                ReportPropertyChanged("description");
+                OndescriptionChanged();
+            }
+        }
+        private global::System.String _description;
+        partial void OndescriptionChanging(global::System.String value);
+        partial void OndescriptionChanged();
 
         #endregion
 

@@ -1322,4 +1322,114 @@ DROP TRIGGER tgud_music_chain_characteristic_delete ON music_chain;
 ALTER TABLE chain ADD CONSTRAINT chk_remote_id CHECK ((remote_db_id IS NULL AND remote_id IS NULL) OR (remote_db_id IS NOT NULL AND remote_id IS NOT NULL));
 DROP FUNCTION seq_next_value(text);
 
+
+
+-- 28.01.2014
+
+-- Ошибка в названиях колонки и аргумента в триггерных функций и опечатки в названиях триггеров.
+
+DROP TRIGGER tgiu_charaacteristic_link ON characteristic;
+DROP TRIGGER tgiu_binary_charaacteristic_link ON binary_characteristic;
+DROP TRIGGER tgiu_congeneric_charaacteristic_link ON congeneric_characteristic;
+
+DROP FUNCTION trigger_characteristics_link();
+
+CREATE OR REPLACE FUNCTION trigger_characteristics_link()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var linkOk = plv8.execute('SELECT linkable=($1 IS NOT NULL) AS result FROM characteristic_type WHERE id = $2;', [NEW.link_id, NEW.characteristic_type_id])[0].result;
+	if(linkOk){
+		return NEW;
+	}
+	else{
+		plv8.elog(ERROR, 'Добавлемая характеристика имеет неверную привязку.');
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id и link_id');
+}
+$BODY$ LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION trigger_characteristics_link() IS 'Триггерная функция, проверяющая что у характеристики не задана привязка если она непривязываема, и задана любая привязка если она необходима.';
+
+CREATE TRIGGER tgiu_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+COMMENT ON TRIGGER tgiu_characteristic_link ON characteristic IS 'Триггер, проверяющий правильность привязки.';
+
+CREATE TRIGGER tgiu_binary_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+COMMENT ON TRIGGER tgiu_binary_characteristic_link ON binary_characteristic IS 'Триггер, проверяющий правильность привязки.';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_link ON congeneric_characteristic IS 'Триггер, проверяющий правильность привязки.';
+
+DROP TRIGGER tgiu_characteristic_applicability ON characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic;
+DROP TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic;
+DROP FUNCTION trigger_check_applicability();
+
+CREATE OR REPLACE FUNCTION trigger_check_applicability()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var applicabilityOk = plv8.execute('SELECT ' + TG_ARGV[0] + ' AS result FROM characteristic_type WHERE id = $1;', [NEW.characteristic_type_id])[0].result;
+	if(applicabilityOk){
+		return NEW;
+	}
+	else{
+		plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
+}
+$BODY$ LANGUAGE plv8 VOLATILE COST 100;
+COMMENT ON FUNCTION trigger_check_applicability() IS 'Триггерная функция, проверяющая, что характеристика может быть вычислена для такого типа цепочки';
+
+CREATE TRIGGER tgiu_binary_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
+COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('congeneric_chain_applicable');
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к однородным цепочкам.';
+
+CREATE TRIGGER tgiu_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('full_chain_applicable');
+COMMENT ON TRIGGER tgiu_characteristic_applicability ON characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к полным цепочкам.';
+
+
+
+-- 06.02.2014
+
+-- Изменен тип поля комментария на text во всех таблицах.
+-- Добавлены новые поля генетических цепочек - флаг комплементарности и флаг частичной последовательности.
+
+ALTER TABLE element ALTER COLUMN description TYPE text;
+ALTER TABLE accidental ALTER COLUMN description TYPE text;
+ALTER TABLE characteristic_group ALTER COLUMN description TYPE text;
+ALTER TABLE characteristic_type ALTER COLUMN description TYPE text;
+ALTER TABLE fmotiv_type ALTER COLUMN description TYPE text;
+ALTER TABLE language ALTER COLUMN description TYPE text;
+ALTER TABLE link ALTER COLUMN description TYPE text;
+ALTER TABLE matter ALTER COLUMN description TYPE text;
+ALTER TABLE nature ALTER COLUMN description TYPE text;
+ALTER TABLE notation ALTER COLUMN description TYPE text;
+ALTER TABLE note_symbol ALTER COLUMN description TYPE text;
+ALTER TABLE piece_type ALTER COLUMN description TYPE text;
+ALTER TABLE remote_db ALTER COLUMN description TYPE text;
+ALTER TABLE tie ALTER COLUMN description TYPE text;
+
+ALTER TABLE dna_chain ADD COLUMN complement boolean NOT NULL DEFAULT false;
+ALTER TABLE dna_chain ADD COLUMN partial boolean NOT NULL DEFAULT false;
+ALTER TABLE chain ADD COLUMN description text;
+COMMENT ON COLUMN dna_chain.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
+COMMENT ON COLUMN dna_chain.partial IS 'Флаг указывающий на неполноту последовательности.';
+COMMENT ON COLUMN chain.description IS 'Описание отдельной цепочки.';
+
 COMMIT;

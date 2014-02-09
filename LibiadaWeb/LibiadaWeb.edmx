@@ -243,6 +243,7 @@
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
     <Property Name="modified" Type="timestamptz"/>
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="characteristic">
     <Key>
@@ -263,7 +264,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="characteristic_type">
     <Key>
@@ -271,7 +272,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="characteristic_group_id" Type="int4" />
     <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
     <Property Name="linkable" Type="bool" Nullable="false" />
@@ -296,6 +297,9 @@
     <Property Name="remote_db_id" Type="int4" />
     <Property Name="web_api_id" Type="int4" />
     <Property Name="modified" Type="timestamptz"/>
+    <Property Name="complement" Type="bool" Nullable="false" />
+    <Property Name="partial" Type="bool" Nullable="false" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="element">
     <Key>
@@ -303,7 +307,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="value" Type="varchar" MaxLength="255" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="created" Type="timestamptz" Nullable="false" />
@@ -315,7 +319,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="link">
     <Key>
@@ -323,7 +327,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="literature_chain">
     <Key>
@@ -341,6 +345,7 @@
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
     <Property Name="modified" Type="timestamptz"/>
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="matter">
     <Key>
@@ -349,7 +354,7 @@
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="modified" Type="timestamptz"/>
   </EntityType>
@@ -359,7 +364,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="notation">
     <Key>
@@ -367,7 +372,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="piece_type">
@@ -376,7 +381,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="remote_db">
@@ -385,7 +390,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="url" Type="varchar" MaxLength="255" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
   </EntityType>
@@ -402,7 +407,7 @@
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="value" Type="varchar" MaxLength="255" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -429,7 +434,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
 
   <EntityType Name="measure">
@@ -444,7 +449,7 @@
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="value" Type="varchar" MaxLength="255" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="beats" Type="int4" Nullable="false" />
     <Property Name="beatbase" Type="int4" Nullable="false" />
@@ -468,6 +473,7 @@
     <Property Name="remote_id" Type="varchar" MaxLength="255" />
     <Property Name="remote_db_id" Type="int4" />
     <Property Name="modified" Type="timestamptz"/>
+    <Property Name="description" Type="text" />
   </EntityType>
 
   <EntityType Name="note">
@@ -476,7 +482,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="value" Type="varchar" MaxLength="255" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
     <Property Name="name" Type="varchar" MaxLength="255" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
     <Property Name="created" Type="timestamptz" Nullable="false" />
@@ -512,7 +518,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
 
   <EntityType Name="fmotiv_type">
@@ -521,7 +527,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
 
   <EntityType Name="note_symbol">
@@ -530,7 +536,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
 
   <EntityType Name="tie">
@@ -539,7 +545,7 @@
     </Key>
     <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-    <Property Name="description" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <Association Name="fk_binary_characteristic_first_element">
     <End Role="element" Type="LibiadaWebModel.Store.element" Multiplicity="1" />
@@ -1667,6 +1673,7 @@
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="chain" ToRole="piece_type" />
@@ -1696,7 +1703,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="characteristic_type" Relationship="LibiadaWebModel.fk_characteristic_group" FromRole="characteristic_group" ToRole="characteristic_type" />
   </EntityType>
   <EntityType Name="characteristic_type">
@@ -1705,7 +1712,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="characteristic_group_id" Type="Int32" />
     <Property Name="class_name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="linkable" Type="Boolean" Nullable="false" />
@@ -1733,6 +1740,9 @@
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+    <Property Name="complement" Type="Boolean" Nullable="false" />
+    <Property Name="partial" Type="Boolean" Nullable="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
@@ -1746,7 +1756,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -1762,7 +1772,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_language" FromRole="language" ToRole="literature_chain" />
   </EntityType>
   <EntityType Name="link">
@@ -1771,7 +1781,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_link" FromRole="link" ToRole="binary_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_link" FromRole="link" ToRole="characteristic" />
   </EntityType>
@@ -1791,6 +1801,7 @@
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="binary_characteristic" Relationship="LibiadaWebModel.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
     <NavigationProperty Name="congeneric_characteristic" Relationship="LibiadaWebModel.fk_congeneric_characteristic_literature_chain" FromRole="literature_chain" ToRole="congeneric_characteristic" />
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
@@ -1807,7 +1818,7 @@
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="modified" Type="DateTimeOffset" Precision="7" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_matter" FromRole="matter" ToRole="chain" />
@@ -1824,7 +1835,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_matter_nature" FromRole="nature" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_notation_nature" FromRole="nature" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_piece_type_nature" FromRole="nature" ToRole="piece_type" />
@@ -1835,7 +1846,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_notation" FromRole="notation" ToRole="chain" />
     <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_notation" FromRole="notation" ToRole="dna_chain" />
@@ -1853,7 +1864,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_piece_type" FromRole="piece_type" ToRole="chain" />
     <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_piece_type" FromRole="piece_type" ToRole="dna_chain" />
@@ -1870,7 +1881,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="nature_id" Type="Int32" Nullable="false" />
     <NavigationProperty Name="chain" Relationship="LibiadaWebModel.fk_chain_remote_db" FromRole="remote_db" ToRole="chain" />
@@ -1893,7 +1904,7 @@
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="fmotiv_type_id" Type="Int32" Nullable="false" />
     <Property Name="remote_db_id" Type="Int32" />
@@ -1931,7 +1942,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_instrument" FromRole="instrument" ToRole="pitch" />
   </EntityType>
   <EntityType Name="measure">
@@ -1946,7 +1957,7 @@
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="beats" Type="Int32" Nullable="false" />
     <Property Name="beatbase" Type="Int32" Nullable="false" />
@@ -1977,6 +1988,7 @@
     <Property Name="remote_db_id" Type="Int32" />
     <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_music_chain_matter" FromRole="music_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_music_chain_notation" FromRole="music_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_music_chain_piece_type" FromRole="music_chain" ToRole="piece_type" />
@@ -1991,7 +2003,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
     <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2033,7 +2045,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_accidental" FromRole="accidental" ToRole="pitch" />
   </EntityType>
 
@@ -2043,7 +2055,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_fmotiv_fmotiv_type" FromRole="fmotiv_type" ToRole="fmotiv" />
   </EntityType>
 
@@ -2053,7 +2065,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="pitch" Relationship="LibiadaWebModel.fk_pitch_note_symbol" FromRole="note_symbol" ToRole="pitch" />
   </EntityType>
 
@@ -2063,7 +2075,7 @@
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-    <Property Name="description" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_tie" FromRole="tie" ToRole="note" />
   </EntityType>
 
@@ -2926,6 +2938,7 @@
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
           <ScalarProperty Name="modified" ColumnName="modified" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2982,6 +2995,9 @@
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
           <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
           <ScalarProperty Name="modified" ColumnName="modified" />
+          <ScalarProperty Name="complement" ColumnName="complement" />
+          <ScalarProperty Name="partial" ColumnName="partial" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3031,6 +3047,7 @@
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
           <ScalarProperty Name="modified" ColumnName="modified" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3171,6 +3188,7 @@
           <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
           <ScalarProperty Name="remote_id" ColumnName="remote_id" />
           <ScalarProperty Name="modified" ColumnName="modified" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

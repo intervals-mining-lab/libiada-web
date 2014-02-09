@@ -7,57 +7,15 @@
 <h2>Вычисление характеристик</h2>
 
 <script type="text/javascript">
+    "use strict";
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 
     var app = angular.module('Calculation', []);
 
-    app.controller('CalculationCtrl', ['$scope', 'filterFilter',  function($scope, filterFilter) {
-
-        var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
-        
-        for(var param in data) {
-            $scope[param] = data[param];
-        }
-        
-        $scope.characteristics = [];
-        $scope.filteredNotations = [];
-
-        $scope.addCharacteristic = function() {
-            $scope.characteristics.push({ 
-                characteristicType: $scope.characteristicTypes[0], 
-                link: $scope.links[0], 
-                notation: $scope.filteredNotations[0],
-                language: $scope.languages[0] 
-            });
-        };
-
-        var filterByNature = function() {
-            $scope.filteredNotations = filterFilter($scope.notations, { Nature: $scope.nature });
-            var notation = $scope.filteredNotations[0];
-            $scope.characteristics.forEach(function(characteristic) {
-                characteristic.notation = notation;
-            });
-            
-        };
-
-        $scope.nature = $scope.natures[0].Value;
-
-        $scope.$watch('nature', filterByNature, true);
-
-        $scope.addCharacteristic();
-
-        $scope.DeleteCharacteristic = function(characteristic) {
-            $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-        };
-
-        $scope.isLiteratureNature = function() {
-            return $scope.natureLiterature == $scope.nature;
-        };
-
-        $scope.isLinkable = function(characteristic) {
-            return characteristic.characteristicType.Linkable;
-        };
-    }]);
 </script>
+
+@Scripts.Render("~/bundles/controllers/calculation")
 
 @using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new
 {
@@ -67,62 +25,39 @@
 {
     <fieldset data-ng-controller="CalculationCtrl">
         <legend>Характеристики полных цепочек</legend>
-        @Html.DropDownList("natureId", new SelectListItem[0], new
-            {
-                title = "Природа объктов",
-                data_ng_model = "nature",
-                data_ng_options = "n.Value as n.Text for n in natures"
-            })
+        <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
         <table>
             <thead>
                 <tr>
                     <th>Название</th>
-                    <th>Описание</th>
-                    <th>Природа</th>
                 </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="matter in matters | filter:{Nature.Value: nature}">
+                <tr data-ng-repeat="matter in matters | filter:{Nature: natureId}">
                     <td>
-                        <input type="checkbox" name="matterIds" data-ng-model="matter.checkBox" />
-                        <span>{{matter.name}}</span>
+                        <input type="checkbox" name="matterIds" value="{{matter.Value}}" />
+                     <span>{{matter.Text}}</span>
                     </td>
-                    <td>{{matter.description}}</td>
-                    <td>{{matter.Nature.Text}}</td>
                 </tr>
             </tbody>
         </table>
         <br />
-        <button type="button" data-ng-click="addCharacteristic()">Добавить характеристику</button>
+        <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
         <br />
         <div data-ng-repeat="characteristic in characteristics">
-            @Html.DropDownList("characteristicIds", new SelectListItem[0], new
-            {
-                title = "Характеристика",
-                data_ng_model = "characteristic.characteristicType",
-                data_ng_options = "c.Text for c in characteristicTypes"
-            })
-            @Html.DropDownList("linkIds", new SelectListItem[0], new
-            {
-                title = "Привязка",
-                data_ng_model = "characteristic.link",
-                data_ng_options = "l.Text for l in links",
-                data_ng_show = "isLinkable(characteristic)"
-            })
-            @Html.DropDownList("notationIds", new SelectListItem[0], new
-            {
-                title = "Форма записи",
-                data_ng_model = "characteristic.notation",
-                data_ng_options = "n.Text for n in filteredNotations"
-            })
-            @Html.DropDownList("languageIds", new SelectListItem[0], new
-            {
-                title = "Язык",
-                data_ng_model = "characteristic.language",
-                data_ng_options = "l.Text for l in languages",
-                data_ng_show = "isLiteratureNature()"
-            })
-            <button type="button" data-ng-click="DeleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
+            <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
+            <input type="hidden" name="characteristicIds" value="{{characteristic.characteristicType.Value}}" />
+            
+            <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
+            <input type="hidden" name="linkIds" value="{{characteristic.link.Value}}" />
+            
+            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
+            <input type="hidden" name="notationIds" value="{{characteristic.notation.Value}}" />
+            
+            <select title="Язык" data-ng-show="isLiteratureNature()" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
+            <input type="hidden" name="languageIds" value="{{characteristic.language.Value}}" />
+
+            <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
             <br />
         </div>
         <br />

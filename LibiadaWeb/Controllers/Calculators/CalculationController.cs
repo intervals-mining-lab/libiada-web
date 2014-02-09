@@ -17,7 +17,6 @@ namespace LibiadaWeb.Controllers.Calculators
         private readonly MatterRepository matterRepository;
         private readonly CharacteristicTypeRepository characteristicRepository;
         private readonly NotationRepository notationRepository;
-        private readonly LinkRepository linkRepository;
         private readonly ChainRepository chainRepository;
 
         public CalculationController()
@@ -26,7 +25,6 @@ namespace LibiadaWeb.Controllers.Calculators
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
         }
 
@@ -35,33 +33,18 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Index()
         {
-            var checkBoxes = matterRepository.GetSelectListItems(db.matter, null);
-            var matters = db.matter.ToArray();
-            var mattersArray = new object[matters.Count()];
-            for (int i = 0; i < matters.Count(); i++)
-            {
-                
-                mattersArray[i] = new
-                    {
-                        id = matters[i].id,
-                        name = matters[i].name,
-                        description = matters[i].description,
-                        Nature = new { Value = matters[i].nature.id, Text = matters[i].nature.name },
-                        checkBox = checkBoxes.Single(c => c.Value == matters[i].id.ToString())
-
-                    };
-            }
-
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.full_chain_applicable);
 
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+
             ViewBag.data = new Dictionary<string, object>
                 {
-                    {"matters", mattersArray},
-                    {"characteristicTypes", characteristicRepository.GetSelectListWithLinkable(characteristicsList)},
+                    {"matters", matterRepository.GetSelectListWithNature()},
+                    {"characteristicTypes", characteristicTypes},
                     {"notations", notationRepository.GetSelectListWithNature()},
                     {"natures", new SelectList(db.nature, "id", "name")},
-                    {"links", linkRepository.GetSelectListItems(null)},
+                    {"links", new SelectList(db.link, "id", "name")},
                     {"languages", new SelectList(db.language, "id", "name")},
                     {"natureLiterature", Aliases.NatureLiterature}
                 };
@@ -69,7 +52,7 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkIds, int[] notationIds, int[] languageIds)
+        public ActionResult Index(long[] matterIds, int[] characteristicIds, int?[] linkIds, int[] notationIds, int[] languageIds)
         {
             var characteristics = new List<List<Double>>();
             var chainNames = new List<string>();
@@ -97,12 +80,12 @@ namespace LibiadaWeb.Controllers.Calculators
                     }
 
                     int characteristicId = characteristicIds[i];
-                    int linkId = linkIds[i];
+                    int? linkId = linkIds[i];
                     if (db.characteristic.Any(c =>
                                               linkId == c.link.id && c.chain_id == chainId &&
                                               c.characteristic_type_id == characteristicId))
                     {
-                        var dbCharacteristic = db.characteristic.Single(c =>
+                        characteristic dbCharacteristic = db.characteristic.Single(c =>
                                                                        linkId == c.link.id && c.chain_id == chainId &&
                                                                        c.characteristic_type_id == characteristicId);
                         characteristics.Last().Add(dbCharacteristic.value.Value);
@@ -112,15 +95,16 @@ namespace LibiadaWeb.Controllers.Calculators
                         Chain tempChain = chainRepository.ToLibiadaChain(chainId);
 
                         String className =
-                            db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                            db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;
                         ICalculator calculator = CalculatorsFactory.Create(className);
                         var link = (Link) db.link.Single(l => l.id == linkId).id;
                         var characteristicValue = calculator.Calculate(tempChain, link);
+                        int characteristicType = characteristicIds[i];
                         var dbCharacteristic = new characteristic
                             {
                                 chain_id = chainId,
                                 characteristic_type_id = characteristicIds[i],
-                                link_id = linkId,
+                                link_id = db.characteristic_type.Single( c=> c.id == characteristicType).linkable ? linkId : null,
                                 value = characteristicValue,
                                 value_string = characteristicValue.ToString(),
                                 created = DateTime.Now
@@ -135,7 +119,7 @@ namespace LibiadaWeb.Controllers.Calculators
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
-                int linkId = linkIds[k];
+                int? linkId = linkIds[k];
                 int notationId = notationIds[k];
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
                                         db.link.Single(l => l.id == linkId).name + " " +
@@ -152,26 +136,33 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            var characteristics = TempData["characteristics"];
-            var characteristicNames = TempData["characteristicNames"] as List<String>;
-            ViewBag.chainIds = TempData["chainIds"] as List<long>;
-            var characteristicIds = TempData["characteristicIds"] as int[];
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
+            try
             {
-                characteristicsList.Add(new SelectListItem
+                var characteristics = TempData["characteristics"];
+                var characteristicNames = TempData["characteristicNames"] as List<String>;
+                ViewBag.chainIds = TempData["chainIds"] as List<long>;
+                var characteristicIds = TempData["characteristicIds"] as int[];
+                var characteristicsList = new List<SelectListItem>();
+                for (int i = 0; i < characteristicNames.Count; i++)
+                {
+                    characteristicsList.Add(new SelectListItem
                     {
                         Value = i.ToString(),
                         Text = characteristicNames[i],
                         Selected = false
                     });
+                }
+                ViewBag.characteristicIds = new List<int>(characteristicIds);
+                ViewBag.characteristicsList = characteristicsList;
+                ViewBag.characteristics = characteristics;
+                ViewBag.chainNames = TempData["chainNames"] as List<String>;
+                ViewBag.characteristicNames = characteristicNames;
+                TempData.Keep();
             }
-            ViewBag.characteristicIds = new List<int>(characteristicIds);
-            ViewBag.characteristicsList = characteristicsList;
-            ViewBag.characteristics = characteristics;
-            ViewBag.chainNames = TempData["chainNames"] as List<String>;
-            ViewBag.characteristicNames = characteristicNames;
-            TempData.Keep();
+            catch (Exception e)
+            {
+                ModelState.AddModelError("Error", e.Message);
+            }
 
             return View();
         }

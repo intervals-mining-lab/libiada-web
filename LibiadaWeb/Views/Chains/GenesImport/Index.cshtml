@@ -4,32 +4,35 @@
     ViewBag.Title = "title";
 }
 <script>
+    var app = angular.module('GenesImport', []);
 
-    function CreateChainViewModel(data) {
-        var chainViewModel = ko.mapping.fromJS(data);
-        var self = chainViewModel;
+    app.controller('GenesImportCtrl', ['$scope', function($scope) {
 
-        return self;
-    }
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-    $(document).ready(function () {
-        var data = @Html.Raw(Json.Encode(ViewBag.data)) ;
+        MapModelFromJson($scope, data);
+    }]);
 
-        ko.applyBindings(CreateChainViewModel(data));
-    });
-    
 </script>
 
 <h2>title</h2>
-@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new {enctype = "multipart/form-data"}))
+@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new
 {
-    <div class="editor-label">
-        Цепочка
-    </div>
-    <div class="editor-field">
-        <select name="chainr_id" data-bind="options: $root.chains, optionsText: 'Text', optionsValue: 'Value'"></select>
-    </div>
-    <p>
-        <input type="submit" value="Создать" />
-    </p>
+    enctype = "multipart/form-data",
+    data_ng_app = "GenesImport"
+}))
+{
+    <fieldset data-ng-controller="GenesImportCtrl">
+        <legend>Характеристики полных цепочек</legend>
+        <div class="editor-label">
+            @Html.Label("Цепочка")
+        </div>
+        <div class="editor-field">
+            <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
+            <input type="hidden" name="chainId" value="{{chainId}}" />
+        </div>
+        <p>
+            <input type="submit" value="Создать" />
+        </p>
+    </fieldset>
 }

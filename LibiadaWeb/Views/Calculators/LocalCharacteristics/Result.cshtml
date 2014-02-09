@@ -115,7 +115,7 @@
         detailChart = new Highcharts.Chart({
             chart: { marginBottom: 120, renderTo: 'detail-container', reflow: false, marginLeft: 50, marginRight: 20, style: { position: 'absolute' } },
             credits: { enabled: false },
-            title: { text: 'Локальные характеристики цепочек' },
+            title: { text: 'Локальные характеристики' },
             xAxis: {
                 title: { text: 'Фрагменты цепочки' },
                 type: 'number'
@@ -199,7 +199,7 @@
 
             plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
-            title: { text: 'Локальные характеристики цепочек' },
+            title: { text: 'Локальные характеристики' },
 
             tooltip: {
                 formatter: function() {

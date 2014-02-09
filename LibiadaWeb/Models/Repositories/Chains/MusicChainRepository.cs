@@ -3,8 +3,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using Npgsql;
-using NpgsqlTypes;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 { 

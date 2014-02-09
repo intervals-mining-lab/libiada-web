@@ -293,11 +293,5 @@ namespace LibiadaWeb.Controllers.Chains
             db.Dispose();
             base.Dispose(disposing);
         }
-
-        public ActionResult ImportFailure()
-        {
-            ViewBag.failedElement = TempData["failedElement"];
-            return View();
-        }
     }
 }

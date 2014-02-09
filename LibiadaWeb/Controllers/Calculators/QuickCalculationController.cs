@@ -4,8 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.Characteristics;
-using LibiadaCore.Classes.Root.Characteristics.Calculators;
-using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 
 namespace LibiadaWeb.Controllers.Calculators
@@ -39,22 +37,22 @@ namespace LibiadaWeb.Controllers.Calculators
         [HttpPost]
         public ActionResult Index(int[] characteristicIds, int[] linkIds, String chain)
         {
-            List<Double> characteristics = new List<Double>();
-            List<String> characteristicNames = new List<string>();
+            var characteristics = new List<Double>();
+            var characteristicNames = new List<string>();
 
 
             for (int i = 0; i < characteristicIds.Length; i++)
             {
-                int characteristicId = characteristicIds[i];
-                int linkId = linkIds[i];
+                var characteristicId = characteristicIds[i];
+                var linkId = linkIds[i];
 
-                Chain tempChain = new Chain(chain);
+                var tempChain = new Chain(chain);
 
                 characteristicNames.Add( db.characteristic_type.Single(charact => charact.id == characteristicId).name);
-                String className =
+                var className =
                     db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                ICalculator calculator = CalculatorsFactory.Create(className);
-                Link link = (Link) db.link.Single(l => l.id == linkId).id;
+                var calculator = CalculatorsFactory.Create(className);
+                var link = (Link) db.link.Single(l => l.id == linkId).id;
 
                 characteristics.Add(calculator.Calculate(tempChain, link));
             }
@@ -67,10 +65,10 @@ namespace LibiadaWeb.Controllers.Calculators
 
         public ActionResult Result()
         {
-            List<double> characteristics = TempData["characteristics"] as List<double>;
-            List<String> characteristicNames = TempData["characteristicNames"] as List<String>;
-            int[] characteristicIds = TempData["characteristicIds"] as int[];
-            List<SelectListItem> characteristicsList = new List<SelectListItem>();
+            var characteristics = TempData["characteristics"] as List<double>;
+            var characteristicNames = TempData["characteristicNames"] as List<String>;
+            var characteristicIds = TempData["characteristicIds"] as int[];
+            var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicNames.Count; i++)
             {
                 characteristicsList.Add(new SelectListItem
