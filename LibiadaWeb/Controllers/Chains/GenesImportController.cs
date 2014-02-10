@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
@@ -42,10 +43,25 @@ namespace LibiadaWeb.Controllers.Chains
         }
 
         [HttpPost]
-        public ActionResult Index(long chainId)
-        {
+        public ActionResult Index(long chainId, bool localFile)
+        { 
+            
             dna_chain parentChain = db.dna_chain.Single(c => c.id == chainId);
-            Stream stream = NcbiHelper.GetGenes(parentChain.web_api_id.ToString());
+            Stream stream;
+            if (localFile)
+            {
+                HttpPostedFileBase file = Request.Files[0];
+
+                if (file == null || file.ContentLength == 0)
+                {
+                    throw new ArgumentNullException("Файл цепочки не задан или пуст");
+                }
+                stream = file.InputStream;
+            }
+            else
+            {
+                stream = NcbiHelper.GetGenes(parentChain.web_api_id.ToString());
+            }
             byte[] input = new byte[stream.Length];
 
             // Read the file into the byte array
@@ -61,46 +77,50 @@ namespace LibiadaWeb.Controllers.Chains
             for (int i = 1; i < genes.Length; i++)
             {
                 var dnaChain = new dna_chain
-                {
-                    matter_id = parentChain.matter_id,
-                    notation_id = Aliases.NotationNucleotide,
-                    dissimilar = false,
-                    remote_db_id = Aliases.RemoteDbNcbi,
-                    partial = false
-                };
+                    {
+                        matter_id = parentChain.matter_id,
+                        notation_id = Aliases.NotationNucleotide,
+                        dissimilar = false,
+                        remote_db_id = Aliases.RemoteDbNcbi,
+                        partial = false
+                    };
 
-                String[] temp2 = genes[i].Split(new[] { '\n', '\r' });
+                String[] temp2 = genes[i].Split(new[] {'\n', '\r'});
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
                                    ? temp2[0].Split(new[] {"complement"}, StringSplitOptions.RemoveEmptyEntries)[0]
                                    : temp2[0];
                 string start = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[0];
-                String stop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                String stop = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[1];
                 dnaChain.piece_position = Convert.ToInt32(start);
                 dnaChain.complement = complement;
                 coordinates.Add(new[]
                     {
-                        Convert.ToInt32(start), 
+                        Convert.ToInt32(start),
                         Convert.ToInt32(stop)
                     });
-                var sequenceType = temp2[3];
+                string sequenceType = String.Empty;
+                for (int j = 1; j < temp2.Length; j++)
+                {
+                    if (temp2[j].Contains(start + ".." + stop))
+                    {
+                        sequenceType = temp2[j].Trim();
+                        break;
+                    }
+                }
                 if (sequenceType.StartsWith("CDS"))
                 {
-                    var proteinId = genes[i].Substring(genes[i].IndexOf("/protein_id=\"") + "/protein_id=\"".Length,genes[i].IndexOf("/db_xref=\""));
-                    var dbXref = genes[i].Substring(genes[i].IndexOf("/db_xref=\"GI:") + "/db_xref=\"GI:".Length, genes[i].IndexOf("/translation=\""));
-                    dnaChain.remote_id = proteinId;
-                    dnaChain.web_api_id = Convert.ToInt32(dbXref);
-
+                    dnaChain.remote_id = GetValue(temp2, "/protein_id=\"");
+                    dnaChain.web_api_id = Convert.ToInt32(GetValue(temp2, "/db_xref=\"GI:"));
+                    dnaChain.description = GetValue(temp2, "/product=\"");
                 }
                 else if (sequenceType.StartsWith("tRNA"))
                 {
-                    var product = genes[i].Substring(genes[i].IndexOf("/product=\"") + "/product=\"".Length,genes[i].IndexOf("/inference=\""));
-                    dnaChain.description = product;
+                    dnaChain.description = GetValue(temp2, "/product=\"");
                 }
                 else if (sequenceType.StartsWith("rRNA"))
                 {
-                    var product = genes[i].Substring(genes[i].IndexOf("/product=\"") + "/product=\"".Length,genes[i].IndexOf("/inference=\""));
-                    dnaChain.description = product;
+                    dnaChain.description = GetValue(temp2, "/product=\"");
                 }
                 else if (sequenceType.StartsWith("/rpt_type=tandem"))
                 {
@@ -147,6 +167,18 @@ namespace LibiadaWeb.Controllers.Chains
         }*/
 
             return RedirectToAction("Result");
+        }
+
+        private static string GetValue(string[] strings, string pattern)
+        {
+            for (int i = 1; i < strings.Length; i++)
+            {
+                if (strings[i].Contains(pattern))
+                {
+                    return strings[i].Substring(strings[i].IndexOf(pattern) + pattern.Length, strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length - 1);
+                }
+            }
+            return String.Empty;
         }
 
         public ActionResult Result()

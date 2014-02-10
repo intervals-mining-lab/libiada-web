@@ -11,6 +11,7 @@
         var data = @Html.Raw(Json.Encode(ViewBag.data));
 
         MapModelFromJson($scope, data);
+        $scope.localFile = false;
     }]);
 
 </script>
@@ -18,14 +19,23 @@
 <h2>title</h2>
 @using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new
 {
+
     enctype = "multipart/form-data",
     data_ng_app = "GenesImport"
 }))
 {
     <fieldset data-ng-controller="GenesImportCtrl">
+        
         <legend>Характеристики полных цепочек</legend>
         <div class="editor-label">
             @Html.Label("Цепочка")
+        </div>
+         <div class="editor-label">
+            @Html.Label("Загружать цепочку из локального файла")
+            @Html.CheckBox("localFile", new {data_ng_model = "localFile"})
+        </div>
+        <div class="editor-field" data-ng-show="localFile">
+            <input type="file" name="file" id="file" />
         </div>
         <div class="editor-field">
             <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
@@ -36,3 +46,5 @@
         </p>
     </fieldset>
 }
+
+
