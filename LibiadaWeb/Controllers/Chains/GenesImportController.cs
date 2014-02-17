@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using LibiadaCore.Classes.Misc.Iterators;
+using LibiadaCore.Classes.Root;
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
@@ -16,6 +18,7 @@ namespace LibiadaWeb.Controllers.Chains
     {
         private readonly ElementRepository elementRepository;
         private readonly DnaChainRepository dnaChainRepository;
+        private readonly ChainRepository chainRepository;
         private readonly LibiadaWebEntities db;
 
         public GenesImportController()
@@ -23,6 +26,7 @@ namespace LibiadaWeb.Controllers.Chains
             db = new LibiadaWebEntities();
             elementRepository = new ElementRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
+            chainRepository = new ChainRepository(db);
         }
 
         //
@@ -73,7 +77,15 @@ namespace LibiadaWeb.Controllers.Chains
             string[] temp = data.Split(new[] { "FEATURES" }, StringSplitOptions.RemoveEmptyEntries);
             string information = temp[0];
             string[] genes = temp[1].Split(new[] { "gene            ", "repeat_region   " }, StringSplitOptions.RemoveEmptyEntries);
-            var coordinates = new List<int[]>();
+            var starts = new List<int>();
+            var stops = new List<int>();
+
+            HashSet<string> products = new HashSet<string>();
+            HashSet<string> geneTypes = new HashSet<string>();
+
+            BaseChain dbChain = chainRepository.ToLBaseChain(chainId);
+            String dbStringChain = dbChain.ToString();
+
             for (int i = 1; i < genes.Length; i++)
             {
                 var dnaChain = new dna_chain
@@ -85,7 +97,7 @@ namespace LibiadaWeb.Controllers.Chains
                         partial = false
                     };
 
-                String[] temp2 = genes[i].Split(new[] {'\n', '\r'});
+                String[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
                                    ? temp2[0].Split(new[] {"complement"}, StringSplitOptions.RemoveEmptyEntries)[0]
@@ -94,11 +106,8 @@ namespace LibiadaWeb.Controllers.Chains
                 String stop = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[1];
                 dnaChain.piece_position = Convert.ToInt32(start);
                 dnaChain.complement = complement;
-                coordinates.Add(new[]
-                    {
-                        Convert.ToInt32(start),
-                        Convert.ToInt32(stop)
-                    });
+                starts.Add(Convert.ToInt32(start));
+                stops.Add(Convert.ToInt32(stop));
                 string sequenceType = String.Empty;
                 for (int j = 1; j < temp2.Length; j++)
                 {
@@ -113,21 +122,47 @@ namespace LibiadaWeb.Controllers.Chains
                     dnaChain.remote_id = GetValue(temp2, "/protein_id=\"");
                     dnaChain.web_api_id = Convert.ToInt32(GetValue(temp2, "/db_xref=\"GI:"));
                     dnaChain.description = GetValue(temp2, "/product=\"");
+                    geneTypes.Add(GetValue(temp2, "/gene=\""));
+                    products.Add(dnaChain.description);
                 }
                 else if (sequenceType.StartsWith("tRNA"))
                 {
                     dnaChain.description = GetValue(temp2, "/product=\"");
+                    products.Add(dnaChain.description);
+                }
+                else if (sequenceType.StartsWith("ncRNA"))
+                {
+                    dnaChain.description = GetValue(temp2, "/note=\"");
+                    geneTypes.Add(GetValue(temp2, "/gene=\""));
+                    products.Add(dnaChain.description);
                 }
                 else if (sequenceType.StartsWith("rRNA"))
                 {
                     dnaChain.description = GetValue(temp2, "/product=\"");
+                    geneTypes.Add(GetValue(temp2, "/gene=\""));
+                    products.Add(dnaChain.description);
+                }
+                else if (sequenceType.StartsWith("tmRNA"))
+                {
+                    geneTypes.Add(GetValue(temp2, "/gene=\""));
                 }
                 else if (sequenceType.StartsWith("/rpt_type=tandem"))
                 {
 
                 }
-
+                else if (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo"))
+                {
+                    dnaChain.description = GetValue(temp2, "/note=\"");
+                }
+                else
+                {
+                    throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
+                }
             }
+            var subChains = DiffCutter.Cut(dbStringChain, new DefaultCutRule(starts, stops));
+            TempData["products"] = products.ToArray();
+            TempData["subChains"] = subChains.ToArray();
+            TempData["genes"] = geneTypes.ToArray();
 
             /*
             string[] chains = data.Split('>');
@@ -183,6 +218,10 @@ namespace LibiadaWeb.Controllers.Chains
 
         public ActionResult Result()
         {
+            ViewBag.Genes = TempData["genes"];
+            ViewBag.Products = TempData["products"];
+            ViewBag.SubChains = TempData["subChains"];
+            TempData.Keep();
             return View();
         }
     }
