@@ -1432,4 +1432,44 @@ COMMENT ON COLUMN dna_chain.complement IS 'Флаг комплементарности данной последо
 COMMENT ON COLUMN dna_chain.partial IS 'Флаг указывающий на неполноту последовательности.';
 COMMENT ON COLUMN chain.description IS 'Описание отдельной цепочки.';
 
+-- 11.02.2014
+
+-- Добавлены записи для новых типов генетических последовательностей
+-- Добавлено новое поле и таблица для более детального различения типов генетических последовательностй
+
+INSERT INTO piece_type(name, description) VALUES 'Кодирующая последовательность', 'CDS - coding DNA sequence';
+INSERT INTO piece_type(name, description) VALUES 'рибосомальная РНК', 'rRNA - ribosomal RNA';
+INSERT INTO piece_type(name, description) VALUES 'Транспортная РНК', 'tRNA - transfer RNA';
+
+CREATE TABLE product
+(
+  id serial NOT NULL, 
+  name character varying(100), 
+  description text, 
+  piece_type_id integer NOT NULL, 
+  CONSTRAINT pk_product PRIMARY KEY (id),
+  CONSTRAINT fk_product_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT uk_product_name UNIQUE (name)
+);
+
+COMMENT ON TABLE product IS 'Таблица с перечнем типов генетических последовательностей.';
+COMMENT ON COLUMN product.id IS 'Уникальный внутренний идентификатор.';
+COMMENT ON COLUMN product.name IS 'Название.';
+COMMENT ON COLUMN product.description IS 'Описание.';
+COMMENT ON COLUMN product.piece_type_id IS 'Соответствующий данному типу последовательности тип фрагмента (тРНК, рРНК, ген, и т.д.).';
+
+CREATE INDEX ix_product_id ON product USING btree (id);
+COMMENT ON INDEX ix_product_id IS 'Индкс первичного ключа таблицы product.';
+
+CREATE INDEX ix_product_piece_type ON product USING btree (piece_type_id);
+COMMENT ON INDEX ix_product_piece_type IS 'Индекс внешнего ключа таблицы product.';
+
+ALTER TABLE dna_chain ADD COLUMN product_id integer;
+
+COMMENT ON COLUMN dna_chain.product_id IS 'Тип генетической последовательности.';
+
+ALTER TABLE dna_chain ADD CONSTRAINT fk_dna_chain_product FOREIGN KEY (product_id) REFERENCES product (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+COMMIT;
+
 COMMIT;

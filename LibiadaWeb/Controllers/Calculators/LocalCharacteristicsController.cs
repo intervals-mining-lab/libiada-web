@@ -16,10 +16,15 @@ namespace LibiadaWeb.Controllers.Calculators
     public class LocalCharacteristicsController : Controller
     {
         private readonly LibiadaWebEntities db;
+
         private readonly MatterRepository matterRepository;
+
         private readonly CharacteristicTypeRepository characteristicRepository;
+
         private readonly NotationRepository notationRepository;
+
         private readonly LinkRepository linkRepository;
+
         private readonly ChainRepository chainRepository;
 
 
@@ -54,13 +59,38 @@ namespace LibiadaWeb.Controllers.Calculators
         }
 
         [HttpPost]
-        public ActionResult Index(long[] matterIds, int[] characteristicIds, int[] linkIds, int languageId, int notationId, int length,
-                                  int step, int startCoordinate, int beginOfChain, int endOfChain, bool isDelta, bool isFurie, bool isGrowingWindow, bool isMoveCoordinate, bool isSetBeginAndEnd, bool isAutocorelation)
+        public ActionResult Index(
+            long[] matterIds,
+            int[] characteristicIds,
+            int[] linkIds,
+            int languageId,
+            int notationId,
+            int length,
+            int step,
+            int startCoordinate,
+            int beginOfChain,
+            int endOfChain,
+            bool isDelta,
+            bool isFurie,
+            bool isGrowingWindow,
+            bool isMoveCoordinate,
+            bool isSetBeginAndEnd,
+            bool isAutocorelation)
         {
 
-            List<List<List<Double>>> characteristics = CalculateCharacteristics(matterIds, isSetBeginAndEnd, isGrowingWindow,
-                                             notationId, languageId, length, characteristicIds, linkIds, step, beginOfChain, endOfChain);
-   
+            List<List<List<Double>>> characteristics = CalculateCharacteristics(
+                matterIds,
+                isSetBeginAndEnd,
+                isGrowingWindow,
+                notationId,
+                languageId,
+                length,
+                characteristicIds,
+                linkIds,
+                step,
+                beginOfChain,
+                endOfChain);
+
             var chainNames = new List<string>();
             var characteristicNames = new List<string>();
             var partNames = new List<List<String>>();
@@ -75,9 +105,10 @@ namespace LibiadaWeb.Controllers.Calculators
                 long chainId;
                 if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                 {
-                    chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
-                                l.notation_id == notationId
-                                && l.language_id == languageId).id;
+                    chainId =
+                        db.literature_chain.Single(
+                            l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId)
+                            .id;
                 }
                 else
                 {
@@ -85,25 +116,34 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
 
                 Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
-                
+
                 CutRule cutRule;
                 if (isSetBeginAndEnd)
                 {
 
-                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRuleWithBeginEnd(endOfChain - beginOfChain, step, beginOfChain) : new SimpleCutRuleWithBeginEnd(endOfChain - beginOfChain, step, length, beginOfChain);
+                    cutRule = isGrowingWindow
+                                  ? (CutRule)
+                                    new CutRuleWithShiftedAndFixedStart(endOfChain - beginOfChain, step, beginOfChain)
+                                  : new SimpleCutRuleWithShiftedStart(
+                                        endOfChain - beginOfChain,
+                                        step,
+                                        length,
+                                        beginOfChain);
                 }
                 else
                 {
-                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                    cutRule = isGrowingWindow
+                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.Length, step)
+                                  : new SimpleCutRule(libiadaChain.Length, step, length);
                 }
                 CutRuleIterator iter = cutRule.GetIterator();
-               
+
                 while (iter.Next())
                 {
                     var tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.GetStopPosition() - iter.GetStartPosition());
+                    tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
 
-                    for (int i = 0; iter.GetStartPosition() + i < iter.GetStopPosition(); i++)
+                    for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                     {
                         tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
                     }
@@ -111,8 +151,18 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
                 if (isMoveCoordinate)
                 {
-                    List<List<List<Double>>> characteristicsParts = CalculateCharacteristics(matterIds, isSetBeginAndEnd,isGrowingWindow,
-                                             notationId, languageId, startCoordinate, characteristicIds, linkIds, step, beginOfChain, endOfChain);
+                    List<List<List<Double>>> characteristicsParts = CalculateCharacteristics(
+                        matterIds,
+                        isSetBeginAndEnd,
+                        isGrowingWindow,
+                        notationId,
+                        languageId,
+                        startCoordinate,
+                        characteristicIds,
+                        linkIds,
+                        step,
+                        beginOfChain,
+                        endOfChain);
                     for (int i = 0; i < characteristics.Count; i++)
                     {
                         for (int j = 0; j < characteristics[i].Count; j++)
@@ -123,7 +173,7 @@ namespace LibiadaWeb.Controllers.Calculators
                             }
                         }
                     }
-                    
+
                 }
 
                 if (isDelta)
@@ -171,7 +221,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         Complex[] data = FFT.Fft(comp.ToArray()); //вернёт массив
 
                         //переводим в массив double
-                        for (int g = 0; g < characteristics.Last().Count; g++ )
+                        for (int g = 0; g < characteristics.Last().Count; g++)
                         {
                             characteristics.Last()[g][i] = data[g].Real;
                         }
@@ -202,8 +252,9 @@ namespace LibiadaWeb.Controllers.Calculators
             {
                 int characteristicId = characteristicIds[i];
                 int linkId = linkIds[i];
-                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                            db.link.Single(l => l.id == linkId).name);
+                characteristicNames.Add(
+                    db.characteristic_type.Single(c => c.id == characteristicId).name + " "
+                    + db.link.Single(l => l.id == linkId).name);
             }
 
             TempData["characteristics"] = characteristics;
@@ -215,9 +266,18 @@ namespace LibiadaWeb.Controllers.Calculators
             return RedirectToAction("Result");
         }
 
-        private List<List<List<Double>>> CalculateCharacteristics(long[] matterIds, bool isSetBeginAndEnd,
-                                                                  bool isGrowingWindow, int notationId, int languageId,
-                                                                  int length, int[] characteristicIds, int[] linkIds, int step, int beginOfChain, int endOfChain)
+        private List<List<List<Double>>> CalculateCharacteristics(
+            long[] matterIds,
+            bool isSetBeginAndEnd,
+            bool isGrowingWindow,
+            int notationId,
+            int languageId,
+            int length,
+            int[] characteristicIds,
+            int[] linkIds,
+            int step,
+            int beginOfChain,
+            int endOfChain)
         {
             var characteristics = new List<List<List<Double>>>();
             for (int k = 0; k < matterIds.Length; k++)
@@ -228,9 +288,10 @@ namespace LibiadaWeb.Controllers.Calculators
                 long chainId;
                 if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                 {
-                    chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
-                                                              l.notation_id == notationId
-                                                              && l.language_id == languageId).id;
+                    chainId =
+                        db.literature_chain.Single(
+                            l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId)
+                            .id;
                 }
                 else
                 {
@@ -243,22 +304,31 @@ namespace LibiadaWeb.Controllers.Calculators
                 if (isSetBeginAndEnd)
                 {
 
-                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRuleWithBeginEnd(endOfChain - beginOfChain, step, beginOfChain) : new SimpleCutRuleWithBeginEnd(endOfChain - beginOfChain, step, length, beginOfChain);
+                    cutRule = isGrowingWindow
+                                  ? (CutRule)
+                                    new CutRuleWithShiftedAndFixedStart(endOfChain - beginOfChain, step, beginOfChain)
+                                  : new SimpleCutRuleWithShiftedStart(
+                                        endOfChain - beginOfChain,
+                                        step,
+                                        length,
+                                        beginOfChain);
                 }
                 else
                 {
-                    cutRule = isGrowingWindow ? (CutRule)new FromFixStartCutRule(libiadaChain.Length, step) : new SimpleCutRule(libiadaChain.Length, step, length);
+                    cutRule = isGrowingWindow
+                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.Length, step)
+                                  : new SimpleCutRule(libiadaChain.Length, step, length);
                 }
                 CutRuleIterator iter = cutRule.GetIterator();
-               
+
 
                 while (iter.Next())
                 {
                     characteristics.Last().Add(new List<Double>());
                     var tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.GetStopPosition() - iter.GetStartPosition());
+                    tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
 
-                    for (int i = 0; iter.GetStartPosition() + i < iter.GetStopPosition(); i++)
+                    for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                     {
                         tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
                     }
@@ -269,7 +339,7 @@ namespace LibiadaWeb.Controllers.Calculators
                         String className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        Link link = (Link) db.link.Single(l => l.id == linkId).id;
+                        Link link = (Link)db.link.Single(l => l.id == linkId).id;
                         characteristics.Last().Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
@@ -286,12 +356,8 @@ namespace LibiadaWeb.Controllers.Calculators
             var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicIds.Length; i++)
             {
-                characteristicsList.Add(new SelectListItem
-                {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
+                characteristicsList.Add(
+                    new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
             }
             ViewBag.characteristicIds = new List<int>(characteristicIds);
             ViewBag.characteristicsList = characteristicsList;
@@ -301,7 +367,7 @@ namespace LibiadaWeb.Controllers.Calculators
             ViewBag.characteristicNames = characteristicNames;
 
             TempData.Keep();
-            
+
             return View();
         }
     }
