@@ -78,13 +78,13 @@ namespace LibiadaWeb.Controllers.Chains
             }
             else
             {
-                if (libiadaChain.Alphabet.Power != dbChain.Alphabet.Power)
+                if (libiadaChain.Alphabet.Cardinality != dbChain.Alphabet.Cardinality)
                 {
-                    TempData["message"] = " Размеры алфавитов не совпадают. В базе - " + dbChain.Alphabet.Power 
-                                          + ". В файле - " + libiadaChain.Alphabet.Power;
+                    TempData["message"] = " Размеры алфавитов не совпадают. В базе - " + dbChain.Alphabet.Cardinality 
+                                          + ". В файле - " + libiadaChain.Alphabet.Cardinality;
                     return RedirectToAction("Result");
                 }
-                for (int i = 0; i < libiadaChain.Alphabet.Power; i++)
+                for (int i = 0; i < libiadaChain.Alphabet.Cardinality; i++)
                 {
                     if (!libiadaChain.Alphabet[i].ToString().Equals(dbChain.Alphabet[i].ToString()))
                     {
@@ -93,8 +93,6 @@ namespace LibiadaWeb.Controllers.Chains
                         return RedirectToAction("Result");
                     }
                 }
-                
-                
                 if (libiadaChain.Length != dbChain.Length)
                 {
                     TempData["message"] = "Длина цепочки в базе " + dbChain.Length + 

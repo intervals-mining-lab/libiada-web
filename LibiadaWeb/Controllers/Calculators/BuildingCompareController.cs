@@ -63,10 +63,10 @@ namespace LibiadaWeb.Controllers.Calculators
 
                     if (congeneric)
                     {
-                        for (int a = 0; a < tempChain1.Alphabet.Power; a++)
+                        for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
                         {
                             CongenericChain firstChain = tempChain1.CongenericChain(a);
-                            for (int b = 0; b < tempChain2.Alphabet.Power; b++)
+                            for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
                             {
 
                                 CongenericChain secondChain = tempChain2.CongenericChain(b);

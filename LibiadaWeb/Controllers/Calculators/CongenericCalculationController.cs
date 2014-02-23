@@ -103,10 +103,10 @@ namespace LibiadaWeb.Controllers.Calculators
                     int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_id == linkId);
-                    if (calculated < libiadaChain.Alphabet.Power)
+                    if (calculated < libiadaChain.Alphabet.Cardinality)
                     {
                         
-                        for (int j = 0; j < libiadaChain.Alphabet.Power; j++)
+                        for (int j = 0; j < libiadaChain.Alphabet.Cardinality; j++)
                         {
                             long elementId = chainElements[j];
 
@@ -135,7 +135,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     }
 
                     //Перебор всех элементов алфавита; третий уровень массива характеристик
-                    for (int d = 0; d < libiadaChain.Alphabet.Power; d++)
+                    for (int d = 0; d < libiadaChain.Alphabet.Cardinality; d++)
                     {
                         long elementId = chainElements[d];
 
@@ -162,14 +162,14 @@ namespace LibiadaWeb.Controllers.Calculators
                         teoreticalRanks[w].Add(new List<double>());
                         ICalculator countCalculator = CalculatorsFactory.Create("Count");
                         List<int> counts = new List<int>();
-                        for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                        for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
                         {
                             counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                         }
 
                         ICalculator frequencyCalculator = CalculatorsFactory.Create("Probability");
                         List<double> frequency = new List<double>();
-                        for (int f = 0; f < libiadaChain.Alphabet.Power; f++)
+                        for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
                         {
                             frequency.Add(frequencyCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                         }

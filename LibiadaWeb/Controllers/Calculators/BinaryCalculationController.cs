@@ -101,7 +101,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                 .OrderBy(b => b.first_element_id)
                                 .ToList();
 
-                for (int l = 0; l < currentChain.Alphabet.Power; l++)
+                for (int l = 0; l < currentChain.Alphabet.Cardinality; l++)
                 {
                     long elementId = filteredResult1[l].second_element_id;
                     elements.Add(db.element.Single(e => e.id == elementId));
@@ -180,12 +180,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                       b.characteristic_type_id == characteristicId &&
                                                                       b.link_id == linkId && b.first_element_id == wordId);
             List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
-            if (calculatedCount < currentChain.Alphabet.Power)
+            if (calculatedCount < currentChain.Alphabet.Cardinality)
             {
                 //TODO: проверить что + - 1 нигде к индексам не надо добавлять
                 
                 int firstElementNumber = chainElements.IndexOf(wordId);
-                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
                 {
                     long secondElementId = chainElements[i];
                     if (!db.binary_characteristic.Any(b =>
@@ -211,10 +211,10 @@ namespace LibiadaWeb.Controllers.Calculators
                                                                   b.characteristic_type_id == characteristicId &&
                                                                   b.link_id == linkId && b.second_element_id == wordId);
 
-            if (calculatedCount < currentChain.Alphabet.Power)
+            if (calculatedCount < currentChain.Alphabet.Cardinality)
             {
                 int secondElementNumber = chainElements.IndexOf(wordId);
-                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
                 {
                     long firstElementId = chainElements[i];
                     if (!db.binary_characteristic.Any(b =>
@@ -241,12 +241,12 @@ namespace LibiadaWeb.Controllers.Calculators
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                  b.characteristic_type_id == characteristicId &&
                                                                  b.link_id == linkId);
-            if (calculatedCount < currentChain.Alphabet.Power*currentChain.Alphabet.Power)
+            if (calculatedCount < currentChain.Alphabet.Cardinality*currentChain.Alphabet.Cardinality)
             {
                 List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
-                for (int i = 0; i < currentChain.Alphabet.Power; i++)
+                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
                 {
-                    for (int j = 0; j < currentChain.Alphabet.Power; j++)
+                    for (int j = 0; j < currentChain.Alphabet.Cardinality; j++)
                     {
                         long firstElementId = chainElements[i];
                         long secondElementId = chainElements[i];
@@ -275,7 +275,7 @@ namespace LibiadaWeb.Controllers.Calculators
             List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             //считаем частоты слов
             List<KeyValuePair<IBaseObject, double>> frequences = new List<KeyValuePair<IBaseObject, double>>();
-            for (int f = 0; f < currentChain.Alphabet.Power; f++)
+            for (int f = 0; f < currentChain.Alphabet.Cardinality; f++)
             {
                 Probability calc = new Probability();
                 frequences.Add(new KeyValuePair<IBaseObject, double>(currentChain.Alphabet[f],

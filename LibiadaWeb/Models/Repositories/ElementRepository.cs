@@ -79,7 +79,7 @@ namespace LibiadaWeb.Models.Repositories
 
         public bool ElementsInDb(Alphabet alphabet, int notationId)
         {
-            for (int i = 0; i < alphabet.Power; i++)
+            for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 if (!ElementInDb(alphabet[i], notationId))
                 {
@@ -91,7 +91,7 @@ namespace LibiadaWeb.Models.Repositories
 
         private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
         {
-            for (int j = 0; j < libiadaAlphabet.Power; j++)
+            for (int j = 0; j < libiadaAlphabet.Cardinality; j++)
             {
                 String strElem = libiadaAlphabet[j].ToString();
 
@@ -124,8 +124,8 @@ namespace LibiadaWeb.Models.Repositories
                 }
             }
 
-            var elementIds = new long[alphabet.Power];
-            for (int i = 0; i < alphabet.Power; i++)
+            var elementIds = new long[alphabet.Cardinality];
+            for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 String stringElement = alphabet[i].ToString();
                 elementIds[i] = db.element.Single(e => e.notation_id == notationId 
