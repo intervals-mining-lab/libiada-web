@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.TheoryOfSet;
+
 using Npgsql;
 
 namespace LibiadaWeb.Models.Repositories.Chains

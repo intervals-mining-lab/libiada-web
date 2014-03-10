@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Web.Mvc;
 using LibiadaCore.Classes.Root;
 using LibiadaCore.Classes.Root.SimpleTypes;
-using LibiadaCore.Classes.TheoryOfSet;
 
 namespace LibiadaWeb.Models.Repositories
 {

@@ -84,7 +84,7 @@ namespace LibiadaWeb.Controllers.Chains
             HashSet<string> geneTypes = new HashSet<string>();
 
             BaseChain dbChain = chainRepository.ToLBaseChain(chainId);
-            String dbStringChain = dbChain.ToString();
+            string dbStringChain = dbChain.ToString();
 
             for (int i = 1; i < genes.Length; i++)
             {
@@ -97,18 +97,18 @@ namespace LibiadaWeb.Controllers.Chains
                         partial = false
                     };
 
-                String[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
                                    ? temp2[0].Split(new[] {"complement"}, StringSplitOptions.RemoveEmptyEntries)[0]
                                    : temp2[0];
                 string start = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[0];
-                String stop = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[1];
+                string stop = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[1];
                 dnaChain.piece_position = Convert.ToInt32(start);
                 dnaChain.complement = complement;
                 starts.Add(Convert.ToInt32(start));
                 stops.Add(Convert.ToInt32(stop));
-                string sequenceType = String.Empty;
+                string sequenceType = string.Empty;
                 for (int j = 1; j < temp2.Length; j++)
                 {
                     if (temp2[j].Contains(start + ".." + stop))
@@ -121,24 +121,24 @@ namespace LibiadaWeb.Controllers.Chains
                 {
                     dnaChain.remote_id = GetValue(temp2, "/protein_id=\"");
                     dnaChain.web_api_id = Convert.ToInt32(GetValue(temp2, "/db_xref=\"GI:"));
-                    dnaChain.description = GetValue(temp2, "/product=\"");
+                    dnaChain.description = GetValue(temp2, "/product=\"", "\"");
                     geneTypes.Add(GetValue(temp2, "/gene=\""));
                     products.Add(dnaChain.description);
                 }
                 else if (sequenceType.StartsWith("tRNA"))
                 {
-                    dnaChain.description = GetValue(temp2, "/product=\"");
+                    dnaChain.description = GetValue(temp2, "/product=\"", "\"");
                     products.Add(dnaChain.description);
                 }
                 else if (sequenceType.StartsWith("ncRNA"))
                 {
                     dnaChain.description = GetValue(temp2, "/note=\"");
                     geneTypes.Add(GetValue(temp2, "/gene=\""));
-                    products.Add(dnaChain.description);
+                    //products.Add(dnaChain.description);
                 }
                 else if (sequenceType.StartsWith("rRNA"))
                 {
-                    dnaChain.description = GetValue(temp2, "/product=\"");
+                    dnaChain.description = GetValue(temp2, "/product=\"", "\"");
                     geneTypes.Add(GetValue(temp2, "/gene=\""));
                     products.Add(dnaChain.description);
                 }
@@ -159,9 +159,9 @@ namespace LibiadaWeb.Controllers.Chains
                     throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                 }
             }
-            var subChains = DiffCutter.Cut(dbStringChain, new DefaultCutRule(starts, stops));
+           // var subChains = DiffCutter.Cut(dbStringChain, new DefaultCutRule(starts, stops));
             TempData["products"] = products.ToArray();
-            TempData["subChains"] = subChains.ToArray();
+            //TempData["subChains"] = subChains.ToArray();
             TempData["genes"] = geneTypes.ToArray();
 
             /*
@@ -213,7 +213,42 @@ namespace LibiadaWeb.Controllers.Chains
                     return strings[i].Substring(strings[i].IndexOf(pattern) + pattern.Length, strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length - 1);
                 }
             }
-            return String.Empty;
+            return string.Empty;
+        }
+
+        private static string GetValue(string[] strings, string pattern, string endPattern)
+        {
+            string result = String.Empty;
+            for (int i = 1; i < strings.Length; i++)
+            {
+                if (strings[i].Contains(pattern))
+                {
+                    result += strings[i].Substring(
+                        strings[i].IndexOf(pattern) + pattern.Length,
+                        strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length);
+                    if (!strings[i].EndsWith(endPattern))
+                    {
+                        for (int j = i + 1; j < strings.Length; j++)
+                        {
+                            if (!strings[j].Contains(endPattern))
+                            {
+                                result += strings[j].Trim();
+                            }
+                            else
+                            {
+                                result += strings[j].Substring(0, strings[j].Length - 1).Trim();
+                                return result;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return result.Substring(0, result.Length - 1);
+                    }
+                    
+                }
+            }
+            return string.Empty;
         }
 
         public ActionResult Result()

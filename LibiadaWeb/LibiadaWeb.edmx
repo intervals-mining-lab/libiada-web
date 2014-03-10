@@ -17,6 +17,7 @@
     <EntitySet Name="matter" EntityType="LibiadaWebModel.Store.matter" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.Store.nature" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="notation" EntityType="LibiadaWebModel.Store.notation" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    <EntitySet Name="product" EntityType="LibiadaWebModel.Store.product" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.Store.piece_type" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.Store.remote_db" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.Store.fmotiv" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -79,6 +80,10 @@
       <End Role="notation" EntitySet="notation" />
       <End Role="dna_chain" EntitySet="dna_chain" />
     </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_product" Association="LibiadaWebModel.Store.fk_dna_chain_product">
+      <End Role="product" EntitySet="product" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
     <AssociationSet Name="fk_dna_chain_piece_type" Association="LibiadaWebModel.Store.fk_dna_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="dna_chain" EntitySet="dna_chain" />
@@ -134,6 +139,10 @@
     <AssociationSet Name="fk_notation_nature" Association="LibiadaWebModel.Store.fk_notation_nature">
       <End Role="nature" EntitySet="nature" />
       <End Role="notation" EntitySet="notation" />
+    </AssociationSet>
+    <AssociationSet Name="fk_product_piece_type" Association="LibiadaWebModel.Store.fk_product_piece_type">
+      <End Role="product" EntitySet="product" />
+      <End Role="piece_type" EntitySet="piece_type" />
     </AssociationSet>
     <AssociationSet Name="fk_piece_type_nature" Association="LibiadaWebModel.Store.fk_piece_type_nature">
       <End Role="nature" EntitySet="nature" />
@@ -287,6 +296,7 @@
     </Key>
     <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
     <Property Name="notation_id" Type="int4" Nullable="false" />
+    <Property Name="product_id" Type="int4" />
     <Property Name="created" Type="timestamptz" Nullable="false" />
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
@@ -374,6 +384,15 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="text" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="description" Type="text" />
+    <Property Name="piece_type_id" Type="int4" Nullable="false" />
   </EntityType>
   <EntityType Name="piece_type">
     <Key>
@@ -691,6 +710,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_dna_chain_product">
+    <End Role="product" Type="LibiadaWebModel.Store.product" Multiplicity="1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_dna_chain_piece_type">
     <End Role="piece_type" Type="LibiadaWebModel.Store.piece_type" Multiplicity="1" />
     <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
@@ -868,6 +899,18 @@
       </Principal>
       <Dependent Role="notation">
         <PropertyRef Name="nature_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_product_piece_type">
+    <End Role="piece_type" Type="LibiadaWebModel.Store.piece_type" Multiplicity="1" />
+    <End Role="product" Type="LibiadaWebModel.Store.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="piece_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="piece_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1343,6 +1386,7 @@
     <EntitySet Name="matter" EntityType="LibiadaWebModel.matter" />
     <EntitySet Name="nature" EntityType="LibiadaWebModel.nature" />
     <EntitySet Name="notation" EntityType="LibiadaWebModel.notation" />
+    <EntitySet Name="product" EntityType="LibiadaWebModel.product" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.fmotiv" />
@@ -1404,6 +1448,10 @@
       <End Role="notation" EntitySet="notation" />
       <End Role="dna_chain" EntitySet="dna_chain" />
     </AssociationSet>
+    <AssociationSet Name="fk_dna_chain_product" Association="LibiadaWebModel.fk_dna_chain_product">
+      <End Role="product" EntitySet="product" />
+      <End Role="dna_chain" EntitySet="dna_chain" />
+    </AssociationSet>
     <AssociationSet Name="fk_dna_chain_piece_type" Association="LibiadaWebModel.fk_dna_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
       <End Role="dna_chain" EntitySet="dna_chain" />
@@ -1459,6 +1507,10 @@
     <AssociationSet Name="fk_notation_nature" Association="LibiadaWebModel.fk_notation_nature">
       <End Role="nature" EntitySet="nature" />
       <End Role="notation" EntitySet="notation" />
+    </AssociationSet>
+    <AssociationSet Name="fk_product_piece_type" Association="LibiadaWebModel.fk_product_piece_type">
+      <End Role="product" EntitySet="product" />
+      <End Role="piece_type" EntitySet="piece_type" />
     </AssociationSet>
     <AssociationSet Name="fk_piece_type_nature" Association="LibiadaWebModel.fk_piece_type_nature">
       <End Role="nature" EntitySet="nature" />
@@ -1730,6 +1782,7 @@
     </Key>
     <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
     <Property Name="notation_id" Type="Int32" Nullable="false" />
+    <Property Name="product_id" Type="Int32" />
     <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
@@ -1747,6 +1800,7 @@
     <NavigationProperty Name="characteristic" Relationship="LibiadaWebModel.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_dna_chain_notation" FromRole="dna_chain" ToRole="notation" />
+    <NavigationProperty Name="product" Relationship="LibiadaWebModel.fk_dna_chain_product" FromRole="dna_chain" ToRole="product" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_dna_chain_piece_type" FromRole="dna_chain" ToRole="piece_type" />
     <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_dna_chain_remote_db" FromRole="dna_chain" ToRole="remote_db" />
   </EntityType>
@@ -1857,6 +1911,18 @@
     <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_measure_notation" FromRole="notation" ToRole="measure" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_notation" FromRole="notation" ToRole="music_chain" />
     <NavigationProperty Name="note" Relationship="LibiadaWebModel.fk_note_notation" FromRole="notation" ToRole="note" />
+  </EntityType>
+  <EntityType Name="product">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+    <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+    
+    <NavigationProperty Name="dna_chain" Relationship="LibiadaWebModel.fk_dna_chain_product" FromRole="product" ToRole="dna_chain" />
+    <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_product_piece_type" FromRole="product" ToRole="piece_type" />
   </EntityType>
   <EntityType Name="piece_type">
     <Key>
@@ -2328,6 +2394,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="fk_dna_chain_product">
+    <End Role="product" Type="LibiadaWebModel.product" Multiplicity="0..1" />
+    <End Role="dna_chain" Type="LibiadaWebModel.dna_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="product">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="dna_chain">
+        <PropertyRef Name="product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="fk_dna_chain_piece_type">
     <End Role="piece_type" Type="LibiadaWebModel.piece_type" Multiplicity="1" />
     <End Role="dna_chain" Type="LibiadaWebModel.dna_chain" Multiplicity="*" />
@@ -2505,6 +2583,18 @@
       </Principal>
       <Dependent Role="notation">
         <PropertyRef Name="nature_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_product_piece_type">
+    <End Role="piece_type" Type="LibiadaWebModel.piece_type" Multiplicity="1" />
+    <End Role="product" Type="LibiadaWebModel.product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="piece_type">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="product">
+        <PropertyRef Name="piece_type_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
