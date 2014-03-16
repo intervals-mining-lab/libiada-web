@@ -1437,9 +1437,9 @@ COMMENT ON COLUMN chain.description IS 'Описание отдельной цепочки.';
 -- Добавлены записи для новых типов генетических последовательностей
 -- Добавлено новое поле и таблица для более детального различения типов генетических последовательностй
 
-INSERT INTO piece_type(name, description) VALUES 'Кодирующая последовательность', 'CDS - coding DNA sequence';
-INSERT INTO piece_type(name, description) VALUES 'рибосомальная РНК', 'rRNA - ribosomal RNA';
-INSERT INTO piece_type(name, description) VALUES 'Транспортная РНК', 'tRNA - transfer RNA';
+INSERT INTO piece_type(name, description, nature_id) VALUES ('Кодирующая последовательность', 'CDS - coding DNA sequence', 1);
+INSERT INTO piece_type(name, description, nature_id) VALUES ('рибосомальная РНК', 'rRNA - ribosomal RNA', 1);
+INSERT INTO piece_type(name, description, nature_id) VALUES ('Транспортная РНК', 'tRNA - transfer RNA', 1);
 
 CREATE TABLE product
 (
@@ -1469,7 +1469,5 @@ ALTER TABLE dna_chain ADD COLUMN product_id integer;
 COMMENT ON COLUMN dna_chain.product_id IS 'Тип генетической последовательности.';
 
 ALTER TABLE dna_chain ADD CONSTRAINT fk_dna_chain_product FOREIGN KEY (product_id) REFERENCES product (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
-
-COMMIT;
 
 COMMIT;

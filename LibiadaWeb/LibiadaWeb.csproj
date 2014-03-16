@@ -10,7 +10,6 @@
     <ProjectGuid>{924875CB-7F82-4113-B42A-374B74CB641E}</ProjectGuid>
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-	<RunCodeAnalysis>false</RunCodeAnalysis>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LibiadaWeb</RootNamespace>
     <AssemblyName>LibiadaWeb</AssemblyName>

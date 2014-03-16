@@ -1,4 +1,4 @@
---27.01.2014 2:02:54
+--16.03.2014 22:04:38
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -285,7 +285,7 @@ CREATE FUNCTION trigger_characteristics_link() RETURNS trigger
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	var linkOk = plv8.execute('SELECT linkability=($1 IS NOT NULL) AS result FROM characteristic_type WHERE id = $2;', [NEW.link_id, NEW.characteristic_type_id])[0].result;
+	var linkOk = plv8.execute('SELECT linkable=($1 IS NOT NULL) AS result FROM characteristic_type WHERE id = $2;', [NEW.link_id, NEW.characteristic_type_id])[0].result;
 	if(linkOk){
 		return NEW;
 	}
@@ -294,7 +294,8 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 	}
 } else{
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id и link_id');
-}$_$;
+}
+$_$;
 
 COMMENT ON FUNCTION trigger_characteristics_link() IS 'Триггерная функция, проверяющая что у характеристики не задана привязка если она непривязываема, и задана любая привязка если она необходима.';
 
@@ -328,7 +329,7 @@ CREATE FUNCTION trigger_check_applicability() RETURNS trigger
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	var applicabilityOk = plv8.execute('SELECT ', ARGV[0], ' AS result FROM characteristic_type WHERE id = $1;', [NEW.characteristic_type_id])[0].result;
+	var applicabilityOk = plv8.execute('SELECT ' + TG_ARGV[0] + ' AS result FROM characteristic_type WHERE id = $1;', [NEW.characteristic_type_id])[0].result;
 	if(applicabilityOk){
 		return NEW;
 	}
@@ -337,7 +338,8 @@ if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
 	}
 } else{
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
-}$_$;
+}
+$_$;
 
 COMMENT ON FUNCTION trigger_check_applicability() IS 'Триггерная функция, проверяющая, что характеристика может быть вычислена для такого типа цепочки';
 
@@ -512,7 +514,7 @@ SET default_with_oids = false;
 CREATE TABLE accidental (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE accidental IS 'Справочная таблица знаков альтерации.';
@@ -579,7 +581,7 @@ ALTER SEQUENCE binary_characteristic_id_seq OWNED BY binary_characteristic.id;
 CREATE TABLE element (
     id bigint NOT NULL,
     value character varying(255),
-    description character varying(255),
+    description text,
     name character varying(255),
     notation_id integer NOT NULL,
     created timestamp with time zone DEFAULT now() NOT NULL,
@@ -624,6 +626,7 @@ CREATE TABLE chain (
     remote_id character varying(255),
     remote_db_id integer,
     modified timestamp with time zone DEFAULT now() NOT NULL,
+    description text,
     CONSTRAINT chk_remote_id CHECK ((((remote_db_id IS NULL) AND (remote_id IS NULL)) OR ((remote_db_id IS NOT NULL) AND (remote_id IS NOT NULL))))
 );
 
@@ -652,6 +655,8 @@ COMMENT ON COLUMN chain.remote_id IS 'id цепочки в удалённой Б
 COMMENT ON COLUMN chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
 
 COMMENT ON COLUMN chain.modified IS 'Дата и время последнего изменения записи в таблице.';
+
+COMMENT ON COLUMN chain.description IS 'Описание отдельной цепочки.';
 
 CREATE TABLE chain_key (
     id bigint NOT NULL
@@ -693,7 +698,7 @@ COMMENT ON COLUMN characteristic.modified IS 'Дата и время после�
 CREATE TABLE characteristic_group (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE characteristic_group IS 'Справочник принадлежности характеристик той или иной группе.';
@@ -716,7 +721,7 @@ ALTER SEQUENCE characteristic_group_id_seq OWNED BY characteristic_group.id;
 CREATE TABLE characteristic_type (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255),
+    description text,
     characteristic_group_id integer,
     class_name character varying(255) NOT NULL,
     linkable boolean DEFAULT true NOT NULL,
@@ -810,7 +815,10 @@ ALTER SEQUENCE congeneric_characteristic_id_seq OWNED BY congeneric_characterist
 
 CREATE TABLE dna_chain (
     fasta_header character varying(255),
-    web_api_id integer
+    web_api_id integer,
+    complement boolean DEFAULT false NOT NULL,
+    partial boolean DEFAULT false NOT NULL,
+    product_id integer
 )
 INHERITS (chain);
 
@@ -842,6 +850,12 @@ COMMENT ON COLUMN dna_chain.fasta_header IS 'Заголовок fasta файла
 
 COMMENT ON COLUMN dna_chain.web_api_id IS 'id цепочки в удалённой БД.';
 
+COMMENT ON COLUMN dna_chain.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
+
+COMMENT ON COLUMN dna_chain.partial IS 'Флаг указывающий на неполноту последовательности.';
+
+COMMENT ON COLUMN dna_chain.product_id IS 'Тип генетической последовательности.';
+
 CREATE TABLE element_key (
     id bigint NOT NULL
 );
@@ -855,7 +869,7 @@ CREATE TABLE fmotiv (
     notation_id integer DEFAULT 6,
     matter_id bigint DEFAULT 508,
     value character varying(255),
-    description character varying(255),
+    description text,
     name character varying(255),
     fmotiv_type_id integer NOT NULL
 )
@@ -896,7 +910,7 @@ COMMENT ON COLUMN fmotiv.fmotiv_type_id IS 'Тип Ф-мотива.';
 CREATE TABLE fmotiv_type (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE fmotiv_type IS 'Справочная таблица типов ф-мотивов.';
@@ -942,7 +956,7 @@ ALTER SEQUENCE instrument_id_seq OWNED BY instrument.id;
 CREATE TABLE language (
     id integer NOT NULL,
     name character varying(100) NOT NULL,
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE language IS 'Язык литературных текстов.';
@@ -965,7 +979,7 @@ ALTER SEQUENCE language_id_seq OWNED BY language.id;
 CREATE TABLE link (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE link IS 'Таблица видов привязки.';
@@ -1023,7 +1037,7 @@ CREATE TABLE matter (
     id bigint NOT NULL,
     name character varying(255) NOT NULL,
     nature_id integer NOT NULL,
-    description character varying(255),
+    description text,
     created timestamp with time zone DEFAULT now() NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL
 );
@@ -1056,7 +1070,7 @@ CREATE TABLE measure (
     notation_id integer DEFAULT 7,
     matter_id bigint DEFAULT 509,
     value character varying(255),
-    description character varying(255),
+    description text,
     name character varying(255),
     beats integer NOT NULL,
     beatbase integer NOT NULL,
@@ -1137,7 +1151,7 @@ COMMENT ON COLUMN music_chain.remote_db_id IS 'id удалённой базы д
 CREATE TABLE nature (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE nature IS 'Список возможной природы объектов исследований.';
@@ -1160,7 +1174,7 @@ ALTER SEQUENCE nature_id_seq OWNED BY nature.id;
 CREATE TABLE notation (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255),
+    description text,
     nature_id integer NOT NULL
 );
 
@@ -1231,7 +1245,7 @@ COMMENT ON COLUMN note.tie_id IS 'Лига.';
 CREATE TABLE note_symbol (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE note_symbol IS 'Справочная таблица буквенных обозначений нот.';
@@ -1254,7 +1268,7 @@ ALTER SEQUENCE note_symbol_id_seq OWNED BY note_symbol.id;
 CREATE TABLE piece_type (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255),
+    description text,
     nature_id integer NOT NULL
 );
 
@@ -1318,10 +1332,36 @@ CREATE SEQUENCE pitch_id_seq
 
 ALTER SEQUENCE pitch_id_seq OWNED BY pitch.id;
 
+CREATE TABLE product (
+    id integer NOT NULL,
+    name character varying(100),
+    description text,
+    piece_type_id integer NOT NULL
+);
+
+COMMENT ON TABLE product IS 'Таблица с перечнем типов генетических последовательностей.';
+
+COMMENT ON COLUMN product.id IS 'Уникальный внутренний идентификатор.';
+
+COMMENT ON COLUMN product.name IS 'Название.';
+
+COMMENT ON COLUMN product.description IS 'Описание.';
+
+COMMENT ON COLUMN product.piece_type_id IS 'Соответствующий данному типу последовательности тип фрагмента (тРНК, рРНК, ген, и т.д.).';
+
+CREATE SEQUENCE product_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE product_id_seq OWNED BY product.id;
+
 CREATE TABLE remote_db (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255),
+    description text,
     url character varying(255),
     nature_id integer NOT NULL
 );
@@ -1350,7 +1390,7 @@ ALTER SEQUENCE remote_db_id_seq OWNED BY remote_db.id;
 CREATE TABLE tie (
     id integer NOT NULL,
     name character varying(100),
-    description character varying(255)
+    description text
 );
 
 COMMENT ON TABLE tie IS 'Справочная таблица лиг.';
@@ -1468,6 +1508,8 @@ ALTER TABLE ONLY piece_type ALTER COLUMN id SET DEFAULT nextval('piece_type_id_s
 
 ALTER TABLE ONLY pitch ALTER COLUMN id SET DEFAULT nextval('pitch_id_seq'::regclass);
 
+ALTER TABLE ONLY product ALTER COLUMN id SET DEFAULT nextval('product_id_seq'::regclass);
+
 ALTER TABLE ONLY remote_db ALTER COLUMN id SET DEFAULT nextval('remote_db_id_seq'::regclass);
 
 ALTER TABLE ONLY tie ALTER COLUMN id SET DEFAULT nextval('tie_id_seq'::regclass);
@@ -1550,6 +1592,9 @@ ALTER TABLE ONLY piece_type
 ALTER TABLE ONLY pitch
     ADD CONSTRAINT pk_pitch PRIMARY KEY (id);
 
+ALTER TABLE ONLY product
+    ADD CONSTRAINT pk_product PRIMARY KEY (id);
+
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT pk_remote_db PRIMARY KEY (id);
 
@@ -1600,6 +1645,9 @@ ALTER TABLE ONLY note_symbol
 
 ALTER TABLE ONLY piece_type
     ADD CONSTRAINT uk_piece_type UNIQUE (name);
+
+ALTER TABLE ONLY product
+    ADD CONSTRAINT uk_product_name UNIQUE (name);
 
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT uk_remote_db_name UNIQUE (name);
@@ -1842,6 +1890,14 @@ CREATE INDEX ix_pitch ON pitch USING btree (id);
 
 CREATE INDEX ix_pitch_note ON pitch USING btree (note_id);
 
+CREATE INDEX ix_product_id ON product USING btree (id);
+
+COMMENT ON INDEX ix_product_id IS 'Индкс первичного ключа таблицы product.';
+
+CREATE INDEX ix_product_piece_type ON product USING btree (piece_type_id);
+
+COMMENT ON INDEX ix_product_piece_type IS 'Индекс внешнего ключа таблицы product.';
+
 CREATE INDEX ix_remote_db_id ON remote_db USING btree (id);
 
 COMMENT ON INDEX ix_remote_db_id IS 'Индекс первичного ключа таблицы remote_db.';
@@ -1886,13 +1942,13 @@ CREATE TRIGGER tgi_music_chain_building_check BEFORE INSERT ON music_chain FOR E
 
 COMMENT ON TRIGGER tgi_music_chain_building_check ON music_chain IS 'Триггер, проверяющий строй цепочки.';
 
-CREATE TRIGGER tgiu_binary_charaacteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
-
-COMMENT ON TRIGGER tgiu_binary_charaacteristic_link ON binary_characteristic IS 'Триггер, проверяющий правильность привязки.';
-
 CREATE TRIGGER tgiu_binary_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
 
 COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+CREATE TRIGGER tgiu_binary_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+
+COMMENT ON TRIGGER tgiu_binary_characteristic_link ON binary_characteristic IS 'Триггер, проверяющий правильность привязки.';
 
 CREATE TRIGGER tgiu_binary_characteristic_modified BEFORE INSERT OR UPDATE ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
@@ -1910,25 +1966,25 @@ CREATE TRIGGER tgiu_chain_modified BEFORE INSERT OR UPDATE ON chain FOR EACH ROW
 
 COMMENT ON TRIGGER tgiu_chain_modified ON chain IS 'Тригер для вставки даты последнего изменения записи.';
 
-CREATE TRIGGER tgiu_charaacteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
-
-COMMENT ON TRIGGER tgiu_charaacteristic_link ON characteristic IS 'Триггер, проверяющий правильность привязки.';
-
 CREATE TRIGGER tgiu_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('full_chain_applicable');
 
 COMMENT ON TRIGGER tgiu_characteristic_applicability ON characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к полным цепочкам.';
+
+CREATE TRIGGER tgiu_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+
+COMMENT ON TRIGGER tgiu_characteristic_link ON characteristic IS 'Триггер, проверяющий правильность привязки.';
 
 CREATE TRIGGER tgiu_characteristic_modified BEFORE INSERT OR UPDATE ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
 COMMENT ON TRIGGER tgiu_characteristic_modified ON characteristic IS 'Тригер для вставки даты последнего изменения записи.';
 
-CREATE TRIGGER tgiu_congeneric_charaacteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
-
-COMMENT ON TRIGGER tgiu_congeneric_charaacteristic_link ON congeneric_characteristic IS 'Триггер, проверяющий правильность привязки.';
-
 CREATE TRIGGER tgiu_congeneric_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('congeneric_chain_applicable');
 
 COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к однородным цепочкам.';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_link ON congeneric_characteristic IS 'Триггер, проверяющий правильность привязки.';
 
 CREATE TRIGGER tgiu_congeneric_characteristic_modified BEFORE INSERT OR UPDATE ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
@@ -2129,6 +2185,9 @@ ALTER TABLE ONLY dna_chain
     ADD CONSTRAINT fk_dna_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY dna_chain
+    ADD CONSTRAINT fk_dna_chain_product FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE;
+
+ALTER TABLE ONLY dna_chain
     ADD CONSTRAINT fk_dna_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY element
@@ -2239,6 +2298,9 @@ ALTER TABLE ONLY pitch
 ALTER TABLE ONLY pitch
     ADD CONSTRAINT fk_pitch_note_symbol FOREIGN KEY (note_symbol_id) REFERENCES note_symbol(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY product
+    ADD CONSTRAINT fk_product_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT fk_remote_db_nature FOREIGN KEY (nature_id) REFERENCES nature(id);
 
@@ -2249,40 +2311,6 @@ INSERT INTO accidental (id, name, description) VALUES (4, '1', 'Диез');
 INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-диез');
 
 SELECT pg_catalog.setval('accidental_id_seq', 23, true);
-
-SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
-
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (1, 'Мощность алфавита', NULL, NULL, 'AlphabetPower', false, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', false, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (6, 'Энтропия словаря по Садовскому', NULL, NULL, 'CutLengthVocabularyEntropy', false, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (12, 'Длина', 'Количество позиций для элементов в цепочке', NULL, 'Length', false, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (15, 'Число возможных цепочек', NULL, NULL, 'PhantomMessagesCount', false, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (16, 'Частота', 'Или вероятность', NULL, 'Probability', false, false, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (26, 'Алфавитная удалённость', 'Вычисляет удалённость с логарифмом основание которого равно мощности алфавита полной цепи', NULL, 'AlphabeticAverageRemoteness', true, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (27, 'Алфавитная глубина', 'Вычисляет глубину c основание логарифма равным мощности алфавита полной цепи', NULL, 'AlphabeticDepth', true, true, false, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (8, 'Глубина', NULL, NULL, 'Depth', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (10, 'Количество идентифицирующих информаций', NULL, NULL, 'IdentificationInformation', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (11, 'Количество интервалов', NULL, NULL, 'IntervalsCount', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (18, 'Объём цепи', NULL, NULL, 'Volume', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (14, 'Периодичность', NULL, NULL, 'Periodicity', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (17, 'Регулярность', NULL, NULL, 'Regularity', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (3, 'Средняя удалённость', NULL, NULL, 'AverageRemoteness', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (9, 'Среднегеометрический интервал', NULL, NULL, 'GeometricMean', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (2, 'Среднее арифметическое', NULL, NULL, 'ArithmeticMean', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (7, 'Число описательных информаций', NULL, NULL, 'DescriptiveInformation', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (13, 'Нормализованная глубина', 'Глубина, приходящаяся на один элемент цепочки', NULL, 'NormalizedDepth', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (25, 'Сумма интервалов', 'Суммарная длина интервалов данной цепи с учётом привязки', NULL, 'IntervalsSum', true, true, true, false);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (19, 'Бинарная среднегеометрическая удалённость', 'Среднегеометрическая удалённость между парой элементов', NULL, 'BinaryGeometricMean', true, false, false, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (24, 'Нормализованный коэффициент частичной зависимости', NULL, NULL, 'NormalizedPartialDependenceCoefficient', true, false, false, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (21, 'Коэффициент частичной зависимости', NULL, NULL, 'PartialDependenceCoefficient', true, false, false, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (22, 'Коэффициент взвешенной частичной зависимости ', 'Степень зависимости одной цепи от другой, с учетом «полноты её участия» в составе обеих однородных цепей', NULL, 'InvolvedPartialDependenceCoefficient', true, false, false, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (20, 'Избыточность', 'Избыточность кодировки второго элемента относительно себя по сравнению с кодированием относительно первого элемента', NULL, 'Redundancy', true, false, false, true);
-INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (23, 'Коэффициент взаимной зависимости', NULL, NULL, 'MutualDependenceCoefficient', true, false, false, true);
-
-SELECT pg_catalog.setval('characteristic_type_id_seq', 27, true);
-
-SELECT pg_catalog.setval('fmotiv_type_id_seq', 1, false);
 
 SELECT pg_catalog.setval('instrument_id_seq', 1, false);
 
@@ -2331,8 +2359,13 @@ SELECT pg_catalog.setval('note_symbol_id_seq', 7, true);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (1, 'Полный геном', 'Вся цепочка без потерянных фрагментов', 1);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (2, 'Полный текст', 'Вся цепочка без потерянных фрагментов', 3);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (3, 'Всё произведение', 'Вся цепочка без потерянных фрагментов', 2);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (4, 'Кодирующая последовательность', 'CDS - coding DNA sequence', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (5, 'рибосомальная РНК', 'rRNA - ribosomal RNA', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (6, 'Транспортная РНК', 'tRNA - transfer RNA', 1);
 
-SELECT pg_catalog.setval('piece_type_id_seq', 3, true);
+SELECT pg_catalog.setval('piece_type_id_seq', 6, true);
+
+SELECT pg_catalog.setval('product_id_seq', 1, false);
 
 INSERT INTO remote_db (id, name, description, url, nature_id) VALUES (1, 'NCBI', 'Нициональный центр биотехнологической информации', 'http://www.ncbi.nlm.nih.gov', 1);
 
@@ -2341,4 +2374,4 @@ SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
 COMMIT;
---27.01.2014 2:02:54
+--16.03.2014 22:04:38
