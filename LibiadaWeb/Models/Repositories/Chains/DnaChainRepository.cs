@@ -36,7 +36,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.dna_chain.Single(x => x.id == id);
         }
 
-        public void Insert(chain chain, string fastaHeader, int? webApiId, long[] alphabet, int[] building)
+        public void Insert(
+            chain chain,
+            string fastaHeader,
+            int? webApiId,
+            int? productId,
+            bool complement,
+            bool partial,
+            long[] alphabet,
+            int[] building)
         {
             var parameters = FillParams(chain, alphabet, building);
             parameters.Add(new NpgsqlParameter
@@ -51,6 +59,24 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 NpgsqlDbType = NpgsqlDbType.Integer,
                 Value = webApiId
             });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "product_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = productId
+            });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "partial",
+                NpgsqlDbType = NpgsqlDbType.Boolean,
+                Value = partial
+            });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "complement",
+                NpgsqlDbType = NpgsqlDbType.Boolean,
+                Value = complement
+            });
 
             const string query = @"INSERT INTO dna_chain (
                                         id, 
@@ -64,7 +90,10 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         building, 
                                         remote_id, 
                                         remote_db_id, 
-                                        web_api_id
+                                        web_api_id,
+                                        product_id,
+                                        partial,
+                                        complement
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
@@ -77,7 +106,10 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @building, 
                                         @remote_id, 
                                         @remote_db_id, 
-                                        @web_api_id
+                                        @web_api_id,
+                                        @product_id,
+                                        @partial,
+                                        @complement
                                     );";
             db.ExecuteStoreCommand(query, parameters.ToArray());
 
