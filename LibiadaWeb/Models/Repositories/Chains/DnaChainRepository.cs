@@ -118,7 +118,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(dna_chain chain, long[] alphabet, int[] building)
         {
-            Insert(ToChain(chain), chain.fasta_header, chain.web_api_id, alphabet, building);
+            Insert(ToChain(chain), chain.fasta_header, chain.web_api_id, null, false, false, alphabet, building);
         }
 
         public chain ToChain(dna_chain source)

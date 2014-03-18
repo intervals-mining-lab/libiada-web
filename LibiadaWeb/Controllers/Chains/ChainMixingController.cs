@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
+
 using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+
     public class ChainMixingController : Controller
     {
         private readonly LibiadaWebEntities db;

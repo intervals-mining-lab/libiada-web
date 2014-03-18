@@ -4,15 +4,17 @@ using System.Linq;
 using System.Web.Mvc;
 using Clusterizator.Classes;
 using Clusterizator.Classes.AlternativeClusterization;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.Characteristics;
-using LibiadaCore.Classes.Root.Characteristics.Calculators;
+
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Core.Characteristics.Calculators;
+
     public class ClusterizationController : Controller
     {
         private readonly LibiadaWebEntities db;

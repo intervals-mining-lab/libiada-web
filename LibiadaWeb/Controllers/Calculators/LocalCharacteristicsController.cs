@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Misc.Iterators;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.Characteristics;
-using LibiadaCore.Classes.Root.Characteristics.Calculators;
+
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Misc.Iterators;
+
     public class LocalCharacteristicsController : Controller
     {
         private readonly LibiadaWebEntities db;

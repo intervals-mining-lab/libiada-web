@@ -6,8 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using System.Xml;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.SimpleTypes;
+
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
@@ -16,6 +15,9 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+
     public class MatterController : Controller
     {
         private readonly LibiadaWebEntities db;
@@ -157,7 +159,7 @@ namespace LibiadaWeb.Controllers.Chains
                             };
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
-                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, null, false, false, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             var doc = new XmlDocument();

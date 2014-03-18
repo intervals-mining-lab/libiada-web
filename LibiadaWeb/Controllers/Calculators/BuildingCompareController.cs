@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Misc.Iterators;
-using LibiadaCore.Classes.Root;
+
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Misc.Iterators;
+
     public class BuildingCompareController : Controller
     {
         private readonly LibiadaWebEntities db;

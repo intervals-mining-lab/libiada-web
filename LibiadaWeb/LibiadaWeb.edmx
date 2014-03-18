@@ -31,6 +31,8 @@
     <EntitySet Name="fmotiv_type" EntityType="LibiadaWebModel.Store.fmotiv_type" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="note_symbol" EntityType="LibiadaWebModel.Store.note_symbol" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
     <EntitySet Name="tie" EntityType="LibiadaWebModel.Store.tie" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+     <EntitySet Name="translator" EntityType="LibiadaWebModel.Store.translator" store:Type="Tables" Schema="public" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+    
     
     <AssociationSet Name="fk_binary_characteristic_first_element" Association="LibiadaWebModel.Store.fk_binary_characteristic_first_element">
       <End Role="element" EntitySet="element" />
@@ -81,8 +83,8 @@
       <End Role="dna_chain" EntitySet="dna_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_dna_chain_product" Association="LibiadaWebModel.Store.fk_dna_chain_product">
-      <End Role="product" EntitySet="product" />
       <End Role="dna_chain" EntitySet="dna_chain" />
+      <End Role="product" EntitySet="product" />
     </AssociationSet>
     <AssociationSet Name="fk_dna_chain_piece_type" Association="LibiadaWebModel.Store.fk_dna_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
@@ -106,6 +108,10 @@
     </AssociationSet>
     <AssociationSet Name="fk_literature_chain_piece_type" Association="LibiadaWebModel.Store.fk_literature_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_translator" Association="LibiadaWebModel.Store.fk_literature_chain_translator">
+      <End Role="translator" EntitySet="translator" />
       <End Role="literature_chain" EntitySet="literature_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_matter_nature" Association="LibiadaWebModel.Store.fk_matter_nature">
@@ -349,6 +355,7 @@
     <Property Name="matter_id" Type="int8" Nullable="false" />
     <Property Name="dissimilar" Type="bool" Nullable="false" />
     <Property Name="piece_type_id" Type="int4" Nullable="false" />
+    <Property Name="translator_id" Type="int4" />
     <Property Name="piece_position" Type="int8" Nullable="false" />
     <Property Name="original" Type="bool" Nullable="false" />
     <Property Name="language_id" Type="int4" Nullable="false" />
@@ -402,6 +409,14 @@
     <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
     <Property Name="description" Type="text" />
     <Property Name="nature_id" Type="int4" Nullable="false" />
+  </EntityType>
+   <EntityType Name="translator">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="description" Type="text" />
   </EntityType>
   <EntityType Name="remote_db">
     <Key>
@@ -711,7 +726,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="fk_dna_chain_product">
-    <End Role="product" Type="LibiadaWebModel.Store.product" Multiplicity="1" />
+    <End Role="product" Type="LibiadaWebModel.Store.product" Multiplicity="0..1" />
     <End Role="dna_chain" Type="LibiadaWebModel.Store.dna_chain" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="product">
@@ -791,6 +806,18 @@
       </Principal>
       <Dependent Role="literature_chain">
         <PropertyRef Name="piece_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_translator">
+    <End Role="translator" Type="LibiadaWebModel.Store.translator" Multiplicity="0..1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.Store.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="translator">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="translator_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1388,6 +1415,7 @@
     <EntitySet Name="notation" EntityType="LibiadaWebModel.notation" />
     <EntitySet Name="product" EntityType="LibiadaWebModel.product" />
     <EntitySet Name="piece_type" EntityType="LibiadaWebModel.piece_type" />
+     <EntitySet Name="translator" EntityType="LibiadaWebModel.translator" />
     <EntitySet Name="remote_db" EntityType="LibiadaWebModel.remote_db" />
     <EntitySet Name="fmotiv" EntityType="LibiadaWebModel.fmotiv" />
     <EntitySet Name="congeneric_characteristic" EntityType="LibiadaWebModel.congeneric_characteristic" />
@@ -1474,6 +1502,10 @@
     </AssociationSet>
     <AssociationSet Name="fk_literature_chain_piece_type" Association="LibiadaWebModel.fk_literature_chain_piece_type">
       <End Role="piece_type" EntitySet="piece_type" />
+      <End Role="literature_chain" EntitySet="literature_chain" />
+    </AssociationSet>
+    <AssociationSet Name="fk_literature_chain_translator" Association="LibiadaWebModel.fk_literature_chain_translator">
+      <End Role="translator" EntitySet="translator" />
       <End Role="literature_chain" EntitySet="literature_chain" />
     </AssociationSet>
     <AssociationSet Name="fk_matter_nature" Association="LibiadaWebModel.fk_matter_nature">
@@ -1849,6 +1881,7 @@
     <Property Name="matter_id" Type="Int64" Nullable="false" />
     <Property Name="dissimilar" Type="Boolean" Nullable="false" />
     <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+    <Property Name="translator_id" Type="Int32"  />
     <Property Name="piece_position" Type="Int64" Nullable="false" />
     <Property Name="original" Type="Boolean" Nullable="false" />
     <Property Name="language_id" Type="Int32" Nullable="false" />
@@ -1863,6 +1896,7 @@
     <NavigationProperty Name="matter" Relationship="LibiadaWebModel.fk_literature_chain_matter" FromRole="literature_chain" ToRole="matter" />
     <NavigationProperty Name="notation" Relationship="LibiadaWebModel.fk_literature_chain_notation" FromRole="literature_chain" ToRole="notation" />
     <NavigationProperty Name="piece_type" Relationship="LibiadaWebModel.fk_literature_chain_piece_type" FromRole="literature_chain" ToRole="piece_type" />
+    <NavigationProperty Name="translator" Relationship="LibiadaWebModel.fk_literature_chain_translator" FromRole="literature_chain" ToRole="translator" />
     <NavigationProperty Name="remote_db" Relationship="LibiadaWebModel.fk_literature_chain_remote_db" FromRole="literature_chain" ToRole="remote_db" />
   </EntityType>
   <EntityType Name="matter">
@@ -1939,7 +1973,15 @@
     <NavigationProperty Name="fmotiv" Relationship="LibiadaWebModel.fk_fmotiv_piece_type" FromRole="piece_type" ToRole="fmotiv" />
     <NavigationProperty Name="measure" Relationship="LibiadaWebModel.fk_measure_piece_type" FromRole="piece_type" ToRole="measure" />
     <NavigationProperty Name="music_chain" Relationship="LibiadaWebModel.fk_music_chain_piece_type" FromRole="piece_type" ToRole="music_chain" />
-
+  </EntityType>
+  <EntityType Name="translator">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+    <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+    <NavigationProperty Name="literature_chain" Relationship="LibiadaWebModel.fk_literature_chain_translator" FromRole="translator" ToRole="literature_chain" />
   </EntityType>
   <EntityType Name="remote_db">
     <Key>
@@ -2475,6 +2517,18 @@
       </Principal>
       <Dependent Role="literature_chain">
         <PropertyRef Name="piece_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_literature_chain_translator">
+    <End Role="translator" Type="LibiadaWebModel.translator" Multiplicity="0..1" />
+    <End Role="literature_chain" Type="LibiadaWebModel.literature_chain" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="translator">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="literature_chain">
+        <PropertyRef Name="translator_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -3131,6 +3185,7 @@
           <ScalarProperty Name="matter_id" ColumnName="matter_id" />
           <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
           <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+          <ScalarProperty Name="translator_id" ColumnName="translator_id" />
           <ScalarProperty Name="piece_position" ColumnName="piece_position" />
           <ScalarProperty Name="original" ColumnName="original" />
           <ScalarProperty Name="language_id" ColumnName="language_id" />
@@ -3172,6 +3227,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="product">
+      <EntityTypeMapping TypeName="LibiadaWebModel.product">
+        <MappingFragment StoreEntitySet="product">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="piece_type">
       <EntityTypeMapping TypeName="LibiadaWebModel.piece_type">
         <MappingFragment StoreEntitySet="piece_type">
@@ -3179,6 +3244,15 @@
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="translator">
+      <EntityTypeMapping TypeName="LibiadaWebModel.translator">
+        <MappingFragment StoreEntitySet="translator">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="description" ColumnName="description" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

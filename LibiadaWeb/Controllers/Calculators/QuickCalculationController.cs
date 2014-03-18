@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.Characteristics;
+
 using LibiadaWeb.Models.Repositories.Catalogs;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+
     public class QuickCalculationController : Controller
     {
         private readonly LibiadaWebEntities db;

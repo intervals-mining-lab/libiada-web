@@ -1470,4 +1470,33 @@ COMMENT ON COLUMN dna_chain.product_id IS 'Тип генетической последовательности.'
 
 ALTER TABLE dna_chain ADD CONSTRAINT fk_dna_chain_product FOREIGN KEY (product_id) REFERENCES product (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
 
+-- 18.03.2014
+
+-- Добавлена таблица переводчиков. И ссылка на неё из литературной цепочки.
+
+CREATE TABLE translator
+(
+  id serial NOT NULL, -- Уникальный внутренний идентификатор.
+  name character varying(100), -- Название привязки.
+  description text, -- Описание привязки.
+  CONSTRAINT pk_translator PRIMARY KEY (id),
+  CONSTRAINT uk_translator_name UNIQUE (name)
+);
+COMMENT ON TABLE public.translator IS 'Справочная таблица переводчиков литературных произведений.';
+
+COMMENT ON COLUMN translator.id IS 'Уникальный внутренний идентификатор.';
+COMMENT ON COLUMN translator.name IS 'Название привязки.';
+COMMENT ON COLUMN translator.description IS 'Описание привязки.';
+
+CREATE INDEX ix_translator_id ON translator USING btree (id);
+COMMENT ON INDEX ix_translator_id IS 'Индекс первичного ключа таблицы translator.';
+
+CREATE INDEX ix_translator_name ON translator USING btree (name COLLATE pg_catalog."default");
+COMMENT ON INDEX ix_translator_name IS 'Индекс по именам переводчиков.';
+
+ALTER TABLE literature_chain ADD COLUMN translator_id integer;
+ALTER TABLE literature_chain ADD CONSTRAINT fk_litarure_chain_translator FOREIGN KEY (translator_id) REFERENCES translator (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
+COMMENT ON COLUMN literature_chain.translator_id IS 'Ссылка на автора перевода.';
+
+
 COMMIT;

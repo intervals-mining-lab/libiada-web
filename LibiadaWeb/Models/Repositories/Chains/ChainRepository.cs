@@ -5,12 +5,13 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
 
 using Npgsql;
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
+    using LibiadaCore.Core;
+
     public class ChainRepository :ChainImporter, IChainRepository
     {
         private readonly ElementRepository elementRepository;

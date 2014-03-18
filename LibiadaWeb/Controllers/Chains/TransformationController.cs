@@ -2,14 +2,16 @@
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Misc.DataTransformers;
-using LibiadaCore.Classes.Root;
+
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Misc.DataTransformers;
+
     public class TransformationController : Controller
     {
         private readonly LibiadaWebEntities db;

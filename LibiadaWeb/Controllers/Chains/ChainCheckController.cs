@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
+
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+
     public class ChainCheckController : Controller
     {
         private readonly LibiadaWebEntities db;

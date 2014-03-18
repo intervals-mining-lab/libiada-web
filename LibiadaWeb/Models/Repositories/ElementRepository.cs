@@ -5,11 +5,12 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.SimpleTypes;
 
 namespace LibiadaWeb.Models.Repositories
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+
     public class ElementRepository : IElementRepository
     {
         private readonly LibiadaWebEntities db;

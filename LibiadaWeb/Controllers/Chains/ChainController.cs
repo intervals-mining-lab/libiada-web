@@ -7,8 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Root;
-using LibiadaCore.Classes.Root.SimpleTypes;
+
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
@@ -17,6 +16,9 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+
     public class ChainController : Controller
     {
         private readonly LibiadaWebEntities db;
@@ -151,7 +153,7 @@ namespace LibiadaWeb.Controllers.Chains
                             }
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, false);
-                            dnaChainRepository.Insert(chain, fastaHeader, webApiId, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(chain, fastaHeader, webApiId, null, false, false, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             break;
@@ -235,7 +237,7 @@ namespace LibiadaWeb.Controllers.Chains
 
                     long[] alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, true);
 
-                    dnaChainRepository.Insert(chain, null, null, alphabet, libiadaChain.Building);
+                    dnaChainRepository.Insert(chain, null, null, null, false, false, alphabet, libiadaChain.Building);
 
                     db.SaveChanges();
 

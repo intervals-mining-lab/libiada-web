@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using LibiadaCore.Classes.Misc.Iterators;
-using LibiadaCore.Classes.Root;
+
 using LibiadaWeb.Helpers;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories;
@@ -14,6 +13,8 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaCore.Core;
+
     public class GenesImportController : Controller
     {
         private readonly ElementRepository elementRepository;
