@@ -45,7 +45,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             var parameters = FillParams(chain, alphabet, building);
 
-            const string query = @"INSERT INTO dna_chain (
+            const string query = @"INSERT INTO chain (
                                         id, 
                                         notation_id,
                                         matter_id, 

@@ -44,15 +44,15 @@
         $scope.isLiteratureChain = function() {
             return $scope.natureLiterature == $scope.natureId;
         };
+
+        $scope.isRemoteDbDefined = function() {
+            return $scope.remoteDbsFiltered.length > 0 && $scope.remoteDbId > 0;
+        };
     }]);
     
 </script>
 
-@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new
-{
-    enctype = "multipart/form-data",
-    data_ng_app = "CreateChain"
-}))
+@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "CreateChain" }))
 {
     @Html.ValidationSummary(true)
     <fieldset data-ng-controller="CreateChainCtrl">
@@ -77,7 +77,7 @@
 
         <div class="editor-label">
             @Html.Label("Загружать цепочку из локального файла")
-            @Html.CheckBox("localFile", new {data_ng_model = "localFile"})
+            @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
         </div>
         <div class="editor-field" data-ng-show="localFile">
             <input type="file" name="file" id="file" />
@@ -117,13 +117,14 @@
             <input type="hidden" name="remote_db_id" value="{{remoteDbId}}" />
             @Html.ValidationMessageFor(model => model.remote_db_id)
         </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.remote_id)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.remote_id)
-            @Html.ValidationMessageFor(model => model.remote_id)
+        <div data-ng-show="isRemoteDbDefined()">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.remote_id)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.remote_id)
+                @Html.ValidationMessageFor(model => model.remote_id)
+            </div>
         </div>
 
         <div data-ng-show="isLiteratureChain()">
@@ -140,6 +141,14 @@
             </div>
             <div class="editor-field">
                 @Html.CheckBox("original")
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Переводчик")
+            </div>
+            <div class="editor-field">
+                <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
+                <input type="hidden" name="translatorId" value="{{translatorId}}" />
             </div>
         </div>
         <p>

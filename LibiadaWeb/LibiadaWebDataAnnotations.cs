@@ -303,8 +303,6 @@ namespace LibiadaWeb
 
     public class MusicChainDataAnnotations : ChainDataAnnotations
     {
-        [Display(Name = "Инструмент")]
-        public int instrument_id { get; set; }
     }
 
     [MetadataType(typeof (NatureDataAnnotations))]
@@ -377,7 +375,7 @@ namespace LibiadaWeb
     {
     }
 
-    [MetadataType(typeof (PitchDataAnnotations))]
+    [MetadataType(typeof(PitchDataAnnotations))]
     public partial class pitch
     {
     }
@@ -421,5 +419,26 @@ namespace LibiadaWeb
 
     public class TieDataAnnotations : CommonDataAnnotations
     {
+    }
+
+    [MetadataType(typeof(ProductDataAnnotations))]
+    public partial class product
+    {
+    }
+
+    public class ProductDataAnnotations : CommonDataAnnotations
+    {
+        [Display(Name = "Тип фрагмента цепочки")]
+        public int piece_type_id { get; set; }
+    }
+
+    [MetadataType(typeof(TranslatorDataAnnotations))]
+    public partial class translator
+    {
+    }
+
+    public class TranslatorDataAnnotations : CommonDataAnnotations
+    {
+        
     }
 }

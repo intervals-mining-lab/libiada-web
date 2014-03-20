@@ -68,12 +68,13 @@ namespace LibiadaWeb.Controllers.Chains
         {
             ViewBag.data = new Dictionary<string, object>
                 {
-                    {"notations", notationRepository.GetSelectListWithNature()},
-                    {"pieceTypes", pieceTypeRepository.GetSelectListWithNature()},
-                    {"languages", new SelectList(db.language, "id", "name")},
-                    {"remoteDbs", remoteDbRepository.GetSelectListWithNature()},
-                    {"natures", new SelectList(db.nature, "id", "name")},
-                    {"natureLiterature", Aliases.NatureLiterature}
+                    { "notations", notationRepository.GetSelectListWithNature() },
+                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() },
+                    { "languages", new SelectList(db.language, "id", "name") },
+                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
+                    { "natures", new SelectList(db.nature, "id", "name") },
+                    { "translators", new SelectList(db.translator, "id", "name") },
+                    { "natureLiterature", Aliases.NatureLiterature }
                 };
             return View();
         }
@@ -83,7 +84,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         [HttpPost]
         public ActionResult Create(matter matter, int notationId, int pieceTypeId, int? remoteDbId, String remoteId,
-            bool localFile, int languageId, bool original)
+            bool localFile, int languageId, bool original, int? translatorId)
         {
 
             if (ModelState.IsValid)
@@ -200,7 +201,7 @@ namespace LibiadaWeb.Controllers.Chains
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, literatureChain.notation_id,
                                 true);
 
-                            literatureChainRepository.Insert(literatureChain, original, languageId, alphabet,
+                            literatureChainRepository.Insert(literatureChain, original, languageId, translatorId, alphabet,
                                 libiadaChain.Building);
 
                             break;

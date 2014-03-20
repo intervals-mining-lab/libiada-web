@@ -198,6 +198,8 @@
     <Compile Include="Controllers\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Calculators\BuildingCompareController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
+    <Compile Include="Controllers\Catalogs\ProductController.cs" />
+    <Compile Include="Controllers\Catalogs\TranslatorController.cs" />
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\Chains\ChainMixingController.cs" />
@@ -596,6 +598,16 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Chains\GenesImport\Index.cshtml" />
     <Content Include="Views\Chains\GenesImport\Result.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Details.cshtml" />
+    <Content Include="Views\Product\Create.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\Product\Delete.cshtml" />
+    <Content Include="Views\Translator\Index.cshtml" />
+    <Content Include="Views\Translator\Details.cshtml" />
+    <Content Include="Views\Translator\Create.cshtml" />
+    <Content Include="Views\Translator\Edit.cshtml" />
+    <Content Include="Views\Translator\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

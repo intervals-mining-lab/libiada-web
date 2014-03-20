@@ -37,7 +37,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             return db.literature_chain.Single(x => x.id == id);
         }
 
-        public void Insert(chain chain, bool original, int languageId, long[] alphabet, int[] building)
+        public void Insert(chain chain, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
         {
             var parameters = FillParams(chain, alphabet, building);
 
@@ -54,7 +54,14 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = languageId
             });
 
-            const string query = @"INSERT INTO dna_chain (
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "translator_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = translatorId
+            });
+
+            const string query = @"INSERT INTO literature_chain (
                                         id, 
                                         notation_id,
                                         matter_id, 
@@ -66,7 +73,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         remote_id, 
                                         remote_db_id,
                                         original,
-                                        language_id
+                                        language_id,
+                                        translator_id
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
@@ -79,7 +87,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @remote_id, 
                                         @remote_db_id,
                                         @original,
-                                        @language_id
+                                        @language_id,
+                                        @translator_id
                                     );";
             db.ExecuteStoreCommand(query, parameters.ToArray());
         }
@@ -87,7 +96,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
         public void Insert(literature_chain chain, long[] alphabet, int[] building)
         {
-            Insert(ToChain(chain), chain.original, chain.language_id, alphabet, building);
+            Insert(ToChain(chain), chain.original, chain.language_id, chain.translator_id, alphabet, building);
         }
 
         public chain ToChain(literature_chain source)
