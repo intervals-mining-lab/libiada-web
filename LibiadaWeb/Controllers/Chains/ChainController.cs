@@ -83,7 +83,8 @@ namespace LibiadaWeb.Controllers.Chains
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                     { "natures", new SelectList(db.nature, "id", "name") },
                     { "translators", new SelectList(db.translator, "id", "name") },
-                    { "natureLiterature", Aliases.NatureLiterature }
+                    { "natureLiterature", Aliases.NatureLiterature },
+                    { "natureGenetic", Aliases.NatureGenetic }
                 };
             return View();
         }
@@ -92,7 +93,7 @@ namespace LibiadaWeb.Controllers.Chains
         // POST: /Chain/Create
 
         [HttpPost]
-        public ActionResult Create(chain chain, bool localFile, int languageId, bool original, int? translatorId)
+        public ActionResult Create(chain chain, bool localFile, int languageId, bool original, int? translatorId, int? productId, bool partial, bool complement)
         {
             if (ModelState.IsValid)
             {
@@ -149,12 +150,11 @@ namespace LibiadaWeb.Controllers.Chains
 
                             if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
                             {
-                                throw new Exception(
-                                    "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                                throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, chain.notation_id, false);
-                            dnaChainRepository.Insert(chain, fastaHeader, webApiId, null, false, false, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(chain, fastaHeader, webApiId, productId, complement, partial, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             break;

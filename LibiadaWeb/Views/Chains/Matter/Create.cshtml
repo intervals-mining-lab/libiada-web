@@ -3,8 +3,10 @@
 @{
     ViewBag.Title = "Объекты";
 }
-@Html.ValidationMessage("Error")
+
 <h2>Создание</h2>
+
+@Html.ValidationMessage("Error")
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -37,6 +39,10 @@
         };
 
         $scope.$watch('natureId', filterByNature, true);
+
+        $scope.isGeneticChain = function() {
+            return $scope.natureGenetic == $scope.natureId;
+        };
 
         $scope.isLiteratureChain = function() {
             return $scope.natureLiterature == $scope.natureId;
@@ -110,6 +116,7 @@
             <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
             <input type="hidden" name="remoteDbId" value="{{remoteDbId}}" />
         </div>
+
         <div data-ng-show="isRemoteDbDefined()">
             <div>
                 <div class="editor-label">
@@ -118,6 +125,30 @@
                 <div class="editor-field">
                     <input type="text" name="remoteId" data-ng-model="remoteId" />
                 </div>
+            </div>
+        </div>
+        
+        <div data-ng-show="isGeneticChain()">
+            <div class="editor-label">
+                @Html.Label("Продукт последовательности")
+            </div>
+            <div class="editor-field">
+                <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
+                <input type="hidden" name="productId" value="{{productId}}" />
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Неполная последовательность")
+            </div>
+            <div class="editor-field">
+                @Html.CheckBox("partial")
+            </div>
+
+            <div class="editor-label">
+                @Html.Label("Комплементарная цепочка")
+            </div>
+            <div class="editor-field">
+                @Html.CheckBox("complement")
             </div>
         </div>
 

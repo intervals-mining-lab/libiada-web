@@ -74,7 +74,8 @@ namespace LibiadaWeb.Controllers.Chains
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                     { "natures", new SelectList(db.nature, "id", "name") },
                     { "translators", new SelectList(db.translator, "id", "name") },
-                    { "natureLiterature", Aliases.NatureLiterature }
+                    { "natureLiterature", Aliases.NatureLiterature },
+                    { "natureGenetic", Aliases.NatureGenetic }
                 };
             return View();
         }
@@ -84,7 +85,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         [HttpPost]
         public ActionResult Create(matter matter, int notationId, int pieceTypeId, int? remoteDbId, String remoteId,
-            bool localFile, int languageId, bool original, int? translatorId)
+            bool localFile, int languageId, bool original, int? translatorId, int? productId, bool partial, bool complement)
         {
 
             if (ModelState.IsValid)
@@ -160,7 +161,7 @@ namespace LibiadaWeb.Controllers.Chains
                             };
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
-                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, null, false, false, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, complement, partial, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             var doc = new XmlDocument();
