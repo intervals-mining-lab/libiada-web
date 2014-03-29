@@ -3,7 +3,9 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Controllers.Chains
-{ 
+{
+    using System.Data.Entity;
+
     public class MeasureController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();

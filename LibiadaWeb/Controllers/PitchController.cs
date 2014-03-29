@@ -3,7 +3,9 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Controllers
-{ 
+{
+    using System.Data.Entity;
+
     public class PitchController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();

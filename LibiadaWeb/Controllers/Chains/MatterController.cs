@@ -15,6 +15,8 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 

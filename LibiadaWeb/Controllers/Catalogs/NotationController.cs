@@ -3,7 +3,9 @@ using System.Linq;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Controllers.Catalogs
-{ 
+{
+    using System.Data.Entity;
+
     public class NotationController : Controller
     {
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();

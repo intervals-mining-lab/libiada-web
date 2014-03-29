@@ -9,91 +9,92 @@
 
 using System;
 using System.ComponentModel;
-using System.Data.EntityClient;
-using System.Data.Objects;
-using System.Data.Objects.DataClasses;
+using System.Data.Entity.Core.Objects.DataClasses;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
-[assembly: EdmSchemaAttribute()]
-#region EDM Relationship Metadata
+[assembly: EdmSchema()]
+#region EDM Relationship Entity.Core.Metadata
 
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_first_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_link", "link", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_second_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type1", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_link", "link", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_group", "characteristic_group", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.characteristic_group), "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_product", "product", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.product), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_element_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "element", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.element), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_language", "language", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.language), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_translator", "translator", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.translator), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_remote_db", "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_notation_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.notation), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_product_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "product", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.product), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_piece_type_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.piece_type), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_dna_chain", "dna_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "literature_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_fmotiv", "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_type", "characteristic_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_element", "element", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_link", "link", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_measure", "measure", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_matter", "matter", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_piece_type", "piece_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "binary_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "congeneric_characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_music_chain", "music_chain", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "characteristic", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_notation", "notation", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note", "note", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_accidental", "accidental", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.accidental), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv_type", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv_type), "fmotiv", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note_symbol), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_tie", "tie", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.tie), "note", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_instrument", "instrument", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.instrument), "pitch", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
-[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_remote_db_nature", "nature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "remote_db", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.remote_db), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_first_element", "element", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_link", "link", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_second_element", "element", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type1", "characteristic_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_link", "link", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_type", "characteristic_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_group", "characteristic_group", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.characteristic_group), "characteristic_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic_type), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_product", "product", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.product), "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_element_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "element", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.element), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_language", "language", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.language), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_translator", "translator", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.translator), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_matter_nature", "nature", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.matter), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_chain_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_dna_chain_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.dna_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_literature_chain_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.literature_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_remote_db", "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.remote_db), "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_notation_nature", "nature", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.notation), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_product_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "product", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.product), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_piece_type_nature", "nature", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.piece_type), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_chain", "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_chain", "chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.chain), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_dna_chain", "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_dna_chain", "dna_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.dna_chain), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_literature_chain", "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_literature_chain", "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_literature_chain", "literature_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.literature_chain), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_fmotiv", "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_fmotiv", "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_fmotiv", "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_type", "characteristic_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.characteristic_type), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_element", "element", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.element), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_link", "link", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LibiadaWeb.link), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_measure_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.measure), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_measure", "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_measure", "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_measure", "measure", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.measure), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_matter", "matter", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.matter), "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_music_chain_piece_type", "piece_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.piece_type), "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.music_chain), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_binary_characteristic_music_chain", "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "binary_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.binary_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_congeneric_characteristic_music_chain", "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "congeneric_characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.congeneric_characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_characteristic_music_chain", "music_chain", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.music_chain), "characteristic", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.characteristic), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_notation", "notation", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.notation), "note", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note", "note", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note), "pitch", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_accidental", "accidental", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.accidental), "pitch", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_fmotiv_fmotiv_type", "fmotiv_type", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.fmotiv_type), "fmotiv", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.fmotiv), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_note_symbol", "note_symbol", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.note_symbol), "pitch", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_note_tie", "tie", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.tie), "note", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.note), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_pitch_instrument", "instrument", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.instrument), "pitch", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.pitch), true)]
+[assembly: EdmRelationshipAttribute("LibiadaWebModel", "fk_remote_db_nature", "nature", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.One, typeof(LibiadaWeb.nature), "remote_db", System.Data.Entity.Core.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LibiadaWeb.remote_db), true)]
 
 #endregion
 
 namespace LibiadaWeb
 {
+    using System.Data.Entity.Core.EntityClient;
+    using System.Data.Entity.Core.Objects;
+
     #region Contexts
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     public partial class LibiadaWebEntities : ObjectContext
     {
@@ -137,7 +138,7 @@ namespace LibiadaWeb
         #region ObjectSet Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<binary_characteristic> binary_characteristic
         {
@@ -153,7 +154,7 @@ namespace LibiadaWeb
         private ObjectSet<binary_characteristic> _binary_characteristic;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<chain> chain
         {
@@ -169,7 +170,7 @@ namespace LibiadaWeb
         private ObjectSet<chain> _chain;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<characteristic> characteristic
         {
@@ -185,7 +186,7 @@ namespace LibiadaWeb
         private ObjectSet<characteristic> _characteristic;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<characteristic_group> characteristic_group
         {
@@ -201,7 +202,7 @@ namespace LibiadaWeb
         private ObjectSet<characteristic_group> _characteristic_group;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<characteristic_type> characteristic_type
         {
@@ -217,7 +218,7 @@ namespace LibiadaWeb
         private ObjectSet<characteristic_type> _characteristic_type;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<dna_chain> dna_chain
         {
@@ -233,7 +234,7 @@ namespace LibiadaWeb
         private ObjectSet<dna_chain> _dna_chain;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<element> element
         {
@@ -249,7 +250,7 @@ namespace LibiadaWeb
         private ObjectSet<element> _element;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<language> language
         {
@@ -265,7 +266,7 @@ namespace LibiadaWeb
         private ObjectSet<language> _language;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<link> link
         {
@@ -281,7 +282,7 @@ namespace LibiadaWeb
         private ObjectSet<link> _link;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<literature_chain> literature_chain
         {
@@ -297,7 +298,7 @@ namespace LibiadaWeb
         private ObjectSet<literature_chain> _literature_chain;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<matter> matter
         {
@@ -313,7 +314,7 @@ namespace LibiadaWeb
         private ObjectSet<matter> _matter;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<nature> nature
         {
@@ -329,7 +330,7 @@ namespace LibiadaWeb
         private ObjectSet<nature> _nature;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<notation> notation
         {
@@ -345,7 +346,7 @@ namespace LibiadaWeb
         private ObjectSet<notation> _notation;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<product> product
         {
@@ -361,7 +362,7 @@ namespace LibiadaWeb
         private ObjectSet<product> _product;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<piece_type> piece_type
         {
@@ -377,7 +378,7 @@ namespace LibiadaWeb
         private ObjectSet<piece_type> _piece_type;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<translator> translator
         {
@@ -393,7 +394,7 @@ namespace LibiadaWeb
         private ObjectSet<translator> _translator;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<remote_db> remote_db
         {
@@ -409,7 +410,7 @@ namespace LibiadaWeb
         private ObjectSet<remote_db> _remote_db;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<fmotiv> fmotiv
         {
@@ -425,7 +426,7 @@ namespace LibiadaWeb
         private ObjectSet<fmotiv> _fmotiv;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<congeneric_characteristic> congeneric_characteristic
         {
@@ -441,7 +442,7 @@ namespace LibiadaWeb
         private ObjectSet<congeneric_characteristic> _congeneric_characteristic;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<instrument> instrument
         {
@@ -457,7 +458,7 @@ namespace LibiadaWeb
         private ObjectSet<instrument> _instrument;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<measure> measure
         {
@@ -473,7 +474,7 @@ namespace LibiadaWeb
         private ObjectSet<measure> _measure;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<music_chain> music_chain
         {
@@ -489,7 +490,7 @@ namespace LibiadaWeb
         private ObjectSet<music_chain> _music_chain;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<note> note
         {
@@ -505,7 +506,7 @@ namespace LibiadaWeb
         private ObjectSet<note> _note;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<pitch> pitch
         {
@@ -521,7 +522,7 @@ namespace LibiadaWeb
         private ObjectSet<pitch> _pitch;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<accidental> accidental
         {
@@ -537,7 +538,7 @@ namespace LibiadaWeb
         private ObjectSet<accidental> _accidental;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<fmotiv_type> fmotiv_type
         {
@@ -553,7 +554,7 @@ namespace LibiadaWeb
         private ObjectSet<fmotiv_type> _fmotiv_type;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<note_symbol> note_symbol
         {
@@ -569,7 +570,7 @@ namespace LibiadaWeb
         private ObjectSet<note_symbol> _note_symbol;
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         public ObjectSet<tie> tie
         {
@@ -821,7 +822,7 @@ namespace LibiadaWeb
     #region Entities
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="accidental")]
     [Serializable()]
@@ -848,7 +849,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -875,7 +876,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -899,7 +900,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -927,7 +928,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -953,7 +954,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="binary_characteristic")]
     [Serializable()]
@@ -988,7 +989,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1015,7 +1016,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1039,7 +1040,7 @@ namespace LibiadaWeb
         partial void Onchain_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1063,7 +1064,7 @@ namespace LibiadaWeb
         partial void Oncharacteristic_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1087,7 +1088,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1111,7 +1112,7 @@ namespace LibiadaWeb
         partial void Onvalue_stringChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1135,7 +1136,7 @@ namespace LibiadaWeb
         partial void Onlink_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1159,7 +1160,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1183,7 +1184,7 @@ namespace LibiadaWeb
         partial void Onfirst_element_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1207,7 +1208,7 @@ namespace LibiadaWeb
         partial void Onsecond_element_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1235,7 +1236,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1253,7 +1254,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1273,7 +1274,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1291,7 +1292,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1311,7 +1312,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1329,7 +1330,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1349,7 +1350,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1367,7 +1368,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1387,7 +1388,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1405,7 +1406,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1429,7 +1430,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="chain")]
     [Serializable()]
@@ -1466,7 +1467,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1493,7 +1494,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1517,7 +1518,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1541,7 +1542,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1565,7 +1566,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1589,7 +1590,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1613,7 +1614,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1637,7 +1638,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1661,7 +1662,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1685,7 +1686,7 @@ namespace LibiadaWeb
         partial void OnmodifiedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1709,7 +1710,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -1737,7 +1738,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1755,7 +1756,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1775,7 +1776,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1793,7 +1794,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1813,7 +1814,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1831,7 +1832,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1851,7 +1852,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1873,7 +1874,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1895,7 +1896,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -1913,7 +1914,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -1937,7 +1938,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="characteristic")]
     [Serializable()]
@@ -1968,7 +1969,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -1995,7 +1996,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2019,7 +2020,7 @@ namespace LibiadaWeb
         partial void Onchain_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2043,7 +2044,7 @@ namespace LibiadaWeb
         partial void Oncharacteristic_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2067,7 +2068,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2091,7 +2092,7 @@ namespace LibiadaWeb
         partial void Onvalue_stringChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2115,7 +2116,7 @@ namespace LibiadaWeb
         partial void Onlink_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2139,7 +2140,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2167,7 +2168,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2185,7 +2186,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -2205,7 +2206,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2223,7 +2224,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -2243,7 +2244,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2261,7 +2262,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -2285,7 +2286,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="characteristic_group")]
     [Serializable()]
@@ -2312,7 +2313,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2339,7 +2340,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2363,7 +2364,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2391,7 +2392,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2417,7 +2418,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="characteristic_type")]
     [Serializable()]
@@ -2454,7 +2455,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2481,7 +2482,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2505,7 +2506,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2529,7 +2530,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2553,7 +2554,7 @@ namespace LibiadaWeb
         partial void Oncharacteristic_group_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2577,7 +2578,7 @@ namespace LibiadaWeb
         partial void Onclass_nameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2601,7 +2602,7 @@ namespace LibiadaWeb
         partial void OnlinkableChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2625,7 +2626,7 @@ namespace LibiadaWeb
         partial void Onfull_chain_applicableChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2649,7 +2650,7 @@ namespace LibiadaWeb
         partial void Oncongeneric_chain_applicableChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2677,7 +2678,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2699,7 +2700,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2721,7 +2722,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2739,7 +2740,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -2759,7 +2760,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -2785,7 +2786,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="congeneric_characteristic")]
     [Serializable()]
@@ -2818,7 +2819,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2845,7 +2846,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2869,7 +2870,7 @@ namespace LibiadaWeb
         partial void Onchain_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2893,7 +2894,7 @@ namespace LibiadaWeb
         partial void Oncharacteristic_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2917,7 +2918,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2941,7 +2942,7 @@ namespace LibiadaWeb
         partial void Onvalue_stringChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -2965,7 +2966,7 @@ namespace LibiadaWeb
         partial void Onlink_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -2989,7 +2990,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3013,7 +3014,7 @@ namespace LibiadaWeb
         partial void Onelement_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3041,7 +3042,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3059,7 +3060,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3079,7 +3080,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3097,7 +3098,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3117,7 +3118,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3135,7 +3136,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3159,7 +3160,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="dna_chain")]
     [Serializable()]
@@ -3200,7 +3201,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3227,7 +3228,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3251,7 +3252,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3275,7 +3276,7 @@ namespace LibiadaWeb
         partial void Onproduct_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3299,7 +3300,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3323,7 +3324,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3347,7 +3348,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3371,7 +3372,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3395,7 +3396,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3419,7 +3420,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3443,7 +3444,7 @@ namespace LibiadaWeb
         partial void Onweb_api_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3467,7 +3468,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3491,7 +3492,7 @@ namespace LibiadaWeb
         partial void Onfasta_headerChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3515,7 +3516,7 @@ namespace LibiadaWeb
         partial void OnmodifiedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3539,7 +3540,7 @@ namespace LibiadaWeb
         partial void OncomplementChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3563,7 +3564,7 @@ namespace LibiadaWeb
         partial void OnpartialChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3591,7 +3592,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3613,7 +3614,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3635,7 +3636,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3653,7 +3654,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3673,7 +3674,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3691,7 +3692,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3711,7 +3712,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3729,7 +3730,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3749,7 +3750,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3767,7 +3768,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3787,7 +3788,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -3805,7 +3806,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -3829,7 +3830,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="element")]
     [Serializable()]
@@ -3858,7 +3859,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3885,7 +3886,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3909,7 +3910,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3933,7 +3934,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -3957,7 +3958,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -3981,7 +3982,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4005,7 +4006,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4033,7 +4034,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4055,7 +4056,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4077,7 +4078,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4095,7 +4096,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4115,7 +4116,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4141,7 +4142,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="fmotiv")]
     [Serializable()]
@@ -4180,7 +4181,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4207,7 +4208,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4231,7 +4232,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4255,7 +4256,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4279,7 +4280,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4303,7 +4304,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4327,7 +4328,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4351,7 +4352,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4375,7 +4376,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4399,7 +4400,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4423,7 +4424,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4447,7 +4448,7 @@ namespace LibiadaWeb
         partial void Onfmotiv_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4471,7 +4472,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4495,7 +4496,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4523,7 +4524,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4541,7 +4542,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4561,7 +4562,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4579,7 +4580,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4599,7 +4600,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4617,7 +4618,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4637,7 +4638,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4659,7 +4660,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4681,7 +4682,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4703,7 +4704,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4721,7 +4722,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4741,7 +4742,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4759,7 +4760,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -4783,7 +4784,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="fmotiv_type")]
     [Serializable()]
@@ -4810,7 +4811,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4837,7 +4838,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4861,7 +4862,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -4889,7 +4890,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -4915,7 +4916,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="instrument")]
     [Serializable()]
@@ -4942,7 +4943,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4969,7 +4970,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -4993,7 +4994,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5021,7 +5022,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5047,7 +5048,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="language")]
     [Serializable()]
@@ -5074,7 +5075,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5101,7 +5102,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5125,7 +5126,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5153,7 +5154,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5179,7 +5180,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="link")]
     [Serializable()]
@@ -5206,7 +5207,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5233,7 +5234,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5257,7 +5258,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5285,7 +5286,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5307,7 +5308,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5333,7 +5334,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="literature_chain")]
     [Serializable()]
@@ -5374,7 +5375,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5401,7 +5402,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5425,7 +5426,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5449,7 +5450,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5473,7 +5474,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5497,7 +5498,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5521,7 +5522,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5545,7 +5546,7 @@ namespace LibiadaWeb
         partial void Ontranslator_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5569,7 +5570,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5593,7 +5594,7 @@ namespace LibiadaWeb
         partial void OnoriginalChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -5617,7 +5618,7 @@ namespace LibiadaWeb
         partial void Onlanguage_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5641,7 +5642,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5665,7 +5666,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5689,7 +5690,7 @@ namespace LibiadaWeb
         partial void OnmodifiedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -5717,7 +5718,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5739,7 +5740,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5761,7 +5762,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5783,7 +5784,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5801,7 +5802,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -5821,7 +5822,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5839,7 +5840,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -5859,7 +5860,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5877,7 +5878,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -5897,7 +5898,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5915,7 +5916,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -5935,7 +5936,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5953,7 +5954,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -5973,7 +5974,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -5991,7 +5992,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -6015,7 +6016,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="matter")]
     [Serializable()]
@@ -6044,7 +6045,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6071,7 +6072,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6095,7 +6096,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6119,7 +6120,7 @@ namespace LibiadaWeb
         partial void Onnature_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6143,7 +6144,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6167,7 +6168,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6195,7 +6196,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6217,7 +6218,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6239,7 +6240,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6261,7 +6262,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6279,7 +6280,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -6299,7 +6300,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6321,7 +6322,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6343,7 +6344,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6369,7 +6370,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="measure")]
     [Serializable()]
@@ -6412,7 +6413,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6439,7 +6440,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6463,7 +6464,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6487,7 +6488,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6511,7 +6512,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6535,7 +6536,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6559,7 +6560,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6583,7 +6584,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6607,7 +6608,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6631,7 +6632,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6655,7 +6656,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6679,7 +6680,7 @@ namespace LibiadaWeb
         partial void OnbeatsChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6703,7 +6704,7 @@ namespace LibiadaWeb
         partial void OnbeatbaseChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6727,7 +6728,7 @@ namespace LibiadaWeb
         partial void Onticks_per_beatChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -6751,7 +6752,7 @@ namespace LibiadaWeb
         partial void OnfifthsChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6775,7 +6776,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6799,7 +6800,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -6827,7 +6828,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6845,7 +6846,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -6865,7 +6866,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6883,7 +6884,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -6903,7 +6904,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6921,7 +6922,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -6941,7 +6942,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6963,7 +6964,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -6985,7 +6986,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7007,7 +7008,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7025,7 +7026,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -7049,7 +7050,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="music_chain")]
     [Serializable()]
@@ -7086,7 +7087,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7113,7 +7114,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7137,7 +7138,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7161,7 +7162,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7185,7 +7186,7 @@ namespace LibiadaWeb
         partial void Onmatter_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7209,7 +7210,7 @@ namespace LibiadaWeb
         partial void OndissimilarChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7233,7 +7234,7 @@ namespace LibiadaWeb
         partial void Onpiece_type_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7257,7 +7258,7 @@ namespace LibiadaWeb
         partial void Onpiece_positionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7281,7 +7282,7 @@ namespace LibiadaWeb
         partial void Onremote_db_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7305,7 +7306,7 @@ namespace LibiadaWeb
         partial void Onremote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7329,7 +7330,7 @@ namespace LibiadaWeb
         partial void OnmodifiedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7357,7 +7358,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7375,7 +7376,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -7395,7 +7396,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7413,7 +7414,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -7433,7 +7434,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7451,7 +7452,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -7471,7 +7472,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7493,7 +7494,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7515,7 +7516,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7537,7 +7538,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7555,7 +7556,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -7579,7 +7580,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="nature")]
     [Serializable()]
@@ -7606,7 +7607,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7633,7 +7634,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7657,7 +7658,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7685,7 +7686,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7707,7 +7708,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7729,7 +7730,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7755,7 +7756,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="notation")]
     [Serializable()]
@@ -7784,7 +7785,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7811,7 +7812,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7835,7 +7836,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -7859,7 +7860,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -7887,7 +7888,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7909,7 +7910,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7931,7 +7932,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7953,7 +7954,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7975,7 +7976,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -7993,7 +7994,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -8013,7 +8014,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8035,7 +8036,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8057,7 +8058,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8079,7 +8080,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8105,7 +8106,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="note")]
     [Serializable()]
@@ -8146,7 +8147,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8173,7 +8174,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8197,7 +8198,7 @@ namespace LibiadaWeb
         partial void OnvalueChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8221,7 +8222,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8245,7 +8246,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8269,7 +8270,7 @@ namespace LibiadaWeb
         partial void Onnotation_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8293,7 +8294,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8317,7 +8318,7 @@ namespace LibiadaWeb
         partial void OnnumeratorChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8341,7 +8342,7 @@ namespace LibiadaWeb
         partial void OndenominatorChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8365,7 +8366,7 @@ namespace LibiadaWeb
         partial void OnticksChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8389,7 +8390,7 @@ namespace LibiadaWeb
         partial void OnonumeratorChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8413,7 +8414,7 @@ namespace LibiadaWeb
         partial void OnodenominatorChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8437,7 +8438,7 @@ namespace LibiadaWeb
         partial void OntripletChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8461,7 +8462,7 @@ namespace LibiadaWeb
         partial void OnpriorityChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8485,7 +8486,7 @@ namespace LibiadaWeb
         partial void Ontie_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8513,7 +8514,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8531,7 +8532,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -8551,7 +8552,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8573,7 +8574,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8591,7 +8592,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -8615,7 +8616,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="note_symbol")]
     [Serializable()]
@@ -8642,7 +8643,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8669,7 +8670,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8693,7 +8694,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8721,7 +8722,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8747,7 +8748,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="piece_type")]
     [Serializable()]
@@ -8776,7 +8777,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8803,7 +8804,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8827,7 +8828,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -8851,7 +8852,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -8879,7 +8880,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8901,7 +8902,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8923,7 +8924,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8945,7 +8946,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -8963,7 +8964,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -8983,7 +8984,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9005,7 +9006,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9027,7 +9028,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9053,7 +9054,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="pitch")]
     [Serializable()]
@@ -9092,7 +9093,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9119,7 +9120,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9143,7 +9144,7 @@ namespace LibiadaWeb
         partial void OnoctaveChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9167,7 +9168,7 @@ namespace LibiadaWeb
         partial void OnmidinumberChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9191,7 +9192,7 @@ namespace LibiadaWeb
         partial void Oninstrument_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9215,7 +9216,7 @@ namespace LibiadaWeb
         partial void Onnote_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9239,7 +9240,7 @@ namespace LibiadaWeb
         partial void Onaccidental_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9263,7 +9264,7 @@ namespace LibiadaWeb
         partial void Onnote_symbol_idChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9287,7 +9288,7 @@ namespace LibiadaWeb
         partial void OncreatedChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -9315,7 +9316,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9333,7 +9334,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -9353,7 +9354,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9371,7 +9372,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -9391,7 +9392,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9409,7 +9410,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -9429,7 +9430,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9447,7 +9448,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -9471,7 +9472,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="product")]
     [Serializable()]
@@ -9500,7 +9501,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9527,7 +9528,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9551,7 +9552,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -9575,7 +9576,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9603,7 +9604,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9625,7 +9626,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9643,7 +9644,7 @@ namespace LibiadaWeb
             }
         }
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
@@ -9667,7 +9668,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="remote_db")]
     [Serializable()]
@@ -9696,7 +9697,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9723,7 +9724,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9747,7 +9748,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -9771,7 +9772,7 @@ namespace LibiadaWeb
         partial void OndescriptionChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -9795,7 +9796,7 @@ namespace LibiadaWeb
         partial void OnurlChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -9823,7 +9824,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9845,7 +9846,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9867,7 +9868,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9889,7 +9890,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9911,7 +9912,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9933,7 +9934,7 @@ namespace LibiadaWeb
         }
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -9959,7 +9960,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="tie")]
     [Serializable()]
@@ -9986,7 +9987,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -10013,7 +10014,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -10037,7 +10038,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -10065,7 +10066,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
@@ -10091,7 +10092,7 @@ namespace LibiadaWeb
     }
     
     /// <summary>
-    /// No Metadata Documentation available.
+    /// No Entity.Core.Metadata Documentation available.
     /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="LibiadaWebModel", Name="translator")]
     [Serializable()]
@@ -10118,7 +10119,7 @@ namespace LibiadaWeb
         #region Simple Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
@@ -10145,7 +10146,7 @@ namespace LibiadaWeb
         partial void OnidChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
@@ -10169,7 +10170,7 @@ namespace LibiadaWeb
         partial void OnnameChanged();
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
@@ -10197,7 +10198,7 @@ namespace LibiadaWeb
         #region Navigation Properties
     
         /// <summary>
-        /// No Metadata Documentation available.
+        /// No Entity.Core.Metadata Documentation available.
         /// </summary>
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
