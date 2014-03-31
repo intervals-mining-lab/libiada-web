@@ -1,4 +1,4 @@
---16.03.2014 22:04:38
+--31.03.2014 20:54:48
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -1001,7 +1001,8 @@ ALTER SEQUENCE link_id_seq OWNED BY link.id;
 
 CREATE TABLE literature_chain (
     original boolean DEFAULT true NOT NULL,
-    language_id integer NOT NULL
+    language_id integer NOT NULL,
+    translator_id integer
 )
 INHERITS (chain);
 
@@ -1032,6 +1033,8 @@ COMMENT ON COLUMN literature_chain.remote_db_id IS 'id удалённой баз
 COMMENT ON COLUMN literature_chain.original IS 'Является ли текст оригинальным или же переведённым.';
 
 COMMENT ON COLUMN literature_chain.language_id IS 'Язык.';
+
+COMMENT ON COLUMN literature_chain.translator_id IS 'Ссылка на автора перевода.';
 
 CREATE TABLE matter (
     id bigint NOT NULL,
@@ -1410,6 +1413,29 @@ CREATE SEQUENCE tie_id_seq
 
 ALTER SEQUENCE tie_id_seq OWNED BY tie.id;
 
+CREATE TABLE translator (
+    id integer NOT NULL,
+    name character varying(100),
+    description text
+);
+
+COMMENT ON TABLE translator IS 'Справочная таблица переводчиков литературных произведений.';
+
+COMMENT ON COLUMN translator.id IS 'Уникальный внутренний идентификатор.';
+
+COMMENT ON COLUMN translator.name IS 'Название привязки.';
+
+COMMENT ON COLUMN translator.description IS 'Описание привязки.';
+
+CREATE SEQUENCE translator_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE translator_id_seq OWNED BY translator.id;
+
 ALTER TABLE ONLY accidental ALTER COLUMN id SET DEFAULT nextval('accidental_id_seq'::regclass);
 
 ALTER TABLE ONLY binary_characteristic ALTER COLUMN id SET DEFAULT nextval('binary_characteristic_id_seq'::regclass);
@@ -1514,6 +1540,8 @@ ALTER TABLE ONLY remote_db ALTER COLUMN id SET DEFAULT nextval('remote_db_id_seq
 
 ALTER TABLE ONLY tie ALTER COLUMN id SET DEFAULT nextval('tie_id_seq'::regclass);
 
+ALTER TABLE ONLY translator ALTER COLUMN id SET DEFAULT nextval('translator_id_seq'::regclass);
+
 ALTER TABLE ONLY accidental
     ADD CONSTRAINT pk_accidental PRIMARY KEY (id);
 
@@ -1601,6 +1629,9 @@ ALTER TABLE ONLY remote_db
 ALTER TABLE ONLY tie
     ADD CONSTRAINT pk_tie PRIMARY KEY (id);
 
+ALTER TABLE ONLY translator
+    ADD CONSTRAINT pk_translator PRIMARY KEY (id);
+
 ALTER TABLE ONLY accidental
     ADD CONSTRAINT uk_accidental_name UNIQUE (name);
 
@@ -1657,6 +1688,9 @@ ALTER TABLE ONLY remote_db
 
 ALTER TABLE ONLY tie
     ADD CONSTRAINT uk_tie_name UNIQUE (name);
+
+ALTER TABLE ONLY translator
+    ADD CONSTRAINT uk_translator_name UNIQUE (name);
 
 CREATE INDEX fki_congeneric_characteristic_alphabet_element ON congeneric_characteristic USING btree (chain_id, element_id);
 
@@ -1909,6 +1943,14 @@ COMMENT ON INDEX ix_remote_db_name IS 'Индекс по имени удалён
 CREATE INDEX ix_tie_id ON tie USING btree (id);
 
 CREATE INDEX ix_tie_name ON tie USING btree (name);
+
+CREATE INDEX ix_translator_id ON translator USING btree (id);
+
+COMMENT ON INDEX ix_translator_id IS 'Индекс первичного ключа таблицы translator.';
+
+CREATE INDEX ix_translator_name ON translator USING btree (name);
+
+COMMENT ON INDEX ix_translator_name IS 'Индекс по именам переводчиков.';
 
 CREATE TRIGGER tgd_element_key BEFORE DELETE ON element_key FOR EACH ROW EXECUTE PROCEDURE trigger_element_delete_alphabet_bound();
 
@@ -2218,6 +2260,9 @@ ALTER TABLE ONLY fmotiv
     ADD CONSTRAINT fk_fmotiv_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY literature_chain
+    ADD CONSTRAINT fk_litarure_chain_translator FOREIGN KEY (translator_id) REFERENCES translator(id);
+
+ALTER TABLE ONLY literature_chain
     ADD CONSTRAINT fk_literature_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id) DEFERRABLE INITIALLY DEFERRED;
 
 ALTER TABLE ONLY literature_chain
@@ -2312,6 +2357,40 @@ INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-ди�
 
 SELECT pg_catalog.setval('accidental_id_seq', 23, true);
 
+SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
+
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (1, 'Мощность алфавита', NULL, NULL, 'AlphabetPower', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (6, 'Энтропия словаря по Садовскому', NULL, NULL, 'CutLengthVocabularyEntropy', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (12, 'Длина', 'Количество позиций для элементов в цепочке', NULL, 'Length', false, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (15, 'Число возможных цепочек', NULL, NULL, 'PhantomMessagesCount', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (16, 'Частота', 'Или вероятность', NULL, 'Probability', false, false, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (26, 'Алфавитная удалённость', 'Вычисляет удалённость с логарифмом основание которого равно мощности алфавита полной цепи', NULL, 'AlphabeticAverageRemoteness', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (27, 'Алфавитная глубина', 'Вычисляет глубину c основание логарифма равным мощности алфавита полной цепи', NULL, 'AlphabeticDepth', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (8, 'Глубина', NULL, NULL, 'Depth', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (10, 'Количество идентифицирующих информаций', NULL, NULL, 'IdentificationInformation', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (11, 'Количество интервалов', NULL, NULL, 'IntervalsCount', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (18, 'Объём цепи', NULL, NULL, 'Volume', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (14, 'Периодичность', NULL, NULL, 'Periodicity', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (17, 'Регулярность', NULL, NULL, 'Regularity', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (3, 'Средняя удалённость', NULL, NULL, 'AverageRemoteness', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (9, 'Среднегеометрический интервал', NULL, NULL, 'GeometricMean', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (2, 'Среднее арифметическое', NULL, NULL, 'ArithmeticMean', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (7, 'Число описательных информаций', NULL, NULL, 'DescriptiveInformation', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (13, 'Нормализованная глубина', 'Глубина, приходящаяся на один элемент цепочки', NULL, 'NormalizedDepth', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (25, 'Сумма интервалов', 'Суммарная длина интервалов данной цепи с учётом привязки', NULL, 'IntervalsSum', true, true, true, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (19, 'Бинарная среднегеометрическая удалённость', 'Среднегеометрическая удалённость между парой элементов', NULL, 'BinaryGeometricMean', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (24, 'Нормализованный коэффициент частичной зависимости', NULL, NULL, 'NormalizedPartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (21, 'Коэффициент частичной зависимости', NULL, NULL, 'PartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (22, 'Коэффициент взвешенной частичной зависимости ', 'Степень зависимости одной цепи от другой, с учетом «полноты её участия» в составе обеих однородных цепей', NULL, 'InvolvedPartialDependenceCoefficient', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (20, 'Избыточность', 'Избыточность кодировки второго элемента относительно себя по сравнению с кодированием относительно первого элемента', NULL, 'Redundancy', true, false, false, true);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (23, 'Коэффициент взаимной зависимости', NULL, NULL, 'MutualDependenceCoefficient', true, false, false, true);
+
+SELECT pg_catalog.setval('characteristic_type_id_seq', 27, true);
+
+SELECT pg_catalog.setval('fmotiv_type_id_seq', 1, false);
+
 SELECT pg_catalog.setval('instrument_id_seq', 1, false);
 
 INSERT INTO language (id, name, description) VALUES (1, 'Русский', 'Русский язык');
@@ -2373,5 +2452,11 @@ SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 
 SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
+INSERT INTO translator (id, name, description) VALUES (1, 'Google translate', 'http://translate.google.ru/');
+INSERT INTO translator (id, name, description) VALUES (2, 'PROMT (translate.ru)', 'http://www.translate.ru/');
+INSERT INTO translator (id, name, description) VALUES (3, 'InterTran', 'http://mrtranslate.ru/translators/intertran.html');
+
+SELECT pg_catalog.setval('translator_id_seq', 3, true);
+
 COMMIT;
---16.03.2014 22:04:38
+--31.03.2014 20:54:48

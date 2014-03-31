@@ -1498,5 +1498,13 @@ ALTER TABLE literature_chain ADD COLUMN translator_id integer;
 ALTER TABLE literature_chain ADD CONSTRAINT fk_litarure_chain_translator FOREIGN KEY (translator_id) REFERENCES translator (id) ON UPDATE NO ACTION ON DELETE NO ACTION;
 COMMENT ON COLUMN literature_chain.translator_id IS 'Ссылка на автора перевода.';
 
+-- 31.30.2014
+
+-- Добавлены автоматические переводчики литературных текстов.
+
+INSERT INTO translator (name, description) VALUES ('Google translate','http://translate.google.ru/');
+INSERT INTO translator (name, description) VALUES ('PROMT (translate.ru)','http://www.translate.ru/');
+INSERT INTO translator (name, description) VALUES ('InterTran','http://mrtranslate.ru/translators/intertran.html');
+
 
 COMMIT;
