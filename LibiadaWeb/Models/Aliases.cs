@@ -68,7 +68,13 @@
 
         public const int PieceTypeFullGenome = 1;
         public const int PieceTypeFullText = 2;
-        public const int PieceTypeFuulSong = 3;
+        public const int PieceTypeFullSong = 3;
+        public const int PieceTypeCodingSequence = 4;
+        public const int PieceTypeTRNA = 5;
+        public const int PieceTypeRRNA = 6;
+        public const int PieceTypeNCRNA = 7;
+        public const int PieceTypeTMRNA = 8;
+        public const int PieceTypePseudoGen = 9;
 
         #endregion
 

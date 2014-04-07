@@ -14,6 +14,7 @@ using LibiadaWeb.Models.Repositories.Chains;
 namespace LibiadaWeb.Controllers.Chains
 {
     using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
 
     public class GenesImportController : Controller
     {
@@ -84,8 +85,7 @@ namespace LibiadaWeb.Controllers.Chains
             HashSet<string> products = new HashSet<string>();
             HashSet<string> geneTypes = new HashSet<string>();
 
-            BaseChain dbChain = chainRepository.ToLBaseChain(chainId);
-            string dbStringChain = dbChain.ToString();
+            string stringParentChain = chainRepository.ToLBaseChain(chainId).ToString();
 
             for (int i = 1; i < genes.Length; i++)
             {
@@ -101,7 +101,7 @@ namespace LibiadaWeb.Controllers.Chains
                 string[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
-                                   ? temp2[0].Split(new[] {"complement"}, StringSplitOptions.RemoveEmptyEntries)[0]
+                                   ? temp2[0].Split(new[] { "complement" }, StringSplitOptions.RemoveEmptyEntries)[0]
                                    : temp2[0];
                 string start = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[0];
                 string stop = temp3.Split(new[] {"..", "(", ")"}, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -109,6 +109,14 @@ namespace LibiadaWeb.Controllers.Chains
                 dnaChain.complement = complement;
                 starts.Add(Convert.ToInt32(start));
                 stops.Add(Convert.ToInt32(stop));
+                string currentStringChain = stringParentChain.Substring(Convert.ToInt32(start), Convert.ToInt32(stop) - Convert.ToInt32(start));
+                var currentLibiadaChain = new BaseChain(currentStringChain);
+                if (complement)
+                {
+                    Alphabet complementAlphabet = CreateComplementAlphabet(currentLibiadaChain.Alphabet);
+                    currentLibiadaChain = new BaseChain(currentLibiadaChain.Building, complementAlphabet);
+                }
+
                 string sequenceType = string.Empty;
                 for (int j = 1; j < temp2.Length; j++)
                 {
@@ -118,51 +126,88 @@ namespace LibiadaWeb.Controllers.Chains
                         break;
                     }
                 }
+
+                string product = string.Empty;
+                string geneType = string.Empty;
+                int pieceTypeId;
                 if (sequenceType.StartsWith("CDS"))
                 {
+                    pieceTypeId = Aliases.PieceTypeCodingSequence;
                     dnaChain.remote_id = GetValue(temp2, "/protein_id=\"");
                     dnaChain.web_api_id = Convert.ToInt32(GetValue(temp2, "/db_xref=\"GI:"));
                     dnaChain.description = GetValue(temp2, "/product=\"", "\"");
-                    geneTypes.Add(GetValue(temp2, "/gene=\""));
-                    products.Add(dnaChain.description);
+                    geneType = GetValue(temp2, "/gene=\"");
+                    product = dnaChain.description;
                 }
                 else if (sequenceType.StartsWith("tRNA"))
                 {
+                    pieceTypeId = Aliases.PieceTypeTRNA;
                     dnaChain.description = GetValue(temp2, "/product=\"", "\"");
-                    products.Add(dnaChain.description);
+                    product = dnaChain.description;
                 }
                 else if (sequenceType.StartsWith("ncRNA"))
                 {
+                    pieceTypeId = Aliases.PieceTypeNCRNA;
                     dnaChain.description = GetValue(temp2, "/note=\"");
-                    geneTypes.Add(GetValue(temp2, "/gene=\""));
-                    //products.Add(dnaChain.description);
+                    geneType = GetValue(temp2, "/gene=\"");
+                    product = dnaChain.description;
                 }
                 else if (sequenceType.StartsWith("rRNA"))
                 {
+                    pieceTypeId = Aliases.PieceTypeRRNA;
                     dnaChain.description = GetValue(temp2, "/product=\"", "\"");
-                    geneTypes.Add(GetValue(temp2, "/gene=\""));
-                    products.Add(dnaChain.description);
+                    geneType = GetValue(temp2, "/gene=\"");
+                    product = dnaChain.description;
                 }
                 else if (sequenceType.StartsWith("tmRNA"))
                 {
-                    geneTypes.Add(GetValue(temp2, "/gene=\""));
+                    pieceTypeId = Aliases.PieceTypeTMRNA;
+                    geneType = GetValue(temp2, "/gene=\"");
                 }
                 else if (sequenceType.StartsWith("/rpt_type=tandem"))
                 {
-
+                    throw new Exception("Тип недоделан" + sequenceType);
                 }
                 else if (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo"))
                 {
+                    pieceTypeId = Aliases.PieceTypePseudoGen;
                     dnaChain.description = GetValue(temp2, "/note=\"");
                 }
                 else
                 {
                     throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                 }
+
+                var resultChain = new chain
+                    {
+                        notation_id = parentChain.notation_id,
+                        matter_id = parentChain.matter_id,
+                        dissimilar = false,
+                        piece_type_id = pieceTypeId,
+                        piece_position = Convert.ToInt64(start),
+                        remote_db_id = parentChain.remote_db_id
+                    };
+
+                int productId;
+
+                if (db.product.Any(p => p.name.Equals(product)))
+                {
+                    productId = db.product.Single(p => p.name.Equals(product)).id;
+                }
+                else
+                {
+                    var newProduct = new product { name = product };
+                    db.product.AddObject(newProduct);
+                    db.SaveChanges();
+                    productId = newProduct.id;
+                }
+
+                long[] alphabet = elementRepository.ToDbElements(currentLibiadaChain.Alphabet, parentChain.notation_id, false);
+                dnaChainRepository.Insert(resultChain, null, null, productId, complement, false, alphabet, currentLibiadaChain.Building);
             }
-           // var subChains = DiffCutter.Cut(dbStringChain, new DefaultCutRule(starts, stops));
+           
             TempData["products"] = products.ToArray();
-            //TempData["subChains"] = subChains.ToArray();
+       
             TempData["genes"] = geneTypes.ToArray();
 
             /*
@@ -185,24 +230,42 @@ namespace LibiadaWeb.Controllers.Chains
                 {
                     throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                 }
-                var resultChain = new chain
-                    {
-                        notation_id = parentChain.notation_id,
-                        created = DateTime.Now,
-                        matter_id = parentChain.matter_id,
-                        dissimilar = false,
-                        piece_type_id = !!!!!!!,
-                        piece_position = !!!!!!!,
-                        remote_id = !!!!!!!!,
-                        remote_db_id = parentChain.remote_db_id
-                    };
-
-                long[] alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, parentChain.notation_id, false);
-                dnaChainRepository.Insert(resultChain, fastaHeader, Convert.ToInt32(webApiId), alphabet, libiadaChain.Building);
+                
             
         }*/
 
             return RedirectToAction("Result");
+        }
+
+        private Alphabet CreateComplementAlphabet(Alphabet alphabet)
+        {
+            var newAlphabet = new Alphabet();
+            for (int i = 0; i < alphabet.Cardinality; i++)
+            {
+                newAlphabet.Add(this.GetComplementElelement(alphabet[i]));
+            }
+            return newAlphabet;
+        }
+
+        private ValueChar GetComplementElelement(IBaseObject source)
+        {
+            switch (source.ToString())
+            {
+                case "A":
+                case "a":
+                    return new ValueChar('T');
+                case "C":
+                case "c":
+                    return new ValueChar('G');
+                case "G":
+                case "g":
+                    return new ValueChar('C');
+                case "T":
+                case "t":
+                    return new ValueChar('A');
+                default:
+                    throw new ArgumentException("Unknown nucleotide.", "source");
+            }
         }
 
         private static string GetValue(string[] strings, string pattern)

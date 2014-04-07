@@ -1507,4 +1507,12 @@ INSERT INTO translator (name, description) VALUES ('PROMT (translate.ru)','http:
 INSERT INTO translator (name, description) VALUES ('InterTran','http://mrtranslate.ru/translators/intertran.html');
 
 
+-- 07.04.2014
+
+-- Добавлены новые типы фрагментов ДНК.
+
+INSERT INTO piece_type(name, description, nature_id) VALUES ('Некодирущая РНК','ncRNA - non-coding RNA', 1);
+INSERT INTO piece_type(name, description, nature_id) VALUES ('Транспортно-матричная РНК','tmRNA - Transfer-messenger RNA', 1);
+INSERT INTO piece_type(name, description, nature_id) VALUES ('Псевдоген','Pseudo', 1);
+
 COMMIT;
