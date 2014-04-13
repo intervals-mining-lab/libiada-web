@@ -1,4 +1,4 @@
---31.03.2014 20:54:48
+--14.04.2014 0:58:59
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -2439,12 +2439,23 @@ INSERT INTO piece_type (id, name, description, nature_id) VALUES (1, 'Полны
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (2, 'Полный текст', 'Вся цепочка без потерянных фрагментов', 3);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (3, 'Всё произведение', 'Вся цепочка без потерянных фрагментов', 2);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (4, 'Кодирующая последовательность', 'CDS - coding DNA sequence', 1);
-INSERT INTO piece_type (id, name, description, nature_id) VALUES (5, 'рибосомальная РНК', 'rRNA - ribosomal RNA', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (5, 'Рибосомальная РНК', 'rRNA - ribosomal RNA', 1);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (6, 'Транспортная РНК', 'tRNA - transfer RNA', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (7, 'Некодирущая РНК', 'ncRNA - non-coding RNA', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (8, 'Транспортно-матричная РНК', 'tmRNA - Transfer-messenger RNA', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (9, 'Псевдоген', 'Pseudo', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (10, 'Плазмид', 'Plasmid', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (11, 'Митохондриальный геном', 'Mitochondrion genome', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (12, 'Митохондриальная рРНК', 'Mitochondrion ribosomal RNA', 1);
 
-SELECT pg_catalog.setval('piece_type_id_seq', 6, true);
 
-SELECT pg_catalog.setval('product_id_seq', 1, false);
+SELECT pg_catalog.setval('piece_type_id_seq', 12, true);
+
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1, '18S ribosomal RNA', '18S рибосомальная РНК', 5);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2, 'Mitochondrion 16S ribosomal RNA', 'Митохондриальная 16S рибосомальная РНК', 12);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (3, '16S ribosomal RNA', '16S рибосомальная РНК', 5);
+
+SELECT pg_catalog.setval('product_id_seq', 3, true);
 
 INSERT INTO remote_db (id, name, description, url, nature_id) VALUES (1, 'NCBI', 'Нициональный центр биотехнологической информации', 'http://www.ncbi.nlm.nih.gov', 1);
 
@@ -2459,4 +2470,4 @@ INSERT INTO translator (id, name, description) VALUES (3, 'InterTran', 'http://m
 SELECT pg_catalog.setval('translator_id_seq', 3, true);
 
 COMMIT;
---31.03.2014 20:54:48
+--14.04.2014 0:58:59
