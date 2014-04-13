@@ -184,8 +184,7 @@ namespace LibiadaWeb.Controllers.Chains
                         matter_id = parentChain.matter_id,
                         dissimilar = false,
                         piece_type_id = pieceTypeId,
-                        piece_position = Convert.ToInt64(start),
-                        remote_db_id = parentChain.remote_db_id
+                        piece_position = Convert.ToInt64(start)
                     };
 
                 int productId;
@@ -196,7 +195,7 @@ namespace LibiadaWeb.Controllers.Chains
                 }
                 else
                 {
-                    var newProduct = new product { name = product };
+                    var newProduct = new product { name = product, piece_type_id = pieceTypeId };
                     db.product.AddObject(newProduct);
                     db.SaveChanges();
                     productId = newProduct.id;
