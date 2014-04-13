@@ -1515,4 +1515,19 @@ INSERT INTO piece_type(name, description, nature_id) VALUES ('Некодирущая РНК','
 INSERT INTO piece_type(name, description, nature_id) VALUES ('Транспортно-матричная РНК','tmRNA - Transfer-messenger RNA', 1);
 INSERT INTO piece_type(name, description, nature_id) VALUES ('Псевдоген','Pseudo', 1);
 
+
+-- 11.04.2014
+
+-- Добавлены ещё типы фрагментов и продукты.
+
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Плазмид', 'Plasmid', 1);
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Митохондриальный геном', 'Mitochondrion genome', 1);
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Митохондриальная рРНК', 'Mitochondrion ribosomal RNA', 1);
+UPDATE piece_type SET name = 'Рибосомальная РНК' WHERE name = 'рибосомальная РНК';
+
+INSERT INTO product (name, description, piece_type_id) VALUES ('18S ribosomal RNA', '18S рибосомальная РНК', 5);
+INSERT INTO product (name, description, piece_type_id) VALUES ('Mitochondrion 16S ribosomal RNA', 'Митохондриальная 16S рибосомальная РНК', 12);
+INSERT INTO product (name, description, piece_type_id) VALUES ('16S ribosomal RNA', '16S рибосомальная РНК', 5);
+
+
 COMMIT;

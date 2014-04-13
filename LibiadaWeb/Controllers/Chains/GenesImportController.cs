@@ -82,8 +82,8 @@ namespace LibiadaWeb.Controllers.Chains
             var starts = new List<int>();
             var stops = new List<int>();
 
-            HashSet<string> products = new HashSet<string>();
-            HashSet<string> geneTypes = new HashSet<string>();
+            var products = new HashSet<string>();
+            var geneTypes = new HashSet<string>();
 
             string stringParentChain = chainRepository.ToLBaseChain(chainId).ToString();
 
@@ -210,30 +210,6 @@ namespace LibiadaWeb.Controllers.Chains
        
             TempData["genes"] = geneTypes.ToArray();
 
-            /*
-            string[] chains = data.Split('>');
-
-            for (int i = 0; i < chains.Length; i++)
-            {
-                string[] splittedFasta = chains[i].Split(new[] { '\n', '\r' });
-                var chainStringBuilder = new StringBuilder();
-                String fastaHeader = splittedFasta[0];
-                for (int j = 1; j < splittedFasta.Length; j++)
-                {
-                    chainStringBuilder.Append(splittedFasta[j]);
-                }
-
-                string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
-
-                var libiadaChain = new BaseChain(resultStringChain);
-                if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, parentChain.notation_id))
-                {
-                    throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
-                }
-                
-            
-        }*/
-
             return RedirectToAction("Result");
         }
 
@@ -242,12 +218,12 @@ namespace LibiadaWeb.Controllers.Chains
             var newAlphabet = new Alphabet();
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
-                newAlphabet.Add(this.GetComplementElelement(alphabet[i]));
+                newAlphabet.Add(this.GetComplementElement(alphabet[i]));
             }
             return newAlphabet;
         }
 
-        private ValueChar GetComplementElelement(IBaseObject source)
+        private ValueChar GetComplementElement(IBaseObject source)
         {
             switch (source.ToString())
             {
@@ -282,7 +258,7 @@ namespace LibiadaWeb.Controllers.Chains
 
         private static string GetValue(string[] strings, string pattern, string endPattern)
         {
-            string result = String.Empty;
+            string result = string.Empty;
             for (int i = 1; i < strings.Length; i++)
             {
                 if (strings[i].Contains(pattern))
