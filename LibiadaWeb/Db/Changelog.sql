@@ -1530,4 +1530,11 @@ INSERT INTO product (name, description, piece_type_id) VALUES ('Mitochondrion 16
 INSERT INTO product (name, description, piece_type_id) VALUES ('16S ribosomal RNA', '16S рибосомальная РНК', 5);
 
 
+-- 14.04.2014
+
+-- добавлен ещё два типа фрагментов генома.
+
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Повторяющийся фрагмент', 'Repeat region', 1);
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Некодирующая последовательность', 'Non-coding sequence', 1);
+
 COMMIT;

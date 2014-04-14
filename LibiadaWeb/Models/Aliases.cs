@@ -75,7 +75,11 @@
         public const int PieceTypeNCRNA = 7;
         public const int PieceTypeTMRNA = 8;
         public const int PieceTypePseudoGen = 9;
-
+        public const int PieceTypePlasmid = 10;
+        public const int PieceTypeMitochondrionGenome = 11;
+        public const int PieceTypeMitochondrionRRNA = 12;
+        public const int PieceTypeRepeatRegion = 13;
+        public const int PieceTypeNonCodingSequence = 14;
         #endregion
 
         #region RemoteDb
