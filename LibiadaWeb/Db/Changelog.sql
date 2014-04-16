@@ -1537,4 +1537,11 @@ INSERT INTO product (name, description, piece_type_id) VALUES ('16S ribosomal RN
 INSERT INTO piece_type (name, description, nature_id) VALUES ('Повторяющийся фрагмент', 'Repeat region', 1);
 INSERT INTO piece_type (name, description, nature_id) VALUES ('Некодирующая последовательность', 'Non-coding sequence', 1);
 
+-- 15.04.2014
+
+-- Расширено до 255 символов имя продукта гена. Добавлена проверка на уникальность генетической цепочки.
+
+ALTER TABLE product ALTER COLUMN name TYPE character varying(255);
+ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE(matter_id, notation_id, piece_position);
+
 COMMIT;
