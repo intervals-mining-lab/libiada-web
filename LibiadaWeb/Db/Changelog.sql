@@ -1544,4 +1544,7 @@ INSERT INTO piece_type (name, description, nature_id) VALUES ('Некодирующая посл
 ALTER TABLE product ALTER COLUMN name TYPE character varying(255);
 ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE(matter_id, notation_id, piece_position);
 
+ALTER TABLE dna_chain DROP CONSTRAINT uk_dna_chain;
+ALTER TABLE dna_chain ADD CONSTRAINT uk_dna_chain UNIQUE(matter_id, notation_id, piece_type_id, piece_position);
+
 COMMIT;
