@@ -1,0 +1,74 @@
+﻿@model LibiadaWeb.characteristic
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>characteristic</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.value_string)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value_string)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.link.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.link.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.chain.remote_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.chain.remote_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.characteristic_type.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.characteristic_type.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

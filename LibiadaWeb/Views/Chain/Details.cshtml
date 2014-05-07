@@ -1,0 +1,98 @@
+﻿@model LibiadaWeb.chain
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>chain</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dissimilar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dissimilar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.piece_position)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.piece_position)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remote_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remote_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.matter.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.matter.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.notation.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.notation.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.piece_type.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.piece_type.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remote_db.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remote_db.name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

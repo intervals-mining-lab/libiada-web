@@ -1,0 +1,117 @@
+﻿@model IEnumerable<LibiadaWeb.dna_chain>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.dissimilar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.piece_position)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.web_api_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.remote_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fasta_header)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.modified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.complement)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.partial)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.matter.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.notation.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.product.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.piece_type.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.remote_db.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.created)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dissimilar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.piece_position)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.web_api_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.remote_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fasta_header)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.modified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.complement)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.partial)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.matter.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.notation.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.product.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.piece_type.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.remote_db.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

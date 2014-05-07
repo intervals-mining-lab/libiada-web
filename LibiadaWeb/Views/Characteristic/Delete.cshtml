@@ -1,0 +1,80 @@
+﻿@model LibiadaWeb.characteristic
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>characteristic</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.value_string)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value_string)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.link.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.link.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.chain.remote_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.chain.remote_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.characteristic_type.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.characteristic_type.name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

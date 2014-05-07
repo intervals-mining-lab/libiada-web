@@ -1,0 +1,128 @@
+﻿@model LibiadaWeb.literature_chain
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>literature_chain</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dissimilar)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dissimilar)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.piece_position)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.piece_position)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.original)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.original)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remote_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remote_id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modified)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.language.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.language.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.matter.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.matter.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.notation.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.notation.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.piece_type.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.piece_type.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.translator.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.translator.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.remote_db.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.remote_db.name)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

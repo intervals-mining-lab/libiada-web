@@ -1,0 +1,81 @@
+﻿@model IEnumerable<LibiadaWeb.binary_characteristic>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.value_string)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.modified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.element.value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.link.name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.element1.value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.chain.remote_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.characteristic_type.name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.value_string)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.modified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.element.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.link.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.element1.value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.chain.remote_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.characteristic_type.name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

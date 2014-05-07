@@ -1,0 +1,114 @@
+﻿@model LibiadaWeb.chain
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>chain</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.notation_id, "notation_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("notation_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.notation_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.created, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.created)
+                @Html.ValidationMessageFor(model => model.created)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.matter_id, "matter_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("matter_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.matter_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.dissimilar, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.dissimilar)
+                @Html.ValidationMessageFor(model => model.dissimilar)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.piece_type_id, "piece_type_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("piece_type_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.piece_type_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.piece_position, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.piece_position)
+                @Html.ValidationMessageFor(model => model.piece_position)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.remote_db_id, "remote_db_id", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("remote_db_id", String.Empty)
+                @Html.ValidationMessageFor(model => model.remote_db_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.modified, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.modified)
+                @Html.ValidationMessageFor(model => model.modified)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.remote_id, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.remote_id)
+                @Html.ValidationMessageFor(model => model.remote_id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.description)
+                @Html.ValidationMessageFor(model => model.description)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
