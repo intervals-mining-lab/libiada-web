@@ -183,14 +183,53 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="accidental.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="binary_characteristic.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="chain.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="characteristic.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="characteristic_group.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="characteristic_type.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="congeneric_characteristic.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="dna_chain.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="element.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="fmotiv.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="fmotiv_type.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="instrument.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="language.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="LibiadaWeb.Context.cs">
       <AutoGen>True</AutoGen>
@@ -207,16 +246,55 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
+    <Compile Include="link.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="literature_chain.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="matter.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="music_chain.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="nature.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="notation.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="note.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="note_symbol.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="piece_type.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="pitch.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="product.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="remote_db.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="tie.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="translator.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />

@@ -5,18 +5,153 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+
+        <EntityType Name="binary_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="chain_id" Type="int8" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
+          <Property Name="value" Type="float8" />
+          <Property Name="value_string" Type="text" />
+          <Property Name="link_id" Type="int4" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="first_element_id" Type="int8" Nullable="false" />
+          <Property Name="second_element_id" Type="int8" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="chain_id" Type="int8" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
+          <Property Name="value" Type="float8" />
+          <Property Name="value_string" Type="text" />
+          <Property Name="link_id" Type="int4" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="characteristic_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="characteristic_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+          <Property Name="characteristic_group_id" Type="int4" />
+          <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
+          <Property Name="linkable" Type="bool" Nullable="false" />
+          <Property Name="full_chain_applicable" Type="bool" Nullable="false" />
+          <Property Name="congeneric_chain_applicable" Type="bool" Nullable="false" />
+          <Property Name="binary_chain_applicable" Type="bool" Nullable="false" />
+        </EntityType>
+
+        <EntityType Name="dna_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="product_id" Type="int4" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="fasta_header" Type="varchar" MaxLength="255" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="web_api_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+          <Property Name="complement" Type="bool" Nullable="false" />
+          <Property Name="partial" Type="bool" Nullable="false" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="element">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="value" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="text" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="link">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="literature_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="translator_id" Type="int4" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="original" Type="bool" Nullable="false" />
+          <Property Name="language_id" Type="int4" Nullable="false" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+          <Property Name="description" Type="text" />
+        </EntityType>
         <EntityType Name="matter">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int8" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="varchar" MaxLength="255" />
           <Property Name="nature_id" Type="int4" Nullable="false" />
           <Property Name="description" Type="text" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="modified" Type="timestamptz"/>
         </EntityType>
-
         <EntityType Name="nature">
           <Key>
             <PropertyRef Name="id" />
@@ -25,7 +160,446 @@
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="description" Type="text" />
         </EntityType>
+        <EntityType Name="notation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+          <Property Name="nature_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="piece_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+          <Property Name="nature_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="translator">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+        <EntityType Name="remote_db">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
+          <Property Name="nature_id" Type="int4" Nullable="false" />
+        </EntityType>
 
+        <EntityType Name="fmotiv">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="value" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="text" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="congeneric_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="chain_id" Type="int8" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
+          <Property Name="value" Type="float8" />
+          <Property Name="value_string" Type="text" />
+          <Property Name="link_id" Type="int4" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="element_id" Type="int8" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="instrument">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+        <EntityType Name="measure">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="value" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="text" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="beats" Type="int4" Nullable="false" />
+          <Property Name="beatbase" Type="int4" Nullable="false" />
+          <Property Name="ticks_per_beat" Type="int4" />
+          <Property Name="fifths" Type="int4" Nullable="false" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+        <EntityType Name="music_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+          <Property Name="dissimilar" Type="bool" Nullable="false" />
+          <Property Name="piece_type_id" Type="int4" Nullable="false" />
+          <Property Name="piece_position" Type="int8" Nullable="false" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
+          <Property Name="remote_db_id" Type="int4" />
+          <Property Name="modified" Type="timestamptz"/>
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+        <EntityType Name="note">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="value" Type="varchar" MaxLength="255" />
+          <Property Name="description" Type="text" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="numerator" Type="int4" Nullable="false" />
+          <Property Name="denominator" Type="int4" Nullable="false" />
+          <Property Name="ticks" Type="int4" />
+          <Property Name="onumerator" Type="int4" Nullable="false" />
+          <Property Name="odenominator" Type="int4" Nullable="false" />
+          <Property Name="triplet" Type="bool" Nullable="false" />
+          <Property Name="priority" Type="int4" />
+          <Property Name="tie_id" Type="int4" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+
+        <EntityType Name="pitch">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="octave" Type="int4" Nullable="false" />
+          <Property Name="midinumber" Type="int4" Nullable="false" />
+          <Property Name="instrument_id" Type="int4" Nullable="false" />
+          <Property Name="note_id" Type="int8" Nullable="false" />
+          <Property Name="accidental_id" Type="int4" Nullable="false" />
+          <Property Name="note_symbol_id" Type="int4" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="modified" Type="timestamptz"/>
+        </EntityType>
+
+        <EntityType Name="accidental">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+        <EntityType Name="fmotiv_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+        <EntityType Name="note_symbol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+        <EntityType Name="tie">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="description" Type="text" />
+        </EntityType>
+
+
+        <Association Name="fk_binary_characteristic_first_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="first_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_second_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="second_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_group">
+          <End Role="characteristic_group" Type="Self.characteristic_group" Multiplicity="0..1" />
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic_type">
+              <PropertyRef Name="characteristic_group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_product">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_element_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="element" Type="Self.element" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="element">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_language">
+          <End Role="language" Type="Self.language" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_translator">
+          <End Role="translator" Type="Self.translator" Multiplicity="0..1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="translator">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="translator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_matter_nature">
           <End Role="nature" Type="Self.nature" Multiplicity="1" />
           <End Role="matter" Type="Self.matter" Multiplicity="*" />
@@ -38,21 +612,977 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+        <Association Name="fk_remote_db_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="remote_db">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_music_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_measure_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="measure" Type="Self.measure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="measure">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notation_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="notation" Type="Self.notation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notation">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_piece_type_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="piece_type">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_chain">
+          <End Role="chain" Type="Self.literature_chain" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_dna_chain">
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dna_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_dna_chain">
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dna_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_dna_chain">
+          <End Role="dna_chain" Type="Self.literature_chain" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dna_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_fmotiv_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_congeneric_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_congeneric_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_music_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_music_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_music_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_note_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="note" Type="Self.note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_note">
+          <End Role="note" Type="Self.note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="note">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="note_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_accidental">
+          <End Role="accidental" Type="Self.accidental" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accidental">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="accidental_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_fmotiv_fmotiv_type">
+          <End Role="fmotiv_type" Type="Self.fmotiv_type" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="fmotiv_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_note_symbol">
+          <End Role="note_symbol" Type="Self.note_symbol" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="note_symbol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="note_symbol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_note_tie">
+          <End Role="tie" Type="Self.tie" Multiplicity="1" />
+          <End Role="note" Type="Self.note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tie">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note">
+              <PropertyRef Name="tie_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_instrument">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="instrument_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
         <EntityContainer Name="LibiadaWebModelStoreContainer">
+          <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="chain" EntityType="Self.chain" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="characteristic" EntityType="Self.characteristic" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="characteristic_group" EntityType="Self.characteristic_group" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="characteristic_type" EntityType="Self.characteristic_type" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="dna_chain" EntityType="Self.dna_chain" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="element" EntityType="Self.element" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="language" EntityType="Self.language" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="link" EntityType="Self.link" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="literature_chain" EntityType="Self.literature_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
           <EntitySet Name="nature" EntityType="Self.nature" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="notation" EntityType="Self.notation" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="product" EntityType="Self.product" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="piece_type" EntityType="Self.piece_type" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="remote_db" EntityType="Self.remote_db" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="fmotiv" EntityType="Self.fmotiv" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="congeneric_characteristic" EntityType="Self.congeneric_characteristic" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="instrument" EntityType="Self.instrument" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="measure" EntityType="Self.measure" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="music_chain" EntityType="Self.music_chain" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="note" EntityType="Self.note" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="accidental" EntityType="Self.accidental" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="note_symbol" EntityType="Self.note_symbol" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="tie" EntityType="Self.tie" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="translator" EntityType="Self.translator" store:Type="Tables" Schema="public"/>
+
+          <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_link" Association="Self.fk_binary_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_second_element" Association="Self.fk_binary_characteristic_second_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_matter" Association="Self.fk_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_notation" Association="Self.fk_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_piece_type" Association="Self.fk_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_group" Association="Self.fk_characteristic_group">
+            <End Role="characteristic_group" EntitySet="characteristic_group" />
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_link" Association="Self.fk_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_type" Association="Self.fk_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_characteristic_type" Association="Self.fk_binary_characteristic_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_notation" Association="Self.fk_dna_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_product" Association="Self.fk_dna_chain_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_piece_type" Association="Self.fk_dna_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_element_notation" Association="Self.fk_element_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="element" EntitySet="element" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
+            <End Role="language" EntitySet="language" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_piece_type" Association="Self.fk_literature_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_translator" Association="Self.fk_literature_chain_translator">
+            <End Role="translator" EntitySet="translator" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
           <AssociationSet Name="fk_matter_nature" Association="Self.fk_matter_nature">
             <End Role="nature" EntitySet="nature" />
             <End Role="matter" EntitySet="matter" />
           </AssociationSet>
+          <AssociationSet Name="fk_chain_remote_db" Association="Self.fk_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_remote_db" Association="Self.fk_dna_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_remote_db" Association="Self.fk_literature_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_music_chain_remote_db" Association="Self.fk_music_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fmotiv_remote_db" Association="Self.fk_fmotiv_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+          <AssociationSet Name="fk_measure_remote_db" Association="Self.fk_measure_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="measure" EntitySet="measure" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notation_nature" Association="Self.fk_notation_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="notation" EntitySet="notation" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_piece_type" Association="Self.fk_product_piece_type">
+            <End Role="product" EntitySet="product" />
+            <End Role="piece_type" EntitySet="piece_type" />
+          </AssociationSet>
+          <AssociationSet Name="fk_piece_type_nature" Association="Self.fk_piece_type_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="piece_type" EntitySet="piece_type" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fmotiv_matter" Association="Self.fk_fmotiv_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fmotiv_notation" Association="Self.fk_fmotiv_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fmotiv_piece_type" Association="Self.fk_fmotiv_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+          <AssociationSet Name="fk_congeneric_characteristic_element" Association="Self.fk_congeneric_characteristic_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_congeneric_characteristic_link" Association="Self.fk_congeneric_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_congeneric_characteristic_type" Association="Self.fk_congeneric_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_music_chain_matter" Association="Self.fk_music_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_music_chain_notation" Association="Self.fk_music_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_music_chain_piece_type" Association="Self.fk_music_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_note_notation" Association="Self.fk_note_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="note" EntitySet="note" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_note" Association="Self.fk_pitch_note">
+            <End Role="note" EntitySet="note" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
+            <End Role="accidental" EntitySet="accidental" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
+            <End Role="fmotiv_type" EntitySet="fmotiv_type" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_note_symbol" Association="Self.fk_pitch_note_symbol">
+            <End Role="note_symbol" EntitySet="note_symbol" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_note_tie" Association="Self.fk_note_tie">
+            <End Role="tie" EntitySet="tie" />
+            <End Role="note" EntitySet="note" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_remote_db_nature" Association="Self.fk_remote_db_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="remote_db" EntitySet="remote_db" />
+          </AssociationSet>
+
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LibiadaWebModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        
+
+        <EntityType Name="binary_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="chain_id" Type="Int64" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
+          <Property Name="value" Type="Double" />
+          <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="link_id" Type="Int32" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="first_element_id" Type="Int64" Nullable="false" />
+          <Property Name="second_element_id" Type="Int64" Nullable="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="element" Relationship="Self.fk_binary_characteristic_first_element" FromRole="binary_characteristic" ToRole="element" />
+          <NavigationProperty Name="link" Relationship="Self.fk_binary_characteristic_link" FromRole="binary_characteristic" ToRole="link" />
+          <NavigationProperty Name="element1" Relationship="Self.fk_binary_characteristic_second_element" FromRole="binary_characteristic" ToRole="element" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_binary_characteristic_chain" FromRole="binary_characteristic" ToRole="chain" />
+          <NavigationProperty Name="characteristic_type" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="binary_characteristic" ToRole="characteristic_type" />
+        </EntityType>
+        <EntityType Name="chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_chain_matter" FromRole="chain" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_chain_notation" FromRole="chain" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_chain_piece_type" FromRole="chain" ToRole="piece_type" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_chain" FromRole="chain" ToRole="binary_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_chain" FromRole="chain" ToRole="characteristic" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_chain_remote_db" FromRole="chain" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="chain_id" Type="Int64" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
+          <Property Name="value" Type="Double" />
+          <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="link_id" Type="Int32" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="link" Relationship="Self.fk_characteristic_link" FromRole="characteristic" ToRole="link" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_characteristic_chain" FromRole="characteristic" ToRole="chain" />
+          <NavigationProperty Name="characteristic_type" Relationship="Self.fk_characteristic_type" FromRole="characteristic" ToRole="characteristic_type" />
+        </EntityType>
+        <EntityType Name="characteristic_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="characteristic_type" Relationship="Self.fk_characteristic_group" FromRole="characteristic_group" ToRole="characteristic_type" />
+        </EntityType>
+        <EntityType Name="characteristic_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="characteristic_group_id" Type="Int32" />
+          <Property Name="class_name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="linkable" Type="Boolean" Nullable="false" />
+          <Property Name="full_chain_applicable" Type="Boolean" Nullable="false" />
+          <Property Name="congeneric_chain_applicable" Type="Boolean" Nullable="false" />
+          <Property Name="binary_chain_applicable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="characteristic_type" ToRole="binary_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_type" FromRole="characteristic_type" ToRole="characteristic" />
+          <NavigationProperty Name="characteristic_group" Relationship="Self.fk_characteristic_group" FromRole="characteristic_type" ToRole="characteristic_group" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_type" FromRole="characteristic_type" ToRole="congeneric_characteristic" />
+        </EntityType>
+        <EntityType Name="dna_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="product_id" Type="Int32" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="web_api_id" Type="Int32" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="fasta_header" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <Property Name="complement" Type="Boolean" Nullable="false" />
+          <Property Name="partial" Type="Boolean" Nullable="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_dna_chain" FromRole="dna_chain" ToRole="binary_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_dna_chain" FromRole="dna_chain" ToRole="characteristic" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_dna_chain_matter" FromRole="dna_chain" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_dna_chain_notation" FromRole="dna_chain" ToRole="notation" />
+          <NavigationProperty Name="product" Relationship="Self.fk_dna_chain_product" FromRole="dna_chain" ToRole="product" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_dna_chain_piece_type" FromRole="dna_chain" ToRole="piece_type" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_dna_chain_remote_db" FromRole="dna_chain" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="element">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_first_element" FromRole="element" ToRole="binary_characteristic" />
+          <NavigationProperty Name="binary_characteristic1" Relationship="Self.fk_binary_characteristic_second_element" FromRole="element" ToRole="binary_characteristic" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_element_notation" FromRole="element" ToRole="notation" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_element" FromRole="element" ToRole="congeneric_characteristic" />
+        </EntityType>
+        <EntityType Name="language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_language" FromRole="language" ToRole="literature_chain" />
+        </EntityType>
+        <EntityType Name="link">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_link" FromRole="link" ToRole="binary_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_link" FromRole="link" ToRole="characteristic" />
+        </EntityType>
+        <EntityType Name="literature_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="translator_id" Type="Int32"  />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="original" Type="Boolean" Nullable="false" />
+          <Property Name="language_id" Type="Int32" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_literature_chain" FromRole="literature_chain" ToRole="binary_characteristic" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_literature_chain" FromRole="literature_chain" ToRole="congeneric_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_literature_chain" FromRole="literature_chain" ToRole="characteristic" />
+          <NavigationProperty Name="language" Relationship="Self.fk_literature_chain_language" FromRole="literature_chain" ToRole="language" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_literature_chain_matter" FromRole="literature_chain" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_literature_chain_notation" FromRole="literature_chain" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_literature_chain_piece_type" FromRole="literature_chain" ToRole="piece_type" />
+          <NavigationProperty Name="translator" Relationship="Self.fk_literature_chain_translator" FromRole="literature_chain" ToRole="translator" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_literature_chain_remote_db" FromRole="literature_chain" ToRole="remote_db" />
+        </EntityType>
         <EntityType Name="matter">
           <Key>
             <PropertyRef Name="id" />
@@ -63,9 +1593,14 @@
           <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_chain_matter" FromRole="matter" ToRole="chain" />
+          <NavigationProperty Name="dna_chain" Relationship="Self.fk_dna_chain_matter" FromRole="matter" ToRole="dna_chain" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_matter" FromRole="matter" ToRole="literature_chain" />
           <NavigationProperty Name="nature" Relationship="Self.fk_matter_nature" FromRole="matter" ToRole="nature" />
+          <NavigationProperty Name="fmotiv" Relationship="Self.fk_fmotiv_matter" FromRole="matter" ToRole="fmotiv" />
+          <NavigationProperty Name="measure" Relationship="Self.fk_measure_matter" FromRole="matter" ToRole="measure" />
+          <NavigationProperty Name="music_chain" Relationship="Self.fk_music_chain_matter" FromRole="matter" ToRole="music_chain" />
         </EntityType>
-        
         <EntityType Name="nature">
           <Key>
             <PropertyRef Name="id" />
@@ -74,8 +1609,615 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="matter" Relationship="Self.fk_matter_nature" FromRole="nature" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_notation_nature" FromRole="nature" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_piece_type_nature" FromRole="nature" ToRole="piece_type" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_remote_db_nature" FromRole="nature" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="notation">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="nature_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_chain_notation" FromRole="notation" ToRole="chain" />
+          <NavigationProperty Name="dna_chain" Relationship="Self.fk_dna_chain_notation" FromRole="notation" ToRole="dna_chain" />
+          <NavigationProperty Name="element" Relationship="Self.fk_element_notation" FromRole="notation" ToRole="element" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_notation" FromRole="notation" ToRole="literature_chain" />
+          <NavigationProperty Name="nature" Relationship="Self.fk_notation_nature" FromRole="notation" ToRole="nature" />
+          <NavigationProperty Name="fmotiv" Relationship="Self.fk_fmotiv_notation" FromRole="notation" ToRole="fmotiv" />
+          <NavigationProperty Name="measure" Relationship="Self.fk_measure_notation" FromRole="notation" ToRole="measure" />
+          <NavigationProperty Name="music_chain" Relationship="Self.fk_music_chain_notation" FromRole="notation" ToRole="music_chain" />
+          <NavigationProperty Name="note" Relationship="Self.fk_note_notation" FromRole="notation" ToRole="note" />
+        </EntityType>
+        <EntityType Name="product">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+
+          <NavigationProperty Name="dna_chain" Relationship="Self.fk_dna_chain_product" FromRole="product" ToRole="dna_chain" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_product_piece_type" FromRole="product" ToRole="piece_type" />
+        </EntityType>
+        <EntityType Name="piece_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="nature_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_chain_piece_type" FromRole="piece_type" ToRole="chain" />
+          <NavigationProperty Name="dna_chain" Relationship="Self.fk_dna_chain_piece_type" FromRole="piece_type" ToRole="dna_chain" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_piece_type" FromRole="piece_type" ToRole="literature_chain" />
+          <NavigationProperty Name="nature" Relationship="Self.fk_piece_type_nature" FromRole="piece_type" ToRole="nature" />
+          <NavigationProperty Name="fmotiv" Relationship="Self.fk_fmotiv_piece_type" FromRole="piece_type" ToRole="fmotiv" />
+          <NavigationProperty Name="measure" Relationship="Self.fk_measure_piece_type" FromRole="piece_type" ToRole="measure" />
+          <NavigationProperty Name="music_chain" Relationship="Self.fk_music_chain_piece_type" FromRole="piece_type" ToRole="music_chain" />
+        </EntityType>
+        <EntityType Name="translator">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_translator" FromRole="translator" ToRole="literature_chain" />
+        </EntityType>
+        <EntityType Name="remote_db">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="nature_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="chain" Relationship="Self.fk_chain_remote_db" FromRole="remote_db" ToRole="chain" />
+          <NavigationProperty Name="dna_chain" Relationship="Self.fk_dna_chain_remote_db" FromRole="remote_db" ToRole="dna_chain" />
+          <NavigationProperty Name="literature_chain" Relationship="Self.fk_literature_chain_remote_db" FromRole="remote_db" ToRole="literature_chain" />
+          <NavigationProperty Name="music_chain" Relationship="Self.fk_music_chain_remote_db" FromRole="remote_db" ToRole="music_chain" />
+          <NavigationProperty Name="fmotiv" Relationship="Self.fk_fmotiv_remote_db" FromRole="remote_db" ToRole="fmotiv" />
+          <NavigationProperty Name="measure" Relationship="Self.fk_measure_remote_db" FromRole="remote_db" ToRole="measure" />
+          <NavigationProperty Name="nature" Relationship="Self.fk_remote_db_nature" FromRole="remote_db" ToRole="nature" />
         </EntityType>
 
+        <EntityType Name="fmotiv">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="fmotiv_type_id" Type="Int32" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_fmotiv_matter" FromRole="fmotiv" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_fmotiv_notation" FromRole="fmotiv" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_fmotiv_piece_type" FromRole="fmotiv" ToRole="piece_type" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_fmotiv" FromRole="fmotiv" ToRole="binary_characteristic" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_fmotiv" FromRole="fmotiv" ToRole="congeneric_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_fmotiv" FromRole="fmotiv" ToRole="characteristic" />
+          <NavigationProperty Name="fmotiv_type" Relationship="Self.fk_fmotiv_fmotiv_type" FromRole="fmotiv" ToRole="fmotiv_type" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_fmotiv_remote_db" FromRole="fmotiv" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="congeneric_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="chain_id" Type="Int64" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="Int32" Nullable="false" />
+          <Property Name="value" Type="Double" />
+          <Property Name="value_string" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="link_id" Type="Int32" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="element_id" Type="Int64" Nullable="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="characteristic_type" Relationship="Self.fk_congeneric_characteristic_type" FromRole="congeneric_characteristic" ToRole="characteristic_type" />
+          <NavigationProperty Name="element" Relationship="Self.fk_congeneric_characteristic_element" FromRole="congeneric_characteristic" ToRole="element" />
+          <NavigationProperty Name="link" Relationship="Self.fk_congeneric_characteristic_link" FromRole="congeneric_characteristic" ToRole="link" />
+        </EntityType>
+        <EntityType Name="instrument">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="pitch" Relationship="Self.fk_pitch_instrument" FromRole="instrument" ToRole="pitch" />
+        </EntityType>
+        <EntityType Name="measure">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="beats" Type="Int32" Nullable="false" />
+          <Property Name="beatbase" Type="Int32" Nullable="false" />
+          <Property Name="ticks_per_beat" Type="Int32" />
+          <Property Name="fifths" Type="Int32" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_measure_matter" FromRole="measure" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_measure_notation" FromRole="measure" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_measure_piece_type" FromRole="measure" ToRole="piece_type" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_measure" FromRole="measure" ToRole="binary_characteristic" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_measure" FromRole="measure" ToRole="congeneric_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_measure" FromRole="measure" ToRole="characteristic" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_measure_remote_db" FromRole="measure" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="music_chain">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="matter_id" Type="Int64" Nullable="false" />
+          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
+          <Property Name="piece_type_id" Type="Int32" Nullable="false" />
+          <Property Name="piece_position" Type="Int64" Nullable="false" />
+          <Property Name="remote_db_id" Type="Int32" />
+          <Property Name="remote_id" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="matter" Relationship="Self.fk_music_chain_matter" FromRole="music_chain" ToRole="matter" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_music_chain_notation" FromRole="music_chain" ToRole="notation" />
+          <NavigationProperty Name="piece_type" Relationship="Self.fk_music_chain_piece_type" FromRole="music_chain" ToRole="piece_type" />
+          <NavigationProperty Name="binary_characteristic" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="music_chain" ToRole="binary_characteristic" />
+          <NavigationProperty Name="congeneric_characteristic" Relationship="Self.fk_congeneric_characteristic_music_chain" FromRole="music_chain" ToRole="congeneric_characteristic" />
+          <NavigationProperty Name="characteristic" Relationship="Self.fk_characteristic_music_chain" FromRole="music_chain" ToRole="characteristic" />
+          <NavigationProperty Name="remote_db" Relationship="Self.fk_music_chain_remote_db" FromRole="music_chain" ToRole="remote_db" />
+        </EntityType>
+        <EntityType Name="note">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <Property Name="name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="notation_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="numerator" Type="Int32" Nullable="false" />
+          <Property Name="denominator" Type="Int32" Nullable="false" />
+          <Property Name="ticks" Type="Int32" />
+          <Property Name="onumerator" Type="Int32" Nullable="false" />
+          <Property Name="odenominator" Type="Int32" Nullable="false" />
+          <Property Name="triplet" Type="Boolean" Nullable="false" />
+          <Property Name="priority" Type="Int32" />
+          <Property Name="tie_id" Type="Int32" Nullable="false" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="notation" Relationship="Self.fk_note_notation" FromRole="note" ToRole="notation" />
+          <NavigationProperty Name="pitch" Relationship="Self.fk_pitch_note" FromRole="note" ToRole="pitch" />
+          <NavigationProperty Name="tie" Relationship="Self.fk_note_tie" FromRole="note" ToRole="tie" />
+        </EntityType>
+        <EntityType Name="pitch">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="octave" Type="Int32" Nullable="false" />
+          <Property Name="midinumber" Type="Int32" Nullable="false" />
+          <Property Name="instrument_id" Type="Int32" Nullable="false" />
+          <Property Name="note_id" Type="Int64" Nullable="false" />
+          <Property Name="accidental_id" Type="Int32" Nullable="false" />
+          <Property Name="note_symbol_id" Type="Int32" Nullable="false" />
+          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="modified" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="note" Relationship="Self.fk_pitch_note" FromRole="pitch" ToRole="note" />
+          <NavigationProperty Name="instrument" Relationship="Self.fk_pitch_instrument" FromRole="pitch" ToRole="instrument" />
+          <NavigationProperty Name="accidental" Relationship="Self.fk_pitch_accidental" FromRole="pitch" ToRole="accidental" />
+          <NavigationProperty Name="note_symbol" Relationship="Self.fk_pitch_note_symbol" FromRole="pitch" ToRole="note_symbol" />
+        </EntityType>
+
+        <EntityType Name="accidental">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="pitch" Relationship="Self.fk_pitch_accidental" FromRole="accidental" ToRole="pitch" />
+        </EntityType>
+
+        <EntityType Name="fmotiv_type">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="fmotiv" Relationship="Self.fk_fmotiv_fmotiv_type" FromRole="fmotiv_type" ToRole="fmotiv" />
+        </EntityType>
+
+        <EntityType Name="note_symbol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="pitch" Relationship="Self.fk_pitch_note_symbol" FromRole="note_symbol" ToRole="pitch" />
+        </EntityType>
+
+        <EntityType Name="tie">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="note" Relationship="Self.fk_note_tie" FromRole="tie" ToRole="note" />
+        </EntityType>
+
+        <Association Name="fk_binary_characteristic_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_dna_chain">
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dna_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_dna_chain">
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="dna_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_literature_chain">
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="literature_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_first_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="first_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_second_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="second_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_binary_characteristic_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_characteristic_group">
+          <End Role="characteristic_group" Type="Self.characteristic_group" Multiplicity="0..1" />
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic_type">
+              <PropertyRef Name="characteristic_group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_product">
+          <End Role="product" Type="Self.product" Multiplicity="0..1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="product">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_element_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="element" Type="Self.element" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="element">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_language">
+          <End Role="language" Type="Self.language" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_translator">
+          <End Role="translator" Type="Self.translator" Multiplicity="0..1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="translator">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="translator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_matter_nature">
           <End Role="nature" Type="Self.nature" Multiplicity="1" />
           <End Role="matter" Type="Self.matter" Multiplicity="*" />
@@ -88,16 +2230,836 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_remote_db_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="remote_db">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_dna_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="dna_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="chain" Type="Self.chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_literature_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="literature_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_music_chain_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_measure_remote_db">
+          <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
+          <End Role="measure" Type="Self.measure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="remote_db">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="measure">
+              <PropertyRef Name="remote_db_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notation_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="notation" Type="Self.notation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notation">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="product" Type="Self.product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="product">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_piece_type_nature">
+          <End Role="nature" Type="Self.nature" Multiplicity="1" />
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="nature">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="piece_type">
+              <PropertyRef Name="nature_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_fmotiv_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_fmotiv_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_fmotiv">
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_congeneric_characteristic_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_congeneric_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_measure_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="measure" Type="Self.measure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="measure">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_measure_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="measure" Type="Self.measure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="measure">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_measure_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="measure" Type="Self.measure" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="measure">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_measure">
+          <End Role="measure" Type="Self.measure" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="measure">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_music_chain_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_music_chain_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_music_chain_piece_type">
+          <End Role="piece_type" Type="Self.piece_type" Multiplicity="1" />
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="piece_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="music_chain">
+              <PropertyRef Name="piece_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_binary_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="binary_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_congeneric_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="congeneric_characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_characteristic_music_chain">
+          <End Role="music_chain" Type="Self.music_chain" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="music_chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="characteristic">
+              <PropertyRef Name="chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_note_notation">
+          <End Role="notation" Type="Self.notation" Multiplicity="1" />
+          <End Role="note" Type="Self.note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="notation">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note">
+              <PropertyRef Name="notation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_pitch_note">
+          <End Role="note" Type="Self.note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="note">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="note_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_accidental">
+          <End Role="accidental" Type="Self.accidental" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accidental">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="accidental_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_fmotiv_fmotiv_type">
+          <End Role="fmotiv_type" Type="Self.fmotiv_type" Multiplicity="1" />
+          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="fmotiv_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="fmotiv">
+              <PropertyRef Name="fmotiv_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_note_symbol">
+          <End Role="note_symbol" Type="Self.note_symbol" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="note_symbol">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="note_symbol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_note_tie">
+          <End Role="tie" Type="Self.tie" Multiplicity="1" />
+          <End Role="note" Type="Self.note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tie">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note">
+              <PropertyRef Name="tie_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_pitch_instrument">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="1" />
+          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="pitch">
+              <PropertyRef Name="instrument_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
 
         <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
+
+          <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" />
+          <EntitySet Name="chain" EntityType="Self.chain" />
+          <EntitySet Name="characteristic" EntityType="Self.characteristic" />
+          <EntitySet Name="characteristic_group" EntityType="Self.characteristic_group" />
+          <EntitySet Name="characteristic_type" EntityType="Self.characteristic_type" />
+          <EntitySet Name="dna_chain" EntityType="Self.dna_chain" />
+          <EntitySet Name="element" EntityType="Self.element" />
+          <EntitySet Name="language" EntityType="Self.language" />
+          <EntitySet Name="link" EntityType="Self.link" />
+          <EntitySet Name="literature_chain" EntityType="Self.literature_chain" />
           <EntitySet Name="matter" EntityType="Self.matter" />
           <EntitySet Name="nature" EntityType="Self.nature" />
+          <EntitySet Name="notation" EntityType="Self.notation" />
+          <EntitySet Name="product" EntityType="Self.product" />
+          <EntitySet Name="piece_type" EntityType="Self.piece_type" />
+          <EntitySet Name="translator" EntityType="Self.translator" />
+          <EntitySet Name="remote_db" EntityType="Self.remote_db" />
+          <EntitySet Name="fmotiv" EntityType="Self.fmotiv" />
+          <EntitySet Name="congeneric_characteristic" EntityType="Self.congeneric_characteristic" />
+          <EntitySet Name="instrument" EntityType="Self.instrument" />
+          <EntitySet Name="measure" EntityType="Self.measure" />
+          <EntitySet Name="music_chain" EntityType="Self.music_chain" />
+          <EntitySet Name="note" EntityType="Self.note" />
+          <EntitySet Name="pitch" EntityType="Self.pitch" />
+          <EntitySet Name="accidental" EntityType="Self.accidental" />
+          <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" />
+          <EntitySet Name="note_symbol" EntityType="Self.note_symbol" />
+          <EntitySet Name="tie" EntityType="Self.tie" />
+
+          <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_link" Association="Self.fk_binary_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_second_element" Association="Self.fk_binary_characteristic_second_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_binary_characteristic_characteristic_type" Association="Self.fk_binary_characteristic_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_matter" Association="Self.fk_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_notation" Association="Self.fk_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_chain_piece_type" Association="Self.fk_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_link" Association="Self.fk_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_type" Association="Self.fk_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_characteristic_group" Association="Self.fk_characteristic_group">
+            <End Role="characteristic_group" EntitySet="characteristic_group" />
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_notation" Association="Self.fk_dna_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_product" Association="Self.fk_dna_chain_product">
+            <End Role="product" EntitySet="product" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_piece_type" Association="Self.fk_dna_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_element_notation" Association="Self.fk_element_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="element" EntitySet="element" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
+            <End Role="language" EntitySet="language" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_piece_type" Association="Self.fk_literature_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_translator" Association="Self.fk_literature_chain_translator">
+            <End Role="translator" EntitySet="translator" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
           <AssociationSet Name="fk_matter_nature" Association="Self.fk_matter_nature">
             <End Role="nature" EntitySet="nature" />
             <End Role="matter" EntitySet="matter" />
           </AssociationSet>
+          <AssociationSet Name="fk_chain_remote_db" Association="Self.fk_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="chain" EntitySet="chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_dna_chain_remote_db" Association="Self.fk_dna_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="dna_chain" EntitySet="dna_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_literature_chain_remote_db" Association="Self.fk_literature_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="literature_chain" EntitySet="literature_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_music_chain_remote_db" Association="Self.fk_music_chain_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_fmotiv_remote_db" Association="Self.fk_fmotiv_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+          <AssociationSet Name="fk_measure_remote_db" Association="Self.fk_measure_remote_db">
+            <End Role="remote_db" EntitySet="remote_db" />
+            <End Role="measure" EntitySet="measure" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notation_nature" Association="Self.fk_notation_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="notation" EntitySet="notation" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_piece_type" Association="Self.fk_product_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="product" EntitySet="product" />
+          </AssociationSet>
+          <AssociationSet Name="fk_piece_type_nature" Association="Self.fk_piece_type_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="piece_type" EntitySet="piece_type" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_chain" Association="Self.fk_binary_characteristic_chain">
+            <End Role="chain" EntitySet="chain" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_chain" Association="Self.fk_characteristic_chain">
+            <End Role="chain" EntitySet="chain" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_dna_chain" Association="Self.fk_binary_characteristic_dna_chain">
+            <End Role="dna_chain" EntitySet="dna_chain" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_dna_chain" Association="Self.fk_characteristic_dna_chain">
+            <End Role="dna_chain" EntitySet="dna_chain" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_literature_chain" Association="Self.fk_binary_characteristic_literature_chain">
+            <End Role="literature_chain" EntitySet="literature_chain" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_literature_chain" Association="Self.fk_congeneric_characteristic_literature_chain">
+            <End Role="literature_chain" EntitySet="literature_chain" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_literature_chain" Association="Self.fk_characteristic_literature_chain">
+            <End Role="literature_chain" EntitySet="literature_chain" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_fmotiv_matter" Association="Self.fk_fmotiv_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_fmotiv_notation" Association="Self.fk_fmotiv_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_fmotiv_piece_type" Association="Self.fk_fmotiv_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_fmotiv" Association="Self.fk_binary_characteristic_fmotiv">
+            <End Role="fmotiv" EntitySet="fmotiv" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_fmotiv" Association="Self.fk_congeneric_characteristic_fmotiv">
+            <End Role="fmotiv" EntitySet="fmotiv" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_fmotiv" Association="Self.fk_characteristic_fmotiv">
+            <End Role="fmotiv" EntitySet="fmotiv" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_type" Association="Self.fk_congeneric_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_element" Association="Self.fk_congeneric_characteristic_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_link" Association="Self.fk_congeneric_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_measure_matter" Association="Self.fk_measure_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="measure" EntitySet="measure" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_measure_notation" Association="Self.fk_measure_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="measure" EntitySet="measure" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_measure_piece_type" Association="Self.fk_measure_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="measure" EntitySet="measure" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_measure" Association="Self.fk_binary_characteristic_measure">
+            <End Role="measure" EntitySet="measure" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_measure" Association="Self.fk_congeneric_characteristic_measure">
+            <End Role="measure" EntitySet="measure" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_measure" Association="Self.fk_characteristic_measure">
+            <End Role="measure" EntitySet="measure" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_music_chain_matter" Association="Self.fk_music_chain_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_music_chain_notation" Association="Self.fk_music_chain_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+          <AssociationSet Name="fk_music_chain_piece_type" Association="Self.fk_music_chain_piece_type">
+            <End Role="piece_type" EntitySet="piece_type" />
+            <End Role="music_chain" EntitySet="music_chain" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_binary_characteristic_music_chain" Association="Self.fk_binary_characteristic_music_chain">
+            <End Role="music_chain" EntitySet="music_chain" />
+            <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_congeneric_characteristic_music_chain" Association="Self.fk_congeneric_characteristic_music_chain">
+            <End Role="music_chain" EntitySet="music_chain" />
+            <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_characteristic_music_chain" Association="Self.fk_characteristic_music_chain">
+            <End Role="music_chain" EntitySet="music_chain" />
+            <End Role="characteristic" EntitySet="characteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_note_notation" Association="Self.fk_note_notation">
+            <End Role="notation" EntitySet="notation" />
+            <End Role="note" EntitySet="note" />
+          </AssociationSet>
+          <AssociationSet Name="fk_pitch_note" Association="Self.fk_pitch_note">
+            <End Role="note" EntitySet="note" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
+            <End Role="accidental" EntitySet="accidental" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
+            <End Role="fmotiv_type" EntitySet="fmotiv_type" />
+            <End Role="fmotiv" EntitySet="fmotiv" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_note_symbol" Association="Self.fk_pitch_note_symbol">
+            <End Role="note_symbol" EntitySet="note_symbol" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_note_tie" Association="Self.fk_note_tie">
+            <End Role="tie" EntitySet="tie" />
+            <End Role="note" EntitySet="note" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_remote_db_nature" Association="Self.fk_remote_db_nature">
+            <End Role="nature" EntitySet="nature" />
+            <End Role="remote_db" EntitySet="remote_db" />
+          </AssociationSet>
+
         </EntityContainer>
-        
+
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -105,6 +3067,150 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LibiadaWebModelStoreContainer" CdmEntityContainer="LibiadaWebEntities">
 
+          <EntitySetMapping Name="binary_characteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.binary_characteristic">
+              <MappingFragment StoreEntitySet="binary_characteristic">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
+                <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="value_string" ColumnName="value_string" />
+                <ScalarProperty Name="link_id" ColumnName="link_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="first_element_id" ColumnName="first_element_id" />
+                <ScalarProperty Name="second_element_id" ColumnName="second_element_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="chain">
+            <EntityTypeMapping TypeName="LibiadaWebModel.chain">
+              <MappingFragment StoreEntitySet="chain">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="characteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic">
+              <MappingFragment StoreEntitySet="characteristic">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
+                <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="value_string" ColumnName="value_string" />
+                <ScalarProperty Name="link_id" ColumnName="link_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="characteristic_group">
+            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic_group">
+              <MappingFragment StoreEntitySet="characteristic_group">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="characteristic_type">
+            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic_type">
+              <MappingFragment StoreEntitySet="characteristic_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="characteristic_group_id" ColumnName="characteristic_group_id" />
+                <ScalarProperty Name="class_name" ColumnName="class_name" />
+                <ScalarProperty Name="linkable" ColumnName="linkable" />
+                <ScalarProperty Name="full_chain_applicable" ColumnName="full_chain_applicable" />
+                <ScalarProperty Name="congeneric_chain_applicable" ColumnName="congeneric_chain_applicable" />
+                <ScalarProperty Name="binary_chain_applicable" ColumnName="binary_chain_applicable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dna_chain">
+            <EntityTypeMapping TypeName="LibiadaWebModel.dna_chain">
+              <MappingFragment StoreEntitySet="dna_chain">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="product_id" ColumnName="product_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="complement" ColumnName="complement" />
+                <ScalarProperty Name="partial" ColumnName="partial" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="element">
+            <EntityTypeMapping TypeName="LibiadaWebModel.element">
+              <MappingFragment StoreEntitySet="element">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="language">
+            <EntityTypeMapping TypeName="LibiadaWebModel.language">
+              <MappingFragment StoreEntitySet="language">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="link">
+            <EntityTypeMapping TypeName="LibiadaWebModel.link">
+              <MappingFragment StoreEntitySet="link">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="literature_chain">
+            <EntityTypeMapping TypeName="LibiadaWebModel.literature_chain">
+              <MappingFragment StoreEntitySet="literature_chain">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="translator_id" ColumnName="translator_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="original" ColumnName="original" />
+                <ScalarProperty Name="language_id" ColumnName="language_id" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="matter">
             <EntityTypeMapping TypeName="LibiadaWebModel.matter">
               <MappingFragment StoreEntitySet="matter">
@@ -117,7 +3223,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          
           <EntitySetMapping Name="nature">
             <EntityTypeMapping TypeName="LibiadaWebModel.nature">
               <MappingFragment StoreEntitySet="nature">
@@ -127,7 +3232,224 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          
+          <EntitySetMapping Name="notation">
+            <EntityTypeMapping TypeName="LibiadaWebModel.notation">
+              <MappingFragment StoreEntitySet="notation">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="product">
+            <EntityTypeMapping TypeName="LibiadaWebModel.product">
+              <MappingFragment StoreEntitySet="product">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="piece_type">
+            <EntityTypeMapping TypeName="LibiadaWebModel.piece_type">
+              <MappingFragment StoreEntitySet="piece_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="translator">
+            <EntityTypeMapping TypeName="LibiadaWebModel.translator">
+              <MappingFragment StoreEntitySet="translator">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="remote_db">
+            <EntityTypeMapping TypeName="LibiadaWebModel.remote_db">
+              <MappingFragment StoreEntitySet="remote_db">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="url" ColumnName="url" />
+                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="fmotiv">
+            <EntityTypeMapping TypeName="LibiadaWebModel.fmotiv">
+              <MappingFragment StoreEntitySet="fmotiv">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="fmotiv_type_id" ColumnName="fmotiv_type_id" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="congeneric_characteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.congeneric_characteristic">
+              <MappingFragment StoreEntitySet="congeneric_characteristic">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
+                <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="value_string" ColumnName="value_string" />
+                <ScalarProperty Name="link_id" ColumnName="link_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="element_id" ColumnName="element_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="instrument">
+            <EntityTypeMapping TypeName="LibiadaWebModel.instrument">
+              <MappingFragment StoreEntitySet="instrument">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="measure">
+            <EntityTypeMapping TypeName="LibiadaWebModel.measure">
+              <MappingFragment StoreEntitySet="measure">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="beats" ColumnName="beats" />
+                <ScalarProperty Name="beatbase" ColumnName="beatbase" />
+                <ScalarProperty Name="ticks_per_beat" ColumnName="ticks_per_beat" />
+                <ScalarProperty Name="fifths" ColumnName="fifths" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="music_chain">
+            <EntityTypeMapping TypeName="LibiadaWebModel.music_chain">
+              <MappingFragment StoreEntitySet="music_chain">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
+                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
+                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
+                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
+                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="note">
+            <EntityTypeMapping TypeName="LibiadaWebModel.note">
+              <MappingFragment StoreEntitySet="note">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="value" ColumnName="value" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="numerator" ColumnName="numerator" />
+                <ScalarProperty Name="denominator" ColumnName="denominator" />
+                <ScalarProperty Name="ticks" ColumnName="ticks" />
+                <ScalarProperty Name="onumerator" ColumnName="onumerator" />
+                <ScalarProperty Name="odenominator" ColumnName="odenominator" />
+                <ScalarProperty Name="triplet" ColumnName="triplet" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="tie_id" ColumnName="tie_id" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="pitch">
+            <EntityTypeMapping TypeName="LibiadaWebModel.pitch">
+              <MappingFragment StoreEntitySet="pitch">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="octave" ColumnName="octave" />
+                <ScalarProperty Name="midinumber" ColumnName="midinumber" />
+                <ScalarProperty Name="instrument_id" ColumnName="instrument_id" />
+                <ScalarProperty Name="note_id" ColumnName="note_id" />
+                <ScalarProperty Name="accidental_id" ColumnName="accidental_id" />
+                <ScalarProperty Name="note_symbol_id" ColumnName="note_symbol_id" />
+                <ScalarProperty Name="created" ColumnName="created" />
+                <ScalarProperty Name="modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="accidental">
+            <EntityTypeMapping TypeName="LibiadaWebModel.accidental">
+              <MappingFragment StoreEntitySet="accidental">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="fmotiv_type">
+            <EntityTypeMapping TypeName="LibiadaWebModel.fmotiv_type">
+              <MappingFragment StoreEntitySet="fmotiv_type">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="note_symbol">
+            <EntityTypeMapping TypeName="LibiadaWebModel.note_symbol">
+              <MappingFragment StoreEntitySet="note_symbol">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="tie">
+            <EntityTypeMapping TypeName="LibiadaWebModel.tie">
+              <MappingFragment StoreEntitySet="tie">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

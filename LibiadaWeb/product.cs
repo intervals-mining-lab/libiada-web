@@ -12,23 +12,19 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class nature
+    public partial class product
     {
-        public nature()
+        public product()
         {
-            this.matter = new HashSet<matter>();
-            this.notation = new HashSet<notation>();
-            this.piece_type = new HashSet<piece_type>();
-            this.remote_db = new HashSet<remote_db>();
+            this.dna_chain = new HashSet<dna_chain>();
         }
     
         public int id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
+        public int piece_type_id { get; set; }
     
-        public virtual ICollection<matter> matter { get; set; }
-        public virtual ICollection<notation> notation { get; set; }
-        public virtual ICollection<piece_type> piece_type { get; set; }
-        public virtual ICollection<remote_db> remote_db { get; set; }
+        public virtual ICollection<dna_chain> dna_chain { get; set; }
+        public virtual piece_type piece_type { get; set; }
     }
 }

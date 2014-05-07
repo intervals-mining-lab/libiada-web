@@ -12,23 +12,17 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class nature
+    public partial class note_symbol
     {
-        public nature()
+        public note_symbol()
         {
-            this.matter = new HashSet<matter>();
-            this.notation = new HashSet<notation>();
-            this.piece_type = new HashSet<piece_type>();
-            this.remote_db = new HashSet<remote_db>();
+            this.pitch = new HashSet<pitch>();
         }
     
         public int id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
     
-        public virtual ICollection<matter> matter { get; set; }
-        public virtual ICollection<notation> notation { get; set; }
-        public virtual ICollection<piece_type> piece_type { get; set; }
-        public virtual ICollection<remote_db> remote_db { get; set; }
+        public virtual ICollection<pitch> pitch { get; set; }
     }
 }

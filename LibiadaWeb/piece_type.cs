@@ -12,9 +12,9 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class matter
+    public partial class piece_type
     {
-        public matter()
+        public piece_type()
         {
             this.chain = new HashSet<chain>();
             this.dna_chain = new HashSet<dna_chain>();
@@ -24,12 +24,10 @@ namespace LibiadaWeb
             this.music_chain = new HashSet<music_chain>();
         }
     
-        public long id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
-        public int nature_id { get; set; }
         public string description { get; set; }
-        public System.DateTimeOffset created { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
+        public int nature_id { get; set; }
     
         public virtual ICollection<chain> chain { get; set; }
         public virtual ICollection<dna_chain> dna_chain { get; set; }

@@ -12,31 +12,33 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class matter
+    public partial class notation
     {
-        public matter()
+        public notation()
         {
             this.chain = new HashSet<chain>();
             this.dna_chain = new HashSet<dna_chain>();
+            this.element = new HashSet<element>();
             this.literature_chain = new HashSet<literature_chain>();
             this.fmotiv = new HashSet<fmotiv>();
             this.measure = new HashSet<measure>();
             this.music_chain = new HashSet<music_chain>();
+            this.note = new HashSet<note>();
         }
     
-        public long id { get; set; }
+        public int id { get; set; }
         public string name { get; set; }
-        public int nature_id { get; set; }
         public string description { get; set; }
-        public System.DateTimeOffset created { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
+        public int nature_id { get; set; }
     
         public virtual ICollection<chain> chain { get; set; }
         public virtual ICollection<dna_chain> dna_chain { get; set; }
+        public virtual ICollection<element> element { get; set; }
         public virtual ICollection<literature_chain> literature_chain { get; set; }
         public virtual nature nature { get; set; }
         public virtual ICollection<fmotiv> fmotiv { get; set; }
         public virtual ICollection<measure> measure { get; set; }
         public virtual ICollection<music_chain> music_chain { get; set; }
+        public virtual ICollection<note> note { get; set; }
     }
 }

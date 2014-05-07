@@ -25,7 +25,33 @@ namespace LibiadaWeb
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<binary_characteristic> binary_characteristic { get; set; }
+        public virtual DbSet<chain> chain { get; set; }
+        public virtual DbSet<characteristic> characteristic { get; set; }
+        public virtual DbSet<characteristic_group> characteristic_group { get; set; }
+        public virtual DbSet<characteristic_type> characteristic_type { get; set; }
+        public virtual DbSet<dna_chain> dna_chain { get; set; }
+        public virtual DbSet<element> element { get; set; }
+        public virtual DbSet<language> language { get; set; }
+        public virtual DbSet<link> link { get; set; }
+        public virtual DbSet<literature_chain> literature_chain { get; set; }
         public virtual DbSet<matter> matter { get; set; }
         public virtual DbSet<nature> nature { get; set; }
+        public virtual DbSet<notation> notation { get; set; }
+        public virtual DbSet<product> product { get; set; }
+        public virtual DbSet<piece_type> piece_type { get; set; }
+        public virtual DbSet<translator> translator { get; set; }
+        public virtual DbSet<remote_db> remote_db { get; set; }
+        public virtual DbSet<fmotiv> fmotiv { get; set; }
+        public virtual DbSet<congeneric_characteristic> congeneric_characteristic { get; set; }
+        public virtual DbSet<instrument> instrument { get; set; }
+        public virtual DbSet<measure> measure { get; set; }
+        public virtual DbSet<music_chain> music_chain { get; set; }
+        public virtual DbSet<note> note { get; set; }
+        public virtual DbSet<pitch> pitch { get; set; }
+        public virtual DbSet<accidental> accidental { get; set; }
+        public virtual DbSet<fmotiv_type> fmotiv_type { get; set; }
+        public virtual DbSet<note_symbol> note_symbol { get; set; }
+        public virtual DbSet<tie> tie { get; set; }
     }
 }
