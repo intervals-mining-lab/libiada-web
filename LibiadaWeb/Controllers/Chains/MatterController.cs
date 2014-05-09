@@ -5,6 +5,8 @@ using System.Web.Mvc;
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using LibiadaWeb.Helpers;
+
     public class MatterController : Controller
     {
         private LibiadaWebEntities db = new LibiadaWebEntities();
@@ -12,6 +14,7 @@ namespace LibiadaWeb.Controllers.Chains
         // GET: /Matter/
         public ActionResult Index()
         {
+            ViewBag.dbName = DbHelper.GetDbName(db);
             var matter = db.matter.Include(m => m.nature);
             return View(matter.ToList());
         }

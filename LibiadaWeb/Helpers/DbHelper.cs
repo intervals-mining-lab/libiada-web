@@ -18,7 +18,7 @@
         /// </returns>
         public static string GetDbName(LibiadaWebEntities db)
         {
-            return db.Set<string>().SqlQuery("SELECT current_database()").First();
-        }
+            return db.Database.SqlQuery<string>("SELECT current_database()").First();
+        }    
     }
 }

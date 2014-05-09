@@ -23,6 +23,13 @@ namespace LibiadaWeb
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
+                        "~/Scripts/procedures.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
+                        "~/Scripts/Controllers/calculation.js"));
+
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));

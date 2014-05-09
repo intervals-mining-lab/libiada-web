@@ -17,6 +17,7 @@ namespace LibiadaWeb.Models
             double arg = -2 * Math.PI * k / n;
             return new Complex(Math.Cos(arg), Math.Sin(arg));
         }
+
         /// <summary>
         /// Возвращает спектр сигнала
         /// </summary>
