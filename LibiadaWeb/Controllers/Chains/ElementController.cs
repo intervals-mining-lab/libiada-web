@@ -43,7 +43,7 @@ namespace LibiadaWeb.Controllers.Chains
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,value,description,name,notation_id,created,modified")] element element)
+        public ActionResult Create([Bind(Include="id,value,description,name,notation_id")] element element)
         {
             if (ModelState.IsValid)
             {

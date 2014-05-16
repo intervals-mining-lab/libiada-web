@@ -310,6 +310,31 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ILinkRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\INotationRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\IPieceTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\IRemoteDbRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\LinkRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\ChainImporter.cs" />
+    <Compile Include="Models\Repositories\Chains\ChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\DnaChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IDnaChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\ILiteratureChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IMatterRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IMusicChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\LiteratureChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\MatterRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\MusicChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\ElementRepository.cs" />
+    <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IElementRepository.cs" />
     <Compile Include="music_chain.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -377,13 +402,13 @@
       <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Content>
-    <None Include="Scripts\jquery-2.1.0.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Controllers\calculation.js" />
-    <Content Include="Scripts\jquery-2.1.0.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.js" />
-    <Content Include="Scripts\jquery-2.1.0.min.map" />
+    <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\jquery-2.1.1.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.js" />
+    <Content Include="Scripts\jquery-2.1.1.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
