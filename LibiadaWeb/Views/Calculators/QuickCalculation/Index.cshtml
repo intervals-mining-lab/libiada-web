@@ -1,0 +1,44 @@
+﻿@using LibiadaWeb.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление характеристик произвольной цепочки";
+}
+
+<h2>Вычисление характеристик произвольной цепочки</h2>
+
+<script type="text/javascript">
+
+    var divCounter = 0;
+    
+    $(document).ready(function () {
+
+        AddCharacteristic();
+    });
+
+    function AddCharacteristic() {
+        
+        var paramsList = new Object();
+        
+        @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
+        @Html.FillOptionsList("linkIds",  (IEnumerable<SelectListItem>)ViewBag.linksList)
+
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
+        $("#characteristics_list").append(characteristicsDiv);
+        divCounter++;
+        
+        return false;
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.Label("Цепочка")
+    @Html.Editor("chain")
+    <br/>
+    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику"/>
+    <div id="characteristics_list"></div>
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}

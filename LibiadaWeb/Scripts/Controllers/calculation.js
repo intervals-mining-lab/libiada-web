@@ -22,7 +22,8 @@ app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, f
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.links[0],
             notation: $scope.notationsFiltered[0],
-            language: $scope.languages[0]
+            language: $scope.languages[0],
+            translator: $scope.translators[0]
         });
     };
 

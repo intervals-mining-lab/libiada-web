@@ -43,8 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Clusterizator">
-      <HintPath>..\..\libiada-clusterization\Clusterizator\bin\Debug\Clusterizator.dll</HintPath>
+    <Reference Include="Clusterizator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libiada-clusterization\Clusterizator\bin\Release\Clusterizator.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -54,8 +55,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="LibiadaCore">
-      <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
+    <Reference Include="LibiadaCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\libiada-core\LibiadaCore\bin\Release\LibiadaCore.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -216,6 +218,14 @@
     <Compile Include="congeneric_characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
+    <Compile Include="Controllers\Calculators\CalculationController.cs" />
+    <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
+    <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\GenesCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\LocalCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\QuickCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Characteristics\BinaryCharacteristicController.cs" />
@@ -585,6 +595,21 @@
     <Content Include="Views\Catalogs\Translator\Details.cshtml" />
     <Content Include="Views\Catalogs\Translator\Edit.cshtml" />
     <Content Include="Views\Catalogs\Translator\Index.cshtml" />
+    <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\RelationCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\BuildingComparison\Index.cshtml" />
+    <Content Include="Views\Calculators\BuildingComparison\Result.cshtml" />
+    <Content Include="Views\Calculators\Calculation\Index.cshtml" />
+    <Content Include="Views\Calculators\Calculation\Result.cshtml" />
+    <Content Include="Views\Calculators\Clusterization\Index.cshtml" />
+    <Content Include="Views\Calculators\Clusterization\Result.cshtml" />
+    <Content Include="Views\Calculators\CongenericCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\CongenericCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\GenesCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\LocalCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\LocalCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\QuickCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\QuickCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

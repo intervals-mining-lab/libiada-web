@@ -52,7 +52,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = m.id,
                 Text = m.name,
                 Selected = false,
-                Nature = m.nature_id
+                Nature = m.nature_id,
+                description = m.description
             });
         }
 
@@ -63,7 +64,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = m.id,
                 Text = m.name,
                 Selected = m.id == selectedMatter,
-                Nature = m.nature_id
+                Nature = m.nature_id,
+                description = m.description
             });
         }
 
@@ -74,7 +76,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Value = m.id,
                 Text = m.name,
                 Selected = selectedMatters.Contains(m.id),
-                Nature = m.nature_id
+                Nature = m.nature_id,
+                description = m.description
             });
         }
 

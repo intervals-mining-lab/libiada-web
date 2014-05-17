@@ -1,0 +1,89 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление характеристик однородных цепочек";
+}
+
+<h2>Вычисление характеристик однородных цепочек</h2>
+
+<script type="text/javascript">
+    "use strict";
+
+    var app = angular.module('GenesCalculation', []);
+
+    app.controller('GenesCalculationCtrl', ['$scope', function ($scope) {
+
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
+
+        MapModelFromJson($scope, data);
+
+        $scope.characteristics = new Array();
+
+        $scope.addCharacteristic = function () {
+            $scope.characteristics.push({
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.links[0],
+                notation: $scope.notations[0]
+            });
+        };
+
+        $scope.deleteCharacteristic = function (characteristic) {
+            $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
+        };
+
+        $scope.isLinkable = function (characteristic) {
+            return characteristic.characteristicType.Linkable;
+        };
+    }]);
+</script>
+
+@using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new
+{
+    enctype = "multipart/form-data",
+    data_ng_app = "GenesCalculation"
+}))
+{
+    <fieldset data-ng-controller="GenesCalculationCtrl">
+        <legend>Характеристики цепочек</legend>
+        
+        <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
+            <input type="checkbox" name="pieceTypeIds" value="{{pieceTypeCheckBox.Value}}" />
+            <span>{{pieceTypeCheckBox.Text}}</span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="matter in matters">
+                    <td>
+                        <input type="checkbox" name="matterIds" value="{{matter.Value}}" />
+                        <span>{{matter.Text}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
+        <br />
+        <div data-ng-repeat="characteristic in characteristics">
+            <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
+            <input type="hidden" name="characteristicIds" value="{{characteristic.characteristicType.Value}}" />
+
+            <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
+            <input type="hidden" name="linkIds" value="{{characteristic.link.Value}}" />
+
+            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
+            <input type="hidden" name="notationIds" value="{{characteristic.notation.Value}}" />
+
+            <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
+            <br />
+        </div>
+        <br />
+        <br />
+        <input type="submit" value="Вычислить" />
+    </fieldset>
+}

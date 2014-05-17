@@ -1,0 +1,92 @@
+﻿@using LibiadaWeb
+@using LibiadaWeb.Helpers
+@model dynamic
+
+@{
+    ViewBag.Title = "Вычисление локальных характеристик";
+}
+
+<h2>Вычисление локальных характеристик</h2>
+
+<script type="text/javascript">
+
+    var divCounter = 0;
+
+    $(document).ready(function() {
+        AddDataTablesWithSubmit();
+
+        AddCharacteristic();
+    });
+
+    function AddCharacteristic() {
+
+        var paramsList = new Object();
+        
+        @Html.FillOptionsList("characteristicIds", (IEnumerable<SelectListItem>)ViewBag.characteristicsList)
+        @Html.FillOptionsList("linkIds",  (IEnumerable<SelectListItem>)ViewBag.linksList)
+
+        var characteristicsDiv = CreateCharacteristicsBlock(divCounter, paramsList);
+        $("#characteristics_list").append(characteristicsDiv);
+        divCounter++;
+
+        return false;
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<matter>)ViewBag.matters)
+    <br/>
+    @Html.Label("Размер окна:")
+    <input type="number" id="length" name="length" value="50" />
+    @Html.Label("Размер шага:")
+    <input type="number" id="step" name="step" value="2" />
+    <br/>
+    <br/>
+    @Html.CheckBox("isDelta", "Считать разницу между характеристиками", null)
+    <br/>
+    @Html.CheckBox("isGrowingWindow", "Считать увеличивающееся окно", null)
+    <br/>
+    @Html.CheckBox("isFurie", "Быстрое преобразование Фурье", null)
+    <br/>
+    @Html.CheckBox("isAutocorelation", "Вычислить авторикорреляционную функцию", null)
+    <br/>
+    @Html.CheckBox("isMoveCoordinate", "Подвижное начало координат", null)
+    <br/>
+  
+   @Html.CheckBox("startCoordinateCheckBox", "Начало координат относительно блока", new Dictionary<string, object> {{"onclick", "SwitchVisibilityByName('startCoordinate')"}})
+
+    <input type="number" id="startCoordinate" name="startCoordinate" value="2" hidden="true" />
+    <br/>
+    @Html.CheckBox("isSetBeginAndEnd", "Задать начало и конец цепочки", new Dictionary<string, object> {{"onclick", "SwitchVisibilityByName('startEnd')"}})
+    <div id="startEnd"  hidden="true">
+        @Html.Label("Начало:")
+        <input type="number" id="beginOfChain" name="beginOfChain" value="100" />
+        @Html.Label("Конец:")
+        <input type="number" id="endOfChain" name="endOfChain" value="1000" />
+        <br/>
+    </div>
+    @Html.Label("Форма записи:")
+    <select name="notationId">
+        @foreach (var option in ViewBag.notationsList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    @Html.Label("Язык:")
+    <select name="languageId">
+        @foreach (var option in ViewBag.languagesList)
+        {
+            <option value="@option.Value">@option.Text</option>
+        }
+    </select>
+    <br/>
+    <br/>
+    <input type="button" onclick="AddCharacteristic()" value="Добавить характеристику" />
+    <br/>
+    <div id="characteristics_list"></div>
+    <br/>
+    <br/>
+    <input type="submit" value="Вычислить" />
+}
