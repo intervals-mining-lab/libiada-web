@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DnaChainRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The dna chain repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System.Collections.Generic;
@@ -202,7 +193,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> allChains, 
+        public List<SelectListItem> GetSelectListItems(
+            IEnumerable<dna_chain> allChains,
             IEnumerable<dna_chain> selectedChain)
         {
             HashSet<long> chainIds = selectedChain != null

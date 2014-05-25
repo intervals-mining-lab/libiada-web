@@ -1,22 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="JavaScriptHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The java script helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Web;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Web;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The java script helper.
     /// </summary>

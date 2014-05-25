@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IMatterRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The MatterRepository interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System;

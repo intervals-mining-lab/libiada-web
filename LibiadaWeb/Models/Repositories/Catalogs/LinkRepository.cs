@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LinkRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The link repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;

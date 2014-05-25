@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChainRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The chain repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System.Collections.Generic;
@@ -54,7 +45,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             var parameters = this.FillParams(chain, alphabet, building);
 
-            const string query = @"INSERT INTO chain (
+            const string Query = @"INSERT INTO chain (
                                         id, 
                                         notation_id,
                                         matter_id, 
@@ -77,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            this.db.Database.ExecuteSqlCommand(query, parameters.ToArray());
+            this.db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>

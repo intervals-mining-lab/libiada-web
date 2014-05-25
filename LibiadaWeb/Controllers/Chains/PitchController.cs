@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PitchController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The pitch controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The pitch controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Chains
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /Pitch/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch.ToList());
         }
 
-        // GET: /Pitch/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch);
         }
 
-        // GET: /Pitch/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -81,9 +67,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /Pitch/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -95,7 +78,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
+        public ActionResult Create([Bind(Include = "id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
         {
             if (this.ModelState.IsValid)
             {
@@ -111,7 +94,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch);
         }
 
-        // GET: /Pitch/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -141,9 +123,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch);
         }
 
-        // POST: /Pitch/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -155,7 +134,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
+        public ActionResult Edit([Bind(Include = "id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
         {
             if (this.ModelState.IsValid)
             {
@@ -171,7 +150,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch);
         }
 
-        // GET: /Pitch/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -197,7 +175,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(pitch);
         }
 
-        // POST: /Pitch/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BuildingComparisonController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The building comparison controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Linq;
     using System.Web.Mvc;
@@ -48,7 +39,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.chainRepository = new ChainRepository(this.db);
         }
 
-        // GET: /BuildingComparison/
         /// <summary>
         /// The index.
         /// </summary>

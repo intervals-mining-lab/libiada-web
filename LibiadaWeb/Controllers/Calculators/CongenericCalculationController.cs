@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CongenericCalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The congeneric calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -66,7 +56,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.chainRepository = new ChainRepository(this.db);
         }
 
-        // GET: /CongenericCalculation/
         /// <summary>
         /// The index.
         /// </summary>

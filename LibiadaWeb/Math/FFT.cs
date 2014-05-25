@@ -1,41 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FFT.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The fft.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Numerics;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Math
 {
+    using System.Numerics;
+
     /// <summary>
     /// The fft.
     /// </summary>
     public static class FFT
     {
-        /// <summary>
-        /// Вычисление поворачивающего модуля e^(-i*2*PI*k/N)
-        /// </summary>
-        /// <param name="k">
-        /// </param>
-        /// <param name="n">
-        /// </param>
-        /// <returns>
-        /// The <see cref="Complex"/>.
-        /// </returns>
-        private static Complex W(int k, int n)
-        {
-            if (k % n == 0) return 1;
-            double arg = -2 * Math.PI * k / n;
-            return new Complex(Math.Cos(arg), Math.Sin(arg));
-        }
-
         /// <summary>
         /// Возвращает спектр сигнала
         /// </summary>
@@ -57,25 +28,47 @@ namespace LibiadaWeb.Models
             }
             else
             {
-                Complex[] xEven = new Complex[n / 2];
-                Complex[] xOdd = new Complex[n / 2];
+                var even = new Complex[n / 2];
+                var odd = new Complex[n / 2];
                 for (int i = 0; i < n / 2; i++)
                 {
-                    xEven[i] = x[2 * i];
-                    xOdd[i] = x[2 * i + 1];
+                    even[i] = x[2 * i];
+                    odd[i] = x[(2 * i) + 1];
                 }
 
-                xEven = Fft(xEven);
-                xOdd = Fft(xOdd);
+                even = Fft(even);
+                odd = Fft(odd);
                 result = new Complex[n];
                 for (int i = 0; i < n / 2; i++)
                 {
-                    result[i] = xEven[i] + W(i, n) * xOdd[i];
-                    result[i + n / 2] = xEven[i] - W(i, n) * xOdd[i];
+                    result[i] = even[i] + (W(i, n) * odd[i]);
+                    result[i + (n / 2)] = even[i] - (W(i, n) * odd[i]);
                 }
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Вычисление поворачивающего модуля e^(-i*2*PI*k/N).
+        /// </summary>
+        /// <param name="k">
+        /// The k.
+        /// </param>
+        /// <param name="n">
+        /// The n.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Complex"/>.
+        /// </returns>
+        private static Complex W(int k, int n)
+        {
+            if ((k % n) == 0)
+            {
+                return 1;
+            }
+            double arg = -2 * System.Math.PI * k / n;
+            return new Complex(System.Math.Cos(arg), System.Math.Sin(arg));
         }
     }
 }

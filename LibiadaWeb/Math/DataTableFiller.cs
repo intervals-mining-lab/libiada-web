@@ -1,20 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataTableFiller.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   Класс заполняющий таблицу данных для кластеризации
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Collections.Generic;
-
-using Clusterizator.Classes;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Math
 {
+    using System.Collections.Generic;
+
+    using Clusterizator.Classes;
+
     /// <summary>
     /// Класс заполняющий таблицу данных для кластеризации
     /// </summary>
@@ -38,7 +27,7 @@ namespace LibiadaWeb.Models
         /// </returns>
         public static DataTable FillDataTable(long[] id, string[] characteristicsNames, List<List<double>> characteristics)
         {
-            DataTable tempTable = new DataTable();
+            var tempTable = new DataTable();
             for (int j = 0; j < id.Length; j++)
             {
                 // формируются строки и добавляются в таблицу
@@ -65,7 +54,7 @@ namespace LibiadaWeb.Models
         /// </returns>
         private static DataObject FormDataObject(List<double> characteristics, string[] characteristicsNames, long id)
         {
-            DataObject tempObject = new DataObject {Id = id};
+            var tempObject = new DataObject {Id = id};
             for (int i = 0; i < characteristicsNames.Length; i++)
             {
                 // добавляется очередное значение характеристики

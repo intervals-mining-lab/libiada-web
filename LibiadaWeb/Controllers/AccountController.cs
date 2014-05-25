@@ -1,30 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The account controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-
-using LibiadaWeb.Models;
-
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin.Security;
-
-namespace LibiadaWeb.Controllers
+﻿namespace LibiadaWeb.Controllers
 {
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using LibiadaWeb.Models;
+
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.EntityFramework;
+    using Microsoft.Owin.Security;
+
     /// <summary>
     /// The account controller.
     /// </summary>
@@ -55,7 +40,6 @@ namespace LibiadaWeb.Controllers
         /// </summary>
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
-        // GET: /Account/Login
         /// <summary>
         /// The login.
         /// </summary>
@@ -72,7 +56,6 @@ namespace LibiadaWeb.Controllers
             return this.View();
         }
 
-        // POST: /Account/Login
         /// <summary>
         /// The login.
         /// </summary>
@@ -108,7 +91,6 @@ namespace LibiadaWeb.Controllers
             return View(model);
         }
 
-        // GET: /Account/Register
         /// <summary>
         /// The register.
         /// </summary>
@@ -121,7 +103,6 @@ namespace LibiadaWeb.Controllers
             return this.View();
         }
 
-        // POST: /Account/Register
         /// <summary>
         /// The register.
         /// </summary>
@@ -155,7 +136,6 @@ namespace LibiadaWeb.Controllers
             return View(model);
         }
 
-        // POST: /Account/Disassociate
         /// <summary>
         /// The disassociate.
         /// </summary>
@@ -190,7 +170,6 @@ namespace LibiadaWeb.Controllers
             return this.RedirectToAction("Manage", new { Message = message });
         }
 
-        // GET: /Account/Manage
         /// <summary>
         /// The manage.
         /// </summary>
@@ -216,7 +195,6 @@ namespace LibiadaWeb.Controllers
             return this.View();
         }
 
-        // POST: /Account/Manage
         /// <summary>
         /// The manage.
         /// </summary>
@@ -281,7 +259,6 @@ namespace LibiadaWeb.Controllers
             return View(model);
         }
 
-        // POST: /Account/ExternalLogin
         /// <summary>
         /// The external login.
         /// </summary>
@@ -305,7 +282,6 @@ namespace LibiadaWeb.Controllers
                 this.Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        // GET: /Account/ExternalLoginCallback
         /// <summary>
         /// The external login callback.
         /// </summary>
@@ -342,7 +318,6 @@ namespace LibiadaWeb.Controllers
             }
         }
 
-        // POST: /Account/LinkLogin
         /// <summary>
         /// The link login.
         /// </summary>
@@ -363,7 +338,6 @@ namespace LibiadaWeb.Controllers
                 this.User.Identity.GetUserId());
         }
 
-        // GET: /Account/LinkLoginCallback
         /// <summary>
         /// The link login callback.
         /// </summary>
@@ -388,7 +362,6 @@ namespace LibiadaWeb.Controllers
             return this.RedirectToAction("Manage", new { Message = ManageMessageId.Error });
         }
 
-        // POST: /Account/ExternalLoginConfirmation
         /// <summary>
         /// The external login confirmation.
         /// </summary>
@@ -441,7 +414,6 @@ namespace LibiadaWeb.Controllers
             return View(model);
         }
 
-        // POST: /Account/LogOff
         /// <summary>
         /// The log off.
         /// </summary>
@@ -456,7 +428,6 @@ namespace LibiadaWeb.Controllers
             return this.RedirectToAction("Index", "Home");
         }
 
-        // GET: /Account/ExternalLoginFailure
         /// <summary>
         /// The external login failure.
         /// </summary>
@@ -502,9 +473,9 @@ namespace LibiadaWeb.Controllers
 
         #region Helpers
 
-        // Used for XSRF protection when adding external logins
         /// <summary>
         /// The xsrf key.
+        /// Used for XSRF protection when adding external logins.
         /// </summary>
         private const string XsrfKey = "XsrfId";
 

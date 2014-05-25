@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LiteratureChainController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The literature chain controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The literature chain controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Chains
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /LiteratureChain/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain.ToList());
         }
 
-        // GET: /LiteratureChain/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain);
         }
 
-        // GET: /LiteratureChain/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -83,9 +69,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /LiteratureChain/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -97,7 +80,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -115,7 +98,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain);
         }
 
-        // GET: /LiteratureChain/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -147,9 +129,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain);
         }
 
-        // POST: /LiteratureChain/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -161,7 +140,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
+        public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -179,7 +158,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain);
         }
 
-        // GET: /LiteratureChain/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -205,7 +183,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(literature_chain);
         }
 
-        // POST: /LiteratureChain/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

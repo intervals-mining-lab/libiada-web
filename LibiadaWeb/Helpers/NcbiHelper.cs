@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NcbiHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The ncbi helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.IO;
-using System.Net;
-using System.Xml;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System;
+    using System.IO;
+    using System.Net;
+    using System.Xml;
+
     /// <summary>
     /// The ncbi helper.
     /// </summary>
@@ -24,7 +13,7 @@ namespace LibiadaWeb.Helpers
         /// <summary>
         /// The base url.
         /// </summary>
-        public const string BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+        private const string BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
         /// <summary>
         /// The get id.

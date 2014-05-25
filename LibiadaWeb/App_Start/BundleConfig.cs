@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BundleConfig.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The bundle config.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
     using System.Web.Optimization;
 
@@ -16,7 +7,6 @@ namespace LibiadaWeb
     /// </summary>
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         /// <summary>
         /// The register bundles.
         /// </summary>

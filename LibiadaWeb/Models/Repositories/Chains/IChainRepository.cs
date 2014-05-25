@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IChainRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The ChainRepository interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System;

@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AccountViewModels.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The external login confirmation view model.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.ComponentModel.DataAnnotations;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// The external login confirmation view model.
     /// </summary>

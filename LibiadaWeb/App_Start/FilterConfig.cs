@@ -1,19 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FilterConfig.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The filter config.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Web;
-using System.Web.Mvc;
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
+    using System.Web.Mvc;
+
     /// <summary>
     /// The filter config.
     /// </summary>

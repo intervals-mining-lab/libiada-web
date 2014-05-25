@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NoteController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The note controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The note controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Chains
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /Note/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note.ToList());
         }
 
-        // GET: /Note/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note);
         }
 
-        // GET: /Note/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -79,9 +65,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /Note/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -93,7 +76,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
+        public ActionResult Create([Bind(Include = "id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
         {
             if (this.ModelState.IsValid)
             {
@@ -107,7 +90,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note);
         }
 
-        // GET: /Note/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -135,9 +117,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note);
         }
 
-        // POST: /Note/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -149,7 +128,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
+        public ActionResult Edit([Bind(Include = "id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
         {
             if (this.ModelState.IsValid)
             {
@@ -163,7 +142,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note);
         }
 
-        // GET: /Note/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -189,7 +167,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(note);
         }
 
-        // POST: /Note/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

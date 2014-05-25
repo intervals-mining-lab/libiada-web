@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DbHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The helper for database functions.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
     using System.Linq;
 

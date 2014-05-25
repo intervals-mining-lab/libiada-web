@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LibiadaWebDataAnnotations.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The common data annotations.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// The common data annotations.
     /// </summary>

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ElementRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The element repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System;
@@ -87,37 +78,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             }
 
             return true;
-        }
-
-        /// <summary>
-        /// The create lacking elements.
-        /// </summary>
-        /// <param name="libiadaAlphabet">
-        /// The libiada alphabet.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
-        {
-            for (int j = 0; j < libiadaAlphabet.Cardinality; j++)
-            {
-                string strElem = libiadaAlphabet[j].ToString();
-
-                if (!this.ElementInDb(libiadaAlphabet[j], notationId))
-                {
-                    var newElement = new element
-                    {
-                        value = strElem, 
-                        name = strElem, 
-                        notation_id = notationId, 
-                        created = DateTime.Now
-                    };
-                    this.db.element.Add(newElement);
-                }
-            }
-
-            this.db.SaveChanges();
         }
 
         /// <summary>
@@ -217,8 +177,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="IEnumerable"/>.
         /// </returns>
-        public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<element> allElements, 
-                                                              IEnumerable<element> selectedElements)
+        public IEnumerable<SelectListItem> GetSelectListItems(
+            IEnumerable<element> allElements,
+            IEnumerable<element> selectedElements)
         {
             HashSet<long> elementIds = selectedElements != null
                                      ? new HashSet<long>(selectedElements.Select(c => c.id))
@@ -269,6 +230,37 @@ namespace LibiadaWeb.Models.Repositories.Chains
             }
 
             return elementsList;
+        }
+
+        /// <summary>
+        /// The create lacking elements.
+        /// </summary>
+        /// <param name="libiadaAlphabet">
+        /// The libiada alphabet.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
+        {
+            for (int j = 0; j < libiadaAlphabet.Cardinality; j++)
+            {
+                string strElem = libiadaAlphabet[j].ToString();
+
+                if (!this.ElementInDb(libiadaAlphabet[j], notationId))
+                {
+                    var newElement = new element
+                    {
+                        value = strElem,
+                        name = strElem,
+                        notation_id = notationId,
+                        created = DateTime.Now
+                    };
+                    this.db.element.Add(newElement);
+                }
+            }
+
+            this.db.SaveChanges();
         }
     }
 }

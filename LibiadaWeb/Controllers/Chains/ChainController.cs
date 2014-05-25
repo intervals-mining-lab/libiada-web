@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChainController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The chain controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
     using System;
     using System.Collections.Generic;
@@ -93,7 +84,6 @@ namespace LibiadaWeb.Controllers.Chains
             this.remoteDbRepository = new RemoteDbRepository(this.db);
         }
 
-        // GET: /Chain/
         /// <summary>
         /// The index.
         /// </summary>
@@ -107,7 +97,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain.ToList());
         }
 
-        // GET: /Chain/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -133,7 +122,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain);
         }
 
-        // GET: /Chain/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -162,9 +150,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /Chain/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -334,7 +319,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain);
         }
 
-        // GET: /Chain/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -364,9 +348,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain);
         }
 
-        // POST: /Chain/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -394,7 +375,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain);
         }
 
-        // GET: /Chain/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -420,7 +400,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(chain);
         }
 
-        // POST: /Chain/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

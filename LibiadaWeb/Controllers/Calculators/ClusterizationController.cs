@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClusterizationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The clusterization controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -22,6 +13,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Math;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
@@ -74,7 +66,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.notationRepository = new NotationRepository(this.db);
         }
 
-        // GET: /Clusterization/
         /// <summary>
         /// The index.
         /// </summary>

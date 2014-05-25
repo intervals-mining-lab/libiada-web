@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DnaChainController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The dna chain controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The dna chain controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Chains
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /DnaChain/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain.ToList());
         }
 
-        // GET: /DnaChain/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain);
         }
 
-        // GET: /DnaChain/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -82,9 +68,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /DnaChain/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -96,7 +79,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -113,7 +96,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain);
         }
 
-        // GET: /DnaChain/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -144,9 +126,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain);
         }
 
-        // POST: /DnaChain/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -158,7 +137,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
+        public ActionResult Edit([Bind(Include = "id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -175,7 +154,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain);
         }
 
-        // GET: /DnaChain/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -201,7 +179,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(dna_chain);
         }
 
-        // POST: /DnaChain/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

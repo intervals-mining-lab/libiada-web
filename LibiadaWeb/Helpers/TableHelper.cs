@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TableHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The table helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The table helper.
     /// </summary>
@@ -41,8 +30,10 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo, 
-                                                List<matter> matters)
+        public static MvcHtmlString MattersTable(
+            this HtmlHelper helper,
+            IEnumerable<SelectListItem> listInfo,
+            List<matter> matters)
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
@@ -86,8 +77,13 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString ChainsTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo, 
-                                                 List<chain> chains, List<string> languages, List<string> fastaHeaders, List<string> remoteIds )
+        public static MvcHtmlString ChainsTable(
+            this HtmlHelper helper,
+            IEnumerable<SelectListItem> listInfo,
+            List<chain> chains,
+            List<string> languages,
+            List<string> fastaHeaders,
+            List<string> remoteIds)
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
@@ -138,8 +134,7 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers, 
-                                          List<List<string>> data)
+        public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers, List<List<string>> data)
         {
             var header = new TagBuilder("thead")
             {

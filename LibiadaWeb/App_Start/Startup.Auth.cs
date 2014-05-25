@@ -1,28 +1,16 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Startup.Auth.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The startup.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
-
-using Owin;
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
+    using Microsoft.AspNet.Identity;
+    using Microsoft.Owin;
+    using Microsoft.Owin.Security.Cookies;
+
+    using Owin;
+
     /// <summary>
     /// The startup.
     /// </summary>
     public partial class Startup
     {
-        // For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
         /// <summary>
         /// The configure auth.
         /// </summary>

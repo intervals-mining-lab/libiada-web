@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RemoteDbRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The remote db repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;

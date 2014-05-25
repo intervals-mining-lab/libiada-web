@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LiteratureChainRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The literature chain repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System.Collections.Generic;

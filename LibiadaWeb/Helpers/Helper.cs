@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Helper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;

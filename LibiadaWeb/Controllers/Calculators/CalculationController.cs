@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -65,7 +56,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.chainRepository = new ChainRepository(this.db);
         }
 
-        // GET: /Calculation/
         /// <summary>
         /// The index.
         /// </summary>

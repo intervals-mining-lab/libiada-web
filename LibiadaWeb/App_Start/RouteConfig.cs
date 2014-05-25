@@ -1,23 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RouteConfig.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The route config.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     /// <summary>
     /// The route config.
     /// </summary>
@@ -34,10 +19,9 @@ namespace LibiadaWeb
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default", 
-                url: "{controller}/{action}/{id}", 
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            );
+                name: "Default",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
         }
     }
 }

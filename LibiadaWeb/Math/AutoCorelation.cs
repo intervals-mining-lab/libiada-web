@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoCorelation.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The auto correlation.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Math
 {
+    using System;
+
     /// <summary>
     /// The auto correlation.
     /// </summary>
@@ -49,12 +38,16 @@ namespace LibiadaWeb.Models
             int len = data.Length;
 
             if (len == 0)
+            {
                 throw new Exception("No data");
+            }
 
             double sum = 0;
 
             for (int i = 0; i < data.Length; i++)
+            {
                 sum += data[i];
+            }
 
             return sum / len;
         }
@@ -78,7 +71,9 @@ namespace LibiadaWeb.Models
             double sum = 0;
 
             for (int i = 0; i < data.Length; i++)
+            {
                 sum += Math.Pow(data[i] - avg, 2);
+            }
 
             return sum / len;
         }
@@ -114,7 +109,9 @@ namespace LibiadaWeb.Models
         public double GetCorrelation(double[] x, double[] y)
         {
             if (x.Length != y.Length)
+            {
                 throw new Exception("Length of sources is different");
+            }
             double avgX = this.GetAverage(x);
             double stdevX = this.GetStdev(x);
             double avgY = this.GetAverage(y);
@@ -123,7 +120,10 @@ namespace LibiadaWeb.Models
             double pearson = 0;
             int len = x.Length;
             for (int i = 0; i < len; i++)
+            {
                 covXY += (x[i] - avgX) * (y[i] - avgY);
+            }
+
             covXY /= len;
             pearson = covXY / (stdevX * stdevY);
             return pearson;
@@ -141,16 +141,14 @@ namespace LibiadaWeb.Models
         public double[] GetAutoCorrelationOfSeries(double[] x)
         {
             int half = x.Length / 2;
-            double[] autoCorrelation = new double[half];
-            double[] a = new double[half];
-            double[] b = new double[half];
+            var autoCorrelation = new double[half];
+            var a = new double[half];
+            var b = new double[half];
             for (int i = 0; i < half; i++)
             {
                 a[i] = x[i];
                 b[i] = x[i + i];
                 autoCorrelation[i] = this.GetCorrelation(a, b);
-                if (i % 1000 == 0)
-                    Console.WriteLine(i);
             }
 
             return autoCorrelation;

@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RelationCalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The relation calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -67,7 +58,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.binaryCharacteristicRepository = new BinaryCharacteristicRepository(this.db);
         }
 
-        // GET: /RelationCalculation/
         /// <summary>
         /// The index.
         /// </summary>

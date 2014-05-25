@@ -1,18 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GenesCalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The genes calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -78,7 +68,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.pieceTypeRepository = new PieceTypeRepository(this.db);
         }
 
-        // GET: /GenesCalculation/
         /// <summary>
         /// The index.
         /// </summary>

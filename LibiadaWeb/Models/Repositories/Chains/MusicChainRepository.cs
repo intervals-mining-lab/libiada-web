@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MusicChainRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The music chain repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Chains
 {
     /// <summary>

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NotationRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The notation repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;

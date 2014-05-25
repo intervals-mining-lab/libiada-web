@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ChainImporter.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The chain importer.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Models.Repositories.Chains
+﻿namespace LibiadaWeb.Models.Repositories.Chains
 {
     using System.Collections.Generic;
     using System.Linq;

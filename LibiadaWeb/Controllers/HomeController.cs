@@ -1,22 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="HomeController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The home controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers
+﻿namespace LibiadaWeb.Controllers
 {
+    using System.Web.Mvc;
+
     /// <summary>
     /// The home controller.
     /// </summary>

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CharacteristicTypeRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The characteristic type repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;
@@ -75,8 +66,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> allcharacteristicTypes, 
-                                                       IEnumerable<characteristic_type> selectedCharacteristicTypes)
+        public List<SelectListItem> GetSelectListItems(
+            IEnumerable<characteristic_type> allcharacteristicTypes,
+            IEnumerable<characteristic_type> selectedCharacteristicTypes)
         {
             HashSet<int> characteristicTypeIds;
             if (selectedCharacteristicTypes != null)

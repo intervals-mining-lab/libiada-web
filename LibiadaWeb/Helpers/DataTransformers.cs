@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataTransformers.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The data transformers.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Text;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System.Text;
+
     /// <summary>
     /// The data transformers.
     /// </summary>

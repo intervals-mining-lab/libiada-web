@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RadioButtonListHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The radio button list helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     /// <summary>
     /// The radio button list helper.
     /// </summary>
@@ -36,8 +25,10 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper helper, string name, 
-                                                          IEnumerable<SelectListItem> listInfo)
+        public static List<MvcHtmlString> RadioButtonList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo)
         {
             return helper.RadioButtonList(name, listInfo, null);
         }
@@ -60,9 +51,11 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper helper, string name, 
-                                                          IEnumerable<SelectListItem> listInfo, 
-                                                          object htmlAttributes)
+        public static List<MvcHtmlString> RadioButtonList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            object htmlAttributes)
         {
             return helper.RadioButtonList(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
@@ -89,14 +82,21 @@ namespace LibiadaWeb.Helpers
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// </exception>
-        public static List<MvcHtmlString> RadioButtonList(this HtmlHelper helper, string name, 
-                                                          IEnumerable<SelectListItem> listInfo, 
-                                                          IDictionary<string, object> htmlAttributes)
+        public static List<MvcHtmlString> RadioButtonList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            IDictionary<string, object> htmlAttributes)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentException("The argument must have a value", "name");
+            }
+
             if (listInfo == null)
+            {
                 throw new ArgumentNullException("listInfo");
+            }
 
             var result = new List<MvcHtmlString>();
 

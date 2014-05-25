@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CheckBoxListHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The check box list helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     /// <summary>
     /// The check box list helper.
     /// </summary>
@@ -36,8 +25,10 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper helper, string name, 
-                                                       IEnumerable<SelectListItem> listInfo)
+        public static List<MvcHtmlString> CheckBoxList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo)
         {
             return helper.CheckBoxList(name, listInfo, null);
         }
@@ -60,8 +51,11 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper helper, string name, 
-                                                       IEnumerable<SelectListItem> listInfo, object htmlAttributes)
+        public static List<MvcHtmlString> CheckBoxList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            object htmlAttributes)
         {
             return helper.CheckBoxList(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
@@ -88,16 +82,23 @@ namespace LibiadaWeb.Helpers
         /// </exception>
         /// <exception cref="ArgumentNullException">
         /// </exception>
-        public static List<MvcHtmlString> CheckBoxList(this HtmlHelper helper, string name, 
-                                                       IEnumerable<SelectListItem> listInfo, 
-                                                       IDictionary<string, object> htmlAttributes)
+        public static List<MvcHtmlString> CheckBoxList(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            IDictionary<string, object> htmlAttributes)
         {
             if (string.IsNullOrEmpty(name))
+            {
                 throw new ArgumentException("The argument must have a value", "name");
+            }
+                
             if (listInfo == null)
+            {
                 throw new ArgumentNullException("listInfo");
+            }
 
-            List<MvcHtmlString> result = new List<MvcHtmlString>();
+            var result = new List<MvcHtmlString>();
 
             foreach (SelectListItem info in listInfo)
             {

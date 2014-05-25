@@ -1,15 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuickCalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The quick calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -49,7 +39,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.linkRepository = new LinkRepository(this.db);
         }
 
-        // GET: /QuickCalculation/
         /// <summary>
         /// The index.
         /// </summary>

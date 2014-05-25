@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PieceTypeController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The piece type controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Catalogs
+﻿namespace LibiadaWeb.Controllers.Catalogs
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The piece type controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /PieceType/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type.ToList());
         }
 
-        // GET: /PieceType/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type);
         }
 
-        // GET: /PieceType/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -78,9 +64,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return this.View();
         }
 
-        // POST: /PieceType/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -92,7 +75,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,name,description,nature_id")] piece_type piece_type)
+        public ActionResult Create([Bind(Include = "id,name,description,nature_id")] piece_type piece_type)
         {
             if (this.ModelState.IsValid)
             {
@@ -105,7 +88,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type);
         }
 
-        // GET: /PieceType/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -132,9 +114,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type);
         }
 
-        // POST: /PieceType/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -146,7 +125,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,name,description,nature_id")] piece_type piece_type)
+        public ActionResult Edit([Bind(Include = "id,name,description,nature_id")] piece_type piece_type)
         {
             if (this.ModelState.IsValid)
             {
@@ -159,7 +138,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type);
         }
 
-        // GET: /PieceType/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -185,7 +163,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(piece_type);
         }
 
-        // POST: /PieceType/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

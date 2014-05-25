@@ -1,18 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LibiadaRazorViewEngine.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The libiada razor view engine.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Web.Mvc;
-
-namespace LibiadaWeb
+﻿namespace LibiadaWeb
 {
+    using System.Web.Mvc;
+
     /// <summary>
     /// The libiada razor view engine.
     /// </summary>
@@ -21,8 +10,7 @@ namespace LibiadaWeb
         /// <summary>
         /// Initializes a new instance of the <see cref="LibiadaRazorViewEngine"/> class.
         /// </summary>
-        public LibiadaRazorViewEngine()
-            : base()
+        public LibiadaRazorViewEngine() : base()
         {
             this.ViewLocationFormats = new[]
                 {

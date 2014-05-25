@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CheckBoxGroupHelper.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The check box group helper.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Collections.Generic;
-using System.Text;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace LibiadaWeb.Helpers
+﻿namespace LibiadaWeb.Helpers
 {
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     /// <summary>
     /// The check box group helper.
     /// </summary>
@@ -36,8 +25,10 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
-                                                 IEnumerable<SelectListItem> listInfo)
+        public static MvcHtmlString CheckBoxGroup(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo)
         {
             return helper.CheckBoxGroup(name, listInfo, null);
         }
@@ -60,8 +51,11 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
-                                                  IEnumerable<SelectListItem> listInfo, object htmlAttributes)
+        public static MvcHtmlString CheckBoxGroup(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            object htmlAttributes)
         {
             return helper.CheckBoxGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
@@ -84,9 +78,11 @@ namespace LibiadaWeb.Helpers
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
-                                                  IEnumerable<SelectListItem> listInfo, 
-                                                  IDictionary<string, object> htmlAttributes)
+        public static MvcHtmlString CheckBoxGroup(
+            this HtmlHelper helper,
+            string name,
+            IEnumerable<SelectListItem> listInfo,
+            IDictionary<string, object> htmlAttributes)
         {
             List<MvcHtmlString> checkBoxList = helper.CheckBoxList(name, listInfo, htmlAttributes);
 

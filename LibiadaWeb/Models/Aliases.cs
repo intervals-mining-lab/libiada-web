@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Aliases.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The aliases.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models
 {
     /// <summary>
     /// The aliases.
@@ -279,6 +270,5 @@ namespace LibiadaWeb.Models
         public const int RemoteDbNcbi = 1;
 
         #endregion
-
     }
 }

@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PieceTypeRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The piece type repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;

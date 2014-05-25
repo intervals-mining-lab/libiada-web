@@ -1,19 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LocalCalculationController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The local calculation controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -22,6 +11,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Math;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
@@ -74,7 +64,6 @@ namespace LibiadaWeb.Controllers.Calculators
             this.chainRepository = new ChainRepository(this.db);
         }
 
-        // GET: /LocalCalculation/
         /// <summary>
         /// The index.
         /// </summary>

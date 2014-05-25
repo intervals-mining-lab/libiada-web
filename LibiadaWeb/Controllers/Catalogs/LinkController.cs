@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LinkController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The link controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Catalogs
+﻿namespace LibiadaWeb.Controllers.Catalogs
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The link controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /Link/
         /// <summary>
         /// The index.
         /// </summary>
@@ -38,7 +26,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return this.View(this.db.link.ToList());
         }
 
-        // GET: /Link/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -64,7 +51,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(link);
         }
 
-        // GET: /Link/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -76,9 +62,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return this.View();
         }
 
-        // POST: /Link/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -90,7 +73,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,name,description")] link link)
+        public ActionResult Create([Bind(Include = "id,name,description")] link link)
         {
             if (this.ModelState.IsValid)
             {
@@ -102,7 +85,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(link);
         }
 
-        // GET: /Link/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -128,9 +110,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(link);
         }
 
-        // POST: /Link/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -142,7 +121,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,name,description")] link link)
+        public ActionResult Edit([Bind(Include = "id,name,description")] link link)
         {
             if (this.ModelState.IsValid)
             {
@@ -154,7 +133,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(link);
         }
 
-        // GET: /Link/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -180,7 +158,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(link);
         }
 
-        // POST: /Link/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

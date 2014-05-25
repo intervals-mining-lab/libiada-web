@@ -1,20 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IBinaryCharacteristicRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The BinaryCharacteristicRepository interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Linq;
-using System.Linq.Expressions;
-
 namespace LibiadaWeb.Models.Repositories
 {
+    using System;
+
     /// <summary>
     /// The BinaryCharacteristicRepository interface.
     /// </summary>

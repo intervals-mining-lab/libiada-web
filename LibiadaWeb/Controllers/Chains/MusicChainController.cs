@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MusicChainController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The music chain controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The music chain controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Chains
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /MusicChain/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain.ToList());
         }
 
-        // GET: /MusicChain/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain);
         }
 
-        // GET: /MusicChain/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -81,9 +67,6 @@ namespace LibiadaWeb.Controllers.Chains
             return this.View();
         }
 
-        // POST: /MusicChain/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -95,7 +78,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -111,7 +94,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain);
         }
 
-        // GET: /MusicChain/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -141,9 +123,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain);
         }
 
-        // POST: /MusicChain/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -155,7 +134,7 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
+        public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -171,7 +150,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain);
         }
 
-        // GET: /MusicChain/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -197,7 +175,6 @@ namespace LibiadaWeb.Controllers.Chains
             return View(music_chain);
         }
 
-        // POST: /MusicChain/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

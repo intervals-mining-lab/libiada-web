@@ -1,22 +1,7 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BinaryCharacteristicRepository.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The binary characteristic repository.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Linq.Expressions;
-
 namespace LibiadaWeb.Models.Repositories
 {
+    using System;
+
     /// <summary>
     /// The binary characteristic repository.
     /// </summary>
@@ -64,7 +49,7 @@ namespace LibiadaWeb.Models.Repositories
         /// </returns>
         public long CreateBinaryCharacteristic(long chainId, int characteristicId, int linkId, long firstElementId, long secondElementId, double value)
         {
-            binary_characteristic characteristic = new binary_characteristic
+            var characteristic = new binary_characteristic
             {
                 chain_id = chainId, 
                 characteristic_type_id = characteristicId, 

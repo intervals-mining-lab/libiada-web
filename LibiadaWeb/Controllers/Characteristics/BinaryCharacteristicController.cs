@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BinaryCharacteristicController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The binary characteristic controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Characteristics
+﻿namespace LibiadaWeb.Controllers.Characteristics
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The binary characteristic controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Characteristics
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /BinaryCharacteristic/
         /// <summary>
         /// The index.
         /// </summary>
@@ -39,7 +27,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic.ToList());
         }
 
-        // GET: /BinaryCharacteristic/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -65,7 +52,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic);
         }
 
-        // GET: /BinaryCharacteristic/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -82,9 +68,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return this.View();
         }
 
-        // POST: /BinaryCharacteristic/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -96,7 +79,7 @@ namespace LibiadaWeb.Controllers.Characteristics
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
+        public ActionResult Create([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
         {
             if (this.ModelState.IsValid)
             {
@@ -113,7 +96,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic);
         }
 
-        // GET: /BinaryCharacteristic/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -144,9 +126,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic);
         }
 
-        // POST: /BinaryCharacteristic/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -158,7 +137,7 @@ namespace LibiadaWeb.Controllers.Characteristics
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
+        public ActionResult Edit([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
         {
             if (this.ModelState.IsValid)
             {
@@ -175,7 +154,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic);
         }
 
-        // GET: /BinaryCharacteristic/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -201,7 +179,6 @@ namespace LibiadaWeb.Controllers.Characteristics
             return View(binary_characteristic);
         }
 
-        // POST: /BinaryCharacteristic/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>

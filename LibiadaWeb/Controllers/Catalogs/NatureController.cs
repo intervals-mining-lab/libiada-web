@@ -1,21 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NatureController.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The nature controller.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-
-
-using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Catalogs
+﻿namespace LibiadaWeb.Controllers.Catalogs
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
     /// <summary>
     /// The nature controller.
     /// </summary>
@@ -26,7 +15,6 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </summary>
         private LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: /Nature/
         /// <summary>
         /// The index.
         /// </summary>
@@ -38,7 +26,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return this.View(this.db.nature.ToList());
         }
 
-        // GET: /Nature/Details/5
         /// <summary>
         /// The details.
         /// </summary>
@@ -64,7 +51,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(nature);
         }
 
-        // GET: /Nature/Create
         /// <summary>
         /// The create.
         /// </summary>
@@ -76,9 +62,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return this.View();
         }
 
-        // POST: /Nature/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The create.
         /// </summary>
@@ -90,7 +73,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,name,description")] nature nature)
+        public ActionResult Create([Bind(Include = "id,name,description")] nature nature)
         {
             if (this.ModelState.IsValid)
             {
@@ -102,7 +85,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(nature);
         }
 
-        // GET: /Nature/Edit/5
         /// <summary>
         /// The edit.
         /// </summary>
@@ -128,9 +110,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(nature);
         }
 
-        // POST: /Nature/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         /// <summary>
         /// The edit.
         /// </summary>
@@ -142,7 +121,7 @@ namespace LibiadaWeb.Controllers.Catalogs
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,name,description")] nature nature)
+        public ActionResult Edit([Bind(Include = "id,name,description")] nature nature)
         {
             if (this.ModelState.IsValid)
             {
@@ -154,7 +133,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(nature);
         }
 
-        // GET: /Nature/Delete/5
         /// <summary>
         /// The delete.
         /// </summary>
@@ -180,7 +158,6 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(nature);
         }
 
-        // POST: /Nature/Delete/5
         /// <summary>
         /// The delete confirmed.
         /// </summary>
