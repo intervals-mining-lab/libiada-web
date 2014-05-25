@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.dna_chain
+﻿@model dna_chain
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>dna_chain</h4>
         <hr />
@@ -20,7 +20,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.notation_id, "notation_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("notation_id", String.Empty)
+                @Html.DropDownList("notation_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.notation_id)
             </div>
         </div>
@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.product_id, "product_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("product_id", String.Empty)
+                @Html.DropDownList("product_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.product_id)
             </div>
         </div>
@@ -44,7 +44,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.matter_id, "matter_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("matter_id", String.Empty)
+                @Html.DropDownList("matter_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.matter_id)
             </div>
         </div>
@@ -60,7 +60,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.piece_type_id, "piece_type_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("piece_type_id", String.Empty)
+                @Html.DropDownList("piece_type_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.piece_type_id)
             </div>
         </div>
@@ -76,7 +76,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.remote_db_id, "remote_db_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("remote_db_id", String.Empty)
+                @Html.DropDownList("remote_db_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.remote_db_id)
             </div>
         </div>

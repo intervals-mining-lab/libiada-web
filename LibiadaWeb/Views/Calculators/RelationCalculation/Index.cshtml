@@ -7,8 +7,8 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
-        $('input[name="chainId"]').each(function (i, item) {
+    $(document).ready(function() {
+        $('input[name="chainId"]').each(function(i, item) {
             $(item).click(GetChainElements);
         });
 
@@ -19,14 +19,14 @@
         $.ajax({
             url: "/api/ChainElements/" + event.target.value,
             type: "GET",
-            success: function (elements) {
+            success: function(elements) {
                 $("#oneWordDiv")[0].innerHTML = "";
 
                 var table = $('<table/>').attr('id', 'elementsTable');
                 var header = $('<thead/>').append($('<tr/>').append($('<th/>').text('Элемент')));
                 var body = $('<tbody/>');
 
-                $(elements).each(function (i, item) {
+                $(elements).each(function(i, item) {
                     var checkbox = $('<label/>').html(item.Text).prepend($('<input/>').attr('type', "radio").attr('name', 'wordId').attr('value', item.Value));
                     body.append($('<tr/>').append($('<td/>').append(checkbox)));
                 });
@@ -43,8 +43,7 @@
 <h2>Вычисление бинарных характеристик</h2>
 @using (Html.BeginForm())
 {
-
-    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<chain>)ViewBag.chains, (List<String>)ViewBag.languages, (List<String>)ViewBag.fastaHeaders, (List<String>)ViewBag.remoteIds)
+    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<chain>)ViewBag.chains, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
     <br />
     @Html.Label("Характеристика:")
     <select name="characteristicId" id="characteristicId">

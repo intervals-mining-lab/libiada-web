@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.pitch
+﻿@model pitch
 
 @{
     ViewBag.Title = "Create";
@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>pitch</h4>
         <hr />
@@ -35,7 +35,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.instrument_id, "instrument_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("instrument_id", String.Empty)
+                @Html.DropDownList("instrument_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.instrument_id)
             </div>
         </div>
@@ -43,7 +43,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.note_id, "note_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("note_id", String.Empty)
+                @Html.DropDownList("note_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.note_id)
             </div>
         </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.accidental_id, "accidental_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("accidental_id", String.Empty)
+                @Html.DropDownList("accidental_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.accidental_id)
             </div>
         </div>
@@ -59,7 +59,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.note_symbol_id, "note_symbol_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("note_symbol_id", String.Empty)
+                @Html.DropDownList("note_symbol_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.note_symbol_id)
             </div>
         </div>

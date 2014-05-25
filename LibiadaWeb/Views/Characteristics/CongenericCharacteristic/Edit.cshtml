@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.congeneric_characteristic
+﻿@model congeneric_characteristic
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>congeneric_characteristic</h4>
         <hr />
@@ -28,7 +28,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.characteristic_type_id, "characteristic_type_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("characteristic_type_id", String.Empty)
+                @Html.DropDownList("characteristic_type_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.characteristic_type_id)
             </div>
         </div>
@@ -52,7 +52,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.link_id, "link_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("link_id", String.Empty)
+                @Html.DropDownList("link_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.link_id)
             </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.element_id, "element_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("element_id", String.Empty)
+                @Html.DropDownList("element_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.element_id)
             </div>
         </div>

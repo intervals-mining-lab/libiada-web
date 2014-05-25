@@ -18,11 +18,7 @@
 
 @Scripts.Render("~/bundles/controllers/calculation")
 
-@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new
-{
-    enctype = "multipart/form-data",
-    data_ng_app = "Clusterization"
-}))
+@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Clusterization" }))
 {
     <fieldset data-ng-controller="CalculationCtrl">
         <legend>Характеристики полных цепочек</legend>

@@ -1,11 +1,26 @@
-﻿namespace LibiadaWeb.Helpers
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Helper.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The helper.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace LibiadaWeb.Helpers
 {
     using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    /// <summary>
+    /// The helper.
+    /// </summary>
     public static class Helper
     {
+        /// <summary>
+        /// The br.
+        /// </summary>
         private static readonly string Br = Environment.NewLine;
 
         /// <summary>
@@ -31,10 +46,10 @@
         /// CheckBox в виде экранированной строки.
         /// </returns>
         public static MvcHtmlString InputElement(
-            this HtmlHelper helper,
-            SelectListItem info,
-            string name,
-            string type,
+            this HtmlHelper helper, 
+            SelectListItem info, 
+            string name, 
+            string type, 
             IDictionary<string, object> htmlAttributes)
         {
             var inputElement = new TagBuilder("input");
@@ -42,6 +57,7 @@
             {
                 inputElement.MergeAttribute("checked", "checked");
             }
+
             inputElement.MergeAttributes(htmlAttributes);
             inputElement.MergeAttribute("type", type);
             inputElement.MergeAttribute("value", info.Value);
@@ -71,9 +87,9 @@
         /// CheckBox в виде экранированной строки.
         /// </returns>
         public static MvcHtmlString CheckBox(
-            this HtmlHelper helper,
-            string name,
-            string label,
+            this HtmlHelper helper, 
+            string name, 
+            string label, 
             IDictionary<string, object> htmlAttributes)
         {
             var checkBoxElement = new TagBuilder("input");

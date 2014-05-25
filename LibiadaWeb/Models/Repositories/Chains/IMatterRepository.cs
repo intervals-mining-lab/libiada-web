@@ -1,9 +1,19 @@
-using System;
-using System.Linq;
-using System.Linq.Expressions;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="IMatterRepository.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The MatterRepository interface.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace LibiadaWeb.Models.Repositories.Chains
 {
+    using System;
+
+    /// <summary>
+    /// The MatterRepository interface.
+    /// </summary>
     public interface IMatterRepository : IDisposable
     {
     }

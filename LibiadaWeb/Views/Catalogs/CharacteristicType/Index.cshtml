@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LibiadaWeb.characteristic_type>
+﻿@model IEnumerable<characteristic_type>
 
 @{
     ViewBag.Title = "Index";
@@ -38,38 +38,39 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.class_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.linkable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.full_chain_applicable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.congeneric_chain_applicable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.binary_chain_applicable)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.characteristic_group.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.class_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.linkable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.full_chain_applicable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.congeneric_chain_applicable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.binary_chain_applicable)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.characteristic_group.name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
 
 </table>

@@ -18,39 +18,39 @@
             }
         </h1>
         <div>
-           @if (ViewBag.duplicate)
-               {
-                   <table>
-                       <tr>
-                           @for(int i = 0; i < ViewBag.res1.Length; i++)
-                           {
-                               <td>
-                                   @ViewBag.res1[i]
-                               </td>
-                           }
-                       </tr>
-                       <tr>
-                           @for(int j = 0; j < ViewBag.res2.Length; j++)
-                           {
-                               <td>
-                                   @ViewBag.res2[j]
-                               </td>
-                           } 
-                       </tr>
-                       <tr>
-                           @for(int i = 0; i < ViewBag.res1.Length; i++)
-                           {
-                               <td>
-                                   @ViewBag.res1.Building[i]
-                               </td>
-                           }  
-                       </tr>
-                   </table>
-               }
-               else
-               {
-                   @:Совпадений строя не найдено
-               }   
+            @if (ViewBag.duplicate)
+            {
+                <table>
+                    <tr>
+                        @for (int i = 0; i < ViewBag.res1.Length; i++)
+                        {
+                            <td>
+                                @ViewBag.res1[i]
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @for (int j = 0; j < ViewBag.res2.Length; j++)
+                        {
+                            <td>
+                                @ViewBag.res2[j]
+                            </td>
+                        } 
+                    </tr>
+                    <tr>
+                        @for (int i = 0; i < ViewBag.res1.Length; i++)
+                        {
+                            <td>
+                                @ViewBag.res1.Building[i]
+                            </td>
+                        }  
+                    </tr>
+                </table>
+            }
+            else
+            {
+                @:Совпадений строя не найдено
+            }   
         </div>
     </body>
 </html>

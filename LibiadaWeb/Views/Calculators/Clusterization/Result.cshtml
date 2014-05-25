@@ -26,7 +26,7 @@
         var rows = $("#resultTable")[0].tBodies[0].rows;
         var clusterNumber = 0;
         for (var i = 1; i < rows.length; i++) {
-            if(clusterNumber < rows[i].cells[0].textContent) {
+            if (clusterNumber < rows[i].cells[0].textContent) {
                 chainNames.push(new Array());
                 clusterNumber++;
             }
@@ -43,8 +43,8 @@
             var characteristicList = ViewBag.characteristics[j];
             for (int i = 0; i < characteristicList.Count; i++)
             {
-                String[] tempValue = characteristicList[i].ToString().Split(',');
-                String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                string[] tempValue = characteristicList[i].ToString().Split(',');
+                string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                 @: characteristics[characteristics.length -1].push(@value);
             }
         }
@@ -59,12 +59,13 @@
         
         AddDataTables();
     });
-    
-    
+
+
     var newChart;
+
     function DrawChart() {
         var dataSeries = new Array();
-        for(var i = 0; i < clusters.length; i++) {
+        for (var i = 0; i < clusters.length; i++) {
             dataSeries.push(new Object());
             dataSeries[i].data = new Array();
             dataSeries[i].name = "Кластер " + (i + 1);
@@ -84,26 +85,27 @@
         }
 
         chart = new Highcharts.Chart({
+            chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: 'xy' },
 
-        chart: { renderTo:'visualization_container', defaultSeriesType: 'scatter', zoomType: 'xy' }, 
+            legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
 
-        legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 }, 
+            plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: '#646464' } } }, states: { hover: { enabled: true } } } },
 
-        plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: '#646464' } } }, states: { hover: { enabled: true } } } }, 
+            title: { text: 'Результаты кластеризации' },
 
-        title: { text: 'Результаты кластеризации' }, 
+            tooltip: {
+                formatter: function() {
+                    return this.point.name + '<br/>' + this.x + '<br/> ' + this.y;
+                }
+            },
 
-        tooltip: { formatter: function() {
-            return this.point.name + '<br/>' + this.x +'<br/> '+ this.y;
-        } }, 
+            xAxis: { gridLineWidth: 1, endOnTick: true, showLastLabel: true, startOnTick: true, title: { text: $("#xaxis option:selected")[0].text } },
 
-        xAxis: { gridLineWidth: 1, endOnTick: true, showLastLabel: true, startOnTick: true, title: { text: $("#xaxis option:selected")[0].text } }, 
+            yAxis: { gridLineWidth: 1, title: { text: $("#yaxis option:selected")[0].text } },
 
-        yAxis: { gridLineWidth: 1, title: { text: $("#yaxis option:selected")[0].text } }, 
+            series: dataSeries
 
-        series: dataSeries
-
-    });
+        });
 
     }
 </script>
@@ -124,7 +126,6 @@
     <tbody>
         @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
         {
-
             foreach (var chain in ViewBag.clusterNames[i])
             {
                 <tr>
@@ -162,4 +163,4 @@
     }
 </select>
 <br/>
-<button onclick="DrawChart()" >Отобразить разбиение</button>
+<button onclick=" DrawChart() " >Отобразить разбиение</button>

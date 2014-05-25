@@ -1,4 +1,13 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GenesCalculationController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The genes calculation controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -15,71 +24,138 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
 
+    /// <summary>
+    /// The genes calculation controller.
+    /// </summary>
     public class GenesCalculationController : Controller
     {
+        /// <summary>
+        /// The db.
+        /// </summary>
         private readonly LibiadaWebEntities db;
+
+        /// <summary>
+        /// The matter repository.
+        /// </summary>
         private readonly MatterRepository matterRepository;
+
+        /// <summary>
+        /// The characteristic repository.
+        /// </summary>
         private readonly CharacteristicTypeRepository characteristicRepository;
+
+        /// <summary>
+        /// The notation repository.
+        /// </summary>
         private readonly NotationRepository notationRepository;
+
+        /// <summary>
+        /// The link repository.
+        /// </summary>
         private readonly LinkRepository linkRepository;
+
+        /// <summary>
+        /// The chain repository.
+        /// </summary>
         private readonly ChainRepository chainRepository;
+
+        /// <summary>
+        /// The piece type repository.
+        /// </summary>
         private readonly PieceTypeRepository pieceTypeRepository;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
+        /// </summary>
         public GenesCalculationController()
         {
-            db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
-            notationRepository = new NotationRepository(db);
-            linkRepository = new LinkRepository(db);
-            chainRepository = new ChainRepository(db);
-            pieceTypeRepository = new PieceTypeRepository(db);
+            this.db = new LibiadaWebEntities();
+            this.matterRepository = new MatterRepository(this.db);
+            this.characteristicRepository = new CharacteristicTypeRepository(this.db);
+            this.notationRepository = new NotationRepository(this.db);
+            this.linkRepository = new LinkRepository(this.db);
+            this.chainRepository = new ChainRepository(this.db);
+            this.pieceTypeRepository = new PieceTypeRepository(this.db);
         }
 
-        //
         // GET: /GenesCalculation/
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(db);
+            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
             IEnumerable<long> matterIds =
-                db.dna_chain.Where(c => c.notation_id == Aliases.NotationNucleotide).Select(c => c.matter_id);
+                this.db.dna_chain.Where(c => c.notation_id == Aliases.NotationNucleotide).Select(c => c.matter_id);
             IEnumerable<long> filterdMatterIds = matterIds.GroupBy(s => s).SelectMany(g => g.Skip(1));
 
-            List<matter> matters = db.matter.ToList();
+            List<matter> matters = this.db.matter.ToList();
             matters = matters.Where(m => filterdMatterIds.Contains(m.id)).ToList();
 
             IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
+                this.db.characteristic_type.Where(c => c.full_chain_applicable);
 
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var notationIds = db.notation.Where(n => n.nature_id == Aliases.NatureGenetic).Select(n => n.id).ToList();
+            var notationIds = this.db.notation.Where(n => n.nature_id == Aliases.NatureGenetic).Select(n => n.id).ToList();
 
             var pieceTypeIds =
-                db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic && p.id != Aliases.PieceTypeFullGenome).Select(p => p.id);
+                this.db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic && p.id != Aliases.PieceTypeFullGenome).Select(p => p.id);
 
-            ViewBag.data = new Dictionary<string, object>
+            this.ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", matters },
-                    { "characteristicTypes", characteristicTypes },
-                    { "notations", notationRepository.GetSelectListWithNature(notationIds) },
-                    { "links", new SelectList(db.link, "id", "name") },
-                    { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) },
-                    { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
+                    { "matters", matters }, 
+                    { "characteristicTypes", characteristicTypes }, 
+                    { "notations", this.notationRepository.GetSelectListWithNature(notationIds) }, 
+                    { "links", new SelectList(this.db.link, "id", "name") }, 
+                    { "matterCheckBoxes", this.matterRepository.GetSelectListItems(matters, null) }, 
+                    { "pieceTypesCheckBoxes", this.pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
-            return View();
+            return this.View();
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <param name="characteristicIds">
+        /// The characteristic ids.
+        /// </param>
+        /// <param name="linkIds">
+        /// The link ids.
+        /// </param>
+        /// <param name="notationIds">
+        /// The notation ids.
+        /// </param>
+        /// <param name="languageIds">
+        /// The language ids.
+        /// </param>
+        /// <param name="translatorIds">
+        /// The translator ids.
+        /// </param>
+        /// <param name="isSort">
+        /// The is sort.
+        /// </param>
+        /// <param name="theoretical">
+        /// The theoretical.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long[] matterIds,
-            int[] characteristicIds,
-            int[] linkIds,
-            int[] notationIds,
-            int[] languageIds,
-            int?[] translatorIds,
-            bool isSort,
+            long[] matterIds, 
+            int[] characteristicIds, 
+            int[] linkIds, 
+            int[] notationIds, 
+            int[] languageIds, 
+            int?[] translatorIds, 
+            bool isSort, 
             bool theoretical)
         {
             var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
@@ -94,7 +170,7 @@
             for (int w = 0; w < matterIds.Length; w++)
             {
                 long matterId = matterIds[w];
-                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                chainNames.Add(this.db.matter.Single(m => m.id == matterId).name);
                 elementNames.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
                 teoreticalRanks.Add(new List<List<double>>());
@@ -107,10 +183,10 @@
                     int? translatorId = translatorIds[i];
                     long chainId;
 
-                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    if (this.db.matter.Single(m => m.id == matterId).nature_id == 3)
                     {
                         isLiteratureChain = true;
-                        chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
+                        chainId = this.db.literature_chain.Single(l => l.matter_id == matterId &&
                                     l.notation_id == notationId
                                     && l.language_id == languageId
                                     && ((translatorId == null && l.translator_id == null)
@@ -118,20 +194,20 @@
                     }
                     else
                     {
-                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                        chainId = this.db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                     }
 
-                    Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
+                    Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
                     libiadaChain.FillIntervalManagers();
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
                     int linkId = linkIds[i];
 
-                    string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                    string className = this.db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                     ICalculator calculator = CalculatorsFactory.Create(className);
-                    Link link = (Link)db.link.Single(l => l.id == linkId).id;
-                    List<long> chainElements = chainRepository.GetElementIds(chainId);
-                    int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
+                    Link link = (Link)this.db.link.Single(l => l.id == linkId).id;
+                    List<long> chainElements = this.chainRepository.GetElementIds(chainId);
+                    int calculated = this.db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
                                                                               b.characteristic_type_id == characteristicId &&
                                                                               b.link_id == linkId);
                     if (calculated < libiadaChain.Alphabet.Cardinality)
@@ -143,7 +219,7 @@
 
                             CongenericChain tempChain = libiadaChain.CongenericChain(j);
 
-                            if (!db.congeneric_characteristic.Any(b =>
+                            if (!this.db.congeneric_characteristic.Any(b =>
                                                                    b.chain_id == chainId &&
                                                                    b.characteristic_type_id == characteristicId &&
                                                                    b.element_id == elementId && b.link_id == linkId))
@@ -151,16 +227,16 @@
                                 double value = calculator.Calculate(tempChain, link);
                                 var currentCharacteristic = new congeneric_characteristic
                                 {
-                                    chain_id = chainId,
-                                    characteristic_type_id = characteristicId,
-                                    link_id = linkId,
-                                    element_id = elementId,
-                                    value = value,
-                                    value_string = value.ToString(),
+                                    chain_id = chainId, 
+                                    characteristic_type_id = characteristicId, 
+                                    link_id = linkId, 
+                                    element_id = elementId, 
+                                    value = value, 
+                                    value_string = value.ToString(), 
                                     created = DateTime.Now
                                 };
-                                db.congeneric_characteristic.Add(currentCharacteristic);
-                                db.SaveChanges();
+                                this.db.congeneric_characteristic.Add(currentCharacteristic);
+                                this.db.SaveChanges();
                             }
                         }
                     }
@@ -170,7 +246,7 @@
                     {
                         long elementId = chainElements[d];
 
-                        double? characteristic = db.congeneric_characteristic.Single(b =>
+                        double? characteristic = this.db.congeneric_characteristic.Single(b =>
                                     b.chain_id == chainId &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.element_id == elementId &&
@@ -226,10 +302,10 @@
             {
                 int characteristicId = characteristicIds[k];
                 int languageId = languageIds[k];
-                string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
+                string characteristicType = this.db.characteristic_type.Single(c => c.id == characteristicId).name;
                 if (isLiteratureChain)
                 {
-                    string language = db.language.Single(l => l.id == languageId).name;
+                    string language = this.db.language.Single(l => l.id == languageId).name;
                     characteristicNames.Add(characteristicType + " " + language);
                 }
                 else
@@ -245,34 +321,48 @@
                 {
                     for (int p = 0; p < characteristics[f].Count; p++)
                     {
-                        SortKeyValuePairList(characteristics[f][p]);
+                        this.SortKeyValuePairList(characteristics[f][p]);
                     }
                 }
             }
 
-            TempData["result"] = new Dictionary<string, object>
+            this.TempData["result"] = new Dictionary<string, object>
                                      {
-                                         { "characteristics", characteristics },
-                                         { "chainNames", chainNames },
-                                         { "elementNames", elementNames },
-                                         { "characteristicNames", characteristicNames },
-                                         { "matterIds", matterIds },
+                                         { "characteristics", characteristics }, 
+                                         { "chainNames", chainNames }, 
+                                         { "elementNames", elementNames }, 
+                                         { "characteristicNames", characteristicNames }, 
+                                         { "matterIds", matterIds }, 
                                          { "teoreticalRanks", teoreticalRanks }
                                      };
 
-            return RedirectToAction("Result");
+            return this.RedirectToAction("Result");
         }
 
+        /// <summary>
+        /// The sort key value pair list.
+        /// </summary>
+        /// <param name="arrayForSort">
+        /// The array for sort.
+        /// </param>
         private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
         {
             arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
         }
 
+        /// <summary>
+        /// The result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
         public ActionResult Result()
         {
             try
             {
-                var result = TempData["characteristics"] as Dictionary<string, object>;
+                var result = this.TempData["characteristics"] as Dictionary<string, object>;
                 if (result == null)
                 {
                     throw new Exception("Нет данных для отображения");
@@ -284,28 +374,28 @@
                 {
                     characteristicsList.Add(new SelectListItem
                     {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
+                        Value = i.ToString(), 
+                        Text = characteristicNames[i], 
                         Selected = false
                     });
                 }
 
-                ViewBag.matterIds = result["matterIds"];
-                ViewBag.characteristicsList = characteristicsList;
-                ViewBag.characteristics = result["characteristics"];
-                ViewBag.chainNames = result["chainNames"];
-                ViewBag.elementNames = result["elementNames"];
-                ViewBag.characteristicNames = characteristicNames;
-                ViewBag.theoreticalRanks = result["teoreticalRanks"];
+                this.ViewBag.matterIds = result["matterIds"];
+                this.ViewBag.characteristicsList = characteristicsList;
+                this.ViewBag.characteristics = result["characteristics"];
+                this.ViewBag.chainNames = result["chainNames"];
+                this.ViewBag.elementNames = result["elementNames"];
+                this.ViewBag.characteristicNames = characteristicNames;
+                this.ViewBag.theoreticalRanks = result["teoreticalRanks"];
 
-                TempData.Keep();
+                this.TempData.Keep();
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("Error", e.Message);
+                this.ModelState.AddModelError("Error", e.Message);
             }
 
-            return View();
+            return this.View();
         }
     }
 }

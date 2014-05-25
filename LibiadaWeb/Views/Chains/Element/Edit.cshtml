@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.element
+﻿@model element
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>element</h4>
         <hr />
@@ -44,7 +44,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.notation_id, "notation_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("notation_id", String.Empty)
+                @Html.DropDownList("notation_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.notation_id)
             </div>
         </div>

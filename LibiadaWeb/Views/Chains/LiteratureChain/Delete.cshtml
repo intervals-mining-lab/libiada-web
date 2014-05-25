@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.literature_chain
+﻿@model literature_chain
 
 @{
     ViewBag.Title = "Delete";
@@ -117,7 +117,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

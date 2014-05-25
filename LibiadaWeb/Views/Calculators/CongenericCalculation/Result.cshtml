@@ -52,8 +52,8 @@
 
                     for (int i = 0; i < ViewBag.characteristics[k][j].Count; i++)
                     {
-                        String[] tempValue = ViewBag.characteristics[k][j][i].Value.ToString().Split(',');
-                        String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                        string[] tempValue = ViewBag.characteristics[k][j][i].Value.ToString().Split(',');
+                        string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                         int key = ViewBag.characteristics[k][j][i].Key;
                         @: characteristics[@k][@j][@i] = {key: @key, value: @value} ;
                     }
@@ -70,13 +70,14 @@
                         @:theoreticalRanks[@c][@f] = new Array();
                         for (int g = 0; g < ViewBag.theoreticalRanks[c][f].Count; g++)
                         {
-                            String[] tempValue = ViewBag.theoreticalRanks[c][f][g].ToString().Split(',');
-                            String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                            string[] tempValue = ViewBag.theoreticalRanks[c][f][g].ToString().Split(',');
+                            string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                             @:theoreticalRanks[@c][@f][@g] = @value; 
                         }
                     }
                 }
             }
+
         }
         
 
@@ -86,7 +87,7 @@
     });
 
     function SwitchXAxis() {
-        if($("#Rank")[0].checked) {
+        if ($("#Rank")[0].checked) {
             $("#xhider")[0].hidden = true;
             $("#allGraphics")[0].disabled = "";
             $("#logarithmicScale")[0].disabled = "";
@@ -96,9 +97,9 @@
             $("#logarithmicScale")[0].disabled = "disabled";
         }
     }
-    
+
     function SwitchYAxis() {
-        if($("#allGraphics")[0].checked) {
+        if ($("#allGraphics")[0].checked) {
             $("#yhider")[0].hidden = true;
         } else {
             $("#yhider")[0].hidden = false;
@@ -107,7 +108,7 @@
 
     var xVals;
     var yVals;
-    
+
     // заполнение данных для двумерного распределения
     function FillSeries(characteristicId, characteristic2Id, dataSeries) {
         for (var k = 0; k < characteristics.length; k++) {
@@ -184,7 +185,7 @@
 
     function CreateChart(dataSeries, minY, minX, rank, logarithmic) {
         chart = new Highcharts.Chart({
-            chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: rank ? 'x': 'xy' },
+            chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: rank ? 'x' : 'xy' },
 
             legend: { align: 'right', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 0, y: 50 },
 
@@ -194,11 +195,11 @@
 
             tooltip: {
                 formatter: function() {
-                    return this.point.name + '<br/> '+ this.x + '<br/>' + this.y;
+                    return this.point.name + '<br/> ' + this.x + '<br/>' + this.y;
                 }
             },
 
-            xAxis: { min: logarithmic ? 1 : minX, type: logarithmic ? 'logarithmic':'linear', minorTickInterval:logarithmic ? 0.1 : 0, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
+            xAxis: { min: logarithmic ? 1 : minX, type: logarithmic ? 'logarithmic' : 'linear', minorTickInterval: logarithmic ? 0.1 : 0, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
 
             yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
@@ -227,9 +228,9 @@
             if ($("#Rank")[0].checked) {
                 // если нужно вывести графики для одной характерстики (ранговое распрделение)
                 characteristicId = $("#yaxis option:selected")[0].value;
-                
+
                 FillRankSeries(characteristicId, logarithmic, dataSeries);
-                
+
                 if (theoreticalRanks[0].length > 0) {
                     FillTheoreticalRanks(characteristicId, logarithmic, dataSeries);
                 }
@@ -241,7 +242,7 @@
 
         CreateChart(dataSeries, Math.min.apply(null, yVals), Math.min.apply(null, xVals), $("#Rank")[0].checked, logarithmic);
     }
-    
+
 </script>
 @for (int d = 0; d < ViewBag.characteristics.Count; d++)
 {
@@ -277,16 +278,15 @@
             }
         </tbody>
     </table>
-    
 }
 
 <br/>
 <div id="visualization_container" style="width: 800px; height: 500px"></div>
 <br/>
 <br/>
-<input type="checkbox" name = "Rank" id="Rank" value="true" onclick="SwitchXAxis()">Ранговое распределение</input>
+<input type="checkbox" name = "Rank" id="Rank" value="true" onclick=" SwitchXAxis() ">Ранговое распределение</input>
 <br/>
-<input type="checkbox" name = "allGraphics" id="allGraphics" value="true" disabled="disabled" onclick="SwitchYAxis()">Вывести все графики сразу</input>
+<input type="checkbox" name = "allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() ">Вывести все графики сразу</input>
 <br/>
 <input type="checkbox" name = "logarithmicScale" id="logarithmicScale" value="true" disabled="disabled">Логарифмический масштаб</input>
 <br/>
@@ -311,4 +311,4 @@
     </select>
 </div>
 <br/>
-<button onclick="DrawChart()" >Отобразить разбиение</button>
+<button onclick=" DrawChart() " >Отобразить разбиение</button>

@@ -1,15 +1,49 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AutoCorelation.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The auto correlation.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+using System;
 
 namespace LibiadaWeb.Models
 {
+    /// <summary>
+    /// The auto correlation.
+    /// </summary>
     public class AutoCorrelation
     {
+        /// <summary>
+        /// The execute.
+        /// </summary>
+        /// <param name="x">
+        /// The x.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double[]"/>.
+        /// </returns>
         public double[] Execute(double[] x)
         {
-            double[] result = GetAutoCorrelationOfSeries(x);
+            double[] result = this.GetAutoCorrelationOfSeries(x);
             return result;
         }
 
+        /// <summary>
+        /// The get average.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
         public double GetAverage(double[] data)
         {
             int len = data.Length;
@@ -25,33 +59,66 @@ namespace LibiadaWeb.Models
             return sum / len;
         }
 
+        /// <summary>
+        /// The get variance.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         public double GetVariance(double[] data)
         {
             int len = data.Length;
 
             // Get average
-            double avg = GetAverage(data);
+            double avg = this.GetAverage(data);
 
             double sum = 0;
 
             for (int i = 0; i < data.Length; i++)
-                sum += Math.Pow((data[i] - avg), 2);
+                sum += Math.Pow(data[i] - avg, 2);
 
             return sum / len;
         }
+
+        /// <summary>
+        /// The get stdev.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         public double GetStdev(double[] data)
         {
-            return Math.Sqrt(GetVariance(data));
+            return Math.Sqrt(this.GetVariance(data));
         }
 
+        /// <summary>
+        /// The get correlation.
+        /// </summary>
+        /// <param name="x">
+        /// The x.
+        /// </param>
+        /// <param name="y">
+        /// The y.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
         public double GetCorrelation(double[] x, double[] y)
         {
             if (x.Length != y.Length)
                 throw new Exception("Length of sources is different");
-            double avgX = GetAverage(x);
-            double stdevX = GetStdev(x);
-            double avgY = GetAverage(y);
-            double stdevY = GetStdev(y);
+            double avgX = this.GetAverage(x);
+            double stdevX = this.GetStdev(x);
+            double avgY = this.GetAverage(y);
+            double stdevY = this.GetStdev(y);
             double covXY = 0;
             double pearson = 0;
             int len = x.Length;
@@ -62,6 +129,15 @@ namespace LibiadaWeb.Models
             return pearson;
         }
 
+        /// <summary>
+        /// The get auto correlation of series.
+        /// </summary>
+        /// <param name="x">
+        /// The x.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double[]"/>.
+        /// </returns>
         public double[] GetAutoCorrelationOfSeries(double[] x)
         {
             int half = x.Length / 2;
@@ -72,10 +148,11 @@ namespace LibiadaWeb.Models
             {
                 a[i] = x[i];
                 b[i] = x[i + i];
-                autoCorrelation[i] = GetCorrelation(a, b);
+                autoCorrelation[i] = this.GetCorrelation(a, b);
                 if (i % 1000 == 0)
                     Console.WriteLine(i);
             }
+
             return autoCorrelation;
         }
     }

@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.music_chain
+﻿@model music_chain
 
 @{
     ViewBag.Title = "Delete";
@@ -93,7 +93,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

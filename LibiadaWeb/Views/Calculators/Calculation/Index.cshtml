@@ -12,11 +12,7 @@
 
 </script>
 @Scripts.Render("~/bundles/controllers/calculation")
-@using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new
-{
-    enctype = "multipart/form-data",
-    data_ng_app = "Calculation"
-}))
+@using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
 {
     <fieldset data-ng-controller="CalculationCtrl">
         <legend>Характеристики полных цепочек</legend>

@@ -1,26 +1,91 @@
-﻿using System.Collections.Generic;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CheckBoxGroupHelper.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The check box group helper.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Routing;
 
 namespace LibiadaWeb.Helpers
 {
+    /// <summary>
+    /// The check box group helper.
+    /// </summary>
     public static class CheckBoxGroupHelper
     {
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name,
+        /// <summary>
+        /// The check box group.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="listInfo">
+        /// The list info.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
                                                  IEnumerable<SelectListItem> listInfo)
         {
             return helper.CheckBoxGroup(name, listInfo, null);
         }
 
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name,
+        /// <summary>
+        /// The check box group.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="listInfo">
+        /// The list info.
+        /// </param>
+        /// <param name="htmlAttributes">
+        /// The html attributes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
                                                   IEnumerable<SelectListItem> listInfo, object htmlAttributes)
         {
             return helper.CheckBoxGroup(name, listInfo, new RouteValueDictionary(htmlAttributes));
         }
 
-        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name,
-                                                  IEnumerable<SelectListItem> listInfo,
+        /// <summary>
+        /// The check box group.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="listInfo">
+        /// The list info.
+        /// </param>
+        /// <param name="htmlAttributes">
+        /// The html attributes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString CheckBoxGroup(this HtmlHelper helper, string name, 
+                                                  IEnumerable<SelectListItem> listInfo, 
                                                   IDictionary<string, object> htmlAttributes)
         {
             List<MvcHtmlString> checkBoxList = helper.CheckBoxList(name, listInfo, htmlAttributes);

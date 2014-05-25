@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function() {
         AddDataTablesWithSubmit();
     });
 
@@ -30,20 +30,21 @@
         </thead>
         <tbody>
             @{
-    List<MvcHtmlString> mattersList1 = Html.RadioButtonList("firstMatterId", (List<SelectListItem>)ViewBag.mattersList);
-    List<MvcHtmlString> mattersList2 = Html.RadioButtonList("secondMatterId", (List<SelectListItem>)ViewBag.mattersList);
+                List<MvcHtmlString> mattersList1 = Html.RadioButtonList("firstMatterId", (List<SelectListItem>)ViewBag.mattersList);
+                List<MvcHtmlString> mattersList2 = Html.RadioButtonList("secondMatterId", (List<SelectListItem>)ViewBag.mattersList);
 
-    for (int i = 0; i < mattersList1.Count; i++)
-    {
-        <tr>
-            <td>
-                @mattersList1[i]
-            </td>
-            <td>
-                @mattersList2[i]
-            </td>
-        </tr>
-    }
+                for (int i = 0; i < mattersList1.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @mattersList1[i]
+                        </td>
+                        <td>
+                            @mattersList2[i]
+                        </td>
+                    </tr>
+                }
+
             }
         </tbody>
     </table>

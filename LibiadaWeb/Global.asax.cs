@@ -1,4 +1,15 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Global.asax.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The mvc application.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,8 +19,14 @@ using System.Web.Routing;
 
 namespace LibiadaWeb
 {
-    public class MvcApplication : System.Web.HttpApplication
+    /// <summary>
+    /// The mvc application.
+    /// </summary>
+    public class MvcApplication : HttpApplication
     {
+        /// <summary>
+        /// The application_ start.
+        /// </summary>
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();

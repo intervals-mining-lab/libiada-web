@@ -1,138 +1,458 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChainController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The chain controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace LibiadaWeb.Controllers.Chains
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Chains;
+
+    /// <summary>
+    /// The chain controller.
+    /// </summary>
     public class ChainController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        /// <summary>
+        /// The db.
+        /// </summary>
+        private readonly LibiadaWebEntities db;
+
+        /// <summary>
+        /// The chain repository.
+        /// </summary>
+        private readonly ChainRepository chainRepository;
+
+        /// <summary>
+        /// The element repository.
+        /// </summary>
+        private readonly ElementRepository elementRepository;
+
+        /// <summary>
+        /// The dna chain repository.
+        /// </summary>
+        private readonly DnaChainRepository dnaChainRepository;
+
+        /// <summary>
+        /// The literature chain repository.
+        /// </summary>
+        private readonly LiteratureChainRepository literatureChainRepository;
+
+        /// <summary>
+        /// The matter repository.
+        /// </summary>
+        private readonly MatterRepository matterRepository;
+
+        /// <summary>
+        /// The piece type repository.
+        /// </summary>
+        private readonly PieceTypeRepository pieceTypeRepository;
+
+        /// <summary>
+        /// The notation repository.
+        /// </summary>
+        private readonly NotationRepository notationRepository;
+
+        /// <summary>
+        /// The remote db repository.
+        /// </summary>
+        private readonly RemoteDbRepository remoteDbRepository;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChainController"/> class.
+        /// </summary>
+        public ChainController()
+        {
+            this.db = new LibiadaWebEntities();
+            this.chainRepository = new ChainRepository(this.db);
+            this.elementRepository = new ElementRepository(this.db);
+            this.dnaChainRepository = new DnaChainRepository(this.db);
+            this.literatureChainRepository = new LiteratureChainRepository(this.db);
+            this.matterRepository = new MatterRepository(this.db);
+            this.pieceTypeRepository = new PieceTypeRepository(this.db);
+            this.notationRepository = new NotationRepository(this.db);
+            this.remoteDbRepository = new RemoteDbRepository(this.db);
+        }
 
         // GET: /Chain/
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
-            var chain = db.chain.Include(c => c.matter).Include(c => c.notation).Include(c => c.piece_type).Include(c => c.remote_db);
+            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
+            var chain = this.db.chain.Include(c => c.matter).Include(c => c.notation).Include(c => c.piece_type).Include(c => c.remote_db);
             return View(chain.ToList());
         }
 
         // GET: /Chain/Details/5
+        /// <summary>
+        /// The details.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Details(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            chain chain = db.chain.Find(id);
+
+            chain chain = this.db.chain.Find(id);
             if (chain == null)
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
+
             return View(chain);
         }
 
         // GET: /Chain/Create
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Create()
         {
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
-            return View();
+            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
+
+            var translators = new SelectList(this.db.translator, "id", "name").ToList();
+            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
+
+            this.ViewBag.data = new Dictionary<string, object>
+                {
+                    { "matters", this.matterRepository.GetSelectListWithNature() }, 
+                    { "notations", this.notationRepository.GetSelectListWithNature() }, 
+                    { "languages", new SelectList(this.db.language, "id", "name") }, 
+                    { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature() }, 
+                    { "remoteDbs", this.remoteDbRepository.GetSelectListWithNature() }, 
+                    { "natures", new SelectList(this.db.nature, "id", "name") }, 
+                    { "translators", translators }, 
+                    { "natureLiterature", Aliases.NatureLiterature }, 
+                    { "natureGenetic", Aliases.NatureGenetic }
+                };
+            return this.View();
         }
 
         // POST: /Chain/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <param name="chain">
+        /// The chain.
+        /// </param>
+        /// <param name="localFile">
+        /// The local file.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="original">
+        /// The original.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
+        /// <param name="productId">
+        /// The product id.
+        /// </param>
+        /// <param name="partial">
+        /// The partial.
+        /// </param>
+        /// <param name="complement">
+        /// The complement.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// </exception>
+        /// <exception cref="Exception">
+        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,modified,remote_id,description")] chain chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain, bool localFile, int languageId, bool original, int? translatorId, int? productId, bool partial, bool complement)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                db.chain.Add(chain);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    int? webApiId = null;
+
+                    Stream fileStream;
+                    if (localFile)
+                    {
+                        HttpPostedFileBase file = this.Request.Files[0];
+
+                        if (file == null || file.ContentLength == 0)
+                        {
+                            throw new ArgumentNullException("Файл цепочки не задан или пуст");
+                        }
+
+                        fileStream = file.InputStream;
+                    }
+                    else
+                    {
+                        webApiId = NcbiHelper.GetId(chain.remote_id);
+                        fileStream = NcbiHelper.GetFile(webApiId.ToString());
+                    }
+
+                    var input = new byte[fileStream.Length];
+
+                    // Read the file into the byte array
+                    fileStream.Read(input, 0, (int)fileStream.Length);
+                    int natureId = this.db.matter.Single(m => m.id == chain.matter_id).nature_id;
+
+                    // Copy the byte array into a string
+                    string stringChain = natureId == Aliases.NatureGenetic
+                        ? Encoding.ASCII.GetString(input)
+                        : Encoding.UTF8.GetString(input);
+
+                    BaseChain libiadaChain;
+                    long[] alphabet;
+                    switch (natureId)
+                    {
+                        case Aliases.NatureGenetic:
+
+                            // отделяем заголовок fasta файла от цепочки
+                            string[] splittedFasta = stringChain.Split(new[] { '\n', '\r' });
+                            var chainStringBuilder = new StringBuilder();
+                            string fastaHeader = splittedFasta[0];
+                            for (int j = 1; j < splittedFasta.Length; j++)
+                            {
+                                chainStringBuilder.Append(splittedFasta[j]);
+                            }
+
+                            string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
+
+                            libiadaChain = new BaseChain(resultStringChain);
+
+                            if (!this.elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
+                            {
+                                throw new Exception(
+                                    "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                            }
+
+                            alphabet = this.elementRepository.ToDbElements(
+                                libiadaChain.Alphabet, 
+                                chain.notation_id, 
+                                false);
+                            this.dnaChainRepository.Insert(
+                                chain, 
+                                fastaHeader, 
+                                webApiId, 
+                                productId, 
+                                complement, 
+                                partial, 
+                                alphabet, 
+                                libiadaChain.Building);
+                            break;
+                        case Aliases.NatureMusic:
+                            break;
+                        case Aliases.NatureLiterature:
+                            string[] text = stringChain.Split('\n');
+                            for (int l = 0; l < text.Length - 1; l++)
+                            {
+                                // убираем \r
+                                text[l] = text[l].Substring(0, text[l].Length - 1);
+                            }
+
+                            libiadaChain = new BaseChain(text.Length - 1);
+
+                            // в конце файла всегда пустая строка поэтому последний элемент не считаем
+                            // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце а лучше сделать нормальный trim
+                            for (int i = 0; i < text.Length - 1; i++)
+                            {
+                                libiadaChain.Add(new ValueString(text[i]), i);
+                            }
+
+                            alphabet = this.elementRepository.ToDbElements(
+                                libiadaChain.Alphabet, 
+                                chain.notation_id, 
+                                true);
+
+                            this.literatureChainRepository.Insert(
+                                chain, 
+                                original, 
+                                languageId, 
+                                translatorId, 
+                                alphabet, 
+                                libiadaChain.Building);
+                            break;
+                    }
+
+                    return this.RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    this.ModelState.AddModelError("Error", e.Message);
+                }
             }
 
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
+            this.ViewBag.data = new Dictionary<string, object>
+            {
+                { "matters", this.matterRepository.GetSelectListWithNature(chain.matter_id) }, 
+                { "notations", this.notationRepository.GetSelectListWithNature(chain.notation_id) }, 
+                { "languages", new SelectList(this.db.language, "id", "name", languageId) }, 
+                { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
+                { "remoteDbs", chain.remote_db_id == null
+                        ? this.remoteDbRepository.GetSelectListWithNature()
+                        : this.remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
+                { "natures", new SelectList(this.db.nature, "id", "name", this.db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
+                { "natureLiterature", Aliases.NatureLiterature }
+            };
             return View(chain);
         }
 
         // GET: /Chain/Edit/5
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Edit(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            chain chain = db.chain.Find(id);
+
+            chain chain = this.db.chain.Find(id);
             if (chain == null)
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
+
+            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", chain.matter_id);
+            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", chain.notation_id);
+            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", chain.piece_type_id);
+            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", chain.remote_db_id);
             return View(chain);
         }
 
         // POST: /Chain/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="chain">
+        /// The chain.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,modified,remote_id,description")] chain chain)
+        public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,modified,remote_id,description")] chain chain)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                db.Entry(chain).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                this.db.Entry(chain).State = EntityState.Modified;
+                this.db.SaveChanges();
+                return this.RedirectToAction("Index");
             }
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
+
+            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", chain.matter_id);
+            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", chain.notation_id);
+            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", chain.piece_type_id);
+            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", chain.remote_db_id);
             return View(chain);
         }
 
         // GET: /Chain/Delete/5
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Delete(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            chain chain = db.chain.Find(id);
+
+            chain chain = this.db.chain.Find(id);
             if (chain == null)
             {
-                return HttpNotFound();
+                return this.HttpNotFound();
             }
+
             return View(chain);
         }
 
         // POST: /Chain/Delete/5
+        /// <summary>
+        /// The delete confirmed.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            chain chain = db.chain.Find(id);
-            db.chain.Remove(chain);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            chain chain = this.db.chain.Find(id);
+            this.db.chain.Remove(chain);
+            this.db.SaveChanges();
+            return this.RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        /// <param name="disposing">
+        /// The disposing.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                this.db.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

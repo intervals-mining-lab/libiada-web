@@ -1,26 +1,58 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TableHelper.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The table helper.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
 
 namespace LibiadaWeb.Helpers
 {
+    /// <summary>
+    /// The table helper.
+    /// </summary>
     public static class TableHelper
     {
+        /// <summary>
+        /// The br.
+        /// </summary>
         private static readonly string Br = Environment.NewLine;
 
-        public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
+        /// <summary>
+        /// The matters table.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="listInfo">
+        /// The list info.
+        /// </param>
+        /// <param name="matters">
+        /// The matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString MattersTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo, 
                                                 List<matter> matters)
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            var headers = new List<String> { "Название", "Описание", "Природа"};
+            var headers = new List<string> { "Название", "Описание", "Природа"};
 
-            var bodyData = new List<List<String>>();
+            var bodyData = new List<List<string>>();
 
             for (int i = 0; i < checkBoxes.Count; i++)
             {
-                bodyData.Add(new List<String>());
+                bodyData.Add(new List<string>());
 
                 bodyData[i].Add(checkBoxes[i].ToString());
                 bodyData[i].Add(matters[i].description);
@@ -30,12 +62,36 @@ namespace LibiadaWeb.Helpers
             return helper.Table(headers, bodyData);
         }
 
-        public static MvcHtmlString ChainsTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo,
-                                                 List<chain> chains, List<String> languages, List<String> fastaHeaders, List<String> remoteIds )
+        /// <summary>
+        /// The chains table.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="listInfo">
+        /// The list info.
+        /// </param>
+        /// <param name="chains">
+        /// The chains.
+        /// </param>
+        /// <param name="languages">
+        /// The languages.
+        /// </param>
+        /// <param name="fastaHeaders">
+        /// The fasta headers.
+        /// </param>
+        /// <param name="remoteIds">
+        /// The remote ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString ChainsTable(this HtmlHelper helper, IEnumerable<SelectListItem> listInfo, 
+                                                 List<chain> chains, List<string> languages, List<string> fastaHeaders, List<string> remoteIds )
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            var headers = new List<String>
+            var headers = new List<string>
                 {
                     "Название", 
                     "Форма записи", 
@@ -43,15 +99,15 @@ namespace LibiadaWeb.Helpers
                     "Тип фрагмента", 
                     "Позиция фрагмента", 
                     "Язык", 
-                    "Заголовок fasta файла",
+                    "Заголовок fasta файла", 
                     "id удалённой БД"
                 };
 
-            var bodyData = new List<List<String>>();
+            var bodyData = new List<List<string>>();
 
             for (int i = 0; i < checkBoxes.Count; i++)
             {
-                bodyData.Add(new List<String>());
+                bodyData.Add(new List<string>());
 
                 bodyData[i].Add(checkBoxes[i].ToString());
                 bodyData[i].Add(chains[i].notation.name);
@@ -67,8 +123,23 @@ namespace LibiadaWeb.Helpers
             return helper.Table(headers, bodyData);
         }
 
-        public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers,
-                                          List<List<String>> data)
+        /// <summary>
+        /// The table.
+        /// </summary>
+        /// <param name="helper">
+        /// The helper.
+        /// </param>
+        /// <param name="headers">
+        /// The headers.
+        /// </param>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="MvcHtmlString"/>.
+        /// </returns>
+        public static MvcHtmlString Table(this HtmlHelper helper, IEnumerable<string> headers, 
+                                          List<List<string>> data)
         {
             var header = new TagBuilder("thead")
             {
@@ -95,7 +166,19 @@ namespace LibiadaWeb.Helpers
             return MvcHtmlString.Create(Br + table + Br);
         }
 
-        private static String TableRow(IEnumerable<string> cells, bool header)
+        /// <summary>
+        /// The table row.
+        /// </summary>
+        /// <param name="cells">
+        /// The cells.
+        /// </param>
+        /// <param name="header">
+        /// The header.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string TableRow(IEnumerable<string> cells, bool header)
         {
             var cellType = header ? "th" : "td";
 

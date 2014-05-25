@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LibiadaWeb.note>
+﻿@model IEnumerable<note>
 
 @{
     ViewBag.Title = "Index";
@@ -56,56 +56,57 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.numerator)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.denominator)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ticks)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.onumerator)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.odenominator)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.triplet)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.priority)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.modified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.notation.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.tie.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.numerator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.denominator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ticks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.onumerator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.odenominator)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.triplet)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.notation.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.tie.name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
 
 </table>

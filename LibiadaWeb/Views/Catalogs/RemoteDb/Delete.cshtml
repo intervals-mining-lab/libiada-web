@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.remote_db
+﻿@model remote_db
 
 @{
     ViewBag.Title = "Delete";
@@ -45,7 +45,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

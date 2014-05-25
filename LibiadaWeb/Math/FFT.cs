@@ -1,16 +1,34 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="FFT.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The fft.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+using System;
 using System.Numerics;
 
 namespace LibiadaWeb.Models
 {
+    /// <summary>
+    /// The fft.
+    /// </summary>
     public static class FFT
     {
         /// <summary>
         /// Вычисление поворачивающего модуля e^(-i*2*PI*k/N)
         /// </summary>
-        /// <param name="k"></param>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="k">
+        /// </param>
+        /// <param name="n">
+        /// </param>
+        /// <returns>
+        /// The <see cref="Complex"/>.
+        /// </returns>
         private static Complex W(int k, int n)
         {
             if (k % n == 0) return 1;
@@ -21,8 +39,12 @@ namespace LibiadaWeb.Models
         /// <summary>
         /// Возвращает спектр сигнала
         /// </summary>
-        /// <param name="x">Массив значений сигнала. Количество значений должно быть степенью 2</param>
-        /// <returns>Массив со значениями спектра сигнала</returns>
+        /// <param name="x">
+        /// Массив значений сигнала. Количество значений должно быть степенью 2
+        /// </param>
+        /// <returns>
+        /// Массив со значениями спектра сигнала
+        /// </returns>
         public static Complex[] Fft(Complex[] x)
         {
             Complex[] result;
@@ -42,6 +64,7 @@ namespace LibiadaWeb.Models
                     xEven[i] = x[2 * i];
                     xOdd[i] = x[2 * i + 1];
                 }
+
                 xEven = Fft(xEven);
                 xOdd = Fft(xOdd);
                 result = new Complex[n];
@@ -51,6 +74,7 @@ namespace LibiadaWeb.Models
                     result[i + n / 2] = xEven[i] - W(i, n) * xOdd[i];
                 }
             }
+
             return result;
         }
     }

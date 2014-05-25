@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.pitch
+﻿@model pitch
 
 @{
     ViewBag.Title = "Delete";
@@ -77,7 +77,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

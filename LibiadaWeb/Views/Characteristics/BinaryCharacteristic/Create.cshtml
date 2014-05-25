@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.binary_characteristic
+﻿@model binary_characteristic
 
 @{
     ViewBag.Title = "Create";
@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>binary_characteristic</h4>
         <hr />
@@ -19,7 +19,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.chain_id, "chain_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("chain_id", String.Empty)
+                @Html.DropDownList("chain_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.chain_id)
             </div>
         </div>
@@ -27,7 +27,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.characteristic_type_id, "characteristic_type_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("characteristic_type_id", String.Empty)
+                @Html.DropDownList("characteristic_type_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.characteristic_type_id)
             </div>
         </div>
@@ -51,7 +51,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.link_id, "link_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("link_id", String.Empty)
+                @Html.DropDownList("link_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.link_id)
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.first_element_id, "first_element_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("first_element_id", String.Empty)
+                @Html.DropDownList("first_element_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.first_element_id)
             </div>
         </div>
@@ -75,7 +75,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.second_element_id, "second_element_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("second_element_id", String.Empty)
+                @Html.DropDownList("second_element_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.second_element_id)
             </div>
         </div>

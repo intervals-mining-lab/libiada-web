@@ -1,4 +1,4 @@
-﻿@model IEnumerable<LibiadaWeb.pitch>
+﻿@model IEnumerable<pitch>
 
 @{
     ViewBag.Title = "Index";
@@ -38,38 +38,39 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.octave)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.midinumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.created)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.modified)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.note.value)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.instrument.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.accidental.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.note_symbol.name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.octave)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.midinumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modified)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.note.value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.instrument.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.accidental.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.note_symbol.name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
 
 </table>

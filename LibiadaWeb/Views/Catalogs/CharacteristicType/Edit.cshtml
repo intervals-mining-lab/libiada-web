@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.characteristic_type
+﻿@model characteristic_type
 
 @{
     ViewBag.Title = "Edit";
@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>characteristic_type</h4>
         <hr />
@@ -36,7 +36,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.characteristic_group_id, "characteristic_group_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("characteristic_group_id", String.Empty)
+                @Html.DropDownList("characteristic_group_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.characteristic_group_id)
             </div>
         </div>

@@ -1,4 +1,4 @@
-﻿@model LibiadaWeb.note
+﻿@model note
 
 @{
     ViewBag.Title = "Create";
@@ -7,10 +7,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>note</h4>
         <hr />
@@ -51,7 +51,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.notation_id, "notation_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("notation_id", String.Empty)
+                @Html.DropDownList("notation_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.notation_id)
             </div>
         </div>
@@ -123,7 +123,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.tie_id, "tie_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("tie_id", String.Empty)
+                @Html.DropDownList("tie_id", string.Empty)
                 @Html.ValidationMessageFor(model => model.tie_id)
             </div>
         </div>

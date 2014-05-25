@@ -19,7 +19,7 @@
 
     $(document).ready(function() {
 
-        for(var l = 0; l < $("table").length; l++) {
+        for (var l = 0; l < $("table").length; l++) {
             partNames.push(new Array());
 
             var rows = $("table")[l].tBodies[0].rows;
@@ -33,27 +33,29 @@
             {
                 @: points.push(new Array());
                 @: characteristics.push(new Array());
-                
+
                 var characteristicList = ViewBag.characteristics[j];
                 for (int i = 0; i < characteristicList.Count; i++)
                 {
                     @: points[@j].push(new Array());
                     @: characteristics[@j].push(new Array());
-                
+
                     var characteristic = characteristicList[i];
                     for (int k = 0; k < characteristic.Count; k++)
                     {
-                        String[] tempValue = characteristic[k].ToString().Split(',');
-                        String value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
+                        string[] tempValue = characteristic[k].ToString().Split(',');
+                        string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                         @: characteristics[@j][@i][@k] = @value;
                         @: points[@j][@i][@k] = {x: @i, y: @value};
                     }
                 }
             }
+
             for (int k = 0; k < ViewBag.chainNames.Count; k++)
             {
                 @:chainNames.push("@ViewBag.chainNames[k]");
             }
+
         }
         
         AddDataTables();
@@ -61,22 +63,21 @@
         // make the container smaller and add a second container for the master chart
         var container = $('#visualization_container')
             .css('position', 'relative');
-    
+
         var detailContainer = $('<div id="detail-container">')
             .css({ position: 'absolute', top: 0, height: 600, width: '100%' })
             .appendTo(container);
     });
-    
+
     var detailChart;
 
-    function setScale(){
+    function setScale() {
         var min = $("#slider_container").rangeSlider("min");
         var max = $("#slider_container").rangeSlider("max");
-          
-        
 
-        min =+min;
-        max =+max; 
+
+        min = +min;
+        max = +max;
 
         for (var i = 0; i < points.length; i++) {
             var detailData = [];
@@ -89,14 +90,14 @@
                         });
                     }
                 });
-                
+
             }
             detailChart.series[i].setData(detailData);
         }
-        
-        
+
+
     }
-    
+
     // create the detail chart
 
     function createDetail(dataSeries, yMin, yMax) {
@@ -140,22 +141,22 @@
                 series: { marker: { enabled: false, states: { hover: { enabled: true, radius: 3 } } } }
             },
             series: dataSeries,
-            exporting: { enabled: false }    
+            exporting: { enabled: false }
         });
     }
 
-    function shift(left,right) {
-        $("#slider_container").rangeSlider("values", left , right);
+    function shift(left, right) {
+        $("#slider_container").rangeSlider("values", left, right);
         setScale();
     }
 
     function stepSlider(step) {
         var min = $("#slider_container").rangeSlider("min");
         var max = $("#slider_container").rangeSlider("max");
-        min =+min;
-        max =+max;
-        step =+step;
-        $("#slider_container").rangeSlider("values", min+step , max+step);
+        min = +min;
+        max = +max;
+        step = +step;
+        $("#slider_container").rangeSlider("values", min + step, max + step);
     }
 
     function GetMaxArrayLength(arrayOfArrays) {
@@ -192,7 +193,7 @@
     }
 
     function CreateChart(dataSeries, minY) {
-        chart = new Highcharts.Chart( {
+        chart = new Highcharts.Chart({
             chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: 'x' },
 
             legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
@@ -203,27 +204,29 @@
 
             tooltip: {
                 formatter: function() {
-                    return  this.point.name + "<br/>" + this.y;
+                    return this.point.name + "<br/>" + this.y;
                 }
             },
-           
-            xAxis: { min: 0, maxZoom: 3, title: {text: 'Фрагменты цепочки'} },
+
+            xAxis: { min: 0, maxZoom: 3, title: { text: 'Фрагменты цепочки' } },
 
             yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
             series: dataSeries
-            
-    });
-    
+
+        });
+
     }
-    function getBorderOfArrows(){
+
+    function getBorderOfArrows() {
         var min = $("#slider_container").rangeSlider("min");
         var max = $("#slider_container").rangeSlider("max");
         $.ajax({
-            type:"GET",
-            data:{"min":min, "max":max},
-            success:result
+            type: "GET",
+            data: { "min": min, "max": max },
+            success: result
         });
+
         function result(data) {
             alert(data);
             return false;
@@ -234,33 +237,34 @@
         yVals = new Array();
         var dataSeries = new Array();
         slider = $("#slider_container").rangeSlider({
-            bounds:{min: 0, max: GetMaxArrayLength(partNames)},
-            defaultValues: {min: 0, max:GetMaxArrayLength(partNames)},
-            wheelMode: "zoom", 
+            bounds: { min: 0, max: GetMaxArrayLength(partNames) },
+            defaultValues: { min: 0, max: GetMaxArrayLength(partNames) },
+            wheelMode: "zoom",
             valueLabels: "show",
             step: false,
             scales: [
-             // Primary scale
-            {
-                first: function(val){ return val; },
-                next: function(val){ return val + 10; },
-                stop: function(val){ return false; },
-                label: function(val){ return val; }
-            },
-            // Secondary scale
-             {
-                 first: function(val){ return val; },
-                 next: function(val){
-                     if (val % 10 === 9){
-                         return val + 2;
-                     }
-                     return val + 1;
-                 },
-                 stop: function(){ return false; },
-                 label: function(){ return null; }
-             }]
+                // Primary scale
+                {
+                    first: function(val) { return val; },
+                    next: function(val) { return val + 10; },
+                    stop: function(val) { return false; },
+                    label: function(val) { return val; }
+                },
+                // Secondary scale
+                {
+                    first: function(val) { return val; },
+                    next: function(val) {
+                        if (val % 10 === 9) {
+                            return val + 2;
+                        }
+                        return val + 1;
+                    },
+                    stop: function() { return false; },
+                    label: function() { return null; }
+                }
+            ]
         });
-        $("#slider_container").bind("valuesChanging", function(e, data){
+        $("#slider_container").bind("valuesChanging", function(e, data) {
             setScale();
 
         });
@@ -273,8 +277,8 @@
         }
         createDetail(dataSeries, Math.min.apply(null, yVals), Math.max.apply(null, yVals));
     }
-    
-    
+
+
 </script>
 
 @for (int k = 0; k < ViewBag.chainNames.Count; k++)
@@ -315,7 +319,7 @@
 <br/>
 <div id="visualization_container" style="width: 800px; height: 520px; margin-bottom: 15px;"></div>
 <br/>
-<div style="width: 755px; height: 30px; margin-left: 35px; margin-top:5px;">
+<div style="width: 755px; height: 30px; margin-left: 35px; margin-top: 5px;">
     <div id="slider_container"> 
     </div>
 </div>
@@ -328,10 +332,10 @@
         <label>Правая граница
             <input type="number" id="rightArrow" name="rightArrow" value="10" />
         </label>
-        <input type="button" value="сдвиг" onclick="stepSlider(stepOfWindow.value);"/>
-        <input type="button" value="значение" onclick="shift(leftArrow.value,rightArrow.value);"/>
+        <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); "/>
+        <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); "/>
     </div>
-    <div id="new-params" style ="clear:both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
+    <div id="new-params" style ="clear: both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
         <label>Изменить параметры разбиения</label>
         <label>Шаг окна
             <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
@@ -339,7 +343,7 @@
         <label>Размер окна
             <input type="number" id="widthOfWindow" name="" value="10">
         </label>
-        <input type="button" value="значение" onclick="shift(stepOfWindow.value,widthOfWindow.value);"/>
+        <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); "/>
     </div>
 </div>
 <br/>
@@ -354,4 +358,4 @@
 <input type="checkbox" name = "allGraphics" id="allGraphics" value="true" />
 <label for = "allGraphics">Вывести все графики сразу</label>
 <br/>
-<button onclick="DrawChart()">Отобразить разбиение</button>
+<button onclick=" DrawChart() ">Отобразить разбиение</button>
