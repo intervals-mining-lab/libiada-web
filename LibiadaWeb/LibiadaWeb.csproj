@@ -228,6 +228,7 @@
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Chains\DnaTransformerController.cs" />
     <Compile Include="Controllers\Characteristics\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\Characteristics\CharacteristicController.cs" />
@@ -614,6 +615,7 @@
     <Content Include="Views\Calculators\LocalCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\QuickCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\QuickCalculation\Result.cshtml" />
+    <Content Include="Views\Chains\DnaTransformer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
