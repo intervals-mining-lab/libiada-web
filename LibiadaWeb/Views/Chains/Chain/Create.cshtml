@@ -88,11 +88,11 @@
             @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
-                @Html.ValidationMessageFor(model => model.dissimilar)
             </div>
         </div>
         
         <div class="form-group" data-ng-show="localFile">
+            @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" id="file" />
             </div>
@@ -192,7 +192,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Создать" class="btn btn-default" />
             </div>
         </div>
     </div>
