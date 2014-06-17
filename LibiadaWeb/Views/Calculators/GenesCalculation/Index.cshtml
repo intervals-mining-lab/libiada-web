@@ -1,10 +1,11 @@
 ﻿@model dynamic
+@using LibiadaWeb.Helpers
 
 @{
-    ViewBag.Title = "Вычисление характеристик однородных цепочек";
+    ViewBag.Title = "Вычисление характеристик генов";
 }
 
-<h2>Вычисление характеристик однородных цепочек</h2>
+<h2>Вычисление характеристик генов</h2>
 
 <script type="text/javascript">
     "use strict";
@@ -65,6 +66,8 @@
             </tbody>
         </table>
         <br />
+        @Html.CheckBox("isSort", "Ранжировать", null)
+        <br />
         <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
         <br />
         <div data-ng-repeat="characteristic in characteristics">
@@ -84,4 +87,8 @@
         <br />
         <input type="submit" value="Вычислить" />
     </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
 }

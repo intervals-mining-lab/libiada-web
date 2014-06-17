@@ -705,6 +705,7 @@
     <Content Include="Views\Calculators\QuickCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\QuickCalculation\Result.cshtml" />
     <Content Include="Views\Chains\DnaTransformer\Index.cshtml" />
+    <Content Include="Views\Calculators\GenesCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
