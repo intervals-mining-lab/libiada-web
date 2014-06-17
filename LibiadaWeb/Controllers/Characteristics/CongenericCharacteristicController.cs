@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var congeneric_characteristic = this.db.congeneric_characteristic.Include(c => c.characteristic_type).Include(c => c.element).Include(c => c.link);
+            var congeneric_characteristic = db.congeneric_characteristic.Include(c => c.characteristic_type).Include(c => c.element).Include(c => c.link);
             return View(congeneric_characteristic.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            congeneric_characteristic congeneric_characteristic = this.db.congeneric_characteristic.Find(id);
+            congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
                 return this.HttpNotFound();
@@ -60,10 +60,10 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name");
-            this.ViewBag.element_id = new SelectList(this.db.element, "id", "value");
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name");
-            return this.View();
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name");
+            ViewBag.element_id = new SelectList(db.element, "id", "value");
+            ViewBag.link_id = new SelectList(db.link, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -81,14 +81,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.congeneric_characteristic.Add(congeneric_characteristic);
-                this.db.SaveChanges();
+                db.congeneric_characteristic.Add(congeneric_characteristic);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
-            this.ViewBag.element_id = new SelectList(this.db.element, "id", "value", congeneric_characteristic.element_id);
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", congeneric_characteristic.link_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
+            ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
 
@@ -108,15 +108,15 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            congeneric_characteristic congeneric_characteristic = this.db.congeneric_characteristic.Find(id);
+            congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
-            this.ViewBag.element_id = new SelectList(this.db.element, "id", "value", congeneric_characteristic.element_id);
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", congeneric_characteristic.link_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
+            ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
 
@@ -135,14 +135,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(congeneric_characteristic).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(congeneric_characteristic).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
-            this.ViewBag.element_id = new SelectList(this.db.element, "id", "value", congeneric_characteristic.element_id);
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", congeneric_characteristic.link_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
+            ViewBag.element_id = new SelectList(db.element, "id", "value", congeneric_characteristic.element_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", congeneric_characteristic.link_id);
             return View(congeneric_characteristic);
         }
 
@@ -162,7 +162,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            congeneric_characteristic congeneric_characteristic = this.db.congeneric_characteristic.Find(id);
+            congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
                 return this.HttpNotFound();
@@ -184,9 +184,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            congeneric_characteristic congeneric_characteristic = this.db.congeneric_characteristic.Find(id);
-            this.db.congeneric_characteristic.Remove(congeneric_characteristic);
-            this.db.SaveChanges();
+            congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
+            db.congeneric_characteristic.Remove(congeneric_characteristic);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -200,7 +200,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

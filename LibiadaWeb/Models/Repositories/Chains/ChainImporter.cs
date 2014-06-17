@@ -47,7 +47,7 @@
         {
             if (chain.id == default(long))
             {
-                chain.id = this.db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
+                chain.id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
             }
 
             var parameters = new List<object>

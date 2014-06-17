@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.link.ToList());
+            return View(db.link.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            link link = this.db.link.Find(id);
+            link link = db.link.Find(id);
             if (link == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.link.Add(link);
-                this.db.SaveChanges();
+                db.link.Add(link);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            link link = this.db.link.Find(id);
+            link link = db.link.Find(id);
             if (link == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(link).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(link).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            link link = this.db.link.Find(id);
+            link link = db.link.Find(id);
             if (link == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            link link = this.db.link.Find(id);
-            this.db.link.Remove(link);
-            this.db.SaveChanges();
+            link link = db.link.Find(id);
+            db.link.Remove(link);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

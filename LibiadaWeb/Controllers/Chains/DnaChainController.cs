@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var dna_chain = this.db.dna_chain.Include(d => d.matter).Include(d => d.notation).Include(d => d.product).Include(d => d.piece_type).Include(d => d.remote_db);
+            var dna_chain = db.dna_chain.Include(d => d.matter).Include(d => d.notation).Include(d => d.product).Include(d => d.piece_type).Include(d => d.remote_db);
             return View(dna_chain.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            dna_chain dna_chain = this.db.dna_chain.Find(id);
+            dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
                 return this.HttpNotFound();
@@ -60,12 +60,12 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name");
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            this.ViewBag.product_id = new SelectList(this.db.product, "id", "name");
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name");
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name");
-            return this.View();
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.product_id = new SelectList(db.product, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -83,16 +83,16 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.dna_chain.Add(dna_chain);
-                this.db.SaveChanges();
+                db.dna_chain.Add(dna_chain);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", dna_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", dna_chain.notation_id);
-            this.ViewBag.product_id = new SelectList(this.db.product, "id", "name", dna_chain.product_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", dna_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", dna_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", dna_chain.notation_id);
+            ViewBag.product_id = new SelectList(db.product, "id", "name", dna_chain.product_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", dna_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", dna_chain.remote_db_id);
             return View(dna_chain);
         }
 
@@ -112,17 +112,17 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            dna_chain dna_chain = this.db.dna_chain.Find(id);
+            dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", dna_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", dna_chain.notation_id);
-            this.ViewBag.product_id = new SelectList(this.db.product, "id", "name", dna_chain.product_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", dna_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", dna_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", dna_chain.notation_id);
+            ViewBag.product_id = new SelectList(db.product, "id", "name", dna_chain.product_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", dna_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", dna_chain.remote_db_id);
             return View(dna_chain);
         }
 
@@ -141,16 +141,16 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(dna_chain).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(dna_chain).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", dna_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", dna_chain.notation_id);
-            this.ViewBag.product_id = new SelectList(this.db.product, "id", "name", dna_chain.product_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", dna_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", dna_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", dna_chain.notation_id);
+            ViewBag.product_id = new SelectList(db.product, "id", "name", dna_chain.product_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", dna_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", dna_chain.remote_db_id);
             return View(dna_chain);
         }
 
@@ -170,7 +170,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            dna_chain dna_chain = this.db.dna_chain.Find(id);
+            dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
                 return this.HttpNotFound();
@@ -192,9 +192,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            dna_chain dna_chain = this.db.dna_chain.Find(id);
-            this.db.dna_chain.Remove(dna_chain);
-            this.db.SaveChanges();
+            dna_chain dna_chain = db.dna_chain.Find(id);
+            db.dna_chain.Remove(dna_chain);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -208,7 +208,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

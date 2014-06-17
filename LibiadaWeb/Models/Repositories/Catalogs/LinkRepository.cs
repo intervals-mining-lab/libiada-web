@@ -39,7 +39,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             HashSet<int> linkIds = links != null
                                          ? new HashSet<int>(links.Select(c => c.id))
                                          : new HashSet<int>();
-            var allLinks = this.db.link;
+            var allLinks = db.link;
             var linksList = new List<SelectListItem>();
             foreach (var link in allLinks)
             {
@@ -59,7 +59,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

@@ -34,9 +34,9 @@
         /// </summary>
         public QuickCalculationController()
         {
-            this.db = new LibiadaWebEntities();
-            this.characteristicRepository = new CharacteristicTypeRepository(this.db);
-            this.linkRepository = new LinkRepository(this.db);
+            db = new LibiadaWebEntities();
+            this.characteristicRepository = new CharacteristicTypeRepository(db);
+            this.linkRepository = new LinkRepository(db);
         }
 
         /// <summary>
@@ -48,13 +48,13 @@
         public ActionResult Index()
         {
             IEnumerable<characteristic_type> characteristicsList =
-                this.db.characteristic_type.Where(c => c.full_chain_applicable);
-            this.ViewBag.characteristicsList = this.characteristicRepository.GetSelectListItems(
+                db.characteristic_type.Where(c => c.full_chain_applicable);
+            ViewBag.characteristicsList = this.characteristicRepository.GetSelectListItems(
                 characteristicsList, 
                 null);
 
-            this.ViewBag.linksList = this.linkRepository.GetSelectListItems(null);
-            return this.View();
+            ViewBag.linksList = this.linkRepository.GetSelectListItems(null);
+            return View();
         }
 
         /// <summary>
@@ -86,10 +86,10 @@
                 var tempChain = new Chain(chain);
 
                 characteristicNames.Add(
-                    this.db.characteristic_type.Single(charact => charact.id == characteristicId).name);
-                var className = this.db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                    db.characteristic_type.Single(charact => charact.id == characteristicId).name);
+                var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                 var calculator = CalculatorsFactory.Create(className);
-                var link = (Link)this.db.link.Single(l => l.id == linkId).id;
+                var link = (Link)db.link.Single(l => l.id == linkId).id;
 
                 characteristics.Add(calculator.Calculate(tempChain, link));
             }
@@ -118,14 +118,14 @@
                     new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
             }
 
-            this.ViewBag.characteristicIds = new List<int>(characteristicIds);
-            this.ViewBag.characteristicsList = characteristicsList;
-            this.ViewBag.characteristics = characteristics;
-            this.ViewBag.characteristicNames = characteristicNames;
+            ViewBag.characteristicIds = new List<int>(characteristicIds);
+            ViewBag.characteristicsList = characteristicsList;
+            ViewBag.characteristics = characteristics;
+            ViewBag.characteristicNames = characteristicNames;
 
             this.TempData.Keep();
 
-            return this.View();
+            return View();
         }
     }
 }

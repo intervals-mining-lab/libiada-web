@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var measure = this.db.measure.Include(m => m.matter).Include(m => m.notation).Include(m => m.piece_type).Include(m => m.remote_db);
+            var measure = db.measure.Include(m => m.matter).Include(m => m.notation).Include(m => m.piece_type).Include(m => m.remote_db);
             return View(measure.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            measure measure = this.db.measure.Find(id);
+            measure measure = db.measure.Find(id);
             if (measure == null)
             {
                 return this.HttpNotFound();
@@ -60,11 +60,11 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name");
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name");
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name");
-            return this.View();
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -82,15 +82,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.measure.Add(measure);
-                this.db.SaveChanges();
+                db.measure.Add(measure);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", measure.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", measure.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", measure.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", measure.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", measure.remote_db_id);
             return View(measure);
         }
 
@@ -110,16 +110,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            measure measure = this.db.measure.Find(id);
+            measure measure = db.measure.Find(id);
             if (measure == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", measure.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", measure.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", measure.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", measure.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", measure.remote_db_id);
             return View(measure);
         }
 
@@ -138,15 +138,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(measure).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(measure).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", measure.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", measure.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", measure.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", measure.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", measure.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", measure.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", measure.remote_db_id);
             return View(measure);
         }
 
@@ -166,7 +166,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            measure measure = this.db.measure.Find(id);
+            measure measure = db.measure.Find(id);
             if (measure == null)
             {
                 return this.HttpNotFound();
@@ -188,9 +188,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            measure measure = this.db.measure.Find(id);
-            this.db.measure.Remove(measure);
-            this.db.SaveChanges();
+            measure measure = db.measure.Find(id);
+            db.measure.Remove(measure);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -204,7 +204,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

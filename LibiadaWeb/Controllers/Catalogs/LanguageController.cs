@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.language.ToList());
+            return View(db.language.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            language language = this.db.language.Find(id);
+            language language = db.language.Find(id);
             if (language == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.language.Add(language);
-                this.db.SaveChanges();
+                db.language.Add(language);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            language language = this.db.language.Find(id);
+            language language = db.language.Find(id);
             if (language == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(language).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(language).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            language language = this.db.language.Find(id);
+            language language = db.language.Find(id);
             if (language == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            language language = this.db.language.Find(id);
-            this.db.language.Remove(language);
-            this.db.SaveChanges();
+            language language = db.language.Find(id);
+            db.language.Remove(language);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

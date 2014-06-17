@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.instrument.ToList());
+            return View(db.instrument.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            instrument instrument = this.db.instrument.Find(id);
+            instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.instrument.Add(instrument);
-                this.db.SaveChanges();
+                db.instrument.Add(instrument);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            instrument instrument = this.db.instrument.Find(id);
+            instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(instrument).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(instrument).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            instrument instrument = this.db.instrument.Find(id);
+            instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            instrument instrument = this.db.instrument.Find(id);
-            this.db.instrument.Remove(instrument);
-            this.db.SaveChanges();
+            instrument instrument = db.instrument.Find(id);
+            db.instrument.Remove(instrument);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

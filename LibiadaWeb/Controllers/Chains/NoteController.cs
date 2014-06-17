@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var note = this.db.note.Include(n => n.notation).Include(n => n.tie);
+            var note = db.note.Include(n => n.notation).Include(n => n.tie);
             return View(note.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note note = this.db.note.Find(id);
+            note note = db.note.Find(id);
             if (note == null)
             {
                 return this.HttpNotFound();
@@ -60,9 +60,9 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            this.ViewBag.tie_id = new SelectList(this.db.tie, "id", "name");
-            return this.View();
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -80,13 +80,13 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.note.Add(note);
-                this.db.SaveChanges();
+                db.note.Add(note);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", note.notation_id);
-            this.ViewBag.tie_id = new SelectList(this.db.tie, "id", "name", note.tie_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
 
@@ -106,14 +106,14 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note note = this.db.note.Find(id);
+            note note = db.note.Find(id);
             if (note == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", note.notation_id);
-            this.ViewBag.tie_id = new SelectList(this.db.tie, "id", "name", note.tie_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
 
@@ -132,13 +132,13 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(note).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(note).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", note.notation_id);
-            this.ViewBag.tie_id = new SelectList(this.db.tie, "id", "name", note.tie_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
+            ViewBag.tie_id = new SelectList(db.tie, "id", "name", note.tie_id);
             return View(note);
         }
 
@@ -158,7 +158,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note note = this.db.note.Find(id);
+            note note = db.note.Find(id);
             if (note == null)
             {
                 return this.HttpNotFound();
@@ -180,9 +180,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            note note = this.db.note.Find(id);
-            this.db.note.Remove(note);
-            this.db.SaveChanges();
+            note note = db.note.Find(id);
+            db.note.Remove(note);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -196,7 +196,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

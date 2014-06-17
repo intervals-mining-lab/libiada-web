@@ -58,12 +58,12 @@
         /// </summary>
         public ClusterizationController()
         {
-            this.db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(this.db);
-            this.chainRepository = new ChainRepository(this.db);
-            this.characteristicRepository = new CharacteristicTypeRepository(this.db);
-            this.linkRepository = new LinkRepository(this.db);
-            this.notationRepository = new NotationRepository(this.db);
+            db = new LibiadaWebEntities();
+            this.matterRepository = new MatterRepository(db);
+            this.chainRepository = new ChainRepository(db);
+            this.characteristicRepository = new CharacteristicTypeRepository(db);
+            this.linkRepository = new LinkRepository(db);
+            this.notationRepository = new NotationRepository(db);
         }
 
         /// <summary>
@@ -74,23 +74,23 @@
         /// </returns>
         public ActionResult Index()
         {
-            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
+            ViewBag.dbName = DbHelper.GetDbName(db);
             IEnumerable<characteristic_type> characteristicsList =
-                this.db.characteristic_type.Where(c => c.full_chain_applicable);
+                db.characteristic_type.Where(c => c.full_chain_applicable);
 
             var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            this.ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", this.matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", this.notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(this.db.nature, "id", "name") }, 
-                    { "links", new SelectList(this.db.link, "id", "name") }, 
-                    { "languages", new SelectList(this.db.language, "id", "name") }, 
+                    { "natures", new SelectList(db.nature, "id", "name") }, 
+                    { "links", new SelectList(db.link, "id", "name") }, 
+                    { "languages", new SelectList(db.language, "id", "name") }, 
                     { "natureLiterature", Aliases.NatureLiterature }
                 };
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -143,22 +143,22 @@
             var chainNames = new List<string>();
             foreach (var matterId in matterIds)
             {
-                chainNames.Add(this.db.matter.Single(m => m.id == matterId).name);
+                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 characteristics.Add(new List<double>());
                 for (int i = 0; i < notationIds.Length; i++)
                 {
-                    long chainId = this.db.matter.Single(m => m.id == matterId).
+                    long chainId = db.matter.Single(m => m.id == matterId).
                         chain.Single(c => c.notation_id == notationIds[i]).id;
 
                     int characteristicId = characteristicIds[i];
                     int linkId = linkIds[i];
-                    if (this.db.characteristic.Any(charact =>
+                    if (db.characteristic.Any(charact =>
                         linkId == charact.link.id &&
                         charact.chain_id == chainId &&
                         charact.characteristic_type_id == characteristicId))
                     {
                         characteristics.Last().
-                        Add((double)this.db.characteristic.Single(charact =>
+                        Add((double)db.characteristic.Single(charact =>
                             linkIds[i] == charact.link.id &&
                             charact.chain_id == chainId &&
                             charact.characteristic_type_id == characteristicIds[i]).value);
@@ -168,9 +168,9 @@
                         Chain tempChain = this.chainRepository.ToLibiadaChain(chainId);
 
                         string className =
-                            this.db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                            db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        var link = (Link)this.db.link.Single(l => l.id == linkId).id;
+                        var link = (Link)db.link.Single(l => l.id == linkId).id;
                         characteristics.Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
@@ -181,9 +181,9 @@
                 int characteristicId = characteristicIds[k];
                 int linkId = linkIds[k];
                 int notationId = notationIds[k];
-                characteristicNames.Add(this.db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                    this.db.link.Single(l => l.id == linkId).name + " " +
-                    this.db.notation.Single(n => n.id == notationId).name);
+                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
+                    db.link.Single(l => l.id == linkId).name + " " +
+                    db.notation.Single(n => n.id == notationId).name);
             }
 
             DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
@@ -238,7 +238,7 @@
                     clusterNames.Add(new List<string>());
                     foreach (var matterId in cluster)
                     {
-                        clusterNames.Last().Add(this.db.matter.Single(m => m.id == matterId).name);
+                        clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
                     }
                 }
 
@@ -256,14 +256,14 @@
                                                 });
                 }
 
-                this.ViewBag.chainNames = result["chainNames"];
-                this.ViewBag.chainIds = result["chainIds"];
-                this.ViewBag.characteristicNames = characteristicNames;
-                this.ViewBag.clusters = clusters;
-                this.ViewBag.clusterNames = clusterNames;
-                this.ViewBag.characteristicsList = characteristicsList;
-                this.ViewBag.characteristics = result["characteristics"];
-                this.ViewBag.characteristicIds = new List<int>(characteristicIds);
+                ViewBag.chainNames = result["chainNames"];
+                ViewBag.chainIds = result["chainIds"];
+                ViewBag.characteristicNames = characteristicNames;
+                ViewBag.clusters = clusters;
+                ViewBag.clusterNames = clusterNames;
+                ViewBag.characteristicsList = characteristicsList;
+                ViewBag.characteristics = result["characteristics"];
+                ViewBag.characteristicIds = new List<int>(characteristicIds);
 
                 this.TempData.Keep();
             }
@@ -272,7 +272,7 @@
                 this.ModelState.AddModelError("Error", e.Message);
             }
 
-            return this.View();
+            return View();
         }
     }
 }

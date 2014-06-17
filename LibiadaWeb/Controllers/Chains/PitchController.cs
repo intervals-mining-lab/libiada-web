@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var pitch = this.db.pitch.Include(p => p.note).Include(p => p.instrument).Include(p => p.accidental).Include(p => p.note_symbol);
+            var pitch = db.pitch.Include(p => p.note).Include(p => p.instrument).Include(p => p.accidental).Include(p => p.note_symbol);
             return View(pitch.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            pitch pitch = this.db.pitch.Find(id);
+            pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
                 return this.HttpNotFound();
@@ -60,11 +60,11 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.note_id = new SelectList(this.db.note, "id", "value");
-            this.ViewBag.instrument_id = new SelectList(this.db.instrument, "id", "name");
-            this.ViewBag.accidental_id = new SelectList(this.db.accidental, "id", "name");
-            this.ViewBag.note_symbol_id = new SelectList(this.db.note_symbol, "id", "name");
-            return this.View();
+            ViewBag.note_id = new SelectList(db.note, "id", "value");
+            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name");
+            ViewBag.accidental_id = new SelectList(db.accidental, "id", "name");
+            ViewBag.note_symbol_id = new SelectList(db.note_symbol, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -82,15 +82,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.pitch.Add(pitch);
-                this.db.SaveChanges();
+                db.pitch.Add(pitch);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.note_id = new SelectList(this.db.note, "id", "value", pitch.note_id);
-            this.ViewBag.instrument_id = new SelectList(this.db.instrument, "id", "name", pitch.instrument_id);
-            this.ViewBag.accidental_id = new SelectList(this.db.accidental, "id", "name", pitch.accidental_id);
-            this.ViewBag.note_symbol_id = new SelectList(this.db.note_symbol, "id", "name", pitch.note_symbol_id);
+            ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
+            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", pitch.instrument_id);
+            ViewBag.accidental_id = new SelectList(db.accidental, "id", "name", pitch.accidental_id);
+            ViewBag.note_symbol_id = new SelectList(db.note_symbol, "id", "name", pitch.note_symbol_id);
             return View(pitch);
         }
 
@@ -110,16 +110,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            pitch pitch = this.db.pitch.Find(id);
+            pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.note_id = new SelectList(this.db.note, "id", "value", pitch.note_id);
-            this.ViewBag.instrument_id = new SelectList(this.db.instrument, "id", "name", pitch.instrument_id);
-            this.ViewBag.accidental_id = new SelectList(this.db.accidental, "id", "name", pitch.accidental_id);
-            this.ViewBag.note_symbol_id = new SelectList(this.db.note_symbol, "id", "name", pitch.note_symbol_id);
+            ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
+            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", pitch.instrument_id);
+            ViewBag.accidental_id = new SelectList(db.accidental, "id", "name", pitch.accidental_id);
+            ViewBag.note_symbol_id = new SelectList(db.note_symbol, "id", "name", pitch.note_symbol_id);
             return View(pitch);
         }
 
@@ -138,15 +138,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(pitch).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(pitch).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.note_id = new SelectList(this.db.note, "id", "value", pitch.note_id);
-            this.ViewBag.instrument_id = new SelectList(this.db.instrument, "id", "name", pitch.instrument_id);
-            this.ViewBag.accidental_id = new SelectList(this.db.accidental, "id", "name", pitch.accidental_id);
-            this.ViewBag.note_symbol_id = new SelectList(this.db.note_symbol, "id", "name", pitch.note_symbol_id);
+            ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
+            ViewBag.instrument_id = new SelectList(db.instrument, "id", "name", pitch.instrument_id);
+            ViewBag.accidental_id = new SelectList(db.accidental, "id", "name", pitch.accidental_id);
+            ViewBag.note_symbol_id = new SelectList(db.note_symbol, "id", "name", pitch.note_symbol_id);
             return View(pitch);
         }
 
@@ -166,7 +166,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            pitch pitch = this.db.pitch.Find(id);
+            pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
                 return this.HttpNotFound();
@@ -188,9 +188,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            pitch pitch = this.db.pitch.Find(id);
-            this.db.pitch.Remove(pitch);
-            this.db.SaveChanges();
+            pitch pitch = db.pitch.Find(id);
+            db.pitch.Remove(pitch);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -204,7 +204,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

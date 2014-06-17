@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var element = this.db.element.Include(e => e.notation);
+            var element = db.element.Include(e => e.notation);
             return View(element.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            element element = this.db.element.Find(id);
+            element element = db.element.Find(id);
             if (element == null)
             {
                 return this.HttpNotFound();
@@ -60,8 +60,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            return this.View();
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -79,12 +79,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.element.Add(element);
-                this.db.SaveChanges();
+                db.element.Add(element);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", element.notation_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
             return View(element);
         }
 
@@ -104,13 +104,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            element element = this.db.element.Find(id);
+            element element = db.element.Find(id);
             if (element == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", element.notation_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
             return View(element);
         }
 
@@ -129,12 +129,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(element).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(element).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", element.notation_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
             return View(element);
         }
 
@@ -154,7 +154,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            element element = this.db.element.Find(id);
+            element element = db.element.Find(id);
             if (element == null)
             {
                 return this.HttpNotFound();
@@ -176,9 +176,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            element element = this.db.element.Find(id);
-            this.db.element.Remove(element);
-            this.db.SaveChanges();
+            element element = db.element.Find(id);
+            db.element.Remove(element);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -192,7 +192,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

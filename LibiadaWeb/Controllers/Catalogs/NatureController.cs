@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.nature.ToList());
+            return View(db.nature.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            nature nature = this.db.nature.Find(id);
+            nature nature = db.nature.Find(id);
             if (nature == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.nature.Add(nature);
-                this.db.SaveChanges();
+                db.nature.Add(nature);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            nature nature = this.db.nature.Find(id);
+            nature nature = db.nature.Find(id);
             if (nature == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(nature).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(nature).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            nature nature = this.db.nature.Find(id);
+            nature nature = db.nature.Find(id);
             if (nature == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            nature nature = this.db.nature.Find(id);
-            this.db.nature.Remove(nature);
-            this.db.SaveChanges();
+            nature nature = db.nature.Find(id);
+            db.nature.Remove(nature);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

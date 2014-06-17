@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return this.db.remote_db.Select(n => new
+            return db.remote_db.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedDb)
         {
-            return this.db.remote_db.Select(n => new
+            return db.remote_db.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -72,7 +72,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> selectedDbs)
         {
-            return this.db.remote_db.Select(n => new
+            return db.remote_db.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -86,7 +86,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose() 
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

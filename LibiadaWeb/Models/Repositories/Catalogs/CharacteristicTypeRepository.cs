@@ -39,7 +39,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             HashSet<int> characteristicTypeIds = characteristicTypes != null
                                                 ? new HashSet<int>(characteristicTypes.Select(c => c.id))
                                                 : new HashSet<int>();
-            var allCharacteristicTypes = this.db.characteristic_type;
+            var allCharacteristicTypes = db.characteristic_type;
             var characteristicTypesList = new List<SelectListItem>();
             foreach (var characteristicType in allCharacteristicTypes)
             {
@@ -82,7 +82,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
             if (allcharacteristicTypes == null)
             {
-                allcharacteristicTypes = this.db.characteristic_type;
+                allcharacteristicTypes = db.characteristic_type;
             }
 
             var characteristicTypesList = new List<SelectListItem>();
@@ -104,7 +104,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithLinkable(IEnumerable<characteristic_type> characteristicTypes)
         {
-            return this.db.characteristic_type.Where(c => characteristicTypes.Contains(c)).Select(c => new
+            return db.characteristic_type.Where(c => characteristicTypes.Contains(c)).Select(c => new
             {
                 Value = c.id, 
                 Text = c.name, 

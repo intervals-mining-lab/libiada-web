@@ -125,7 +125,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @partial,
                                         @complement
                                     );";
-            this.db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
         {
-            return this.GetSelectListItems(this.db.dna_chain.ToList(), chains);
+            return this.GetSelectListItems(db.dna_chain.ToList(), chains);
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 : new HashSet<long>();
             if (allChains == null)
             {
-                allChains = this.db.dna_chain.Include("matter");
+                allChains = db.dna_chain.Include("matter");
             }
 
             var chainsList = new List<SelectListItem>();
@@ -224,7 +224,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

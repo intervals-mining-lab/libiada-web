@@ -60,8 +60,8 @@ namespace LibiadaWeb.Models.Repositories
                 value = value, 
                 value_string = value.ToString()
             };
-            this.db.binary_characteristic.Add(characteristic);
-            this.db.SaveChanges();
+            db.binary_characteristic.Add(characteristic);
+            db.SaveChanges();
             return characteristic.id;
         }
 
@@ -70,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories
         /// </summary>
         public void Dispose() 
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

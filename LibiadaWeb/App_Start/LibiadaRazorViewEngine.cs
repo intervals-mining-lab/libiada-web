@@ -12,7 +12,7 @@
         /// </summary>
         public LibiadaRazorViewEngine() : base()
         {
-            this.ViewLocationFormats = new[]
+            ViewLocationFormats = new[]
                 {
                     "~/Views/{1}/{0}.cshtml", 
                     "~/Views/Shared/{0}.cshtml", 
@@ -22,8 +22,8 @@
                     "~/Views/Characteristics/{1}/{0}.cshtml"
                 };
 
-            this.PartialViewLocationFormats = this.ViewLocationFormats;
-            this.ViewLocationFormats = this.ViewLocationFormats;
+            PartialViewLocationFormats = ViewLocationFormats;
+            ViewLocationFormats = ViewLocationFormats;
         }
     }
 }

@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristic = this.db.characteristic.Include(c => c.link).Include(c => c.chain).Include(c => c.characteristic_type);
+            var characteristic = db.characteristic.Include(c => c.link).Include(c => c.chain).Include(c => c.characteristic_type);
             return View(characteristic.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic characteristic = this.db.characteristic.Find(id);
+            characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
                 return this.HttpNotFound();
@@ -60,10 +60,10 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name");
-            this.ViewBag.chain_id = new SelectList(this.db.chain, "id", "remote_id");
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name");
-            return this.View();
+            ViewBag.link_id = new SelectList(db.link, "id", "name");
+            ViewBag.chain_id = new SelectList(db.chain, "id", "remote_id");
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -81,14 +81,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.characteristic.Add(characteristic);
-                this.db.SaveChanges();
+                db.characteristic.Add(characteristic);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", characteristic.link_id);
-            this.ViewBag.chain_id = new SelectList(this.db.chain, "id", "remote_id", characteristic.chain_id);
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
+            ViewBag.chain_id = new SelectList(db.chain, "id", "remote_id", characteristic.chain_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }
 
@@ -108,15 +108,15 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic characteristic = this.db.characteristic.Find(id);
+            characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", characteristic.link_id);
-            this.ViewBag.chain_id = new SelectList(this.db.chain, "id", "remote_id", characteristic.chain_id);
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
+            ViewBag.chain_id = new SelectList(db.chain, "id", "remote_id", characteristic.chain_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }
 
@@ -135,14 +135,14 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(characteristic).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(characteristic).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.link_id = new SelectList(this.db.link, "id", "name", characteristic.link_id);
-            this.ViewBag.chain_id = new SelectList(this.db.chain, "id", "remote_id", characteristic.chain_id);
-            this.ViewBag.characteristic_type_id = new SelectList(this.db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
+            ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
+            ViewBag.chain_id = new SelectList(db.chain, "id", "remote_id", characteristic.chain_id);
+            ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", characteristic.characteristic_type_id);
             return View(characteristic);
         }
 
@@ -162,7 +162,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic characteristic = this.db.characteristic.Find(id);
+            characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
                 return this.HttpNotFound();
@@ -184,9 +184,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            characteristic characteristic = this.db.characteristic.Find(id);
-            this.db.characteristic.Remove(characteristic);
-            this.db.SaveChanges();
+            characteristic characteristic = db.characteristic.Find(id);
+            db.characteristic.Remove(characteristic);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -200,7 +200,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

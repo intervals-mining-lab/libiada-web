@@ -29,7 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose() 
         {
-            this.db.Dispose();
+            db.Dispose();
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return this.db.piece_type.Select(p => new
+            return db.piece_type.Select(p => new
             {
                 Value = p.id, 
                 Text = p.name, 
@@ -60,7 +60,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedPieceType)
         {
-            return this.db.piece_type.Select(p => new
+            return db.piece_type.Select(p => new
             {
                 Value = p.id, 
                 Text = p.name, 
@@ -80,7 +80,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes)
         {
-            return this.db.piece_type.Select(p => new
+            return db.piece_type.Select(p => new
             {
                 Value = p.id, 
                 Text = p.name, 
@@ -103,7 +103,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes, IEnumerable<int> filter)
         {
-            return this.db.piece_type.Where(p => filter.Contains(p.id)).Select(p => new
+            return db.piece_type.Where(p => filter.Contains(p.id)).Select(p => new
             {
                 Value = p.id, 
                 Text = p.name, 

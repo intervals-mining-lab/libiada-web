@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristic_type = this.db.characteristic_type.Include(c => c.characteristic_group);
+            var characteristic_type = db.characteristic_type.Include(c => c.characteristic_group);
             return View(characteristic_type.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_type characteristic_type = this.db.characteristic_type.Find(id);
+            characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
                 return this.HttpNotFound();
@@ -60,8 +60,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.characteristic_group_id = new SelectList(this.db.characteristic_group, "id", "name");
-            return this.View();
+            ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -79,12 +79,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.characteristic_type.Add(characteristic_type);
-                this.db.SaveChanges();
+                db.characteristic_type.Add(characteristic_type);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.characteristic_group_id = new SelectList(this.db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
+            ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
             return View(characteristic_type);
         }
 
@@ -104,13 +104,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_type characteristic_type = this.db.characteristic_type.Find(id);
+            characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.characteristic_group_id = new SelectList(this.db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
+            ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
             return View(characteristic_type);
         }
 
@@ -129,12 +129,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(characteristic_type).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(characteristic_type).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.characteristic_group_id = new SelectList(this.db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
+            ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
             return View(characteristic_type);
         }
 
@@ -154,7 +154,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_type characteristic_type = this.db.characteristic_type.Find(id);
+            characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
                 return this.HttpNotFound();
@@ -176,9 +176,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            characteristic_type characteristic_type = this.db.characteristic_type.Find(id);
-            this.db.characteristic_type.Remove(characteristic_type);
-            this.db.SaveChanges();
+            characteristic_type characteristic_type = db.characteristic_type.Find(id);
+            db.characteristic_type.Remove(characteristic_type);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -192,7 +192,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

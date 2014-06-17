@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.characteristic_group.ToList());
+            return View(db.characteristic_group.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_group characteristic_group = this.db.characteristic_group.Find(id);
+            characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.characteristic_group.Add(characteristic_group);
-                this.db.SaveChanges();
+                db.characteristic_group.Add(characteristic_group);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_group characteristic_group = this.db.characteristic_group.Find(id);
+            characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(characteristic_group).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(characteristic_group).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_group characteristic_group = this.db.characteristic_group.Find(id);
+            characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            characteristic_group characteristic_group = this.db.characteristic_group.Find(id);
-            this.db.characteristic_group.Remove(characteristic_group);
-            this.db.SaveChanges();
+            characteristic_group characteristic_group = db.characteristic_group.Find(id);
+            db.characteristic_group.Remove(characteristic_group);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

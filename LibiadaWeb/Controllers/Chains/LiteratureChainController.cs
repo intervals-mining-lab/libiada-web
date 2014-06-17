@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var literature_chain = this.db.literature_chain.Include(l => l.language).Include(l => l.matter).Include(l => l.notation).Include(l => l.piece_type).Include(l => l.translator).Include(l => l.remote_db);
+            var literature_chain = db.literature_chain.Include(l => l.language).Include(l => l.matter).Include(l => l.notation).Include(l => l.piece_type).Include(l => l.translator).Include(l => l.remote_db);
             return View(literature_chain.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            literature_chain literature_chain = this.db.literature_chain.Find(id);
+            literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
                 return this.HttpNotFound();
@@ -60,13 +60,13 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.language_id = new SelectList(this.db.language, "id", "name");
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name");
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name");
-            this.ViewBag.translator_id = new SelectList(this.db.translator, "id", "name");
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name");
-            return this.View();
+            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            ViewBag.translator_id = new SelectList(db.translator, "id", "name");
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -84,17 +84,17 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.literature_chain.Add(literature_chain);
-                this.db.SaveChanges();
+                db.literature_chain.Add(literature_chain);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.language_id = new SelectList(this.db.language, "id", "name", literature_chain.language_id);
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", literature_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", literature_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", literature_chain.piece_type_id);
-            this.ViewBag.translator_id = new SelectList(this.db.translator, "id", "name", literature_chain.translator_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", literature_chain.remote_db_id);
+            ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", literature_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", literature_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", literature_chain.piece_type_id);
+            ViewBag.translator_id = new SelectList(db.translator, "id", "name", literature_chain.translator_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", literature_chain.remote_db_id);
             return View(literature_chain);
         }
 
@@ -114,18 +114,18 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            literature_chain literature_chain = this.db.literature_chain.Find(id);
+            literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.language_id = new SelectList(this.db.language, "id", "name", literature_chain.language_id);
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", literature_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", literature_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", literature_chain.piece_type_id);
-            this.ViewBag.translator_id = new SelectList(this.db.translator, "id", "name", literature_chain.translator_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", literature_chain.remote_db_id);
+            ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", literature_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", literature_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", literature_chain.piece_type_id);
+            ViewBag.translator_id = new SelectList(db.translator, "id", "name", literature_chain.translator_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", literature_chain.remote_db_id);
             return View(literature_chain);
         }
 
@@ -144,17 +144,17 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(literature_chain).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(literature_chain).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.language_id = new SelectList(this.db.language, "id", "name", literature_chain.language_id);
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", literature_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", literature_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", literature_chain.piece_type_id);
-            this.ViewBag.translator_id = new SelectList(this.db.translator, "id", "name", literature_chain.translator_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", literature_chain.remote_db_id);
+            ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", literature_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", literature_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", literature_chain.piece_type_id);
+            ViewBag.translator_id = new SelectList(db.translator, "id", "name", literature_chain.translator_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", literature_chain.remote_db_id);
             return View(literature_chain);
         }
 
@@ -174,7 +174,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            literature_chain literature_chain = this.db.literature_chain.Find(id);
+            literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
                 return this.HttpNotFound();
@@ -196,9 +196,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            literature_chain literature_chain = this.db.literature_chain.Find(id);
-            this.db.literature_chain.Remove(literature_chain);
-            this.db.SaveChanges();
+            literature_chain literature_chain = db.literature_chain.Find(id);
+            db.literature_chain.Remove(literature_chain);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -212,7 +212,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

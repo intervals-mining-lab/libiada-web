@@ -34,7 +34,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public bool ElementInDb(IBaseObject element, int notationId)
         {
             string stringElement = element.ToString();
-            return this.db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+            return db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 string stringElement = alphabet[i].ToString();
-                elementIds[i] = this.db.element.Single(e => e.notation_id == notationId 
+                elementIds[i] = db.element.Single(e => e.notation_id == notationId 
                                                        && e.value.Equals(stringElement)).id;
             }
 
@@ -136,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             var alphabet = new Alphabet { NullValue.Instance() };
             foreach (long elementId in elementIds)
             {
-                element el = this.db.element.Single(e => e.id == elementId);
+                element el = db.element.Single(e => e.id == elementId);
                 alphabet.Add(new ValueString(el.value));
             }
 
@@ -158,7 +158,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             for (int i = 0; i < elementIds.Count(); i++)
             {
                 long elementId = elementIds[i];
-                elements.Add(this.db.element.Single(e => e.id == elementId));
+                elements.Add(db.element.Single(e => e.id == elementId));
                 
             }
 
@@ -186,7 +186,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                      : new HashSet<long>();
             if (allElements == null)
             {
-                allElements = this.db.element;
+                allElements = db.element;
             }
 
             var elementsList = new List<SelectListItem>();
@@ -217,7 +217,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             HashSet<long> elementIds = elements != null
                                            ? new HashSet<long>(elements.Select(c => c.id))
                                            : new HashSet<long>();
-            var allElements = this.db.element;
+            var allElements = db.element;
             var elementsList = new List<SelectListItem>();
             foreach (var element in allElements)
             {
@@ -256,11 +256,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
                         notation_id = notationId,
                         created = DateTime.Now
                     };
-                    this.db.element.Add(newElement);
+                    db.element.Add(newElement);
                 }
             }
 
-            this.db.SaveChanges();
+            db.SaveChanges();
         }
     }
 }

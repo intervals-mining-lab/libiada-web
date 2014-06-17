@@ -39,7 +39,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             HashSet<int> notationIds = notations != null
                                            ? new HashSet<int>(notations.Select(c => c.id))
                                            : new HashSet<int>();
-            var allNotations = this.db.notation;
+            var allNotations = db.notation;
             var notationsList = new List<SelectListItem>();
             foreach (var notation in allNotations)
             {
@@ -62,7 +62,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return this.db.notation.Select(n => new
+            return db.notation.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -82,7 +82,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedNotation)
         {
-            return this.db.notation.Select(n => new
+            return db.notation.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -102,7 +102,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> selectedNotations)
         {
-            return this.db.notation.Select(n => new
+            return db.notation.Select(n => new
             {
                 Value = n.id, 
                 Text = n.name, 
@@ -116,7 +116,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

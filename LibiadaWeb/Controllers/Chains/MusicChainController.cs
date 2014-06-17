@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var music_chain = this.db.music_chain.Include(m => m.matter).Include(m => m.notation).Include(m => m.piece_type).Include(m => m.remote_db);
+            var music_chain = db.music_chain.Include(m => m.matter).Include(m => m.notation).Include(m => m.piece_type).Include(m => m.remote_db);
             return View(music_chain.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            music_chain music_chain = this.db.music_chain.Find(id);
+            music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
                 return this.HttpNotFound();
@@ -60,11 +60,11 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name");
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name");
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name");
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name");
-            return this.View();
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -82,15 +82,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.music_chain.Add(music_chain);
-                this.db.SaveChanges();
+                db.music_chain.Add(music_chain);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", music_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", music_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", music_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", music_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", music_chain.remote_db_id);
             return View(music_chain);
         }
 
@@ -110,16 +110,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            music_chain music_chain = this.db.music_chain.Find(id);
+            music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", music_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", music_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", music_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", music_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", music_chain.remote_db_id);
             return View(music_chain);
         }
 
@@ -138,15 +138,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(music_chain).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(music_chain).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", music_chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", music_chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", music_chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", music_chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", music_chain.remote_db_id);
             return View(music_chain);
         }
 
@@ -166,7 +166,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            music_chain music_chain = this.db.music_chain.Find(id);
+            music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
                 return this.HttpNotFound();
@@ -188,9 +188,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            music_chain music_chain = this.db.music_chain.Find(id);
-            this.db.music_chain.Remove(music_chain);
-            this.db.SaveChanges();
+            music_chain music_chain = db.music_chain.Find(id);
+            db.music_chain.Remove(music_chain);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -204,7 +204,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

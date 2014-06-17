@@ -54,7 +54,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            this.db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose() 
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.note_symbol.ToList());
+            return View(db.note_symbol.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note_symbol note_symbol = this.db.note_symbol.Find(id);
+            note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.note_symbol.Add(note_symbol);
-                this.db.SaveChanges();
+                db.note_symbol.Add(note_symbol);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note_symbol note_symbol = this.db.note_symbol.Find(id);
+            note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(note_symbol).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(note_symbol).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            note_symbol note_symbol = this.db.note_symbol.Find(id);
+            note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            note_symbol note_symbol = this.db.note_symbol.Find(id);
-            this.db.note_symbol.Remove(note_symbol);
-            this.db.SaveChanges();
+            note_symbol note_symbol = db.note_symbol.Find(id);
+            db.note_symbol.Remove(note_symbol);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

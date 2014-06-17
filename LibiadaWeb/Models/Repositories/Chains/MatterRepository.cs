@@ -36,7 +36,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<matter> selectedMatters)
         {
-            return this.GetSelectListItems(this.db.matter, selectedMatters);
+            return this.GetSelectListItems(db.matter, selectedMatters);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             var mattersList = new List<SelectListItem>();
             if (allMatters == null)
             {
-                allMatters = this.db.matter;
+                allMatters = db.matter;
             }
 
             foreach (var matter in allMatters)
@@ -84,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return this.db.matter.Select(m => new
+            return db.matter.Select(m => new
             {
                 Value = m.id, 
                 Text = m.name, 
@@ -105,7 +105,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(long selectedMatter)
         {
-            return this.db.matter.Select(m => new
+            return db.matter.Select(m => new
             {
                 Value = m.id, 
                 Text = m.name, 
@@ -126,7 +126,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<long> selectedMatters)
         {
-            return this.db.matter.Select(m => new
+            return db.matter.Select(m => new
             {
                 Value = m.id, 
                 Text = m.name, 
@@ -141,7 +141,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

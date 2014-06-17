@@ -12,7 +12,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
 
@@ -56,12 +55,12 @@
         /// </summary>
         public LocalCalculationController()
         {
-            this.db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(this.db);
-            this.characteristicRepository = new CharacteristicTypeRepository(this.db);
-            this.notationRepository = new NotationRepository(this.db);
-            this.linkRepository = new LinkRepository(this.db);
-            this.chainRepository = new ChainRepository(this.db);
+            db = new LibiadaWebEntities();
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            linkRepository = new LinkRepository(db);
+            chainRepository = new ChainRepository(db);
         }
 
         /// <summary>
@@ -72,20 +71,20 @@
         /// </returns>
         public ActionResult Index()
         {
-            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
-            List<matter> matters = this.db.matter.Include("nature").ToList();
-            this.ViewBag.matterCheckBoxes = this.matterRepository.GetSelectListItems(matters, null);
-            this.ViewBag.matters = matters;
+            ViewBag.dbName = DbHelper.GetDbName(db);
+            List<matter> matters = db.matter.Include("nature").ToList();
+            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
+            ViewBag.matters = matters;
 
             IEnumerable<characteristic_type> characteristicsList =
-                this.db.characteristic_type.Where(c => c.full_chain_applicable);
-            this.ViewBag.characteristicsList = this.characteristicRepository.GetSelectListItems(characteristicsList, null);
+                db.characteristic_type.Where(c => c.full_chain_applicable);
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
-            this.ViewBag.notationsList = this.notationRepository.GetSelectListItems(null);
-            this.ViewBag.linksList = this.linkRepository.GetSelectListItems(null);
-            this.ViewBag.languagesList = new SelectList(this.db.language, "id", "name");
+            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
+            ViewBag.languagesList = new SelectList(db.language, "id", "name");
 
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -161,8 +160,7 @@
             bool isSetBeginAndEnd, 
             bool isAutocorelation)
         {
-
-            List<List<List<double>>> characteristics = this.CalculateCharacteristics(
+            List<List<List<double>>> characteristics = CalculateCharacteristics(
                 matterIds, 
                 isSetBeginAndEnd, 
                 isGrowingWindow, 
@@ -179,24 +177,23 @@
             var characteristicNames = new List<string>();
             var partNames = new List<List<string>>();
 
-
             for (int k = 0; k < matterIds.Length; k++)
             {
                 long matterId = matterIds[k];
-                chainNames.Add(this.db.matter.Single(m => m.id == matterId).name);
+                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 partNames.Add(new List<string>());
 
                 long chainId;
-                if (this.db.matter.Single(m => m.id == matterId).nature_id == 3)
+                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                 {
                     chainId =
-                        this.db.literature_chain.Single(
-                            l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId)
-                            .id;
+                        db.literature_chain.Single(l => l.matter_id == matterId 
+                                                && l.notation_id == notationId 
+                                                && l.language_id == languageId).id;
                 }
                 else
                 {
-                    chainId = this.db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                 }
 
                 Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
@@ -204,7 +201,6 @@
                 CutRule cutRule;
                 if (isSetBeginAndEnd)
                 {
-
                     cutRule = isGrowingWindow
                                   ? (CutRule)
                                     new CutRuleWithShiftedAndFixedStart(endOfChain - beginOfChain, step, beginOfChain)
@@ -260,7 +256,6 @@
                             }
                         }
                     }
-
                 }
 
                 if (isDelta)
@@ -280,18 +275,17 @@
 
                 if (isFurie)
                 {
-
                     // переводим в комлексный вид
                     // Для всех характеристик
                     for (int i = 0; i < characteristics.Last().Last().Count; i++)
                     {
-                        List<Complex> comp = new List<Complex>();
+                        var complex = new List<Complex>();
                         int j;
 
                         // Для всех фрагментов цепочек
                         for (j = 0; j < characteristics.Last().Count; j++)
                         {
-                            comp.Add(new Complex(characteristics.Last()[j][i], 0));
+                            complex.Add(new Complex(characteristics.Last()[j][i], 0));
                         }
 
                         int m = 1;
@@ -303,10 +297,10 @@
 
                         for (; j < m; j++)
                         {
-                            comp.Add(new Complex(0, 0));
+                            complex.Add(new Complex(0, 0));
                         }
 
-                        Complex[] data = FFT.Fft(comp.ToArray()); // вернёт массив
+                        Complex[] data = FFT.Fft(complex.ToArray()); // вернёт массив
 
                         // переводим в массив double
                         for (int g = 0; g < characteristics.Last().Count; g++)
@@ -319,10 +313,10 @@
 
             if (isAutocorelation)
             {
-                AutoCorrelation autoCorellation = new AutoCorrelation();
+                var autoCorellation = new AutoCorrelation();
                 for (int i = 0; i < characteristics.Last().Last().Count; i++)
                 {
-                    double[] temp = new double[characteristics.Last().Count];
+                    var temp = new double[characteristics.Last().Count];
 
                     // Для всех фрагментов цепочек
                     for (int j = 0; j < characteristics.Last().Count; j++)
@@ -345,8 +339,8 @@
                 int characteristicId = characteristicIds[i];
                 int linkId = linkIds[i];
                 characteristicNames.Add(
-                    this.db.characteristic_type.Single(c => c.id == characteristicId).name + " "
-                    + this.db.link.Single(l => l.id == linkId).name);
+                    db.characteristic_type.Single(c => c.id == characteristicId).name + " "
+                    + db.link.Single(l => l.id == linkId).name);
             }
 
             this.TempData["characteristics"] = characteristics;
@@ -417,16 +411,16 @@
                 characteristics.Add(new List<List<double>>());
 
                 long chainId;
-                if (this.db.matter.Single(m => m.id == matterId).nature_id == 3)
+                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                 {
                     chainId =
-                        this.db.literature_chain.Single(
+                        db.literature_chain.Single(
                             l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId)
                             .id;
                 }
                 else
                 {
-                    chainId = this.db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                 }
 
                 Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
@@ -434,7 +428,6 @@
                 CutRule cutRule;
                 if (isSetBeginAndEnd)
                 {
-
                     cutRule = isGrowingWindow
                                   ? (CutRule)
                                     new CutRuleWithShiftedAndFixedStart(endOfChain - beginOfChain, step, beginOfChain)
@@ -469,10 +462,10 @@
                     {
                         int characteristicId = characteristicIds[i];
                         int linkId = linkIds[i];
-                        string className = this.db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                        string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                         ICalculator calculator = CalculatorsFactory.Create(className);
-                        var link = (Link)this.db.link.Single(l => l.id == linkId).id;
+                        var link = (Link)db.link.Single(l => l.id == linkId).id;
                         characteristics.Last().Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
@@ -489,27 +482,25 @@
         /// </returns>
         public ActionResult Result()
         {
-            var characteristics = this.TempData["characteristics"] as List<List<List<double>>>;
-            this.ViewBag.chainIds = this.TempData["chainIds"] as List<long>;
-            int[] characteristicIds = this.TempData["characteristicIds"] as int[];
+            ViewBag.chainIds = this.TempData["chainIds"] as List<long>;
+            var characteristicIds = this.TempData["characteristicIds"] as int[];
             var characteristicNames = this.TempData["characteristicNames"] as List<string>;
             var characteristicsList = new List<SelectListItem>();
             for (int i = 0; i < characteristicIds.Length; i++)
             {
-                characteristicsList.Add(
-                    new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
+                characteristicsList.Add(new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
             }
 
-            this.ViewBag.characteristicIds = new List<int>(characteristicIds);
-            this.ViewBag.characteristicsList = characteristicsList;
-            this.ViewBag.characteristics = characteristics;
-            this.ViewBag.chainNames = this.TempData["chainNames"] as List<string>;
-            this.ViewBag.partNames = this.TempData["partNames"] as List<List<string>>;
-            this.ViewBag.characteristicNames = characteristicNames;
+            ViewBag.characteristicIds = new List<int>(characteristicIds);
+            ViewBag.characteristicsList = characteristicsList;
+            ViewBag.characteristics = this.TempData["characteristics"];
+            ViewBag.chainNames = this.TempData["chainNames"] as List<string>;
+            ViewBag.partNames = this.TempData["partNames"] as List<List<string>>;
+            ViewBag.characteristicNames = characteristicNames;
 
-            this.TempData.Keep();
+            TempData.Keep();
 
-            return this.View();
+            return View();
         }
     }
 }

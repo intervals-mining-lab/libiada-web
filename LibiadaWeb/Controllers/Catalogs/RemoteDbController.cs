@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var remote_db = this.db.remote_db.Include(r => r.nature);
+            var remote_db = db.remote_db.Include(r => r.nature);
             return View(remote_db.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            remote_db remote_db = this.db.remote_db.Find(id);
+            remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
                 return this.HttpNotFound();
@@ -60,8 +60,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name");
-            return this.View();
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -79,12 +79,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.remote_db.Add(remote_db);
-                this.db.SaveChanges();
+                db.remote_db.Add(remote_db);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name", remote_db.nature_id);
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
             return View(remote_db);
         }
 
@@ -104,13 +104,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            remote_db remote_db = this.db.remote_db.Find(id);
+            remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name", remote_db.nature_id);
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
             return View(remote_db);
         }
 
@@ -129,12 +129,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(remote_db).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(remote_db).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name", remote_db.nature_id);
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
             return View(remote_db);
         }
 
@@ -154,7 +154,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            remote_db remote_db = this.db.remote_db.Find(id);
+            remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
                 return this.HttpNotFound();
@@ -176,9 +176,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            remote_db remote_db = this.db.remote_db.Find(id);
-            this.db.remote_db.Remove(remote_db);
-            this.db.SaveChanges();
+            remote_db remote_db = db.remote_db.Find(id);
+            db.remote_db.Remove(remote_db);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -192,7 +192,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

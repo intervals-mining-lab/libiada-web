@@ -1,5 +1,4 @@
-﻿@using LibiadaWeb
-@using LibiadaWeb.Helpers
+﻿@using LibiadaWeb.Helpers
 @model dynamic
 
 @{
@@ -13,7 +12,6 @@
     var divCounter = 0;
 
     $(document).ready(function() {
-        AddDataTablesWithSubmit();
 
         AddCharacteristic();
     });
@@ -66,6 +64,7 @@
         <input type="number" id="endOfChain" name="endOfChain" value="1000" />
         <br/>
     </div>
+    <br/>
     @Html.Label("Форма записи:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
@@ -89,4 +88,8 @@
     <br/>
     <br/>
     <input type="submit" value="Вычислить" />
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
 }

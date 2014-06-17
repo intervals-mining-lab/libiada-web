@@ -52,8 +52,8 @@
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            this.ViewBag.ReturnUrl = returnUrl;
-            return this.View();
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -181,7 +181,7 @@
         /// </returns>
         public ActionResult Manage(ManageMessageId? message)
         {
-            this.ViewBag.StatusMessage = message == ManageMessageId.ChangePasswordSuccess
+            ViewBag.StatusMessage = message == ManageMessageId.ChangePasswordSuccess
                                              ? "Your password has been changed."
                                              : message == ManageMessageId.SetPasswordSuccess
                                                    ? "Your password has been set."
@@ -190,9 +190,9 @@
                                                          : message == ManageMessageId.Error
                                                                ? "An error has occurred."
                                                                : string.Empty;
-            this.ViewBag.HasLocalPassword = this.HasPassword();
-            this.ViewBag.ReturnUrl = this.Url.Action("Manage");
-            return this.View();
+            ViewBag.HasLocalPassword = this.HasPassword();
+            ViewBag.ReturnUrl = this.Url.Action("Manage");
+            return View();
         }
 
         /// <summary>
@@ -209,8 +209,8 @@
         public async Task<ActionResult> Manage(ManageUserViewModel model)
         {
             bool hasPassword = this.HasPassword();
-            this.ViewBag.HasLocalPassword = hasPassword;
-            this.ViewBag.ReturnUrl = this.Url.Action("Manage");
+            ViewBag.HasLocalPassword = hasPassword;
+            ViewBag.ReturnUrl = this.Url.Action("Manage");
             if (hasPassword)
             {
                 if (this.ModelState.IsValid)
@@ -310,9 +310,9 @@
             else
             {
                 // If the user does not have an account, then prompt the user to create an account
-                this.ViewBag.ReturnUrl = returnUrl;
-                this.ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                return this.View(
+                ViewBag.ReturnUrl = returnUrl;
+                ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
+                return View(
                     "ExternalLoginConfirmation", 
                     new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
             }
@@ -392,7 +392,7 @@
                 var info = await this.AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
-                    return this.View("ExternalLoginFailure");
+                    return View("ExternalLoginFailure");
                 }
 
                 var user = new ApplicationUser() { UserName = model.UserName };
@@ -410,7 +410,7 @@
                 this.AddErrors(result);
             }
 
-            this.ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = returnUrl;
             return View(model);
         }
 
@@ -437,7 +437,7 @@
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -450,7 +450,7 @@
         public ActionResult RemoveAccountList()
         {
             var linkedAccounts = this.UserManager.GetLogins(this.User.Identity.GetUserId());
-            this.ViewBag.ShowRemoveButton = this.HasPassword() || linkedAccounts.Count > 1;
+            ViewBag.ShowRemoveButton = this.HasPassword() || linkedAccounts.Count > 1;
             return (ActionResult)this.PartialView("_RemoveAccountPartial", linkedAccounts);
         }
 

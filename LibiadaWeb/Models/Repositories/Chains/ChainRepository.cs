@@ -68,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            this.db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (allChains == null)
             {
-                allChains = this.db.chain.Include("matter");
+                allChains = db.chain.Include("matter");
             }
 
             HashSet<long> chainIds = selectedChains != null
@@ -165,7 +165,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public List<long> GetElementIds(long chainId)
         {
             const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            return this.db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", chainId)).ToList();
+            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", chainId)).ToList();
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public int[] GetBuilding(long chainId)
         {
             const string Query = "SELECT unnest(building) FROM chain WHERE id = @id";
-            return this.db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", chainId)).ToArray();
+            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", chainId)).ToArray();
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

@@ -73,15 +73,15 @@
         /// </summary>
         public MatterController()
         {
-            this.db = new LibiadaWebEntities();
-            this.chainRepository = new ChainRepository(this.db);
-            this.elementRepository = new ElementRepository(this.db);
-            this.dnaChainRepository = new DnaChainRepository(this.db);
-            this.literatureChainRepository = new LiteratureChainRepository(this.db);
-            this.matterRepository = new MatterRepository(this.db);
-            this.pieceTypeRepository = new PieceTypeRepository(this.db);
-            this.notationRepository = new NotationRepository(this.db);
-            this.remoteDbRepository = new RemoteDbRepository(this.db);
+            db = new LibiadaWebEntities();
+            this.chainRepository = new ChainRepository(db);
+            this.elementRepository = new ElementRepository(db);
+            this.dnaChainRepository = new DnaChainRepository(db);
+            this.literatureChainRepository = new LiteratureChainRepository(db);
+            this.matterRepository = new MatterRepository(db);
+            this.pieceTypeRepository = new PieceTypeRepository(db);
+            this.notationRepository = new NotationRepository(db);
+            this.remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
-            var matter = this.db.matter.Include(m => m.nature);
+            ViewBag.dbName = DbHelper.GetDbName(db);
+            var matter = db.matter.Include(m => m.nature);
             return View(matter.ToList());
         }
 
@@ -113,7 +113,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = this.db.matter.Find(id);
+            matter matter = db.matter.Find(id);
             if (matter == null)
             {
                 return this.HttpNotFound();
@@ -142,7 +142,7 @@
                     { "natureLiterature", Aliases.NatureLiterature },
                     { "natureGenetic", Aliases.NatureGenetic }
                 };
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -373,13 +373,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = this.db.matter.Find(id);
+            matter matter = db.matter.Find(id);
             if (matter == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name", matter.nature_id);
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
             return View(matter);
         }
 
@@ -398,12 +398,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(matter).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(matter).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.nature_id = new SelectList(this.db.nature, "id", "name", matter.nature_id);
+            ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
             return View(matter);
         }
 
@@ -423,7 +423,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = this.db.matter.Find(id);
+            matter matter = db.matter.Find(id);
             if (matter == null)
             {
                 return this.HttpNotFound();
@@ -445,9 +445,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            matter matter = this.db.matter.Find(id);
-            this.db.matter.Remove(matter);
-            this.db.SaveChanges();
+            matter matter = db.matter.Find(id);
+            db.matter.Remove(matter);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -461,7 +461,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

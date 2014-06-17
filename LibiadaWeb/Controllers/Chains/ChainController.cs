@@ -73,15 +73,15 @@
         /// </summary>
         public ChainController()
         {
-            this.db = new LibiadaWebEntities();
-            this.chainRepository = new ChainRepository(this.db);
-            this.elementRepository = new ElementRepository(this.db);
-            this.dnaChainRepository = new DnaChainRepository(this.db);
-            this.literatureChainRepository = new LiteratureChainRepository(this.db);
-            this.matterRepository = new MatterRepository(this.db);
-            this.pieceTypeRepository = new PieceTypeRepository(this.db);
-            this.notationRepository = new NotationRepository(this.db);
-            this.remoteDbRepository = new RemoteDbRepository(this.db);
+            db = new LibiadaWebEntities();
+            this.chainRepository = new ChainRepository(db);
+            this.elementRepository = new ElementRepository(db);
+            this.dnaChainRepository = new DnaChainRepository(db);
+            this.literatureChainRepository = new LiteratureChainRepository(db);
+            this.matterRepository = new MatterRepository(db);
+            this.pieceTypeRepository = new PieceTypeRepository(db);
+            this.notationRepository = new NotationRepository(db);
+            this.remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
-            var chain = this.db.chain.Include(c => c.matter).Include(c => c.notation).Include(c => c.piece_type).Include(c => c.remote_db);
+            ViewBag.dbName = DbHelper.GetDbName(db);
+            var chain = db.chain.Include(c => c.matter).Include(c => c.notation).Include(c => c.piece_type).Include(c => c.remote_db);
             return View(chain.ToList());
         }
 
@@ -113,7 +113,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = this.db.chain.Find(id);
+            chain chain = db.chain.Find(id);
             if (chain == null)
             {
                 return this.HttpNotFound();
@@ -130,24 +130,24 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.dbName = DbHelper.GetDbName(this.db);
+            ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var translators = new SelectList(this.db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
-            this.ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", this.matterRepository.GetSelectListWithNature() }, 
                     { "notations", this.notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(this.db.language, "id", "name") }, 
+                    { "languages", new SelectList(db.language, "id", "name") }, 
                     { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature() }, 
                     { "remoteDbs", this.remoteDbRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(this.db.nature, "id", "name") }, 
+                    { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.NatureLiterature }, 
                     { "natureGenetic", Aliases.NatureGenetic }
                 };
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -186,7 +186,15 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,notation_id,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain, bool localFile, int languageId, bool original, int? translatorId, int? productId, bool partial, bool complement)
+        public ActionResult Create(
+            [Bind(Include ="id,notation_id,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain,
+            bool localFile,
+            int languageId,
+            bool original,
+            int? translatorId,
+            int? productId,
+            bool partial,
+            bool complement)
         {
             if (this.ModelState.IsValid)
             {
@@ -216,7 +224,7 @@
 
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
-                    int natureId = this.db.matter.Single(m => m.id == chain.matter_id).nature_id;
+                    int natureId = db.matter.Single(m => m.id == chain.matter_id).nature_id;
 
                     // Copy the byte array into a string
                     string stringChain = natureId == Aliases.NatureGenetic
@@ -244,8 +252,7 @@
 
                             if (!this.elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
                             {
-                                throw new Exception(
-                                    "В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
+                                throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
                             alphabet = this.elementRepository.ToDbElements(
@@ -304,16 +311,16 @@
                 }
             }
 
-            this.ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = new Dictionary<string, object>
             {
                 { "matters", this.matterRepository.GetSelectListWithNature(chain.matter_id) }, 
                 { "notations", this.notationRepository.GetSelectListWithNature(chain.notation_id) }, 
-                { "languages", new SelectList(this.db.language, "id", "name", languageId) }, 
+                { "languages", new SelectList(db.language, "id", "name", languageId) }, 
                 { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
                 { "remoteDbs", chain.remote_db_id == null
                         ? this.remoteDbRepository.GetSelectListWithNature()
                         : this.remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
-                { "natures", new SelectList(this.db.nature, "id", "name", this.db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
+                { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
                 { "natureLiterature", Aliases.NatureLiterature }
             };
             return View(chain);
@@ -335,16 +342,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = this.db.chain.Find(id);
+            chain chain = db.chain.Find(id);
             if (chain == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
             return View(chain);
         }
 
@@ -363,15 +370,15 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(chain).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(chain).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.matter_id = new SelectList(this.db.matter, "id", "name", chain.matter_id);
-            this.ViewBag.notation_id = new SelectList(this.db.notation, "id", "name", chain.notation_id);
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", chain.piece_type_id);
-            this.ViewBag.remote_db_id = new SelectList(this.db.remote_db, "id", "name", chain.remote_db_id);
+            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
+            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
             return View(chain);
         }
 
@@ -391,7 +398,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = this.db.chain.Find(id);
+            chain chain = db.chain.Find(id);
             if (chain == null)
             {
                 return this.HttpNotFound();
@@ -413,9 +420,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            chain chain = this.db.chain.Find(id);
-            this.db.chain.Remove(chain);
-            this.db.SaveChanges();
+            chain chain = db.chain.Find(id);
+            db.chain.Remove(chain);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -429,7 +436,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

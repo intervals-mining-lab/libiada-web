@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.fmotiv_type.ToList());
+            return View(db.fmotiv_type.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            fmotiv_type fmotiv_type = this.db.fmotiv_type.Find(id);
+            fmotiv_type fmotiv_type = db.fmotiv_type.Find(id);
             if (fmotiv_type == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.fmotiv_type.Add(fmotiv_type);
-                this.db.SaveChanges();
+                db.fmotiv_type.Add(fmotiv_type);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            fmotiv_type fmotiv_type = this.db.fmotiv_type.Find(id);
+            fmotiv_type fmotiv_type = db.fmotiv_type.Find(id);
             if (fmotiv_type == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(fmotiv_type).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(fmotiv_type).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            fmotiv_type fmotiv_type = this.db.fmotiv_type.Find(id);
+            fmotiv_type fmotiv_type = db.fmotiv_type.Find(id);
             if (fmotiv_type == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            fmotiv_type fmotiv_type = this.db.fmotiv_type.Find(id);
-            this.db.fmotiv_type.Remove(fmotiv_type);
-            this.db.SaveChanges();
+            fmotiv_type fmotiv_type = db.fmotiv_type.Find(id);
+            db.fmotiv_type.Remove(fmotiv_type);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

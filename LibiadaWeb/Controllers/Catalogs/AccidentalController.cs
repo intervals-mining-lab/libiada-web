@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            return this.View(this.db.accidental.ToList());
+            return View(db.accidental.ToList());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            accidental accidental = this.db.accidental.Find(id);
+            accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
                 return this.HttpNotFound();
@@ -59,7 +59,7 @@
         /// </returns>
         public ActionResult Create()
         {
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -77,8 +77,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.accidental.Add(accidental);
-                this.db.SaveChanges();
+                db.accidental.Add(accidental);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -101,7 +101,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            accidental accidental = this.db.accidental.Find(id);
+            accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
                 return this.HttpNotFound();
@@ -125,8 +125,8 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(accidental).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(accidental).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
@@ -149,7 +149,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            accidental accidental = this.db.accidental.Find(id);
+            accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
                 return this.HttpNotFound();
@@ -171,9 +171,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            accidental accidental = this.db.accidental.Find(id);
-            this.db.accidental.Remove(accidental);
-            this.db.SaveChanges();
+            accidental accidental = db.accidental.Find(id);
+            db.accidental.Remove(accidental);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -187,7 +187,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

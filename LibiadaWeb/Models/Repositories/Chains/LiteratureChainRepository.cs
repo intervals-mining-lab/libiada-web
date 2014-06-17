@@ -97,7 +97,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         @language_id,
                                         @translator_id
                                     );";
-            this.db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             HashSet<long> chainIds = chains != null
                                          ? new HashSet<long>(chains.Select(c => c.id))
                                          : new HashSet<long>();
-            var allChains = this.db.literature_chain.Include("matter");
+            var allChains = db.literature_chain.Include("matter");
             var chainsList = new List<SelectListItem>();
             foreach (var chain in allChains)
             {
@@ -156,7 +156,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </summary>
         public void Dispose()
         {
-            this.db.Dispose();
+            db.Dispose();
         }
     }
 }

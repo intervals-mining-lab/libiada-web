@@ -23,7 +23,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var product = this.db.product.Include(p => p.piece_type);
+            var product = db.product.Include(p => p.piece_type);
             return View(product.ToList());
         }
 
@@ -43,7 +43,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            product product = this.db.product.Find(id);
+            product product = db.product.Find(id);
             if (product == null)
             {
                 return this.HttpNotFound();
@@ -60,8 +60,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name");
-            return this.View();
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
+            return View();
         }
 
         /// <summary>
@@ -79,12 +79,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.product.Add(product);
-                this.db.SaveChanges();
+                db.product.Add(product);
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", product.piece_type_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
             return View(product);
         }
 
@@ -104,13 +104,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            product product = this.db.product.Find(id);
+            product product = db.product.Find(id);
             if (product == null)
             {
                 return this.HttpNotFound();
             }
 
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", product.piece_type_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
             return View(product);
         }
 
@@ -129,12 +129,12 @@
         {
             if (this.ModelState.IsValid)
             {
-                this.db.Entry(product).State = EntityState.Modified;
-                this.db.SaveChanges();
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
                 return this.RedirectToAction("Index");
             }
 
-            this.ViewBag.piece_type_id = new SelectList(this.db.piece_type, "id", "name", product.piece_type_id);
+            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
             return View(product);
         }
 
@@ -154,7 +154,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            product product = this.db.product.Find(id);
+            product product = db.product.Find(id);
             if (product == null)
             {
                 return this.HttpNotFound();
@@ -176,9 +176,9 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            product product = this.db.product.Find(id);
-            this.db.product.Remove(product);
-            this.db.SaveChanges();
+            product product = db.product.Find(id);
+            db.product.Remove(product);
+            db.SaveChanges();
             return this.RedirectToAction("Index");
         }
 
@@ -192,7 +192,7 @@
         {
             if (disposing)
             {
-                this.db.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

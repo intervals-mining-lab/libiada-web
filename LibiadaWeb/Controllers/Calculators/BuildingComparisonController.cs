@@ -34,9 +34,9 @@
         /// </summary>
         public BuildingComparisonController()
         {
-            this.db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(this.db);
-            this.chainRepository = new ChainRepository(this.db);
+            db = new LibiadaWebEntities();
+            this.matterRepository = new MatterRepository(db);
+            this.chainRepository = new ChainRepository(db);
         }
 
         /// <summary>
@@ -47,9 +47,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            this.ViewBag.mattersList = this.matterRepository.GetSelectListItems(null);
+            ViewBag.mattersList = this.matterRepository.GetSelectListItems(null);
 
-            return this.View();
+            return View();
         }
 
         /// <summary>
@@ -73,12 +73,12 @@
         [HttpPost]
         public ActionResult Index(long firstMatterId, long secondMatterId, int length, bool congeneric)
         {
-            string chainName1 = this.db.matter.Single(m => m.id == firstMatterId).name;
-            string chainName2 = this.db.matter.Single(m => m.id == secondMatterId).name;
-            matter matter1 = this.db.matter.Single(m => m.id == firstMatterId);
+            string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
+            string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
+            matter matter1 = db.matter.Single(m => m.id == firstMatterId);
             long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
             Chain libiadaChain1 = this.chainRepository.ToLibiadaChain(chainId1);
-            matter matter2 = this.db.matter.Single(m => m.id == secondMatterId);
+            matter matter2 = db.matter.Single(m => m.id == secondMatterId);
             long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
             Chain libiadaChain2 = this.chainRepository.ToLibiadaChain(chainId2);
 
@@ -148,20 +148,20 @@
         /// </returns>
         public ActionResult Result()
         {
-            this.ViewBag.duplicate = this.TempData["duplicate"];
-            if (this.ViewBag.duplicate)
+            ViewBag.duplicate = this.TempData["duplicate"];
+            if (ViewBag.duplicate)
             {
-                this.ViewBag.chainName1 = this.TempData["chainName1"] as string;
-                this.ViewBag.chainName2 = this.TempData["chainName2"] as string;
-                this.ViewBag.res1 = this.TempData["res1"] as BaseChain;
-                this.ViewBag.res2 = this.TempData["res2"] as BaseChain;
-                this.ViewBag.pos1 = this.TempData["pos1"] is int ? (int)this.TempData["pos1"] : 0;
-                this.ViewBag.pos2 = this.TempData["pos2"] is int ? (int)this.TempData["pos2"] : 0;
+                ViewBag.chainName1 = this.TempData["chainName1"] as string;
+                ViewBag.chainName2 = this.TempData["chainName2"] as string;
+                ViewBag.res1 = this.TempData["res1"] as BaseChain;
+                ViewBag.res2 = this.TempData["res2"] as BaseChain;
+                ViewBag.pos1 = this.TempData["pos1"] is int ? (int)this.TempData["pos1"] : 0;
+                ViewBag.pos2 = this.TempData["pos2"] is int ? (int)this.TempData["pos2"] : 0;
             }
 
             this.TempData.Keep();
 
-            return this.View();
+            return View();
         }
 
         /// <summary>

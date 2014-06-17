@@ -8,6 +8,7 @@
 
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/slider")
+@Scripts.Render("~/bundles/highCharts")
 @Styles.Render("~/Content/slider")
 
 <script type='text/javascript'>
@@ -57,8 +58,6 @@
             }
 
         }
-        
-        AddDataTables();
 
         // make the container smaller and add a second container for the master chart
         var container = $('#visualization_container')
