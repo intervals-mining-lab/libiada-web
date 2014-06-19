@@ -321,7 +321,8 @@
                         ? this.remoteDbRepository.GetSelectListWithNature()
                         : this.remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
                 { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
-                { "natureLiterature", Aliases.NatureLiterature }
+                { "natureLiterature", Aliases.NatureLiterature },
+                { "natureGenetic", Aliases.NatureGenetic }
             };
             return View(chain);
         }

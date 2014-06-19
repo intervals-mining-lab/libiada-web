@@ -12,7 +12,16 @@
 <table class="table">
     <tr>
         <th>
+            @Html.DisplayNameFor(model => model.matter_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.notation_id)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.modified)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.dissimilar)
@@ -21,25 +30,16 @@
             @Html.DisplayNameFor(model => model.piece_position)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.modified)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.remote_id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.matter.name)
+            @Html.DisplayNameFor(model => model.piece_type_id)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.notation.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.piece_type.name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.remote_db.name)
+            @Html.DisplayNameFor(model => model.remote_db_id)
         </th>
         <th></th>
     </tr>
@@ -48,7 +48,16 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.matter.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.notation.name)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.modified)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.dissimilar)
@@ -57,19 +66,10 @@
                 @Html.DisplayFor(modelItem => item.piece_position)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.modified)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.remote_id)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.matter.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.notation.name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.piece_type.name)

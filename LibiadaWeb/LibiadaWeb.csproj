@@ -127,6 +127,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -139,6 +143,14 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.0.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -200,6 +212,7 @@
     <Compile Include="App_Start\LibiadaRazorViewEngine.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="binary_characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -228,8 +241,10 @@
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Chains\ChainCheckController.cs" />
+    <Compile Include="Controllers\Chains\ChainElementsController.cs" />
     <Compile Include="Controllers\Chains\ChainMixerController.cs" />
-    <Compile Include="Controllers\Chains\DnaTransformerController.cs" />
+    <Compile Include="Controllers\Chains\ChainTransformerController.cs" />
     <Compile Include="Controllers\Characteristics\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
     <Compile Include="Controllers\Characteristics\CharacteristicController.cs" />
@@ -704,12 +719,14 @@
     <Content Include="Views\Calculators\LocalCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\QuickCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\QuickCalculation\Result.cshtml" />
-    <Content Include="Views\Chains\DnaTransformer\Index.cshtml" />
+    <Content Include="Views\Chains\ChainTransformer\Index.cshtml" />
     <Content Include="Views\Calculators\GenesCalculation\Result.cshtml" />
+    <Content Include="Views\Chains\ChainCheck\Index.cshtml" />
+    <Content Include="Views\Chains\ChainCheck\Result.cshtml" />
+    <Content Include="Views\Chains\ChainMixer\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\ChainMixer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

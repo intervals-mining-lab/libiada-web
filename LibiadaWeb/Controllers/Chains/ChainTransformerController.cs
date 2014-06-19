@@ -15,7 +15,7 @@
     /// <summary>
     /// The dna transformation controller.
     /// </summary>
-    public class DnaTransformerController : Controller
+    public class ChainTransformerController : Controller
     {
         /// <summary>
         /// The db.
@@ -38,9 +38,9 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DnaTransformerController"/> class.
+        /// Initializes a new instance of the <see cref="ChainTransformerController"/> class.
         /// </summary>
-        public DnaTransformerController()
+        public ChainTransformerController()
         {
             db = new LibiadaWebEntities();
             dnaChainRepository = new DnaChainRepository(db);
