@@ -190,7 +190,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "id,name,nature_id,description")] matter matter,
+            [Bind(Include = "name,nature_id")] matter matter,
             int notationId,
             int pieceTypeId,
             int? remoteDbId,
@@ -394,7 +394,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,name,nature_id,description,created,modified")] matter matter)
+        public ActionResult Edit([Bind(Include = "name,nature_id")] matter matter)
         {
             if (this.ModelState.IsValid)
             {

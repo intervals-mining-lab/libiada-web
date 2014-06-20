@@ -131,18 +131,20 @@
                 libiadaChain[secondIndex] = firstElement;
             }
 
-            var result = new matter
+            var resultMatter = new matter
                 {
                     nature_id = matter.nature_id,
                     name = matter.name + " " + mixes + " перемешиваний"
                 };
-            db.matter.Add(result);
+            db.matter.Add(resultMatter);
 
             var resultChain = new chain
                 {
                     dissimilar = false,
                     notation_id = notationId,
-                    piece_type_id = dataBaseChain.piece_type_id
+                    piece_type_id = dataBaseChain.piece_type_id,
+                    piece_position = dataBaseChain.piece_position,
+                    matter_id = resultMatter.id
                 };
 
             long[] alphabet = this.elementRepository.ToDbElements(
@@ -150,13 +152,13 @@
                         dataBaseChain.notation_id,
                         false);
 
-            /*switch (matter.nature_id)
+            switch (matter.nature_id)
             {
                 case Aliases.NatureGenetic:
-                    dna_chain dnaChain = db.dna_chain.Single(dataBaseChain.id);
+                    dna_chain dnaChain = db.dna_chain.Single(c => c.id == dataBaseChain.id);
 
                     this.dnaChainRepository.Insert(
-                        chain,
+                        resultChain,
                         dnaChain.fasta_header,
                         null,
                         dnaChain.product_id,
@@ -169,15 +171,17 @@
                     break;
                 case Aliases.NatureLiterature:
 
+                    literature_chain literatureChain = db.literature_chain.Single(c => c.id == dataBaseChain.id);
+
                     literatureChainRepository.Insert(
-                        chain,
-                        original,
-                        languageId,
-                        translatorId,
+                        resultChain,
+                        literatureChain.original,
+                        literatureChain.language_id,
+                        literatureChain.translator_id,
                         alphabet,
                         libiadaChain.Building);
                     break;
-            }*/
+            }
 
             return RedirectToAction("Index", "Matter");
         }
