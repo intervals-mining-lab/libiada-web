@@ -96,7 +96,7 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", matters }, 
+                    { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", this.notationRepository.GetSelectListWithNature(notationIds) }, 
                     { "links", new SelectList(db.link, "id", "name") }, 
@@ -196,7 +196,7 @@
                     for (int d = 0; d < chains.Length; d++)
                     {
                         long chainId = chains[d].id;
-                        double? characteristic = db.congeneric_characteristic.Single(b =>
+                        double? characteristic = db.characteristic.Single(b =>
                                     b.chain_id == chainId &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.link_id == linkId).value;
