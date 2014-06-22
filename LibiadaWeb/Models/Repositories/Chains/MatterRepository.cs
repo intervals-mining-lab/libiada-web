@@ -90,7 +90,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 Text = m.name, 
                 Selected = false, 
                 Nature = m.nature_id, 
-                description = m.description
+                description = m.description,
+                created = m.created.ToString()
             });
         }
 

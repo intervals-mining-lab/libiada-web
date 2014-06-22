@@ -22,6 +22,7 @@
                 <tr>
                     <th>Название</th>
                     <th>Описание</th>
+                    <th>Создан</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,9 @@
                     </td>
                     <td>
                         {{matter.description}}
+                    </td>
+                    <td>
+                        {{matter.created}}
                     </td>
                 </tr>
             </tbody>
@@ -60,4 +64,8 @@
         <br />
         <input type="submit" value="Вычислить" />
     </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
 }

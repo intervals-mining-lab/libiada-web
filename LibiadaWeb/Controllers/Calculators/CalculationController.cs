@@ -71,8 +71,10 @@
             var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var translators = new SelectList(db.translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
 
-            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
+            var links = new SelectList(db.link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
 
             ViewBag.data = new Dictionary<string, object>
                 {
@@ -80,7 +82,7 @@
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", this.notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
-                    { "links", new SelectList(db.link, "id", "name") }, 
+                    { "links", links }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.NatureLiterature }
@@ -121,14 +123,14 @@
             int[] languageIds, 
             int?[] translatorIds)
         {
+
+            matterIds = matterIds.OrderBy(m => m).ToArray();
             var characteristics = new List<List<double>>();
-            var chainNames = new List<string>();
+            var chainNames = db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name).ToList();
             var characteristicNames = new List<string>();
 
             foreach (var matterId in matterIds)
             {
-                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
-
                 characteristics.Add(new List<double>());
                 for (int i = 0; i < notationIds.Length; i++)
                 {
@@ -152,14 +154,14 @@
 
                     int characteristicId = characteristicIds[i];
                     int? linkId = linkIds[i];
-                    if (db.characteristic.Any(c =>
-                                              linkId == c.link.id && c.chain_id == chainId &&
+                    if (db.characteristic.Any(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                                              c.chain_id == chainId &&
                                               c.characteristic_type_id == characteristicId))
                     {
-                        characteristic dbCharacteristic = db.characteristic.Single(c =>
-                                                                       linkId == c.link.id && c.chain_id == chainId &&
-                                                                       c.characteristic_type_id == characteristicId);
-                        characteristics.Last().Add(dbCharacteristic.value.Value);
+                        double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                                                                                        c.chain_id == chainId &&
+                                                                                        c.characteristic_type_id == characteristicId).value.Value;
+                        characteristics.Last().Add(dataBaseCharacteristic);
                     }
                     else
                     {
@@ -170,17 +172,16 @@
                         ICalculator calculator = CalculatorsFactory.Create(className);
                         var link = (Link)db.link.Single(l => l.id == linkId).id;
                         var characteristicValue = calculator.Calculate(tempChain, link);
-                        int characteristicType = characteristicIds[i];
-                        var dbCharacteristic = new characteristic
+
+                        var dataBaseCharacteristic = new characteristic
                         {
                             chain_id = chainId, 
                             characteristic_type_id = characteristicIds[i], 
-                            link_id = db.characteristic_type.Single(c => c.id == characteristicType).linkable ? linkId : null, 
+                            link_id = linkId, 
                             value = characteristicValue, 
-                            value_string = characteristicValue.ToString(), 
-                            created = DateTime.Now
+                            value_string = characteristicValue.ToString()
                         };
-                        db.characteristic.Add(dbCharacteristic);
+                        db.characteristic.Add(dataBaseCharacteristic);
                         db.SaveChanges();
                         characteristics.Last().Add(characteristicValue);
                     }
@@ -192,11 +193,9 @@
                 int characteristicId = characteristicIds[k];
                 int? linkId = linkIds[k];
                 int notationId = notationIds[k];
-                int? translatorId = translatorIds[k];
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
                                         db.link.Single(l => l.id == linkId).name + " " +
-                                        db.notation.Single(n => n.id == notationId).name
-                                        + (translatorId == null ? string.Empty : " " + db.translator.Single(t => t.id == translatorId)));
+                                        db.notation.Single(n => n.id == notationId).name);
             }
 
             this.TempData["result"] = new Dictionary<string, object>
@@ -223,7 +222,7 @@
         {
             try
             {
-                var result = this.TempData["characteristics"] as Dictionary<string, object>;
+                var result = this.TempData["result"] as Dictionary<string, object>;
                 if (result == null)
                 {
                     throw new Exception("Нет данных для отображения");
