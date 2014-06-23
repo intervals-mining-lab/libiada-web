@@ -1598,4 +1598,145 @@ UPDATE characteristic_type SET class_name = 'AlphabetCardinality' WHERE class_na
 
 UPDATE product SET piece_type_id = 6 WHERE name IN ('18S ribosomal RNA', '16S ribosomal RNA');
 
+-- 23.06.2014
+
+-- Добавил автоматическую вставку даты создания записи с помощью триггера.
+
+DROP TRIGGER tgiu_binary_characteristic_modified ON binary_characteristic;
+DROP TRIGGER tgiu_chain_modified ON chain;
+DROP TRIGGER tgiu_characteristic_modified ON characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_modified ON congeneric_characteristic;
+DROP TRIGGER tgiu_dna_chain_modified ON dna_chain;
+DROP TRIGGER tgiu_element_modified ON element;
+DROP TRIGGER tgiu_fmotiv_modified ON fmotiv;
+DROP TRIGGER tgiu_literature_chain_modified ON literature_chain;
+DROP TRIGGER tgiu_matter_modified ON matter;
+DROP TRIGGER tgiu_measure_modified ON measure;
+DROP TRIGGER tgiu_music_chain_modified ON music_chain;
+DROP TRIGGER tgiu_note_modified ON note;
+DROP TRIGGER tgiu_pitch_modified ON pitch;
+
+DROP FUNCTION trigger_set_modified();
+
+CREATE OR REPLACE FUNCTION trigger_set_modified()
+  RETURNS trigger AS
+$BODY$
+    BEGIN
+	IF (TG_OP = 'INSERT') THEN
+            NEW.created := now();
+        END IF;
+        IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+            NEW.modified := now();
+            RETURN NEW;
+        END IF;
+        RAISE EXCEPTION 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблицах с полями modified и created.';
+    END;
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION trigger_set_modified()
+  OWNER TO postgres;
+COMMENT ON FUNCTION trigger_set_modified() IS 'Триггерная функция, добавляющая текущее время и дату в поля modified и created.';
+
+CREATE TRIGGER tgiu_pitch_modified
+  BEFORE INSERT OR UPDATE
+  ON pitch
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_pitch_modified ON pitch IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_note_modified
+  BEFORE INSERT OR UPDATE
+  ON note
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_note_modified ON note IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_music_chain_modified
+  BEFORE INSERT OR UPDATE
+  ON music_chain
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_music_chain_modified ON music_chain IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_measure_modified
+  BEFORE INSERT OR UPDATE
+  ON measure
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_measure_modified ON measure IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_matter_modified
+  BEFORE INSERT OR UPDATE
+  ON matter
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_matter_modified ON matter IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_literature_chain_modified
+  BEFORE INSERT OR UPDATE
+  ON literature_chain
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_literature_chain_modified ON literature_chain IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_fmotiv_modified
+  BEFORE INSERT OR UPDATE
+  ON fmotiv
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_fmotiv_modified ON fmotiv IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_element_modified
+  BEFORE INSERT OR UPDATE
+  ON element
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_element_modified ON element IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_dna_chain_modified
+  BEFORE INSERT OR UPDATE
+  ON dna_chain
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_dna_chain_modified ON dna_chain IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_congeneric_characteristic_modified
+  BEFORE INSERT OR UPDATE
+  ON congeneric_characteristic
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_modified ON congeneric_characteristic IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_characteristic_modified
+  BEFORE INSERT OR UPDATE
+  ON characteristic
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_characteristic_modified ON characteristic IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_chain_modified
+  BEFORE INSERT OR UPDATE
+  ON chain
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_chain_modified ON chain IS 'Тригер для вставки даты последнего изменения записи.';
+CREATE TRIGGER tgiu_binary_characteristic_modified
+  BEFORE INSERT OR UPDATE
+  ON binary_characteristic
+  FOR EACH ROW
+  EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_binary_characteristic_modified ON binary_characteristic IS 'Тригер для вставки даты последнего изменения записи.';
+
+
+-- 23.06.2014
+
+-- Исправил ограничения уникальности содержащие столбцы, допускающие null.
+
+ALTER TABLE characteristic DROP CONSTRAINT uk_characteristic_value;
+ALTER TABLE congeneric_characteristic DROP CONSTRAINT uk_congeneric_characteristic;
+ALTER TABLE binary_characteristic DROP CONSTRAINT uk_binary_characteristic_value;
+ALTER TABLE literature_chain DROP CONSTRAINT uk_literature_chain;
+
+CREATE UNIQUE INDEX uk_literature_chain_translator_not_null ON literature_chain (notation_id, matter_id, piece_type_id, piece_position, language_id, translator_id) WHERE translator_id IS NOT NULL;
+CREATE UNIQUE INDEX uk_literature_chain_translator_null ON literature_chain (notation_id, matter_id, piece_type_id, piece_position, language_id) WHERE translator_id IS NULL;
+
+CREATE UNIQUE INDEX uk_binary_characteristic_value_link_not_null ON binary_characteristic (chain_id, characteristic_type_id, link_id, first_element_id, second_element_id) WHERE link_id IS NOT NULL;
+CREATE UNIQUE INDEX uk_binary_characteristic_value_link_null ON binary_characteristic (chain_id, characteristic_type_id, first_element_id, second_element_id) WHERE link_id IS NULL;
+
+CREATE UNIQUE INDEX uk_characteristic_value_link_not_null ON characteristic (chain_id, characteristic_type_id, link_id) WHERE link_id IS NOT NULL;
+CREATE UNIQUE INDEX uk_characteristic_value_link_null ON characteristic (chain_id, characteristic_type_id) WHERE link_id IS NULL;
+
+CREATE UNIQUE INDEX uk_congeneric_characteristic_link_not_null ON congeneric_characteristic (chain_id, characteristic_type_id, link_id, element_id) WHERE link_id IS NOT NULL;
+CREATE UNIQUE INDEX uk_congeneric_characteristic_link_null ON congeneric_characteristic (chain_id, characteristic_type_id, element_id) WHERE link_id IS NULL;
+
 COMMIT;
