@@ -102,7 +102,7 @@
             @Html.Label("Форма записи цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
-                <input type="hidden" name="notation_id" value="{{notationId}}" />
+                <input type="hidden" name="notationId" value="{{notationId}}" />
             </div>
         </div>
 
@@ -110,7 +110,7 @@
             @Html.Label("Тип цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
-                <input type="hidden" name="piece_type_id" value="{{pieceTypeId}}" />
+                <input type="hidden" name="pieceTypeId" value="{{pieceTypeId}}" />
             </div>
         </div>
 
@@ -118,7 +118,7 @@
             @Html.Label("Стороняя БД", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="remote_db_id" value="{{remoteDbId}}" />
+                <input type="hidden" name="remoteDbId" value="{{remoteDbId}}" />
             </div>
         </div>
 
