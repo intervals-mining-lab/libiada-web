@@ -142,6 +142,7 @@
             var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
             var chainNames = new List<string>();
             var chainsProduct = new List<List<string>>();
+            var chainsPieceTypes = new List<List<string>>();
             var characteristicNames = new List<string>();
 
             // Перебор всех цепочек; первый уровень массива характеристик
@@ -150,6 +151,7 @@
                 long matterId = matterIds[w];
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 chainsProduct.Add(new List<string>());
+                chainsPieceTypes.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
                 var chains = db.dna_chain.Where(c => c.matter_id == matterId &&
@@ -188,6 +190,7 @@
                                 value = value,
                                 value_string = value.ToString()
                             };
+
                             db.characteristic.Add(currentCharacteristic);
                             db.SaveChanges();
                         }
@@ -206,7 +209,10 @@
 
                         if (i == 0)
                         {
-                            chainsProduct.Last().Add(db.product.Single(p => chains[d].product_id == p.id).name);
+                            var productId = chains[d].product_id;
+                            var pieceTypeId = chains[d].piece_type_id;
+                            chainsProduct.Last().Add(db.product.Single(p => productId == p.id).name);
+                            chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
                         }
                     }
                 }
@@ -238,6 +244,7 @@
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
                                          { "chainsProduct", chainsProduct }, 
+                                         { "chainsPieceTypes", chainsPieceTypes }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "matterIds", matterIds }
                                      };
@@ -291,6 +298,7 @@
                 ViewBag.characteristics = result["characteristics"];
                 ViewBag.chainNames = result["chainNames"];
                 ViewBag.chainsProduct = result["chainsProduct"];
+                ViewBag.chainsPieceTypes = result["chainsPieceTypes"];
                 ViewBag.characteristicNames = characteristicNames;
 
                 TempData.Keep();

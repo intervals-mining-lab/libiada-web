@@ -68,7 +68,7 @@
                             Value = c.id,
                             Text = c.matter.name,
                             Selected = false
-                        })
+                        }).OrderBy(c => c.Text)
                     }
                 };
             return View();
@@ -102,22 +102,20 @@
 
             data = data.Split(new[] { "ORIGIN" }, StringSplitOptions.RemoveEmptyEntries)[0];
             string[] temp = data.Split(new[] { "FEATURES" }, StringSplitOptions.RemoveEmptyEntries);
-            string information = temp[0];
             string[] genes = temp[1].Split(
                 new[] { "gene            ", "repeat_region   " },
                 StringSplitOptions.RemoveEmptyEntries);
             var starts = new List<int>();
-            var stops = new List<int>();
-            stops.Add(0);
-            var products = new HashSet<string>();
-            var geneTypes = new HashSet<string>();
+            var stops = new List<int> { 0 };
 
             string stringParentChain = chainRepository.ToLBaseChain(chainId).ToString();
 
+            var existingChainsPositions = db.dna_chain.Where(c => c.matter_id == parentChain.matter_id && c.notation_id == parentChain.notation_id)
+                .Select(c => c.piece_position).ToArray();
+            var products = db.product.ToList();
+
             for (int i = 1; i < genes.Length; i++)
             {
-
-
                 string[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
@@ -127,90 +125,86 @@
                 string stringStop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
                 starts.Add(Convert.ToInt32(stringStart) - 1);
                 stops.Add(Convert.ToInt32(stringStop) - 1);
+
                 int start = starts.Last();
 
-
-
-                string sequenceType = string.Empty;
-                for (int j = 1; j < temp2.Length; j++)
+                if (!existingChainsPositions.Contains(start))
                 {
-                    if (temp2[j].Contains(stringStart + ".." + stringStop))
+                    string sequenceType = string.Empty;
+                    for (int j = 1; j < temp2.Length; j++)
                     {
-                        sequenceType = temp2[j].Trim();
-                        break;
+                        if (temp2[j].Contains(stringStart + ".." + stringStop))
+                        {
+                            sequenceType = temp2[j].Trim();
+                            break;
+                        }
                     }
-                }
 
-                if (string.IsNullOrEmpty(sequenceType))
-                {
-                    sequenceType = temp2[temp2.Length - 1].Trim();
-                }
+                    if (string.IsNullOrEmpty(sequenceType))
+                    {
+                        sequenceType = temp2[temp2.Length - 1].Trim();
+                    }
 
-                string product = string.Empty;
-                string geneType = string.Empty;
-                int pieceTypeId;
-                string description = string.Empty;
-                if (sequenceType.StartsWith("CDS"))
-                {
-                    pieceTypeId = Aliases.PieceTypeCodingSequence;
-                    //dnaChain.remote_id = GetValue(temp2, "/protein_id=\"");
-                    //dnaChain.web_api_id = Convert.ToInt32(GetValue(temp2, "/db_xref=\"GI:"));
-                    product = GetValue(temp2, "/product=\"", "\"");
-                    geneType = GetValue(temp2, "/gene=\"");
-                    description = geneType;
-                }
-                else if (sequenceType.StartsWith("tRNA"))
-                {
-                    pieceTypeId = Aliases.PieceTypeTRNA;
-                    product = GetValue(temp2, "/product=\"", "\"");
-                    description = product;
-                }
-                else if (sequenceType.StartsWith("ncRNA"))
-                {
-                    pieceTypeId = Aliases.PieceTypeNCRNA;
-                    description = GetValue(temp2, "/note=\"");
-                    geneType = GetValue(temp2, "/gene=\"");
-                }
-                else if (sequenceType.StartsWith("rRNA"))
-                {
-                    pieceTypeId = Aliases.PieceTypeRRNA;
-                    product = GetValue(temp2, "/product=\"", "\"");
-                    geneType = GetValue(temp2, "/gene=\"");
-                    description = geneType;
-                }
-                else if (sequenceType.StartsWith("tmRNA"))
-                {
-                    pieceTypeId = Aliases.PieceTypeTMRNA;
-                    geneType = GetValue(temp2, "/gene=\"");
-                    description = geneType;
-                }
-                else if (sequenceType.StartsWith("/rpt_type=tandem"))
-                {
-                    pieceTypeId = Aliases.PieceTypeRepeatRegion;
-                    description = GetValue(temp2, "/inference=\"", "\"");
-                }
-                else if (sequenceType.StartsWith("/rpt_family="))
-                {
-                    pieceTypeId = Aliases.PieceTypeRepeatRegion;
-                    description = GetValue(temp2, "/rpt_family=\"", "\"");
-                }
-                else if (sequenceType.StartsWith("/pseudo") || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
-                {
-                    pieceTypeId = Aliases.PieceTypePseudoGen;
-                    description = GetValue(temp2, "/note=\"");
-                }
-                else
-                {
-                    throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
-                }
-                if (!db.dna_chain.Any(
-                        c => c.matter_id == parentChain.matter_id
-                            && c.piece_position == start 
-                            && c.piece_type_id == pieceTypeId
-                            && c.notation_id == parentChain.notation_id))
-                {
+                    int pieceTypeId;
+                    string product = string.Empty;
+                    string geneType = string.Empty;
+                    string description = string.Empty;
+
+                    if (sequenceType.StartsWith("CDS"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeCodingSequence;
+                        product = GetValue(temp2, "/product=\"", "\"");
+                        geneType = GetValue(temp2, "/gene=\"");
+                        description = geneType;
+                    }
+                    else if (sequenceType.StartsWith("tRNA"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeTRNA;
+                        product = GetValue(temp2, "/product=\"", "\"");
+                        description = product;
+                    }
+                    else if (sequenceType.StartsWith("ncRNA"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeNCRNA;
+                        description = GetValue(temp2, "/note=\"");
+                        geneType = GetValue(temp2, "/gene=\"");
+                    }
+                    else if (sequenceType.StartsWith("rRNA"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeRRNA;
+                        product = GetValue(temp2, "/product=\"", "\"");
+                        geneType = GetValue(temp2, "/gene=\"");
+                        description = geneType;
+                    }
+                    else if (sequenceType.StartsWith("tmRNA"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeTMRNA;
+                        geneType = GetValue(temp2, "/gene=\"");
+                        description = geneType;
+                    }
+                    else if (sequenceType.StartsWith("/rpt_type=tandem"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        description = GetValue(temp2, "/inference=\"", "\"");
+                    }
+                    else if (sequenceType.StartsWith("/rpt_family="))
+                    {
+                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        description = GetValue(temp2, "/rpt_family=\"", "\"");
+                    }
+                    else if (sequenceType.StartsWith("/pseudo") || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
+                    {
+                        pieceTypeId = Aliases.PieceTypePseudoGen;
+                        description = GetValue(temp2, "/note=\"");
+                    }
+                    else
+                    {
+                        throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
+                    }
+
                     string currentStringChain = stringParentChain.Substring(starts.Last(), stops.Last() - starts.Last());
                     var currentLibiadaChain = new BaseChain(currentStringChain);
+
                     if (complement)
                     {
                         Alphabet complementAlphabet = CreateComplementAlphabet(currentLibiadaChain.Alphabet);
@@ -229,15 +223,16 @@
 
                     int productId;
 
-                    if (db.product.Any(p => p.name.Equals(product)))
+                    if (products.Any(p => p.name.Equals(product)))
                     {
-                        productId = db.product.Single(p => p.name.Equals(product)).id;
+                        productId = products.Single(p => p.name.Equals(product)).id;
                     }
                     else
                     {
                         var newProduct = new product { name = product, piece_type_id = pieceTypeId };
                         db.product.Add(newProduct);
                         db.SaveChanges();
+                        products.Add(newProduct);
                         productId = newProduct.id;
                     }
 
@@ -254,15 +249,12 @@
                 }
             }
 
-            starts.Add(chainRepository.ToLibiadaChain(parentChain.id).Length);
+            starts.Add(stringParentChain.Length);
 
             for (int j = 0; j < stops.Count; j++)
             {
                 int stop = stops[j];
-                bool chainExists = db.dna_chain.Any(c => c.matter_id == parentChain.matter_id &&
-                                                    c.piece_position == stop && 
-                                                    c.piece_type_id == Aliases.PieceTypeNonCodingSequence);
-                if (starts[j] > stops[j] && !chainExists)
+                if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
                 {
                     string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
                     var currentLibiadaChain = new BaseChain(currentStringChain);
@@ -280,6 +272,7 @@
                         currentLibiadaChain.Alphabet,
                         parentChain.notation_id,
                         false);
+
                     dnaChainRepository.Insert(
                         resultChain,
                         null,
@@ -292,11 +285,7 @@
                 }
             }
 
-            TempData["products"] = products.ToArray();
-
-            TempData["genes"] = geneTypes.ToArray();
-
-            return RedirectToAction("Result");
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
@@ -310,8 +299,8 @@
         /// </returns>
         private Alphabet CreateComplementAlphabet(Alphabet alphabet)
         {
-            var newAlphabet = new Alphabet();
-            newAlphabet.Add(NullValue.Instance());
+            var newAlphabet = new Alphabet { NullValue.Instance() };
+
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 newAlphabet.Add(this.GetComplementElement(alphabet[i]));
@@ -401,6 +390,7 @@
                     result += strings[i].Substring(
                         strings[i].IndexOf(pattern) + pattern.Length,
                         strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length);
+
                     if (!strings[i].EndsWith(endPattern))
                     {
                         for (int j = i + 1; j < strings.Length; j++)
@@ -420,25 +410,10 @@
                     {
                         return result.Substring(0, result.Length - 1);
                     }
-                    
                 }
             }
-            return string.Empty;
-        }
 
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Result()
-        {
-            ViewBag.Genes = TempData["genes"];
-            ViewBag.Products = TempData["products"];
-            ViewBag.SubChains = TempData["subChains"];
-            TempData.Keep();
-            return View();
+            return string.Empty;
         }
     }
 }

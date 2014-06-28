@@ -44,7 +44,7 @@
                     var characteristic = characteristicList[i];
                     for (int k = 0; k < characteristic.Count; k++)
                     {
-                        string[] tempValue = characteristic[k].ToString().Split(',');
+                        string[] tempValue = characteristic[k].Value.ToString().Split(',');
                         string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                         @: characteristics[@j][@i][@k] = @value;
                         @: points[@j][@i][@k] = {x: @i, y: @value};
@@ -287,6 +287,9 @@
         <thead>
             <tr>
                 <th>
+                    Тип фрагмента
+                </th>
+                <th>
                     Продукт гена
                 </th>
                 @foreach (var characteristicName in ViewBag.characteristicNames)
@@ -301,6 +304,9 @@
             @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
             {
                 <tr>
+                    <td >
+                        @ViewBag.chainsPieceTypes[d][i]
+                    </td>
                     <td id="chainNameCell">
                         @ViewBag.chainsProduct[d][i]
                     </td>

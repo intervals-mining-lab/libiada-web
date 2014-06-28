@@ -19,6 +19,16 @@ namespace LibiadaWeb.Models.Repositories.Chains
         private readonly LibiadaWebEntities db;
 
         /// <summary>
+        /// The cached values.
+        /// </summary>
+        private string[] cachedValues;
+
+        /// <summary>
+        /// The cached notation id.
+        /// </summary>
+        private int cachedNotationId = -1;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ElementRepository"/> class.
         /// </summary>
         /// <param name="db">
@@ -37,23 +47,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             db.Dispose();
         }
 
-        /// <summary>
-        /// The element in db.
-        /// </summary>
-        /// <param name="element">
-        /// The element.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public bool ElementInDb(IBaseObject element, int notationId)
-        {
-            string stringElement = element.ToString();
-            return db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
-        }
 
         /// <summary>
         /// The elements in db.
@@ -69,6 +62,12 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public bool ElementsInDb(Alphabet alphabet, int notationId)
         {
+            if (cachedNotationId != notationId)
+            {
+                cachedValues = db.element.Where(e => e.notation_id == notationId).Select(e => e.value).ToArray();
+                cachedNotationId = notationId;
+            }
+
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 if (!this.ElementInDb(alphabet[i], notationId))
@@ -233,6 +232,24 @@ namespace LibiadaWeb.Models.Repositories.Chains
         }
 
         /// <summary>
+        /// The element in db.
+        /// </summary>
+        /// <param name="element">
+        /// The element.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool ElementInDb(IBaseObject element, int notationId)
+        {
+            string stringElement = element.ToString();
+            return cachedValues.Contains(stringElement);
+        }
+
+        /// <summary>
         /// The create lacking elements.
         /// </summary>
         /// <param name="libiadaAlphabet">
@@ -256,6 +273,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                         notation_id = notationId,
                         created = DateTime.Now
                     };
+
                     db.element.Add(newElement);
                 }
             }

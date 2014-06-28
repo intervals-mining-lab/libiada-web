@@ -17,34 +17,45 @@
 </script>
 
 <h2>title</h2>
-@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new
+@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImport" }))
 {
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" data-ng-controller="GenesImportCtrl">
+        @Html.ValidationSummary(true)
 
-    enctype = "multipart/form-data",
-    data_ng_app = "GenesImport"
-}))
-{
-    <fieldset data-ng-controller="GenesImportCtrl">
-        
-        <legend>Характеристики полных цепочек</legend>
-        <div class="editor-label">
-            @Html.Label("Цепочка")
+        <div class="form-group">
+            @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
+            </div>
         </div>
-         <div class="editor-label">
-            @Html.Label("Загружать цепочку из локального файла")
-            @Html.CheckBox("localFile", new {data_ng_model = "localFile"})
+
+        <div class="form-group" data-ng-show="localFile">
+            @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" />
+            </div>
         </div>
-        <div class="editor-field" data-ng-show="localFile">
-            <input type="file" name="file" id="file" />
+
+        <div class="form-group">
+            @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
+                <input type="hidden" name="chainId" value="{{chainId}}" />
+            </div>
         </div>
-        <div class="editor-field">
-            <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
-            <input type="hidden" name="chainId" value="{{chainId}}" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
         </div>
-        <p>
-            <input type="submit" value="Создать" />
-        </p>
-    </fieldset>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
 }
 
 

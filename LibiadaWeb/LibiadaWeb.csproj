@@ -726,7 +726,6 @@
     <Content Include="Views\Chains\ChainCheck\Result.cshtml" />
     <Content Include="Views\Chains\ChainMixer\Index.cshtml" />
     <Content Include="Views\Chains\GenesImport\Index.cshtml" />
-    <Content Include="Views\Chains\GenesImport\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
