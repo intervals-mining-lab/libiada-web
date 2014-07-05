@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Models
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The aliases.
     /// </summary>
@@ -147,6 +149,11 @@
         /// The notation letters.
         /// </summary>
         public const int NotationLetters = 9;
+
+        /// <summary>
+        /// The static notations.
+        /// </summary>
+        public static readonly List<int> StaticNotations = new List<int> { NotationNucleotide, NotationTriplet, NotationAminoAcid, NotationLetters }; 
 
         #endregion
 

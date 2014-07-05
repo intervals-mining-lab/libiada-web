@@ -21,12 +21,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The cached values.
         /// </summary>
-        private string[] cachedValues;
-
-        /// <summary>
-        /// The cached notation id.
-        /// </summary>
-        private int cachedNotationId = -1;
+        private element[] cachedElements;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementRepository"/> class.
@@ -47,7 +42,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             db.Dispose();
         }
 
-
         /// <summary>
         /// The elements in db.
         /// </summary>
@@ -62,10 +56,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public bool ElementsInDb(Alphabet alphabet, int notationId)
         {
-            if (cachedNotationId != notationId)
+            if (CheckNotationStatic(notationId))
             {
-                cachedValues = db.element.Where(e => e.notation_id == notationId).Select(e => e.value).ToArray();
-                cachedNotationId = notationId;
+                FillElementsCache();
             }
 
             for (int i = 0; i < alphabet.Cardinality; i++)
@@ -111,11 +104,24 @@ namespace LibiadaWeb.Models.Repositories.Chains
             }
 
             var elementIds = new long[alphabet.Cardinality];
+            var staticNotation = CheckNotationStatic(notationId);
+
+            if (staticNotation)
+            {
+                FillElementsCache();
+            }
+
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 string stringElement = alphabet[i].ToString();
-                elementIds[i] = db.element.Single(e => e.notation_id == notationId 
-                                                       && e.value.Equals(stringElement)).id;
+                if (staticNotation)
+                {
+                    elementIds[i] = cachedElements.Single(e => e.notation_id == notationId && e.value.Equals(stringElement)).id;
+                }
+                else
+                {
+                    elementIds[i] = db.element.Single(e => e.notation_id == notationId && e.value.Equals(stringElement)).id;
+                }
             }
 
             return elementIds;
@@ -158,7 +164,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
             {
                 long elementId = elementIds[i];
                 elements.Add(db.element.Single(e => e.id == elementId));
-                
             }
 
             return elements;
@@ -232,6 +237,31 @@ namespace LibiadaWeb.Models.Repositories.Chains
         }
 
         /// <summary>
+        /// The check notation static.
+        /// </summary>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private static bool CheckNotationStatic(int notationId)
+        {
+            return Aliases.StaticNotations.Contains(notationId);
+        }
+
+        /// <summary>
+        /// The fill elements cache.
+        /// </summary>
+        private void FillElementsCache()
+        {
+            if (cachedElements == null)
+            {
+                cachedElements = db.element.Where(e => Aliases.StaticNotations.Contains(e.notation_id)).ToArray();
+            }
+        }
+
+        /// <summary>
         /// The element in db.
         /// </summary>
         /// <param name="element">
@@ -246,7 +276,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
         private bool ElementInDb(IBaseObject element, int notationId)
         {
             string stringElement = element.ToString();
-            return cachedValues.Contains(stringElement);
+
+            if (CheckNotationStatic(notationId))
+            {
+                return cachedElements.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+            }
+            else
+            {
+                return db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+            }
         }
 
         /// <summary>
@@ -260,18 +298,22 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
         {
+            if (CheckNotationStatic(notationId))
+            {
+                FillElementsCache();
+            }
+
             for (int j = 0; j < libiadaAlphabet.Cardinality; j++)
             {
                 string strElem = libiadaAlphabet[j].ToString();
 
-                if (!this.ElementInDb(libiadaAlphabet[j], notationId))
+                if (!ElementInDb(libiadaAlphabet[j], notationId))
                 {
                     var newElement = new element
                     {
                         value = strElem,
                         name = strElem,
-                        notation_id = notationId,
-                        created = DateTime.Now
+                        notation_id = notationId
                     };
 
                     db.element.Add(newElement);

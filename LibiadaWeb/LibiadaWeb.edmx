@@ -174,7 +174,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="name" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
         </EntityType>
@@ -1636,7 +1636,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
 
