@@ -1739,4 +1739,11 @@ CREATE UNIQUE INDEX uk_characteristic_value_link_null ON characteristic (chain_i
 CREATE UNIQUE INDEX uk_congeneric_characteristic_link_not_null ON congeneric_characteristic (chain_id, characteristic_type_id, link_id, element_id) WHERE link_id IS NOT NULL;
 CREATE UNIQUE INDEX uk_congeneric_characteristic_link_null ON congeneric_characteristic (chain_id, characteristic_type_id, element_id) WHERE link_id IS NULL;
 
+
+-- 23.06.2014
+
+-- Новый тип фрагментов генетического текста.
+
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Геном хлоропласта','Chloroplast genome', 1);
+
 COMMIT;

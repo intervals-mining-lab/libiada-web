@@ -74,6 +74,22 @@
             return View();
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="chainId">
+        /// The chain id.
+        /// </param>
+        /// <param name="localFile">
+        /// The local file.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// </exception>
+        /// <exception cref="Exception">
+        /// </exception>
         [HttpPost]
         public ActionResult Index(long chainId, bool localFile)
         {
@@ -87,12 +103,14 @@
                 {
                     throw new ArgumentNullException("Файл цепочки не задан или пуст");
                 }
+
                 stream = file.InputStream;
             }
             else
             {
                 stream = NcbiHelper.GetGenes(parentChain.web_api_id.ToString());
             }
+
             var input = new byte[stream.Length];
 
             // Read the file into the byte array
@@ -114,175 +132,219 @@
                 .Select(c => c.piece_position).ToArray();
             var products = db.product.ToList();
 
-            for (int i = 1; i < genes.Length; i++)
+            var transaction = db.Database.BeginTransaction();
+            try
             {
-                string[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                bool complement = temp2[0].StartsWith("complement");
-                string temp3 = complement
-                                   ? temp2[0].Split(new[] { "complement" }, StringSplitOptions.RemoveEmptyEntries)[0]
-                                   : temp2[0];
-                string stringStart = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[0];
-                string stringStop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
-                starts.Add(Convert.ToInt32(stringStart) - 1);
-                stops.Add(Convert.ToInt32(stringStop) - 1);
-
-                int start = starts.Last();
-
-                if (!existingChainsPositions.Contains(start))
+                for (int i = 1; i < genes.Length; i++)
                 {
-                    string sequenceType = string.Empty;
-                    for (int j = 1; j < temp2.Length; j++)
+                    string[] temp2 = genes[i].Trim()
+                        .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    bool complement = temp2[0].StartsWith("complement");
+                    string temp3 = complement
+                                       ? temp2[0].Split(
+                                           new[] { "complement" },
+                                           StringSplitOptions.RemoveEmptyEntries)[0]
+                                       : temp2[0];
+                    string stringStart =
+                        temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                    string stringStop =
+                        temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                    starts.Add(Convert.ToInt32(stringStart) - 1);
+                    stops.Add(Convert.ToInt32(stringStop) - 1);
+
+                    int start = starts.Last();
+
+                    if (!existingChainsPositions.Contains(start))
                     {
-                        if (temp2[j].Contains(stringStart + ".." + stringStop))
+                        string sequenceType = string.Empty;
+                        for (int j = 1; j < temp2.Length; j++)
                         {
-                            sequenceType = temp2[j].Trim();
-                            break;
+                            if (temp2[j].Contains(stringStart + ".." + stringStop))
+                            {
+                                sequenceType = temp2[j].Trim();
+                                break;
+                            }
+                        }
+
+                        if (string.IsNullOrEmpty(sequenceType))
+                        {
+                            sequenceType = temp2[temp2.Length - 1].Trim();
+                        }
+
+                        int pieceTypeId;
+                        string product = string.Empty;
+                        string geneType = string.Empty;
+                        string description = string.Empty;
+
+                        if (sequenceType.StartsWith("CDS"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeCodingSequence;
+                            product = GetValue(temp2, "/product=\"", "\"");
+                            geneType = GetValue(temp2, "/gene=\"");
+                            description = geneType;
+                        }
+                        else if (sequenceType.StartsWith("tRNA"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeTRNA;
+                            product = GetValue(temp2, "/product=\"", "\"");
+                            description = product;
+                        }
+                        else if (sequenceType.StartsWith("ncRNA"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeNCRNA;
+                            description = GetValue(temp2, "/note=\"");
+                            geneType = GetValue(temp2, "/gene=\"");
+                        }
+                        else if (sequenceType.StartsWith("rRNA"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeRRNA;
+                            product = GetValue(temp2, "/product=\"", "\"");
+                            geneType = GetValue(temp2, "/gene=\"");
+                            description = geneType;
+                        }
+                        else if (sequenceType.StartsWith("tmRNA"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeTMRNA;
+                            geneType = GetValue(temp2, "/gene=\"");
+                            description = geneType;
+                        }
+                        else if (sequenceType.StartsWith("/rpt_type=tandem"))
+                        {
+                            pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                            description = GetValue(temp2, "/inference=\"", "\"");
+                        }
+                        else if (sequenceType.StartsWith("/rpt_family="))
+                        {
+                            pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                            description = GetValue(temp2, "/rpt_family=\"", "\"");
+                        }
+                        else if (sequenceType.StartsWith("/pseudo")
+                                 || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
+                        {
+                            pieceTypeId = Aliases.PieceTypePseudoGen;
+                            description = GetValue(temp2, "/note=\"");
+                        }
+                        else
+                        {
+                            throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
+                        }
+
+                        string currentStringChain = stringParentChain.Substring(
+                            starts.Last(),
+                            stops.Last() - starts.Last());
+                        var currentLibiadaChain = new BaseChain(currentStringChain);
+
+                        if (complement)
+                        {
+                            Alphabet complementAlphabet = CreateComplementAlphabet(currentLibiadaChain.Alphabet);
+                            currentLibiadaChain = new BaseChain(currentLibiadaChain.Building, complementAlphabet);
+                        }
+
+                        var resultChain = new chain
+                                              {
+                                                  notation_id = parentChain.notation_id,
+                                                  matter_id = parentChain.matter_id,
+                                                  description = description,
+                                                  dissimilar = false,
+                                                  piece_type_id = pieceTypeId,
+                                                  piece_position = starts.Last()
+                                              };
+
+                        int productId;
+
+                        if (products.Any(p => p.name.Equals(product)))
+                        {
+                            productId = products.Single(p => p.name.Equals(product)).id;
+                        }
+                        else
+                        {
+                            var newProduct = new product { name = product, piece_type_id = pieceTypeId };
+                            db.product.Add(newProduct);
+                            db.SaveChanges();
+                            products.Add(newProduct);
+                            productId = newProduct.id;
+                        }
+
+                        long[] alphabet = elementRepository.ToDbElements(
+                            currentLibiadaChain.Alphabet,
+                            parentChain.notation_id,
+                            false);
+                        dnaChainRepository.Insert(
+                            resultChain,
+                            null,
+                            null,
+                            productId,
+                            complement,
+                            false,
+                            alphabet,
+                            currentLibiadaChain.Building);
+                        if (i % 100 == 0)
+                        {
+                            transaction.Commit();
+                            transaction = db.Database.BeginTransaction();
                         }
                     }
-
-                    if (string.IsNullOrEmpty(sequenceType))
-                    {
-                        sequenceType = temp2[temp2.Length - 1].Trim();
-                    }
-
-                    int pieceTypeId;
-                    string product = string.Empty;
-                    string geneType = string.Empty;
-                    string description = string.Empty;
-
-                    if (sequenceType.StartsWith("CDS"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeCodingSequence;
-                        product = GetValue(temp2, "/product=\"", "\"");
-                        geneType = GetValue(temp2, "/gene=\"");
-                        description = geneType;
-                    }
-                    else if (sequenceType.StartsWith("tRNA"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeTRNA;
-                        product = GetValue(temp2, "/product=\"", "\"");
-                        description = product;
-                    }
-                    else if (sequenceType.StartsWith("ncRNA"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeNCRNA;
-                        description = GetValue(temp2, "/note=\"");
-                        geneType = GetValue(temp2, "/gene=\"");
-                    }
-                    else if (sequenceType.StartsWith("rRNA"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeRRNA;
-                        product = GetValue(temp2, "/product=\"", "\"");
-                        geneType = GetValue(temp2, "/gene=\"");
-                        description = geneType;
-                    }
-                    else if (sequenceType.StartsWith("tmRNA"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeTMRNA;
-                        geneType = GetValue(temp2, "/gene=\"");
-                        description = geneType;
-                    }
-                    else if (sequenceType.StartsWith("/rpt_type=tandem"))
-                    {
-                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
-                        description = GetValue(temp2, "/inference=\"", "\"");
-                    }
-                    else if (sequenceType.StartsWith("/rpt_family="))
-                    {
-                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
-                        description = GetValue(temp2, "/rpt_family=\"", "\"");
-                    }
-                    else if (sequenceType.StartsWith("/pseudo") || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
-                    {
-                        pieceTypeId = Aliases.PieceTypePseudoGen;
-                        description = GetValue(temp2, "/note=\"");
-                    }
-                    else
-                    {
-                        throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
-                    }
-
-                    string currentStringChain = stringParentChain.Substring(starts.Last(), stops.Last() - starts.Last());
-                    var currentLibiadaChain = new BaseChain(currentStringChain);
-
-                    if (complement)
-                    {
-                        Alphabet complementAlphabet = CreateComplementAlphabet(currentLibiadaChain.Alphabet);
-                        currentLibiadaChain = new BaseChain(currentLibiadaChain.Building, complementAlphabet);
-                    }
-
-                    var resultChain = new chain
-                                          {
-                                              notation_id = parentChain.notation_id,
-                                              matter_id = parentChain.matter_id,
-                                              description = description,
-                                              dissimilar = false,
-                                              piece_type_id = pieceTypeId,
-                                              piece_position = starts.Last()
-                                          };
-
-                    int productId;
-
-                    if (products.Any(p => p.name.Equals(product)))
-                    {
-                        productId = products.Single(p => p.name.Equals(product)).id;
-                    }
-                    else
-                    {
-                        var newProduct = new product { name = product, piece_type_id = pieceTypeId };
-                        db.product.Add(newProduct);
-                        db.SaveChanges();
-                        products.Add(newProduct);
-                        productId = newProduct.id;
-                    }
-
-                    long[] alphabet = elementRepository.ToDbElements(currentLibiadaChain.Alphabet, parentChain.notation_id, false);
-                    dnaChainRepository.Insert(
-                        resultChain,
-                        null,
-                        null,
-                        productId,
-                        complement,
-                        false,
-                        alphabet,
-                        currentLibiadaChain.Building);
                 }
+
+                transaction.Commit();
             }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                throw;
+            }
+
 
             starts.Add(stringParentChain.Length);
 
-            for (int j = 0; j < stops.Count; j++)
+            try
             {
-                int stop = stops[j];
-                if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
+                for (int j = 0; j < stops.Count; j++)
                 {
-                    string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
-                    var currentLibiadaChain = new BaseChain(currentStringChain);
-                    var resultChain = new chain
-                                          {
-                                              notation_id = parentChain.notation_id,
-                                              matter_id = parentChain.matter_id,
-                                              description = "Non coding sequence from " + stops[j],
-                                              dissimilar = false,
-                                              piece_type_id = Aliases.PieceTypeNonCodingSequence,
-                                              piece_position = stops[j]
-                                          };
+                    int stop = stops[j];
+                    if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
+                    {
+                        string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
+                        var currentLibiadaChain = new BaseChain(currentStringChain);
+                        var resultChain = new chain
+                                              {
+                                                  notation_id = parentChain.notation_id,
+                                                  matter_id = parentChain.matter_id,
+                                                  description = "Non coding sequence from " + stops[j],
+                                                  dissimilar = false,
+                                                  piece_type_id = Aliases.PieceTypeNonCodingSequence,
+                                                  piece_position = stops[j]
+                                              };
 
-                    long[] alphabet = elementRepository.ToDbElements(
-                        currentLibiadaChain.Alphabet,
-                        parentChain.notation_id,
-                        false);
+                        long[] alphabet = elementRepository.ToDbElements(
+                            currentLibiadaChain.Alphabet,
+                            parentChain.notation_id,
+                            false);
 
-                    dnaChainRepository.Insert(
-                        resultChain,
-                        null,
-                        null,
-                        null,
-                        false,
-                        false,
-                        alphabet,
-                        currentLibiadaChain.Building);
+                        dnaChainRepository.Insert(
+                            resultChain,
+                            null,
+                            null,
+                            null,
+                            false,
+                            false,
+                            alphabet,
+                            currentLibiadaChain.Building);
+
+                        if (j % 100 == 0)
+                        {
+                            transaction.Commit();
+                            transaction = db.Database.BeginTransaction();
+                        }
+                    }
                 }
+
+                transaction.Commit();
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+                throw;
             }
 
             return RedirectToAction("Index", "Home");
