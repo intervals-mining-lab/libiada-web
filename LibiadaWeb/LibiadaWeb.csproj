@@ -15,7 +15,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -245,6 +245,7 @@
     <Compile Include="Controllers\Chains\ChainElementsController.cs" />
     <Compile Include="Controllers\Chains\ChainMixerController.cs" />
     <Compile Include="Controllers\Chains\ChainTransformerController.cs" />
+    <Compile Include="Controllers\Chains\GenesImportCheckController.cs" />
     <Compile Include="Controllers\Chains\GenesImportController.cs" />
     <Compile Include="Controllers\Characteristics\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
@@ -726,6 +727,8 @@
     <Content Include="Views\Chains\ChainCheck\Result.cshtml" />
     <Content Include="Views\Chains\ChainMixer\Index.cshtml" />
     <Content Include="Views\Chains\GenesImport\Index.cshtml" />
+    <Content Include="Views\Chains\GenesImportCheck\Index.cshtml" />
+    <Content Include="Views\Chains\GenesImportCheck\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -755,7 +758,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>28103</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/LibiadaWeb</IISUrl>
+          <IISUrl>http://localhost:28103/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

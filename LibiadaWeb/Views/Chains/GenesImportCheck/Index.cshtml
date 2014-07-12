@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+}
+<script>
+    var app = angular.module('GenesImport', []);
+
+    app.controller('GenesImportCtrl', ['$scope', function($scope) {
+
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
+
+        MapModelFromJson($scope, data);
+        $scope.localFile = false;
+    }]);
+
+</script>
+
+<h2>Проверить целостность цепочки</h2>
+@using (Html.BeginForm("Index", "GenesImportCheck", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImport" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" data-ng-controller="GenesImportCtrl">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
+                <input type="hidden" name="chainId" value="{{chainId}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Проверить" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+}
+
+
