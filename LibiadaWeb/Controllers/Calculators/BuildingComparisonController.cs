@@ -87,24 +87,24 @@
 
             int i = 0;
             int j = 0;
-            var iter1 = new IteratorStart<Chain, Chain>(libiadaChain1, length, 1);
+            var iter1 = new IteratorStart(libiadaChain1, length, 1);
             bool duplicate = false;
             while (!duplicate && iter1.Next())
             {
                 i++;
-                Chain tempChain1 = iter1.Current();
-                var iter2 = new IteratorStart<Chain, Chain>(libiadaChain2, length, 1);
+                var tempChain1 = (BaseChain)iter1.Current();
+                var iter2 = new IteratorStart(libiadaChain2, length, 1);
                 j = 0;
                 while (!duplicate && iter2.Next())
                 {
                     j++;
-                    Chain tempChain2 = iter2.Current();
+                    var tempChain2 = (BaseChain)iter2.Current();
 
                     if (congeneric)
                     {
                         for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
                         {
-                            CongenericChain firstChain = tempChain1.CongenericChain(a);
+                          /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
                             for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
                             {
 
@@ -115,7 +115,7 @@
                                     res2 = secondChain;
                                     duplicate = true;
                                 }
-                            }
+                            }*/
                         }
                     }
                     else
