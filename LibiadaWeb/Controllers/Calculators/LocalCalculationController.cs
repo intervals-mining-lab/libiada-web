@@ -213,8 +213,8 @@
                 else
                 {
                     cutRule = isGrowingWindow
-                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.Length, step)
-                                  : new SimpleCutRule(libiadaChain.Length, step, length);
+                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
+                                  : new SimpleCutRule(libiadaChain.GetLength(), step, length);
                 }
 
                 CutRuleIterator iter = cutRule.GetIterator();
@@ -440,8 +440,8 @@
                 else
                 {
                     cutRule = isGrowingWindow
-                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.Length, step)
-                                  : new SimpleCutRule(libiadaChain.Length, step, length);
+                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
+                                  : new SimpleCutRule(libiadaChain.GetLength(), step, length);
                 }
 
                 CutRuleIterator iter = cutRule.GetIterator();

@@ -122,8 +122,8 @@
             BaseChain libiadaChain = chainRepository.ToLBaseChain(dataBaseChain.id);
             for (int i = 0; i < mixes; i++)
             {
-                int firstIndex = rndGenerator.Next(libiadaChain.Length);
-                int secondIndex = rndGenerator.Next(libiadaChain.Length);
+                int firstIndex = rndGenerator.Next(libiadaChain.GetLength());
+                int secondIndex = rndGenerator.Next(libiadaChain.GetLength());
 
                 IBaseObject firstElement = libiadaChain[firstIndex];
                 IBaseObject secondElement = libiadaChain[secondIndex];

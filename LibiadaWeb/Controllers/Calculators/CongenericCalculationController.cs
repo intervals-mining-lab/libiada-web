@@ -256,16 +256,16 @@
                         }
 
                         double maxFrequency = frequency.Max();
-                        double K = 1 / Math.Log(counts.Max());
-                        double B = (K / maxFrequency) - 1;
+                        double k = 1 / Math.Log(counts.Max());
+                        double b = (k / maxFrequency) - 1;
                         int n = 1;
-                        double Plow = libiadaChain.Length;
-                        double P = K / (B + n);
-                        while (P >= (1 / Plow))
+                        double plow = libiadaChain.GetLength();
+                        double p = k / (b + n);
+                        while (p >= (1 / plow))
                         {
-                            teoreticalRanks.Last().Last().Add(P);
+                            teoreticalRanks.Last().Last().Add(p);
                             n++;
-                            P = K / (B + n);
+                            p = k / (b + n);
                         }
                     }
                 }

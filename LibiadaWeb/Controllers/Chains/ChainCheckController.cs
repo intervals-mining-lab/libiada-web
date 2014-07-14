@@ -122,14 +122,14 @@
                         return RedirectToAction("Result");
                     }
                 }
-                if (libiadaChain.Length != dataBaseChain.Length)
+                if (libiadaChain.GetLength() != dataBaseChain.GetLength())
                 {
-                    TempData["message"] = "Длина цепочки в базе " + dataBaseChain.Length +
-                                          ", а длина цепочки из файла " + libiadaChain.Length;
+                    TempData["message"] = "Длина цепочки в базе " + dataBaseChain.GetLength() +
+                                          ", а длина цепочки из файла " + libiadaChain.GetLength();
                 }
                 int[] libiadaBuilding = libiadaChain.Building;
                 int[] dataBaseBuilding = dataBaseChain.Building;
-                for (int j = 0; j < libiadaChain.Length; j++)
+                for (int j = 0; j < libiadaChain.GetLength(); j++)
                 {
                     if (libiadaBuilding[j] != dataBaseBuilding[j])
                     {
