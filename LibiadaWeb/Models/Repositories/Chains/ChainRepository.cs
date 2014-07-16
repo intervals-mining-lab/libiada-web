@@ -194,7 +194,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public BaseChain ToLBaseChain(long chainId)
         {
-            return new BaseChain(this.GetBuilding(chainId), this.GetAlphabet(chainId));
+            return new BaseChain(this.GetBuilding(chainId), GetAlphabet(chainId));
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public Chain ToLibiadaChain(long chainId)
         {
-            return new Chain(this.GetBuilding(chainId), this.GetAlphabet(chainId));
+            return new Chain(GetBuilding(chainId), GetAlphabet(chainId));
         }
 
         /// <summary>
