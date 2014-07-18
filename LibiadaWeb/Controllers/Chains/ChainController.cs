@@ -311,6 +311,9 @@
                 }
             }
 
+            var translators = new SelectList(db.translator, "id", "name").ToList();
+            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
+
             ViewBag.data = new Dictionary<string, object>
             {
                 { "matters", this.matterRepository.GetSelectListWithNature(chain.matter_id) }, 
@@ -322,7 +325,8 @@
                         : this.remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
                 { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
                 { "natureLiterature", Aliases.NatureLiterature },
-                { "natureGenetic", Aliases.NatureGenetic }
+                { "natureGenetic", Aliases.NatureGenetic },
+                    { "translators", translators }
             };
             return View(chain);
         }

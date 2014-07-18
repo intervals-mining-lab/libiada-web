@@ -352,7 +352,9 @@
                             remoteDbRepository.GetSelectListWithNature() : 
                             remoteDbRepository.GetSelectListWithNature((int)remoteDbId) },
                         { "natures", new SelectList(db.nature, "id", "name", matter.nature_id) },
-                        { "natureLiterature", Aliases.NatureLiterature }
+                        { "translators", new SelectList(db.translator, "id", "name") },
+                        { "natureLiterature", Aliases.NatureLiterature },
+                        { "natureGenetic", Aliases.NatureGenetic }
                     };
             return View(matter);
         }
