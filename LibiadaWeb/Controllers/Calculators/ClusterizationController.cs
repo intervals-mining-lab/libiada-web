@@ -5,8 +5,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Clusterizator.Classes;
-    using Clusterizator.Classes.AlternativeClusterization;
+    using Clusterizator;
+    using Clusterizator.Krab;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
@@ -187,7 +187,7 @@
             }
 
             DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
-            var clusterizator = new AlternativeKRAB(data, powerWeight, normalizedDistanseWeight, distanseWeight);
+            var clusterizator = new KrabClusterization(data, powerWeight, normalizedDistanseWeight, distanseWeight);
             ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
             var clusters = new List<List<long>>();
             for (int i = 0; i < result.Clusters.Count; i++)

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Clusterizator.Classes;
+    using Clusterizator;
 
     /// <summary>
     /// Класс заполняющий таблицу данных для кластеризации
