@@ -1,5 +1,23 @@
 ﻿@model dynamic
 
-<div>
-    @ViewBag.check
+<div class="genes-check-result">
+    <div>
+        @ViewBag.check
+    </div>
+    <div>
+        Length Difference: @ViewBag.lengthDelta    
+    </div>
+    <div>
+        @if (ViewBag.NotEqualPositions != null)
+        {
+            @:Positions of not equal element
+            <ul>               
+                @for (int i = 0; i < ViewBag.NotEqualPositions.Count; i++)
+                {
+                <li>@ViewBag.NotEqualPositions[i]</li>
+                }
+            </ul>         
+        }
+    </div>
 </div>
+

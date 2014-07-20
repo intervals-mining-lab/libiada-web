@@ -1746,4 +1746,37 @@ CREATE UNIQUE INDEX uk_congeneric_characteristic_link_null ON congeneric_charact
 
 INSERT INTO piece_type (name, description, nature_id) VALUES ('Геном хлоропласта','Chloroplast genome', 1);
 
+-- 20.07.2014
+
+-- Новая функция для предварительной проверки импорта генов.
+
+CREATE OR REPLACE FUNCTION check_genes_import_positions(matter_id bigint)
+  RETURNS void AS
+$BODY$function check_genes_import_positions(id){
+	plv8.elog(INFO, "Проверяем Позиции всех фрагментов генома объекта с id =", id);
+	
+	var genes = plv8.execute('SELECT piece_position "start", piece_position + array_length(building, 1) "stop" FROM dna_chain WHERE matter_id = $1 AND piece_type_id != 1 ORDER BY piece_position;', [id]);
+	
+	if(genes[0].start != 0){
+		plv8.elog(WARNING, "Начало первого фрагмента не на нулевой позиции. Фактическая позиция начала первого фрагмента: ", genes[0].start);
+	}
+	
+	for(var i = 1; i < genes.length; i++){
+		if(genes[i].start > genes[i - 1].stop){
+			plv8.elog(WARNING, "Начало и конец соседних фрагментов не совпадают. Конец предыдущего фрагмента: ", genes[i - 1].stop, " Начало следующего: ", genes[i].start);
+		}
+	}
+	
+	var fullChainLength = plv8.execute('SELECT array_length(building, 1) length FROM dna_chain WHERE matter_id = $1 AND piece_type_id = 1;', [id])[0].length;
+	
+	if(genes[genes.length - 1].stop != fullChainLength){
+		plv8.elog(WARNING, "Конец последнего фрагмента не совпадает с длиной полной последовательности. Фактическая позиция конца последнего фрагмента: ", genes[genes.length - 1].stop, " Длина полной цепи: ", fullChainLength);
+	}
+}
+
+check_genes_import_positions(matter_id);$BODY$
+  LANGUAGE plv8 STABLE;
+
+COMMENT ON FUNCTION check_genes_import_positions(bigint) IS 'Функция, проверяющая, что все фрагменты полной генетической последовательности загружены в БД. ';
+
 COMMIT;

@@ -6,6 +6,8 @@
     using System.Text;
     using System.Web.Mvc;
 
+    using LibiadaCore.Core;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Chains;
@@ -43,8 +45,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.dna_chain.Where(c => c.product_id != null).Select(c => c.matter_id).Distinct().ToList();
             ViewBag.dbName = DbHelper.GetDbName(db);
+
+            var matterIds = db.dna_chain.Where(c => c.product_id != null).Select(c => c.matter_id).Distinct().ToList();
             ViewBag.data = new Dictionary<string, object>
                 {
                     {
@@ -78,18 +81,44 @@
         {
             long matterId = db.dna_chain.Single(c => c.id == chainId).matter_id;
             string parentChain = chainRepository.ToLibiadaChain(chainId).ToString();
-            List<long> childChains =
+            List<long> childChainIds =
                 db.dna_chain.Where(c => c.matter_id == matterId && c.piece_type_id != Aliases.PieceTypeFullGenome)
-                .OrderBy(c => c.piece_type_id).Select(c => c.id).ToList();
-            var stringBuilder = new StringBuilder();
-            childChains.ForEach(c => stringBuilder.Append(chainRepository.ToLibiadaChain(c)));
+                .OrderBy(c => c.piece_position).Select(c => c.id).ToList();
 
-            if (stringBuilder.ToString() == parentChain)
+            var stringBuilder = new StringBuilder();
+
+
+            childChainIds.ForEach(c => stringBuilder.Append(chainRepository.ToLibiadaChain(c)));
+
+            string gluedChain = stringBuilder.ToString();
+
+            if (gluedChain == parentChain)
             {
                 TempData["check"] = true;
             }
+            else
+            {
+                TempData["check"] = false;
+                if (gluedChain.Length < parentChain.Length)
+                {
+                    TempData["lengthDelta"] = parentChain.Length - gluedChain.Length;
+                }
+                else
+                {
+                    TempData["lengthDelta"] = 0;
+                    var notEqualPositions = new List<int>();
+                    for (int j = 0; j < gluedChain.Length; j++)
+                    {
+                        if (!gluedChain[j].Equals(parentChain[j]))
+                        {
+                            notEqualPositions.Add(j);
+                            
+                        }
+                    }
 
-            TempData["check"] = false;
+                    TempData["NotEqualPositions"] = notEqualPositions;
+                }
+            }
 
             return RedirectToAction("Result", "GenesImportCheck");
         }
@@ -105,6 +134,8 @@
         public ActionResult Result()
         {
             ViewBag.check = TempData["check"];
+            ViewBag.lengthDelta = TempData["lengthDelta"];
+            ViewBag.NotEqualPositions = TempData["NotEqualPositions"];
             TempData.Keep();
             return View();
         }
