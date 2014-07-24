@@ -217,6 +217,11 @@
                         pieceTypeId = Aliases.PieceTypeRepeatRegion;
                         description = GetValue(temp2, "/rpt_family=\"", "\"");
                     }
+                    else if (sequenceType.StartsWith("/note=\"REP"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        description = GetValue(temp2, "/note=\"", "\"");
+                    }
                     else if (sequenceType.StartsWith("/pseudo")
                              || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
                     {
