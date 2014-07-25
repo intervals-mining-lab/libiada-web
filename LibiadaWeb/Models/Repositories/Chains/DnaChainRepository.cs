@@ -1,8 +1,12 @@
 namespace LibiadaWeb.Models.Repositories.Chains
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
 
     using Npgsql;
 
@@ -217,6 +221,59 @@ namespace LibiadaWeb.Models.Repositories.Chains
             }
 
             return chainsList;
+        }
+
+        /// <summary>
+        /// The create complement alphabet.
+        /// </summary>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Alphabet"/>.
+        /// </returns>
+        public Alphabet CreateComplementAlphabet(Alphabet alphabet)
+        {
+            var newAlphabet = new Alphabet { NullValue.Instance() };
+
+            for (int i = 0; i < alphabet.Cardinality; i++)
+            {
+                newAlphabet.Add(this.GetComplementElement(alphabet[i]));
+            }
+
+            return newAlphabet;
+        }
+
+        /// <summary>
+        /// The get complement element.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ValueChar"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        public ValueChar GetComplementElement(IBaseObject source)
+        {
+            switch (source.ToString())
+            {
+                case "A":
+                case "a":
+                    return new ValueChar('T');
+                case "C":
+                case "c":
+                    return new ValueChar('G');
+                case "G":
+                case "g":
+                    return new ValueChar('C');
+                case "T":
+                case "t":
+                    return new ValueChar('A');
+                default:
+                    throw new ArgumentException("Unknown nucleotide.", "source");
+            }
         }
 
         /// <summary>

@@ -4,9 +4,9 @@
     ViewBag.Title = "title";
 }
 <script>
-    var app = angular.module('GenesImport', []);
+    var app = angular.module('GenesImportCheck', []);
 
-    app.controller('GenesImportCtrl', ['$scope', function($scope) {
+    app.controller('GenesImportCheckCtrl', ['$scope', function($scope) {
 
         var data = @Html.Raw(Json.Encode(ViewBag.data));
 
@@ -17,10 +17,10 @@
 </script>
 
 <h2>Проверить целостность цепочки</h2>
-@using (Html.BeginForm("Index", "GenesImportCheck", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImport" }))
+@using (Html.BeginForm("Index", "GenesImportCheck", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImportCheck" }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" data-ng-controller="GenesImportCtrl">
+    <div class="form-horizontal" data-ng-controller="GenesImportCheckCtrl">
         @Html.ValidationSummary(true)
 
         <div class="form-group">

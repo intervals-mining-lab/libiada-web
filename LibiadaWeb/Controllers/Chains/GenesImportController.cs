@@ -240,7 +240,7 @@
 
                     if (complement)
                     {
-                        Alphabet complementAlphabet = CreateComplementAlphabet(currentLibiadaChain.Alphabet);
+                        Alphabet complementAlphabet = dnaChainRepository.CreateComplementAlphabet(currentLibiadaChain.Alphabet);
                         currentLibiadaChain = new BaseChain(currentLibiadaChain.Building, complementAlphabet);
                     }
 
@@ -325,58 +325,9 @@
             return RedirectToAction("Index", "Home");
         }
 
-        /// <summary>
-        /// The create complement alphabet.
-        /// </summary>
-        /// <param name="alphabet">
-        /// The alphabet.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Alphabet"/>.
-        /// </returns>
-        private Alphabet CreateComplementAlphabet(Alphabet alphabet)
-        {
-            var newAlphabet = new Alphabet { NullValue.Instance() };
+        
 
-            for (int i = 0; i < alphabet.Cardinality; i++)
-            {
-                newAlphabet.Add(this.GetComplementElement(alphabet[i]));
-            }
-
-            return newAlphabet;
-        }
-
-        /// <summary>
-        /// The get complement element.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ValueChar"/>.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        private ValueChar GetComplementElement(IBaseObject source)
-        {
-            switch (source.ToString())
-            {
-                case "A":
-                case "a":
-                    return new ValueChar('T');
-                case "C":
-                case "c":
-                    return new ValueChar('G');
-                case "G":
-                case "g":
-                    return new ValueChar('C');
-                case "T":
-                case "t":
-                    return new ValueChar('A');
-                default:
-                    throw new ArgumentException("Unknown nucleotide.", "source");
-            }
-        }
+        
 
         /// <summary>
         /// The get value.
