@@ -169,7 +169,7 @@
                     }
                     else
                     {
-                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId && c.piece_position == 0).id;
                     }
 
                     Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
@@ -337,7 +337,7 @@
         {
             try
             {
-                var result = this.TempData["characteristics"] as Dictionary<string, object>;
+                var result = this.TempData["result"] as Dictionary<string, object>;
                 if (result == null)
                 {
                     throw new Exception("Нет данных для отображения");
