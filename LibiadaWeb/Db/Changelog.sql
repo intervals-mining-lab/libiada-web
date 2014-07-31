@@ -1779,4 +1779,139 @@ check_genes_import_positions(matter_id);$BODY$
 
 COMMENT ON FUNCTION check_genes_import_positions(bigint) IS 'Функция, проверяющая, что все фрагменты полной генетической последовательности загружены в БД. ';
 
+-- 31.07.2014
+
+-- Переписываем триггер проверки алфавита на plpgsql.
+-- Также добавлена таблица для позиций фрагментов цепочек.
+
+
+DROP TRIGGER tgiu_chain_alphabet ON chain;
+DROP TRIGGER tgiu_dna_chain_alphabet ON dna_chain;
+DROP TRIGGER tgiu_fmotiv_alphabet ON fmotiv;
+DROP TRIGGER tgiu_literature_chain_alphabet ON literature_chain;
+DROP TRIGGER tgiu_measure_alphabet ON measure;
+DROP TRIGGER tgiu_music_chain_alphabet ON music_chain;
+
+DROP FUNCTION trigger_check_alphabet();
+
+CREATE FUNCTION trigger_check_alphabet() RETURNS trigger AS
+$BODY$
+DECLARE
+	orphanedElements integer;
+BEGIN
+	IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+		SELECT count(1) INTO orphanedElements result FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL;
+		IF (orphanedElements = 0) THEN 
+			RETURN true;
+		ELSE
+			RAISE EXCEPTION 'В БД отсутствует % элементов алфавита.', orphanedElements;
+		END IF;
+	END IF;
+    RAISE EXCEPTION 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полем alphabet.';
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE NOT LEAKPROOF;
+COMMENT ON FUNCTION trigger_check_alphabet() IS 'Триггерная функция, проверяющая что все элементы алфавита добавляемой цепочки есть в базе.';
+
+CREATE TRIGGER tgiu_music_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON music_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_music_chain_alphabet ON music_chain IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+CREATE TRIGGER tgiu_measure_alphabet AFTER INSERT OR UPDATE OF alphabet ON measure FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_measure_alphabet ON measure IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+CREATE TRIGGER tgiu_literature_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_literature_chain_alphabet ON literature_chain IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+CREATE TRIGGER tgiu_fmotiv_alphabet AFTER INSERT OR UPDATE OF alphabet ON fmotiv FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_fmotiv_alphabet ON fmotiv IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+CREATE TRIGGER tgiu_dna_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON dna_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_dna_chain_alphabet ON dna_chain IS 'Проверяет наличие всех элементов алфавита в БД.';
+
+CREATE TRIGGER tgiu_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_chain_alphabet ON chain IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+
+CREATE TABLE genes
+(
+   id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass), 
+   created timestamp with time zone NOT NULL DEFAULT now(), 
+   modified timestamp with time zone NOT NULL DEFAULT now(), 
+   chain_id bigint NOT NULL,
+   piece_type_id integer NOT NULL, 
+   "position" integer NOT NULL, 
+   length integer NOT NULL, 
+   description text NOT NULL, 
+   web_api_id integer, 
+   complement boolean NOT NULL DEFAULT false, 
+   partial boolean NOT NULL DEFAULT false, 
+   product_id integer,
+   
+  CONSTRAINT pk_genes PRIMARY KEY (id),
+  CONSTRAINT fk_genes_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_genes_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED,
+  CONSTRAINT fk_genes_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT fk_genes_product FOREIGN KEY (product_id) REFERENCES product (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT uk_genes UNIQUE (chain_id, piece_type_id, position)
+);
+
+COMMENT ON COLUMN genes.id IS 'Уникальный внутренний идентификатор.';
+COMMENT ON COLUMN genes.created IS 'Дата создания.';
+COMMENT ON COLUMN genes.modified IS 'Дата изменения.';
+COMMENT ON COLUMN genes.chain_id IS 'Родительская цепочка.';
+COMMENT ON COLUMN genes.piece_type_id IS 'Тип фрагмента.';
+COMMENT ON COLUMN genes."position" IS 'Позиция начала фрагмента.';
+COMMENT ON COLUMN genes.length IS 'Длина фрагмента.';
+COMMENT ON COLUMN genes.description IS 'Описание фрагмента.';
+COMMENT ON COLUMN genes.web_api_id IS 'id в удалённой БД.';
+COMMENT ON COLUMN genes.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
+COMMENT ON COLUMN genes.partial IS 'Флаг указывающий на неполноту последовательности.';
+COMMENT ON COLUMN genes.product_id IS 'Тип генетической последовательности.';
+COMMENT ON TABLE genes IS 'Таблица с данными о расположении генов и других фрагменов в полном геноме.';
+
+
+
+-- Index: ix_genes_id
+
+-- DROP INDEX ix_genes_id;
+
+CREATE INDEX ix_genes_id ON genes USING btree (id);
+COMMENT ON INDEX ix_genes_id IS 'Индекс id генов.';
+
+-- Index: ix_genes_matter_id
+
+-- DROP INDEX ix_genes_matter_id;
+
+CREATE INDEX ix_genes_chain_id ON genes USING btree (chain_id);
+COMMENT ON INDEX ix_genes_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
+
+-- Index: ix_genes_piece_type_id
+
+-- DROP INDEX ix_genes_piece_type_id;
+
+CREATE INDEX ix_genes_piece_type_id ON genes USING btree (piece_type_id);
+COMMENT ON INDEX ix_genes_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
+
+-- Trigger: tgiu_genes_modified on genes
+
+-- DROP TRIGGER tgiu_genes_modified ON genes;
+
+CREATE TRIGGER tgiu_genes_modified BEFORE INSERT OR UPDATE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_genes_modified ON genes IS 'Тригер для вставки даты последнего изменения записи.';
+
+-- Trigger: tgiud_genes_chain_key_bound on genes
+
+-- DROP TRIGGER tgiud_genes_chain_key_bound ON genes;
+
+CREATE TRIGGER tgiud_genes_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+COMMENT ON TRIGGER tgiud_genes_chain_key_bound ON genes IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
+
+-- Trigger: tgu_genes_characteristics on genes
+
+-- DROP TRIGGER tgu_genes_characteristics ON genes;
+
+CREATE TRIGGER tgu_genes_characteristics AFTER UPDATE ON genes FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
+
 COMMIT;

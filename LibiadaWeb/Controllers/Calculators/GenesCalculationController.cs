@@ -211,7 +211,16 @@
                         {
                             var productId = chains[d].product_id;
                             var pieceTypeId = chains[d].piece_type_id;
-                            chainsProduct.Last().Add(db.product.Single(p => productId == p.id).name);
+
+                            if (productId == null)
+                            {
+                                chainsProduct.Last().Add(string.Empty);
+                            }
+                            else
+                            {
+                                chainsProduct.Last().Add(db.product.Single(p => productId == p.id).name);
+                            }
+
                             chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
                         }
                     }
