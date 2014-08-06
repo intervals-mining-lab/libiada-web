@@ -86,8 +86,7 @@
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "links", new SelectList(db.link, "id", "name") }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
-                    { "translators", translators }, 
-                    { "natureLiterature", Aliases.NatureLiterature }
+                    { "translators", translators }
                 };
             return View();
         }
@@ -134,7 +133,7 @@
             bool theoretical)
         {
             var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
-            var teoreticalRanks = new List<List<List<double>>>();
+            var theoreticalRanks = new List<List<List<double>>>();
             var chainNames = new List<string>();
             var elementNames = new List<List<string>>();
             var characteristicNames = new List<string>();
@@ -148,28 +147,29 @@
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 elementNames.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
-                teoreticalRanks.Add(new List<List<double>>());
+                theoreticalRanks.Add(new List<List<double>>());
 
                 // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                 for (int i = 0; i < characteristicIds.Length; i++)
                 {
                     int notationId = notationIds[i];
-                    int languageId = languageIds[i];
-                    int? translatorId = translatorIds[i];
+                    
                     long chainId;
 
-                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
                     {
+                        int languageId = languageIds[i];
+                        int? translatorId = translatorIds[i];
+
                         isLiteratureChain = true;
                         chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
                                     l.notation_id == notationId
                                     && l.language_id == languageId
-                                    && ((translatorId == null && l.translator_id == null)
-                                                    || (translatorId == l.translator_id))).id;
+                                    && ((translatorId == null && l.translator_id == null) || (translatorId == l.translator_id))).id;
                     }
                     else
                     {
-                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId && c.piece_position == 0).id;
+                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId && c.piece_position == 0 && (c.piece_type_id == Aliases.PieceTypeFullGenome || c.piece_type_id == Aliases.PieceTypeMitochondrionGenome)).id;
                     }
 
                     Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
@@ -227,8 +227,7 @@
                                     b.element_id == elementId &&
                                     b.link_id == linkId).value;
 
-                        characteristics.Last().Last().Add(
-                            new KeyValuePair<int, double>(d, (double)characteristic));
+                        characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
                         if (i == 0)
                         {
@@ -240,7 +239,7 @@
                     if (theoretical)
                     {
 
-                        teoreticalRanks[w].Add(new List<double>());
+                        theoreticalRanks[w].Add(new List<double>());
                         ICalculator countCalculator = CalculatorsFactory.Create("Count");
                         var counts = new List<int>();
                         for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
@@ -263,7 +262,7 @@
                         double p = k / (b + n);
                         while (p >= (1 / plow))
                         {
-                            teoreticalRanks.Last().Last().Add(p);
+                            theoreticalRanks.Last().Last().Add(p);
                             n++;
                             p = k / (b + n);
                         }
@@ -276,10 +275,11 @@
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
-                int languageId = languageIds[k];
+                
                 string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
                 if (isLiteratureChain)
                 {
+                    int languageId = languageIds[k];
                     string language = db.language.Single(l => l.id == languageId).name;
                     characteristicNames.Add(characteristicType + " " + language);
                 }
@@ -308,7 +308,7 @@
                                          { "elementNames", elementNames }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "matterIds", matterIds }, 
-                                         { "teoreticalRanks", teoreticalRanks }
+                                         { "theoreticalRanks", theoreticalRanks }
                                      };
 
             return this.RedirectToAction("Result");
@@ -361,7 +361,7 @@
                 ViewBag.chainNames = result["chainNames"];
                 ViewBag.elementNames = result["elementNames"];
                 ViewBag.characteristicNames = characteristicNames;
-                ViewBag.theoreticalRanks = result["teoreticalRanks"];
+                ViewBag.theoreticalRanks = result["theoreticalRanks"];
 
                 this.TempData.Keep();
             }

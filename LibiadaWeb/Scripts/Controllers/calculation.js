@@ -6,15 +6,16 @@ app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, f
 
     $scope.characteristics = new Array();
     $scope.notationsFiltered = new Array();
+
     $scope.natureId = $scope.natures[0].Value;
 
     var filterByNature = function () {
         FilterOptionsByNature($scope, filterFilter, "notations");
         var notation = $scope.notationsFiltered[0];
-        $scope.characteristics.forEach(function (characteristic) {
+
+        angular.forEach($scope.characteristics, function (characteristic) {
             characteristic.notation = notation;
         });
-
     };
 
     $scope.addCharacteristic = function () {
@@ -29,10 +30,6 @@ app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, f
 
     $scope.deleteCharacteristic = function (characteristic) {
         $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-    };
-
-    $scope.isLiteratureNature = function () {
-        return $scope.natureLiterature == $scope.natureId;
     };
 
     $scope.isLinkable = function (characteristic) {

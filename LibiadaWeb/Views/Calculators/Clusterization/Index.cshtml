@@ -1,4 +1,5 @@
 ﻿
+@using LibiadaWeb.Models
 @model dynamic
 
 @{
@@ -33,12 +34,10 @@
             <tbody>
                 <tr data-ng-repeat="matter in matters | filter:{Nature: natureId}">
                     <td>
-                        <input type="checkbox" name="matterIds" value="{{matter.Value}}" />
-                        <span>{{matter.Text}}</span>
+                        <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
+                        <span data-ng-bind="matter.Text"></span>
                     </td>
-                    <td>
-                        {{matter.description}}
-                    </td>
+                    <td data-ng-bind="matter.description"/>
                 </tr>
             </tbody>
         </table>
@@ -47,18 +46,32 @@
         <br />
         <div data-ng-repeat="characteristic in characteristics">
             <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" value="{{characteristic.characteristicType.Value}}" />
+            <input type="hidden" name="characteristicIds" data-ng-value="characteristic.characteristicType.Value" />
 
             <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" value="{{characteristic.link.Value}}" />
+            <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value" />
 
             <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
-            <input type="hidden" name="notationIds" value="{{characteristic.notation.Value}}" />
+            <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value" />
 
-            <select title="Язык" data-ng-show="isLiteratureNature()" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
-            <input type="hidden" name="languageIds" value="{{characteristic.language.Value}}" />
-            <select title="Переводчик" data-ng-show="isLiteratureNature()" data-ng-model="characteristic.translator" data-ng-options="t.Text for t in translators"></select>
-            <input type="hidden" name="translatorIds" value="{{characteristic.translator.Value}}" />
+            <div data-ng-switch="natureId">
+                <div data-ng-switch-when="@Aliases.NatureLiterature">
+                    <select title="Язык" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
+                    <input type="hidden" name="languageIds" data-ng-value="characteristic.language.Value" />
+
+                    <select title="Переводчик" data-ng-model="characteristic.translator" data-ng-options="t.Text for t in translators"></select>
+                    <input type="hidden" name="translatorIds" data-ng-value="characteristic.translator.Value" />
+                </div>
+
+                <div data-ng-switch-when="@Aliases.NatureGenetic">
+
+                </div>
+
+                <div data-ng-switch-when="@Aliases.NatureMusic">
+
+                </div>
+            </div>
+
             <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
             <br />
         </div>

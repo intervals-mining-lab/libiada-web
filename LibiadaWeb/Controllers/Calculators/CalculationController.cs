@@ -65,6 +65,7 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
+
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.full_chain_applicable);
 
@@ -84,8 +85,7 @@
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "links", links }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
-                    { "translators", translators }, 
-                    { "natureLiterature", Aliases.NatureLiterature }
+                    { "translators", translators }
                 };
             return View();
         }
@@ -135,12 +135,13 @@
                 for (int i = 0; i < notationIds.Length; i++)
                 {
                     int notationId = notationIds[i];
-                    int languageId = languageIds[i];
-                    int? translatorId = translatorIds[i];
 
                     long chainId;
                     if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
                     {
+                        int languageId = languageIds[i];
+                        int? translatorId = translatorIds[i];
+
                         chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
                                     l.notation_id == notationId
                                     && l.language_id == languageId

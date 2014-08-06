@@ -87,8 +87,7 @@
                     { "notations", this.notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "links", new SelectList(db.link, "id", "name") }, 
-                    { "languages", new SelectList(db.language, "id", "name") }, 
-                    { "natureLiterature", Aliases.NatureLiterature }
+                    { "languages", new SelectList(db.language, "id", "name") }
                 };
             return View();
         }
