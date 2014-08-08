@@ -27,7 +27,7 @@
             @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
-                <input type="hidden" name="chainId" value="{{chainId}}" />
+                <input type="hidden" name="chainId" data-ng-value="chainId" />
             </div>
         </div>
         <div class="form-group">

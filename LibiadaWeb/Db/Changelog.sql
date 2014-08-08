@@ -1802,7 +1802,7 @@ BEGIN
 	IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
 		SELECT count(1) INTO orphanedElements result FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL;
 		IF (orphanedElements = 0) THEN 
-			RETURN true;
+			RETURN NULL;
 		ELSE
 			RAISE EXCEPTION 'В БД отсутствует % элементов алфавита.', orphanedElements;
 		END IF;

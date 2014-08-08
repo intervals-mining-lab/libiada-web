@@ -46,22 +46,26 @@
         <legend>Характеристики цепочек</legend>
         
         <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
-            <input type="checkbox" name="pieceTypeIds" value="{{pieceTypeCheckBox.Value}}" />
-            <span>{{pieceTypeCheckBox.Text}}</span>
+            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value" />
+            <span data-ng-bind="pieceTypeCheckBox.Text"></span>
         </div>
 
         <table>
             <thead>
                 <tr>
                     <th>Название</th>
+                    <th>Описание</th>
+                    <th>Создан</th>
                 </tr>
             </thead>
             <tbody>
                 <tr data-ng-repeat="matter in matters">
                     <td>
-                        <input type="checkbox" name="matterIds" value="{{matter.Value}}" />
-                        <span>{{matter.Text}}</span>
+                        <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
+                        <span data-ng-bind="matter.Text"></span>
                     </td>
+                    <td data-ng-bind="matter.description" />
+                    <td data-ng-bind="matter.created" />
                 </tr>
             </tbody>
         </table>
@@ -72,13 +76,13 @@
         <br />
         <div data-ng-repeat="characteristic in characteristics">
             <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" value="{{characteristic.characteristicType.Value}}" />
+            <input type="hidden" name="characteristicIds" data-ng-value="characteristic.characteristicType.Value" />
 
             <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" value="{{characteristic.link.Value}}" />
+            <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value" />
 
-            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
-            <input type="hidden" name="notationIds" value="{{characteristic.notation.Value}}" />
+            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
+            <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value" />
 
             <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
             <br />
