@@ -1869,49 +1869,30 @@ COMMENT ON COLUMN genes.partial IS 'Флаг указывающий на неполноту последовательн
 COMMENT ON COLUMN genes.product_id IS 'Тип генетической последовательности.';
 COMMENT ON TABLE genes IS 'Таблица с данными о расположении генов и других фрагменов в полном геноме.';
 
-
-
--- Index: ix_genes_id
-
--- DROP INDEX ix_genes_id;
-
 CREATE INDEX ix_genes_id ON genes USING btree (id);
 COMMENT ON INDEX ix_genes_id IS 'Индекс id генов.';
-
--- Index: ix_genes_matter_id
-
--- DROP INDEX ix_genes_matter_id;
 
 CREATE INDEX ix_genes_chain_id ON genes USING btree (chain_id);
 COMMENT ON INDEX ix_genes_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
 
--- Index: ix_genes_piece_type_id
-
--- DROP INDEX ix_genes_piece_type_id;
-
 CREATE INDEX ix_genes_piece_type_id ON genes USING btree (piece_type_id);
 COMMENT ON INDEX ix_genes_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
-
--- Trigger: tgiu_genes_modified on genes
-
--- DROP TRIGGER tgiu_genes_modified ON genes;
 
 CREATE TRIGGER tgiu_genes_modified BEFORE INSERT OR UPDATE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 COMMENT ON TRIGGER tgiu_genes_modified ON genes IS 'Тригер для вставки даты последнего изменения записи.';
 
--- Trigger: tgiud_genes_chain_key_bound on genes
-
--- DROP TRIGGER tgiud_genes_chain_key_bound ON genes;
-
 CREATE TRIGGER tgiud_genes_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
 COMMENT ON TRIGGER tgiud_genes_chain_key_bound ON genes IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
 
--- Trigger: tgu_genes_characteristics on genes
-
--- DROP TRIGGER tgu_genes_characteristics ON genes;
-
 CREATE TRIGGER tgu_genes_characteristics AFTER UPDATE ON genes FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
+
+-- 09.08.2014
+
+-- Добавлена новая характеристика.
+
+INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Дисперсия удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', 'AverageRemotenessDispersion', true, true, true, false);
 
 
 COMMIT;
