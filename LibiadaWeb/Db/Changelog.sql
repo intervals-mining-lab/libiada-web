@@ -1892,7 +1892,7 @@ COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все 
 
 -- Добавлена новая характеристика.
 
-INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Дисперсия удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', 'AverageRemotenessDispersion', true, true, true, false);
+INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Дисперсия удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', 'AverageRemotenessDispersion', true, true, false, false);
 
 
 COMMIT;
