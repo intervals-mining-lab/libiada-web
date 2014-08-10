@@ -1895,4 +1895,13 @@ COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все 
 INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Дисперсия удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', 'AverageRemotenessDispersion', true, true, false, false);
 
 
+-- 10.08.2014
+
+-- Добавлены новые характеристики.
+
+INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Ассиметрия средних удаленностей', 'Третий центральный момент или ассиметрия средних удаленностей', 'AverageRemotenessAsymmetry', true, true, false, false);
+
+INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('СКО средних удаленностей', 'Среднее квадратическое отклонение средних удаленностей', 'StandardDeviation', true, true, false, false);
+
+
 COMMIT;
