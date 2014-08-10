@@ -1,4 +1,4 @@
---23.06.2014 23:06:48
+--10.08.2014 23:10:54
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -17,6 +17,34 @@ plan.free();
 return result; $_$;
 
 COMMENT ON FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) IS 'Функция для проверки наличия элемента с указанным id в алфавите указанной цепочки.';
+
+CREATE FUNCTION check_genes_import_positions(matter_id bigint) RETURNS void
+    LANGUAGE plv8 STABLE
+    AS $_$function check_genes_import_positions(id){
+	plv8.elog(INFO, "Проверяем Позиции всех фрагментов генома объекта с id =", id);
+	
+	var genes = plv8.execute('SELECT piece_position "start", piece_position + array_length(building, 1) "stop" FROM dna_chain WHERE matter_id = $1 AND piece_type_id != 1 ORDER BY piece_position;', [id]);
+	
+	if(genes[0].start != 0){
+		plv8.elog(WARNING, "Начало первого фрагмента не на нулевой позиции. Фактическая позиция начала первого фрагмента: ", genes[0].start);
+	}
+	
+	for(var i = 1; i < genes.length; i++){
+		if(genes[i].start > genes[i - 1].stop){
+			plv8.elog(WARNING, "Начало и конец соседних фрагментов не совпадают. Конец предыдущего фрагмента: ", genes[i - 1].stop, " Начало следующего: ", genes[i].start);
+		}
+	}
+	
+	var fullChainLength = plv8.execute('SELECT array_length(building, 1) length FROM dna_chain WHERE matter_id = $1 AND piece_type_id = 1;', [id])[0].length;
+	
+	if(genes[genes.length - 1].stop != fullChainLength){
+		plv8.elog(WARNING, "Конец последнего фрагмента не совпадает с длиной полной последовательности. Фактическая позиция конца последнего фрагмента: ", genes[genes.length - 1].stop, " Длина полной цепи: ", fullChainLength);
+	}
+}
+
+check_genes_import_positions(matter_id);$_$;
+
+COMMENT ON FUNCTION check_genes_import_positions(matter_id bigint) IS 'Функция, проверяющая, что все фрагменты полной генетической последовательности загружены в БД. ';
 
 CREATE FUNCTION copy_constraints(src text, dst text) RETURNS integer
     LANGUAGE plpgsql IMMUTABLE
@@ -300,22 +328,21 @@ $_$;
 COMMENT ON FUNCTION trigger_characteristics_link() IS 'Триггерная функция, проверяющая что у характеристики не задана привязка если она непривязываема, и задана любая привязка если она необходима.';
 
 CREATE FUNCTION trigger_check_alphabet() RETURNS trigger
-    LANGUAGE plv8
+    LANGUAGE plpgsql
     AS $$
-//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
-//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
-//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
-
-if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
-	var orphanedElements = plv8.execute('SELECT 1 result FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL;').length;
-	if(orphanedElements == 0){
-		return true;
-	} else{
-		return plv8.elog(ERROR, 'В БД отсутствует ', orphanedElements, ' элементов алфавита.');
-	}
-} else{
-	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полем alphabet.');
-}$$;
+DECLARE
+	orphanedElements integer;
+BEGIN
+	IF (TG_OP = 'INSERT' OR TG_OP = 'UPDATE') THEN
+		SELECT count(1) INTO orphanedElements result FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL;
+		IF (orphanedElements = 0) THEN 
+			RETURN NULL;
+		ELSE
+			RAISE EXCEPTION 'В БД отсутствует % элементов алфавита.', orphanedElements;
+		END IF;
+	END IF;
+    RAISE EXCEPTION 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полем alphabet.';
+END;$$;
 
 COMMENT ON FUNCTION trigger_check_alphabet() IS 'Триггерная функция, проверяющая что все элементы алфавита добавляемой цепочки есть в базе.';
 
@@ -932,6 +959,47 @@ CREATE SEQUENCE fmotiv_type_id_seq
     CACHE 1;
 
 ALTER SEQUENCE fmotiv_type_id_seq OWNED BY fmotiv_type.id;
+
+CREATE TABLE genes (
+    id bigint DEFAULT nextval('elements_id_seq'::regclass) NOT NULL,
+    created timestamp with time zone DEFAULT now() NOT NULL,
+    modified timestamp with time zone DEFAULT now() NOT NULL,
+    chain_id bigint NOT NULL,
+    piece_type_id integer NOT NULL,
+    "position" integer NOT NULL,
+    length integer NOT NULL,
+    description text NOT NULL,
+    web_api_id integer,
+    complement boolean DEFAULT false NOT NULL,
+    partial boolean DEFAULT false NOT NULL,
+    product_id integer
+);
+
+COMMENT ON TABLE genes IS 'Таблица с данными о расположении генов и других фрагменов в полном геноме.';
+
+COMMENT ON COLUMN genes.id IS 'Уникальный внутренний идентификатор.';
+
+COMMENT ON COLUMN genes.created IS 'Дата создания.';
+
+COMMENT ON COLUMN genes.modified IS 'Дата изменения.';
+
+COMMENT ON COLUMN genes.chain_id IS 'Родительская цепочка.';
+
+COMMENT ON COLUMN genes.piece_type_id IS 'Тип фрагмента.';
+
+COMMENT ON COLUMN genes."position" IS 'Позиция начала фрагмента.';
+
+COMMENT ON COLUMN genes.length IS 'Длина фрагмента.';
+
+COMMENT ON COLUMN genes.description IS 'Описание фрагмента.';
+
+COMMENT ON COLUMN genes.web_api_id IS 'id в удалённой БД.';
+
+COMMENT ON COLUMN genes.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
+
+COMMENT ON COLUMN genes.partial IS 'Флаг указывающий на неполноту последовательности.';
+
+COMMENT ON COLUMN genes.product_id IS 'Тип генетической последовательности.';
 
 CREATE TABLE instrument (
     id integer NOT NULL,
@@ -1584,6 +1652,9 @@ ALTER TABLE ONLY fmotiv
 ALTER TABLE ONLY fmotiv_type
     ADD CONSTRAINT pk_fmotiv_type PRIMARY KEY (id);
 
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT pk_genes PRIMARY KEY (id);
+
 ALTER TABLE ONLY instrument
     ADD CONSTRAINT pk_instrument PRIMARY KEY (id);
 
@@ -1652,6 +1723,9 @@ ALTER TABLE ONLY element
 
 ALTER TABLE ONLY fmotiv_type
     ADD CONSTRAINT uk_fmotiv_type_name UNIQUE (name);
+
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT uk_genes UNIQUE (chain_id, piece_type_id, "position");
 
 ALTER TABLE ONLY instrument
     ADD CONSTRAINT uk_instrument_name UNIQUE (name);
@@ -1829,6 +1903,18 @@ CREATE INDEX ix_fmotiv_piece_type_id ON fmotiv USING btree (piece_type_id);
 CREATE INDEX ix_fmotiv_type_id ON fmotiv_type USING btree (id);
 
 CREATE INDEX ix_fmotiv_type_name ON fmotiv_type USING btree (name);
+
+CREATE INDEX ix_genes_chain_id ON genes USING btree (chain_id);
+
+COMMENT ON INDEX ix_genes_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
+
+CREATE INDEX ix_genes_id ON genes USING btree (id);
+
+COMMENT ON INDEX ix_genes_id IS 'Индекс id генов.';
+
+CREATE INDEX ix_genes_piece_type_id ON genes USING btree (piece_type_id);
+
+COMMENT ON INDEX ix_genes_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
 
 CREATE INDEX ix_instrument_id ON instrument USING btree (id);
 
@@ -2072,6 +2158,10 @@ CREATE TRIGGER tgiu_fmotiv_modified BEFORE INSERT OR UPDATE ON fmotiv FOR EACH R
 
 COMMENT ON TRIGGER tgiu_fmotiv_modified ON fmotiv IS 'Тригер для вставки даты последнего изменения записи.';
 
+CREATE TRIGGER tgiu_genes_modified BEFORE INSERT OR UPDATE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+
+COMMENT ON TRIGGER tgiu_genes_modified ON genes IS 'Тригер для вставки даты последнего изменения записи.';
+
 CREATE TRIGGER tgiu_literature_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
 
 COMMENT ON TRIGGER tgiu_literature_chain_alphabet ON literature_chain IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
@@ -2128,6 +2218,10 @@ CREATE TRIGGER tgiud_fmotiv_element_key_bound AFTER INSERT OR DELETE OR UPDATE O
 
 COMMENT ON TRIGGER tgiud_fmotiv_element_key_bound ON fmotiv IS 'Дублирует добавление, изменение и удаление записей в таблице fmotiv в таблицу element_key.';
 
+CREATE TRIGGER tgiud_genes_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+
+COMMENT ON TRIGGER tgiud_genes_chain_key_bound ON genes IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
+
 CREATE TRIGGER tgiud_literature_chain_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
 
 COMMENT ON TRIGGER tgiud_literature_chain_chain_key_bound ON literature_chain IS 'Дублирует добавление, изменение и удаление записей в таблице literature_chain в таблицу chain_key.';
@@ -2163,6 +2257,10 @@ COMMENT ON TRIGGER tgu_element_key ON element_key IS 'Триггер обнов�
 CREATE TRIGGER tgu_fmotiv_characteristics AFTER UPDATE ON fmotiv FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 
 COMMENT ON TRIGGER tgu_fmotiv_characteristics ON fmotiv IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
+CREATE TRIGGER tgu_genes_characteristics AFTER UPDATE ON genes FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+
+COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
 
 CREATE TRIGGER tgu_literature_chain_characteristics AFTER UPDATE ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 
@@ -2275,6 +2373,18 @@ ALTER TABLE ONLY fmotiv
 ALTER TABLE ONLY fmotiv
     ADD CONSTRAINT fk_fmotiv_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT fk_genes_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id) DEFERRABLE INITIALLY DEFERRED;
+
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT fk_genes_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT fk_genes_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
+
+ALTER TABLE ONLY genes
+    ADD CONSTRAINT fk_genes_product FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE;
+
 ALTER TABLE ONLY literature_chain
     ADD CONSTRAINT fk_litarure_chain_translator FOREIGN KEY (translator_id) REFERENCES translator(id);
 
@@ -2365,14 +2475,6 @@ ALTER TABLE ONLY product
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT fk_remote_db_nature FOREIGN KEY (nature_id) REFERENCES nature(id);
 
-INSERT INTO accidental (id, name, description) VALUES (1, '-2', 'Дубль-бемоль');
-INSERT INTO accidental (id, name, description) VALUES (2, '-1', 'Бемоль');
-INSERT INTO accidental (id, name, description) VALUES (3, '0', 'Бекар');
-INSERT INTO accidental (id, name, description) VALUES (4, '1', 'Диез');
-INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-диез');
-
-SELECT pg_catalog.setval('accidental_id_seq', 23, true);
-
 SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
 
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
@@ -2402,8 +2504,11 @@ INSERT INTO characteristic_type (id, name, description, characteristic_group_id,
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (20, 'Избыточность', 'Избыточность кодировки второго элемента относительно себя по сравнению с кодированием относительно первого элемента', NULL, 'Redundancy', true, false, false, true);
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (23, 'Коэффициент взаимной зависимости', NULL, NULL, 'MutualDependenceCoefficient', true, false, false, true);
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (1, 'Мощность алфавита', NULL, NULL, 'AlphabetCardinality', false, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (29, 'СКО удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', NULL, 'RemotenessStandardDeviation', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (30, 'Ассиметрия удалённости', 'Ассиметрия удалённостей однородных последовательностей относительно среднего значения', NULL, 'RemotenessAsymmetry', true, true, false, false);
+INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (28, 'Дисперсия удалённости', 'Разброс удалённости однородных последовательностей относительно среднего значения', NULL, 'RemotenessDispersion', true, true, false, false);
 
-SELECT pg_catalog.setval('characteristic_type_id_seq', 27, true);
+SELECT pg_catalog.setval('characteristic_type_id_seq', 30, true);
 
 SELECT pg_catalog.setval('fmotiv_type_id_seq', 1, false);
 
@@ -2465,8 +2570,9 @@ INSERT INTO piece_type (id, name, description, nature_id) VALUES (12, 'Мито�
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (5, 'Рибосомальная РНК', 'rRNA - ribosomal RNA', 1);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (13, 'Повторяющийся фрагмент', 'Repeat region', 1);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (14, 'Некодирующая последовательность', 'Non-coding sequence', 1);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (15, 'Геном хлоропласта', 'Chloroplast genome', 1);
 
-SELECT pg_catalog.setval('piece_type_id_seq', 14, true);
+SELECT pg_catalog.setval('piece_type_id_seq', 15, true);
 
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2, 'Mitochondrion 16S ribosomal RNA', 'Митохондриальная 16S рибосомальная РНК', 12);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (4, 'chromosomal replication initiator protein DnaA', NULL, 4);
@@ -4168,14 +4274,642 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (1723, 'membra
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1724, '1-hydroxy-2-methyl-2-(E)-butenyl 4-diphosphatesynthase', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1, '18S ribosomal RNA', '18S рибосомальная РНК', 6);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (3, '16S ribosomal RNA', '16S рибосомальная РНК', 6);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1725, '50S ribosomal protein L34', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1726, '50S ribosomal protein L35', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1727, '50S ribosomal protein L25', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1728, 'transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1729, 'Chromosomal replication initiator protein DnaA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1730, 'Tetratricopeptide repeat-containing protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1731, 'UDP-N-acetylmuramoyl-L-alanyl-D-glutamate--2,6-diaminopimelate ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1732, 'Phospho-N-acetylmuramoyl-pentapeptide-transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1733, 'succinyl-CoA:3-ketoacid-coenzyme Atransferasesubunit B (Succinyl CoA:3-oxoacid CoA-transferase)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1734, 'Protein MurJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1735, 'Cytochrome c-type biogenesis protein CcmE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1736, 'Protein translocase subunit SecD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1737, 'HAD-superfamily subfamily IIA hydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1738, 'UDP-N-acetylglucosamine1-carboxyvinyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1739, 'Holo-[acyl-carrier-protein] synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1740, 'Protein translocase subunit SecA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1741, 'Sodium/pantothenate symporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1742, 'Protein MraZ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1743, 'Cell division protein FtsL', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1744, 'response regulator NtrX-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1745, 'UPF0192 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1746, 'Tyrosyl-tRNA synthetase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1747, 'Transcription elongation protein NusA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1748, 'DNA repair protein RecO', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1749, 'DNA repair protein RadA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1750, 'RNA pseudouridine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1751, 'aromatic acid decarboxylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1752, 'Delta-aminolevulinic acid dehydratase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1753, 'reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1754, 'Folylpolyglutamate synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1755, 'hydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1756, 'Dihydrolipoyllysine-residue acetyltransferasecomponent of pyruvate dehydrogenase complex', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1757, 'Single-stranded-DNA-specific exonuclease RecJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1758, 'Transcription termination factor Rho', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1759, 'DNA-binding protein HU-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1760, '30S ribosomal protein S1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1766, 'Sigma(54) modulation protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1767, 'Bifunctional protein FolD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1768, 'Ribonucleoside-diphosphate reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1769, 'tRNA dimethylallyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1770, 'ABC transporter ATP-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1771, 'Antigenic heat-stable 120 kDa protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1772, 'Ribonuclease BN', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1773, 'Laccase domain protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1774, 'Pyruvate, phosphate dikinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1775, 'Cysteine desulfurase protein IscS/NifS', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1776, 'NFS1 nitrogen fixation 1 isoform CRA_b', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1777, 'Aminopeptidase P', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1778, 'Lipopolysaccharide 1,2-glucosyltransferase RfaJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1779, 'transporter AmpG 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1780, '1-acyl-sn-glycerol-3-phosphate acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1781, 'Porphobilinogen deaminase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1782, 'Glycine cleavage T-protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1783, 'Ribonuclease D', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1784, 'Dihydrolipoyl dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1785, 'Soluble lytic murein transglycosylase-likeregulatory protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1786, 'transcriptional regulatory protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1787, 'Isopentenyl-diphosphate delta-isomerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1788, 'Lon protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1789, 'Glycosyl transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1790, '2-hydroxy-6-oxo-6-phenylhexa-2,4-dienoatehydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1791, 'Glycerol-3-phosphate dehydrogenase [NAD(P)+]', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1792, 'inorganic polyphosphate/ATP-NAD kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1793, 'Recombination protein RecR', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1794, 'Succinyl-CoA ligase [ADP-forming] subunitalpha-2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1795, 'branched-chain-amino-acid aminotransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1796, 'Osmolarity sensor protein EnvZ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1797, 'Phosphatidate cytidylyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1798, 'Phenylalanine--tRNA ligase beta subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1799, 'Threonylcarbamoyladenosine tRNAmethylthiotransferase MtaB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1800, 'Glycosyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1801, 'UDP-N-acetylglucosamine--N-acetylmuramyl-(pentapeptide) pyrophosphoryl-undecaprenolN-acetylglucosamine transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1802, 'Lipoprotein signal peptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1803, 'cytochrome c oxidase subunit 2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1804, 'glutamine amidotransferase-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1805, 'carboxypeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1806, 'Soluble lytic murein transglycosylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1807, 'protease SOHB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1808, 'dioxygenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1809, 'Periplasmic protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1810, 'Penicillin-binding protein dacF', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1811, 'Multidrug resistance protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1812, 'Holliday junction ATP-dependent DNA helicaseRuvA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1813, 'Proline--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1814, 'Proline/betaine transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1815, 'NADP-dependent malic enzyme', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1816, 'Lysine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1817, 'Apolipoprotein N-acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1818, '3-methyladenine DNA glycosylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1819, 'Outer membrane assembly protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1820, '30S ribosomal protein S4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1821, 'Alpha/beta hydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1822, 'RND family efflux transporter MFP subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1823, 'Integral membrane protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1824, 'Thioredoxin peroxidase 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1825, 'DNA topoisomerase 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1826, 'Aminodeoxychorismate lyase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1827, 'ATP-dependent protease ATPase subunit HslU', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1828, 'Aspartate-semialdehyde dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1829, 'HlyD family secretion protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1830, 'Guanosine polyphosphatepyrophosphohydrolase/synthetase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1831, 'Transport protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1832, 'Amino acid permease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1833, 'RNA polymerase sigma-32 factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1834, 'Thymidylate synthase ThyX', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1835, 'sugar phosphate isomerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1836, '3''-phosphoadenosine 5''-phosphosulfate3''-phosphatase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1837, 'Type IV secretion system protein VirD4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1838, 'VirB10 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1839, 'VirB9', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1840, 'monovalent cation/H+ antiporter subunit C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1841, 'NADH dehydrogenase I chain L', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1842, 'Rod shape-determining protein RodA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1843, 'Translation factor GUF1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1844, 'Small heat shock protein C1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1845, 'Cytochrome b', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1846, 'Multisubunit Na+/H+ antiporter, MnhB subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1847, 'Isocitrate dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1848, 'Pyruvate dehydrogenase E1 component subunitalpha', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1849, 'Penicillin binding protein 4*', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1850, 'Heme A synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1851, 'Ribonuclease E', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1852, 'UDP-3-O-[3-hydroxymyristoyl] N-acetylglucosaminedeacetylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1853, 'Cell division protein FtsQ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1854, 'Phosphatidylserine decarboxylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1855, 'Elongation factor P', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1856, 'Regulatory component of sensory transductionsystem', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1857, '30S ribosomal protein S9', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1858, 'Tol system periplasmic component', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1859, 'Carboxyl-terminal protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1860, 'DNA topoisomerase 4 subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1861, 'Threonine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1862, 'zinc protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1863, 'Cytochrome d ubiquinol oxidase, subunit II', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1864, 'S-adenosylmethionine:tRNAribosyltransferase-isomerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1865, 'ATPase N2B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1866, 'Methionyl-tRNA formyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1867, 'DNA gyrase subunit A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1868, 'Glutaredoxin-1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1869, 'Ribonuclease HII', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1870, 'Chaperone protein HscA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1871, 'Universal stress protein UspA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1872, 'Bifunctional penicillin-binding protein 1C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1873, 'Cytochrome c oxidase subunit 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1874, 'Ubiquinone biosynthesis protein Coq7', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1875, 'protease DO', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1876, 'Chaperone protein DnaJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1877, '2-oxoglutarate dehydrogenase E1 component', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1878, 'Dihydrolipoyllysine-residue succinyltransferasecomponent of 2-oxoglutarate dehydrogenase complex', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1879, 'Periplasmic divalent cation tolerance protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1880, 'Na+-H+-dicarboxylate symporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1881, 'peptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1882, 'DNA-binding protein HU', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1883, 'Hydrophobe/amphiphile efflux-1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1884, 'Ribosomal RNA small subunit methyltransferase E', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1885, 'Ribosome association toxin RatA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1886, 'Ribosomal RNA large subunit methyltransferase E', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1887, 'zinc metalloprotease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1888, 'Multisubunit Na+/H+ antiporter, MnhE subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1889, 'Ribosome-recycling factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1890, 'Glutamyl-tRNA(Gln) amidotransferase subunit A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1891, 'Amino acid ABC transporter substrate bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1892, 'Cytosol aminopeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1893, 'DNA-directed RNA polymerase subunit beta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1894, '50S ribosomal protein L7/L12', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1895, '50S ribosomal protein L1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1896, 'Transcription antitermination protein NusG', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1897, 'Elongation factor G', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1898, '30S ribosomal protein S12', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1899, 'Succinate dehydrogenase [ubiquinone]flavoprotein subunit 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1900, 'Succinate dehydrogenase cytochrome b556 subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1901, 'periplasmic serine endoprotease DegP-likeprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1902, 'HflK protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1903, 'GTPase Era', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1904, 'Signal peptidase I', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1905, 'Protein translocase subunit SecF', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1906, '50S ribosomal protein L19', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1907, 'Acetate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1908, 'lipoprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1909, 'VirB4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1910, 'GTP-binding protein EngB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1911, '50S ribosomal protein L28', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1912, 'Ribonucleotide ABC transporter ATP-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1913, 'Alanine racemase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1914, 'ABC-type transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1915, '30S ribosomal protein S2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1916, '190 kDa antigen', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1917, 'outer membrane protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1918, 'Transcriptional activator protein CzcR', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1919, 'Deoxycytidine triphosphate deaminase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1920, 'DNA topoisomerase 4 subunit A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1921, 'Arginine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1922, 'chromosome-partitioning protein ParB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1923, 'Ribosomal RNA small subunit methyltransferase G', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1924, 'Nucleoside diphosphate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1925, 'ADP,ATP carrier protein 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1926, 'Membrane protein insertase YidC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1927, 'Prolipoprotein diacylglyceryl transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1928, 'Succinate dehydrogenase [ubiquinone] iron-sulfursubunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1929, 'tRNA(Ile)-lysidine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1930, '30S ribosomal protein S18', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1931, 'Acyl-CoA desaturase 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1932, 'Chaperone protein ClpB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1933, 'UPF0301 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1934, 'SCO2 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1935, 'Transcriptional regulator', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1936, 'ATP synthase subunit c', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1937, 'ATP synthase subunit b', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1938, '3-hydroxyacyl-[acyl-carrier-protein] dehydrataseFabZ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1939, 'NADPH-dependent glutamate synthase beta chain', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1940, 'O-antigen export system ATP-binding proteinRfbE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1941, 'pyruvate, phosphate dikinase regulatory protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1942, 'Coproporphyrinogen-III oxidase, aerobic', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1943, '50S ribosomal protein L33', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1944, 'Octanoyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1945, 'Succinyl-diaminopimelate desuccinylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1946, 'Nucleoid-associated protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1947, 'NAD(P) transhydrogenase subunit alpha part 2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1948, 'RNA polymerase sigma factor RpoD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1949, 'Alanine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1950, 'Proline/betaine transporter ProP6', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1951, 'Glycine--tRNA ligase alpha subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1952, 'Sua5', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1953, 'Pseudouridine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1954, 'GTPase obg', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1955, '5-aminolevulinate synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1956, 'MFS type sugar transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1957, 'Single-stranded DNA-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1958, 'Zinc import ATP-binding protein ZnuC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1959, 'Protein p34', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1960, 'Heme exporter protein C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1961, 'Parvulin-like peptidyl-prolyl isomerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1962, 'Phospholipase D', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1963, 'Tyrosine recombinase XerC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1964, 'Maf-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1965, 'Glutathione-regulated potassium-efflux systemprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1966, '(Dimethylallyl)adenosine tRNAmethylthiotransferase MiaB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1967, 'Strees induced DNA-binding Dps', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1968, 'ATP synthase subunit delta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1969, 'ATP synthase gamma chain', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1970, 'ATP synthase epsilon chain', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1971, 'NADH dehydrogenase subunit G', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1972, 'Cytochrome c biogenesis ATP-binding exportprotein CcmA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1973, 'Serine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1974, 'transporter AmpG 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1975, 'DNA polymerase III subunit alpha', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1976, 'DNA polymerase I', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1977, 'TmRNA-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1978, '3-oxoacyl-[acyl-carrier-protein] synthase 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1979, 'Permease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1980, 'Cell shape-determining protein MreC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1981, 'HTH-type transcriptional regulator', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1982, '3-oxoacyl-[acyl-carrier-protein] synthase 2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1983, 'Bacterial NAD-glutamate dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1984, 'Aspartokinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1985, '50S ribosomal protein L21', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1986, 'Sec-independent protein translocase proteinTatA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1987, 'Ribosomal RNA small subunit methyltransferase I', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1988, 'Endonuclease III', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (1989, 'Lipoyl synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2016, 'Hemolysin C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2017, 'Poly-beta-hydroxybutyrate polymerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2018, 'Malonyl CoA-acyl carrier protein transacylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2019, 'SURF1-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2020, 'Dephospho-CoA kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2021, 'DNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2022, 'Lipid A biosynthesis lauroyl acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2023, 'Ankyrin repeat-containing protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2024, 'transposase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2025, 'ankyrin repeat protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2026, 'resolvase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2027, 'Transposase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2028, 'Outer membrane protein B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2029, 'Magnesium and cobalt efflux protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2030, 'Lipoprotein-releasing system ATP-binding proteinLolD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2031, 'Bicyclomycin resistance protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2032, 'export ATP-binding/permease protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2033, 'Ribosomal-protein-alanine acetyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2034, 'LicD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2035, 'Valine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2036, 'Methionine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2037, 'Poly-beta-hydroxyalkanoate depolymerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2038, '2-polyprenylphenol 6-hydroxylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2039, 'Exodeoxyribonuclease III', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2040, 'Exodeoxyribonuclease 7 large subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2041, 'Cold shock-like protein CspA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2042, 'Muropeptide permease AmpG', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2043, 'Cell division protein FtsZ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2044, 'tRNA/rRNA methyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2045, 'Elongation factor Tu', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2046, '50S ribosomal protein L3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2047, '50S ribosomal protein L23', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2048, '30S ribosomal protein S19', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2049, '30S ribosomal protein S3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2050, '50S ribosomal protein L29', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2051, '50S ribosomal protein L14', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2052, '50S ribosomal protein L5', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2053, '30S ribosomal protein S8', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2054, '50S ribosomal protein L18', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2055, '50S ribosomal protein L30', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2056, 'Protein translocase subunit SecY', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2057, '30S ribosomal protein S13', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2058, 'DNA-directed RNA polymerase subunit alpha', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2059, '30S ribosomal protein S20', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2060, 'UPF0118 membrane protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2061, 'Ribonuclease PH', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2062, '60 kDa chaperonin', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2063, 'Guanosine-3'',5''-bis(Diphosphate)3''-pyrophosphohydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2064, '2-acylglycerophosphoethanolamineacyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2065, 'Propionyl-CoA carboxylase beta chain', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2066, 'sensor histidine kinase NtrY-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2067, 'Aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferasesubunit C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2068, 'Aspartyl/glutamyl-tRNA(Asn/Gln) amidotransferasesubunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2069, 'Flavoprotein oxygenase DIM6/NTAB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2070, 'Aspartate--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2071, 'Chromosome partitioning protein-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2072, '50S ribosomal protein L10', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2073, '50S ribosomal protein L11', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2074, 'Preprotein translocase subunit SecE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2075, '30S ribosomal protein S7', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2076, 'glutamine transport system permease proteinGlnP', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2077, 'Succinate dehydrogenase hydrophobic membraneanchor subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2078, 'HflC protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2079, 'Protein mrp', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2080, 'Crossover junction endodeoxyribonuclease RuvC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2081, 'Ribonuclease 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2082, 'UPF0335 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2083, 'tRNA (guanine-N(1)-)-methyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2084, 'Phosphate acetyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2085, 'Type IV secretion system protein VirB3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2086, '50S ribosomal protein L31', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2087, 'ABC transporter permease protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2088, 'Mechanosensitive ion channel', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2089, 'metalloprotease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2090, '50S ribosomal protein L9', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2091, '30S ribosomal protein S6', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2092, 'tRNA threonylcarbamoyladenosine biosynthesisprotein Gcp', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2093, 'Acetoacetyl-CoA reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2094, 'protein-disulfide oxidoreductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2095, 'ATP synthase subunit a', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2096, 'ATP synthase B chain', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2097, 'Poly(A) polymerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2098, 'ATP-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2099, 'tRNA-dihydrouridine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2100, 'UDP-3-O-acylglucosamine N-acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2101, 'Acyl-[acyl-carrier-protein]--UDP-N-acetylglucosamine O-acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2102, 'O-antigen export system permease protein RfbA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2103, 'Thioredoxin', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2104, 'Uroporphyrinogen decarboxylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2105, 'UPF0093 membrane protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2106, '30S ribosomal protein S16', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2107, 'Glutamine ABC transporter ATP-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2108, 'DNA polymerase III subunits gamma and tau', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2109, 'NAD(P) transhydrogenase subunit alpha part 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2110, 'Transcription elongation factor GreA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2111, 'Citrate synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2112, 'Trigger factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2113, 'Heat shock protein HtpG', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2114, 'Single-strand DNA-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2115, 'UvrABC system protein A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2116, 'deaminase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2117, 'Ferredoxin', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2118, 'adhesin', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2119, 'Undecaprenyl-phosphatealpha-N-acetylglucosaminyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2120, 'Methionine aminopeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2121, 'DNA translocase FtsK', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2122, 'Dihydrolipoamide dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2123, 'ATP synthase subunit alpha', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2124, 'ATP synthase subunit beta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2125, 'Aconitate hydratase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2126, 'UDP-glucose 6-dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2127, 'S-adenosylmethionine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2128, 'Acyl carrier protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2129, 'Protein RecA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2130, 'tRNA modification GTPase MnmE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2131, 'Glutaredoxin-like protein grla', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2132, 'Serine hydroxymethyltransferase 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2133, 'rRNA maturation factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2134, 'ADP,ATP carrier protein 5', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2135, 'Acetyl-CoA acetyltransferase (Beta-ketothiolase)protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2136, 'ATP-dependent helicase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2137, 'DNA polymerase III subunit epsilon', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2138, 'ABC transporter substrate binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2139, 'Queuine tRNA-ribosyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2140, 'Tetraacyldisaccharide 4''-kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2141, 'Histone-like DNA-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2142, 'Cytochrome c-type biogenesis protein ccmF', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2143, 'Ribosomal RNA small subunit methyltransferase A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2144, '30S ribosomal protein S10', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2145, '50S ribosomal protein L4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2146, '50S ribosomal protein L2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2147, '50S ribosomal protein L22', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2148, '50S ribosomal protein L16', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2149, '30S ribosomal protein S17', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2150, '50S ribosomal protein L24', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2151, '30S ribosomal protein S14', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2152, '50S ribosomal protein L6', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2153, '30S ribosomal protein S5', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2154, '50S ribosomal protein L15', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2155, 'Adenylate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2156, '30S ribosomal protein S11', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2157, '50S ribosomal protein L17', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2158, '10 kDa chaperonin', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2159, 'Isoleucine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2160, '30S ribosomal protein S21', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2161, 'Ribonuclease P protein component', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2162, '50S ribosomal protein L20', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2163, '7-carboxy-7-deazaguanine synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2164, 'Peptidyl-tRNA hydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2165, 'GTP-dependent nucleic acid-binding protein EngD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2166, 'Patatin-like phospholipase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2167, 'Transcription-repair-coupling factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2168, 'DNA gyrase subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2169, 'DNA-directed RNA polymerase subunit omega', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2170, 'Parvulin-like PPIase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2171, 'UvrABC system protein C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2172, 'Penicillin-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2173, 'low-complexity protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2174, 'UbiH protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2175, 'fatty acid oxidation complex trifunctionalenzyme', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2176, 'Tyrosine--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2177, 'Ribosome maturation factor RimP', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2178, 'Translation initiation factor IF-2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2179, 'Superoxide dismutase (Mn/Fe)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2180, 'Biotin--protein ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2181, 'Translation initiation factor IF-3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2182, 'Peptide chain release factor 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2183, 'Methyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2184, 'Signal peptide peptidase SppA, 36K type', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2185, 'Cytidylate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2186, 'ATP-dependent Clp protease proteolytic subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2187, 'Carbonicanhydrase/acetyltransferase,isoleucinepatch super', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2188, 'Ferredoxin--NADP reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2189, 'Phosphomannomutase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2190, '30S ribosomal protein S15', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2191, 'ADP,ATP carrier protein 4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2192, 'Glutamine synthetase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2193, 'Octaprenyl-diphosphate synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2194, 'ADP,ATP carrier protein 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2195, 'Tryptophan--tRNA ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2196, 'Alkaline phosphatase synthesis sensor proteinPhoR', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2197, '5-formyltetrahydrofolate cyclo-ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2198, 'UDP-N-acetylglucosamine pyrophosphorylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2199, 'Cell surface antigen', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2200, 'Threonine dehydratase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2201, 'DNA helicase II', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2202, 'Thioredoxin reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2203, 'Metallo-beta-lactamase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2204, 'Ribosome-binding factor A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2205, 'Cell division protein FtsW', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2206, 'Membrane-bound metallopeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2207, 'Cytochrome c oxidase subunit 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2208, 'polysaccharide polymerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2209, 'membrane protein insertion efficiency factor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2210, 'Exodeoxyribonuclease 7 small subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2211, 'Ribosome maturation factor RimM', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2212, 'Protoheme IX farnesyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2213, 'WaaG-like sugar transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2214, 'Holliday junction resolvase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2215, 'Glutamate--tRNA ligase 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2216, 'Periplasmic protein TonB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2217, 'TolQ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2218, 'Protease II', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2219, 'Peptide chain release factor 2', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2220, 'Cytochrome c1, heme protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2221, 'UPF0091 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2222, 'Outer membrane protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2223, 'Phosphoribosylaminoimidazole-succinocarboxamidesynthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2224, 'Cytochrome D ubiquinol oxidase subunit 1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2225, 'Multidrug resistance ABC transporter ATP-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2257, 'Stress-70 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2258, 'Outer membrane protein assembly factor BamD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2259, 'Thermostable carboxypeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2260, '6-carboxy-5,6,7,8-tetrahydropterin synthase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2261, 'DNA polymerase III subunit delta''', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2262, 'UPF0369 protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2263, 'N utilization substance protein B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2264, 'Outer membrane protein assembly factor BamA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2265, 'MFS-type multidrug resistance protein B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2266, 'Uridylate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2267, 'O-antigen export system permease RfbA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2268, 'bifunctional glutamate synthase subunitbeta/2-polyprenylphenol hydroxylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2269, 'UDP-N-acetylglucosamine acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2270, '(3R)-hydroxymyristoyl-ACP dehydratase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2271, 'UDP-3-O-[3-hydroxymyristoyl] glucosamineN-acyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2272, 'nifR3-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2273, 'zinc/manganese ABC transporter substrate-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2274, 'poly(A) polymerase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2275, 'competence locus E protein 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2276, 'ATP synthase F0F1 subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2277, 'ATP synthase F0F1 subunit B''', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2278, 'ATP synthase F0F1 subunit C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2279, 'ATP synthase F0F1 subunit A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2312, 'recombination protein F', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2313, 'coenzyme PQQ synthesis protein c', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2314, 'dihydrofolate reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2315, 'folate synthesis bifunctional protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2316, 'sco2 protein precursor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2317, 'acetoacetyl-CoA reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2318, 'clpB protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2319, 'DNA-binding/iron metalloprotein/AP endonuclease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2320, 'acyl-CoA desaturase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2321, 'cell cycle protein MesJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2322, 'cell division protein ftsH', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2323, 'succinate dehydrogenase iron-sulfur subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2324, 'inner membrane protein translocase componentYidC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2325, 'BioC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2326, 'polypeptide deformylase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2327, 'ADP,ATP carrier protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2328, 'glycerol-3-phosphate transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2329, 'nucleoside diphosphate kinase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2330, 'tRNA uridine 5-carboxymethylaminomethylmodification enzyme GidA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2331, '16S rRNA methyltransferase GidB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2332, 'soj protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2333, 'stage 0 sporulation protein J', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2334, 'cation efflux system protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2335, 'hesB protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2336, 'deoxyguanosinetriphosphatetriphosphohydrolase-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2337, 'DNA topoisomerase IV subunit A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2338, 'deoxycytidine triphosphate deaminase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2339, 'preprotein translocase subunit SecB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2340, 'transcriptional activator protein czcR', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2341, 'NAD(P) transhydrogenase subunit beta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2342, 'proline/betaine transporter', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2343, 'preprotein translocase subunit SecG', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2344, 'elongation factor Ts', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2345, '3-deoxy-D-manno-octulosonic-acid transferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2346, 'aspartate aminotransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2347, 'vacJ lipoprotein precursor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2348, 'ABC transporter permease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2349, 'ribonucleotide ABC transporter ATP-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2350, 'ribosome biogenesis GTP-binding protein YsxC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2351, 'type IV secretion system protein VirB3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2352, 'type IV secretion system ATPase VirB4', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2353, 'phosphate acetyltransferase (Pta)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2354, 'acetate kinase (AckA)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2355, 'preprotein translocase subunit SecF', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2356, 'NADH dehydrogenase I subunit F', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2357, 'ribonuclease III', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2358, 'GTP-binding protein Era', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2359, 'Mrp protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2360, 'protease activity modulator HflK', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2361, 'hflC protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2362, 'periplasmic serine protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2363, 'succinate dehydrogenase cytochrome b-556subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2364, 'succinate dehydrogenase hydrophobic membraneanchor protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2365, 'succinate dehydrogenase flavoprotein subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2366, 'amino acid ABC transporter permease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2367, 'elongation factor G', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2368, 'preprotein translocase subunit SecE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2369, 'transcription antitermination protein NusG', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2370, 'DNA-directed RNA polymerase subunit beta''', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2371, 'leucyl aminopeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2372, 'dihydrodipicolinate reductase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2373, 'amino acid ABC transporter substrate-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2374, 'aspartyl/glutamyl-tRNA amidotransferase subunitB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2375, 'aspartyl/glutamyl-tRNA amidotransferase subunitA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2376, 'aspartyl/glutamyl-tRNA amidotransferase subunitC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2377, 'monovalent cation/H+ antiporter subunit E', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2378, 'multidrug resistance protein B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2379, 'transcription antitermination protein NusB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2380, 'cell division protein ftsJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2381, '16S ribosomal RNA methyltransferase RsmE', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2382, 'acriflavin resistance protein D', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2383, 'prolyl endopeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2384, 'coproporphyrinogen III oxidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2385, 'proton/sodium-glutamate symport protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2386, 'periplasmic divalent cation tolerance protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2387, 'dihydrolipoamide succinyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2388, '2-oxoglutarate dehydrogenase E1', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2389, 'thermostable carboxypeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2390, 'cation transport regulator ChaB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2391, 'molecular chaperone DnaJ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2392, 'molecular chaperone DnaK', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2393, 'heat shock protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2394, 'DNA polymerase III subunit delta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2395, 'ubiquinone biosynthesis protein coq7', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2396, '2,3,4,5-tetrahydropyridine-2,6-carboxylateN-succinyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2397, 'bifunctional penicillin-binding protein 1C', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2398, 'chaperone protein HscA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2399, 'co-chaperone HscB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2400, 'ribonuclease HII', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2401, 'excinuclease ABC subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2402, 'glutaredoxin 3', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2403, 'multidrug resistance protein (Atm1)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2404, 'ATPase n2B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2405, 'multidrug resistance ABC transporter ATP-bindingprotein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2406, 'cytochrome d ubiquinol oxidase subunit I', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2407, 'cytochrome d ubiquinol oxidase subunit II', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2408, 'beta 1,4 glucosyltransferase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2409, 'mitochondrial protease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2410, 'outer membrane protein TolC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2411, 'DNA topoisomerase IV subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2412, 'tail-specific protease precursor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2413, 'histidine kinase sensor protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2414, '50S ribosomal protein L13', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2415, 'D-alanyl-D-alanine dipeptidase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2416, 'dinucleoside polyphosphate hydrolase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2417, 'response regulator PleD', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2418, 'elongation factor P', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2419, 'extragenic suppressor protein suhB', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2420, 'multidrug resistance protein A', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2421, 'morphology/transcriptional regulatory proteinBolA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2422, 'UDP-N-acetylmuramate--L-alanine ligase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2423, 'cell division protein FtsQ', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2424, 'cell division protein ftsA', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2425, 'cytochrome c', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2426, 'ribonuclease E', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2427, 'cytochrome c oxidase assembly protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2428, 'ribosomal large subunit pseudouridine synthaseC', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2429, 'penicillin-binding protein 4*', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2430, 'exodeoxyribonuclease III', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2431, 'pyruvate dehydrogenase e1 component, alphasubunit precursor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2432, 'pyruvate dehydrogenase subunit beta', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2433, 'GTP-binding protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2434, 'isocitrate dehydrogenase', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2435, 'monovalent cation/H+ antiporter subunit G', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2436, 'monovalent cation/H+ antiporter subunit B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2437, 'heme exporter protein B', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2438, 'cytochrome b6-f complex iron-sulfur subunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2457, 'cytochrome b', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2458, 'cytochrome c1, heme protein precursor', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2459, 'heat shock protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2460, 'O-antigen export system ATP-binding protein RFBE(rfbE)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2461, 'O-antigen export system permease RFBA (rfbA)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2462, 'NIFR3-like protein (nifR3)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2463, 'SCO2 protein precursor (sco2)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2464, 'protein disaggregation chaperone', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2465, 'cell cycle protein MESJ (mesJ)', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2466, 'cell division protein FTSH (ftsH)', NULL, 4);
 
-SELECT pg_catalog.setval('product_id_seq', 1724, true);
+SELECT pg_catalog.setval('product_id_seq', 2466, true);
 
 INSERT INTO remote_db (id, name, description, url, nature_id) VALUES (1, 'NCBI', 'Нициональный центр биотехнологической информации', 'http://www.ncbi.nlm.nih.gov', 1);
 
 SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
-
-SELECT pg_catalog.setval('tie_id_seq', 1, false);
 
 INSERT INTO translator (id, name, description) VALUES (1, 'Google translate', 'http://translate.google.ru/');
 INSERT INTO translator (id, name, description) VALUES (2, 'PROMT (translate.ru)', 'http://www.translate.ru/');
@@ -4184,4 +4918,4 @@ INSERT INTO translator (id, name, description) VALUES (3, 'InterTran', 'http://m
 SELECT pg_catalog.setval('translator_id_seq', 3, true);
 
 COMMIT;
---23.06.2014 23:06:48
+--10.08.2014 23:10:54
