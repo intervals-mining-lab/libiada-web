@@ -2477,6 +2477,14 @@ ALTER TABLE ONLY remote_db
 
 SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
 
+INSERT INTO accidental (id, name, description) VALUES (1, '-2', 'Дубль-бемоль');
+INSERT INTO accidental (id, name, description) VALUES (2, '-1', 'Бемоль');
+INSERT INTO accidental (id, name, description) VALUES (3, '0', 'Бекар');
+INSERT INTO accidental (id, name, description) VALUES (4, '1', 'Диез');
+INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-диез');
+
+SELECT pg_catalog.setval('accidental_id_seq', 23, true);
+
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', false, true, false, false);
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (6, 'Энтропия словаря по Садовскому', NULL, NULL, 'CutLengthVocabularyEntropy', false, true, false, false);
