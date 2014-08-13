@@ -166,7 +166,7 @@
                     int linkId = linkIds[i];
 
                     string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    ICalculator calculator = CalculatorsFactory.Create(className);
+                    IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     Link link = (Link)db.link.Single(l => l.id == linkId).id;
 
                     for (int j = 0; j < chains.Length; j++)

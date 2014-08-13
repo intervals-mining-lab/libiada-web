@@ -84,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.matter.Select(m => new
+            return db.matter.OrderBy(m => m.name).Select(m => new
             {
                 Value = m.id, 
                 Text = m.name, 

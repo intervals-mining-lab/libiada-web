@@ -168,7 +168,7 @@
 
                         string className =
                             db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                        ICalculator calculator = CalculatorsFactory.Create(className);
+                        IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                         var link = (Link)db.link.Single(l => l.id == linkId).id;
                         characteristics.Last().Add(calculator.Calculate(tempChain, link));
                     }

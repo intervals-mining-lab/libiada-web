@@ -179,7 +179,7 @@
                     int linkId = linkIds[i];
 
                     string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    ICalculator calculator = CalculatorsFactory.Create(className);
+                    ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
                     Link link = (Link)db.link.Single(l => l.id == linkId).id;
                     List<long> chainElements = this.chainRepository.GetElementIds(chainId);
                     int calculated = db.congeneric_characteristic.Count(b => b.chain_id == chainId &&
@@ -240,14 +240,14 @@
                     {
 
                         theoreticalRanks[w].Add(new List<double>());
-                        ICalculator countCalculator = CalculatorsFactory.Create("Count");
+                        ICongenericCalculator countCalculator = CalculatorsFactory.CreateCongenericCalculator("Count");
                         var counts = new List<int>();
                         for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
                         {
                             counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                         }
 
-                        ICalculator frequencyCalculator = CalculatorsFactory.Create("Probability");
+                        ICongenericCalculator frequencyCalculator = CalculatorsFactory.CreateCongenericCalculator("Probability");
                         var frequency = new List<double>();
                         for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
                         {

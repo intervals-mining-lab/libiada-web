@@ -88,7 +88,7 @@
                 characteristicNames.Add(
                     db.characteristic_type.Single(charact => charact.id == characteristicId).name);
                 var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                var calculator = CalculatorsFactory.Create(className);
+                var calculator = CalculatorsFactory.CreateFullCalculator(className);
                 var link = (Link)db.link.Single(l => l.id == linkId).id;
 
                 characteristics.Add(calculator.Calculate(tempChain, link));
