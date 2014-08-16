@@ -1903,4 +1903,82 @@ INSERT INTO characteristic_type(name, description, class_name, linkable, full_ch
 INSERT INTO characteristic_type(name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Ассиметрия удалённости', 'Ассиметрия удалённостей однородных последовательностей относительно среднего значения', 'RemotenessAsymmetry', true, true, false, false); 
 
 
+-- 16.08.2014
+
+-- Добавлена таблица позиций генов.
+
+ALTER TABLE genes RENAME TO gene;
+
+ALTER TABLE gene DROP CONSTRAINT pk_genes;
+
+ALTER TABLE gene ADD CONSTRAINT pk_gene PRIMARY KEY(id);
+
+ALTER TABLE gene DROP CONSTRAINT fk_genes_chain_chain_key;
+
+ALTER TABLE gene ADD CONSTRAINT fk_gene_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED;
+
+ALTER TABLE gene DROP CONSTRAINT fk_genes_chain_key;
+
+ALTER TABLE gene ADD CONSTRAINT fk_gene_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE gene DROP CONSTRAINT fk_genes_piece_type;
+
+ALTER TABLE gene ADD CONSTRAINT fk_gene_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE gene DROP CONSTRAINT fk_genes_product;
+
+ALTER TABLE gene ADD CONSTRAINT fk_gene_product FOREIGN KEY (product_id) REFERENCES product (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE gene DROP CONSTRAINT uk_genes;
+
+ALTER TABLE gene ADD CONSTRAINT uk_gene UNIQUE(chain_id, piece_type_id, "position");
+
+DROP INDEX ix_genes_chain_id;
+
+CREATE INDEX ix_gene_chain_id ON gene USING btree (chain_id);
+COMMENT ON INDEX ix_gene_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
+
+  DROP INDEX ix_genes_id;
+
+CREATE INDEX ix_gene_id ON gene USING btree (id);
+COMMENT ON INDEX ix_gene_id IS 'Индекс id генов.';
+
+  DROP INDEX ix_genes_piece_type_id;
+
+CREATE INDEX ix_gene_piece_type_id ON gene USING btree (piece_type_id);
+COMMENT ON INDEX ix_gene_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
+
+   DROP TRIGGER tgiu_genes_modified ON gene;
+
+CREATE TRIGGER tgiu_gene_modified BEFORE INSERT OR UPDATE ON gene FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_gene_modified ON gene IS 'Тригер для вставки даты последнего изменения записи.';
+
+DROP TRIGGER tgiud_genes_chain_key_bound ON gene;
+
+CREATE TRIGGER tgiud_gene_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON gene FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+COMMENT ON TRIGGER tgiud_gene_chain_key_bound ON gene IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
+
+DROP TRIGGER tgu_genes_characteristics ON gene;
+
+CREATE TRIGGER tgu_gene_characteristics AFTER UPDATE ON gene FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_gene_characteristics ON gene IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
+
+CREATE TABLE part (
+	id			bigserial  NOT NULL,
+    gene_id     bigint NOT NULL,   
+    position    int NOT NULL,          
+    "length"    int NOT NULL          
+);
+
+ALTER TABLE ONLY part ADD CONSTRAINT pk_part PRIMARY KEY (id);
+
+ALTER TABLE ONLY part ADD CONSTRAINT uk_part UNIQUE (gene_id, position, "length");
+
+ALTER TABLE ONLY part ADD CONSTRAINT fk_part_gene FOREIGN KEY (gene_id) REFERENCES gene(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+ALTER TABLE gene DROP COLUMN "position";
+
+ALTER TABLE gene DROP COLUMN "length";
+
 COMMIT;
