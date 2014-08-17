@@ -1,4 +1,4 @@
---10.08.2014 23:10:54
+--17.08.2014 23:45:20
 BEGIN;
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
@@ -292,16 +292,23 @@ CREATE FUNCTION trigger_chain_key_insert() RETURNS trigger
 //plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
 //plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
 if (TG_OP == "INSERT"){
  var result = plv8.execute('SELECT count(*) = 1 result FROM chain WHERE id = $1', [NEW.id])[0].result;
  if (result){
   return NEW;
  }else{
-  plv8.elog(ERROR, 'Нельзя добавлять запись в ', TG_TABLE_NAME, ' без предварительного добавления записи в таблицу chain или её потомок. id = ', NEW.id);
+  var gene = plv8.execute('SELECT count(*) = 1 result FROM gene WHERE id = $1', [NEW.id])[0].result;
+  if (gene){
+   return NEW;
+  }else{
+   plv8.elog(ERROR, 'Нельзя добавлять запись в ', TG_TABLE_NAME, ' без предварительного добавления записи в таблицу chain или её потомок. id = ', NEW.id);
+  }
  }
 } else{
 	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операции добавления записей в таблице с полем id.');
-}$_$;
+}
+$_$;
 
 CREATE FUNCTION trigger_characteristics_link() RETURNS trigger
     LANGUAGE plv8
@@ -960,14 +967,12 @@ CREATE SEQUENCE fmotiv_type_id_seq
 
 ALTER SEQUENCE fmotiv_type_id_seq OWNED BY fmotiv_type.id;
 
-CREATE TABLE genes (
+CREATE TABLE gene (
     id bigint DEFAULT nextval('elements_id_seq'::regclass) NOT NULL,
     created timestamp with time zone DEFAULT now() NOT NULL,
     modified timestamp with time zone DEFAULT now() NOT NULL,
     chain_id bigint NOT NULL,
     piece_type_id integer NOT NULL,
-    "position" integer NOT NULL,
-    length integer NOT NULL,
     description text NOT NULL,
     web_api_id integer,
     complement boolean DEFAULT false NOT NULL,
@@ -975,31 +980,27 @@ CREATE TABLE genes (
     product_id integer
 );
 
-COMMENT ON TABLE genes IS 'Таблица с данными о расположении генов и других фрагменов в полном геноме.';
+COMMENT ON TABLE gene IS 'Таблица с данными о расположении генов и других фрагменов в полном геноме.';
 
-COMMENT ON COLUMN genes.id IS 'Уникальный внутренний идентификатор.';
+COMMENT ON COLUMN gene.id IS 'Уникальный внутренний идентификатор.';
 
-COMMENT ON COLUMN genes.created IS 'Дата создания.';
+COMMENT ON COLUMN gene.created IS 'Дата создания.';
 
-COMMENT ON COLUMN genes.modified IS 'Дата изменения.';
+COMMENT ON COLUMN gene.modified IS 'Дата изменения.';
 
-COMMENT ON COLUMN genes.chain_id IS 'Родительская цепочка.';
+COMMENT ON COLUMN gene.chain_id IS 'Родительская цепочка.';
 
-COMMENT ON COLUMN genes.piece_type_id IS 'Тип фрагмента.';
+COMMENT ON COLUMN gene.piece_type_id IS 'Тип фрагмента.';
 
-COMMENT ON COLUMN genes."position" IS 'Позиция начала фрагмента.';
+COMMENT ON COLUMN gene.description IS 'Описание фрагмента.';
 
-COMMENT ON COLUMN genes.length IS 'Длина фрагмента.';
+COMMENT ON COLUMN gene.web_api_id IS 'id в удалённой БД.';
 
-COMMENT ON COLUMN genes.description IS 'Описание фрагмента.';
+COMMENT ON COLUMN gene.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
 
-COMMENT ON COLUMN genes.web_api_id IS 'id в удалённой БД.';
+COMMENT ON COLUMN gene.partial IS 'Флаг указывающий на неполноту последовательности.';
 
-COMMENT ON COLUMN genes.complement IS 'Флаг комплементарности данной последовательности по отношению к полной.';
-
-COMMENT ON COLUMN genes.partial IS 'Флаг указывающий на неполноту последовательности.';
-
-COMMENT ON COLUMN genes.product_id IS 'Тип генетической последовательности.';
+COMMENT ON COLUMN gene.product_id IS 'Тип генетической последовательности.';
 
 CREATE TABLE instrument (
     id integer NOT NULL,
@@ -1339,6 +1340,32 @@ CREATE SEQUENCE note_symbol_id_seq
 
 ALTER SEQUENCE note_symbol_id_seq OWNED BY note_symbol.id;
 
+CREATE TABLE piece (
+    id bigint NOT NULL,
+    gene_id bigint NOT NULL,
+    start integer NOT NULL,
+    length integer NOT NULL
+);
+
+COMMENT ON TABLE piece IS 'Таблица с позициями фрагментов генов.';
+
+COMMENT ON COLUMN piece.id IS 'Уникальный внутренний идентификатор.';
+
+COMMENT ON COLUMN piece.gene_id IS 'Принадлежит гену.';
+
+COMMENT ON COLUMN piece.start IS 'Индекс начала фрагмента.';
+
+COMMENT ON COLUMN piece.length IS 'Длина фрагмента.';
+
+CREATE SEQUENCE piece_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+ALTER SEQUENCE piece_id_seq OWNED BY piece.id;
+
 CREATE TABLE piece_type (
     id integer NOT NULL,
     name character varying(100),
@@ -1601,6 +1628,8 @@ ALTER TABLE ONLY note ALTER COLUMN modified SET DEFAULT now();
 
 ALTER TABLE ONLY note_symbol ALTER COLUMN id SET DEFAULT nextval('note_symbol_id_seq'::regclass);
 
+ALTER TABLE ONLY piece ALTER COLUMN id SET DEFAULT nextval('piece_id_seq'::regclass);
+
 ALTER TABLE ONLY piece_type ALTER COLUMN id SET DEFAULT nextval('piece_type_id_seq'::regclass);
 
 ALTER TABLE ONLY pitch ALTER COLUMN id SET DEFAULT nextval('pitch_id_seq'::regclass);
@@ -1652,8 +1681,8 @@ ALTER TABLE ONLY fmotiv
 ALTER TABLE ONLY fmotiv_type
     ADD CONSTRAINT pk_fmotiv_type PRIMARY KEY (id);
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT pk_genes PRIMARY KEY (id);
+ALTER TABLE ONLY gene
+    ADD CONSTRAINT pk_gene PRIMARY KEY (id);
 
 ALTER TABLE ONLY instrument
     ADD CONSTRAINT pk_instrument PRIMARY KEY (id);
@@ -1687,6 +1716,9 @@ ALTER TABLE ONLY note
 
 ALTER TABLE ONLY note_symbol
     ADD CONSTRAINT pk_note_symbol PRIMARY KEY (id);
+
+ALTER TABLE ONLY piece
+    ADD CONSTRAINT pk_piece PRIMARY KEY (id);
 
 ALTER TABLE ONLY piece_type
     ADD CONSTRAINT pk_piece_type PRIMARY KEY (id);
@@ -1724,9 +1756,6 @@ ALTER TABLE ONLY element
 ALTER TABLE ONLY fmotiv_type
     ADD CONSTRAINT uk_fmotiv_type_name UNIQUE (name);
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT uk_genes UNIQUE (chain_id, piece_type_id, "position");
-
 ALTER TABLE ONLY instrument
     ADD CONSTRAINT uk_instrument_name UNIQUE (name);
 
@@ -1747,6 +1776,9 @@ ALTER TABLE ONLY notation
 
 ALTER TABLE ONLY note_symbol
     ADD CONSTRAINT uk_note_symbol_name UNIQUE (name);
+
+ALTER TABLE ONLY piece
+    ADD CONSTRAINT uk_piece UNIQUE (gene_id, start, length);
 
 ALTER TABLE ONLY piece_type
     ADD CONSTRAINT uk_piece_type UNIQUE (name);
@@ -1904,17 +1936,17 @@ CREATE INDEX ix_fmotiv_type_id ON fmotiv_type USING btree (id);
 
 CREATE INDEX ix_fmotiv_type_name ON fmotiv_type USING btree (name);
 
-CREATE INDEX ix_genes_chain_id ON genes USING btree (chain_id);
+CREATE INDEX ix_gene_chain_id ON gene USING btree (chain_id);
 
-COMMENT ON INDEX ix_genes_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
+COMMENT ON INDEX ix_gene_chain_id IS 'Индекс по цепочкам которым принадлежат цепчоки ДНК.';
 
-CREATE INDEX ix_genes_id ON genes USING btree (id);
+CREATE INDEX ix_gene_id ON gene USING btree (id);
 
-COMMENT ON INDEX ix_genes_id IS 'Индекс id генов.';
+COMMENT ON INDEX ix_gene_id IS 'Индекс id генов.';
 
-CREATE INDEX ix_genes_piece_type_id ON genes USING btree (piece_type_id);
+CREATE INDEX ix_gene_piece_type_id ON gene USING btree (piece_type_id);
 
-COMMENT ON INDEX ix_genes_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
+COMMENT ON INDEX ix_gene_piece_type_id IS 'Индекс по типу фрагмента цепочек ДНК.';
 
 CREATE INDEX ix_instrument_id ON instrument USING btree (id);
 
@@ -2158,9 +2190,9 @@ CREATE TRIGGER tgiu_fmotiv_modified BEFORE INSERT OR UPDATE ON fmotiv FOR EACH R
 
 COMMENT ON TRIGGER tgiu_fmotiv_modified ON fmotiv IS 'Тригер для вставки даты последнего изменения записи.';
 
-CREATE TRIGGER tgiu_genes_modified BEFORE INSERT OR UPDATE ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+CREATE TRIGGER tgiu_gene_modified BEFORE INSERT OR UPDATE ON gene FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
 
-COMMENT ON TRIGGER tgiu_genes_modified ON genes IS 'Тригер для вставки даты последнего изменения записи.';
+COMMENT ON TRIGGER tgiu_gene_modified ON gene IS 'Тригер для вставки даты последнего изменения записи.';
 
 CREATE TRIGGER tgiu_literature_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
 
@@ -2218,9 +2250,9 @@ CREATE TRIGGER tgiud_fmotiv_element_key_bound AFTER INSERT OR DELETE OR UPDATE O
 
 COMMENT ON TRIGGER tgiud_fmotiv_element_key_bound ON fmotiv IS 'Дублирует добавление, изменение и удаление записей в таблице fmotiv в таблицу element_key.';
 
-CREATE TRIGGER tgiud_genes_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON genes FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+CREATE TRIGGER tgiud_gene_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON gene FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
 
-COMMENT ON TRIGGER tgiud_genes_chain_key_bound ON genes IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
+COMMENT ON TRIGGER tgiud_gene_chain_key_bound ON gene IS 'Дублирует добавление, изменение и удаление записей в таблице genes в таблицу chain_key.';
 
 CREATE TRIGGER tgiud_literature_chain_chain_key_bound AFTER INSERT OR DELETE OR UPDATE OF id ON literature_chain FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
 
@@ -2258,9 +2290,9 @@ CREATE TRIGGER tgu_fmotiv_characteristics AFTER UPDATE ON fmotiv FOR EACH STATEM
 
 COMMENT ON TRIGGER tgu_fmotiv_characteristics ON fmotiv IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
 
-CREATE TRIGGER tgu_genes_characteristics AFTER UPDATE ON genes FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+CREATE TRIGGER tgu_gene_characteristics AFTER UPDATE ON gene FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 
-COMMENT ON TRIGGER tgu_genes_characteristics ON genes IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+COMMENT ON TRIGGER tgu_gene_characteristics ON gene IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
 
 CREATE TRIGGER tgu_literature_chain_characteristics AFTER UPDATE ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 
@@ -2373,17 +2405,17 @@ ALTER TABLE ONLY fmotiv
 ALTER TABLE ONLY fmotiv
     ADD CONSTRAINT fk_fmotiv_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db(id) ON UPDATE CASCADE;
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT fk_genes_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id) DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE ONLY gene
+    ADD CONSTRAINT fk_gene_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key(id) DEFERRABLE INITIALLY DEFERRED;
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT fk_genes_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key(id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY gene
+    ADD CONSTRAINT fk_gene_dna_chain FOREIGN KEY (chain_id) REFERENCES dna_chain(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT fk_genes_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY gene
+    ADD CONSTRAINT fk_gene_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type(id) ON UPDATE CASCADE;
 
-ALTER TABLE ONLY genes
-    ADD CONSTRAINT fk_genes_product FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE;
+ALTER TABLE ONLY gene
+    ADD CONSTRAINT fk_gene_product FOREIGN KEY (product_id) REFERENCES product(id) ON UPDATE CASCADE;
 
 ALTER TABLE ONLY literature_chain
     ADD CONSTRAINT fk_litarure_chain_translator FOREIGN KEY (translator_id) REFERENCES translator(id);
@@ -2454,6 +2486,9 @@ ALTER TABLE ONLY note
 ALTER TABLE ONLY note
     ADD CONSTRAINT fk_note_tie FOREIGN KEY (tie_id) REFERENCES tie(id) ON UPDATE CASCADE;
 
+ALTER TABLE ONLY piece
+    ADD CONSTRAINT fk_piece_gene FOREIGN KEY (gene_id) REFERENCES gene(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
 ALTER TABLE ONLY piece_type
     ADD CONSTRAINT fk_piece_type_nature FOREIGN KEY (nature_id) REFERENCES nature(id) ON UPDATE CASCADE;
 
@@ -2475,8 +2510,6 @@ ALTER TABLE ONLY product
 ALTER TABLE ONLY remote_db
     ADD CONSTRAINT fk_remote_db_nature FOREIGN KEY (nature_id) REFERENCES nature(id);
 
-SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
-
 INSERT INTO accidental (id, name, description) VALUES (1, '-2', 'Дубль-бемоль');
 INSERT INTO accidental (id, name, description) VALUES (2, '-1', 'Бемоль');
 INSERT INTO accidental (id, name, description) VALUES (3, '0', 'Бекар');
@@ -2484,6 +2517,8 @@ INSERT INTO accidental (id, name, description) VALUES (4, '1', 'Диез');
 INSERT INTO accidental (id, name, description) VALUES (5, '2', 'Дубль-диез');
 
 SELECT pg_catalog.setval('accidental_id_seq', 23, true);
+
+SELECT pg_catalog.setval('characteristic_group_id_seq', 1, false);
 
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (4, 'Количество элементов', NULL, NULL, 'Count', false, false, true, false);
 INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES (5, 'Длина обрезания по Садовскому', NULL, NULL, 'CutLength', false, true, false, false);
@@ -3023,6 +3058,7 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (440, 'uracil 
 INSERT INTO product (id, name, description, piece_type_id) VALUES (441, 'ATPase BadF/BadG/BcrA/BcrD type', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (442, 'FAD linked oxidase domain protein', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (443, 'cytochrome b subunit of formatedehydrogenase-like protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2045, 'Elongation factor Tu', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (444, 'multiple antibiotic resistance (MarC)-relatedprotein', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (445, 'acetylornithine deacetylase orsuccinyl-diaminopimelate desuccinylase', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (446, 'pyridoxamine 5''-phosphate oxidase', NULL, 4);
@@ -3136,6 +3172,7 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (553, 'topoiso
 INSERT INTO product (id, name, description, piece_type_id) VALUES (554, 'restriction endonuclease', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (555, 'type I restriction-modification system, Msubunit', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (556, 'anticodon nuclease', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2046, '50S ribosomal protein L3', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (557, 'restriction modification system DNA specificitydomain', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (558, 'type I site-specific deoxyribonuclease, HsdRfamily', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (559, 'Alpha/beta hydrolase fold-3 domain protein', NULL, 4);
@@ -3357,6 +3394,7 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (774, '6,7-dim
 INSERT INTO product (id, name, description, piece_type_id) VALUES (775, 'NusB antitermination factor', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (776, 'signal recognition particle-docking proteinFtsY', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (777, 'molybdate ABC transporter, inner membranesubunit', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2047, '50S ribosomal protein L23', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (778, 'molybdenum ABC transporter, periplasmicmolybdate-binding protein', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (779, 'WD-40 repeat protein', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (780, 'GtrA family protein', NULL, 4);
@@ -4339,6 +4377,7 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (1783, 'Ribonu
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1784, 'Dihydrolipoyl dehydrogenase', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1785, 'Soluble lytic murein transglycosylase-likeregulatory protein', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1786, 'transcriptional regulatory protein', NULL, 4);
+INSERT INTO product (id, name, description, piece_type_id) VALUES (2048, '30S ribosomal protein S19', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1787, 'Isopentenyl-diphosphate delta-isomerase', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1788, 'Lon protease', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (1789, 'Glycosyl transferase', NULL, 4);
@@ -4571,10 +4610,6 @@ INSERT INTO product (id, name, description, piece_type_id) VALUES (2041, 'Cold s
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2042, 'Muropeptide permease AmpG', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2043, 'Cell division protein FtsZ', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2044, 'tRNA/rRNA methyltransferase', NULL, 4);
-INSERT INTO product (id, name, description, piece_type_id) VALUES (2045, 'Elongation factor Tu', NULL, 4);
-INSERT INTO product (id, name, description, piece_type_id) VALUES (2046, '50S ribosomal protein L3', NULL, 4);
-INSERT INTO product (id, name, description, piece_type_id) VALUES (2047, '50S ribosomal protein L23', NULL, 4);
-INSERT INTO product (id, name, description, piece_type_id) VALUES (2048, '30S ribosomal protein S19', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2049, '30S ribosomal protein S3', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2050, '50S ribosomal protein L29', NULL, 4);
 INSERT INTO product (id, name, description, piece_type_id) VALUES (2051, '50S ribosomal protein L14', NULL, 4);
@@ -4919,6 +4954,8 @@ INSERT INTO remote_db (id, name, description, url, nature_id) VALUES (1, 'NCBI',
 
 SELECT pg_catalog.setval('remote_db_id_seq', 1, true);
 
+SELECT pg_catalog.setval('tie_id_seq', 1, false);
+
 INSERT INTO translator (id, name, description) VALUES (1, 'Google translate', 'http://translate.google.ru/');
 INSERT INTO translator (id, name, description) VALUES (2, 'PROMT (translate.ru)', 'http://www.translate.ru/');
 INSERT INTO translator (id, name, description) VALUES (3, 'InterTran', 'http://mrtranslate.ru/translators/intertran.html');
@@ -4926,4 +4963,4 @@ INSERT INTO translator (id, name, description) VALUES (3, 'InterTran', 'http://m
 SELECT pg_catalog.setval('translator_id_seq', 3, true);
 
 COMMIT;
---10.08.2014 23:10:54
+--17.08.2014 23:45:20
