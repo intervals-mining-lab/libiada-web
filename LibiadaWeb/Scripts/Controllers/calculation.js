@@ -1,5 +1,7 @@
 ﻿"use strict";
 
+var app = angular.module('Calculation', []);
+
 app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, filterFilter) {
 
     MapModelFromJson($scope, data);

@@ -9,10 +9,8 @@
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-    var app = angular.module('Calculation', []);
-
 </script>
-@Scripts.Render("~/bundles/controllers/calculation")
+
 @using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
 {
     <fieldset data-ng-controller="CalculationCtrl">
@@ -79,4 +77,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/calculation")
 }

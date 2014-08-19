@@ -1,4 +1,5 @@
-﻿@model matter
+﻿@using LibiadaWeb.Models
+@model matter
 
 @{
     ViewBag.Title = "Создание";
@@ -9,54 +10,15 @@
 @Html.ValidationMessage("Error")
 
 <script>
-    var app = angular.module('CreateMatter', []);
-
-    app.controller('CreateMatterCtrl', ['$scope', 'filterFilter', function($scope, filterFilter) {
-
-        var data = @Html.Raw(Json.Encode(ViewBag.data));
-
-        MapModelFromJson($scope, data);
-
-        $scope.original = false;
-        $scope.localFile = true;
-        $scope.languageId = $scope.languages[0].Value;
-        $scope.natureId = $scope.natures[0].Value;
-
-        var filterByNature = function() {
-            var arraysForFiltration = ["notations", "pieceTypes", "remoteDbs"];
-
-            arraysForFiltration.forEach(function(array)
-            {
-                FilterOptionsByNature($scope, filterFilter, array);
-            });
-
-            $scope.notationId = $scope.notationsFiltered[0].Value;
-            $scope.pieceTypeId = $scope.pieceTypesFiltered[0].Value;
-        };
-
-        $scope.$watch('natureId', filterByNature, true);
-
-        $scope.isGeneticChain = function() {
-            return $scope.natureGenetic == $scope.natureId;
-        };
-
-        $scope.isLiteratureChain = function() {
-            return $scope.natureLiterature == $scope.natureId;
-        };
-
-        $scope.isRemoteDbDefined = function() {
-            return $scope.remoteDbsFiltered.length > 0 && $scope.remoteDbId > 0;
-        };
-    }]);
-
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
 
-@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "CreateMatter" }))
+@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "MatterChainCreate" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" data-ng-controller="CreateMatterCtrl">
+    <div class="form-horizontal" data-ng-controller="MatterChainCreateCtrl">
         <h4>Объект</h4>
         <hr />
         @Html.ValidationSummary(true)
@@ -95,7 +57,7 @@
             @Html.LabelFor(model => model.nature_id, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
-                <input type="hidden" name="nature_id" value="{{natureId}}" />
+                <input type="hidden" name="nature_id" data-ng-value="natureId" />
                 @Html.ValidationMessageFor(model => model.nature_id)
             </div>
         </div>
@@ -104,7 +66,7 @@
             @Html.Label("Форма записи цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
-                <input type="hidden" name="notationId" value="{{notationId}}" />
+                <input type="hidden" name="notationId" data-ng-value="notationId" />
             </div>
         </div>
 
@@ -112,7 +74,7 @@
             @Html.Label("Тип цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
-                <input type="hidden" name="pieceTypeId" value="{{pieceTypeId}}" />
+                <input type="hidden" name="pieceTypeId" data-ng-value="pieceTypeId" />
             </div>
         </div>
 
@@ -120,7 +82,7 @@
             @Html.Label("Стороняя БД", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="remoteDbId" value="{{remoteDbId}}" />
+                <input type="hidden" name="remoteDbId" data-ng-value="remoteDbId" />
             </div>
         </div>
 
@@ -131,52 +93,58 @@
             </div>
         </div>
 
-        <div data-ng-show="isGeneticChain()">
-            <div class="form-group">
-                @Html.Label("Продукт последовательности", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
-                    <input type="hidden" name="productId" value="{{productId}}" />
+        <div data-ng-switch="natureId">
+            <div data-ng-switch-when="@Aliases.NatureGenetic">
+                <div class="form-group">
+                    @Html.Label("Продукт последовательности", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
+                        <input type="hidden" name="productId" data-ng-value="productId" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Неполная последовательность", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("partial")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Комплементарная цепочка", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("complement")
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.Label("Неполная последовательность", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("partial")
+            <div data-ng-switch-when="@Aliases.NatureLiterature">
+                <div class="form-group">
+                    @Html.Label("Язык литературного произведения", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
+                        <input type="hidden" name="languageId" data-ng-value="languageId" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Произведение является оригиналом, а не переводом", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("original")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Переводчик", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
+                        <input type="hidden" name="translatorId" data-ng-value="translatorId" />
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.Label("Комплементарная цепочка", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("complement")
-                </div>
-            </div>
-        </div>
+            <div data-ng-switch-when="@Aliases.NatureMusic">
 
-        <div data-ng-show="isLiteratureChain()">
-            <div class="form-group">
-                @Html.Label("Язык литературного произведения", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
-                    <input type="hidden" name="languageId" value="{{languageId}}" />
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Произведение является оригиналом, а не переводом", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("original")
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.Label("Переводчик", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorId" value="{{translatorId}}" />
-                </div>
             </div>
         </div>
 
@@ -196,4 +164,5 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/matterChainCreate")
 }

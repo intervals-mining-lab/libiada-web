@@ -74,7 +74,9 @@ function AddDataTablesWithSubmit(name) {
 }
 
 function FilterOptionsByNature($scope, filterFilter, arrayName) {
-    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.natureId });
+    if (angular.isDefined($scope[arrayName])) {
+        $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.natureId });
+    }
 }
 
 function MapModelFromJson($scope, data) {

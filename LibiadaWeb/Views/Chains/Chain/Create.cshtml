@@ -1,4 +1,5 @@
-﻿@model chain
+﻿@using LibiadaWeb.Models
+@model chain
 
 @{
     ViewBag.Title = "Создание цепочки";
@@ -9,58 +10,18 @@
 @Html.ValidationMessage("Error")
 
 <script>
-    var app = angular.module('CreateChain', []);
-
-    app.controller('CreateChainCtrl', [
-        '$scope', 'filterFilter', function($scope, filterFilter) {
-
-            var data = @Html.Raw(Json.Encode(ViewBag.data));
-
-            MapModelFromJson($scope, data);
-
-            $scope.original = false;
-            $scope.localFile = true;
-            $scope.languageId = $scope.languages[0].Value;
-            $scope.natureId = $scope.natures[0].Value;
-
-            var filterByNature = function() {
-                var arraysForFiltration = ["notations", "pieceTypes", "remoteDbs", "matters"];
-
-                arraysForFiltration.forEach(function(array) {
-                    FilterOptionsByNature($scope, filterFilter, array);
-                });
-
-                $scope.notationId = $scope.notationsFiltered[0].Value;
-                $scope.pieceTypeId = $scope.pieceTypesFiltered[0].Value;
-                $scope.matterId = $scope.mattersFiltered[0].Value;
-            };
-
-            $scope.$watch('natureId', filterByNature, true);
-
-            $scope.isLiteratureChain = function() {
-                return $scope.natureLiterature == $scope.natureId;
-            };
-
-            $scope.isGeneticChain = function() {
-                return $scope.natureGenetic == $scope.natureId;
-            };
-
-            $scope.isRemoteDbDefined = function() {
-                return $scope.remoteDbsFiltered.length > 0 && $scope.remoteDbId > 0;
-            };
-        }
-    ]);
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "CreateChain" }))
+@using (Html.BeginForm("Create", "Chain", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "MatterChainCreate" }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" data-ng-controller="CreateChainCtrl">
+    <div class="form-horizontal" data-ng-controller="MatterChainCreateCtrl">
         <h4>Цепочка</h4>
         <hr />
         @Html.ValidationSummary(true)
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.matter.nature_id, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -68,16 +29,16 @@
                 @Html.ValidationMessageFor(model => model.matter.nature_id)
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.matter_id, "matter_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="matterId" data-ng-options="m.Value as m.Text for m in mattersFiltered"></select>
-                <input type="hidden" name="matter_id" value="{{matterId}}" />
+                <input type="hidden" name="matter_id" data-ng-value="matterId" />
                 @Html.ValidationMessageFor(model => model.matter_id)
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -85,14 +46,14 @@
                 @Html.ValidationMessageFor(model => model.description)
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
             </div>
         </div>
-        
+
         <div class="form-group" data-ng-show="localFile">
             @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -104,7 +65,7 @@
             @Html.LabelFor(model => model.notation_id, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
-                <input type="hidden" name="notation_id" value="{{notationId}}" />
+                <input type="hidden" name="notation_id" data-ng-value="notationId" />
                 @Html.ValidationMessageFor(model => model.notation_id)
             </div>
         </div>
@@ -121,7 +82,7 @@
             @Html.LabelFor(model => model.piece_type_id, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
-                <input type="hidden" name="piece_type_id" value="{{pieceTypeId}}" />
+                <input type="hidden" name="piece_type_id" data-ng-value="pieceTypeId" />
                 @Html.ValidationMessageFor(model => model.piece_type_id)
             </div>
         </div>
@@ -130,7 +91,7 @@
             @Html.LabelFor(model => model.remote_db_id, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="remote_db_id" value="{{remoteDbId}}" />
+                <input type="hidden" name="remote_db_id" data-ng-value="remoteDbId" />
                 @Html.ValidationMessageFor(model => model.remote_db_id)
             </div>
         </div>
@@ -143,52 +104,58 @@
             </div>
         </div>
 
-        <div data-ng-show="isGeneticChain()">
-            <div class="form-group">
-                @Html.Label("Продукт последовательности", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
-                    <input type="hidden" name="productId" value="{{productId}}" />
+        <div data-ng-switch="natureId">
+            <div data-ng-switch-when="@Aliases.NatureGenetic">
+                <div class="form-group">
+                    @Html.Label("Продукт последовательности", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
+                        <input type="hidden" name="productId" data-ng-value="productId" />
+                    </div>
                 </div>
-            </div>
-            
-            <div class="form-group">
-                @Html.Label("Неполная последовательность", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("partial")
-                </div>
-            </div>
-            
-            <div class="form-group">
-                @Html.Label("Комплементарная цепочка", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("complement")
-                </div>
-            </div>
-        </div>
 
-        <div data-ng-show="isLiteratureChain()">
-            <div class="form-group">
-                @Html.Label("Язык литературного произведения", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
-                    <input type="hidden" name="languageId" value="{{languageId}}" />
+                <div class="form-group">
+                    @Html.Label("Неполная последовательность", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("partial")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Комплементарная цепочка", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("complement")
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                @Html.Label("Произведение является оригиналом, а не переводом", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.CheckBox("original")
+            <div data-ng-switch-when="@Aliases.NatureLiterature">
+                <div class="form-group">
+                    @Html.Label("Язык литературного произведения", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
+                        <input type="hidden" name="languageId" data-ng-value="languageId" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Произведение является оригиналом, а не переводом", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.CheckBox("original")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("Переводчик", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
+                        <input type="hidden" name="translatorId" data-ng-value="translatorId" />
+                    </div>
                 </div>
             </div>
-            
-            <div class="form-group">
-                @Html.Label("Переводчик", new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorId" value="{{translatorId}}" />
-                </div>
+
+            <div data-ng-switch-when="@Aliases.NatureMusic">
+
             </div>
         </div>
 
@@ -208,4 +175,5 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/matterChainCreate")
 }
