@@ -81,7 +81,7 @@
             <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
             <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value" />
 
-            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
+            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
             <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value" />
 
             <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>

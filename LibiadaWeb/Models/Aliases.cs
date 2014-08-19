@@ -267,6 +267,12 @@
         /// The piece type non coding sequence.
         /// </summary>
         public const int PieceTypeNonCodingSequence = 14;
+
+        /// <summary>
+        /// The piece type chloroplast genome.
+        /// </summary>
+        public const int PieceTypeChloroplastGenome = 15;
+
         #endregion
 
         #region RemoteDb

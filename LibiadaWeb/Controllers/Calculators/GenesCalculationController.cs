@@ -92,13 +92,16 @@
             var notationIds = db.notation.Where(n => n.nature_id == Aliases.NatureGenetic).Select(n => n.id).ToList();
 
             var pieceTypeIds =
-                db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic && p.id != Aliases.PieceTypeFullGenome).Select(p => p.id);
+                db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
+                                         && p.id != Aliases.PieceTypeFullGenome 
+                                         && p.id != Aliases.PieceTypeChloroplastGenome 
+                                         && p.id != Aliases.PieceTypeMitochondrionGenome).Select(p => p.id);
 
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", this.notationRepository.GetSelectListWithNature(notationIds) }, 
+                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.NatureGenetic), "id", "name") }, 
                     { "links", new SelectList(db.link, "id", "name") }, 
                     { "matterCheckBoxes", this.matterRepository.GetSelectListItems(matters, null) }, 
                     { "pieceTypesCheckBoxes", this.pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
