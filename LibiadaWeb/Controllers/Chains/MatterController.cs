@@ -196,12 +196,12 @@
             int? remoteDbId,
             string remoteId,
             bool localFile,
-            int languageId,
-            bool original,
+            int? languageId,
+            bool? original,
             int? translatorId,
             int? productId,
-            bool partial,
-            bool complement)
+            bool? partial,
+            bool? complement)
         {
             if (this.ModelState.IsValid)
             {
@@ -277,7 +277,7 @@
                             };
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
-                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, complement, partial, alphabet, libiadaChain.Building);
+                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
                             var doc = new XmlDocument();
@@ -322,8 +322,8 @@
 
                             literatureChainRepository.Insert(
                                 literatureChain,
-                                original,
-                                languageId,
+                                (bool)original,
+                                (int)languageId,
                                 translatorId,
                                 alphabet,
                                 libiadaChain.Building);

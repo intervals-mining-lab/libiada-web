@@ -56,7 +56,6 @@ namespace LibiadaWeb.Models.Repositories
                 link_id = linkId, 
                 first_element_id = firstElementId, 
                 second_element_id = secondElementId, 
-                created = DateTime.Now, 
                 value = value, 
                 value_string = value.ToString()
             };

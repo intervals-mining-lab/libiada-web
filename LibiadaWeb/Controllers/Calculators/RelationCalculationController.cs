@@ -154,7 +154,7 @@
             Chain currentChain = this.chainRepository.ToLibiadaChain(dbChain.id);
             string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
-            IBinaryCalculator calculator = BinaryCalculatorsFactory.Create(className);
+            IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(className);
             Link link = (Link)linkId;
 
             if (oneWord)
@@ -306,11 +306,7 @@
                                                       b.second_element_id == secondElementId &&
                                                       b.link_id == linkId))
                     {
-                        double result = calculator.Calculate(
-                            currentChain, 
-                            currentChain.Alphabet[firstElementNumber], 
-                            currentChain.Alphabet[i], 
-                            link);
+                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
 
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id, 
@@ -340,11 +336,7 @@
                                                       b.second_element_id == wordId &&
                                                       b.link_id == linkId))
                     {
-                        double result = calculator.Calculate(
-                            currentChain, 
-                            currentChain.Alphabet[secondElementNumber - 1], 
-                            currentChain.Alphabet[i], 
-                            link);
+                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id, 
                             characteristicId, 
@@ -407,11 +399,8 @@
                                                           b.second_element_id == secondElementId &&
                                                           b.link_id == linkId))
                         {
-                            double result = calculator.Calculate(
-                                currentChain, 
-                                currentChain.Alphabet[i], 
-                                currentChain.Alphabet[j], 
-                                link);
+                            double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
+
                             this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
                                 dbChain.id, 
                                 characteristicId, 
@@ -491,11 +480,8 @@
                                                       b.second_element_id == secondElementId &&
                                                       b.link_id == linkId))
                     {
-                        double result = calculator.Calculate(
-                            currentChain, 
-                            currentChain.Alphabet[i], 
-                            currentChain.Alphabet[j], 
-                            link);
+                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
+
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id, 
                             characteristicId, 
