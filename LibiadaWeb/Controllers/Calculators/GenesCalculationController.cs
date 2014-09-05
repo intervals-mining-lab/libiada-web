@@ -35,16 +35,6 @@
         private readonly CharacteristicTypeRepository characteristicRepository;
 
         /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
-        /// The link repository.
-        /// </summary>
-        private readonly LinkRepository linkRepository;
-
-        /// <summary>
         /// The chain repository.
         /// </summary>
         private readonly ChainRepository chainRepository;
@@ -62,8 +52,6 @@
             db = new LibiadaWebEntities();
             this.matterRepository = new MatterRepository(db);
             this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.notationRepository = new NotationRepository(db);
-            this.linkRepository = new LinkRepository(db);
             this.chainRepository = new ChainRepository(db);
             this.pieceTypeRepository = new PieceTypeRepository(db);
         }
@@ -77,19 +65,15 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            IEnumerable<long> matterIds =
-                db.dna_chain.Where(c => c.notation_id == Aliases.NotationNucleotide).Select(c => c.matter_id);
-            IEnumerable<long> filterdMatterIds = matterIds.GroupBy(s => s).SelectMany(g => g.Skip(1));
+            IEnumerable<long> matterIds = db.dna_chain.Where(c => c.notation_id == Aliases.NotationNucleotide).Select(c => c.matter_id);
+            IEnumerable<long> filteredMatterIds = matterIds.GroupBy(s => s).SelectMany(g => g.Skip(1));
 
             List<matter> matters = db.matter.ToList();
-            matters = matters.Where(m => filterdMatterIds.Contains(m.id)).ToList();
+            matters = matters.Where(m => filteredMatterIds.Contains(m.id)).ToList();
 
-            IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
+            IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
 
             var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
-
-            var notationIds = db.notation.Where(n => n.nature_id == Aliases.NatureGenetic).Select(n => n.id).ToList();
 
             var pieceTypeIds =
                 db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
@@ -145,6 +129,7 @@
             var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
             var chainNames = new List<string>();
             var chainsProduct = new List<List<string>>();
+            var chainsPosition = new List<List<long>>();
             var chainsPieceTypes = new List<List<string>>();
             var characteristicNames = new List<string>();
 
@@ -154,12 +139,13 @@
                 long matterId = matterIds[w];
                 chainNames.Add(db.matter.Single(m => m.id == matterId).name);
                 chainsProduct.Add(new List<string>());
+                chainsPosition.Add(new List<long>());
                 chainsPieceTypes.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
                 var chains = db.dna_chain.Where(c => c.matter_id == matterId &&
-                        pieceTypeIds.Contains(c.piece_type_id) &&
-                        notationIds.Contains(c.notation_id)).ToArray();
+                                                     pieceTypeIds.Contains(c.piece_type_id) &&
+                                                     notationIds.Contains(c.notation_id)).OrderBy(c => c.piece_position).ToArray();
 
                 // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                 for (int i = 0; i < characteristicIds.Length; i++)
@@ -207,22 +193,15 @@
                                     b.characteristic_type_id == characteristicId &&
                                     b.link_id == linkId).value;
 
-                        characteristics.Last().Last().Add(
-                            new KeyValuePair<int, double>(d, (double)characteristic));
+                        characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
                         if (i == 0)
                         {
                             var productId = chains[d].product_id;
                             var pieceTypeId = chains[d].piece_type_id;
 
-                            if (productId == null)
-                            {
-                                chainsProduct.Last().Add(string.Empty);
-                            }
-                            else
-                            {
-                                chainsProduct.Last().Add(db.product.Single(p => productId == p.id).name);
-                            }
+                            chainsProduct.Last().Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
+                            chainsPosition.Last().Add(chains[d].piece_position);
 
                             chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
                         }
@@ -256,6 +235,7 @@
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
                                          { "chainsProduct", chainsProduct }, 
+                                         { "chainsPosition", chainsPosition }, 
                                          { "chainsPieceTypes", chainsPieceTypes }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "matterIds", matterIds }
@@ -310,6 +290,7 @@
                 ViewBag.characteristics = result["characteristics"];
                 ViewBag.chainNames = result["chainNames"];
                 ViewBag.chainsProduct = result["chainsProduct"];
+                ViewBag.chainsPosition = result["chainsPosition"];  
                 ViewBag.chainsPieceTypes = result["chainsPieceTypes"];
                 ViewBag.characteristicNames = characteristicNames;
 

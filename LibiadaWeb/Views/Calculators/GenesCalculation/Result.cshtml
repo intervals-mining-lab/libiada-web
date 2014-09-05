@@ -292,6 +292,9 @@
                 <th>
                     Продукт гена
                 </th>
+                <th>
+                    Позиция гена
+                </th>
                 @foreach (var characteristicName in ViewBag.characteristicNames)
                 {
                     <th>
@@ -309,6 +312,9 @@
                     </td>
                     <td id="chainNameCell">
                         @ViewBag.chainsProduct[d][i]
+                    </td>
+                    <td>
+                        @ViewBag.chainsPosition[d][i]
                     </td>
                     @foreach (var characteristic in ViewBag.characteristics[d])
                     {
