@@ -100,7 +100,7 @@
                 TempData["message"] = "объекта с заголовком " + fastaHeader + " не существует";
                 return RedirectToAction("Result");
             }
-            BaseChain dataBaseChain = chainRepository.ToLBaseChain(chainId);
+            BaseChain dataBaseChain = chainRepository.ToLibiadaBaseChain(chainId);
             if (dataBaseChain.Equals(libiadaChain))
             {
                 TempData["message"] = "Цепочки в БД и в файле идентичны";

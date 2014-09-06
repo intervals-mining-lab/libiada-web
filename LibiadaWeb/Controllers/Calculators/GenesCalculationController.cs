@@ -2,17 +2,21 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
+
+    using Microsoft.Ajax.Utilities;
 
     /// <summary>
     /// The genes calculation controller.
@@ -65,11 +69,11 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            IEnumerable<long> matterIds = db.dna_chain.Where(c => c.notation_id == Aliases.NotationNucleotide).Select(c => c.matter_id);
-            IEnumerable<long> filteredMatterIds = matterIds.GroupBy(s => s).SelectMany(g => g.Skip(1));
+            var chainIds = db.gene.Select(g => g.chain_id).Distinct().ToList();
+            var chains = db.dna_chain.Where(c => chainIds.Contains(c.id));
+                var matterIds = chains.Select(c => c.matter_id);
 
-            List<matter> matters = db.matter.ToList();
-            matters = matters.Where(m => filteredMatterIds.Contains(m.id)).ToList();
+            List<matter> matters = db.matter.Where(m => matterIds.Contains(m.id)).ToList();
 
             IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
 
@@ -143,9 +147,32 @@
                 chainsPieceTypes.Add(new List<string>());
                 characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                var chains = db.dna_chain.Where(c => c.matter_id == matterId &&
-                                                     pieceTypeIds.Contains(c.piece_type_id) &&
-                                                     notationIds.Contains(c.notation_id)).OrderBy(c => c.piece_position).ToArray();
+                var notationId = notationIds[w];
+
+                var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+
+                var genes = db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
+
+               // var pieces = db.piece.Where()
+
+                var pieces = genes.Select(g => g.piece).First().ToList();
+
+                var starts = pieces.Select(p => p.start).ToList();
+
+                var stops = pieces.Select(p => p.start + p.length).ToList();
+
+                BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
+
+                var iterator = new DefaultCutRule(starts, stops);
+
+                var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
+
+                var chains = new List<Chain>();
+
+                for (int i = 0; i < stringChains.Count; i++)
+                {
+                    chains.Add(new Chain(stringChains[i]));
+                }
 
                 // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                 for (int i = 0; i < characteristicIds.Length; i++)
@@ -158,19 +185,15 @@
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     Link link = (Link)db.link.Single(l => l.id == linkId).id;
 
-                    for (int j = 0; j < chains.Length; j++)
+                    for (int j = 0; j < chains.Count; j++)
                     {
-                        long chainId = chains[j].id;
+                        long geneId = genes[j].id;
 
-                        Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
-                        libiadaChain.FillIntervalManagers();
-
-                        if (!db.characteristic.Any(b =>
-                                                        b.chain_id == chainId &&
+                        if (!db.characteristic.Any(b => b.chain_id == geneId &&
                                                         b.characteristic_type_id == characteristicId &&
                                                         b.link_id == linkId))
                         {
-                            double value = calculator.Calculate(libiadaChain, link);
+                            double value = calculator.Calculate(chains[i], link);
                             var currentCharacteristic = new characteristic
                             {
                                 chain_id = chainId,
@@ -185,11 +208,11 @@
                         }
                     }
 
-                    for (int d = 0; d < chains.Length; d++)
+                    for (int d = 0; d < chains.Count; d++)
                     {
-                        long chainId = chains[d].id;
+                        long geneId = genes[d].id;
                         double? characteristic = db.characteristic.Single(b =>
-                                    b.chain_id == chainId &&
+                                    b.chain_id == geneId &&
                                     b.characteristic_type_id == characteristicId &&
                                     b.link_id == linkId).value;
 
@@ -197,11 +220,11 @@
 
                         if (i == 0)
                         {
-                            var productId = chains[d].product_id;
-                            var pieceTypeId = chains[d].piece_type_id;
+                            var productId = genes[d].product_id;
+                            var pieceTypeId = genes[d].piece_type_id;
 
                             chainsProduct.Last().Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
-                            chainsPosition.Last().Add(chains[d].piece_position);
+                            chainsPosition.Last().Add(pieces[d].start);
 
                             chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
                         }

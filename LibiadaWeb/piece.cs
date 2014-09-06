@@ -12,19 +12,13 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class link
+    public partial class piece
     {
-        public link()
-        {
-            this.binary_characteristic = new HashSet<binary_characteristic>();
-            this.characteristic = new HashSet<characteristic>();
-        }
+        public long id { get; set; }
+        public long gene_id { get; set; }
+        public int start { get; set; }
+        public int length { get; set; }
     
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-    
-        public virtual ICollection<binary_characteristic> binary_characteristic { get; set; }
-        public virtual ICollection<characteristic> characteristic { get; set; }
+        public virtual gene gene { get; set; }
     }
 }

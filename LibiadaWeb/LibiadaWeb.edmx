@@ -99,7 +99,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="modified" Type="timestamptz" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
@@ -1632,7 +1632,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
           <Property Name="created" Type="DateTimeOffset" Precision="7" />
           <Property Name="modified" Type="DateTimeOffset" Precision="7" />
           <Property Name="chain_id" Type="Int64" Nullable="false" />

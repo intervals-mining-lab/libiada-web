@@ -119,7 +119,7 @@
                 dataBaseChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
             }
 
-            BaseChain libiadaChain = chainRepository.ToLBaseChain(dataBaseChain.id);
+            BaseChain libiadaChain = chainRepository.ToLibiadaBaseChain(dataBaseChain.id);
             for (int i = 0; i < mixes; i++)
             {
                 int firstIndex = rndGenerator.Next(libiadaChain.GetLength());

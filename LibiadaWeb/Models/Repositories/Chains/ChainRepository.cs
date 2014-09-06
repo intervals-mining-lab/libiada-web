@@ -192,7 +192,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="BaseChain"/>.
         /// </returns>
-        public BaseChain ToLBaseChain(long chainId)
+        public BaseChain ToLibiadaBaseChain(long chainId)
         {
             return new BaseChain(this.GetBuilding(chainId), GetAlphabet(chainId));
         }

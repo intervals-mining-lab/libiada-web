@@ -286,6 +286,9 @@
     <Compile Include="fmotiv_type.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="gene.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -376,6 +379,9 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="note_symbol.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="piece.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="piece_type.cs">

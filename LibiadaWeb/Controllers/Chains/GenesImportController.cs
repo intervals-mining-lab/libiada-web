@@ -8,9 +8,6 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.SimpleTypes;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Chains;
@@ -126,12 +123,11 @@
             var starts = new List<int>();
             var stops = new List<int> { 0 };
 
-            string stringParentChain = chainRepository.ToLBaseChain(chainId).ToString();
+            string stringParentChain = chainRepository.ToLibiadaBaseChain(chainId).ToString();
 
-            var existingChainsPositions = db.dna_chain.Where(c => c.matter_id == parentChain.matter_id 
-                                                            && c.notation_id == parentChain.notation_id 
-                                                            && c.piece_type_id != Aliases.PieceTypeFullGenome)
-                .Select(c => c.piece_position).ToArray();
+            var existingGenes = db.gene.Where(g => g.chain_id == parentChain.id).Select(g => g.id);
+
+            var existingChainsPositions = db.piece.Where(p => existingGenes.Contains(p.gene_id)).Select(p => p.start);
             var products = db.product.ToList();
 
             for (int i = 1; i < genes.Length; i++)
@@ -144,10 +140,8 @@
                                        new[] { "complement" },
                                        StringSplitOptions.RemoveEmptyEntries)[0]
                                    : temp2[0];
-                string stringStart =
-                    temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[0];
-                string stringStop =
-                    temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
+                string stringStart = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[0];
+                string stringStop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
                 starts.Add(Convert.ToInt32(stringStart) - 1);
                 stops.Add(Convert.ToInt32(stringStop) - 1);
 
@@ -233,101 +227,84 @@
                         throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                     }
 
-                    string currentStringChain = stringParentChain.Substring(
-                        starts.Last(),
-                        stops.Last() - starts.Last());
-                    var currentLibiadaChain = new BaseChain(currentStringChain);
+                    //string currentStringChain = stringParentChain.Substring(starts.Last(), stops.Last() - starts.Last());
 
-                    if (complement)
-                    {
-                        Alphabet complementAlphabet = dnaChainRepository.CreateComplementAlphabet(currentLibiadaChain.Alphabet);
-                        currentLibiadaChain = new BaseChain(currentLibiadaChain.Building, complementAlphabet);
-                    }
-
-                    var resultChain = new chain
-                                          {
-                                              notation_id = parentChain.notation_id,
-                                              matter_id = parentChain.matter_id,
-                                              description = description,
-                                              dissimilar = false,
-                                              piece_type_id = pieceTypeId,
-                                              piece_position = starts.Last()
-                                          };
-
-                    int productId;
+                    product dbProduct;
 
                     if (products.Any(p => p.name.Equals(product)))
                     {
-                        productId = products.Single(p => p.name.Equals(product)).id;
+                        dbProduct = products.Single(p => p.name.Equals(product));
                     }
                     else
                     {
-                        var newProduct = new product { name = product, piece_type_id = pieceTypeId };
-                        db.product.Add(newProduct);
-                        db.SaveChanges();
-                        products.Add(newProduct);
-                        productId = newProduct.id;
+                        dbProduct = new product { name = product, piece_type_id = pieceTypeId };
+                        db.product.Add(dbProduct);
+                        //db.SaveChanges();
+                        products.Add(dbProduct);
                     }
 
-                    long[] alphabet = elementRepository.ToDbElements(
-                        currentLibiadaChain.Alphabet,
-                        parentChain.notation_id,
-                        false);
-                    dnaChainRepository.Insert(
-                        resultChain,
-                        null,
-                        null,
-                        productId,
-                        complement,
-                        false,
-                        alphabet,
-                        currentLibiadaChain.Building);
+                    var gene = new gene
+                    {
+                        id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        chain_id = parentChain.id,
+                        description = description,
+                        piece_type_id = pieceTypeId,
+                        complement = complement,
+                        partial = false,
+                        product = dbProduct
+                    };
 
+                    db.gene.Add(gene);
+
+                    var piece = new piece
+                    {
+                        gene = gene,
+                        start = starts.Last(),
+                        length = stops.Last() - starts.Last()
+                    };
+
+                    db.piece.Add(piece);
                 }
             }
 
             starts.Add(stringParentChain.Length);
+
+            db.SaveChanges();
 
             for (int j = 0; j < stops.Count; j++)
             {
                 int stop = stops[j];
                 if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
                 {
-                    string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
-                    var currentLibiadaChain = new BaseChain(currentStringChain);
-                    var resultChain = new chain
-                                          {
-                                              notation_id = parentChain.notation_id,
-                                              matter_id = parentChain.matter_id,
-                                              description = "Non coding sequence from " + stops[j],
-                                              dissimilar = false,
-                                              piece_type_id = Aliases.PieceTypeNonCodingSequence,
-                                              piece_position = stops[j]
-                                          };
+                    //string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
+                    //var currentLibiadaChain = new BaseChain(currentStringChain);
+                    var gene = new gene
+                    {
+                        id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        chain_id = parentChain.id,
+                        description = string.Empty,
+                        piece_type_id = Aliases.PieceTypeNonCodingSequence,
+                        complement = false,
+                        partial = false
+                    };
 
-                    long[] alphabet = elementRepository.ToDbElements(
-                        currentLibiadaChain.Alphabet,
-                        parentChain.notation_id,
-                        false);
+                    db.gene.Add(gene);
 
-                    dnaChainRepository.Insert(
-                        resultChain,
-                        null,
-                        null,
-                        null,
-                        false,
-                        false,
-                        alphabet,
-                        currentLibiadaChain.Building);
+                    var piece = new piece
+                    {
+                        gene = gene,
+                        start = stops[j],
+                        length = starts[j] - stops[j]
+                    };
+
+                    db.piece.Add(piece);
                 }
             }
 
+            db.SaveChanges();
+
             return RedirectToAction("Index", "Home");
         }
-
-        
-
-        
 
         /// <summary>
         /// The get value.
@@ -375,9 +352,7 @@
             {
                 if (strings[i].Contains(pattern))
                 {
-                    result += strings[i].Substring(
-                        strings[i].IndexOf(pattern) + pattern.Length,
-                        strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length);
+                    result += strings[i].Substring(strings[i].IndexOf(pattern) + pattern.Length, strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length);
 
                     if (!strings[i].EndsWith(endPattern))
                     {

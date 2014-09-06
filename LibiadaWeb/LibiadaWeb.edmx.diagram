@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c4b0e02522424fdaa36b3bd5e9b375a7" Name="Diagram1" ZoomLevel="39" >
+      <Diagram DiagramId="c4b0e02522424fdaa36b3bd5e9b375a7" Name="Diagram1" ZoomLevel="85" >
         <EntityTypeShape EntityType="LibiadaWebModel.matter" Width="1.5" PointX="11.125" PointY="1.625" />
         <EntityTypeShape EntityType="LibiadaWebModel.nature" Width="1.5" PointX="7.75" PointY="1.625" />
         <AssociationConnector Association="LibiadaWebModel.fk_matter_nature" />
@@ -99,6 +99,12 @@
         <AssociationConnector Association="LibiadaWebModel.fk_note_tie" />
         <EntityTypeShape EntityType="LibiadaWebModel.translator" Width="1.5" PointX="9.25" PointY="15" />
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_translator" />
+        <EntityTypeShape EntityType="LibiadaWebModel.gene" Width="1.5" PointX="26.375" PointY="2.625" />
+        <AssociationConnector Association="LibiadaWebModel.fk_gene_dna_chain" />
+        <AssociationConnector Association="LibiadaWebModel.fk_gene_product" />
+        <AssociationConnector Association="LibiadaWebModel.fk_gene_piece_type" />
+        <EntityTypeShape EntityType="LibiadaWebModel.piece" Width="1.5" PointX="28.75" PointY="8" />
+        <AssociationConnector Association="LibiadaWebModel.fk_piece_gene" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
