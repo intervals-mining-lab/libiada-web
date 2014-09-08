@@ -153,8 +153,6 @@
 
                 var genes = db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
 
-               // var pieces = db.piece.Where()
-
                 var pieces = genes.Select(g => g.piece).First().ToList();
 
                 var starts = pieces.Select(p => p.start).ToList();
@@ -196,7 +194,7 @@
                             double value = calculator.Calculate(chains[i], link);
                             var currentCharacteristic = new characteristic
                             {
-                                chain_id = chainId,
+                                chain_id = geneId,
                                 characteristic_type_id = characteristicId,
                                 link_id = linkId,
                                 value = value,
