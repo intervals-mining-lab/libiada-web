@@ -153,7 +153,7 @@
 
                 var genes = db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
 
-                var pieces = genes.Select(g => g.piece).First().ToList();
+                var pieces = genes.Select(g => g.piece.First()).ToList();
 
                 var starts = pieces.Select(p => p.start).ToList();
 
