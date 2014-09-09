@@ -219,14 +219,14 @@
         public const int PieceTypeCodingSequence = 4;
 
         /// <summary>
-        /// The piece type trna.
-        /// </summary>
-        public const int PieceTypeTRNA = 5;
-
-        /// <summary>
         /// The piece type rrna.
         /// </summary>
-        public const int PieceTypeRRNA = 6;
+        public const int PieceTypeRRNA = 5;
+
+        /// <summary>
+        /// The piece type trna.
+        /// </summary>
+        public const int PieceTypeTRNA = 6;
 
         /// <summary>
         /// The piece type ncrna.
