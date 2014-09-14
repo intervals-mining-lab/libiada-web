@@ -155,22 +155,7 @@
 
                 var pieces = genes.Select(g => g.piece.First()).ToList();
 
-                var starts = pieces.Select(p => p.start).ToList();
-
-                var stops = pieces.Select(p => p.start + p.length).ToList();
-
-                BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
-
-                var iterator = new DefaultCutRule(starts, stops);
-
-                var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
-
-                var chains = new List<Chain>();
-
-                for (int i = 0; i < stringChains.Count; i++)
-                {
-                    chains.Add(new Chain(stringChains[i]));
-                }
+                var chains = ExtractChains(pieces, chainId);
 
                 // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                 for (int i = 0; i < characteristicIds.Length; i++)
@@ -191,7 +176,7 @@
                                                         b.characteristic_type_id == characteristicId &&
                                                         b.link_id == linkId))
                         {
-                            double value = calculator.Calculate(chains[i], link);
+                            double value = calculator.Calculate(chains[j], link);
                             var currentCharacteristic = new characteristic
                             {
                                 chain_id = geneId,
@@ -263,6 +248,40 @@
                                      };
 
             return this.RedirectToAction("Result");
+        }
+
+        /// <summary>
+        /// The extract chains.
+        /// </summary>
+        /// <param name="pieces">
+        /// The pieces.
+        /// </param>
+        /// <param name="chainId">
+        /// The chain id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        private List<Chain> ExtractChains(List<piece> pieces, long chainId)
+        {
+            var starts = pieces.Select(p => p.start).ToList();
+
+            var stops = pieces.Select(p => p.start + p.length).ToList();
+
+            BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
+
+            var iterator = new DefaultCutRule(starts, stops);
+
+            var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
+
+            var chains = new List<Chain>();
+
+            for (int i = 0; i < stringChains.Count; i++)
+            {
+                chains.Add(new Chain(stringChains[i]));
+            }
+
+            return chains;
         }
 
         /// <summary>
