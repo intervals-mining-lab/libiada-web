@@ -7,7 +7,6 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.BinaryCalculators;
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
@@ -154,7 +153,7 @@
             Chain currentChain = this.chainRepository.ToLibiadaChain(dbChain.id);
             string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
-            IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(className);
+            IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
             Link link = (Link)linkId;
 
             if (oneWord)
@@ -514,8 +513,8 @@
         /// </returns>
         public ActionResult Result()
         {
-            ViewBag.chainName = this.TempData["chainName"] as String;
-            ViewBag.characteristicName = this.TempData["characteristicName"] as String;
+            ViewBag.chainName = this.TempData["chainName"] as string;
+            ViewBag.characteristicName = this.TempData["characteristicName"] as string;
             ViewBag.notationName = this.TempData["notationName"];
             ViewBag.isFilter = this.TempData["filter"];
             ViewBag.filteredResult1 = this.TempData["filteredResult1"];
