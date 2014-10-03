@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Helpers
 {
+    using System;
     using System.Linq;
 
     /// <summary>
@@ -18,7 +19,17 @@
         /// </returns>
         public static string GetDbName(LibiadaWebEntities db)
         {
-            return db.Database.SqlQuery<string>("SELECT current_database()").First();
+            string result;
+            try
+            {
+                result = db.Database.SqlQuery<string>("SELECT current_database()").First();
+            }
+            catch (Exception e)
+            {
+                result = "Error: " + e.Message;
+            }
+
+            return result;
         }    
     }
 }

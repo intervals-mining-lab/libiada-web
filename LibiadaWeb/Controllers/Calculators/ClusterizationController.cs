@@ -80,14 +80,21 @@
 
             var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
+            var links = new SelectList(db.link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+
+            var translators = new SelectList(db.translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", this.matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", this.notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
-                    { "links", new SelectList(db.link, "id", "name") }, 
-                    { "languages", new SelectList(db.language, "id", "name") }
+                    { "links", links }, 
+                    { "languages", new SelectList(db.language, "id", "name") }, 
+                    { "translators", translators }
                 };
             return View();
         }
@@ -129,7 +136,7 @@
         public ActionResult Index(
             long[] matterIds, 
             int[] characteristicIds, 
-            int[] linkIds, 
+            int?[] linkIds, 
             int[] notationIds, 
             int[] languageIds, 
             int clustersCount, 
@@ -150,26 +157,26 @@
                         chain.Single(c => c.notation_id == notationIds[i]).id;
 
                     int characteristicId = characteristicIds[i];
-                    int linkId = linkIds[i];
-                    if (db.characteristic.Any(charact =>
-                        linkId == charact.link.id &&
-                        charact.chain_id == chainId &&
-                        charact.characteristic_type_id == characteristicId))
+                    int? linkId = linkIds[i];
+                    if (db.characteristic.Any(c =>
+                        ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                        c.chain_id == chainId &&
+                        c.characteristic_type_id == characteristicId))
                     {
                         characteristics.Last().
-                        Add((double)db.characteristic.Single(charact =>
-                            linkIds[i] == charact.link.id &&
-                            charact.chain_id == chainId &&
-                            charact.characteristic_type_id == characteristicIds[i]).value);
+                        Add((double)db.characteristic.Single(c =>
+                            ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                            c.chain_id == chainId &&
+                            c.characteristic_type_id == characteristicIds[i]).value);
                     }
                     else
                     {
                         Chain tempChain = this.chainRepository.ToLibiadaChain(chainId);
 
                         string className =
-                            db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                            db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                         IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = (Link)db.link.Single(l => l.id == linkId).id;
+                        var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
                         characteristics.Last().Add(calculator.Calculate(tempChain, link));
                     }
                 }
@@ -178,10 +185,13 @@
             for (int k = 0; k < characteristicIds.Length; k++)
             {
                 int characteristicId = characteristicIds[k];
-                int linkId = linkIds[k];
+                int? linkId = linkIds[k];
                 int notationId = notationIds[k];
+
+                string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
+
                 characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                    db.link.Single(l => l.id == linkId).name + " " +
+                    linkName + " " +
                     db.notation.Single(n => n.id == notationId).name);
             }
 
@@ -198,14 +208,37 @@
                 }
             }
 
+            var clusterNames = new List<List<string>>();
+            foreach (var cluster in clusters)
+            {
+                clusterNames.Add(new List<string>());
+                foreach (var matterId in cluster)
+                {
+                    clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
+                }
+            }
+
+            var characteristicsList = new List<SelectListItem>();
+            for (int i = 0; i < characteristicNames.Count; i++)
+            {
+                characteristicsList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = characteristicNames[i],
+                    Selected = false
+                });
+            }
+
             this.TempData["result"] = new Dictionary<string, object>
                                      {
                                          { "clusters", clusters }, 
                                          { "characteristicNames", characteristicNames }, 
-                                         { "characteristicIds", characteristicIds }, 
+                                         { "characteristicIds", new List<int>(characteristicIds) }, 
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
-                                         { "chainIds", new List<long>(matterIds) } 
+                                         { "chainIds", new List<long>(matterIds) },
+                                         { "clusterNames", clusterNames },
+                                         { "characteristicsList", characteristicsList }
                                      };
 
             return this.RedirectToAction("Result", "Clusterization");
@@ -218,57 +251,32 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if there is no data.
         /// </exception>
         public ActionResult Result()
         {
             try
             {
-                var result = this.TempData["characteristics"] as Dictionary<string, object>;
+                var result = this.TempData["result"] as Dictionary<string, object>;
                 if (result == null)
                 {
-                    throw new Exception("Нет данных для отображения");
+                    throw new Exception("No data.");
                 }
 
-                var clusters = result["clusters"] as List<List<long>>;
-
-                var clusterNames = new List<List<string>>();
-                foreach (var cluster in clusters)
+                foreach (var key in result.Keys)
                 {
-                    clusterNames.Add(new List<string>());
-                    foreach (var matterId in cluster)
-                    {
-                        clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
-                    }
+                    ViewData[key] = result[key];
                 }
-
-                var characteristicNames = result["characteristicNames"] as List<string>;
-
-                var characteristicIds = result["characteristicIds"] as int[];
-                var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicNames.Count; i++)
-                {
-                    characteristicsList.Add(new SelectListItem
-                                                {
-                                                    Value = i.ToString(), 
-                                                    Text = characteristicNames[i], 
-                                                    Selected = false
-                                                });
-                }
-
-                ViewBag.chainNames = result["chainNames"];
-                ViewBag.chainIds = result["chainIds"];
-                ViewBag.characteristicNames = characteristicNames;
-                ViewBag.clusters = clusters;
-                ViewBag.clusterNames = clusterNames;
-                ViewBag.characteristicsList = characteristicsList;
-                ViewBag.characteristics = result["characteristics"];
-                ViewBag.characteristicIds = new List<int>(characteristicIds);
 
                 this.TempData.Keep();
             }
             catch (Exception e)
             {
                 this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
             }
 
             return View();

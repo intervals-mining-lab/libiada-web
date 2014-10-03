@@ -85,12 +85,15 @@
                                          && p.id != Aliases.PieceTypeChloroplastGenome 
                                          && p.id != Aliases.PieceTypeMitochondrionGenome).Select(p => p.id);
 
+            var links = new SelectList(db.link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.NatureGenetic), "id", "name") }, 
-                    { "links", new SelectList(db.link, "id", "name") }, 
+                    { "links", links }, 
                     { "matterCheckBoxes", this.matterRepository.GetSelectListItems(matters, null) }, 
                     { "pieceTypesCheckBoxes", this.pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
@@ -125,7 +128,7 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicIds,
-            int[] linkIds,
+            int?[] linkIds,
             int[] notationIds,
             int[] pieceTypeIds,
             bool isSort)
@@ -162,19 +165,19 @@
                 {
                     characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                     int characteristicId = characteristicIds[i];
-                    int linkId = linkIds[i];
+                    int? linkId = linkIds[i];
 
                     string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                    Link link = (Link)db.link.Single(l => l.id == linkId).id;
+                    var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
 
                     for (int j = 0; j < chains.Count; j++)
                     {
                         long geneId = genes[j].id;
 
-                        if (!db.characteristic.Any(b => b.chain_id == geneId &&
-                                                        b.characteristic_type_id == characteristicId &&
-                                                        b.link_id == linkId))
+                        if (!db.characteristic.Any(c => c.chain_id == geneId &&
+                                                        c.characteristic_type_id == characteristicId &&
+                                                        ((linkId == null && c.link_id == null) || (linkId == c.link_id))))
                         {
                             double value = calculator.Calculate(chains[j], link);
                             var currentCharacteristic = new characteristic
@@ -194,10 +197,10 @@
                     for (int d = 0; d < chains.Count; d++)
                     {
                         long geneId = genes[d].id;
-                        double? characteristic = db.characteristic.Single(b =>
-                                    b.chain_id == geneId &&
-                                    b.characteristic_type_id == characteristicId &&
-                                    b.link_id == linkId).value;
+                        double? characteristic = db.characteristic.Single(c =>
+                                    c.chain_id == geneId &&
+                                    c.characteristic_type_id == characteristicId &&
+                                    ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
 
                         characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
@@ -236,6 +239,17 @@
                 }
             }
 
+            var characteristicsList = new List<SelectListItem>();
+            for (int i = 0; i < characteristicNames.Count; i++)
+            {
+                characteristicsList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = characteristicNames[i],
+                    Selected = false
+                });
+            }
+
             this.TempData["result"] = new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
@@ -248,6 +262,44 @@
                                      };
 
             return this.RedirectToAction("Result");
+        }
+
+        /// <summary>
+        /// The result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if there is no data.
+        /// </exception>
+        public ActionResult Result()
+        {
+            try
+            {
+                var result = this.TempData["result"] as Dictionary<string, object>;
+                if (result == null)
+                {
+                    throw new Exception("No data.");
+                }
+
+                foreach (var key in result.Keys)
+                {
+                    ViewData[key] = result[key];
+                }
+
+                this.TempData.Keep();
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
+            }
+
+            return View();
         }
 
         /// <summary>
@@ -293,55 +345,6 @@
         private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
         {
             arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// </exception>
-        public ActionResult Result()
-        {
-            try
-            {
-                var result = this.TempData["result"] as Dictionary<string, object>;
-                if (result == null)
-                {
-                    throw new Exception("Нет данных для отображения");
-                }
-
-                var characteristicNames = (List<string>)result["characteristicNames"];
-                var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicNames.Count; i++)
-                {
-                    characteristicsList.Add(new SelectListItem
-                    {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
-                        Selected = false
-                    });
-                }
-
-                ViewBag.matterIds = result["matterIds"];
-                ViewBag.characteristicsList = characteristicsList;
-                ViewBag.characteristics = result["characteristics"];
-                ViewBag.chainNames = result["chainNames"];
-                ViewBag.chainsProduct = result["chainsProduct"];
-                ViewBag.chainsPosition = result["chainsPosition"];  
-                ViewBag.chainsPieceTypes = result["chainsPieceTypes"];
-                ViewBag.characteristicNames = characteristicNames;
-
-                TempData.Keep();
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Error", e.Message);
-            }
-
-            return View();
         }
     }
 }

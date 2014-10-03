@@ -1,5 +1,4 @@
-﻿
-@using LibiadaWeb.Models
+﻿@using LibiadaWeb.Models
 @model dynamic
 
 @{
@@ -12,14 +11,9 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-
-    var app = angular.module('Clusterization', []);
-
 </script>
 
-@Scripts.Render("~/bundles/controllers/calculation")
-
-@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Clusterization" }))
+@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
 {
     <fieldset data-ng-controller="CalculationCtrl">
         <legend>Характеристики полных цепочек</legend>
@@ -29,6 +23,7 @@
                 <tr>
                     <th>Название</th>
                     <th>Описание</th>
+                    <th>Создан</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +32,8 @@
                         <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
                         <span data-ng-bind="matter.Text"></span>
                     </td>
-                    <td data-ng-bind="matter.description"/>
+                    <td data-ng-bind="matter.description" />
+                    <td data-ng-bind="matter.created" />
                 </tr>
             </tbody>
         </table>
@@ -64,11 +60,9 @@
                 </div>
 
                 <div data-ng-switch-when="@Aliases.NatureGenetic">
-
                 </div>
 
                 <div data-ng-switch-when="@Aliases.NatureMusic">
-
                 </div>
             </div>
 
@@ -89,4 +83,9 @@
         <br />
         <input type="submit" value="Группировать" />
     </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/calculation")
 }

@@ -1,14 +1,16 @@
 ﻿@using LibiadaWeb.Models
 @model dynamic
+
 @{
     ViewBag.Title = "Вычисление характеристик";
 }
+
 <h2>Вычисление характеристик</h2>
+
 <script type="text/javascript">
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-
 </script>
 
 @using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
@@ -30,8 +32,8 @@
                         <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
                         <span data-ng-bind="matter.Text"></span>
                     </td>
-                    <td data-ng-bind="matter.description"/>
-                    <td data-ng-bind="matter.created"/>
+                    <td data-ng-bind="matter.description" />
+                    <td data-ng-bind="matter.created" />
                 </tr>
             </tbody>
         </table>
@@ -58,11 +60,9 @@
                 </div>
 
                 <div data-ng-switch-when="@Aliases.NatureGenetic">
-
                 </div>
 
                 <div data-ng-switch-when="@Aliases.NatureMusic">
-
                 </div>
             </div>
 

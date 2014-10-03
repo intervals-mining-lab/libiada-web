@@ -93,7 +93,6 @@
                         matter_id = dataBaseChain.matter_id,
                         dissimilar = false,
                         notation_id = notationId,
-                        created = DateTime.Now,
                         piece_type_id = Aliases.PieceTypeFullGenome,
                         piece_position = 0
                     };

@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -104,18 +106,18 @@
                     {
                         for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
                         {
-                          /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
-                            for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
-                            {
+                            /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
+                              for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
+                              {
 
-                                CongenericChain secondChain = tempChain2.CongenericChain(b);
-                                if (!firstChain.Equals(secondChain) && this.CompareBuldings(firstChain.Building, secondChain.Building))
-                                {
-                                    res1 = firstChain;
-                                    res2 = secondChain;
-                                    duplicate = true;
-                                }
-                            }*/
+                                  CongenericChain secondChain = tempChain2.CongenericChain(b);
+                                  if (!firstChain.Equals(secondChain) && this.CompareBuldings(firstChain.Building, secondChain.Building))
+                                  {
+                                      res1 = firstChain;
+                                      res2 = secondChain;
+                                      duplicate = true;
+                                  }
+                              }*/
                         }
                     }
                     else
@@ -130,13 +132,17 @@
                 }
             }
 
-            this.TempData["duplicate"] = duplicate;
-            this.TempData["chainName1"] = chainName1;
-            this.TempData["chainName2"] = chainName2;
-            this.TempData["res1"] = res1;
-            this.TempData["res2"] = res2;
-            this.TempData["pos1"] = i;
-            this.TempData["pos2"] = j;
+
+            this.TempData["result"] = new Dictionary<string, object>
+                                    {
+                                        { "duplicate", duplicate },
+                                        { "chainName1", chainName1 },
+                                        { "chainName2", chainName2 },
+                                        { "res1", res1 },
+                                        { "res2", res2 },
+                                        { "pos1", i },
+                                        { "pos2", j }
+                                    };
             return this.RedirectToAction("Result");
         }
 
@@ -148,18 +154,29 @@
         /// </returns>
         public ActionResult Result()
         {
-            ViewBag.duplicate = this.TempData["duplicate"];
-            if (ViewBag.duplicate)
+            try
             {
-                ViewBag.chainName1 = this.TempData["chainName1"] as string;
-                ViewBag.chainName2 = this.TempData["chainName2"] as string;
-                ViewBag.res1 = this.TempData["res1"] as BaseChain;
-                ViewBag.res2 = this.TempData["res2"] as BaseChain;
-                ViewBag.pos1 = this.TempData["pos1"] is int ? (int)this.TempData["pos1"] : 0;
-                ViewBag.pos2 = this.TempData["pos2"] is int ? (int)this.TempData["pos2"] : 0;
-            }
+                var result = this.TempData["result"] as Dictionary<string, object>;
+                if (result == null)
+                {
+                    throw new Exception("No data.");
+                }
 
-            this.TempData.Keep();
+                foreach (var key in result.Keys)
+                {
+                    ViewData[key] = result[key];
+                }
+
+                this.TempData.Keep();
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
+            }
 
             return View();
         }

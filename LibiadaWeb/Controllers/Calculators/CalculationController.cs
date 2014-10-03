@@ -71,11 +71,11 @@
 
             var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
-
             var links = new SelectList(db.link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+
+            var translators = new SelectList(db.translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
 
             ViewBag.data = new Dictionary<string, object>
                 {
@@ -123,7 +123,6 @@
             int[] languageIds, 
             int?[] translatorIds)
         {
-
             matterIds = matterIds.OrderBy(m => m).ToArray();
             var characteristics = new List<List<double>>();
             var chainNames = db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name).ToList();
@@ -201,13 +200,25 @@
                                         db.notation.Single(n => n.id == notationId).name);
             }
 
+            var characteristicsList = new List<SelectListItem>();
+            for (int i = 0; i < characteristicNames.Count; i++)
+            {
+                characteristicsList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = characteristicNames[i],
+                    Selected = false
+                });
+            }
+
             this.TempData["result"] = new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "characteristicIds", characteristicIds }, 
-                                         { "chainIds", new List<long>(matterIds) }
+                                         { "chainIds", new List<long>(matterIds) },
+                                         { "characteristicsList", characteristicsList }
                                      };
 
             return this.RedirectToAction("Result");
@@ -220,6 +231,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if there is no data.
         /// </exception>
         public ActionResult Result()
         {
@@ -228,35 +240,23 @@
                 var result = this.TempData["result"] as Dictionary<string, object>;
                 if (result == null)
                 {
-                    throw new Exception("Нет данных для отображения");
+                    throw new Exception("No data.");
                 }
 
-                var characteristics = result["characteristics"];
-                var characteristicNames = (List<string>)result["characteristicNames"];
-                ViewBag.chainIds = result["chainIds"];
-                var characteristicIds = (int[])result["characteristicIds"];
-                var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicNames.Count; i++)
+                foreach (var key in result.Keys)
                 {
-                    characteristicsList.Add(new SelectListItem
-                    {
-                        Value = i.ToString(), 
-                        Text = characteristicNames[i], 
-                        Selected = false
-                    });
+                    ViewData[key] = result[key];
                 }
-
-                ViewBag.characteristicIds = new List<int>(characteristicIds);
-                ViewBag.characteristicsList = characteristicsList;
-                ViewBag.characteristics = characteristics;
-                ViewBag.chainNames = result["chainNames"];
-                ViewBag.characteristicNames = characteristicNames;
 
                 this.TempData.Keep();
             }
             catch (Exception e)
             {
                 this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
             }
 
             return View();
