@@ -5,17 +5,20 @@
 }
 
 <h2>Характеристики произвольной цепочки</h2>
+@if (ViewBag.Error == null)
+{
+    <table id="resultTable">
+        @for (int i = 0; i < ViewBag.characteristics.Count; i++)
+        {
+            <tr>
+                <td>
+                    @ViewBag.characteristicNames[i]
+                </td>
+                <td>
+                    @ViewBag.characteristics[i]
+                </td>
+            </tr>
+        }
+    </table>
+}
 
-<table id="resultTable">
-    @for (int i = 0; i < ViewBag.characteristics.Count; i++)
-    {
-        <tr>
-            <td>
-                @ViewBag.characteristicNames[i]
-            </td>
-            <td>
-                @ViewBag.characteristics[i]
-            </td>
-        </tr>
-    }
-</table>

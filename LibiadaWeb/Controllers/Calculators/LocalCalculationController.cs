@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Numerics;
@@ -135,7 +136,7 @@
         /// <param name="isSetBeginAndEnd">
         /// The is set begin and end.
         /// </param>
-        /// <param name="isAutocorelation">
+        /// <param name="isAutocorrelation">
         /// The is autocorelation.
         /// </param>
         /// <returns>
@@ -158,7 +159,7 @@
             bool isGrowingWindow, 
             bool isMoveCoordinate, 
             bool isSetBeginAndEnd, 
-            bool isAutocorelation)
+            bool isAutocorrelation)
         {
             List<List<List<double>>> characteristics = CalculateCharacteristics(
                 matterIds, 
@@ -311,9 +312,9 @@
                 }
             }
 
-            if (isAutocorelation)
+            if (isAutocorrelation)
             {
-                var autoCorellation = new AutoCorrelation();
+                var autoCorrellation = new AutoCorrelation();
                 for (int i = 0; i < characteristics.Last().Last().Count; i++)
                 {
                     var temp = new double[characteristics.Last().Count];
@@ -324,7 +325,7 @@
                         temp[j] = characteristics.Last()[j][i];
                     }
 
-                    double[] res = autoCorellation.Execute(temp);
+                    double[] res = autoCorrellation.Execute(temp);
                     for (int j = 0; j < res.Length; j++)
                     {
                         characteristics.Last()[j][i] = res[j];
@@ -343,13 +344,67 @@
                     + db.link.Single(l => l.id == linkId).name);
             }
 
-            this.TempData["characteristics"] = characteristics;
-            this.TempData["chainNames"] = chainNames;
-            this.TempData["partNames"] = partNames;
-            this.TempData["characteristicIds"] = characteristicIds;
-            this.TempData["characteristicNames"] = characteristicNames;
-            this.TempData["chainIds"] = matterIds;
+            var characteristicsList = new List<SelectListItem>();
+            for (int i = 0; i < characteristicIds.Length; i++)
+            {
+                characteristicsList.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = characteristicNames[i],
+                    Selected = false
+                });
+            }
+            
+            TempData["result"] = new Dictionary<string, object>
+                                     {
+                                        { "characteristics", characteristics },
+                                        { "chainNames", chainNames },
+                                        { "partNames", partNames },
+                                        { "characteristicIds", new List<int>(characteristicIds) },
+                                        { "characteristicNames", characteristicNames },
+                                        { "chainIds", matterIds },
+                                        { "characteristicsList", characteristicsList }
+                                     };
+
             return this.RedirectToAction("Result");
+        }
+
+        /// <summary>
+        /// The result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if there is no data.
+        /// </exception>
+        public ActionResult Result()
+        {
+            try
+            {
+                var result = this.TempData["result"] as Dictionary<string, object>;
+                if (result == null)
+                {
+                    throw new Exception("No data.");
+                }
+
+                foreach (var key in result.Keys)
+                {
+                    ViewData[key] = result[key];
+                }
+
+                this.TempData.Keep();
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
+            }
+
+            return View();
         }
 
         /// <summary>
@@ -392,16 +447,16 @@
         /// The <see cref="List"/>.
         /// </returns>
         private List<List<List<double>>> CalculateCharacteristics(
-            long[] matterIds, 
-            bool isSetBeginAndEnd, 
-            bool isGrowingWindow, 
-            int notationId, 
-            int languageId, 
-            int length, 
-            int[] characteristicIds, 
-            int[] linkIds, 
-            int step, 
-            int beginOfChain, 
+            long[] matterIds,
+            bool isSetBeginAndEnd,
+            bool isGrowingWindow,
+            int notationId,
+            int languageId,
+            int length,
+            int[] characteristicIds,
+            int[] linkIds,
+            int step,
+            int beginOfChain,
             int endOfChain)
         {
             var characteristics = new List<List<List<double>>>();
@@ -432,9 +487,9 @@
                                   ? (CutRule)
                                     new CutRuleWithShiftedAndFixedStart(endOfChain - beginOfChain, step, beginOfChain)
                                   : new SimpleCutRuleWithShiftedStart(
-                                        endOfChain - beginOfChain, 
-                                        step, 
-                                        length, 
+                                        endOfChain - beginOfChain,
+                                        step,
+                                        length,
                                         beginOfChain);
                 }
                 else
@@ -472,35 +527,6 @@
             }
 
             return characteristics;
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Result()
-        {
-            ViewBag.chainIds = this.TempData["chainIds"] as List<long>;
-            var characteristicIds = this.TempData["characteristicIds"] as int[];
-            var characteristicNames = this.TempData["characteristicNames"] as List<string>;
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicIds.Length; i++)
-            {
-                characteristicsList.Add(new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
-            }
-
-            ViewBag.characteristicIds = new List<int>(characteristicIds);
-            ViewBag.characteristicsList = characteristicsList;
-            ViewBag.characteristics = this.TempData["characteristics"];
-            ViewBag.chainNames = this.TempData["chainNames"] as List<string>;
-            ViewBag.partNames = this.TempData["partNames"] as List<List<string>>;
-            ViewBag.characteristicNames = characteristicNames;
-
-            TempData.Keep();
-
-            return View();
         }
     }
 }

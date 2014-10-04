@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -94,9 +95,21 @@
                 characteristics.Add(calculator.Calculate(tempChain, link));
             }
 
-            this.TempData["characteristics"] = characteristics;
-            this.TempData["characteristicNames"] = characteristicNames;
-            this.TempData["characteristicIds"] = characteristicIds;
+            var characteristicsList = new List<SelectListItem>();
+            for (int i = 0; i < characteristicNames.Count; i++)
+            {
+                characteristicsList.Add(
+                    new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
+            }
+
+            TempData["result"] = new Dictionary<string, object>
+                                     {
+                                        { "characteristics", characteristics },
+                                        { "characteristicIds", new List<int>(characteristicIds) },
+                                        { "characteristicNames", characteristicNames },
+                                        { "characteristicsList", characteristicsList }
+                                     };
+
             return this.RedirectToAction("Result");
         }
 
@@ -106,24 +119,34 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if there is no data.
+        /// </exception>
         public ActionResult Result()
         {
-            var characteristics = this.TempData["characteristics"] as List<double>;
-            var characteristicNames = this.TempData["characteristicNames"] as List<string>;
-            var characteristicIds = this.TempData["characteristicIds"] as int[];
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
+            try
             {
-                characteristicsList.Add(
-                    new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
+                var result = this.TempData["result"] as Dictionary<string, object>;
+                if (result == null)
+                {
+                    throw new Exception("No data.");
+                }
+
+                foreach (var key in result.Keys)
+                {
+                    ViewData[key] = result[key];
+                }
+
+                this.TempData.Keep();
             }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("Error", e.Message);
 
-            ViewBag.characteristicIds = new List<int>(characteristicIds);
-            ViewBag.characteristicsList = characteristicsList;
-            ViewBag.characteristics = characteristics;
-            ViewBag.characteristicNames = characteristicNames;
+                ViewBag.Error = true;
 
-            this.TempData.Keep();
+                ViewBag.ErrorMessage = e.Message;
+            }
 
             return View();
         }

@@ -232,23 +232,63 @@
                 }
             }
 
-            this.TempData["filter"] = filter;
-            this.TempData["filteredResult"] = filteredResult;
-            this.TempData["firstElements"] = firstElements;
-            this.TempData["secondElements"] = secondElements;
-            this.TempData["filterSize"] = filterSize;
-            this.TempData["characteristics"] = characteristics;
-            this.TempData["elements"] = elements;
-            this.TempData["characteristicName"] =
-                db.characteristic_type.Single(charact => charact.id == characteristicId).name;
-            this.TempData["chainName"] = db.chain.Single(m => m.id == chainId).matter.name;
-            this.TempData["notationName"] = db.chain.Single(c => c.id == chainId).notation.name;
-            this.TempData["filteredResult1"] = filteredResult1;
-            this.TempData["filteredResult2"] = filteredResult2;
-            this.TempData["oneWord"] = oneWord;
-            this.TempData["word"] = word;
+            TempData["result"] = new Dictionary<string, object>
+                                     {
+                                        { "characteristics", characteristics },
+                                        { "isFilter", filter },
+                                        { "filteredResult", filteredResult },
+                                        { "firstElements", firstElements },
+                                        { "secondElements", secondElements },
+                                        { "filterSize", filterSize },
+                                        { "elements", elements },
+                                        { "characteristicName", db.characteristic_type.Single(charact => charact.id == characteristicId).name },
+                                        { "chainName", db.chain.Single(m => m.id == chainId).matter.name },
+                                        { "notationName", db.chain.Single(c => c.id == chainId).notation.name },
+                                        { "filteredResult1", filteredResult1 },
+                                        { "filteredResult2", filteredResult2 },
+                                        { "oneWord", oneWord },
+                                        { "word", word }
+                                     };
 
             return this.RedirectToAction("Result");
+        }
+
+        /// <summary>
+        /// The result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if there is no data.
+        /// </exception>
+        public ActionResult Result()
+        {
+            try
+            {
+                var result = this.TempData["result"] as Dictionary<string, object>;
+                if (result == null)
+                {
+                    throw new Exception("No data.");
+                }
+
+                foreach (var key in result.Keys)
+                {
+                    ViewData[key] = result[key];
+                }
+
+                this.TempData.Keep();
+            }
+            catch (Exception e)
+            {
+                this.ModelState.AddModelError("Error", e.Message);
+
+                ViewBag.Error = true;
+
+                ViewBag.ErrorMessage = e.Message;
+            }
+
+            return View();
         }
 
         /// <summary>
@@ -279,12 +319,12 @@
         /// The <see cref="string"/>.
         /// </returns>
         private string OneWordCharacteristic(
-            int characteristicId, 
-            int linkId, 
-            long wordId, 
-            chain dbChain, 
-            Chain currentChain, 
-            IBinaryCalculator calculator, 
+            int characteristicId,
+            int linkId,
+            long wordId,
+            chain dbChain,
+            Chain currentChain,
+            IBinaryCalculator calculator,
             Link link)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
@@ -308,11 +348,11 @@
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
 
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbChain.id, 
-                            characteristicId, 
-                            linkId, 
-                            wordId, 
-                            secondElementId, 
+                            dbChain.id,
+                            characteristicId,
+                            linkId,
+                            wordId,
+                            secondElementId,
                             result);
                     }
                 }
@@ -337,11 +377,11 @@
                     {
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbChain.id, 
-                            characteristicId, 
-                            linkId, 
-                            firstElementId, 
-                            wordId, 
+                            dbChain.id,
+                            characteristicId,
+                            linkId,
+                            firstElementId,
+                            wordId,
                             result);
                     }
                 }
@@ -372,11 +412,11 @@
         /// The link.
         /// </param>
         private void NotFrequencyCharacteristic(
-            int characteristicId, 
-            int linkId, 
-            chain dbChain, 
-            Chain currentChain, 
-            IBinaryCalculator calculator, 
+            int characteristicId,
+            int linkId,
+            chain dbChain,
+            Chain currentChain,
+            IBinaryCalculator calculator,
             Link link)
         {
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
@@ -401,11 +441,11 @@
                             double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                             this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                                dbChain.id, 
-                                characteristicId, 
-                                linkId, 
-                                firstElementId, 
-                                secondElementId, 
+                                dbChain.id,
+                                characteristicId,
+                                linkId,
+                                firstElementId,
+                                secondElementId,
                                 result);
                         }
                     }
@@ -438,12 +478,12 @@
         /// The link.
         /// </param>
         private void FrequencyCharacteristic(
-            int characteristicId, 
-            int linkId, 
-            int frequencyCount, 
-            Chain currentChain, 
-            chain dbChain, 
-            IBinaryCalculator calculator, 
+            int characteristicId,
+            int linkId,
+            int frequencyCount,
+            Chain currentChain,
+            chain dbChain,
+            IBinaryCalculator calculator,
             Link link)
         {
             List<long> chainElements = this.chainRepository.GetElementIds(dbChain.id);
@@ -454,7 +494,7 @@
             {
                 var calc = new Probability();
                 frequences.Add(new KeyValuePair<IBaseObject, double>(
-                        currentChain.Alphabet[f], 
+                        currentChain.Alphabet[f],
                         calc.Calculate(currentChain.CongenericChain(f), Link.Both)));
             }
 
@@ -482,11 +522,11 @@
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                         this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbChain.id, 
-                            characteristicId, 
-                            linkId, 
-                            firstElementId, 
-                            secondElementId, 
+                            dbChain.id,
+                            characteristicId,
+                            linkId,
+                            firstElementId,
+                            secondElementId,
                             result);
                     }
                 }
@@ -503,41 +543,6 @@
         {
             arrayForSort.Sort(
                 (firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Result()
-        {
-            ViewBag.chainName = this.TempData["chainName"] as string;
-            ViewBag.characteristicName = this.TempData["characteristicName"] as string;
-            ViewBag.notationName = this.TempData["notationName"];
-            ViewBag.isFilter = this.TempData["filter"];
-            ViewBag.filteredResult1 = this.TempData["filteredResult1"];
-            ViewBag.filteredResult2 = this.TempData["filteredResult2"];
-            ViewBag.oneWord = this.TempData["oneWord"];
-            ViewBag.word = this.TempData["word"];
-            ViewBag.firstElements = this.TempData["firstElements"];
-            ViewBag.secondElements = this.TempData["secondElements"];
-            ViewBag.elements = this.TempData["elements"] as List<element>;
-
-            if ((bool)this.TempData["filter"])
-            {
-                ViewBag.filtersize = this.TempData["filterSize"];
-                ViewBag.filteredResult = this.TempData["filteredResult"] as List<binary_characteristic>;
-            }
-            else
-            {
-                ViewBag.characteristics = this.TempData["characteristics"] as List<binary_characteristic>;
-            }
-
-            this.TempData.Keep();
-
-            return View();
         }
     }
 }
