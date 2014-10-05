@@ -273,6 +273,8 @@
         /// </summary>
         public const int PieceTypeChloroplastGenome = 15;
 
+        public const int PieceTypeMiscRNA = 16;
+
         #endregion
 
         #region RemoteDb

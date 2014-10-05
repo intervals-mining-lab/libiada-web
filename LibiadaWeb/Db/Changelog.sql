@@ -16,4 +16,9 @@ INSERT INTO characteristic_type (name, description, characteristic_group_id, cla
 CREATE INDEX ix_piece_id ON piece (id ASC NULLS LAST);
 CREATE INDEX ix_piece_gene_id ON piece (gene_id ASC NULLS LAST);
 
+-- 05.10.2014
+-- Добавлен новый тип РНК.
+
+INSET INTO piece_type (name, description, nature_id) VALUES ('Различная РНК', 'misc_RNA - miscellaneous other RNA', 1)
+
 COMMIT;

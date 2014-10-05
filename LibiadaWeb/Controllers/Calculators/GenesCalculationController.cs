@@ -258,7 +258,8 @@
                                          { "chainsPosition", chainsPosition }, 
                                          { "chainsPieceTypes", chainsPieceTypes }, 
                                          { "characteristicNames", characteristicNames }, 
-                                         { "matterIds", matterIds }
+                                         { "matterIds", matterIds },
+                                         { "characteristicsList", characteristicsList }
                                      };
 
             return this.RedirectToAction("Result");

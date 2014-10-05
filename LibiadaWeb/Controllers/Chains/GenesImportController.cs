@@ -84,8 +84,10 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
+        /// Thrown if there is no file with sequence.
         /// </exception>
         /// <exception cref="Exception">
+        /// Thrown if unknown part is found.
         /// </exception>
         [HttpPost]
         public ActionResult Index(long chainId, bool localFile)
@@ -117,9 +119,7 @@
 
             data = data.Split(new[] { "ORIGIN" }, StringSplitOptions.RemoveEmptyEntries)[0];
             string[] temp = data.Split(new[] { "FEATURES" }, StringSplitOptions.RemoveEmptyEntries);
-            string[] genes = temp[1].Split(
-                new[] { "gene            ", "repeat_region   " },
-                StringSplitOptions.RemoveEmptyEntries);
+            string[] genes = temp[1].Split(new[] { "gene            ", "repeat_region  " }, StringSplitOptions.RemoveEmptyEntries);
             var starts = new List<int>();
             var stops = new List<int> { 0 };
 
@@ -132,13 +132,10 @@
 
             for (int i = 1; i < genes.Length; i++)
             {
-                string[] temp2 = genes[i].Trim()
-                    .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] temp2 = genes[i].Trim().Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 bool complement = temp2[0].StartsWith("complement");
                 string temp3 = complement
-                                   ? temp2[0].Split(
-                                       new[] { "complement" },
-                                       StringSplitOptions.RemoveEmptyEntries)[0]
+                                   ? temp2[0].Split(new[] { "complement" }, StringSplitOptions.RemoveEmptyEntries)[0]
                                    : temp2[0];
                 string stringStart = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[0];
                 string stringStop = temp3.Split(new[] { "..", "(", ")" }, StringSplitOptions.RemoveEmptyEntries)[1];
@@ -157,6 +154,16 @@
                             sequenceType = temp2[j].Trim();
                             break;
                         }
+
+                        if (temp2[j].Trim().Equals("/pseudo"))
+                        {
+                            sequenceType = temp2[j].Trim();
+                        }
+                    }
+
+                    if (genes[i][0] == ' ')
+                    {
+                        sequenceType = "/note=\"REP";
                     }
 
                     if (string.IsNullOrEmpty(sequenceType))
@@ -216,18 +223,21 @@
                         pieceTypeId = Aliases.PieceTypeRepeatRegion;
                         description = GetValue(temp2, "/note=\"", "\"");
                     }
-                    else if (sequenceType.StartsWith("/pseudo")
-                             || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
+                    else if (sequenceType.StartsWith("/pseudo") || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
                     {
                         pieceTypeId = Aliases.PieceTypePseudoGen;
+                        description = GetValue(temp2, "/note=\"");
+                    }
+                    else if (sequenceType.StartsWith("misc_RNA"))
+                    {
+                        pieceTypeId = Aliases.PieceTypeMiscRNA;
+                        product = GetValue(temp2, "/product=\"", "\"");
                         description = GetValue(temp2, "/note=\"");
                     }
                     else
                     {
                         throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                     }
-
-                    //string currentStringChain = stringParentChain.Substring(starts.Last(), stops.Last() - starts.Last());
 
                     product dbProduct;
 
@@ -276,8 +286,6 @@
                 int stop = stops[j];
                 if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
                 {
-                    //string currentStringChain = stringParentChain.Substring(stops[j], starts[j] - stops[j]);
-                    //var currentLibiadaChain = new BaseChain(currentStringChain);
                     var gene = new gene
                     {
                         id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
