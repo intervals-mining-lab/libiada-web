@@ -1,12 +1,42 @@
 ﻿namespace LibiadaWeb.Math
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The auto correlation.
     /// </summary>
     public class AutoCorrelation
     {
+        /// <summary>
+        /// The calculate autocorrelation.
+        /// </summary>
+        /// <param name="characteristics">
+        /// The characteristics.
+        /// </param>
+        public void CalculateAutocorrelation(List<List<List<double>>> characteristics)
+        {
+            for (int i = 0; i < characteristics.Last().Last().Count; i++)
+            {
+                var temp = new double[characteristics.Last().Count];
+
+                // Для всех фрагментов цепочек
+                for (int j = 0; j < characteristics.Last().Count; j++)
+                {
+                    temp[j] = characteristics.Last()[j][i];
+                }
+
+                double[] res = Execute(temp);
+                for (int j = 0; j < res.Length; j++)
+                {
+                    characteristics.Last()[j][i] = res[j];
+                }
+
+                characteristics.Last().RemoveRange(res.Length, characteristics.Last().Count - res.Length);
+            }
+        }
+
         /// <summary>
         /// The execute.
         /// </summary>

@@ -1,12 +1,57 @@
 ﻿namespace LibiadaWeb.Math
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Numerics;
 
     /// <summary>
     /// The fft.
     /// </summary>
-    public static class FFT
+    public static class FastFourierTransform
     {
+        /// <summary>
+        /// The fourier transform.
+        /// </summary>
+        /// <param name="characteristics">
+        /// The characteristics.
+        /// </param>
+        public static void FourierTransform(List<List<List<double>>> characteristics)
+        {
+            // переводим в комлексный вид
+            // Для всех характеристик
+            for (int i = 0; i < characteristics.Last().Last().Count; i++)
+            {
+                var complex = new List<Complex>();
+                int j;
+
+                // Для всех фрагментов цепочек
+                for (j = 0; j < characteristics.Last().Count; j++)
+                {
+                    complex.Add(new Complex(characteristics.Last()[j][i], 0));
+                }
+
+                int m = 1;
+
+                while (m < j)
+                {
+                    m *= 2;
+                }
+
+                for (; j < m; j++)
+                {
+                    complex.Add(new Complex(0, 0));
+                }
+
+                Complex[] data = FourierTransform(complex.ToArray()); // вернёт массив
+
+                // переводим в массив double
+                for (int g = 0; g < characteristics.Last().Count; g++)
+                {
+                    characteristics.Last()[g][i] = data[g].Real;
+                }
+            }
+        }
+
         /// <summary>
         /// Возвращает спектр сигнала
         /// </summary>
@@ -16,7 +61,7 @@
         /// <returns>
         /// Массив со значениями спектра сигнала
         /// </returns>
-        public static Complex[] Fft(Complex[] x)
+        public static Complex[] FourierTransform(Complex[] x)
         {
             Complex[] result;
             int n = x.Length;
@@ -36,8 +81,8 @@
                     odd[i] = x[(2 * i) + 1];
                 }
 
-                even = Fft(even);
-                odd = Fft(odd);
+                even = FourierTransform(even);
+                odd = FourierTransform(odd);
                 result = new Complex[n];
                 for (int i = 0; i < n / 2; i++)
                 {

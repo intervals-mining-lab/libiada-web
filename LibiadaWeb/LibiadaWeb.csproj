@@ -331,7 +331,7 @@
     </Compile>
     <Compile Include="Math\AutoCorelation.cs" />
     <Compile Include="Math\DataTableFiller.cs" />
-    <Compile Include="Math\FFT.cs" />
+    <Compile Include="Math\FastFourierTransform.cs" />
     <Compile Include="matter.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

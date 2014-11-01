@@ -115,8 +115,8 @@
         /// <param name="isDelta">
         /// The is delta.
         /// </param>
-        /// <param name="isFurie">
-        /// The is furie.
+        /// <param name="isFourier">
+        /// The Fourier transform flag.
         /// </param>
         /// <param name="isGrowingWindow">
         /// The is growing window.
@@ -207,13 +207,14 @@
 
                 if (isFourier)
                 {
-                    FourierTransform(characteristics);
+                    FastFourierTransform.FourierTransform(characteristics);
                 }
             }
 
             if (isAutocorrelation)
             {
-                CalculateAutocorrelation(characteristics);
+                var autoCorrelation = new AutoCorrelation();
+                autoCorrelation.CalculateAutocorrelation(characteristics);
             }
 
             for (int i = 0; i < characteristicIds.Length; i++)
@@ -289,41 +290,12 @@
         }
 
         /// <summary>
-        /// The calculate autocorrelation.
-        /// </summary>
-        /// <param name="characteristics">
-        /// The characteristics.
-        /// </param>
-        private void CalculateAutocorrelation(List<List<List<double>>> characteristics)
-        {
-            var autoCorrelation = new AutoCorrelation();
-            for (int i = 0; i < characteristics.Last().Last().Count; i++)
-            {
-                var temp = new double[characteristics.Last().Count];
-
-                // Для всех фрагментов цепочек
-                for (int j = 0; j < characteristics.Last().Count; j++)
-                {
-                    temp[j] = characteristics.Last()[j][i];
-                }
-
-                double[] res = autoCorrelation.Execute(temp);
-                for (int j = 0; j < res.Length; j++)
-                {
-                    characteristics.Last()[j][i] = res[j];
-                }
-
-                characteristics.Last().RemoveRange(res.Length, characteristics.Last().Count - res.Length);
-            }
-        }
-
-        /// <summary>
         /// The calculate delta.
         /// </summary>
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        private void CalculateDelta(List<List<List<double>>> characteristics)
+        private static void CalculateDelta(List<List<List<double>>> characteristics)
         {
             // Перебираем характеристики 
             for (int i = 0; i < characteristics.Last().Last().Count; i++)
@@ -336,49 +308,6 @@
             }
 
             characteristics.Last().RemoveAt(0);
-        }
-
-        /// <summary>
-        /// The fourier transform.
-        /// </summary>
-        /// <param name="characteristics">
-        /// The characteristics.
-        /// </param>
-        private void FourierTransform(List<List<List<double>>> characteristics)
-        {
-            // переводим в комлексный вид
-            // Для всех характеристик
-            for (int i = 0; i < characteristics.Last().Last().Count; i++)
-            {
-                var complex = new List<Complex>();
-                int j;
-
-                // Для всех фрагментов цепочек
-                for (j = 0; j < characteristics.Last().Count; j++)
-                {
-                    complex.Add(new Complex(characteristics.Last()[j][i], 0));
-                }
-
-                int m = 1;
-
-                while (m < j)
-                {
-                    m *= 2;
-                }
-
-                for (; j < m; j++)
-                {
-                    complex.Add(new Complex(0, 0));
-                }
-
-                Complex[] data = FFT.Fft(complex.ToArray()); // вернёт массив
-
-                // переводим в массив double
-                for (int g = 0; g < characteristics.Last().Count; g++)
-                {
-                    characteristics.Last()[g][i] = data[g].Real;
-                }
-            }
         }
 
         /// <summary>
