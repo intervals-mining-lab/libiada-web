@@ -45,25 +45,10 @@
     <br/>
     @Html.CheckBox("isGrowingWindow", "Считать увеличивающееся окно", null)
     <br/>
-    @Html.CheckBox("isFurie", "Быстрое преобразование Фурье", null)
+    @Html.CheckBox("isFourier", "Быстрое преобразование Фурье", null)
     <br/>
     @Html.CheckBox("isAutocorrelation", "Вычислить авторикорреляционную функцию", null)
     <br/>
-    @Html.CheckBox("isMoveCoordinate", "Подвижное начало координат", null)
-    <br/>
-
-    @Html.CheckBox("startCoordinateCheckBox", "Начало координат относительно блока", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('startCoordinate')" } })
-
-    <input type="number" id="startCoordinate" name="startCoordinate" value="2" hidden="true" />
-    <br/>
-    @Html.CheckBox("isSetBeginAndEnd", "Задать начало и конец цепочки", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('startEnd')" } })
-    <div id="startEnd"  hidden="true">
-        @Html.Label("Начало:")
-        <input type="number" id="beginOfChain" name="beginOfChain" value="100" />
-        @Html.Label("Конец:")
-        <input type="number" id="endOfChain" name="endOfChain" value="1000" />
-        <br/>
-    </div>
     <br/>
     @Html.Label("Форма записи:")
     <select name="notationId">

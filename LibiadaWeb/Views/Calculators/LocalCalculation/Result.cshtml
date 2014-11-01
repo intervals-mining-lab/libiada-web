@@ -280,11 +280,15 @@
 
     for (int k = 0; k < ViewBag.chainNames.Count; k++)
     {
+        <div>@ViewBag.chainNames[k]</div>
         <table>
             <thead>
                 <tr>
                     <th>
-                        @ViewBag.chainNames[k]
+                        Начало
+                    </th>
+                    <th>
+                        Длина
                     </th>
                     @foreach (var characteristicName in ViewBag.characteristicNames)
                     {
@@ -299,7 +303,10 @@
                 {
                     <tr>
                         <td id="chainNameCell">
-                            @ViewBag.partNames[k][i]
+                            @ViewBag.starts[k][i]
+                        </td>
+                        <td id="chainNameCell">
+                            @ViewBag.lengthes[k][i]
                         </td>
                         @foreach (var characteristic in ViewBag.characteristics[k][i])
                         {
