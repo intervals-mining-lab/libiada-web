@@ -1,0 +1,82 @@
+﻿@model dynamic
+@using LibiadaWeb.Helpers
+
+@{
+    ViewBag.Title = "Выравнивание генов";
+}
+
+<h2>Выравнивание генов</h2>
+
+<script type="text/javascript">
+    "use strict";
+
+    var app = angular.module('Alignment', []);
+
+    app.controller('AlignmentCtrl', [
+        '$scope', function($scope) {
+
+            var data = @Html.Raw(Json.Encode(ViewBag.data));
+
+            MapModelFromJson($scope, data);
+
+            $scope.characteristic = {
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.links[0],
+                notation: $scope.notations[0]
+            };
+
+            $scope.isLinkable = function(characteristic) {
+                return characteristic.characteristicType.Linkable;
+            };
+        }
+    ]);
+</script>
+
+@using (Html.BeginForm("Index", "Alignment", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Alignment" }))
+{
+    <fieldset data-ng-controller="AlignmentCtrl">
+        <legend>Характеристики цепочек</legend>
+
+        <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
+            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value" />
+            <span data-ng-bind="pieceTypeCheckBox.Text"></span>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Создан</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="matter in matters">
+                    <td>
+                        <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
+                        <span data-ng-bind="matter.Text"></span>
+                    </td>
+                    <td data-ng-bind="matter.description" />
+                    <td data-ng-bind="matter.created" />
+                </tr>
+            </tbody>
+        </table>
+
+        <br />
+        <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
+        <input type="hidden" name="characteristicId" data-ng-value="characteristic.characteristicType.Value" />
+
+        <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
+        <input type="hidden" name="linkId" data-ng-value="characteristic.link.Value" />
+
+        <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
+        <input type="hidden" name="notationId" data-ng-value="characteristic.notation.Value" />
+        <br />
+        <br />
+        <input type="submit" value="Вычислить" />
+    </fieldset>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+}
