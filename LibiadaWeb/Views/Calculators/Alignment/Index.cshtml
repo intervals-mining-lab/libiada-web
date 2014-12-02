@@ -53,7 +53,27 @@
             <tbody>
                 <tr data-ng-repeat="matter in matters">
                     <td>
-                        <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
+                        <input type="radio" name="matterId1" data-ng-value="matter.Value" />
+                        <span data-ng-bind="matter.Text"></span>
+                    </td>
+                    <td data-ng-bind="matter.description" />
+                    <td data-ng-bind="matter.created" />
+                </tr>
+            </tbody>
+        </table>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                    <th>Создан</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="matter in matters">
+                    <td>
+                        <input type="radio" name="matterId2" data-ng-value="matter.Value" />
                         <span data-ng-bind="matter.Text"></span>
                     </td>
                     <td data-ng-bind="matter.description" />

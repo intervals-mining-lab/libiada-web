@@ -115,116 +115,130 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long[] matterIds,
+            long matterId1,
+            long matterId2,
             int characteristicId,
             int? linkId,
             int notationId,
             int[] pieceTypeIds)
         {
-            var characteristics = new List<List<KeyValuePair<int, double>>>();
-            var chainNames = new List<string>();
-            var chainsProduct = new List<List<string>>();
-            var chainsPosition = new List<List<long>>();
-            var chainsPieceTypes = new List<List<string>>();
-            var characteristicNames = new List<string>();
+            var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
+            var firstChainName = db.matter.Single(m => m.id == matterId1).name;
+            var firstChainProducts = new List<string>();
+            var firstChainPositions = new List<long>();
+            var firstChainPieceTypes = new List<string>();
 
-            // Перебор всех цепочек; первый уровень массива характеристик
-            for (int w = 0; w < matterIds.Length; w++)
+
+            var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
+            var secondChainName = db.matter.Single(m => m.id == matterId1).name;
+            var secondChainProducts = new List<string>();
+            var secondChainPositions = new List<long>();
+            var secondChainPieceTypes = new List<string>();
+
+            CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
+            CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
+
+            int optimalRotation = 0;
+
+            if (firstChainCharacteristics.Count >= secondChainCharacteristics.Count)
             {
-                long matterId = matterIds[w];
-                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
-                chainsProduct.Add(new List<string>());
-                chainsPosition.Add(new List<long>());
-                chainsPieceTypes.Add(new List<string>());
-                characteristics.Add(new List<KeyValuePair<int, double>>());
-
-                var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-
-                var genes = db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
-
-                var pieces = genes.Select(g => g.piece.First()).ToList();
-
-                var chains = ExtractChains(pieces, chainId);
-
-                // Перебор всех характеристик и форм записи; второй уровень массива характеристик
-
-                string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
-
-                for (int j = 0; j < chains.Count; j++)
-                {
-                    long geneId = genes[j].id;
-
-                    if (!db.characteristic.Any(c => c.chain_id == geneId &&
-                                                    c.characteristic_type_id == characteristicId &&
-                                                    ((linkId == null && c.link_id == null) || (linkId == c.link_id))))
-                    {
-                        double value = calculator.Calculate(chains[j], link);
-                        var currentCharacteristic = new characteristic
-                        {
-                            chain_id = geneId,
-                            characteristic_type_id = characteristicId,
-                            link_id = linkId,
-                            value = value,
-                            value_string = value.ToString()
-                        };
-
-                        db.characteristic.Add(currentCharacteristic);
-                        db.SaveChanges();
-                    }
-                }
-
-                for (int d = 0; d < chains.Count; d++)
-                {
-                    long geneId = genes[d].id;
-                    double? characteristic = db.characteristic.Single(c =>
-                                c.chain_id == geneId &&
-                                c.characteristic_type_id == characteristicId &&
-                                ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
-
-                    characteristics.Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
-
-
-                    var productId = genes[d].product_id;
-                    var pieceTypeId = genes[d].piece_type_id;
-
-                    chainsProduct.Last().Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
-                    chainsPosition.Last().Add(pieces[d].start);
-
-                    chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
-                }
+                optimalRotation = FindOptimalRotation(firstChainCharacteristics, secondChainCharacteristics);
+            }
+            else
+            {
+                optimalRotation = FindOptimalRotation(secondChainCharacteristics, firstChainCharacteristics);
             }
 
-            // подписи для характеристик
-            string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
-            characteristicNames.Add(characteristicType);
-
-
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
-            {
-                characteristicsList.Add(new SelectListItem
-                {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
-            }
+            string characteristicName = db.characteristic_type.Single(c => c.id == characteristicId).name;
 
             TempData["result"] = new Dictionary<string, object>
                                      {
-                                         { "characteristics", characteristics }, 
-                                         { "chainNames", chainNames }, 
-                                         { "chainsProduct", chainsProduct }, 
-                                         { "chainsPosition", chainsPosition }, 
-                                         { "chainsPieceTypes", chainsPieceTypes }, 
-                                         { "characteristicNames", characteristicNames }, 
-                                         { "matterIds", matterIds },
-                                         { "characteristicsList", characteristicsList }
+                                         { "firstChainCharacteristics", firstChainCharacteristics }, 
+                                         { "firstChainName", firstChainName }, 
+                                         { "firstChainProducts", firstChainProducts }, 
+                                         { "firstChainPositions", firstChainPositions }, 
+                                         { "firstChainPieceTypes", firstChainPieceTypes },
+                                         { "secondChainCharacteristics", secondChainCharacteristics }, 
+                                         { "secondChainName", secondChainName }, 
+                                         { "secondChainProducts", secondChainProducts }, 
+                                         { "secondChainPositions", secondChainPositions }, 
+                                         { "secondChainPieceTypes", secondChainPieceTypes },
+                                         { "characteristicName", characteristicName }, 
+                                         { "matterId1", matterId1 },
+                                         { "matterId2", matterId2 },
+                                         {"optimalRotation", optimalRotation }
                                      };
 
             return RedirectToAction("Result");
+        }
+
+        private void CalculateCharacteristic(
+            long matterId,
+            int characteristicId,
+            int? linkId,
+            int notationId,
+            int[] pieceTypeIds,
+            List<KeyValuePair<int, double>> characteristics,
+            List<string> chainProducts,
+            List<long> chainPositions,
+            List<string> chainPieceTypes)
+        {
+            var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+
+            var genes =
+                db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
+
+            var pieces = genes.Select(g => g.piece.First()).ToList();
+
+            var chains = ExtractChains(pieces, chainId);
+
+
+            string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+            IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
+            var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+
+            for (int j = 0; j < chains.Count; j++)
+            {
+                long geneId = genes[j].id;
+
+                if (!db.characteristic.Any(c => c.chain_id == geneId &&
+                                                c.characteristic_type_id == characteristicId &&
+                                                ((linkId == null && c.link_id == null) || (linkId == c.link_id))))
+                {
+                    double value = calculator.Calculate(chains[j], link);
+                    var currentCharacteristic = new characteristic
+                    {
+                        chain_id = geneId,
+                        characteristic_type_id = characteristicId,
+                        link_id = linkId,
+                        value = value,
+                        value_string = value.ToString()
+                    };
+
+                    db.characteristic.Add(currentCharacteristic);
+                    db.SaveChanges();
+                }
+            }
+
+            for (int d = 0; d < chains.Count; d++)
+            {
+                long geneId = genes[d].id;
+                double? characteristic = db.characteristic.Single(c =>
+                    c.chain_id == geneId &&
+                    c.characteristic_type_id == characteristicId &&
+                    ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
+
+                characteristics.Add(new KeyValuePair<int, double>(d, (double)characteristic));
+
+
+                var productId = genes[d].product_id;
+                var pieceTypeId = genes[d].piece_type_id;
+
+                chainProducts.Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
+                chainPositions.Add(pieces[d].start);
+
+                chainPieceTypes.Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
+            }
         }
 
         /// <summary>
@@ -297,6 +311,49 @@ namespace LibiadaWeb.Controllers.Calculators
             }
 
             return chains;
+        }
+
+        private int FindOptimalRotation(
+            List<KeyValuePair<int, double>> first,
+            List<KeyValuePair<int, double>> second)
+        {
+            int optimal = 0;
+            double match = 0;
+            for (int i = 0; i < first.Count; i++)
+            {
+                double currentMatch = CalculateMatch(first, second);
+                if (currentMatch > match)
+                {
+                    match = currentMatch;
+                    optimal = i;
+                }
+
+                first = Rotate(first);
+            }
+
+            return optimal;
+        }
+
+        private List<KeyValuePair<int, double>> Rotate(List<KeyValuePair<int, double>> list)
+        {
+            KeyValuePair<int, double> first = list[0];
+            list.RemoveAt(0);
+            list.Add(first);
+            return list;
+        }
+
+        private double CalculateMatch(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
+        {
+            double result = 0;
+            for (int i = 0; i < second.Count; i++)
+            {
+                if (first[i].Value * second[i].Value > 0)
+                {
+                    result += System.Math.Abs(System.Math.Min(first[i].Value, second[i].Value));
+                }
+            }
+
+            return result;
         }
     }
 }
