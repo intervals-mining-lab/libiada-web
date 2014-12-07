@@ -146,7 +146,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         public void Insert(dna_chain chain, long[] alphabet, int[] building)
         {
-            this.Insert(this.ToChain(chain), chain.fasta_header, chain.web_api_id, null, false, false, alphabet, building);
+            Insert(ToChain(chain), chain.fasta_header, chain.web_api_id, null, false, false, alphabet, building);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
         {
-            return this.GetSelectListItems(db.dna_chain.ToList(), chains);
+            return GetSelectListItems(db.dna_chain.ToList(), chains);
         }
 
         /// <summary>
@@ -251,26 +251,26 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The source.
         /// </param>
         /// <returns>
-        /// The <see cref="ValueChar"/>.
+        /// The <see cref="ValueString"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
-        public ValueChar GetComplementElement(IBaseObject source)
+        public ValueString GetComplementElement(IBaseObject source)
         {
             switch (source.ToString())
             {
                 case "A":
                 case "a":
-                    return new ValueChar('T');
+                    return new ValueString('T');
                 case "C":
                 case "c":
-                    return new ValueChar('G');
+                    return new ValueString('G');
                 case "G":
                 case "g":
-                    return new ValueChar('C');
+                    return new ValueString('C');
                 case "T":
                 case "t":
-                    return new ValueChar('A');
+                    return new ValueString('A');
                 default:
                     throw new ArgumentException("Unknown nucleotide.", "source");
             }
