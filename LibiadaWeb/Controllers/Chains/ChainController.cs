@@ -285,7 +285,7 @@
                             // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце а лучше сделать нормальный trim
                             for (int i = 0; i < text.Length - 1; i++)
                             {
-                                libiadaChain.Add(new ValueString(text[i]), i);
+                                libiadaChain.Set(new ValueString(text[i]), i);
                             }
 
                             alphabet = this.elementRepository.ToDbElements(

@@ -192,7 +192,7 @@
 
                     for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                     {
-                        tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
+                        tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
                     }
 
                     partNames.Last().Add(tempChain.ToString());
@@ -388,7 +388,7 @@
 
                     for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                     {
-                        tempChain.Add(libiadaChain[iter.GetStartPosition() + i], i);
+                        tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
                     }
 
                     for (int i = 0; i < characteristicIds.Length; i++)

@@ -299,7 +299,7 @@
                             // в конце файла всегда пустая строка поэтому последний элемент не считаем
                             for (int i = 0; i < text.Length - 1; i++)
                             {
-                                libiadaChain.Add(new ValueString(text[i]), i);
+                                libiadaChain.Set(new ValueString(text[i]), i);
                             }
 
                             db.matter.Add(matter);
