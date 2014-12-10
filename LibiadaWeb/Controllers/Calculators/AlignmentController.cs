@@ -89,30 +89,6 @@ namespace LibiadaWeb.Controllers.Calculators
             return View();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="matterIds">
-        /// The matter ids.
-        /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
-        /// </param>
-        /// <param name="notationIds">
-        /// The notation ids.
-        /// </param>
-        /// <param name="pieceTypeIds">
-        /// The piece type ids.
-        /// </param>
-        /// <param name="isSort">
-        /// The is sort.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
         [HttpPost]
         public ActionResult Index(
             long matterId1,
@@ -120,7 +96,8 @@ namespace LibiadaWeb.Controllers.Calculators
             int characteristicId,
             int? linkId,
             int notationId,
-            int[] pieceTypeIds)
+            int[] pieceTypeIds,
+            string validationType)
         {
             var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
             var firstChainName = db.matter.Single(m => m.id == matterId1).name;
@@ -142,11 +119,38 @@ namespace LibiadaWeb.Controllers.Calculators
 
             if (firstChainCharacteristics.Count >= secondChainCharacteristics.Count)
             {
-                optimalRotation = FindOptimalRotation(firstChainCharacteristics, secondChainCharacteristics);
+                switch (validationType)
+                {
+                    case "Equality":
+                        optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics, secondChainCharacteristics);
+                        break;
+                    case "Difference":
+                        optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
+                        break;
+                    case "NormalizedDifference":
+                        optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
+                        break;
+                    default:
+                        throw new ArgumentException("unknown validation type");
+                }
+                
             }
             else
             {
-                optimalRotation = FindOptimalRotation(secondChainCharacteristics, firstChainCharacteristics);
+                switch (validationType)
+                {
+                    case "Equality":
+                        optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics, firstChainCharacteristics);
+                        break;
+                    case "Difference":
+                        optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
+                        break;
+                    case "NormalizedDifference":
+                        optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
+                        break;
+                    default:
+                        throw new ArgumentException("unknown validation type");
+                }
             }
 
             string characteristicName = db.characteristic_type.Single(c => c.id == characteristicId).name;
@@ -166,7 +170,8 @@ namespace LibiadaWeb.Controllers.Calculators
                                          { "characteristicName", characteristicName }, 
                                          { "matterId1", matterId1 },
                                          { "matterId2", matterId2 },
-                                         {"optimalRotation", optimalRotation }
+                                         {"optimalRotation", optimalRotation },
+                                         {"validationType", validationType}
                                      };
 
             return RedirectToAction("Result");
@@ -313,7 +318,7 @@ namespace LibiadaWeb.Controllers.Calculators
             return chains;
         }
 
-        private int FindOptimalRotation(
+        private int FindMaximumEqualityRotation(
             List<KeyValuePair<int, double>> first,
             List<KeyValuePair<int, double>> second)
         {
@@ -325,6 +330,48 @@ namespace LibiadaWeb.Controllers.Calculators
                 if (currentMatch > match)
                 {
                     match = currentMatch;
+                    optimal = i;
+                }
+
+                first = Rotate(first);
+            }
+
+            return optimal;
+        }
+
+        private int FindMinimumDifferenceRotation(
+            List<KeyValuePair<int, double>> first,
+            List<KeyValuePair<int, double>> second)
+        {
+            int optimal = 0;
+            double difference = double.MaxValue;
+            for (int i = 0; i < first.Count; i++)
+            {
+                double currentDifference = CalculateDifference(first, second);
+                if (currentDifference < difference)
+                {
+                    difference = currentDifference;
+                    optimal = i;
+                }
+
+                first = Rotate(first);
+            }
+
+            return optimal;
+        }
+
+        private int FindMinimumNormalizedDifferenceRotation(
+            List<KeyValuePair<int, double>> first,
+            List<KeyValuePair<int, double>> second)
+        {
+            int optimal = 0;
+            double difference = double.MaxValue;
+            for (int i = 0; i < first.Count; i++)
+            {
+                double currentDifference = CalculateNormalizedDifference(first, second);
+                if (currentDifference < difference)
+                {
+                    difference = currentDifference;
                     optimal = i;
                 }
 
@@ -350,6 +397,34 @@ namespace LibiadaWeb.Controllers.Calculators
                 if (first[i].Value * second[i].Value > 0)
                 {
                     result += System.Math.Abs(System.Math.Min(first[i].Value, second[i].Value));
+                }
+            }
+
+            return result;
+        }
+
+        private double CalculateDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
+        {
+            double result = 0;
+            for (int i = 0; i < second.Count; i++)
+            {
+                if (first[i].Value * second[i].Value > 0)
+                {
+                    result += System.Math.Abs(first[i].Value - second[i].Value);
+                }
+            }
+
+            return result;
+        }
+
+        private double CalculateNormalizedDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
+        {
+            double result = 0;
+            for (int i = 0; i < second.Count; i++)
+            {
+                if (first[i].Value * second[i].Value > 0)
+                {
+                    result += System.Math.Abs((first[i].Value - second[i].Value) / (first[i].Value + second[i].Value));
                 }
             }
 

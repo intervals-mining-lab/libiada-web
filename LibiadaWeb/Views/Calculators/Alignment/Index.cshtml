@@ -61,7 +61,7 @@
                 </tr>
             </tbody>
         </table>
-        
+
         <table>
             <thead>
                 <tr>
@@ -81,7 +81,20 @@
                 </tr>
             </tbody>
         </table>
-
+        <br/>
+        <div>Способ сравнения при выравнивании:</div>
+        <div>
+            <input type="radio" name="validationType" value="Equality" />
+            <span> Степень совпадения</span>
+        </div>
+        <div>
+            <input type="radio" name="validationType" value="Difference" />
+            <span> Степень расхождения</span>
+        </div>
+        <div>
+            <input type="radio" name="validationType" value="NormalizedDifference" />
+            <span> Нормализованная степень расхождения</span>
+        </div>
         <br />
         <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
         <input type="hidden" name="characteristicId" data-ng-value="characteristic.characteristicType.Value" />
