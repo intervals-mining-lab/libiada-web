@@ -93,7 +93,10 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chain = db.chain.Include(c => c.matter).Include(c => c.notation).Include(c => c.piece_type).Include(c => c.remote_db);
+            var chain = db.chain.Include(c => c.matter).
+                                 Include(c => c.notation).
+                                 Include(c => c.piece_type).
+                                 Include(c => c.remote_db);
             return View(chain.ToList());
         }
 
@@ -321,8 +324,8 @@
                 { "languages", new SelectList(db.language, "id", "name", languageId) }, 
                 { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
                 { "remoteDbs", chain.remote_db_id == null
-                        ? this.remoteDbRepository.GetSelectListWithNature()
-                        : this.remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
+                        ? remoteDbRepository.GetSelectListWithNature()
+                        : remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
                 { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
                 { "natureLiterature", Aliases.NatureLiterature },
                 { "natureGenetic", Aliases.NatureGenetic },

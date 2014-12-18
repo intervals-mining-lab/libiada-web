@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Chains
 {
-    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -56,7 +55,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var chains = db.dna_chain.Where(d => d.notation_id == 1 && d.dissimilar == false).Include("matter");
+            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.NotationNucleotide && 
+                                                 d.dissimilar == false).Include("matter");
             ViewBag.chains = chains.ToList();
             ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
             return View();

@@ -23,7 +23,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var dna_chain = db.dna_chain.Include(d => d.matter).Include(d => d.notation).Include(d => d.product).Include(d => d.piece_type).Include(d => d.remote_db);
+            var dna_chain = db.dna_chain.Include(d => d.matter).
+                                         Include(d => d.notation).
+                                         Include(d => d.product).
+                                         Include(d => d.piece_type).
+                                         Include(d => d.remote_db);
             return View(dna_chain.ToList());
         }
 

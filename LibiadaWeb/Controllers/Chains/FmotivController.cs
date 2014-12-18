@@ -23,7 +23,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var fmotiv = db.fmotiv.Include(f => f.matter).Include(f => f.notation).Include(f => f.piece_type).Include(f => f.fmotiv_type).Include(f => f.remote_db);
+            var fmotiv = db.fmotiv.Include(f => f.matter).
+                                   Include(f => f.notation).
+                                   Include(f => f.piece_type).
+                                   Include(f => f.fmotiv_type).
+                                   Include(f => f.remote_db);
             return View(fmotiv.ToList());
         }
 

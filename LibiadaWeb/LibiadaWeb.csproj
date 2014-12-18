@@ -230,6 +230,7 @@
     <Compile Include="congeneric_characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\Calculators\AbstractCalculationController.cs" />
     <Compile Include="Controllers\Calculators\AlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -245,7 +246,6 @@
     <Compile Include="Controllers\Chains\ChainElementsController.cs" />
     <Compile Include="Controllers\Chains\ChainMixerController.cs" />
     <Compile Include="Controllers\Chains\ChainTransformerController.cs" />
-    <Compile Include="Controllers\Chains\GenesImportCheckController.cs" />
     <Compile Include="Controllers\Chains\GenesImportController.cs" />
     <Compile Include="Controllers\Characteristics\BinaryCharacteristicController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
@@ -706,8 +706,6 @@
     <Content Include="Views\Chains\ChainCheck\Result.cshtml" />
     <Content Include="Views\Chains\ChainMixer\Index.cshtml" />
     <Content Include="Views\Chains\GenesImport\Index.cshtml" />
-    <Content Include="Views\Chains\GenesImportCheck\Index.cshtml" />
-    <Content Include="Views\Chains\GenesImportCheck\Result.cshtml" />
     <Content Include="Views\Calculators\Alignment\Index.cshtml" />
     <Content Include="Views\Calculators\Alignment\Result.cshtml" />
   </ItemGroup>

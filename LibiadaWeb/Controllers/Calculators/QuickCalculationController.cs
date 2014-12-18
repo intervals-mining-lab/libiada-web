@@ -13,7 +13,7 @@
     /// <summary>
     /// The quick calculation controller.
     /// </summary>
-    public class QuickCalculationController : Controller
+    public class QuickCalculationController : AbstractCalculationController
     {
         /// <summary>
         /// The db.
@@ -111,44 +111,6 @@
                                      };
 
             return this.RedirectToAction("Result");
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if there is no data.
-        /// </exception>
-        public ActionResult Result()
-        {
-            try
-            {
-                var result = this.TempData["result"] as Dictionary<string, object>;
-                if (result == null)
-                {
-                    throw new Exception("No data.");
-                }
-
-                foreach (var key in result.Keys)
-                {
-                    ViewData[key] = result[key];
-                }
-
-                this.TempData.Keep();
-            }
-            catch (Exception e)
-            {
-                this.ModelState.AddModelError("Error", e.Message);
-
-                ViewBag.Error = true;
-
-                ViewBag.ErrorMessage = e.Message;
-            }
-
-            return View();
         }
     }
 }

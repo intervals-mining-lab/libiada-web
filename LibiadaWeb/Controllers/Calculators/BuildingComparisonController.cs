@@ -14,7 +14,7 @@
     /// <summary>
     /// The building comparison controller.
     /// </summary>
-    public class BuildingComparisonController : Controller
+    public class BuildingComparisonController : AbstractCalculationController
     {
         /// <summary>
         /// The db.
@@ -122,7 +122,7 @@
                     }
                     else
                     {
-                        if (!tempChain1.Equals(tempChain2) && this.CompareBuldings(tempChain2.Building, tempChain1.Building))
+                        if (!tempChain1.Equals(tempChain2) && this.CompareBuildings(tempChain2.Building, tempChain1.Building))
                         {
                             res1 = tempChain1;
                             res2 = tempChain2;
@@ -147,42 +147,7 @@
         }
 
         /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Result()
-        {
-            try
-            {
-                var result = this.TempData["result"] as Dictionary<string, object>;
-                if (result == null)
-                {
-                    throw new Exception("No data.");
-                }
-
-                foreach (var key in result.Keys)
-                {
-                    ViewData[key] = result[key];
-                }
-
-                this.TempData.Keep();
-            }
-            catch (Exception e)
-            {
-                this.ModelState.AddModelError("Error", e.Message);
-
-                ViewBag.Error = true;
-
-                ViewBag.ErrorMessage = e.Message;
-            }
-
-            return View();
-        }
-
-        /// <summary>
-        /// The compare buldings.
+        /// The compare buildings.
         /// </summary>
         /// <param name="firstBuilding">
         /// The first building.
@@ -193,7 +158,7 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool CompareBuldings(int[] firstBuilding, int[] secondbuilding)
+        private bool CompareBuildings(int[] firstBuilding, int[] secondbuilding)
         {
             if (firstBuilding.Length != secondbuilding.Length)
             {

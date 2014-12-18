@@ -107,11 +107,12 @@
         {
             matter matter = db.matter.Single(m => m.id == matterId);
             chain dataBaseChain;
-            if (matter.nature_id == 3)
+            if (matter.nature_id == Aliases.NatureLiterature)
             {
                 long chainId =
-                    db.literature_chain.Single(
-                        l => l.matter_id == matterId && l.notation_id == notationId && l.language_id == languageId).id;
+                    db.literature_chain.Single(l => l.matter_id == matterId && 
+                                               l.notation_id == notationId && 
+                                               l.language_id == languageId).id;
                 dataBaseChain = db.chain.Single(c => c.id == chainId);
             }
             else
