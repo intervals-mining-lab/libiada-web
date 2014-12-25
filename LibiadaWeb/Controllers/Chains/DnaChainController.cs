@@ -83,7 +83,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,product_id,created,matter_id,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
             if (this.ModelState.IsValid)
             {
@@ -141,7 +141,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,notation_id,product_id,created,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
+        public ActionResult Edit([Bind(Include = "id,notation_id,product_id,created,matter_id,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
             if (this.ModelState.IsValid)
             {

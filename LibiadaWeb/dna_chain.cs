@@ -26,7 +26,6 @@ namespace LibiadaWeb
         public Nullable<int> product_id { get; set; }
         public System.DateTimeOffset created { get; set; }
         public long matter_id { get; set; }
-        public bool dissimilar { get; set; }
         public int piece_type_id { get; set; }
         public long piece_position { get; set; }
         public Nullable<int> remote_db_id { get; set; }

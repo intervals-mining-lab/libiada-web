@@ -49,14 +49,6 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.dissimilar, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.dissimilar)
-                @Html.ValidationMessageFor(model => model.dissimilar)
-            </div>
-        </div>
-
-        <div class="form-group">
             @Html.LabelFor(model => model.piece_type_id, "piece_type_id", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("piece_type_id", string.Empty)

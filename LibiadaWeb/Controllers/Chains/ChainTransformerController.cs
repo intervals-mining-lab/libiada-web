@@ -55,8 +55,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.NotationNucleotide && 
-                                                 d.dissimilar == false).Include("matter");
+            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.NotationNucleotide).Include("matter");
             ViewBag.chains = chains.ToList();
             ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
             return View();
@@ -91,7 +90,6 @@
                 var result = new dna_chain
                     {
                         matter_id = dataBaseChain.matter_id,
-                        dissimilar = false,
                         notation_id = notationId,
                         piece_type_id = Aliases.PieceTypeFullGenome,
                         piece_position = 0

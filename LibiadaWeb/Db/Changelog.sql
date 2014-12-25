@@ -109,4 +109,9 @@ $BODY$
 
 COMMENT ON FUNCTION db_integrity_test() IS 'Функция для проверки целостности данных в базе.';
 
+-- 26.12.2014
+-- Deleted dissimilar column
+
+ALTER TABLE chain DROP COLUMN dissimilar;
+
 COMMIT;

@@ -141,7 +141,6 @@
 
             var resultChain = new chain
                 {
-                    dissimilar = false,
                     notation_id = notationId,
                     piece_type_id = dataBaseChain.piece_type_id,
                     piece_position = dataBaseChain.piece_position,

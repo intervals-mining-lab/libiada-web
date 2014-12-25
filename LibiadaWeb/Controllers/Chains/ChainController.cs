@@ -190,7 +190,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "notation_id,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain,
+            [Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain,
             bool localFile,
             int languageId,
             bool original,
@@ -374,7 +374,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "notation_id,matter_id,dissimilar,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain)
+        public ActionResult Edit([Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain)
         {
             if (this.ModelState.IsValid)
             {

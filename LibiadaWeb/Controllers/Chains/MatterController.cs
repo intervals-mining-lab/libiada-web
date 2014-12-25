@@ -268,7 +268,6 @@
 
                             var dnaChain = new chain
                             {
-                                dissimilar = false,
                                 notation_id = notationId,
                                 piece_type_id = pieceTypeId,
                                 matter_id = matter.id,
@@ -307,7 +306,6 @@
 
                             var literatureChain = new chain
                             {
-                                dissimilar = false,
                                 notation_id = notationId,
                                 piece_type_id = pieceTypeId,
                                 matter_id = matter.id,

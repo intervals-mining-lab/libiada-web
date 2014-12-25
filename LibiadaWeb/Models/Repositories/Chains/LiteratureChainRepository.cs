@@ -113,8 +113,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             return new chain
             {
-                id = source.id, 
-                dissimilar = source.dissimilar, 
+                id = source.id,
                 notation_id = source.notation_id, 
                 matter_id = source.matter_id, 
                 piece_type_id = source.piece_type_id, 

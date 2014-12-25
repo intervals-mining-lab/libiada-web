@@ -29,7 +29,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -82,7 +81,6 @@
           <Property Name="product_id" Type="int4" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="fasta_header" Type="varchar" MaxLength="255" />
@@ -157,7 +155,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="translator_id" Type="int4" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
@@ -241,7 +238,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
@@ -283,7 +279,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
@@ -305,7 +300,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="dissimilar" Type="bool" Nullable="false" />
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -1540,7 +1534,6 @@
           <Property Name="notation_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
           <Property Name="remote_db_id" Type="Int32" />
@@ -1607,7 +1600,6 @@
           <Property Name="product_id" Type="Int32" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
           <Property Name="remote_db_id" Type="Int32" />
@@ -1702,7 +1694,6 @@
           <Property Name="notation_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="translator_id" Type="Int32"  />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
@@ -1834,7 +1825,6 @@
           <Property Name="notation_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
           <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1887,7 +1877,6 @@
           <Property Name="notation_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
           <Property Name="value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1916,7 +1905,6 @@
           <Property Name="notation_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="matter_id" Type="Int64" Nullable="false" />
-          <Property Name="dissimilar" Type="Boolean" Nullable="false" />
           <Property Name="piece_type_id" Type="Int32" Nullable="false" />
           <Property Name="piece_position" Type="Int64" Nullable="false" />
           <Property Name="remote_db_id" Type="Int32" />
@@ -3310,7 +3298,6 @@
                 <ScalarProperty Name="notation_id" ColumnName="notation_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
                 <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
@@ -3367,7 +3354,6 @@
                 <ScalarProperty Name="product_id" ColumnName="product_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
                 <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
@@ -3448,7 +3434,6 @@
                 <ScalarProperty Name="notation_id" ColumnName="notation_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="translator_id" ColumnName="translator_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
@@ -3540,7 +3525,6 @@
                 <ScalarProperty Name="notation_id" ColumnName="notation_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
                 <ScalarProperty Name="value" ColumnName="value" />
@@ -3587,7 +3571,6 @@
                 <ScalarProperty Name="notation_id" ColumnName="notation_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
                 <ScalarProperty Name="value" ColumnName="value" />
@@ -3611,7 +3594,6 @@
                 <ScalarProperty Name="notation_id" ColumnName="notation_id" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="dissimilar" ColumnName="dissimilar" />
                 <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
                 <ScalarProperty Name="piece_position" ColumnName="piece_position" />
                 <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />

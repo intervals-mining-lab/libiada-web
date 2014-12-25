@@ -78,7 +78,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
+        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
         {
             if (this.ModelState.IsValid)
             {
@@ -134,7 +134,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,dissimilar,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
+        public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
         {
             if (this.ModelState.IsValid)
             {

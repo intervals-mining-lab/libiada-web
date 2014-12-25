@@ -105,12 +105,6 @@
                     ParameterName = "piece_position", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
                     Value = chain.piece_position
-                }, 
-                new NpgsqlParameter
-                {
-                    ParameterName = "dissimilar", 
-                    NpgsqlDbType = NpgsqlDbType.Boolean, 
-                    Value = chain.dissimilar
                 }
             };
             return parameters;
