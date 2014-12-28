@@ -1,27 +1,22 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
     using Clusterizator;
     using Clusterizator.Krab;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
 
     /// <summary>
     /// The clusterization controller.
     /// </summary>
-    public class ClusterizationController : AbstractCalculationController
+    public class ClusterizationController : AbstractResultController
     {
         /// <summary>
         /// The db.

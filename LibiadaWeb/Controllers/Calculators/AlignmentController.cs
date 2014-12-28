@@ -14,7 +14,7 @@ using LibiadaWeb.Models.Repositories.Chains;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
-    public class AlignmentController : AbstractCalculationController
+    public class AlignmentController : AbstractResultController
     {
         /// <summary>
         /// The db.

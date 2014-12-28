@@ -74,14 +74,14 @@
         public ChainController()
         {
             db = new LibiadaWebEntities();
-            this.chainRepository = new ChainRepository(db);
-            this.elementRepository = new ElementRepository(db);
-            this.dnaChainRepository = new DnaChainRepository(db);
-            this.literatureChainRepository = new LiteratureChainRepository(db);
-            this.matterRepository = new MatterRepository(db);
-            this.pieceTypeRepository = new PieceTypeRepository(db);
-            this.notationRepository = new NotationRepository(db);
-            this.remoteDbRepository = new RemoteDbRepository(db);
+            chainRepository = new ChainRepository(db);
+            elementRepository = new ElementRepository(db);
+            dnaChainRepository = new DnaChainRepository(db);
+            literatureChainRepository = new LiteratureChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@
             chain chain = db.chain.Find(id);
             if (chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(chain);
@@ -140,11 +140,11 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", this.matterRepository.GetSelectListWithNature() }, 
-                    { "notations", this.notationRepository.GetSelectListWithNature() }, 
+                    { "matters", matterRepository.GetSelectListWithNature() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
-                    { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature() }, 
-                    { "remoteDbs", this.remoteDbRepository.GetSelectListWithNature() }, 
+                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() }, 
+                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.NatureLiterature }, 
@@ -199,7 +199,7 @@
             bool partial,
             bool complement)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -208,7 +208,7 @@
                     Stream fileStream;
                     if (localFile)
                     {
-                        HttpPostedFileBase file = this.Request.Files[0];
+                        HttpPostedFileBase file = Request.Files[0];
 
                         if (file == null || file.ContentLength == 0)
                         {
@@ -253,23 +253,23 @@
 
                             libiadaChain = new BaseChain(resultStringChain);
 
-                            if (!this.elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
+                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
                             {
                                 throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
-                            alphabet = this.elementRepository.ToDbElements(
-                                libiadaChain.Alphabet, 
-                                chain.notation_id, 
+                            alphabet = elementRepository.ToDbElements(
+                                libiadaChain.Alphabet,
+                                chain.notation_id,
                                 false);
-                            this.dnaChainRepository.Insert(
-                                chain, 
-                                fastaHeader, 
-                                webApiId, 
-                                productId, 
-                                complement, 
-                                partial, 
-                                alphabet, 
+                            dnaChainRepository.Insert(
+                                chain,
+                                fastaHeader,
+                                webApiId,
+                                productId,
+                                complement,
+                                partial,
+                                alphabet,
                                 libiadaChain.Building);
                             break;
                         case Aliases.NatureMusic:
@@ -291,26 +291,26 @@
                                 libiadaChain.Set(new ValueString(text[i]), i);
                             }
 
-                            alphabet = this.elementRepository.ToDbElements(
-                                libiadaChain.Alphabet, 
-                                chain.notation_id, 
+                            alphabet = elementRepository.ToDbElements(
+                                libiadaChain.Alphabet,
+                                chain.notation_id,
                                 true);
 
-                            this.literatureChainRepository.Insert(
-                                chain, 
-                                original, 
-                                languageId, 
-                                translatorId, 
-                                alphabet, 
+                            literatureChainRepository.Insert(
+                                chain,
+                                original,
+                                languageId,
+                                translatorId,
+                                alphabet,
                                 libiadaChain.Building);
                             break;
                     }
 
-                    return this.RedirectToAction("Index");
+                    return RedirectToAction("Index");
                 }
                 catch (Exception e)
                 {
-                    this.ModelState.AddModelError("Error", e.Message);
+                    ModelState.AddModelError("Error", e.Message);
                 }
             }
 
@@ -319,10 +319,10 @@
 
             ViewBag.data = new Dictionary<string, object>
             {
-                { "matters", this.matterRepository.GetSelectListWithNature(chain.matter_id) }, 
-                { "notations", this.notationRepository.GetSelectListWithNature(chain.notation_id) }, 
+                { "matters", matterRepository.GetSelectListWithNature(chain.matter_id) }, 
+                { "notations", notationRepository.GetSelectListWithNature(chain.notation_id) }, 
                 { "languages", new SelectList(db.language, "id", "name", languageId) }, 
-                { "pieceTypes", this.pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
+                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
                 { "remoteDbs", chain.remote_db_id == null
                         ? remoteDbRepository.GetSelectListWithNature()
                         : remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
@@ -353,7 +353,7 @@
             chain chain = db.chain.Find(id);
             if (chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
@@ -376,11 +376,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(chain).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
@@ -409,7 +409,7 @@
             chain chain = db.chain.Find(id);
             if (chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(chain);
@@ -431,7 +431,7 @@
             chain chain = db.chain.Find(id);
             db.chain.Remove(chain);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

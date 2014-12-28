@@ -1,19 +1,16 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
-
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The quick calculation controller.
     /// </summary>
-    public class QuickCalculationController : AbstractCalculationController
+    public class QuickCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.

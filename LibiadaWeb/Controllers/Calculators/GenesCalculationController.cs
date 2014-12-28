@@ -21,7 +21,7 @@
     /// <summary>
     /// The genes calculation controller.
     /// </summary>
-    public class GenesCalculationController : AbstractCalculationController
+    public class GenesCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.

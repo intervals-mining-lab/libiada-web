@@ -1,16 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Numerics;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -19,7 +15,7 @@
     /// <summary>
     /// The local calculation controller.
     /// </summary>
-    public class LocalCalculationController : AbstractCalculationController
+    public class LocalCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.

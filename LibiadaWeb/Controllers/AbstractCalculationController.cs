@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
-namespace LibiadaWeb.Controllers.Calculators
+namespace LibiadaWeb.Controllers
 {
-    public abstract class AbstractCalculationController : Controller
+    public abstract class AbstractResultController : Controller
     {
         /// <summary>
         /// The result.
@@ -21,7 +19,7 @@ namespace LibiadaWeb.Controllers.Calculators
         {
             try
             {
-                var result = this.TempData["result"] as Dictionary<string, object>;
+                var result = TempData["result"] as Dictionary<string, object>;
                 if (result == null)
                 {
                     throw new Exception("No data.");
@@ -32,11 +30,11 @@ namespace LibiadaWeb.Controllers.Calculators
                     ViewData[key] = result[key];
                 }
 
-                this.TempData.Keep();
+                TempData.Keep();
             }
             catch (Exception e)
             {
-                this.ModelState.AddModelError("Error", e.Message);
+                ModelState.AddModelError("Error", e.Message);
 
                 ViewBag.Error = true;
 

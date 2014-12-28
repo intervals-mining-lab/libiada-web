@@ -230,7 +230,7 @@
     <Compile Include="congeneric_characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\Calculators\AbstractCalculationController.cs" />
+    <Compile Include="Controllers\AbstractCalculationController.cs" />
     <Compile Include="Controllers\Calculators\AlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />

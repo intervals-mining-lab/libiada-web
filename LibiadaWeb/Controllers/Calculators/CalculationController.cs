@@ -1,14 +1,11 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -17,7 +14,7 @@
     /// <summary>
     /// The calculation controller.
     /// </summary>
-    public class CalculationController : AbstractCalculationController
+    public class CalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -116,11 +113,11 @@
         /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long[] matterIds, 
-            int[] characteristicIds, 
-            int?[] linkIds, 
-            int[] notationIds, 
-            int[] languageIds, 
+            long[] matterIds,
+            int[] characteristicIds,
+            int?[] linkIds,
+            int[] notationIds,
+            int[] languageIds,
             int?[] translatorIds)
         {
             matterIds = matterIds.OrderBy(m => m).ToArray();
@@ -175,10 +172,10 @@
 
                         var dataBaseCharacteristic = new characteristic
                         {
-                            chain_id = chainId, 
-                            characteristic_type_id = characteristicIds[i], 
-                            link_id = linkId, 
-                            value = characteristicValue, 
+                            chain_id = chainId,
+                            characteristic_type_id = characteristicIds[i],
+                            link_id = linkId,
+                            value = characteristicValue,
                             value_string = characteristicValue.ToString()
                         };
                         db.characteristic.Add(dataBaseCharacteristic);
@@ -211,7 +208,7 @@
                 });
             }
 
-            this.TempData["result"] = new Dictionary<string, object>
+            TempData["result"] = new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
@@ -221,7 +218,7 @@
                                          { "characteristicsList", characteristicsList }
                                      };
 
-            return this.RedirectToAction("Result");
+            return RedirectToAction("Result");
         }
     }
 }

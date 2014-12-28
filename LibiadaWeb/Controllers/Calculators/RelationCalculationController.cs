@@ -18,7 +18,7 @@
     /// <summary>
     /// The relation calculation controller.
     /// </summary>
-    public class RelationCalculationController : AbstractCalculationController
+    public class RelationCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.

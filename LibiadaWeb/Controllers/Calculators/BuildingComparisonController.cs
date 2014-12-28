@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -14,7 +13,7 @@
     /// <summary>
     /// The building comparison controller.
     /// </summary>
-    public class BuildingComparisonController : AbstractCalculationController
+    public class BuildingComparisonController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -37,8 +36,8 @@
         public BuildingComparisonController()
         {
             db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(db);
-            this.chainRepository = new ChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            chainRepository = new ChainRepository(db);
         }
 
         /// <summary>
@@ -49,7 +48,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.mattersList = this.matterRepository.GetSelectListItems(null);
+            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
 
             return View();
         }
@@ -79,10 +78,10 @@
             string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
             matter matter1 = db.matter.Single(m => m.id == firstMatterId);
             long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain1 = this.chainRepository.ToLibiadaChain(chainId1);
+            Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
             matter matter2 = db.matter.Single(m => m.id == secondMatterId);
             long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain2 = this.chainRepository.ToLibiadaChain(chainId2);
+            Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
 
             BaseChain res1 = null;
             BaseChain res2 = null;

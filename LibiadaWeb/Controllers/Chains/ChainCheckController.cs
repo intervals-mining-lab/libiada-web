@@ -1,4 +1,7 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿using System.Collections.Generic;
+using LibiadaWeb.Controllers.Calculators;
+
+namespace LibiadaWeb.Controllers.Chains
 {
     using System.Linq;
     using System.Text;
@@ -12,7 +15,7 @@
     /// <summary>
     /// The chain check controller.
     /// </summary>
-    public class ChainCheckController : Controller
+    public class ChainCheckController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -80,10 +83,11 @@
 
             // Copy the byte array into a string.
             string stringChain = Encoding.ASCII.GetString(input);
-            string[] tempString = stringChain.Split(new[] { '\n', '\r' });
+            string[] tempString = stringChain.Split('\n', '\r');
 
             var chainStringBuilder = new StringBuilder();
             string fastaHeader = tempString[0];
+
             for (int j = 1; j < tempString.Length; j++)
             {
                 chainStringBuilder.Append(tempString[j]);
@@ -95,66 +99,70 @@
 
             long chainId = db.chain.Single(c => c.matter_id == matterId).id;
 
+            string message;
+
             if (!db.dna_chain.Any(d => d.fasta_header.Equals(fastaHeader)))
             {
-                TempData["message"] = "объекта с заголовком " + fastaHeader + " не существует";
+                message = "объекта с заголовком " + fastaHeader + " не существует";
+
+                TempData["result"] = new Dictionary<string, object> { { "message", message } };
                 return RedirectToAction("Result");
             }
+
             BaseChain dataBaseChain = chainRepository.ToLibiadaBaseChain(chainId);
+
             if (dataBaseChain.Equals(libiadaChain))
             {
-                TempData["message"] = "Цепочки в БД и в файле идентичны";
+                message = "Цепочки в БД и в файле идентичны";
             }
             else
             {
                 if (libiadaChain.Alphabet.Cardinality != dataBaseChain.Alphabet.Cardinality)
                 {
-                    TempData["message"] = " Размеры алфавитов не совпадают. В базе - " + dataBaseChain.Alphabet.Cardinality
-                                          + ". В файле - " + libiadaChain.Alphabet.Cardinality;
+                    message = "Размеры алфавитов не совпадают. В базе - " + dataBaseChain.Alphabet.Cardinality + ". В файле - " + libiadaChain.Alphabet.Cardinality;
+                    
+                    TempData["result"] = new Dictionary<string, object> { { "message", message } };
                     return RedirectToAction("Result");
                 }
+
                 for (int i = 0; i < libiadaChain.Alphabet.Cardinality; i++)
                 {
                     if (!libiadaChain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
                     {
-                        TempData["message"] = i + " элементы алфавитов не равны. В базе - " +
-                                              dataBaseChain.Alphabet[i] + ". В файле -" + libiadaChain.Alphabet[i];
+                        message = i + "Элементы алфавитов не равны. В базе - " + dataBaseChain.Alphabet[i] + ". В файле - " + libiadaChain.Alphabet[i];
+                        
+                        TempData["result"] = new Dictionary<string, object> { { "message", message } };
                         return RedirectToAction("Result");
                     }
                 }
+
                 if (libiadaChain.GetLength() != dataBaseChain.GetLength())
                 {
-                    TempData["message"] = "Длина цепочки в базе " + dataBaseChain.GetLength() +
-                                          ", а длина цепочки из файла " + libiadaChain.GetLength();
+                    message = "Длина цепочки в базе " + dataBaseChain.GetLength() + ", а длина цепочки из файла " + libiadaChain.GetLength();
+
+                    TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                    return RedirectToAction("Result");
                 }
+
                 int[] libiadaBuilding = libiadaChain.Building;
                 int[] dataBaseBuilding = dataBaseChain.Building;
+
                 for (int j = 0; j < libiadaChain.GetLength(); j++)
                 {
                     if (libiadaBuilding[j] != dataBaseBuilding[j])
                     {
-                        TempData["message"] = j + " элементы цепочек не совпадают. В базе " +
-                                              dataBaseBuilding[j] + ". В файле " + libiadaBuilding[j];
+                        message = j + "Элементы цепочек не совпадают. В базе " + dataBaseBuilding[j] + ". В файле " + libiadaBuilding[j];
+                        
+                        TempData["result"] = new Dictionary<string, object> { { "message", message } };
                         return RedirectToAction("Result");
                     }
-                    TempData["message"] = "Цепочки Шрёдингера - они равны и неравны одновременно";
                 }
+
+                message = "Цепочки Шрёдингера - они равны и не равны одновременно";
             }
 
+            TempData["result"] = new Dictionary<string, object> { { "message", message } };
             return RedirectToAction("Result");
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Result()
-        {
-            ViewBag.message = TempData["message"] as string;
-            TempData.Keep();
-            return View();
         }
     }
 }

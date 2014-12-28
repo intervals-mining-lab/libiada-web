@@ -17,7 +17,7 @@
     /// <summary>
     /// The congeneric calculation controller.
     /// </summary>
-    public class CongenericCalculationController : AbstractCalculationController
+    public class CongenericCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.

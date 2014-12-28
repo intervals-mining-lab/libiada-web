@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-var app = angular.module('Calculation', []);
+var app = angular.module("Calculation", []);
 
-app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, filterFilter) {
+app.controller("CalculationCtrl", ["$scope", "filterFilter", function ($scope, filterFilter) {
 
     MapModelFromJson($scope, data);
 
@@ -38,5 +38,5 @@ app.controller('CalculationCtrl', ['$scope', 'filterFilter', function ($scope, f
         return characteristic.characteristicType.Linkable;
     };
 
-    $scope.$watch('natureId', filterByNature, true);
+    $scope.$watch("natureId", filterByNature, true);
 }]);
