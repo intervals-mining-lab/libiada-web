@@ -126,12 +126,6 @@
         public long matter_id { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether dissimilar.
-        /// </summary>
-        [Display(Name = "Цепочка разнородная")]
-        public bool dissimilar { get; set; }
-
-        /// <summary>
         /// Gets or sets the piece_type_id.
         /// </summary>
         [Display(Name = "Тип фрагмента цепочки")]

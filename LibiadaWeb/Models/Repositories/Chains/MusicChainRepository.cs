@@ -34,8 +34,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             const string Query = @"INSERT INTO music_chain (
                                         id, 
                                         notation_id,
-                                        matter_id, 
-                                        dissimilar, 
+                                        matter_id,
                                         piece_type_id, 
                                         piece_position,  
                                         alphabet, 
@@ -45,8 +44,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
-                                        @matter_id, 
-                                        @dissimilar, 
+                                        @matter_id,
                                         @piece_type_id, 
                                         @piece_position,  
                                         @alphabet, 

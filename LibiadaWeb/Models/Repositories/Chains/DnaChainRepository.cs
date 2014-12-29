@@ -100,7 +100,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                         id, 
                                         notation_id,
                                         matter_id, 
-                                        dissimilar, 
                                         piece_type_id, 
                                         piece_position, 
                                         fasta_header, 
@@ -115,8 +114,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
-                                        @matter_id, 
-                                        @dissimilar, 
+                                        @matter_id,
                                         @piece_type_id, 
                                         @piece_position, 
                                         @fasta_header, 
