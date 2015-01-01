@@ -230,7 +230,7 @@
     <Compile Include="congeneric_characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\AbstractCalculationController.cs" />
+    <Compile Include="Controllers\AbstractResultController.cs" />
     <Compile Include="Controllers\Calculators\AlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -275,6 +275,7 @@
     <Compile Include="Controllers\Catalogs\RemoteDbController.cs" />
     <Compile Include="Controllers\Catalogs\TieController.cs" />
     <Compile Include="Controllers\Catalogs\TranslatorController.cs" />
+    <Compile Include="Controllers\TaskManagerController.cs" />
     <Compile Include="dna_chain.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -330,6 +331,9 @@
     <Compile Include="literature_chain.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Maintenance\TaskData.cs" />
+    <Compile Include="Maintenance\TaskManager.cs" />
+    <Compile Include="Maintenance\TaskState.cs" />
     <Compile Include="Math\AutoCorelation.cs" />
     <Compile Include="Math\DataTableFiller.cs" />
     <Compile Include="Math\FastFourierTransform.cs" />
@@ -708,6 +712,7 @@
     <Content Include="Views\Chains\GenesImport\Index.cshtml" />
     <Content Include="Views\Calculators\Alignment\Index.cshtml" />
     <Content Include="Views\Calculators\Alignment\Result.cshtml" />
+    <Content Include="Views\TaskManager\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

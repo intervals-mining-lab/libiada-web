@@ -1,0 +1,29 @@
+﻿@using LibiadaWeb.Maintenance
+@{
+    ViewBag.Title = "Менеджер задач";
+}
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Task id
+        </th>
+        <th>
+            Task state
+        </th>
+    </tr>
+
+    @foreach (var item in ViewBag.Tasks)
+    {
+        <tr>
+            <td>
+                @item.Key
+            </td>
+            <td>
+                @item.Value
+            </td>
+        </tr>
+    }
+</table>

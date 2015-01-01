@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -120,95 +122,98 @@
             int[] languageIds,
             int?[] translatorIds)
         {
-            matterIds = matterIds.OrderBy(m => m).ToArray();
-            var characteristics = new List<List<double>>();
-            var chainNames = db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name).ToList();
-            var characteristicNames = new List<string>();
 
-            foreach (var matterId in matterIds)
+            TaskData taskData = new TaskData(() =>
             {
-                characteristics.Add(new List<double>());
-                for (int i = 0; i < notationIds.Length; i++)
+                matterIds = matterIds.OrderBy(m => m).ToArray();
+                var characteristics = new List<List<double>>();
+                var chainNames = db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name).ToList();
+                var characteristicNames = new List<string>();
+
+                foreach (var matterId in matterIds)
                 {
-                    int notationId = notationIds[i];
-
-                    long chainId;
-                    if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
+                    characteristics.Add(new List<double>());
+                    for (int i = 0; i < notationIds.Length; i++)
                     {
-                        int languageId = languageIds[i];
-                        int? translatorId = translatorIds[i];
+                        int notationId = notationIds[i];
 
-                        chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
-                                    l.notation_id == notationId
-                                    && l.language_id == languageId
-                                    && ((translatorId == null && l.translator_id == null)
-                                                    || (translatorId == l.translator_id))).id;
-                    }
-                    else
-                    {
-                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-                    }
-
-                    int characteristicId = characteristicIds[i];
-                    int? linkId = linkIds[i];
-                    if (db.characteristic.Any(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
-                                              c.chain_id == chainId &&
-                                              c.characteristic_type_id == characteristicId))
-                    {
-                        double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
-                                                                                        c.chain_id == chainId &&
-                                                                                        c.characteristic_type_id == characteristicId).value.Value;
-                        characteristics.Last().Add(dataBaseCharacteristic);
-                    }
-                    else
-                    {
-                        Chain tempChain = this.chainRepository.ToLibiadaChain(chainId);
-                        tempChain.FillIntervalManagers();
-                        string className =
-                            db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;
-                        IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
-                        var characteristicValue = calculator.Calculate(tempChain, link);
-
-                        var dataBaseCharacteristic = new characteristic
+                        long chainId;
+                        if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
                         {
-                            chain_id = chainId,
-                            characteristic_type_id = characteristicIds[i],
-                            link_id = linkId,
-                            value = characteristicValue,
-                            value_string = characteristicValue.ToString()
-                        };
-                        db.characteristic.Add(dataBaseCharacteristic);
-                        db.SaveChanges();
-                        characteristics.Last().Add(characteristicValue);
+                            int languageId = languageIds[i];
+                            int? translatorId = translatorIds[i];
+
+                            chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
+                                        l.notation_id == notationId
+                                        && l.language_id == languageId
+                                        && ((translatorId == null && l.translator_id == null)
+                                                        || (translatorId == l.translator_id))).id;
+                        }
+                        else
+                        {
+                            chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                        }
+
+                        int characteristicId = characteristicIds[i];
+                        int? linkId = linkIds[i];
+                        if (db.characteristic.Any(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                                                  c.chain_id == chainId &&
+                                                  c.characteristic_type_id == characteristicId))
+                        {
+                            double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                                                                                            c.chain_id == chainId &&
+                                                                                            c.characteristic_type_id == characteristicId).value.Value;
+                            characteristics.Last().Add(dataBaseCharacteristic);
+                        }
+                        else
+                        {
+                            Chain tempChain = this.chainRepository.ToLibiadaChain(chainId);
+                            tempChain.FillIntervalManagers();
+                            string className =
+                                db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;
+                            IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
+                            var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+                            var characteristicValue = calculator.Calculate(tempChain, link);
+
+                            var dataBaseCharacteristic = new characteristic
+                            {
+                                chain_id = chainId,
+                                characteristic_type_id = characteristicIds[i],
+                                link_id = linkId,
+                                value = characteristicValue,
+                                value_string = characteristicValue.ToString()
+                            };
+                            db.characteristic.Add(dataBaseCharacteristic);
+                            db.SaveChanges();
+                            characteristics.Last().Add(characteristicValue);
+                        }
                     }
                 }
-            }
 
-            for (int k = 0; k < characteristicIds.Length; k++)
-            {
-                int characteristicId = characteristicIds[k];
-                int? linkId = linkIds[k];
-                int notationId = notationIds[k];
-                string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
-
-                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                        linkName + " " +
-                                        db.notation.Single(n => n.id == notationId).name);
-            }
-
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
-            {
-                characteristicsList.Add(new SelectListItem
+                for (int k = 0; k < characteristicIds.Length; k++)
                 {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
-            }
+                    int characteristicId = characteristicIds[k];
+                    int? linkId = linkIds[k];
+                    int notationId = notationIds[k];
+                    string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
 
-            TempData["result"] = new Dictionary<string, object>
+                    characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
+                                            linkName + " " +
+                                            db.notation.Single(n => n.id == notationId).name);
+                }
+
+                var characteristicsList = new List<SelectListItem>();
+                for (int i = 0; i < characteristicNames.Count; i++)
+                {
+                    characteristicsList.Add(new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = characteristicNames[i],
+                        Selected = false
+                    });
+                }
+
+                TempData["result"] = new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
@@ -217,8 +222,12 @@
                                          { "chainIds", new List<long>(matterIds) },
                                          { "characteristicsList", characteristicsList }
                                      };
+            });
 
-            return RedirectToAction("Result");
+            int taskId = TaskManager.CreateNewTask(taskData);
+            TaskManager.StartTask(taskId);
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
