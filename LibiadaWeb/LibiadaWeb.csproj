@@ -331,6 +331,7 @@
     <Compile Include="literature_chain.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Maintenance\Task.cs" />
     <Compile Include="Maintenance\TaskData.cs" />
     <Compile Include="Maintenance\TaskManager.cs" />
     <Compile Include="Maintenance\TaskState.cs" />

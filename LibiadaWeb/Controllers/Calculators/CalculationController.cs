@@ -1,4 +1,5 @@
-﻿using LibiadaWeb.Maintenance;
+﻿using System;
+using LibiadaWeb.Maintenance;
 
 namespace LibiadaWeb.Controllers.Calculators
 {
@@ -46,6 +47,7 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
+
         public CalculationController()
         {
             db = new LibiadaWebEntities();
@@ -122,8 +124,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] languageIds,
             int?[] translatorIds)
         {
-
-            TaskData taskData = new TaskData(() =>
+            Task task = new Task(() =>
             {
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var characteristics = new List<List<double>>();
@@ -197,9 +198,8 @@ namespace LibiadaWeb.Controllers.Calculators
                     int notationId = notationIds[k];
                     string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
 
-                    characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                            linkName + " " +
-                                            db.notation.Single(n => n.id == notationId).name);
+                    characteristicNames.Add(string.Join("  ", db.characteristic_type.Single(c => c.id == characteristicId).name,
+                                            linkName, db.notation.Single(n => n.id == notationId).name));
                 }
 
                 var characteristicsList = new List<SelectListItem>();
@@ -213,7 +213,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     });
                 }
 
-                TempData["result"] = new Dictionary<string, object>
+                return new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
                                          { "chainNames", chainNames }, 
@@ -224,10 +224,12 @@ namespace LibiadaWeb.Controllers.Calculators
                                      };
             });
 
-            int taskId = TaskManager.CreateNewTask(taskData);
+            task.ControllerName = "Calculation";
+            task.TaskData.ActionName = "Calculation";
+            int taskId = TaskManager.CreateNewTask(task);
             TaskManager.StartTask(taskId);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "TaskManager", new {id = taskId});
         }
     }
 }

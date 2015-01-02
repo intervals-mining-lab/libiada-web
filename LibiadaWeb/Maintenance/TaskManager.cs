@@ -6,70 +6,70 @@ namespace LibiadaWeb.Maintenance
 {
     public static class TaskManager
     {
-        private static Dictionary<int, TaskData> tasks = new Dictionary<int, TaskData>();
+        private static readonly Dictionary<int, Task> tasks = new Dictionary<int, Task>();
         private static int taskCounter = 0;
-        //private static Task task;
         private static int coreCount = Environment.ProcessorCount;
 
-        public static int CreateNewTask(TaskData taskData)
+        public static int CreateNewTask(Task task)
         {
-            tasks.Add(taskCounter, taskData);
+            tasks.Add(taskCounter, task);
             return taskCounter++;
         }
 
         public static void StartTask(int id)
         {
-            var task = tasks[id];
-            if (task != null && task.TaskState == TaskState.InQueue)
+            var taskFromList = tasks[id];
+            bool taskCheck;
+            lock (taskFromList)
             {
-                Action<TaskData> action = (taskData) =>
+                taskCheck = taskFromList != null && taskFromList.TaskData.TaskState == TaskState.InQueue;
+            }
+            if (taskCheck)
+            {
+                Action<Task> action = (task) =>
                 {
-                    taskData.TaskState = TaskState.InProcess;
                     try
                     {
-                        taskData.Action();
-                        taskData.TaskState = TaskState.Completed;
+                        Func<Dictionary<string, object>> method;
+                        lock (task)
+                        {
+                            method = task.Action;
+                            task.TaskData.TaskState = TaskState.InProgress;
+                        }
+
+                        var result = method();
+                        lock (task)
+                        {
+                            task.Result = result;
+                            task.TaskData.TaskState = TaskState.Completed;
+                        }
                     }
                     catch (Exception e)
                     {
-                        taskData.TaskState = TaskState.Error;
-                        taskData.Result = new Dictionary<string, object>
+                        lock (task)
                         {
-                            { "ErrorMessage", e.Message }, 
-                            { "StackTrace", e.StackTrace }
-                        };
+                            task.TaskData.TaskState = TaskState.Error;
+                            task.Result = new Dictionary<string, object>
+                            {
+                                { "Error", true }, 
+                                { "ErrorMessage", e.Message },
+                                { "StackTrace", e.StackTrace }
+                            };
+                        }
                     }
                 };
-                Thread thread = new Thread(() => action(task));
+
+                Thread thread = new Thread(() => action(taskFromList));
                 thread.Start();
             }
         }
 
-        //private static void threadDo(TaskData taskData)
-        //{
-        //    taskData.TaskState = TaskState.InProcess;
-        //    try
-        //    {
-        //        taskData.Action();
-        //        taskData.TaskState = TaskState.Completed;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        taskData.TaskState = TaskState.Error;
-        //        taskData.Result = new Dictionary<string, object>
-        //        {
-        //            { "ErrorMessage", e.Message }, 
-        //            { "StackTrace", e.StackTrace }
-        //        };
-        //    }
-        //}
-
-        public static TaskData GetTask(int id)
+        public static Task GetTask(int id)
         {
             return tasks[id];
         }
 
-        public static Dictionary<int, TaskData> Tasks
+        public static Dictionary<int, Task> Tasks
         {
             get { return tasks; }
         }

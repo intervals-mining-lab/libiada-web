@@ -37,8 +37,13 @@
 
         @if (ViewBag.Error != null && ViewBag.ErrorMessage != null)
         {
-            <div>
+            <br/>
+            <div class="error-message">
                 @ViewBag.ErrorMessage
+            </div>
+            <br/>
+            <div class="stack-trace">
+                @ViewBag.StackTrace
             </div>
         }
         <hr />

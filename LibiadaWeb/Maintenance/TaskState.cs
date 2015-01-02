@@ -3,7 +3,7 @@
     public enum TaskState
     {
         InQueue,
-        InProcess,
+        InProgress,
         Completed,
         Error
     }

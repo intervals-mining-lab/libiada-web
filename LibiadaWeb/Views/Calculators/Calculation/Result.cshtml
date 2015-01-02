@@ -7,7 +7,6 @@
 @if (ViewBag.Error == null)
 {
     <h2>Характеристики</h2>
-    @Html.ValidationMessage("Error")
     <script type='text/javascript'>
         var characteristics = new Array();
         var chainIds = new Array();
@@ -87,7 +86,7 @@
         }
     </script>
 
-    <table id="resultTable">
+    <table id="resultTable" class="table">
         <thead>
             <tr>
                 <th>
@@ -96,7 +95,7 @@
                 @foreach (var characteristicName in ViewBag.characteristicNames)
                 {
                     <th>
-                        @characteristicName
+                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
                     </th>
                 }
             </tr>

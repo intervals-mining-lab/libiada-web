@@ -1,9 +1,16 @@
-﻿@using LibiadaWeb.Maintenance
-@{
+﻿@{
     ViewBag.Title = "Менеджер задач";
 }
 
 <h2>Index</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="error-message">
+        @ViewBag.ErrorMessage
+    </div>
+    <br/>
+}
 
 <table class="table">
     <tr>
@@ -11,7 +18,16 @@
             Task id
         </th>
         <th>
+            Task Name
+        </th>
+        <th>
+            Created
+        </th>
+        <th>
             Task state
+        </th>
+        <th>
+            Actions
         </th>
     </tr>
 
@@ -22,7 +38,16 @@
                 @item.Key
             </td>
             <td>
-                @item.Value
+                @item.Value.ActionName
+            </td>
+            <td>
+                @item.Value.Created
+            </td>
+            <td>
+                @item.Value.TaskState
+            </td>
+            <td>
+                @Html.ActionLink("View result", "RedirectToResult", new { id = item.Key })
             </td>
         </tr>
     }
