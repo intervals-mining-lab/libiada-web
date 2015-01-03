@@ -17,13 +17,13 @@
         /// </returns>
         public ActionResult Index()
         {
-            Dictionary<int, TaskData> tasks = new Dictionary<int, TaskData>();
+            var tasks = new List<TaskData>();
             var tasksFromManager = TaskManager.Tasks;
             foreach (var task in tasksFromManager)
             {
-                lock (task.Value)
+                lock (task)
                 {
-                    tasks.Add(task.Key, task.Value.TaskData);   
+                    tasks.Add(task.TaskData);
                 }
             }
             ViewBag.ErrorMessage = TempData["ErrorMessage"];

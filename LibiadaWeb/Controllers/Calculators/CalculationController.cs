@@ -124,6 +124,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] languageIds,
             int?[] translatorIds)
         {
+            int taskId = TaskManager.GetId();
             Task task = new Task(() =>
             {
                 matterIds = matterIds.OrderBy(m => m).ToArray();
@@ -222,12 +223,11 @@ namespace LibiadaWeb.Controllers.Calculators
                                          { "chainIds", new List<long>(matterIds) },
                                          { "characteristicsList", characteristicsList }
                                      };
-            });
+            }, taskId);
 
             task.ControllerName = "Calculation";
             task.TaskData.ActionName = "Calculation";
-            int taskId = TaskManager.CreateNewTask(task);
-            TaskManager.StartTask(taskId);
+            TaskManager.AddTask(task);
 
             return RedirectToAction("Index", "TaskManager", new {id = taskId});
         }

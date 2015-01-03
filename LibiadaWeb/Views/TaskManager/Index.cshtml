@@ -35,19 +35,19 @@
     {
         <tr>
             <td>
-                @item.Key
+                @item.Id
             </td>
             <td>
-                @item.Value.ActionName
+                @item.ActionName
             </td>
             <td>
-                @item.Value.Created
+                @item.Created
             </td>
             <td>
-                @item.Value.TaskState
+                @item.TaskState
             </td>
             <td>
-                @Html.ActionLink("View result", "RedirectToResult", new { id = item.Key })
+                @Html.ActionLink("View result", "RedirectToResult", new { id = item.Id })
             </td>
         </tr>
     }

@@ -1,77 +1,128 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace LibiadaWeb.Maintenance
 {
     public static class TaskManager
     {
-        private static readonly Dictionary<int, Task> tasks = new Dictionary<int, Task>();
+        private static readonly List<Task> tasks = new List<Task>();
         private static int taskCounter = 0;
         private static int coreCount = Environment.ProcessorCount;
 
-        public static int CreateNewTask(Task task)
+        public static void AddTask(Task task)
         {
-            tasks.Add(taskCounter, task);
+            tasks.Add(task);
+            ManageTasks();
+        }
+
+        public static int GetId()
+        {
             return taskCounter++;
         }
 
-        public static void StartTask(int id)
+        private static void StartTask(int id)
         {
-            var taskFromList = tasks[id];
-            bool taskCheck;
-            lock (taskFromList)
+            var taskToStart = tasks[id];
+            Action<Task> action = (task) =>
             {
-                taskCheck = taskFromList != null && taskFromList.TaskData.TaskState == TaskState.InQueue;
-            }
-            if (taskCheck)
-            {
-                Action<Task> action = (task) =>
+                try
                 {
-                    try
+                    Func<Dictionary<string, object>> method;
+                    lock (task)
                     {
-                        Func<Dictionary<string, object>> method;
-                        lock (task)
+                        method = task.Action;
+                    }
+
+                    var result = method();
+                    lock (task)
+                    {
+                        task.Result = result;
+                        task.TaskData.TaskState = TaskState.Completed;
+                    }
+                }
+                catch (Exception e)
+                {
+                    lock (task)
+                    {
+                        string errorMessage = e.Message;
+                        string stackTrace = e.StackTrace;
+
+                        while (e.InnerException != null)
                         {
-                            method = task.Action;
-                            task.TaskData.TaskState = TaskState.InProgress;
+                            e = e.InnerException;
+                            errorMessage += "<br/>" + e.Message;
                         }
 
-                        var result = method();
-                        lock (task)
-                        {
-                            task.Result = result;
-                            task.TaskData.TaskState = TaskState.Completed;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        lock (task)
-                        {
-                            task.TaskData.TaskState = TaskState.Error;
-                            task.Result = new Dictionary<string, object>
+                        task.Result = new Dictionary<string, object>
                             {
                                 { "Error", true }, 
-                                { "ErrorMessage", e.Message },
-                                { "StackTrace", e.StackTrace }
+                                { "ErrorMessage", errorMessage },
+                                { "StackTrace", stackTrace }
                             };
-                        }
-                    }
-                };
 
-                Thread thread = new Thread(() => action(taskFromList));
-                thread.Start();
-            }
+                        task.TaskData.TaskState = TaskState.Error;
+                    }
+                }
+
+                ManageTasks();
+            };
+
+            var thread = new Thread(() => action(taskToStart));
+            thread.Start();
         }
 
         public static Task GetTask(int id)
         {
-            return tasks[id];
+            return tasks.Single(t => t.TaskData.Id == id);
         }
 
-        public static Dictionary<int, Task> Tasks
+        public static List<Task> Tasks
         {
             get { return tasks; }
+        }
+
+        public static void ManageTasks()
+        {
+            lock (Tasks)
+            {
+                int activeTasks = 0;
+                foreach (var task in Tasks)
+                {
+                    lock (task)
+                    {
+                        if (task.TaskData.TaskState == TaskState.InProgress)
+                        {
+                            activeTasks++;
+                        }
+                    }
+                }
+                while (activeTasks < coreCount)
+                {
+                    activeTasks++;
+                    var taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
+                    if (taskToStart != null)
+                    {
+                        lock (taskToStart)
+                        {
+                            if (taskToStart != null)
+                            {
+                                taskToStart.TaskData.TaskState = TaskState.InProgress;
+                                StartTask(taskToStart.TaskData.Id);
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
         }
 
     }
