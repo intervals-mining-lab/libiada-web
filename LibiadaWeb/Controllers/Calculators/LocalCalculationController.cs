@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -137,114 +139,123 @@
             bool isGrowingWindow,
             bool isAutocorrelation)
         {
-            List<List<List<double>>> characteristics = CalculateCharacteristics(
-                matterIds,
-                isGrowingWindow, 
-                notationId, 
-                languageId, 
-                length, 
-                characteristicIds, 
-                linkIds, 
-                step);
-
-            var chainNames = new List<string>();
-            var characteristicNames = new List<string>();
-            var partNames = new List<List<string>>();
-            var starts = new List<List<int>>();
-            var lengthes = new List<List<int>>();
-
-            for (int k = 0; k < matterIds.Length; k++)
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                long matterId = matterIds[k];
-                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
-                partNames.Add(new List<string>());
-                starts.Add(new List<int>());
-                lengthes.Add(new List<int>());
+                List<List<List<double>>> characteristics = CalculateCharacteristics(
+                    matterIds,
+                    isGrowingWindow,
+                    notationId,
+                    languageId,
+                    length,
+                    characteristicIds,
+                    linkIds,
+                    step);
 
-                long chainId;
-                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                var chainNames = new List<string>();
+                var characteristicNames = new List<string>();
+                var partNames = new List<List<string>>();
+                var starts = new List<List<int>>();
+                var lengthes = new List<List<int>>();
+
+                for (int k = 0; k < matterIds.Length; k++)
                 {
-                    chainId =
-                        db.literature_chain.Single(l => l.matter_id == matterId 
-                                                && l.notation_id == notationId 
-                                                && l.language_id == languageId).id;
-                }
-                else
-                {
-                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-                }
+                    long matterId = matterIds[k];
+                    chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                    partNames.Add(new List<string>());
+                    starts.Add(new List<int>());
+                    lengthes.Add(new List<int>());
 
-                Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
-
-                CutRule cutRule = isGrowingWindow
-                                  ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
-                                  : new SimpleCutRule(libiadaChain.GetLength(), step, length);
-
-                CutRuleIterator iter = cutRule.GetIterator();
-
-                while (iter.Next())
-                {
-                    var tempChain = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
-
-                    for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
+                    long chainId;
+                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
                     {
-                        tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
+                        chainId =
+                            db.literature_chain.Single(l => l.matter_id == matterId
+                                                            && l.notation_id == notationId
+                                                            && l.language_id == languageId).id;
+                    }
+                    else
+                    {
+                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                     }
 
-                    partNames.Last().Add(tempChain.ToString());
-                    starts.Last().Add(iter.GetStartPosition());
-                    lengthes.Last().Add(tempChain.GetLength());
+                    Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
+
+                    CutRule cutRule = isGrowingWindow
+                        ? (CutRule) new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
+                        : new SimpleCutRule(libiadaChain.GetLength(), step, length);
+
+                    CutRuleIterator iter = cutRule.GetIterator();
+
+                    while (iter.Next())
+                    {
+                        var tempChain = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
+
+                        for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
+                        {
+                            tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
+                        }
+
+                        partNames.Last().Add(tempChain.ToString());
+                        starts.Last().Add(iter.GetStartPosition());
+                        lengthes.Last().Add(tempChain.GetLength());
+                    }
+
+                    if (isDelta)
+                    {
+                        CalculateDelta(characteristics);
+                    }
+
+                    if (isFourier)
+                    {
+                        FastFourierTransform.FourierTransform(characteristics);
+                    }
                 }
 
-                if (isDelta)
+                if (isAutocorrelation)
                 {
-                    CalculateDelta(characteristics);
+                    var autoCorrelation = new AutoCorrelation();
+                    autoCorrelation.CalculateAutocorrelation(characteristics);
                 }
 
-                if (isFourier)
+                for (int i = 0; i < characteristicIds.Length; i++)
                 {
-                    FastFourierTransform.FourierTransform(characteristics);
+                    int characteristicId = characteristicIds[i];
+                    int linkId = linkIds[i];
+                    characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
+                                            db.link.Single(l => l.id == linkId).name);
                 }
-            }
 
-            if (isAutocorrelation)
-            {
-                var autoCorrelation = new AutoCorrelation();
-                autoCorrelation.CalculateAutocorrelation(characteristics);
-            }
-
-            for (int i = 0; i < characteristicIds.Length; i++)
-            {
-                int characteristicId = characteristicIds[i];
-                int linkId = linkIds[i];
-                characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " + db.link.Single(l => l.id == linkId).name);
-            }
-
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicIds.Length; i++)
-            {
-                characteristicsList.Add(new SelectListItem
+                var characteristicsList = new List<SelectListItem>();
+                for (int i = 0; i < characteristicIds.Length; i++)
                 {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
-            }
-            
-            TempData["result"] = new Dictionary<string, object>
-                                     {
-                                        { "characteristics", characteristics },
-                                        { "chainNames", chainNames },
-                                        //{ "partNames", partNames },
-                                        { "starts", starts },
-                                        { "lengthes", lengthes },
-                                        { "characteristicIds", new List<int>(characteristicIds) },
-                                        { "characteristicNames", characteristicNames },
-                                        { "chainIds", matterIds },
-                                        { "characteristicsList", characteristicsList }
-                                     };
+                    characteristicsList.Add(new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = characteristicNames[i],
+                        Selected = false
+                    });
+                }
 
-            return this.RedirectToAction("Result");
+                return new Dictionary<string, object>
+                {
+                    {"characteristics", characteristics},
+                    {"chainNames", chainNames},
+                    //{ "partNames", partNames },
+                    {"starts", starts},
+                    {"lengthes", lengthes},
+                    {"characteristicIds", new List<int>(characteristicIds)},
+                    {"characteristicNames", characteristicNames},
+                    {"chainIds", matterIds},
+                    {"characteristicsList", characteristicsList}
+                };
+            }, taskId);
+
+            task.ControllerName = "LocalCalculation";
+            task.TaskData.ActionName = "Local calculation";
+            TaskManager.AddTask(task);
+
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
 
         /// <summary>

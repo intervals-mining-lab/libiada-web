@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -138,119 +140,136 @@
             bool oneWord, 
             long wordId = 0)
         {
-            var characteristics = new List<binary_characteristic>();
-            var elements = new List<element>();
-            List<binary_characteristic> filteredResult = null;
-            List<binary_characteristic> filteredResult1 = null;
-            List<binary_characteristic> filteredResult2 = null;
-            var firstElements = new List<element>();
-            var secondElements = new List<element>();
-            string word = null;
-
-            chain dbChain = db.chain.Single(c => c.id == chainId);
-
-
-            Chain currentChain = this.chainRepository.ToLibiadaChain(dbChain.id);
-            string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-
-            IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
-            Link link = (Link)linkId;
-
-            if (oneWord)
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                word = this.OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain, calculator, link);
+                var characteristics = new List<binary_characteristic>();
+                var elements = new List<element>();
+                List<binary_characteristic> filteredResult = null;
+                List<binary_characteristic> filteredResult1 = null;
+                List<binary_characteristic> filteredResult2 = null;
+                var firstElements = new List<element>();
+                var secondElements = new List<element>();
+                string word = null;
 
-                filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                  b.characteristic_type_id == characteristicId &&
-                                                                  b.link_id == linkId && b.first_element_id == wordId)
-                                .OrderBy(b => b.second_element_id)
-                                .ToList();
+                chain dbChain = db.chain.Single(c => c.id == chainId);
 
-                filteredResult2 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                  b.characteristic_type_id == characteristicId &&
-                                                                  b.link_id == linkId && b.second_element_id == wordId)
-                                .OrderBy(b => b.first_element_id)
-                                .ToList();
 
-                for (int l = 0; l < currentChain.Alphabet.Cardinality; l++)
+                Chain currentChain = this.chainRepository.ToLibiadaChain(dbChain.id);
+                string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+
+                IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
+                Link link = (Link) linkId;
+
+                if (oneWord)
                 {
-                    long elementId = filteredResult1[l].second_element_id;
-                    elements.Add(db.element.Single(e => e.id == elementId));
-                }
-            }
-            else
-            {
-                if (frequency)
-                {
-                    this.FrequencyCharacteristic(
-                        characteristicId, 
-                        linkId, 
-                        frequencyCount, 
-                        currentChain, 
-                        dbChain, 
-                        calculator, 
-                        link);
-                }
-                else
-                {
-                    this.NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator, link);
-                }
+                    word = this.OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain,
+                        calculator, link);
 
-                if (filter)
-                {
-                    filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                         b.characteristic_type_id == characteristicId &&
-                                                                         b.link_id == linkId)
-                                       .OrderByDescending(b => b.value)
-                                       .Take(filterSize).ToList();
-
-                    for (int l = 0; l < filterSize; l++)
-                    {
-                        long firstElementId = filteredResult[l].first_element_id;
-                        firstElements.Add(db.element.Single(e => e.id == firstElementId));
-                    }
-
-                    for (int m = 0; m < filterSize; m++)
-                    {
-                        long secondElementId = filteredResult[m].second_element_id;
-                        secondElements.Add(db.element.Single(e => e.id == secondElementId));
-                    }
-                }
-                else
-                {
-                    characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                    filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                           b.characteristic_type_id == characteristicId &&
-                                                                          b.link_id == linkId)
-                                        .OrderBy(b => b.second_element_id)
-                                        .ThenBy(b => b.first_element_id)
-                                        .ToList();
-                    for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
+                                                                          b.link_id == linkId &&
+                                                                          b.first_element_id == wordId)
+                        .OrderBy(b => b.second_element_id)
+                        .ToList();
+
+                    filteredResult2 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                          b.characteristic_type_id == characteristicId &&
+                                                                          b.link_id == linkId &&
+                                                                          b.second_element_id == wordId)
+                        .OrderBy(b => b.first_element_id)
+                        .ToList();
+
+                    for (int l = 0; l < currentChain.Alphabet.Cardinality; l++)
                     {
-                        long firstElementId = characteristics[m].first_element_id;
-                        elements.Add(db.element.Single(e => e.id == firstElementId));
+                        long elementId = filteredResult1[l].second_element_id;
+                        elements.Add(db.element.Single(e => e.id == elementId));
                     }
                 }
-            }
+                else
+                {
+                    if (frequency)
+                    {
+                        this.FrequencyCharacteristic(
+                            characteristicId,
+                            linkId,
+                            frequencyCount,
+                            currentChain,
+                            dbChain,
+                            calculator,
+                            link);
+                    }
+                    else
+                    {
+                        this.NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator,
+                            link);
+                    }
 
-            TempData["result"] = new Dictionary<string, object>
-                                     {
-                                        { "characteristics", characteristics },
-                                        { "isFilter", filter },
-                                        { "filteredResult", filteredResult },
-                                        { "firstElements", firstElements },
-                                        { "secondElements", secondElements },
-                                        { "filterSize", filterSize },
-                                        { "elements", elements },
-                                        { "characteristicName", db.characteristic_type.Single(charact => charact.id == characteristicId).name },
-                                        { "chainName", db.chain.Single(m => m.id == chainId).matter.name },
-                                        { "notationName", db.chain.Single(c => c.id == chainId).notation.name },
-                                        { "filteredResult1", filteredResult1 },
-                                        { "filteredResult2", filteredResult2 },
-                                        { "oneWord", oneWord },
-                                        { "word", word }
-                                     };
+                    if (filter)
+                    {
+                        filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                             b.characteristic_type_id ==
+                                                                             characteristicId &&
+                                                                             b.link_id == linkId)
+                            .OrderByDescending(b => b.value)
+                            .Take(filterSize).ToList();
 
-            return this.RedirectToAction("Result");
+                        for (int l = 0; l < filterSize; l++)
+                        {
+                            long firstElementId = filteredResult[l].first_element_id;
+                            firstElements.Add(db.element.Single(e => e.id == firstElementId));
+                        }
+
+                        for (int m = 0; m < filterSize; m++)
+                        {
+                            long secondElementId = filteredResult[m].second_element_id;
+                            secondElements.Add(db.element.Single(e => e.id == secondElementId));
+                        }
+                    }
+                    else
+                    {
+                        characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
+                                                                              b.characteristic_type_id ==
+                                                                              characteristicId &&
+                                                                              b.link_id == linkId)
+                            .OrderBy(b => b.second_element_id)
+                            .ThenBy(b => b.first_element_id)
+                            .ToList();
+                        for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
+                        {
+                            long firstElementId = characteristics[m].first_element_id;
+                            elements.Add(db.element.Single(e => e.id == firstElementId));
+                        }
+                    }
+                }
+
+                return new Dictionary<string, object>
+                {
+                    {"characteristics", characteristics},
+                    {"isFilter", filter},
+                    {"filteredResult", filteredResult},
+                    {"firstElements", firstElements},
+                    {"secondElements", secondElements},
+                    {"filterSize", filterSize},
+                    {"elements", elements},
+                    {
+                        "characteristicName",
+                        db.characteristic_type.Single(charact => charact.id == characteristicId).name
+                    },
+                    {"chainName", db.chain.Single(m => m.id == chainId).matter.name},
+                    {"notationName", db.chain.Single(c => c.id == chainId).notation.name},
+                    {"filteredResult1", filteredResult1},
+                    {"filteredResult2", filteredResult2},
+                    {"oneWord", oneWord},
+                    {"word", word}
+                };
+            }, taskId);
+
+            task.ControllerName = "RelationCalculation";
+            task.TaskData.ActionName = "Relation calculation";
+            TaskManager.AddTask(task);
+
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
 
         /// <summary>

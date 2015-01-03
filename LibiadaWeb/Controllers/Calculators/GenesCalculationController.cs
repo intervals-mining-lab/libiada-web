@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -133,136 +135,151 @@
             int[] pieceTypeIds,
             bool isSort)
         {
-            var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
-            var chainNames = new List<string>();
-            var chainsProduct = new List<List<string>>();
-            var chainsPosition = new List<List<long>>();
-            var chainsPieceTypes = new List<List<string>>();
-            var characteristicNames = new List<string>();
-
-            // Перебор всех цепочек; первый уровень массива характеристик
-            for (int w = 0; w < matterIds.Length; w++)
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                long matterId = matterIds[w];
-                chainNames.Add(db.matter.Single(m => m.id == matterId).name);
-                chainsProduct.Add(new List<string>());
-                chainsPosition.Add(new List<long>());
-                chainsPieceTypes.Add(new List<string>());
-                characteristics.Add(new List<List<KeyValuePair<int, double>>>());
+                var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
+                var chainNames = new List<string>();
+                var chainsProduct = new List<List<string>>();
+                var chainsPosition = new List<List<long>>();
+                var chainsPieceTypes = new List<List<string>>();
+                var characteristicNames = new List<string>();
 
-                var notationId = notationIds[w];
-
-                var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
-
-                var genes = db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
-
-                var pieces = genes.Select(g => g.piece.First()).ToList();
-
-                var chains = ExtractChains(pieces, chainId);
-
-                // Перебор всех характеристик и форм записи; второй уровень массива характеристик
-                for (int i = 0; i < characteristicIds.Length; i++)
+                // Перебор всех цепочек; первый уровень массива характеристик
+                for (int w = 0; w < matterIds.Length; w++)
                 {
-                    characteristics.Last().Add(new List<KeyValuePair<int, double>>());
-                    int characteristicId = characteristicIds[i];
-                    int? linkId = linkIds[i];
+                    long matterId = matterIds[w];
+                    chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                    chainsProduct.Add(new List<string>());
+                    chainsPosition.Add(new List<long>());
+                    chainsPieceTypes.Add(new List<string>());
+                    characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-                    IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                    var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+                    var notationId = notationIds[w];
 
-                    for (int j = 0; j < chains.Count; j++)
+                    var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+
+                    var genes =
+                        db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id))
+                            .Include("piece")
+                            .ToArray();
+
+                    var pieces = genes.Select(g => g.piece.First()).ToList();
+
+                    var chains = ExtractChains(pieces, chainId);
+
+                    // Перебор всех характеристик и форм записи; второй уровень массива характеристик
+                    for (int i = 0; i < characteristicIds.Length; i++)
                     {
-                        long geneId = genes[j].id;
+                        characteristics.Last().Add(new List<KeyValuePair<int, double>>());
+                        int characteristicId = characteristicIds[i];
+                        int? linkId = linkIds[i];
 
-                        if (!db.characteristic.Any(c => c.chain_id == geneId &&
-                                                        c.characteristic_type_id == characteristicId &&
-                                                        ((linkId == null && c.link_id == null) || (linkId == c.link_id))))
+                        string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                        IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
+                        var link = linkId != null ? (Link) db.link.Single(l => l.id == linkId).id : Link.None;
+
+                        for (int j = 0; j < chains.Count; j++)
                         {
-                            double value = calculator.Calculate(chains[j], link);
-                            var currentCharacteristic = new characteristic
+                            long geneId = genes[j].id;
+
+                            if (!db.characteristic.Any(c => c.chain_id == geneId &&
+                                                            c.characteristic_type_id == characteristicId &&
+                                                            ((linkId == null && c.link_id == null) ||
+                                                             (linkId == c.link_id))))
                             {
-                                chain_id = geneId,
-                                characteristic_type_id = characteristicId,
-                                link_id = linkId,
-                                value = value,
-                                value_string = value.ToString()
-                            };
+                                double value = calculator.Calculate(chains[j], link);
+                                var currentCharacteristic = new characteristic
+                                {
+                                    chain_id = geneId,
+                                    characteristic_type_id = characteristicId,
+                                    link_id = linkId,
+                                    value = value,
+                                    value_string = value.ToString()
+                                };
 
-                            db.characteristic.Add(currentCharacteristic);
-                            db.SaveChanges();
+                                db.characteristic.Add(currentCharacteristic);
+                                db.SaveChanges();
+                            }
                         }
-                    }
 
-                    for (int d = 0; d < chains.Count; d++)
-                    {
-                        long geneId = genes[d].id;
-                        double? characteristic = db.characteristic.Single(c =>
-                                    c.chain_id == geneId &&
-                                    c.characteristic_type_id == characteristicId &&
-                                    ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
-
-                        characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
-
-                        if (i == 0)
+                        for (int d = 0; d < chains.Count; d++)
                         {
-                            var productId = genes[d].product_id;
-                            var pieceTypeId = genes[d].piece_type_id;
+                            long geneId = genes[d].id;
+                            double? characteristic = db.characteristic.Single(c =>
+                                c.chain_id == geneId &&
+                                c.characteristic_type_id == characteristicId &&
+                                ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
 
-                            chainsProduct.Last().Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
-                            chainsPosition.Last().Add(pieces[d].start);
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double) characteristic));
 
-                            chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
+                            if (i == 0)
+                            {
+                                var productId = genes[d].product_id;
+                                var pieceTypeId = genes[d].piece_type_id;
+
+                                chainsProduct.Last()
+                                    .Add(productId == null
+                                        ? string.Empty
+                                        : db.product.Single(p => productId == p.id).name);
+                                chainsPosition.Last().Add(pieces[d].start);
+
+                                chainsPieceTypes.Last().Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
+                            }
                         }
                     }
                 }
-            }
 
-            // подписи для характеристик
-            for (int k = 0; k < characteristicIds.Length; k++)
-            {
-                int characteristicId = characteristicIds[k];
-
-                string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
-                characteristicNames.Add(characteristicType);
-            }
-
-            // ранговая сортировка
-            if (isSort)
-            {
-                for (int f = 0; f < matterIds.Length; f++)
+                // подписи для характеристик
+                for (int k = 0; k < characteristicIds.Length; k++)
                 {
-                    for (int p = 0; p < characteristics[f].Count; p++)
+                    int characteristicId = characteristicIds[k];
+
+                    string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
+                    characteristicNames.Add(characteristicType);
+                }
+
+                // ранговая сортировка
+                if (isSort)
+                {
+                    for (int f = 0; f < matterIds.Length; f++)
                     {
-                        SortKeyValuePairList(characteristics[f][p]);
+                        for (int p = 0; p < characteristics[f].Count; p++)
+                        {
+                            SortKeyValuePairList(characteristics[f][p]);
+                        }
                     }
                 }
-            }
 
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
-            {
-                characteristicsList.Add(new SelectListItem
+                var characteristicsList = new List<SelectListItem>();
+                for (int i = 0; i < characteristicNames.Count; i++)
                 {
-                    Value = i.ToString(),
-                    Text = characteristicNames[i],
-                    Selected = false
-                });
-            }
+                    characteristicsList.Add(new SelectListItem
+                    {
+                        Value = i.ToString(),
+                        Text = characteristicNames[i],
+                        Selected = false
+                    });
+                }
 
-            this.TempData["result"] = new Dictionary<string, object>
-                                     {
-                                         { "characteristics", characteristics }, 
-                                         { "chainNames", chainNames }, 
-                                         { "chainsProduct", chainsProduct }, 
-                                         { "chainsPosition", chainsPosition }, 
-                                         { "chainsPieceTypes", chainsPieceTypes }, 
-                                         { "characteristicNames", characteristicNames }, 
-                                         { "matterIds", matterIds },
-                                         { "characteristicsList", characteristicsList }
-                                     };
+                return new Dictionary<string, object>
+                {
+                    {"characteristics", characteristics},
+                    {"chainNames", chainNames},
+                    {"chainsProduct", chainsProduct},
+                    {"chainsPosition", chainsPosition},
+                    {"chainsPieceTypes", chainsPieceTypes},
+                    {"characteristicNames", characteristicNames},
+                    {"matterIds", matterIds},
+                    {"characteristicsList", characteristicsList}
+                };
+            }, taskId);
 
-            return this.RedirectToAction("Result");
+            task.ControllerName = "GenesCalculation";
+            task.TaskData.ActionName = "Genes calculation";
+            TaskManager.AddTask(task);
+            
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
 
         /// <summary>

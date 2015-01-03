@@ -8,6 +8,7 @@ using LibiadaCore.Core.Characteristics;
 using LibiadaCore.Core.Characteristics.Calculators;
 using LibiadaCore.Misc.Iterators;
 using LibiadaWeb.Helpers;
+using LibiadaWeb.Maintenance;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
@@ -99,82 +100,100 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] pieceTypeIds,
             string validationType)
         {
-            var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
-            var firstChainName = db.matter.Single(m => m.id == matterId1).name;
-            var firstChainProducts = new List<string>();
-            var firstChainPositions = new List<long>();
-            var firstChainPieceTypes = new List<string>();
 
-
-            var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
-            var secondChainName = db.matter.Single(m => m.id == matterId1).name;
-            var secondChainProducts = new List<string>();
-            var secondChainPositions = new List<long>();
-            var secondChainPieceTypes = new List<string>();
-
-            CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
-            CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
-
-            int optimalRotation = 0;
-
-            if (firstChainCharacteristics.Count >= secondChainCharacteristics.Count)
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                switch (validationType)
+
+                var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
+                var firstChainName = db.matter.Single(m => m.id == matterId1).name;
+                var firstChainProducts = new List<string>();
+                var firstChainPositions = new List<long>();
+                var firstChainPieceTypes = new List<string>();
+
+
+                var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
+                var secondChainName = db.matter.Single(m => m.id == matterId1).name;
+                var secondChainProducts = new List<string>();
+                var secondChainPositions = new List<long>();
+                var secondChainPieceTypes = new List<string>();
+
+                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds,
+                    firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
+                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds,
+                    secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
+
+                int optimalRotation = 0;
+
+                if (firstChainCharacteristics.Count >= secondChainCharacteristics.Count)
                 {
-                    case "Equality":
-                        optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics, secondChainCharacteristics);
-                        break;
-                    case "Difference":
-                        optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
-                        break;
-                    case "NormalizedDifference":
-                        optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
-                        break;
-                    default:
-                        throw new ArgumentException("unknown validation type");
+                    switch (validationType)
+                    {
+                        case "Equality":
+                            optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics,
+                                secondChainCharacteristics);
+                            break;
+                        case "Difference":
+                            optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics,
+                                secondChainCharacteristics);
+                            break;
+                        case "NormalizedDifference":
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics,
+                                secondChainCharacteristics);
+                            break;
+                        default:
+                            throw new ArgumentException("unknown validation type");
+                    }
+
                 }
-                
-            }
-            else
-            {
-                switch (validationType)
+                else
                 {
-                    case "Equality":
-                        optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics, firstChainCharacteristics);
-                        break;
-                    case "Difference":
-                        optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
-                        break;
-                    case "NormalizedDifference":
-                        optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
-                        break;
-                    default:
-                        throw new ArgumentException("unknown validation type");
+                    switch (validationType)
+                    {
+                        case "Equality":
+                            optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics,
+                                firstChainCharacteristics);
+                            break;
+                        case "Difference":
+                            optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics,
+                                firstChainCharacteristics);
+                            break;
+                        case "NormalizedDifference":
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics,
+                                firstChainCharacteristics);
+                            break;
+                        default:
+                            throw new ArgumentException("unknown validation type");
+                    }
                 }
-            }
 
-            string characteristicName = db.characteristic_type.Single(c => c.id == characteristicId).name;
+                string characteristicName = db.characteristic_type.Single(c => c.id == characteristicId).name;
 
-            TempData["result"] = new Dictionary<string, object>
-                                     {
-                                         { "firstChainCharacteristics", firstChainCharacteristics }, 
-                                         { "firstChainName", firstChainName }, 
-                                         { "firstChainProducts", firstChainProducts }, 
-                                         { "firstChainPositions", firstChainPositions }, 
-                                         { "firstChainPieceTypes", firstChainPieceTypes },
-                                         { "secondChainCharacteristics", secondChainCharacteristics }, 
-                                         { "secondChainName", secondChainName }, 
-                                         { "secondChainProducts", secondChainProducts }, 
-                                         { "secondChainPositions", secondChainPositions }, 
-                                         { "secondChainPieceTypes", secondChainPieceTypes },
-                                         { "characteristicName", characteristicName }, 
-                                         { "matterId1", matterId1 },
-                                         { "matterId2", matterId2 },
-                                         {"optimalRotation", optimalRotation },
-                                         {"validationType", validationType}
-                                     };
+                return new Dictionary<string, object>
+                {
+                    {"firstChainCharacteristics", firstChainCharacteristics},
+                    {"firstChainName", firstChainName},
+                    {"firstChainProducts", firstChainProducts},
+                    {"firstChainPositions", firstChainPositions},
+                    {"firstChainPieceTypes", firstChainPieceTypes},
+                    {"secondChainCharacteristics", secondChainCharacteristics},
+                    {"secondChainName", secondChainName},
+                    {"secondChainProducts", secondChainProducts},
+                    {"secondChainPositions", secondChainPositions},
+                    {"secondChainPieceTypes", secondChainPieceTypes},
+                    {"characteristicName", characteristicName},
+                    {"matterId1", matterId1},
+                    {"matterId2", matterId2},
+                    {"optimalRotation", optimalRotation},
+                    {"validationType", validationType}
+                };
+            }, taskId);
 
-            return RedirectToAction("Result");
+            task.ControllerName = "Alignment";
+            task.TaskData.ActionName = "Genes alignment";
+            TaskManager.AddTask(task);
+
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
 
         private void CalculateCharacteristic(

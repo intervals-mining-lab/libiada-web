@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -74,38 +76,41 @@
         [HttpPost]
         public ActionResult Index(long firstMatterId, long secondMatterId, int length, bool congeneric)
         {
-            string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
-            string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
-            matter matter1 = db.matter.Single(m => m.id == firstMatterId);
-            long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
-            matter matter2 = db.matter.Single(m => m.id == secondMatterId);
-            long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
-            Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
-
-            BaseChain res1 = null;
-            BaseChain res2 = null;
-
-            int i = 0;
-            int j = 0;
-            var iter1 = new IteratorStart(libiadaChain1, length, 1);
-            bool duplicate = false;
-            while (!duplicate && iter1.Next())
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                i++;
-                var tempChain1 = (BaseChain)iter1.Current();
-                var iter2 = new IteratorStart(libiadaChain2, length, 1);
-                j = 0;
-                while (!duplicate && iter2.Next())
-                {
-                    j++;
-                    var tempChain2 = (BaseChain)iter2.Current();
+                string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
+                string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
+                matter matter1 = db.matter.Single(m => m.id == firstMatterId);
+                long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+                Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
+                matter matter2 = db.matter.Single(m => m.id == secondMatterId);
+                long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+                Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
 
-                    if (congeneric)
+                BaseChain res1 = null;
+                BaseChain res2 = null;
+
+                int i = 0;
+                int j = 0;
+                var iter1 = new IteratorStart(libiadaChain1, length, 1);
+                bool duplicate = false;
+                while (!duplicate && iter1.Next())
+                {
+                    i++;
+                    var tempChain1 = (BaseChain) iter1.Current();
+                    var iter2 = new IteratorStart(libiadaChain2, length, 1);
+                    j = 0;
+                    while (!duplicate && iter2.Next())
                     {
-                        for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
+                        j++;
+                        var tempChain2 = (BaseChain) iter2.Current();
+
+                        if (congeneric)
                         {
-                            /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
+                            for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
+                            {
+                                /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
                               for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
                               {
 
@@ -117,32 +122,39 @@
                                       duplicate = true;
                                   }
                               }*/
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (!tempChain1.Equals(tempChain2) && this.CompareBuildings(tempChain2.Building, tempChain1.Building))
+                        else
                         {
-                            res1 = tempChain1;
-                            res2 = tempChain2;
-                            duplicate = true;
+                            if (!tempChain1.Equals(tempChain2) &&
+                                this.CompareBuildings(tempChain2.Building, tempChain1.Building))
+                            {
+                                res1 = tempChain1;
+                                res2 = tempChain2;
+                                duplicate = true;
+                            }
                         }
                     }
                 }
-            }
 
 
-            this.TempData["result"] = new Dictionary<string, object>
-                                    {
-                                        { "duplicate", duplicate },
-                                        { "chainName1", chainName1 },
-                                        { "chainName2", chainName2 },
-                                        { "res1", res1 },
-                                        { "res2", res2 },
-                                        { "pos1", i },
-                                        { "pos2", j }
-                                    };
-            return this.RedirectToAction("Result");
+                return new Dictionary<string, object>
+                {
+                    {"duplicate", duplicate},
+                    {"chainName1", chainName1},
+                    {"chainName2", chainName2},
+                    {"res1", res1},
+                    {"res2", res2},
+                    {"pos1", i},
+                    {"pos2", j}
+                };
+            }, taskId);
+
+            task.ControllerName = "BuildingComparison";
+            task.TaskData.ActionName = "Building comparison";
+            TaskManager.AddTask(task);
+
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
 
         /// <summary>

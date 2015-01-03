@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaWeb.Maintenance;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -73,41 +75,49 @@
         [HttpPost]
         public ActionResult Index(int[] characteristicIds, int[] linkIds, string chain)
         {
-            var characteristics = new List<double>();
-            var characteristicNames = new List<string>();
-
-            for (int i = 0; i < characteristicIds.Length; i++)
+            int taskId = TaskManager.GetId();
+            Task task = new Task(() =>
             {
-                var characteristicId = characteristicIds[i];
-                var linkId = linkIds[i];
+                var characteristics = new List<double>();
+                var characteristicNames = new List<string>();
 
-                var tempChain = new Chain(chain);
+                for (int i = 0; i < characteristicIds.Length; i++)
+                {
+                    var characteristicId = characteristicIds[i];
+                    var linkId = linkIds[i];
 
-                characteristicNames.Add(
-                    db.characteristic_type.Single(charact => charact.id == characteristicId).name);
-                var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
-                var calculator = CalculatorsFactory.CreateFullCalculator(className);
-                var link = (Link)db.link.Single(l => l.id == linkId).id;
+                    var tempChain = new Chain(chain);
 
-                characteristics.Add(calculator.Calculate(tempChain, link));
-            }
+                    characteristicNames.Add(
+                        db.characteristic_type.Single(charact => charact.id == characteristicId).name);
+                    var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                    var calculator = CalculatorsFactory.CreateFullCalculator(className);
+                    var link = (Link) db.link.Single(l => l.id == linkId).id;
 
-            var characteristicsList = new List<SelectListItem>();
-            for (int i = 0; i < characteristicNames.Count; i++)
-            {
-                characteristicsList.Add(
-                    new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
-            }
+                    characteristics.Add(calculator.Calculate(tempChain, link));
+                }
 
-            TempData["result"] = new Dictionary<string, object>
-                                     {
-                                        { "characteristics", characteristics },
-                                        { "characteristicIds", new List<int>(characteristicIds) },
-                                        { "characteristicNames", characteristicNames },
-                                        { "characteristicsList", characteristicsList }
-                                     };
+                var characteristicsList = new List<SelectListItem>();
+                for (int i = 0; i < characteristicNames.Count; i++)
+                {
+                    characteristicsList.Add(
+                        new SelectListItem {Value = i.ToString(), Text = characteristicNames[i], Selected = false});
+                }
 
-            return this.RedirectToAction("Result");
+                return new Dictionary<string, object>
+                {
+                    {"characteristics", characteristics},
+                    {"characteristicIds", new List<int>(characteristicIds)},
+                    {"characteristicNames", characteristicNames},
+                    {"characteristicsList", characteristicsList}
+                };
+            }, taskId);
+
+            task.ControllerName = "QuickCalculation";
+            task.TaskData.ActionName = "Quick calculation";
+            TaskManager.AddTask(task);
+
+            return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
     }
 }

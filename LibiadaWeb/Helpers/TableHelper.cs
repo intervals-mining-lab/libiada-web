@@ -158,6 +158,7 @@
                 InnerHtml = Br + header + Br + body + Br
             };
 
+            table.AddCssClass("table");
             return MvcHtmlString.Create(Br + table + Br);
         }
 
