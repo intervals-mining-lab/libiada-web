@@ -1,8 +1,5 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -17,8 +14,6 @@ namespace LibiadaWeb.Controllers.Calculators
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Chains;
-
-    using Microsoft.Ajax.Utilities;
 
     /// <summary>
     /// The genes calculation controller.
@@ -60,6 +55,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.chainRepository = new ChainRepository(db);
             this.pieceTypeRepository = new PieceTypeRepository(db);
+
+            ControllerName = "GenesCalculation";
+            DisplayName = "Genes calculation";
         }
 
         /// <summary>
@@ -135,8 +133,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] pieceTypeIds,
             bool isSort)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
                 var chainNames = new List<string>();
@@ -273,13 +270,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"matterIds", matterIds},
                     {"characteristicsList", characteristicsList}
                 };
-            }, taskId);
-
-            task.ControllerName = "GenesCalculation";
-            task.TaskData.ActionName = "Genes calculation";
-            TaskManager.AddTask(task);
-            
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -61,6 +59,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.linkRepository = new LinkRepository(db);
             this.notationRepository = new NotationRepository(db);
+
+            ControllerName = "Clusterization";
+            DisplayName = "Clusterization";
         }
 
         /// <summary>
@@ -141,8 +142,7 @@ namespace LibiadaWeb.Controllers.Calculators
             double normalizedDistanseWeight,
             double distanseWeight)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 var characteristics = new List<List<double>>();
                 var characteristicNames = new List<string>();
@@ -241,13 +241,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"clusterNames", clusterNames},
                     {"characteristicsList", characteristicsList}
                 };
-            }, taskId);
-
-            task.ControllerName = "Clusterization";
-            task.TaskData.ActionName = "Clusterization";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
     }
 }

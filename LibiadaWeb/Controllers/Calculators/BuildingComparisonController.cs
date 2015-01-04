@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -40,6 +38,9 @@ namespace LibiadaWeb.Controllers.Calculators
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             chainRepository = new ChainRepository(db);
+
+            ControllerName = "BuildingComparison";
+            DisplayName = "Building comparison";
         }
 
         /// <summary>
@@ -76,8 +77,7 @@ namespace LibiadaWeb.Controllers.Calculators
         [HttpPost]
         public ActionResult Index(long firstMatterId, long secondMatterId, int length, bool congeneric)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
                 string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
@@ -148,13 +148,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"pos1", i},
                     {"pos2", j}
                 };
-            }, taskId);
-
-            task.ControllerName = "BuildingComparison";
-            task.TaskData.ActionName = "Building comparison";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         /// <summary>

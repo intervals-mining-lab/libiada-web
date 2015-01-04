@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -57,6 +55,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.linkRepository = new LinkRepository(db);
             this.chainRepository = new ChainRepository(db);
             this.binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
+
+            ControllerName = "RelationCalculation";
+            DisplayName = "Relation calculation";
         }
 
         /// <summary>
@@ -140,8 +141,7 @@ namespace LibiadaWeb.Controllers.Calculators
             bool oneWord, 
             long wordId = 0)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 var characteristics = new List<binary_characteristic>();
                 var elements = new List<element>();
@@ -263,13 +263,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"oneWord", oneWord},
                     {"word", word}
                 };
-            }, taskId);
-
-            task.ControllerName = "RelationCalculation";
-            task.TaskData.ActionName = "Relation calculation";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         /// <summary>

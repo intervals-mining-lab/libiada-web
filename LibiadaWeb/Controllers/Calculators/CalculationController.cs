@@ -1,7 +1,4 @@
-﻿using System;
-using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -55,6 +52,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.notationRepository = new NotationRepository(db);
             this.chainRepository = new ChainRepository(db);
+            
+            ControllerName = "Calculation";
+            DisplayName = "Calculation";
         }
 
         /// <summary>
@@ -124,8 +124,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] languageIds,
             int?[] translatorIds)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var characteristics = new List<List<double>>();
@@ -223,13 +222,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                          { "chainIds", new List<long>(matterIds) },
                                          { "characteristicsList", characteristicsList }
                                      };
-            }, taskId);
-
-            task.ControllerName = "Calculation";
-            task.TaskData.ActionName = "Calculation";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new {id = taskId});
+            });
         }
     }
 }

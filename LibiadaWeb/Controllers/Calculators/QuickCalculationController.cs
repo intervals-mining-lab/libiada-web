@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -37,6 +35,9 @@ namespace LibiadaWeb.Controllers.Calculators
             db = new LibiadaWebEntities();
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.linkRepository = new LinkRepository(db);
+
+            ControllerName = "QuickCalculation";
+            DisplayName = "Quick calculation";
         }
 
         /// <summary>
@@ -75,8 +76,7 @@ namespace LibiadaWeb.Controllers.Calculators
         [HttpPost]
         public ActionResult Index(int[] characteristicIds, int[] linkIds, string chain)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 var characteristics = new List<double>();
                 var characteristicNames = new List<string>();
@@ -111,13 +111,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"characteristicNames", characteristicNames},
                     {"characteristicsList", characteristicsList}
                 };
-            }, taskId);
-
-            task.ControllerName = "QuickCalculation";
-            task.TaskData.ActionName = "Quick calculation";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
     }
 }

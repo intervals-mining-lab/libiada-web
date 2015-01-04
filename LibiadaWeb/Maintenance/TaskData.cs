@@ -8,7 +8,7 @@ namespace LibiadaWeb.Maintenance
 
         public TaskState TaskState;
         
-        public string ActionName;
+        public string DisplayName;
 
         public int Id;
 

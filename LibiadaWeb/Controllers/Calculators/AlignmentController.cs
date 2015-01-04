@@ -8,7 +8,6 @@ using LibiadaCore.Core.Characteristics;
 using LibiadaCore.Core.Characteristics.Calculators;
 using LibiadaCore.Misc.Iterators;
 using LibiadaWeb.Helpers;
-using LibiadaWeb.Maintenance;
 using LibiadaWeb.Models;
 using LibiadaWeb.Models.Repositories.Catalogs;
 using LibiadaWeb.Models.Repositories.Chains;
@@ -52,6 +51,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.pieceTypeRepository = new PieceTypeRepository(db);
             this.chainRepository = new ChainRepository(db);
+
+            ControllerName = "Alignment";
+            DisplayName = "Genes alignment";
         }
 
         // GET: Alignment
@@ -100,9 +102,7 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] pieceTypeIds,
             string validationType)
         {
-
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
 
                 var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
@@ -187,13 +187,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"optimalRotation", optimalRotation},
                     {"validationType", validationType}
                 };
-            }, taskId);
-
-            task.ControllerName = "Alignment";
-            task.TaskData.ActionName = "Genes alignment";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         private void CalculateCharacteristic(

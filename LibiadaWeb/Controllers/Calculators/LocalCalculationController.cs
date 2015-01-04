@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -60,6 +58,9 @@ namespace LibiadaWeb.Controllers.Calculators
             notationRepository = new NotationRepository(db);
             linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
+
+            ControllerName = "LocalCalculation";
+            DisplayName = "Local calculation";
         }
 
         /// <summary>
@@ -139,8 +140,7 @@ namespace LibiadaWeb.Controllers.Calculators
             bool isGrowingWindow,
             bool isAutocorrelation)
         {
-            int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 List<List<List<double>>> characteristics = CalculateCharacteristics(
                     matterIds,
@@ -249,13 +249,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"chainIds", matterIds},
                     {"characteristicsList", characteristicsList}
                 };
-            }, taskId);
-
-            task.ControllerName = "LocalCalculation";
-            task.TaskData.ActionName = "Local calculation";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         /// <summary>
@@ -319,6 +313,15 @@ namespace LibiadaWeb.Controllers.Calculators
             int[] linkIds,
             int step)
         {
+            var calculators = new List<IFullCalculator>();
+
+            for (int i = 0; i < characteristicIds.Length; i++)
+            {
+                int characteristicId = characteristicIds[i];
+                string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
+            }
+
             var characteristics = new List<List<List<double>>>();
             for (int k = 0; k < matterIds.Length; k++)
             {
@@ -338,16 +341,12 @@ namespace LibiadaWeb.Controllers.Calculators
                 }
 
                 Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
-
-                CutRule cutRule;
-
-
-                cutRule = isGrowingWindow
-                                ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
-                                : new SimpleCutRule(libiadaChain.GetLength(), step, length);
+                
+                CutRule cutRule = isGrowingWindow
+                    ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
+                    : new SimpleCutRule(libiadaChain.GetLength(), step, length);
 
                 CutRuleIterator iter = cutRule.GetIterator();
-
 
                 while (iter.Next())
                 {
@@ -362,13 +361,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
                     for (int i = 0; i < characteristicIds.Length; i++)
                     {
-                        int characteristicId = characteristicIds[i];
-                        int linkId = linkIds[i];
-                        string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
-
-                        IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = (Link)db.link.Single(l => l.id == linkId).id;
-                        characteristics.Last().Last().Add(calculator.Calculate(tempChain, link));
+                        characteristics.Last().Last().Add(calculators[i].Calculate(tempChain, (Link)linkIds[i]));
                     }
                 }
             }

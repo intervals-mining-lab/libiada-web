@@ -1,6 +1,4 @@
-﻿using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -56,6 +54,9 @@ namespace LibiadaWeb.Controllers.Calculators
             this.characteristicRepository = new CharacteristicTypeRepository(db);
             this.notationRepository = new NotationRepository(db);
             this.chainRepository = new ChainRepository(db);
+
+            ControllerName = "CongenericCalculation";
+            DisplayName = "Congeneric calculation";
         }
 
         /// <summary>
@@ -136,8 +137,7 @@ namespace LibiadaWeb.Controllers.Calculators
             bool isSort, 
             bool theoretical)
         {
-             int taskId = TaskManager.GetId();
-            Task task = new Task(() =>
+            return Action(() =>
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
                 var theoreticalRanks = new List<List<List<double>>>();
@@ -332,13 +332,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {"theoreticalRanks", theoreticalRanks},
                     {"characteristicsList", characteristicsList}
                 };
-            }, taskId);
-
-            task.ControllerName = "CongenericCalculation";
-            task.TaskData.ActionName = "Congeneric calculation";
-            TaskManager.AddTask(task);
-
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            });
         }
 
         /// <summary>
