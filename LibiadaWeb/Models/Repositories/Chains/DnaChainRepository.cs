@@ -64,7 +64,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             long[] alphabet, 
             int[] building)
         {
-            var parameters = this.FillParams(chain, alphabet, building);
+            var parameters = FillParams(chain, alphabet, building);
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "fasta_header", 
@@ -235,7 +235,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
-                newAlphabet.Add(this.GetComplementElement(alphabet[i]));
+                newAlphabet.Add(GetComplementElement(alphabet[i]));
             }
 
             return newAlphabet;

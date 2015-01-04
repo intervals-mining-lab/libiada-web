@@ -20,7 +20,7 @@ namespace LibiadaWeb
         /// </param>
         public void Configuration(IAppBuilder app)
         {
-            this.ConfigureAuth(app);
+            ConfigureAuth(app);
         }
     }
 }

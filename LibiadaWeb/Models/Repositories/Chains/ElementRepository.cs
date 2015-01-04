@@ -63,7 +63,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
-                if (!this.ElementInDb(alphabet[i], notationId))
+                if (!ElementInDb(alphabet[i], notationId))
                 {
                     return false;
                 }
@@ -91,11 +91,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </exception>
         public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
         {
-            if (!this.ElementsInDb(alphabet, notationId))
+            if (!ElementsInDb(alphabet, notationId))
             {
                 if (createElements)
                 {
-                    this.CreateLackingElements(alphabet, notationId);
+                    CreateLackingElements(alphabet, notationId);
                 }
                 else
                 {

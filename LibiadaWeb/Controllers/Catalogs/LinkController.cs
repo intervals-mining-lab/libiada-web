@@ -45,7 +45,7 @@
             link link = db.link.Find(id);
             if (link == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(link);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] link link)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.link.Add(link);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(link);
@@ -104,7 +104,7 @@
             link link = db.link.Find(id);
             if (link == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(link);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] link link)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(link).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(link);
@@ -152,7 +152,7 @@
             link link = db.link.Find(id);
             if (link == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(link);
@@ -174,7 +174,7 @@
             link link = db.link.Find(id);
             db.link.Remove(link);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

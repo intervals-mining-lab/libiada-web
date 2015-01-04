@@ -46,7 +46,7 @@
             characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic_type);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description,characteristic_group_id,class_name,linkable,full_chain_applicable,congeneric_chain_applicable,binary_chain_applicable")] characteristic_type characteristic_type)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.characteristic_type.Add(characteristic_type);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
@@ -107,7 +107,7 @@
             characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description,characteristic_group_id,class_name,linkable,full_chain_applicable,congeneric_chain_applicable,binary_chain_applicable")] characteristic_type characteristic_type)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(characteristic_type).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.characteristic_group_id = new SelectList(db.characteristic_group, "id", "name", characteristic_type.characteristic_group_id);
@@ -157,7 +157,7 @@
             characteristic_type characteristic_type = db.characteristic_type.Find(id);
             if (characteristic_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic_type);
@@ -179,7 +179,7 @@
             characteristic_type characteristic_type = db.characteristic_type.Find(id);
             db.characteristic_type.Remove(characteristic_type);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

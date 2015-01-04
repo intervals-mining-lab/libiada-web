@@ -9,10 +9,10 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The congeneric calculation controller.
@@ -50,10 +50,10 @@
         public CongenericCalculationController()
         {
             db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(db);
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.notationRepository = new NotationRepository(db);
-            this.chainRepository = new ChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            chainRepository = new ChainRepository(db);
 
             ControllerName = "CongenericCalculation";
             DisplayName = "Congeneric calculation";
@@ -69,13 +69,13 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
             List<matter> matters = db.matter.Include("nature").ToList();
-            ViewBag.matterCheckBoxes = this.matterRepository.GetSelectListItems(matters, null);
+            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.congeneric_chain_applicable);
 
-            var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var links = new SelectList(db.link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
@@ -85,9 +85,9 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", this.matterRepository.GetSelectListWithNature() }, 
+                    { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", this.notationRepository.GetSelectListWithNature() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "links", links }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
@@ -181,7 +181,7 @@
                             chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                         }
 
-                        Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
+                        Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
                         libiadaChain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicId = characteristicIds[i];
@@ -190,7 +190,7 @@
                         string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
                         var link = linkId != null ? (Link) db.link.Single(l => l.id == linkId).id : Link.None;
-                        List<long> chainElements = this.chainRepository.GetElementIds(chainId);
+                        List<long> chainElements = chainRepository.GetElementIds(chainId);
                         int calculated = db.congeneric_characteristic.Count(c => c.chain_id == chainId &&
                                                                                  c.characteristic_type_id ==
                                                                                  characteristicId &&
@@ -306,7 +306,7 @@
                     {
                         for (int p = 0; p < characteristics[f].Count; p++)
                         {
-                            this.SortKeyValuePairList(characteristics[f][p]);
+                            SortKeyValuePairList(characteristics[f][p]);
                         }
                     }
                 }

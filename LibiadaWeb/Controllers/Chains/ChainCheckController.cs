@@ -9,8 +9,8 @@ namespace LibiadaWeb.Controllers.Chains
 
     using LibiadaCore.Core;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The chain check controller.

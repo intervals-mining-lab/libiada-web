@@ -7,8 +7,8 @@
     using LibiadaCore.Core;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Models;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The building comparison controller.
@@ -127,7 +127,7 @@
                         else
                         {
                             if (!tempChain1.Equals(tempChain2) &&
-                                this.CompareBuildings(tempChain2.Building, tempChain1.Building))
+                                CompareBuildings(tempChain2.Building, tempChain1.Building))
                             {
                                 res1 = tempChain1;
                                 res2 = tempChain2;

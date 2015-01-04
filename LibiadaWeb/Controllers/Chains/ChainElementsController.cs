@@ -4,7 +4,7 @@
     using System.Web.Http;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The chain elements controller.

@@ -6,10 +6,10 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The calculation controller.
@@ -48,10 +48,10 @@
         public CalculationController()
         {
             db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(db);
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.notationRepository = new NotationRepository(db);
-            this.chainRepository = new ChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            chainRepository = new ChainRepository(db);
             
             ControllerName = "Calculation";
             DisplayName = "Calculation";
@@ -70,7 +70,7 @@
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.full_chain_applicable);
 
-            var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var links = new SelectList(db.link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
@@ -80,9 +80,9 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", this.matterRepository.GetSelectListWithNature() }, 
+                    { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", this.notationRepository.GetSelectListWithNature() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "links", links }, 
                     { "languages", new SelectList(db.language, "id", "name") }, 
@@ -168,7 +168,7 @@
                         }
                         else
                         {
-                            Chain tempChain = this.chainRepository.ToLibiadaChain(chainId);
+                            Chain tempChain = chainRepository.ToLibiadaChain(chainId);
                             tempChain.FillIntervalManagers();
                             string className =
                                 db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;

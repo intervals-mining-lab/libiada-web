@@ -29,7 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         public void Insert(chain chain, long[] alphabet, int[] building)
         {
-            var parameters = this.FillParams(chain, alphabet, building);
+            var parameters = FillParams(chain, alphabet, building);
 
             const string Query = @"INSERT INTO music_chain (
                                         id, 

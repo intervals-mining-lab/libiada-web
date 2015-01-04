@@ -46,7 +46,7 @@
             literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(literature_chain);
@@ -82,11 +82,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.literature_chain.Add(literature_chain);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
@@ -117,7 +117,7 @@
             literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
@@ -142,11 +142,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,translator_id,piece_position,original,language_id,remote_db_id,remote_id,modified,description")] literature_chain literature_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(literature_chain).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.language_id = new SelectList(db.language, "id", "name", literature_chain.language_id);
@@ -177,7 +177,7 @@
             literature_chain literature_chain = db.literature_chain.Find(id);
             if (literature_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(literature_chain);
@@ -199,7 +199,7 @@
             literature_chain literature_chain = db.literature_chain.Find(id);
             db.literature_chain.Remove(literature_chain);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

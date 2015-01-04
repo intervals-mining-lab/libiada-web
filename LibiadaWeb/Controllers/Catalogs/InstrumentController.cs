@@ -45,7 +45,7 @@
             instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(instrument);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] instrument instrument)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.instrument.Add(instrument);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(instrument);
@@ -104,7 +104,7 @@
             instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(instrument);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] instrument instrument)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(instrument).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(instrument);
@@ -152,7 +152,7 @@
             instrument instrument = db.instrument.Find(id);
             if (instrument == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(instrument);
@@ -174,7 +174,7 @@
             instrument instrument = db.instrument.Find(id);
             db.instrument.Remove(instrument);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

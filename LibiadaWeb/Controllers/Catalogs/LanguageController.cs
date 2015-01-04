@@ -45,7 +45,7 @@
             language language = db.language.Find(id);
             if (language == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(language);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] language language)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.language.Add(language);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(language);
@@ -104,7 +104,7 @@
             language language = db.language.Find(id);
             if (language == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(language);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] language language)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(language).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(language);
@@ -152,7 +152,7 @@
             language language = db.language.Find(id);
             if (language == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(language);
@@ -174,7 +174,7 @@
             language language = db.language.Find(id);
             db.language.Remove(language);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

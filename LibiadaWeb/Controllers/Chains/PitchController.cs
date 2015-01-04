@@ -46,7 +46,7 @@
             pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(pitch);
@@ -80,11 +80,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.pitch.Add(pitch);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
@@ -113,7 +113,7 @@
             pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
@@ -136,11 +136,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,octave,midinumber,instrument_id,note_id,accidental_id,note_symbol_id,created,modified")] pitch pitch)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(pitch).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.note_id = new SelectList(db.note, "id", "value", pitch.note_id);
@@ -169,7 +169,7 @@
             pitch pitch = db.pitch.Find(id);
             if (pitch == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(pitch);
@@ -191,7 +191,7 @@
             pitch pitch = db.pitch.Find(id);
             db.pitch.Remove(pitch);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

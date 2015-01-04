@@ -6,9 +6,9 @@
 
     using LibiadaCore.Core;
 
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Models;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The chain mixer controller.
@@ -147,7 +147,7 @@
                     matter_id = resultMatter.id
                 };
 
-            long[] alphabet = this.elementRepository.ToDbElements(
+            long[] alphabet = elementRepository.ToDbElements(
                         libiadaChain.Alphabet,
                         dataBaseChain.notation_id,
                         false);
@@ -157,7 +157,7 @@
                 case Aliases.NatureGenetic:
                     dna_chain dnaChain = db.dna_chain.Single(c => c.id == dataBaseChain.id);
 
-                    this.dnaChainRepository.Insert(
+                    dnaChainRepository.Insert(
                         resultChain,
                         dnaChain.fasta_header,
                         null,

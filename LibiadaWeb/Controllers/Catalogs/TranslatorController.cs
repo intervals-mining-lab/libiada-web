@@ -45,7 +45,7 @@
             translator translator = db.translator.Find(id);
             if (translator == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(translator);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] translator translator)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.translator.Add(translator);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(translator);
@@ -104,7 +104,7 @@
             translator translator = db.translator.Find(id);
             if (translator == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(translator);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] translator translator)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(translator).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(translator);
@@ -152,7 +152,7 @@
             translator translator = db.translator.Find(id);
             if (translator == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(translator);
@@ -174,7 +174,7 @@
             translator translator = db.translator.Find(id);
             db.translator.Remove(translator);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

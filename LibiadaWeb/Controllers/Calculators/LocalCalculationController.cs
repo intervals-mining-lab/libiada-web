@@ -7,10 +7,10 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Math;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Math;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The local calculation controller.
@@ -179,7 +179,7 @@
                         chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                     }
 
-                    Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
+                    Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
 
                     CutRule cutRule = isGrowingWindow
                         ? (CutRule) new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
@@ -340,7 +340,7 @@
                     chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
                 }
 
-                Chain libiadaChain = this.chainRepository.ToLibiadaChain(chainId);
+                Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
                 
                 CutRule cutRule = isGrowingWindow
                     ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)

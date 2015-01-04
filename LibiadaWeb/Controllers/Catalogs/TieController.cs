@@ -45,7 +45,7 @@
             tie tie = db.tie.Find(id);
             if (tie == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(tie);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] tie tie)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.tie.Add(tie);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(tie);
@@ -104,7 +104,7 @@
             tie tie = db.tie.Find(id);
             if (tie == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(tie);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] tie tie)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(tie).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(tie);
@@ -152,7 +152,7 @@
             tie tie = db.tie.Find(id);
             if (tie == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(tie);
@@ -174,7 +174,7 @@
             tie tie = db.tie.Find(id);
             db.tie.Remove(tie);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

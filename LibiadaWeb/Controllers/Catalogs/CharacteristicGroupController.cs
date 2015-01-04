@@ -45,7 +45,7 @@
             characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic_group);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] characteristic_group characteristic_group)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.characteristic_group.Add(characteristic_group);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(characteristic_group);
@@ -104,7 +104,7 @@
             characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic_group);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] characteristic_group characteristic_group)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(characteristic_group).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(characteristic_group);
@@ -152,7 +152,7 @@
             characteristic_group characteristic_group = db.characteristic_group.Find(id);
             if (characteristic_group == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic_group);
@@ -174,7 +174,7 @@
             characteristic_group characteristic_group = db.characteristic_group.Find(id);
             db.characteristic_group.Remove(characteristic_group);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

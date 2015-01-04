@@ -1,6 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers
 {
-    using LibiadaWeb.Maintenance;
+    using Maintenance;
     using System.Collections.Generic;
     using System.Web.Mvc;
 

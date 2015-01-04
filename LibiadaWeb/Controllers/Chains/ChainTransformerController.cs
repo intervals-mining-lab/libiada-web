@@ -8,8 +8,8 @@
     using LibiadaCore.Core;
     using LibiadaCore.Misc.DataTransformers;
 
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Models;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The dna transformation controller.

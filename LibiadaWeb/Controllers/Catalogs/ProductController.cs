@@ -46,7 +46,7 @@
             product product = db.product.Find(id);
             if (product == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(product);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description,piece_type_id")] product product)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.product.Add(product);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
@@ -107,7 +107,7 @@
             product product = db.product.Find(id);
             if (product == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description,piece_type_id")] product product)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(product).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", product.piece_type_id);
@@ -157,7 +157,7 @@
             product product = db.product.Find(id);
             if (product == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(product);
@@ -179,7 +179,7 @@
             product product = db.product.Find(id);
             db.product.Remove(product);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

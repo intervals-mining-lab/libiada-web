@@ -13,10 +13,10 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The matter controller.
@@ -74,14 +74,14 @@
         public MatterController()
         {
             db = new LibiadaWebEntities();
-            this.chainRepository = new ChainRepository(db);
-            this.elementRepository = new ElementRepository(db);
-            this.dnaChainRepository = new DnaChainRepository(db);
-            this.literatureChainRepository = new LiteratureChainRepository(db);
-            this.matterRepository = new MatterRepository(db);
-            this.pieceTypeRepository = new PieceTypeRepository(db);
-            this.notationRepository = new NotationRepository(db);
-            this.remoteDbRepository = new RemoteDbRepository(db);
+            chainRepository = new ChainRepository(db);
+            elementRepository = new ElementRepository(db);
+            dnaChainRepository = new DnaChainRepository(db);
+            literatureChainRepository = new LiteratureChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
+            notationRepository = new NotationRepository(db);
+            remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@
             matter matter = db.matter.Find(id);
             if (matter == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(matter);
@@ -203,7 +203,7 @@
             bool? partial,
             bool? complement)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 bool matterCreated = false;
                 try
@@ -376,7 +376,7 @@
             matter matter = db.matter.Find(id);
             if (matter == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
@@ -396,11 +396,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "name,nature_id,description")] matter matter)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(matter).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
@@ -426,7 +426,7 @@
             matter matter = db.matter.Find(id);
             if (matter == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(matter);
@@ -448,7 +448,7 @@
             matter matter = db.matter.Find(id);
             db.matter.Remove(matter);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

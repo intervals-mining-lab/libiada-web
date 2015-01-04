@@ -46,7 +46,7 @@
             music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(music_chain);
@@ -80,11 +80,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.music_chain.Add(music_chain);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
@@ -113,7 +113,7 @@
             music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
@@ -136,11 +136,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(music_chain).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
@@ -169,7 +169,7 @@
             music_chain music_chain = db.music_chain.Find(id);
             if (music_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(music_chain);
@@ -191,7 +191,7 @@
             music_chain music_chain = db.music_chain.Find(id);
             db.music_chain.Remove(music_chain);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

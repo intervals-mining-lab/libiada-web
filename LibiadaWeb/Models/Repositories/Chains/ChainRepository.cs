@@ -26,7 +26,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         public ChainRepository(LibiadaWebEntities db) : base(db)
         {
-            this.elementRepository = new ElementRepository(db);
+            elementRepository = new ElementRepository(db);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         public void Insert(chain chain, long[] alphabet, int[] building)
         {
-            var parameters = this.FillParams(chain, alphabet, building);
+            var parameters = FillParams(chain, alphabet, building);
 
             const string Query = @"INSERT INTO chain (
                                         id, 
@@ -80,7 +80,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<chain> selectedChains)
         {
-            return this.GetSelectListItems(null, selectedChains);
+            return GetSelectListItems(null, selectedChains);
         }
 
         /// <summary>
@@ -132,8 +132,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
         public List<element> GetElements(long chainId)
         {
             
-            List<long> elementIds = this.GetElementIds(chainId);
-            return this.elementRepository.GetElements(elementIds);
+            List<long> elementIds = GetElementIds(chainId);
+            return elementRepository.GetElements(elementIds);
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public Alphabet GetAlphabet(long chainId)
         {
-            List<long> elements = this.GetElementIds(chainId);
-            return this.elementRepository.ToLibiadaAlphabet(elements);
+            List<long> elements = GetElementIds(chainId);
+            return elementRepository.ToLibiadaAlphabet(elements);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public BaseChain ToLibiadaBaseChain(long chainId)
         {
-            return new BaseChain(this.GetBuilding(chainId), GetAlphabet(chainId));
+            return new BaseChain(GetBuilding(chainId), GetAlphabet(chainId));
         }
 
         /// <summary>

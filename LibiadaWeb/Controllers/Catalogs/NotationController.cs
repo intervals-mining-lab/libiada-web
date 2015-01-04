@@ -46,7 +46,7 @@
             notation notation = db.notation.Find(id);
             if (notation == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(notation);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description,nature_id")] notation notation)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.notation.Add(notation);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", notation.nature_id);
@@ -107,7 +107,7 @@
             notation notation = db.notation.Find(id);
             if (notation == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", notation.nature_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description,nature_id")] notation notation)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(notation).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", notation.nature_id);
@@ -157,7 +157,7 @@
             notation notation = db.notation.Find(id);
             if (notation == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(notation);
@@ -179,7 +179,7 @@
             notation notation = db.notation.Find(id);
             db.notation.Remove(notation);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

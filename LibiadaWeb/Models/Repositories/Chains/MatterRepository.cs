@@ -36,7 +36,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<matter> selectedMatters)
         {
-            return this.GetSelectListItems(db.matter, selectedMatters);
+            return GetSelectListItems(db.matter, selectedMatters);
         }
 
         /// <summary>

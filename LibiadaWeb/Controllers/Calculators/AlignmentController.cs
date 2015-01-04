@@ -47,10 +47,10 @@ namespace LibiadaWeb.Controllers.Calculators
         public AlignmentController()
         {
             db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(db);
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.pieceTypeRepository = new PieceTypeRepository(db);
-            this.chainRepository = new ChainRepository(db);
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
+            chainRepository = new ChainRepository(db);
 
             ControllerName = "Alignment";
             DisplayName = "Genes alignment";

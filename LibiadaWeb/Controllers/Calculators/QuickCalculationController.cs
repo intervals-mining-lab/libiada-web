@@ -5,7 +5,7 @@
     using System.Web.Mvc;
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
-    using LibiadaWeb.Models.Repositories.Catalogs;
+    using Models.Repositories.Catalogs;
 
     /// <summary>
     /// The quick calculation controller.
@@ -33,8 +33,8 @@
         public QuickCalculationController()
         {
             db = new LibiadaWebEntities();
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.linkRepository = new LinkRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            linkRepository = new LinkRepository(db);
 
             ControllerName = "QuickCalculation";
             DisplayName = "Quick calculation";
@@ -50,11 +50,11 @@
         {
             IEnumerable<characteristic_type> characteristicsList =
                 db.characteristic_type.Where(c => c.full_chain_applicable);
-            ViewBag.characteristicsList = this.characteristicRepository.GetSelectListItems(
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(
                 characteristicsList, 
                 null);
 
-            ViewBag.linksList = this.linkRepository.GetSelectListItems(null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
         }
 

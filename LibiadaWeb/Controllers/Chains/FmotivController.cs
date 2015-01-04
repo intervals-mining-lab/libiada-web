@@ -50,7 +50,7 @@
             fmotiv fmotiv = db.fmotiv.Find(id);
             if (fmotiv == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(fmotiv);
@@ -85,11 +85,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,fmotiv_type_id,remote_db_id,remote_id,modified")] fmotiv fmotiv)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.fmotiv.Add(fmotiv);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
@@ -119,7 +119,7 @@
             fmotiv fmotiv = db.fmotiv.Find(id);
             if (fmotiv == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
@@ -143,11 +143,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,fmotiv_type_id,remote_db_id,remote_id,modified")] fmotiv fmotiv)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(fmotiv).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", fmotiv.matter_id);
@@ -177,7 +177,7 @@
             fmotiv fmotiv = db.fmotiv.Find(id);
             if (fmotiv == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(fmotiv);
@@ -199,7 +199,7 @@
             fmotiv fmotiv = db.fmotiv.Find(id);
             db.fmotiv.Remove(fmotiv);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

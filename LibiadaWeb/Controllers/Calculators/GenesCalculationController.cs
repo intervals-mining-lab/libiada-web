@@ -10,10 +10,10 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The genes calculation controller.
@@ -51,10 +51,10 @@
         public GenesCalculationController()
         {
             db = new LibiadaWebEntities();
-            this.matterRepository = new MatterRepository(db);
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.chainRepository = new ChainRepository(db);
-            this.pieceTypeRepository = new PieceTypeRepository(db);
+            matterRepository = new MatterRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            chainRepository = new ChainRepository(db);
+            pieceTypeRepository = new PieceTypeRepository(db);
 
             ControllerName = "GenesCalculation";
             DisplayName = "Genes calculation";
@@ -77,7 +77,7 @@
 
             IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
 
-            var characteristicTypes = this.characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var pieceTypeIds =
                 db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
@@ -94,8 +94,8 @@
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.NatureGenetic), "id", "name") }, 
                     { "links", links }, 
-                    { "matterCheckBoxes", this.matterRepository.GetSelectListItems(matters, null) }, 
-                    { "pieceTypesCheckBoxes", this.pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
+                    { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
+                    { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
             return View();
         }

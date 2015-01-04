@@ -46,7 +46,7 @@
             element element = db.element.Find(id);
             if (element == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(element);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,value,description,name,notation_id")] element element)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.element.Add(element);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
@@ -107,7 +107,7 @@
             element element = db.element.Find(id);
             if (element == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,value,description,name,notation_id,created,modified")] element element)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(element).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", element.notation_id);
@@ -157,7 +157,7 @@
             element element = db.element.Find(id);
             if (element == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(element);
@@ -179,7 +179,7 @@
             element element = db.element.Find(id);
             db.element.Remove(element);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

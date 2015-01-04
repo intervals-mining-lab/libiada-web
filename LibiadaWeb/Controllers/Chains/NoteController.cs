@@ -46,7 +46,7 @@
             note note = db.note.Find(id);
             if (note == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(note);
@@ -78,11 +78,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.note.Add(note);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
@@ -109,7 +109,7 @@
             note note = db.note.Find(id);
             if (note == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
@@ -130,11 +130,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,value,description,name,notation_id,created,numerator,denominator,ticks,onumerator,odenominator,triplet,priority,tie_id,modified")] note note)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(note).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.notation_id = new SelectList(db.notation, "id", "name", note.notation_id);
@@ -161,7 +161,7 @@
             note note = db.note.Find(id);
             if (note == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(note);
@@ -183,7 +183,7 @@
             note note = db.note.Find(id);
             db.note.Remove(note);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

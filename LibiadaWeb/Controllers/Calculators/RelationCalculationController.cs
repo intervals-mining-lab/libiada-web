@@ -9,11 +9,11 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories;
-    using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories;
+    using Models.Repositories.Catalogs;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The relation calculation controller.
@@ -51,10 +51,10 @@
         public RelationCalculationController()
         {
             db = new LibiadaWebEntities();
-            this.characteristicRepository = new CharacteristicTypeRepository(db);
-            this.linkRepository = new LinkRepository(db);
-            this.chainRepository = new ChainRepository(db);
-            this.binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
+            characteristicRepository = new CharacteristicTypeRepository(db);
+            linkRepository = new LinkRepository(db);
+            chainRepository = new ChainRepository(db);
+            binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
 
             ControllerName = "RelationCalculation";
             DisplayName = "Relation calculation";
@@ -70,7 +70,7 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
             List<chain> chains = db.chain.Include("matter").ToList();
-            ViewBag.chainCheckBoxes = this.chainRepository.GetSelectListItems(chains, null);
+            ViewBag.chainCheckBoxes = chainRepository.GetSelectListItems(chains, null);
             ViewBag.chains = chains;
             var languages = new List<string>();
             var fastaHeaders = new List<string>();
@@ -88,11 +88,11 @@
             ViewBag.languages = languages;
             ViewBag.fastaHeaders = fastaHeaders;
 
-            ViewBag.chainsList = this.chainRepository.GetSelectListItems(null);
+            ViewBag.chainsList = chainRepository.GetSelectListItems(null);
             IEnumerable<characteristic_type> characteristics =
                 db.characteristic_type.Where(c => c.binary_chain_applicable);
-            ViewBag.characteristicsList = this.characteristicRepository.GetSelectListItems(characteristics, null);
-            ViewBag.linksList = this.linkRepository.GetSelectListItems(null);
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
+            ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
         }
 
@@ -155,7 +155,7 @@
                 chain dbChain = db.chain.Single(c => c.id == chainId);
 
 
-                Chain currentChain = this.chainRepository.ToLibiadaChain(dbChain.id);
+                Chain currentChain = chainRepository.ToLibiadaChain(dbChain.id);
                 string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                 IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
@@ -163,7 +163,7 @@
 
                 if (oneWord)
                 {
-                    word = this.OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain,
+                    word = OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain,
                         calculator, link);
 
                     filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
@@ -190,7 +190,7 @@
                 {
                     if (frequency)
                     {
-                        this.FrequencyCharacteristic(
+                        FrequencyCharacteristic(
                             characteristicId,
                             linkId,
                             frequencyCount,
@@ -201,7 +201,7 @@
                     }
                     else
                     {
-                        this.NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator,
+                        NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator,
                             link);
                     }
 
@@ -305,7 +305,7 @@
             int calculatedCount = db.binary_characteristic.Count(b => b.chain_id == dbChain.id &&
                                                                       b.characteristic_type_id == characteristicId &&
                                                                       b.link_id == linkId && b.first_element_id == wordId);
-            List<long> chainElements = this.chainRepository.GetElementIds(dbChain.id);
+            List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
             if (calculatedCount < currentChain.Alphabet.Cardinality)
             {
                 // TODO: проверить что + - 1 нигде к индексам не надо добавлять
@@ -322,7 +322,7 @@
                     {
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
 
-                        this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id,
                             characteristicId,
                             linkId,
@@ -351,7 +351,7 @@
                                                       b.link_id == linkId))
                     {
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
-                        this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id,
                             characteristicId,
                             linkId,
@@ -399,7 +399,7 @@
                                                                  b.link_id == linkId);
             if (calculatedCount < currentChain.Alphabet.Cardinality * currentChain.Alphabet.Cardinality)
             {
-                List<long> chainElements = this.chainRepository.GetElementIds(dbChain.id);
+                List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
                 for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
                 {
                     for (int j = 0; j < currentChain.Alphabet.Cardinality; j++)
@@ -415,7 +415,7 @@
                         {
                             double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                            this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
+                            binaryCharacteristicRepository.CreateBinaryCharacteristic(
                                 dbChain.id,
                                 characteristicId,
                                 linkId,
@@ -461,7 +461,7 @@
             IBinaryCalculator calculator,
             Link link)
         {
-            List<long> chainElements = this.chainRepository.GetElementIds(dbChain.id);
+            List<long> chainElements = chainRepository.GetElementIds(dbChain.id);
 
             // считаем частоты слов
             var frequences = new List<KeyValuePair<IBaseObject, double>>();
@@ -474,7 +474,7 @@
             }
 
             // сортируем алфавит по частоте
-            this.SortKeyValuePairList(frequences);
+            SortKeyValuePairList(frequences);
 
             // для заданного числа слов с наибольшей частотой считаем зависимости
             for (int i = 0; i < frequencyCount; i++)
@@ -496,7 +496,7 @@
                     {
                         double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                        this.binaryCharacteristicRepository.CreateBinaryCharacteristic(
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
                             dbChain.id,
                             characteristicId,
                             linkId,

@@ -46,7 +46,7 @@
             measure measure = db.measure.Find(id);
             if (measure == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(measure);
@@ -80,11 +80,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.measure.Add(measure);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
@@ -113,7 +113,7 @@
             measure measure = db.measure.Find(id);
             if (measure == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
@@ -136,11 +136,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,value,description,name,beats,beatbase,ticks_per_beat,fifths,remote_db_id,remote_id,modified")] measure measure)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(measure).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", measure.matter_id);
@@ -169,7 +169,7 @@
             measure measure = db.measure.Find(id);
             if (measure == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(measure);
@@ -191,7 +191,7 @@
             measure measure = db.measure.Find(id);
             db.measure.Remove(measure);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

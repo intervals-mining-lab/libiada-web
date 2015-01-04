@@ -50,7 +50,7 @@
             dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(dna_chain);
@@ -85,11 +85,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,notation_id,product_id,created,matter_id,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.dna_chain.Add(dna_chain);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
@@ -119,7 +119,7 @@
             dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
@@ -143,11 +143,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,notation_id,product_id,created,matter_id,piece_type_id,piece_position,remote_db_id,web_api_id,remote_id,fasta_header,modified,complement,partial,description")] dna_chain dna_chain)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(dna_chain).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.matter_id = new SelectList(db.matter, "id", "name", dna_chain.matter_id);
@@ -177,7 +177,7 @@
             dna_chain dna_chain = db.dna_chain.Find(id);
             if (dna_chain == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(dna_chain);
@@ -199,7 +199,7 @@
             dna_chain dna_chain = db.dna_chain.Find(id);
             db.dna_chain.Remove(dna_chain);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

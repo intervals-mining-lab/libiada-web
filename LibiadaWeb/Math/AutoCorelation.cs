@@ -48,7 +48,7 @@
         /// </returns>
         public double[] Execute(double[] x)
         {
-            double[] result = this.GetAutoCorrelationOfSeries(x);
+            double[] result = GetAutoCorrelationOfSeries(x);
             return result;
         }
 
@@ -96,7 +96,7 @@
             int len = data.Length;
 
             // Get average
-            double avg = this.GetAverage(data);
+            double avg = GetAverage(data);
 
             double sum = 0;
 
@@ -119,7 +119,7 @@
         /// </returns>
         public double GetStdev(double[] data)
         {
-            return Math.Sqrt(this.GetVariance(data));
+            return Math.Sqrt(GetVariance(data));
         }
 
         /// <summary>
@@ -142,10 +142,10 @@
             {
                 throw new Exception("Length of sources is different");
             }
-            double avgX = this.GetAverage(x);
-            double stdevX = this.GetStdev(x);
-            double avgY = this.GetAverage(y);
-            double stdevY = this.GetStdev(y);
+            double avgX = GetAverage(x);
+            double stdevX = GetStdev(x);
+            double avgY = GetAverage(y);
+            double stdevY = GetStdev(y);
             double covXY = 0;
             double pearson = 0;
             int len = x.Length;
@@ -178,7 +178,7 @@
             {
                 a[i] = x[i];
                 b[i] = x[i + i];
-                autoCorrelation[i] = this.GetCorrelation(a, b);
+                autoCorrelation[i] = GetCorrelation(a, b);
             }
 
             return autoCorrelation;

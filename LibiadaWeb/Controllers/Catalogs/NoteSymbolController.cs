@@ -45,7 +45,7 @@
             note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(note_symbol);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] note_symbol note_symbol)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.note_symbol.Add(note_symbol);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(note_symbol);
@@ -104,7 +104,7 @@
             note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(note_symbol);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] note_symbol note_symbol)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(note_symbol).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(note_symbol);
@@ -152,7 +152,7 @@
             note_symbol note_symbol = db.note_symbol.Find(id);
             if (note_symbol == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(note_symbol);
@@ -174,7 +174,7 @@
             note_symbol note_symbol = db.note_symbol.Find(id);
             db.note_symbol.Remove(note_symbol);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

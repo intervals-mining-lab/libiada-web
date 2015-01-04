@@ -46,7 +46,7 @@
             characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic);
@@ -79,11 +79,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,modified")] characteristic characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.characteristic.Add(characteristic);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
@@ -111,7 +111,7 @@
             characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
@@ -133,11 +133,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,modified")] characteristic characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(characteristic).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.link_id = new SelectList(db.link, "id", "name", characteristic.link_id);
@@ -165,7 +165,7 @@
             characteristic characteristic = db.characteristic.Find(id);
             if (characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(characteristic);
@@ -187,7 +187,7 @@
             characteristic characteristic = db.characteristic.Find(id);
             db.characteristic.Remove(characteristic);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

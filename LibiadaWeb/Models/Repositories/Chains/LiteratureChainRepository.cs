@@ -46,7 +46,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </param>
         public void Insert(chain chain, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
         {
-            var parameters = this.FillParams(chain, alphabet, building);
+            var parameters = FillParams(chain, alphabet, building);
 
             parameters.Add(new NpgsqlParameter
             {

@@ -46,7 +46,7 @@
             remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(remote_db);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description,url,nature_id")] remote_db remote_db)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.remote_db.Add(remote_db);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
@@ -107,7 +107,7 @@
             remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description,url,nature_id")] remote_db remote_db)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(remote_db).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", remote_db.nature_id);
@@ -157,7 +157,7 @@
             remote_db remote_db = db.remote_db.Find(id);
             if (remote_db == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(remote_db);
@@ -179,7 +179,7 @@
             remote_db remote_db = db.remote_db.Find(id);
             db.remote_db.Remove(remote_db);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

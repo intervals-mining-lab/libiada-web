@@ -8,9 +8,9 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using Helpers;
+    using Models;
+    using Models.Repositories.Chains;
 
     /// <summary>
     /// The genes import controller.

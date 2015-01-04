@@ -45,7 +45,7 @@
             accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(accidental);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] accidental accidental)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.accidental.Add(accidental);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(accidental);
@@ -104,7 +104,7 @@
             accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(accidental);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] accidental accidental)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(accidental).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(accidental);
@@ -152,7 +152,7 @@
             accidental accidental = db.accidental.Find(id);
             if (accidental == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(accidental);
@@ -174,7 +174,7 @@
             accidental accidental = db.accidental.Find(id);
             db.accidental.Remove(accidental);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

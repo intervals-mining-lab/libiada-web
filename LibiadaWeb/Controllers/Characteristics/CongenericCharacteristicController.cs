@@ -46,7 +46,7 @@
             congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(congeneric_characteristic);
@@ -79,11 +79,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,element_id,modified")] congeneric_characteristic congeneric_characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.congeneric_characteristic.Add(congeneric_characteristic);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
@@ -111,7 +111,7 @@
             congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
@@ -133,11 +133,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,element_id,modified")] congeneric_characteristic congeneric_characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(congeneric_characteristic).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.characteristic_type_id = new SelectList(db.characteristic_type, "id", "name", congeneric_characteristic.characteristic_type_id);
@@ -165,7 +165,7 @@
             congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             if (congeneric_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(congeneric_characteristic);
@@ -187,7 +187,7 @@
             congeneric_characteristic congeneric_characteristic = db.congeneric_characteristic.Find(id);
             db.congeneric_characteristic.Remove(congeneric_characteristic);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

@@ -46,7 +46,7 @@
             binary_characteristic binary_characteristic = db.binary_characteristic.Find(id);
             if (binary_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(binary_characteristic);
@@ -81,11 +81,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.binary_characteristic.Add(binary_characteristic);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
@@ -115,7 +115,7 @@
             binary_characteristic binary_characteristic = db.binary_characteristic.Find(id);
             if (binary_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
@@ -139,11 +139,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,chain_id,characteristic_type_id,value,value_string,link_id,created,first_element_id,second_element_id,modified")] binary_characteristic binary_characteristic)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(binary_characteristic).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.first_element_id = new SelectList(db.element, "id", "value", binary_characteristic.first_element_id);
@@ -173,7 +173,7 @@
             binary_characteristic binary_characteristic = db.binary_characteristic.Find(id);
             if (binary_characteristic == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(binary_characteristic);
@@ -195,7 +195,7 @@
             binary_characteristic binary_characteristic = db.binary_characteristic.Find(id);
             db.binary_characteristic.Remove(binary_characteristic);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

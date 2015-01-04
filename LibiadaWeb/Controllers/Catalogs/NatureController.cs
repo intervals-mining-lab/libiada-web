@@ -45,7 +45,7 @@
             nature nature = db.nature.Find(id);
             if (nature == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(nature);
@@ -75,11 +75,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description")] nature nature)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.nature.Add(nature);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(nature);
@@ -104,7 +104,7 @@
             nature nature = db.nature.Find(id);
             if (nature == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(nature);
@@ -123,11 +123,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description")] nature nature)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(nature).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(nature);
@@ -152,7 +152,7 @@
             nature nature = db.nature.Find(id);
             if (nature == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(nature);
@@ -174,7 +174,7 @@
             nature nature = db.nature.Find(id);
             db.nature.Remove(nature);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>

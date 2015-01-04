@@ -46,7 +46,7 @@
             piece_type piece_type = db.piece_type.Find(id);
             if (piece_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(piece_type);
@@ -77,11 +77,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,name,description,nature_id")] piece_type piece_type)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.piece_type.Add(piece_type);
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", piece_type.nature_id);
@@ -107,7 +107,7 @@
             piece_type piece_type = db.piece_type.Find(id);
             if (piece_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", piece_type.nature_id);
@@ -127,11 +127,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,name,description,nature_id")] piece_type piece_type)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(piece_type).State = EntityState.Modified;
                 db.SaveChanges();
-                return this.RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             ViewBag.nature_id = new SelectList(db.nature, "id", "name", piece_type.nature_id);
@@ -157,7 +157,7 @@
             piece_type piece_type = db.piece_type.Find(id);
             if (piece_type == null)
             {
-                return this.HttpNotFound();
+                return HttpNotFound();
             }
 
             return View(piece_type);
@@ -179,7 +179,7 @@
             piece_type piece_type = db.piece_type.Find(id);
             db.piece_type.Remove(piece_type);
             db.SaveChanges();
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>
