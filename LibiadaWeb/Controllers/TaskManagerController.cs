@@ -1,4 +1,7 @@
-﻿namespace LibiadaWeb.Controllers
+﻿using System;
+using Antlr.Runtime.Misc;
+
+namespace LibiadaWeb.Controllers
 {
     using Maintenance;
     using System.Collections.Generic;
@@ -26,8 +29,10 @@
                     tasks.Add(task.TaskData);
                 }
             }
-            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+
             ViewBag.Tasks = tasks;
+
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
             return View();
         }
 
@@ -47,7 +52,38 @@
                         return RedirectToAction("Index");
                 }
             }
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                TaskManager.DeleteTask(id);
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAll()
+        {
+            try
+            {
+                TaskManager.ClearTasks();
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
+            }
+
+            return RedirectToAction("Index");
         }
 
     }

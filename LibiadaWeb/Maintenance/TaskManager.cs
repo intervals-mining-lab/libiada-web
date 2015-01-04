@@ -22,9 +22,43 @@ namespace LibiadaWeb.Maintenance
             return taskCounter++;
         }
 
+        public static void ClearTasks()
+        {
+            lock (tasks)
+            {
+                while (tasks.Count > 0)
+                {
+                    var task = tasks.Last();
+                    lock (task)
+                    {
+                        if (task.Thread != null && task.Thread.IsAlive)
+                        {
+                            task.Thread.Abort();
+                        }
+
+                        tasks.Remove(task);
+                    }
+                }
+            }
+        }
+
+        public static void DeleteTask(int id)
+        {
+            var task = tasks.Single(t => t.TaskData.Id == id);
+            lock (task)
+            {
+                if (task.Thread != null && task.Thread.IsAlive)
+                {
+                    task.Thread.Abort();
+                }
+
+                tasks.Remove(task);
+            }
+        }
+
         private static void StartTask(int id)
         {
-            var taskToStart = tasks[id];
+            var taskToStart = tasks.Single(t => t.TaskData.Id == id);
             Action<Task> action = (task) =>
             {
                 try
@@ -70,6 +104,7 @@ namespace LibiadaWeb.Maintenance
             };
 
             var thread = new Thread(() => action(taskToStart));
+            taskToStart.Thread = thread;
             thread.Start();
         }
 

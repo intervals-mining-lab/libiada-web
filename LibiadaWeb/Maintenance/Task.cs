@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace LibiadaWeb.Maintenance
 {
@@ -12,6 +13,8 @@ namespace LibiadaWeb.Maintenance
         public Func<Dictionary<string, object>> Action;
 
         public string ControllerName;
+
+        public Thread Thread;
 
         public Task(Func<Dictionary<string, object>> action, int id)
         {
