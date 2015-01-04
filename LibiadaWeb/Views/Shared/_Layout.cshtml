@@ -39,11 +39,11 @@
         {
             <br/>
             <div class="error-message">
-                @ViewBag.ErrorMessage
+                @Html.Raw(ViewBag.ErrorMessage)
             </div>
             <br/>
             <div class="stack-trace">
-                @ViewBag.StackTrace
+                @Html.Raw(ViewBag.StackTrace)
             </div>
         }
         <hr />
