@@ -54,7 +54,7 @@
         /// </returns>
         private static DataObject FormDataObject(List<double> characteristics, string[] characteristicsNames, long id)
         {
-            var tempObject = new DataObject {Id = id};
+            var tempObject = new DataObject { Id = id };
             for (int i = 0; i < characteristicsNames.Length; i++)
             {
                 // добавляется очередное значение характеристики

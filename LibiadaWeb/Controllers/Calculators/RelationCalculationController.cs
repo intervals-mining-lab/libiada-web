@@ -5,11 +5,12 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
-    using Helpers;
     using Models;
     using Models.Repositories;
     using Models.Repositories.Catalogs;
@@ -48,16 +49,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController()
+        public RelationCalculationController() : base("RelationCalculation", "Relation calculation")
         {
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
-
-            ControllerName = "RelationCalculation";
-            DisplayName = "Relation calculation";
         }
 
         /// <summary>
@@ -159,12 +157,11 @@
                 string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                 IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
-                Link link = (Link) linkId;
+                Link link = (Link)linkId;
 
                 if (oneWord)
                 {
-                    word = OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain,
-                        calculator, link);
+                    word = OneWordCharacteristic(characteristicId, linkId, wordId, dbChain, currentChain, calculator, link);
 
                     filteredResult1 = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
                                                                           b.characteristic_type_id == characteristicId &&
@@ -190,26 +187,17 @@
                 {
                     if (frequency)
                     {
-                        FrequencyCharacteristic(
-                            characteristicId,
-                            linkId,
-                            frequencyCount,
-                            currentChain,
-                            dbChain,
-                            calculator,
-                            link);
+                        FrequencyCharacteristic(characteristicId, linkId, frequencyCount, currentChain, dbChain, calculator, link);
                     }
                     else
                     {
-                        NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator,
-                            link);
+                        NotFrequencyCharacteristic(characteristicId, linkId, dbChain, currentChain, calculator, link);
                     }
 
                     if (filter)
                     {
                         filteredResult = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                             b.characteristic_type_id ==
-                                                                             characteristicId &&
+                                                                             b.characteristic_type_id == characteristicId &&
                                                                              b.link_id == linkId)
                             .OrderByDescending(b => b.value)
                             .Take(filterSize).ToList();
@@ -229,8 +217,7 @@
                     else
                     {
                         characteristics = db.binary_characteristic.Where(b => b.chain_id == dbChain.id &&
-                                                                              b.characteristic_type_id ==
-                                                                              characteristicId &&
+                                                                              b.characteristic_type_id == characteristicId &&
                                                                               b.link_id == linkId)
                             .OrderBy(b => b.second_element_id)
                             .ThenBy(b => b.first_element_id)
@@ -245,23 +232,20 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"characteristics", characteristics},
-                    {"isFilter", filter},
-                    {"filteredResult", filteredResult},
-                    {"firstElements", firstElements},
-                    {"secondElements", secondElements},
-                    {"filterSize", filterSize},
-                    {"elements", elements},
-                    {
-                        "characteristicName",
-                        db.characteristic_type.Single(charact => charact.id == characteristicId).name
-                    },
-                    {"chainName", db.chain.Single(m => m.id == chainId).matter.name},
-                    {"notationName", db.chain.Single(c => c.id == chainId).notation.name},
-                    {"filteredResult1", filteredResult1},
-                    {"filteredResult2", filteredResult2},
-                    {"oneWord", oneWord},
-                    {"word", word}
+                    { "characteristics", characteristics },
+                    { "isFilter", filter },
+                    { "filteredResult", filteredResult },
+                    { "firstElements", firstElements },
+                    { "secondElements", secondElements },
+                    { "filterSize", filterSize },
+                    { "elements", elements },
+                    { "characteristicName", db.characteristic_type.Single(charact => charact.id == characteristicId).name },
+                    { "chainName", db.chain.Single(m => m.id == chainId).matter.name },
+                    { "notationName", db.chain.Single(c => c.id == chainId).notation.name },
+                    { "filteredResult1", filteredResult1 },
+                    { "filteredResult2", filteredResult2 },
+                    { "oneWord", oneWord },
+                    { "word", word }
                 };
             });
         }

@@ -30,14 +30,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="QuickCalculationController"/> class.
         /// </summary>
-        public QuickCalculationController()
+        public QuickCalculationController() : base("QuickCalculation", "Quick calculation")
         {
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkRepository = new LinkRepository(db);
-
-            ControllerName = "QuickCalculation";
-            DisplayName = "Quick calculation";
         }
 
         /// <summary>
@@ -48,11 +45,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(
-                characteristicsList, 
-                null);
+            IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
@@ -92,7 +86,7 @@
                         db.characteristic_type.Single(charact => charact.id == characteristicId).name);
                     var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
                     var calculator = CalculatorsFactory.CreateFullCalculator(className);
-                    var link = (Link) db.link.Single(l => l.id == linkId).id;
+                    var link = (Link)db.link.Single(l => l.id == linkId).id;
 
                     characteristics.Add(calculator.Calculate(tempChain, link));
                 }
@@ -101,15 +95,15 @@
                 for (int i = 0; i < characteristicNames.Count; i++)
                 {
                     characteristicsList.Add(
-                        new SelectListItem {Value = i.ToString(), Text = characteristicNames[i], Selected = false});
+                        new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
                 }
 
                 return new Dictionary<string, object>
                 {
-                    {"characteristics", characteristics},
-                    {"characteristicIds", new List<int>(characteristicIds)},
-                    {"characteristicNames", characteristicNames},
-                    {"characteristicsList", characteristicsList}
+                    { "characteristics", characteristics },
+                    { "characteristicIds", new List<int>(characteristicIds) },
+                    { "characteristicNames", characteristicNames },
+                    { "characteristicsList", characteristicsList }
                 };
             });
         }

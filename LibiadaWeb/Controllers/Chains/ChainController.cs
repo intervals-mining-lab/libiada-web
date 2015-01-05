@@ -93,10 +93,10 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chain = db.chain.Include(c => c.matter).
-                                 Include(c => c.notation).
-                                 Include(c => c.piece_type).
-                                 Include(c => c.remote_db);
+            var chain = db.chain.Include(c => c.matter)
+                                .Include(c => c.notation)
+                                .Include(c => c.piece_type)
+                                .Include(c => c.remote_db);
             return View(chain.ToList());
         }
 

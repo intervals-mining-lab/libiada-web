@@ -1,11 +1,10 @@
-﻿using System;
-using Antlr.Runtime.Misc;
-
-namespace LibiadaWeb.Controllers
+﻿namespace LibiadaWeb.Controllers
 {
-    using Maintenance;
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
+
+    using LibiadaWeb.Maintenance;
 
     /// <summary>
     /// The calculation controller.
@@ -30,12 +29,21 @@ namespace LibiadaWeb.Controllers
                 }
             }
 
-            ViewBag.Tasks = tasks;
+            this.ViewBag.Tasks = tasks;
 
-            ViewBag.ErrorMessage = TempData["ErrorMessage"];
-            return View();
+            this.ViewBag.ErrorMessage = this.TempData["ErrorMessage"];
+            return this.View();
         }
 
+        /// <summary>
+        /// The redirect to result.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult RedirectToResult(int id)
         {
             var task = TaskManager.GetTask(id);
@@ -45,15 +53,24 @@ namespace LibiadaWeb.Controllers
                 {
                     case TaskState.Completed:
                     case TaskState.Error:
-                        TempData["Result"] = task.Result;
-                        return RedirectToAction("Result", task.ControllerName);
+                        this.TempData["Result"] = task.Result;
+                        return this.RedirectToAction("Result", task.ControllerName);
                     default:
-                        TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
-                        return RedirectToAction("Index");
+                        this.TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
+                        return this.RedirectToAction("Index");
                 }
             }
         }
 
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
@@ -64,12 +81,18 @@ namespace LibiadaWeb.Controllers
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
+                this.TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
             }
 
-            return RedirectToAction("Index");
+            return this.RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// The delete all.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAll()
@@ -80,10 +103,10 @@ namespace LibiadaWeb.Controllers
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
+                this.TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
             }
 
-            return RedirectToAction("Index");
+            return this.RedirectToAction("Index");
         }
 
     }

@@ -249,7 +249,6 @@
                     {
                         dbProduct = new product { name = product, piece_type_id = pieceTypeId };
                         db.product.Add(dbProduct);
-                        //db.SaveChanges();
                         products.Add(dbProduct);
                     }
 

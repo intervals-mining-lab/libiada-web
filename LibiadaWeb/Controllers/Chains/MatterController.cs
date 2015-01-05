@@ -281,10 +281,10 @@
                         case Aliases.NatureMusic:
                             var doc = new XmlDocument();
                             doc.LoadXml(stringChain);
-                            //MusicXmlParser parser = new MusicXmlParser();
-                            //parser.Execute(doc, "test");
-                            //ScoreTrack tempTrack = parser.ScoreModel;
-
+                            
+                            // MusicXmlParser parser = new MusicXmlParser();
+                            // parser.Execute(doc, "test");
+                            // ScoreTrack tempTrack = parser.ScoreModel;
                             break;
                         case Aliases.NatureLiterature:
                             string[] text = stringChain.Split('\n');
@@ -295,6 +295,7 @@
                             }
 
                             libiadaChain = new BaseChain(text.Length - 1);
+
                             // в конце файла всегда пустая строка поэтому последний элемент не считаем
                             for (int i = 0; i < text.Length - 1; i++)
                             {

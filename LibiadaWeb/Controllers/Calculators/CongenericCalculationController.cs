@@ -5,11 +5,12 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
-    using Helpers;
     using Models;
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
@@ -47,16 +48,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
-        public CongenericCalculationController()
+        public CongenericCalculationController() : base("CongenericCalculation", "Congeneric calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
-
-            ControllerName = "CongenericCalculation";
-            DisplayName = "Congeneric calculation";
         }
 
         /// <summary>
@@ -189,7 +187,7 @@
 
                         string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
-                        var link = linkId != null ? (Link) db.link.Single(l => l.id == linkId).id : Link.None;
+                        var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
                         List<long> chainElements = chainRepository.GetElementIds(chainId);
                         int calculated = db.congeneric_characteristic.Count(c => c.chain_id == chainId &&
                                                                                  c.characteristic_type_id ==
@@ -237,7 +235,7 @@
                                 c.element_id == elementId &&
                                 ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
 
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double) characteristic));
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
                             if (i == 0)
                             {
@@ -254,7 +252,7 @@
                             var counts = new List<int>();
                             for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
                             {
-                                counts.Add((int) countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
+                                counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
                             }
 
                             ICongenericCalculator frequencyCalculator =
@@ -266,16 +264,16 @@
                             }
 
                             double maxFrequency = frequency.Max();
-                            double k = 1/Math.Log(counts.Max());
-                            double b = (k/maxFrequency) - 1;
+                            double k = 1 / Math.Log(counts.Max());
+                            double b = (k / maxFrequency) - 1;
                             int n = 1;
                             double plow = libiadaChain.GetLength();
-                            double p = k/(b + n);
-                            while (p >= (1/plow))
+                            double p = k / (b + n);
+                            while (p >= (1 / plow))
                             {
                                 theoreticalRanks.Last().Last().Add(p);
                                 n++;
-                                p = k/(b + n);
+                                p = k / (b + n);
                             }
                         }
                     }
@@ -324,13 +322,13 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"characteristics", characteristics},
-                    {"chainNames", chainNames},
-                    {"elementNames", elementNames},
-                    {"characteristicNames", characteristicNames},
-                    {"matterIds", matterIds},
-                    {"theoreticalRanks", theoreticalRanks},
-                    {"characteristicsList", characteristicsList}
+                    { "characteristics", characteristics },
+                    { "chainNames", chainNames },
+                    { "elementNames", elementNames },
+                    { "characteristicNames", characteristicNames },
+                    { "matterIds", matterIds },
+                    { "theoreticalRanks", theoreticalRanks },
+                    { "characteristicsList", characteristicsList }
                 };
             });
         }

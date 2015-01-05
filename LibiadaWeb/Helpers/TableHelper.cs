@@ -37,7 +37,7 @@
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            var headers = new List<string> { "Название", "Описание", "Природа"};
+            var headers = new List<string> { "Название", "Описание", "Природа" };
 
             var bodyData = new List<List<string>>();
 

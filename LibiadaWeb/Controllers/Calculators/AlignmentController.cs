@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics;
-using LibiadaCore.Core.Characteristics.Calculators;
-using LibiadaCore.Misc.Iterators;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories.Catalogs;
-using LibiadaWeb.Models.Repositories.Chains;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Misc.Iterators;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Chains;
+
+    /// <summary>
+    /// The alignment controller.
+    /// </summary>
     public class AlignmentController : AbstractResultController
     {
         /// <summary>
@@ -44,16 +49,13 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <summary>
         /// Initializes a new instance of the <see cref="AlignmentController"/> class.
         /// </summary>
-        public AlignmentController()
+        public AlignmentController() : base("Alignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             chainRepository = new ChainRepository(db);
-
-            ControllerName = "Alignment";
-            DisplayName = "Genes alignment";
         }
 
         // GET: Alignment
@@ -118,10 +120,8 @@ namespace LibiadaWeb.Controllers.Calculators
                 var secondChainPositions = new List<long>();
                 var secondChainPieceTypes = new List<string>();
 
-                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds,
-                    firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
-                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds,
-                    secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
+                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
+                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
 
                 int optimalRotation = 0;
 
@@ -130,16 +130,13 @@ namespace LibiadaWeb.Controllers.Calculators
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics,
-                                secondChainCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics, secondChainCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics,
-                                secondChainCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics,
-                                secondChainCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -151,16 +148,13 @@ namespace LibiadaWeb.Controllers.Calculators
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics,
-                                firstChainCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics, firstChainCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics,
-                                firstChainCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics,
-                                firstChainCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -171,21 +165,21 @@ namespace LibiadaWeb.Controllers.Calculators
 
                 return new Dictionary<string, object>
                 {
-                    {"firstChainCharacteristics", firstChainCharacteristics},
-                    {"firstChainName", firstChainName},
-                    {"firstChainProducts", firstChainProducts},
-                    {"firstChainPositions", firstChainPositions},
-                    {"firstChainPieceTypes", firstChainPieceTypes},
-                    {"secondChainCharacteristics", secondChainCharacteristics},
-                    {"secondChainName", secondChainName},
-                    {"secondChainProducts", secondChainProducts},
-                    {"secondChainPositions", secondChainPositions},
-                    {"secondChainPieceTypes", secondChainPieceTypes},
-                    {"characteristicName", characteristicName},
-                    {"matterId1", matterId1},
-                    {"matterId2", matterId2},
-                    {"optimalRotation", optimalRotation},
-                    {"validationType", validationType}
+                    { "firstChainCharacteristics", firstChainCharacteristics },
+                    { "firstChainName", firstChainName },
+                    { "firstChainProducts", firstChainProducts },
+                    { "firstChainPositions", firstChainPositions },
+                    { "firstChainPieceTypes", firstChainPieceTypes },
+                    { "secondChainCharacteristics", secondChainCharacteristics },
+                    { "secondChainName", secondChainName },
+                    { "secondChainProducts", secondChainProducts },
+                    { "secondChainPositions", secondChainPositions },
+                    { "secondChainPieceTypes", secondChainPieceTypes },
+                    { "characteristicName", characteristicName },
+                    { "matterId1", matterId1 },
+                    { "matterId2", matterId2 },
+                    { "optimalRotation", optimalRotation },
+                    { "validationType", validationType }
                 };
             });
         }

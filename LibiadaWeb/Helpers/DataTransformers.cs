@@ -18,7 +18,7 @@
         /// </returns>
         public static string CleanFastaFile(string file)
         {
-            string[] splittedFile = file.Split(new [] { '\0', '\t'});
+            string[] splittedFile = file.Split('\0', '\t');
             
             var result = new StringBuilder();
 

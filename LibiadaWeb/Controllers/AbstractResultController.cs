@@ -1,14 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using LibiadaWeb.Maintenance;
-
-namespace LibiadaWeb.Controllers
+﻿namespace LibiadaWeb.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Web.Mvc;
+
+    using LibiadaWeb.Maintenance;
+
+    /// <summary>
+    /// The abstract result controller.
+    /// </summary>
     public abstract class AbstractResultController : Controller
     {
-        protected string ControllerName;
-        protected string DisplayName;
+        /// <summary>
+        /// The controller name.
+        /// </summary>
+        protected readonly string ControllerName;
+
+        /// <summary>
+        /// The display name.
+        /// </summary>
+        protected readonly string DisplayName;
+
+        protected AbstractResultController(string controllerName, string displayName)
+        {
+            ControllerName = controllerName;
+            DisplayName = displayName;
+        }
 
         /// <summary>
         /// The result.
@@ -48,14 +65,19 @@ namespace LibiadaWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// The action method.
+        /// </summary>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         protected ActionResult Action(Func<Dictionary<string, object>> action)
         {
             int taskId = TaskManager.GetId();
-            var task = new Task(action, taskId)
-            {
-                ControllerName = ControllerName,
-                TaskData = { DisplayName = DisplayName }
-            };
+            var task = new Task(taskId, action, ControllerName, DisplayName);
 
             TaskManager.AddTask(task);
             return RedirectToAction("Index", "TaskManager", new { id = taskId });

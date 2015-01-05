@@ -3,10 +3,13 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using Helpers;
+
     using Models;
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
@@ -44,17 +47,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-
-        public CalculationController()
+        public CalculationController() : base("Calculation", " Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             chainRepository = new ChainRepository(db);
-            
-            ControllerName = "Calculation";
-            DisplayName = "Calculation";
         }
 
         /// <summary>
@@ -198,8 +197,7 @@
                     int notationId = notationIds[k];
                     string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
 
-                    characteristicNames.Add(string.Join("  ", db.characteristic_type.Single(c => c.id == characteristicId).name,
-                                            linkName, db.notation.Single(n => n.id == notationId).name));
+                    characteristicNames.Add(string.Join("  ", db.characteristic_type.Single(c => c.id == characteristicId).name, linkName, db.notation.Single(n => n.id == notationId).name));
                 }
 
                 var characteristicsList = new List<SelectListItem>();

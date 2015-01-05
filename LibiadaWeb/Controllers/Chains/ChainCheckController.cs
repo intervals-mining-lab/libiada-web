@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using LibiadaWeb.Controllers.Calculators;
-
-namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Chains
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
 
-    using Helpers;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Chains;
 
     /// <summary>
     /// The chain check controller.
@@ -30,10 +28,10 @@ namespace LibiadaWeb.Controllers.Chains
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainCheckController"/> class.
         /// </summary>
-        public ChainCheckController()
+        public ChainCheckController() : base("ChainCheck", "Chain check")
         {
-            db = new LibiadaWebEntities();
-            chainRepository = new ChainRepository(db);
+            this.db = new LibiadaWebEntities();
+            this.chainRepository = new ChainRepository(this.db);
         }
 
         /// <summary>
@@ -44,8 +42,8 @@ namespace LibiadaWeb.Controllers.Chains
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matterId = new SelectList(db.matter, "id", "name");
-            return View();
+            this.ViewBag.matterId = new SelectList(this.db.matter, "id", "name");
+            return this.View();
         }
 
         /// <summary>
@@ -63,14 +61,14 @@ namespace LibiadaWeb.Controllers.Chains
         [HttpPost]
         public ActionResult Index(long matterId, string[] file)
         {
-            var myFile = Request.Files[0];
+            var myFile = this.Request.Files[0];
 
             var fileLen = myFile.ContentLength;
 
             if (fileLen == 0)
             {
-                ModelState.AddModelError("Error", "Файл цепочки не задан");
-                return View();
+                this.ModelState.AddModelError("Error", "Файл цепочки не задан");
+                return this.View();
             }
 
             byte[] input = new byte[fileLen];
@@ -97,19 +95,19 @@ namespace LibiadaWeb.Controllers.Chains
 
             BaseChain libiadaChain = new BaseChain(resultStringChain);
 
-            long chainId = db.chain.Single(c => c.matter_id == matterId).id;
+            long chainId = this.db.chain.Single(c => c.matter_id == matterId).id;
 
             string message;
 
-            if (!db.dna_chain.Any(d => d.fasta_header.Equals(fastaHeader)))
+            if (!this.db.dna_chain.Any(d => d.fasta_header.Equals(fastaHeader)))
             {
                 message = "объекта с заголовком " + fastaHeader + " не существует";
 
-                TempData["result"] = new Dictionary<string, object> { { "message", message } };
-                return RedirectToAction("Result");
+                this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                return this.RedirectToAction("Result");
             }
 
-            BaseChain dataBaseChain = chainRepository.ToLibiadaBaseChain(chainId);
+            BaseChain dataBaseChain = this.chainRepository.ToLibiadaBaseChain(chainId);
 
             if (dataBaseChain.Equals(libiadaChain))
             {
@@ -121,8 +119,8 @@ namespace LibiadaWeb.Controllers.Chains
                 {
                     message = "Размеры алфавитов не совпадают. В базе - " + dataBaseChain.Alphabet.Cardinality + ". В файле - " + libiadaChain.Alphabet.Cardinality;
                     
-                    TempData["result"] = new Dictionary<string, object> { { "message", message } };
-                    return RedirectToAction("Result");
+                    this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                    return this.RedirectToAction("Result");
                 }
 
                 for (int i = 0; i < libiadaChain.Alphabet.Cardinality; i++)
@@ -131,8 +129,8 @@ namespace LibiadaWeb.Controllers.Chains
                     {
                         message = i + "Элементы алфавитов не равны. В базе - " + dataBaseChain.Alphabet[i] + ". В файле - " + libiadaChain.Alphabet[i];
                         
-                        TempData["result"] = new Dictionary<string, object> { { "message", message } };
-                        return RedirectToAction("Result");
+                        this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                        return this.RedirectToAction("Result");
                     }
                 }
 
@@ -140,8 +138,8 @@ namespace LibiadaWeb.Controllers.Chains
                 {
                     message = "Длина цепочки в базе " + dataBaseChain.GetLength() + ", а длина цепочки из файла " + libiadaChain.GetLength();
 
-                    TempData["result"] = new Dictionary<string, object> { { "message", message } };
-                    return RedirectToAction("Result");
+                    this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                    return this.RedirectToAction("Result");
                 }
 
                 int[] libiadaBuilding = libiadaChain.Building;
@@ -153,16 +151,16 @@ namespace LibiadaWeb.Controllers.Chains
                     {
                         message = j + "Элементы цепочек не совпадают. В базе " + dataBaseBuilding[j] + ". В файле " + libiadaBuilding[j];
                         
-                        TempData["result"] = new Dictionary<string, object> { { "message", message } };
-                        return RedirectToAction("Result");
+                        this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+                        return this.RedirectToAction("Result");
                     }
                 }
 
                 message = "Цепочки Шрёдингера - они равны и не равны одновременно";
             }
 
-            TempData["result"] = new Dictionary<string, object> { { "message", message } };
-            return RedirectToAction("Result");
+            this.TempData["result"] = new Dictionary<string, object> { { "message", message } };
+            return this.RedirectToAction("Result");
         }
     }
 }

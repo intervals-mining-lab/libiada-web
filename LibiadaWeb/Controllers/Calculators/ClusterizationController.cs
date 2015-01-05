@@ -3,13 +3,18 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+
     using Clusterizator;
     using Clusterizator.Krab;
+
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using Helpers;
+
     using Math;
+
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
 
@@ -51,7 +56,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController()
+        public ClusterizationController() : base("Clusterization", "Clusterization")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
@@ -59,9 +64,6 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkRepository = new LinkRepository(db);
             notationRepository = new NotationRepository(db);
-
-            ControllerName = "Clusterization";
-            DisplayName = "Clusterization";
         }
 
         /// <summary>
@@ -153,8 +155,8 @@
                     characteristics.Add(new List<double>());
                     for (int i = 0; i < notationIds.Length; i++)
                     {
-                        long chainId = db.matter.Single(m => m.id == matterId).
-                            chain.Single(c => c.notation_id == notationIds[i]).id;
+                        long chainId = db.matter.Single(m => m.id == matterId)
+                            .chain.Single(c => c.notation_id == notationIds[i]).id;
 
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
@@ -163,8 +165,8 @@
                             c.chain_id == chainId &&
                             c.characteristic_type_id == characteristicId))
                         {
-                            characteristics.Last().
-                                Add((double)db.characteristic.Single(c =>
+                            characteristics.Last()
+                                .Add((double)db.characteristic.Single(c =>
                                     ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
                                     c.chain_id == chainId &&
                                     c.characteristic_type_id == characteristicIds[i]).value);
@@ -195,8 +197,7 @@
                                             db.notation.Single(n => n.id == notationId).name);
                 }
 
-                DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(),
-                    characteristics);
+                DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
                 var clusterizator = new KrabClusterization(data, powerWeight, normalizedDistanseWeight, distanseWeight);
                 ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
                 var clusters = new List<List<long>>();
@@ -232,14 +233,14 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"clusters", clusters},
-                    {"characteristicNames", characteristicNames},
-                    {"characteristicIds", new List<int>(characteristicIds)},
-                    {"characteristics", characteristics},
-                    {"chainNames", chainNames},
-                    {"chainIds", new List<long>(matterIds)},
-                    {"clusterNames", clusterNames},
-                    {"characteristicsList", characteristicsList}
+                    { "clusters", clusters },
+                    { "characteristicNames", characteristicNames },
+                    { "characteristicIds", new List<int>(characteristicIds) },
+                    { "characteristics", characteristics },
+                    { "chainNames", chainNames },
+                    { "chainIds", new List<long>(matterIds) },
+                    { "clusterNames", clusterNames },
+                    { "characteristicsList", characteristicsList }
                 };
             });
         }

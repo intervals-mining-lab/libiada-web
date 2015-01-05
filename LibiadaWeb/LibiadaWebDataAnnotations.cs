@@ -24,7 +24,7 @@
     /// <summary>
     /// The accidental.
     /// </summary>
-    [MetadataType(typeof (AccidentalDataAnnotations))]
+    [MetadataType(typeof(AccidentalDataAnnotations))]
     public partial class accidental
     {
     }
@@ -39,7 +39,7 @@
     /// <summary>
     /// The alphabet.
     /// </summary>
-    [MetadataType(typeof (AlphabetDataAnnotations))]
+    [MetadataType(typeof(AlphabetDataAnnotations))]
     public partial class alphabet
     {
     }
@@ -71,7 +71,7 @@
     /// <summary>
     /// The binary_characteristic.
     /// </summary>
-    [MetadataType(typeof (BinaryCharacteristicDataAnnotations))]
+    [MetadataType(typeof(BinaryCharacteristicDataAnnotations))]
     public partial class binary_characteristic
     {
     }
@@ -97,7 +97,7 @@
     /// <summary>
     /// The chain.
     /// </summary>
-    [MetadataType(typeof (ChainDataAnnotations))]
+    [MetadataType(typeof(ChainDataAnnotations))]
     public partial class chain
     {
     }
@@ -153,7 +153,7 @@
     /// <summary>
     /// The characteristic.
     /// </summary>
-    [MetadataType(typeof (CharacteristicDataAnnotations))]
+    [MetadataType(typeof(CharacteristicDataAnnotations))]
     public partial class characteristic
     {
     }
@@ -203,7 +203,7 @@
     /// <summary>
     /// The characteristic_group.
     /// </summary>
-    [MetadataType(typeof (CharacteristicGroupDataAnnotations))]
+    [MetadataType(typeof(CharacteristicGroupDataAnnotations))]
     public partial class characteristic_group
     {
     }
@@ -218,7 +218,7 @@
     /// <summary>
     /// The characteristic_type.
     /// </summary>
-    [MetadataType(typeof (CharacteristicTypeDataAnnotations))]
+    [MetadataType(typeof(CharacteristicTypeDataAnnotations))]
     public partial class characteristic_type
     {
     }
@@ -268,7 +268,7 @@
     /// <summary>
     /// The dna_chain.
     /// </summary>
-    [MetadataType(typeof (DnaChainDataAnnotations))]
+    [MetadataType(typeof(DnaChainDataAnnotations))]
     public partial class dna_chain
     {
     }
@@ -288,7 +288,7 @@
     /// <summary>
     /// The element.
     /// </summary>
-    [MetadataType(typeof (ElementDataAnnotations))]
+    [MetadataType(typeof(ElementDataAnnotations))]
     public partial class element
     {
     }
@@ -320,7 +320,7 @@
     /// <summary>
     /// The fmotiv.
     /// </summary>
-    [MetadataType(typeof (FmotivDataAnnotations))]
+    [MetadataType(typeof(FmotivDataAnnotations))]
     public partial class fmotiv
     {
     }
@@ -358,7 +358,7 @@
     /// <summary>
     /// The fmotiv_type.
     /// </summary>
-    [MetadataType(typeof (FmotivTypeDataAnnotations))]
+    [MetadataType(typeof(FmotivTypeDataAnnotations))]
     public partial class fmotiv_type
     {
     }
@@ -373,7 +373,7 @@
     /// <summary>
     /// The congeneric_characteristic.
     /// </summary>
-    [MetadataType(typeof (CongenericCharacteristicDataAnnotations))]
+    [MetadataType(typeof(CongenericCharacteristicDataAnnotations))]
     public partial class congeneric_characteristic
     {
     }
@@ -393,7 +393,7 @@
     /// <summary>
     /// The instrument.
     /// </summary>
-    [MetadataType(typeof (InstrumentDataAnnotations))]
+    [MetadataType(typeof(InstrumentDataAnnotations))]
     public partial class instrument
     {
     }
@@ -408,7 +408,7 @@
     /// <summary>
     /// The language.
     /// </summary>
-    [MetadataType(typeof (LanguageDataAnnotations))]
+    [MetadataType(typeof(LanguageDataAnnotations))]
     public partial class language
     {
     }
@@ -423,7 +423,7 @@
     /// <summary>
     /// The link.
     /// </summary>
-    [MetadataType(typeof (LinkDataAnnotations))]
+    [MetadataType(typeof(LinkDataAnnotations))]
     public partial class link
     {
     }
@@ -438,7 +438,7 @@
     /// <summary>
     /// The literature_chain.
     /// </summary>
-    [MetadataType(typeof (LiteratureChainDataAnnotations))]
+    [MetadataType(typeof(LiteratureChainDataAnnotations))]
     public partial class literature_chain
     {
     }
@@ -464,7 +464,7 @@
     /// <summary>
     /// The matter.
     /// </summary>
-    [MetadataType(typeof (MatterDataAnnotations))]
+    [MetadataType(typeof(MatterDataAnnotations))]
     public partial class matter
     {
     }
@@ -479,14 +479,12 @@
         /// </summary>
         [Display(Name = "Природа")]
         public int nature_id { get; set; }
-
-        
     }
 
     /// <summary>
     /// The measure.
     /// </summary>
-    [MetadataType(typeof (MeasureDataAnnotations))]
+    [MetadataType(typeof(MeasureDataAnnotations))]
     public partial class measure
     {
     }
@@ -542,7 +540,7 @@
     /// <summary>
     /// The music_chain.
     /// </summary>
-    [MetadataType(typeof (MusicChainDataAnnotations))]
+    [MetadataType(typeof(MusicChainDataAnnotations))]
     public partial class music_chain
     {
     }
@@ -557,7 +555,7 @@
     /// <summary>
     /// The nature.
     /// </summary>
-    [MetadataType(typeof (NatureDataAnnotations))]
+    [MetadataType(typeof(NatureDataAnnotations))]
     public partial class nature
     {
     }
@@ -572,7 +570,7 @@
     /// <summary>
     /// The notation.
     /// </summary>
-    [MetadataType(typeof (NotationDataAnnotations))]
+    [MetadataType(typeof(NotationDataAnnotations))]
     public partial class notation
     {
     }
@@ -592,7 +590,7 @@
     /// <summary>
     /// The note.
     /// </summary>
-    [MetadataType(typeof (NoteDataAnnotations))]
+    [MetadataType(typeof(NoteDataAnnotations))]
     public partial class note
     {
     }
@@ -654,7 +652,7 @@
     /// <summary>
     /// The note_symbol.
     /// </summary>
-    [MetadataType(typeof (NoteSymbolDataAnnotations))]
+    [MetadataType(typeof(NoteSymbolDataAnnotations))]
     public partial class note_symbol
     {
     }
@@ -669,7 +667,7 @@
     /// <summary>
     /// The piece_type.
     /// </summary>
-    [MetadataType(typeof (PieceTypeDataAnnotations))]
+    [MetadataType(typeof(PieceTypeDataAnnotations))]
     public partial class piece_type
     {
     }
@@ -734,7 +732,7 @@
     /// <summary>
     /// The remote_db.
     /// </summary>
-    [MetadataType(typeof (RemoteDbDataAnnotations))]
+    [MetadataType(typeof(RemoteDbDataAnnotations))]
     public partial class remote_db
     {
     }
@@ -754,7 +752,7 @@
     /// <summary>
     /// The tie.
     /// </summary>
-    [MetadataType(typeof (TieDataAnnotations))]
+    [MetadataType(typeof(TieDataAnnotations))]
     public partial class tie
     {
     }

@@ -1,34 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-
-namespace LibiadaWeb.Maintenance
+﻿namespace LibiadaWeb.Maintenance
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
+    /// <summary>
+    /// The task manager.
+    /// </summary>
     public static class TaskManager
     {
-        private static readonly List<Task> tasks = new List<Task>();
-        private static int taskCounter = 0;
-        private static int coreCount = Environment.ProcessorCount;
+        /// <summary>
+        /// Machine core count.
+        /// </summary>
+        private static readonly int CoreCount = Environment.ProcessorCount;
 
+        /// <summary>
+        /// The created tasks counter.
+        /// </summary>
+        private static int taskCounter;
+
+        /// <summary>
+        /// Initializes static members of the <see cref="TaskManager"/> class.
+        /// </summary>
+        static TaskManager()
+        {
+            Tasks = new List<Task>();
+        }
+
+        /// <summary>
+        /// Gets the tasks.
+        /// </summary>
+        public static List<Task> Tasks { get; private set; }
+
+        /// <summary>
+        /// The add task.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
         public static void AddTask(Task task)
         {
-            tasks.Add(task);
+            lock (Tasks)
+            {
+                Tasks.Add(task);
+            }
+            
             ManageTasks();
         }
 
+        /// <summary>
+        /// The get id.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public static int GetId()
         {
             return taskCounter++;
         }
 
+        /// <summary>
+        /// The clear tasks.
+        /// </summary>
         public static void ClearTasks()
         {
-            lock (tasks)
+            lock (Tasks)
             {
-                while (tasks.Count > 0)
+                while (Tasks.Count > 0)
                 {
-                    var task = tasks.Last();
+                    var task = Tasks.Last();
                     lock (task)
                     {
                         if (task.Thread != null && task.Thread.IsAlive)
@@ -36,89 +77,63 @@ namespace LibiadaWeb.Maintenance
                             task.Thread.Abort();
                         }
 
-                        tasks.Remove(task);
+                        Tasks.Remove(task);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// The delete task.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
         public static void DeleteTask(int id)
         {
-            var task = tasks.Single(t => t.TaskData.Id == id);
-            lock (task)
+            lock (Tasks)
             {
-                if (task.Thread != null && task.Thread.IsAlive)
+                var task = Tasks.Single(t => t.TaskData.Id == id);
+                lock (task)
                 {
-                    task.Thread.Abort();
-                }
+                    if (task.Thread != null && task.Thread.IsAlive)
+                    {
+                        task.Thread.Abort();
+                    }
 
-                tasks.Remove(task);
+                    Tasks.Remove(task);
+                }
             }
         }
 
-        private static void StartTask(int id)
-        {
-            var taskToStart = tasks.Single(t => t.TaskData.Id == id);
-            Action<Task> action = (task) =>
-            {
-                try
-                {
-                    Func<Dictionary<string, object>> method;
-                    lock (task)
-                    {
-                        method = task.Action;
-                    }
-
-                    var result = method();
-                    lock (task)
-                    {
-                        task.Result = result;
-                        task.TaskData.TaskState = TaskState.Completed;
-                    }
-                }
-                catch (Exception e)
-                {
-                    lock (task)
-                    {
-                        string errorMessage = e.Message;
-                        string stackTrace = e.StackTrace;
-
-                        while (e.InnerException != null)
-                        {
-                            e = e.InnerException;
-                            errorMessage += "<br/>" + e.Message;
-                        }
-
-                        task.Result = new Dictionary<string, object>
-                            {
-                                { "Error", true }, 
-                                { "ErrorMessage", errorMessage },
-                                { "StackTrace", stackTrace }
-                            };
-
-                        task.TaskData.TaskState = TaskState.Error;
-                    }
-                }
-
-                ManageTasks();
-            };
-
-            var thread = new Thread(() => action(taskToStart));
-            taskToStart.Thread = thread;
-            thread.Start();
-        }
-
+        /// <summary>
+        /// The get task.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public static Task GetTask(int id)
         {
-            return tasks.Single(t => t.TaskData.Id == id);
+            Task result;
+            lock (Tasks)
+            {
+                var task = Tasks.Single(t => t.TaskData.Id == id);
+                lock (task)
+                {
+                    result = task.Clone();
+                }
+            }
+
+            return result;
         }
 
-        public static List<Task> Tasks
-        {
-            get { return tasks; }
-        }
-
-        public static void ManageTasks()
+        /// <summary>
+        /// The manage tasks.
+        /// </summary>
+        private static void ManageTasks()
         {
             lock (Tasks)
             {
@@ -133,7 +148,7 @@ namespace LibiadaWeb.Maintenance
                         }
                     }
                 }
-                while (activeTasks < coreCount)
+                while (activeTasks < CoreCount)
                 {
                     activeTasks++;
                     var taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
@@ -160,5 +175,75 @@ namespace LibiadaWeb.Maintenance
             }
         }
 
+        /// <summary>
+        /// The create action.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        private static void Action(Task task)
+        {
+            try
+            {
+                Func<Dictionary<string, object>> method;
+                lock (task)
+                {
+                    method = task.Action;
+                }
+
+                var result = method();
+                lock (task)
+                {
+                    task.Result = result;
+                    task.TaskData.TaskState = TaskState.Completed;
+                }
+            }
+            catch (Exception e)
+            {
+                string errorMessage = e.Message;
+                string stackTrace = e.StackTrace;
+
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                    errorMessage += "<br/>" + e.Message;
+                }
+
+                lock (task)
+                {
+                    task.Result = new Dictionary<string, object>
+                                      {
+                                          { "Error", true },
+                                          { "ErrorMessage", errorMessage },
+                                          { "StackTrace", stackTrace }
+                                      };
+
+                    task.TaskData.TaskState = TaskState.Error;
+                }
+            }
+
+            ManageTasks();
+        }
+
+        /// <summary>
+        /// The start task.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        private static void StartTask(int id)
+        {
+            Task taskToStart;
+            lock (Tasks)
+            {
+                taskToStart = Tasks.Single(t => t.TaskData.Id == id);
+            }
+
+            Action<Task> action = Action;
+
+            var thread = new Thread(() => action(taskToStart));
+            taskToStart.Thread = thread;
+            thread.Start();
+        }
     }
 }

@@ -5,12 +5,13 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
-    using Helpers;
     using Models;
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
@@ -48,16 +49,13 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
         /// </summary>
-        public GenesCalculationController()
+        public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             chainRepository = new ChainRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
-
-            ControllerName = "GenesCalculation";
-            DisplayName = "Genes calculation";
         }
 
         /// <summary>
@@ -174,7 +172,7 @@
 
                         string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
                         IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = linkId != null ? (Link) db.link.Single(l => l.id == linkId).id : Link.None;
+                        var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
 
                         for (int j = 0; j < chains.Count; j++)
                         {
@@ -208,7 +206,7 @@
                                 c.characteristic_type_id == characteristicId &&
                                 ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
 
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double) characteristic));
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
                             if (i == 0)
                             {
@@ -261,14 +259,14 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"characteristics", characteristics},
-                    {"chainNames", chainNames},
-                    {"chainsProduct", chainsProduct},
-                    {"chainsPosition", chainsPosition},
-                    {"chainsPieceTypes", chainsPieceTypes},
-                    {"characteristicNames", characteristicNames},
-                    {"matterIds", matterIds},
-                    {"characteristicsList", characteristicsList}
+                    { "characteristics", characteristics },
+                    { "chainNames", chainNames },
+                    { "chainsProduct", chainsProduct },
+                    { "chainsPosition", chainsPosition },
+                    { "chainsPieceTypes", chainsPieceTypes },
+                    { "characteristicNames", characteristicNames },
+                    { "matterIds", matterIds },
+                    { "characteristicsList", characteristicsList }
                 };
             });
         }

@@ -32,8 +32,7 @@
 
             foreach (var option in array)
             {
-                builder.AppendFormat("{0}.push(CreateOption({1},'{2}'));", 
-                    paramName, option.Value, HttpUtility.JavaScriptStringEncode(option.Text)).AppendLine();
+                builder.AppendFormat("{0}.push(CreateOption({1},'{2}'));", paramName, option.Value, HttpUtility.JavaScriptStringEncode(option.Text)).AppendLine();
             }
 
             builder.AppendFormat("paramsList.{0} = {0};", paramName).AppendLine();

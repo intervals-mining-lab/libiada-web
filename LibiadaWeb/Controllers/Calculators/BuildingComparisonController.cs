@@ -33,14 +33,11 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingComparisonController"/> class.
         /// </summary>
-        public BuildingComparisonController()
+        public BuildingComparisonController() : base("BuildingComparison", "Building comparison")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             chainRepository = new ChainRepository(db);
-
-            ControllerName = "BuildingComparison";
-            DisplayName = "Building comparison";
         }
 
         /// <summary>
@@ -98,13 +95,13 @@
                 while (!duplicate && iter1.Next())
                 {
                     i++;
-                    var tempChain1 = (BaseChain) iter1.Current();
+                    var tempChain1 = (BaseChain)iter1.Current();
                     var iter2 = new IteratorStart(libiadaChain2, length, 1);
                     j = 0;
                     while (!duplicate && iter2.Next())
                     {
                         j++;
-                        var tempChain2 = (BaseChain) iter2.Current();
+                        var tempChain2 = (BaseChain)iter2.Current();
 
                         if (congeneric)
                         {
@@ -140,13 +137,13 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"duplicate", duplicate},
-                    {"chainName1", chainName1},
-                    {"chainName2", chainName2},
-                    {"res1", res1},
-                    {"res2", res2},
-                    {"pos1", i},
-                    {"pos2", j}
+                    { "duplicate", duplicate },
+                    { "chainName1", chainName1 },
+                    { "chainName2", chainName2 },
+                    { "res1", res1 },
+                    { "res2", res2 },
+                    { "pos1", i },
+                    { "pos2", j }
                 };
             });
         }

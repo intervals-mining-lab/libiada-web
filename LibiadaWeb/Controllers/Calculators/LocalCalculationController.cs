@@ -3,12 +3,16 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
-    using Helpers;
+
     using Math;
+
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
 
@@ -50,7 +54,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController()
+        public LocalCalculationController() : base("LocalCalculation", "Local calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
@@ -58,9 +62,6 @@
             notationRepository = new NotationRepository(db);
             linkRepository = new LinkRepository(db);
             chainRepository = new ChainRepository(db);
-
-            ControllerName = "LocalCalculation";
-            DisplayName = "Local calculation";
         }
 
         /// <summary>
@@ -182,7 +183,7 @@
                     Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
 
                     CutRule cutRule = isGrowingWindow
-                        ? (CutRule) new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
+                        ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
                         : new SimpleCutRule(libiadaChain.GetLength(), step, length);
 
                     CutRuleIterator iter = cutRule.GetIterator();
@@ -239,15 +240,14 @@
 
                 return new Dictionary<string, object>
                 {
-                    {"characteristics", characteristics},
-                    {"chainNames", chainNames},
-                    //{ "partNames", partNames },
-                    {"starts", starts},
-                    {"lengthes", lengthes},
-                    {"characteristicIds", new List<int>(characteristicIds)},
-                    {"characteristicNames", characteristicNames},
-                    {"chainIds", matterIds},
-                    {"characteristicsList", characteristicsList}
+                    { "characteristics", characteristics },
+                    { "chainNames", chainNames },
+                    { "starts", starts },
+                    { "lengthes", lengthes },
+                    { "characteristicIds", new List<int>(characteristicIds) },
+                    { "characteristicNames", characteristicNames },
+                    { "chainIds", matterIds },
+                    { "characteristicsList", characteristicsList }
                 };
             });
         }
