@@ -29,10 +29,10 @@
                 }
             }
 
-            this.ViewBag.Tasks = tasks;
+            ViewBag.Tasks = tasks;
 
-            this.ViewBag.ErrorMessage = this.TempData["ErrorMessage"];
-            return this.View();
+            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            return View();
         }
 
         /// <summary>
@@ -53,11 +53,11 @@
                 {
                     case TaskState.Completed:
                     case TaskState.Error:
-                        this.TempData["Result"] = task.Result;
-                        return this.RedirectToAction("Result", task.ControllerName);
+                        TempData["Result"] = task.Result;
+                        return RedirectToAction("Result", task.ControllerName);
                     default:
-                        this.TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
-                        return this.RedirectToAction("Index");
+                        TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
+                        return RedirectToAction("Index");
                 }
             }
         }
@@ -81,10 +81,10 @@
             }
             catch (Exception e)
             {
-                this.TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
+                TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
             }
 
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
         /// <summary>
@@ -103,10 +103,10 @@
             }
             catch (Exception e)
             {
-                this.TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
+                TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
             }
 
-            return this.RedirectToAction("Index");
+            return RedirectToAction("Index");
         }
 
     }
