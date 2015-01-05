@@ -4,11 +4,11 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using Models;
-
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.Owin.Security;
+
+    using Models;
 
     /// <summary>
     /// The account controller.
@@ -33,6 +33,32 @@
         public AccountController(UserManager<ApplicationUser> userManager)
         {
             UserManager = userManager;
+        }
+
+        /// <summary>
+        /// The manage message id.
+        /// </summary>
+        public enum ManageMessageId
+        {
+            /// <summary>
+            /// The change password success.
+            /// </summary>
+            ChangePasswordSuccess,
+
+            /// <summary>
+            /// The set password success.
+            /// </summary>
+            SetPasswordSuccess,
+
+            /// <summary>
+            /// The remove login success.
+            /// </summary>
+            RemoveLoginSuccess,
+
+            /// <summary>
+            /// The error.
+            /// </summary>
+            Error
         }
 
         /// <summary>
@@ -539,32 +565,6 @@
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// The manage message id.
-        /// </summary>
-        public enum ManageMessageId
-        {
-            /// <summary>
-            /// The change password success.
-            /// </summary>
-            ChangePasswordSuccess, 
-
-            /// <summary>
-            /// The set password success.
-            /// </summary>
-            SetPasswordSuccess, 
-
-            /// <summary>
-            /// The remove login success.
-            /// </summary>
-            RemoveLoginSuccess, 
-
-            /// <summary>
-            /// The error.
-            /// </summary>
-            Error
         }
 
         /// <summary>

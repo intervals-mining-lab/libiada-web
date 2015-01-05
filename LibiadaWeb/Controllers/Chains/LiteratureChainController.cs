@@ -23,7 +23,12 @@
         /// </returns>
         public ActionResult Index()
         {
-            var literature_chain = db.literature_chain.Include(l => l.language).Include(l => l.matter).Include(l => l.notation).Include(l => l.piece_type).Include(l => l.translator).Include(l => l.remote_db);
+            var literature_chain = db.literature_chain
+                .Include(l => l.language).Include(l => l.matter)
+                .Include(l => l.notation)
+                .Include(l => l.piece_type)
+                .Include(l => l.translator)
+                .Include(l => l.remote_db);
             return View(literature_chain.ToList());
         }
 

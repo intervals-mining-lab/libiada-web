@@ -14,17 +14,26 @@
         /// <summary>
         /// The controller name.
         /// </summary>
-        protected readonly string ControllerName;
+        private readonly string controllerName;
 
         /// <summary>
         /// The display name.
         /// </summary>
-        protected readonly string DisplayName;
+        private readonly string displayName;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AbstractResultController"/> class.
+        /// </summary>
+        /// <param name="controllerName">
+        /// The controller name.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
         protected AbstractResultController(string controllerName, string displayName)
         {
-            ControllerName = controllerName;
-            DisplayName = displayName;
+            this.controllerName = controllerName;
+            this.displayName = displayName;
         }
 
         /// <summary>
@@ -77,11 +86,10 @@
         protected ActionResult Action(Func<Dictionary<string, object>> action)
         {
             int taskId = TaskManager.GetId();
-            var task = new Task(taskId, action, ControllerName, DisplayName);
+            var task = new Task(taskId, action, controllerName, displayName);
 
             TaskManager.AddTask(task);
             return RedirectToAction("Index", "TaskManager", new { id = taskId });
         }
-
     }
 }

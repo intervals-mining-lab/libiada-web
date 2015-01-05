@@ -136,7 +136,7 @@
                         int notationId = notationIds[i];
 
                         long chainId;
-                        if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.NatureLiterature)
+                        if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];

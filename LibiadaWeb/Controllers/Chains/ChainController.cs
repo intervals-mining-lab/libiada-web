@@ -10,10 +10,11 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
-    using Helpers;
     using Models;
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
@@ -147,8 +148,8 @@
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.nature, "id", "name") }, 
                     { "translators", translators }, 
-                    { "natureLiterature", Aliases.NatureLiterature }, 
-                    { "natureGenetic", Aliases.NatureGenetic }
+                    { "natureLiterature", Aliases.Nature.Literature }, 
+                    { "natureGenetic", Aliases.Nature.Genetic }
                 };
             return View();
         }
@@ -184,8 +185,10 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
+        /// Thrown if file is null.
         /// </exception>
         /// <exception cref="Exception">
+        /// Thrown if element of created chain is not found in db.
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -212,7 +215,7 @@
 
                         if (file == null || file.ContentLength == 0)
                         {
-                            throw new ArgumentNullException("Файл цепочки не задан или пуст");
+                            throw new ArgumentNullException("file", "File not attached or empty.");
                         }
 
                         fileStream = file.InputStream;
@@ -230,7 +233,7 @@
                     int natureId = db.matter.Single(m => m.id == chain.matter_id).nature_id;
 
                     // Copy the byte array into a string
-                    string stringChain = natureId == Aliases.NatureGenetic
+                    string stringChain = natureId == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
@@ -238,10 +241,10 @@
                     long[] alphabet;
                     switch (natureId)
                     {
-                        case Aliases.NatureGenetic:
+                        case Aliases.Nature.Genetic:
 
                             // отделяем заголовок fasta файла от цепочки
-                            string[] splittedFasta = stringChain.Split(new[] { '\n', '\r' });
+                            string[] splittedFasta = stringChain.Split('\n', '\r');
                             var chainStringBuilder = new StringBuilder();
                             string fastaHeader = splittedFasta[0];
                             for (int j = 1; j < splittedFasta.Length; j++)
@@ -272,9 +275,9 @@
                                 alphabet,
                                 libiadaChain.Building);
                             break;
-                        case Aliases.NatureMusic:
+                        case Aliases.Nature.Music:
                             break;
-                        case Aliases.NatureLiterature:
+                        case Aliases.Nature.Literature:
                             string[] text = stringChain.Split('\n');
                             for (int l = 0; l < text.Length - 1; l++)
                             {
@@ -327,8 +330,8 @@
                         ? remoteDbRepository.GetSelectListWithNature()
                         : remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
                 { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
-                { "natureLiterature", Aliases.NatureLiterature },
-                { "natureGenetic", Aliases.NatureGenetic },
+                { "natureLiterature", Aliases.Nature.Literature },
+                { "natureGenetic", Aliases.Nature.Genetic },
                     { "translators", translators }
             };
             return View(chain);

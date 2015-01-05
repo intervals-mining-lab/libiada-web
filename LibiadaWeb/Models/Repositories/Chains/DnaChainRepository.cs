@@ -251,6 +251,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The <see cref="ValueString"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
+        /// Thrown if any element in chain is not recognized as nucleotide.
         /// </exception>
         public ValueString GetComplementElement(IBaseObject source)
         {

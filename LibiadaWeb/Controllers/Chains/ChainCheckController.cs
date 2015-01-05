@@ -159,7 +159,7 @@
                     message = "Цепочки Шрёдингера - они равны и не равны одновременно";
                 }
 
-                return new Dictionary<string, object> {{"message", message}};
+                return new Dictionary<string, object> { { "message", message } };
             });
         }
     }

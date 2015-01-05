@@ -55,7 +55,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.NotationNucleotide).Include("matter");
+            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.Notation.Nucleotide).Include("matter");
             ViewBag.chains = chains.ToList();
             ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
             return View();
@@ -76,7 +76,7 @@
         [HttpPost]
         public ActionResult Index(IEnumerable<long> chainIds, bool toAmino)
         {
-            int notationId = toAmino ? Aliases.NotationAminoAcid : Aliases.NotationTriplet;
+            int notationId = toAmino ? Aliases.Notation.AminoAcid : Aliases.Notation.Triplet;
 
             foreach (var chainId in chainIds)
             {
@@ -91,7 +91,7 @@
                     {
                         matter_id = dataBaseChain.matter_id,
                         notation_id = notationId,
-                        piece_type_id = Aliases.PieceTypeFullGenome,
+                        piece_type_id = Aliases.PieceType.FullGenome,
                         piece_position = 0
                     };
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);

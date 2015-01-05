@@ -53,7 +53,6 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<matter> allMatters, IEnumerable<matter> selectedMatters)
         {
-
             HashSet<long> matterIds = selectedMatters != null
                                           ? new HashSet<long>(selectedMatters.Select(c => c.id))
                                           : new HashSet<long>();

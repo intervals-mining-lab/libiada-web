@@ -127,11 +127,10 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The chain id.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{element}"/>.
         /// </returns>
         public List<element> GetElements(long chainId)
         {
-            
             List<long> elementIds = GetElementIds(chainId);
             return elementRepository.GetElements(elementIds);
         }

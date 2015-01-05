@@ -178,59 +178,59 @@
 
                     if (sequenceType.StartsWith("CDS"))
                     {
-                        pieceTypeId = Aliases.PieceTypeCodingSequence;
+                        pieceTypeId = Aliases.PieceType.CodingSequence;
                         product = GetValue(temp2, "/product=\"", "\"");
                         geneType = GetValue(temp2, "/gene=\"");
                         description = geneType;
                     }
                     else if (sequenceType.StartsWith("tRNA"))
                     {
-                        pieceTypeId = Aliases.PieceTypeTRNA;
+                        pieceTypeId = Aliases.PieceType.TRNA;
                         product = GetValue(temp2, "/product=\"", "\"");
                         description = product;
                     }
                     else if (sequenceType.StartsWith("ncRNA"))
                     {
-                        pieceTypeId = Aliases.PieceTypeNCRNA;
+                        pieceTypeId = Aliases.PieceType.NCRNA;
                         description = GetValue(temp2, "/note=\"");
                         geneType = GetValue(temp2, "/gene=\"");
                     }
                     else if (sequenceType.StartsWith("rRNA"))
                     {
-                        pieceTypeId = Aliases.PieceTypeRRNA;
+                        pieceTypeId = Aliases.PieceType.RRNA;
                         product = GetValue(temp2, "/product=\"", "\"");
                         geneType = GetValue(temp2, "/gene=\"");
                         description = geneType;
                     }
                     else if (sequenceType.StartsWith("tmRNA"))
                     {
-                        pieceTypeId = Aliases.PieceTypeTMRNA;
+                        pieceTypeId = Aliases.PieceType.TMRNA;
                         geneType = GetValue(temp2, "/gene=\"");
                         description = geneType;
                     }
                     else if (sequenceType.StartsWith("/rpt_type=tandem"))
                     {
-                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        pieceTypeId = Aliases.PieceType.RepeatRegion;
                         description = GetValue(temp2, "/inference=\"", "\"");
                     }
                     else if (sequenceType.StartsWith("/rpt_family="))
                     {
-                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        pieceTypeId = Aliases.PieceType.RepeatRegion;
                         description = GetValue(temp2, "/rpt_family=\"", "\"");
                     }
                     else if (sequenceType.StartsWith("/note=\"REP"))
                     {
-                        pieceTypeId = Aliases.PieceTypeRepeatRegion;
+                        pieceTypeId = Aliases.PieceType.RepeatRegion;
                         description = GetValue(temp2, "/note=\"", "\"");
                     }
                     else if (sequenceType.StartsWith("/pseudo") || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
                     {
-                        pieceTypeId = Aliases.PieceTypePseudoGen;
+                        pieceTypeId = Aliases.PieceType.PseudoGen;
                         description = GetValue(temp2, "/note=\"");
                     }
                     else if (sequenceType.StartsWith("misc_RNA"))
                     {
-                        pieceTypeId = Aliases.PieceTypeMiscRNA;
+                        pieceTypeId = Aliases.PieceType.MiscRNA;
                         product = GetValue(temp2, "/product=\"", "\"");
                         description = GetValue(temp2, "/note=\"");
                     }
@@ -290,7 +290,7 @@
                         id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
                         chain_id = parentChain.id,
                         description = string.Empty,
-                        piece_type_id = Aliases.PieceTypeNonCodingSequence,
+                        piece_type_id = Aliases.PieceType.NonCodingSequence,
                         complement = false,
                         partial = false
                     };
@@ -334,6 +334,7 @@
                     return strings[i].Substring(strings[i].IndexOf(pattern) + pattern.Length, strings[i].Length - strings[i].IndexOf(pattern) - pattern.Length - 1);
                 }
             }
+
             return string.Empty;
         }
 

@@ -79,8 +79,10 @@
         /// The <see cref="List"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
+        /// Thrown if name is empty or null.
         /// </exception>
         /// <exception cref="ArgumentNullException">
+        /// Thrown if listInfo is null.
         /// </exception>
         public static List<MvcHtmlString> RadioButtonList(
             this HtmlHelper helper,

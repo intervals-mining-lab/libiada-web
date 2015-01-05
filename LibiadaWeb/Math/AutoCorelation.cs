@@ -62,24 +62,25 @@
         /// The <see cref="double"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if array is empty.
         /// </exception>
         public double GetAverage(double[] data)
         {
-            int len = data.Length;
+            int length = data.Length;
 
-            if (len == 0)
+            if (length == 0)
             {
                 throw new Exception("No data");
             }
 
             double sum = 0;
 
-            for (int i = 0; i < data.Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 sum += data[i];
             }
 
-            return sum / len;
+            return sum / length;
         }
 
         /// <summary>
@@ -135,6 +136,7 @@
         /// The <see cref="double"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if input arrays has different length. 
         /// </exception>
         public double GetCorrelation(double[] x, double[] y)
         {
@@ -142,6 +144,7 @@
             {
                 throw new Exception("Length of sources is different");
             }
+
             double avgX = GetAverage(x);
             double stdevX = GetStdev(x);
             double avgY = GetAverage(y);

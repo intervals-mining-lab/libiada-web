@@ -114,4 +114,9 @@ COMMENT ON FUNCTION db_integrity_test() IS 'Функция для проверки целостности дан
 
 ALTER TABLE chain DROP COLUMN dissimilar;
 
+-- 05.01.2015
+-- Changed none link id to 0.
+
+UPDATE link set id = 0 WHERE id = 5;
+
 COMMIT;

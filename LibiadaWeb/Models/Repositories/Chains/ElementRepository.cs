@@ -88,6 +88,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The <see cref="long[]"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if alphabet element is not found in db. 
         /// </exception>
         public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
         {
@@ -247,7 +248,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         private static bool CheckNotationStatic(int notationId)
         {
-            return Aliases.StaticNotations.Contains(notationId);
+            return Aliases.Notation.StaticNotations.Contains(notationId);
         }
 
         /// <summary>
@@ -257,7 +258,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (cachedElements == null)
             {
-                cachedElements = db.element.Where(e => Aliases.StaticNotations.Contains(e.notation_id)).ToArray();
+                cachedElements = db.element.Where(e => Aliases.Notation.StaticNotations.Contains(e.notation_id)).ToArray();
             }
         }
 

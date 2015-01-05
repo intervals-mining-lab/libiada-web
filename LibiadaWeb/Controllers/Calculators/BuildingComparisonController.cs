@@ -79,10 +79,10 @@
                 string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
                 string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
                 matter matter1 = db.matter.Single(m => m.id == firstMatterId);
-                long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+                long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.Notation.Nucleotide).id;
                 Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
                 matter matter2 = db.matter.Single(m => m.id == secondMatterId);
-                long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.NotationNucleotide).id;
+                long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.Notation.Nucleotide).id;
                 Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
 
                 BaseChain res1 = null;
@@ -133,7 +133,6 @@
                         }
                     }
                 }
-
 
                 return new Dictionary<string, object>
                 {

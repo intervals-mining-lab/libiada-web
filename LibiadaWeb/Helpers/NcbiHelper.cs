@@ -25,6 +25,7 @@
         /// The <see cref="int"/>.
         /// </returns>
         /// <exception cref="Exception">
+        /// Thrown if recivied not one sequence.
         /// </exception>
         public static int GetId(string id)
         {
@@ -39,7 +40,6 @@
                 stream.CopyTo(memoryStream);
                 memoryStream.Position = 0;
                 doc.Load(memoryStream);
-
             }
             finally
             {
@@ -68,7 +68,6 @@
         /// </returns>
         public static Stream GetFile(string id)
         {
-            
             var fileUrl = BaseUrl + @"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id;
             var fileRequest = WebRequest.Create(fileUrl);
             var fileResponse = fileRequest.GetResponse();
@@ -92,7 +91,6 @@
         /// </returns>
         public static Stream GetGenes(string id)
         {
-
             var fileUrl = BaseUrl + @"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + id;
             var fileRequest = WebRequest.Create(fileUrl);
             var fileResponse = fileRequest.GetResponse();

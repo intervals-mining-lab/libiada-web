@@ -74,10 +74,10 @@
             var fastaHeaders = new List<string>();
             foreach (var chain in chains)
             {
-                languages.Add(chain.matter.nature.id == Aliases.NatureLiterature
+                languages.Add(chain.matter.nature.id == Aliases.Nature.Literature
                                          ? db.literature_chain.Single(l => l.id == chain.id).language.name
                                          : null);
-                fastaHeaders.Add(chain.matter.nature.id == Aliases.NatureGenetic
+                fastaHeaders.Add(chain.matter.nature.id == Aliases.Nature.Genetic
                                          ? db.dna_chain.Single(l => l.id == chain.id).fasta_header
                                          : null);
             }

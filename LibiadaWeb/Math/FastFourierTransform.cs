@@ -112,6 +112,7 @@
             {
                 return 1;
             }
+
             double arg = -2 * System.Math.PI * k / n;
             return new Complex(System.Math.Cos(arg), System.Math.Sin(arg));
         }

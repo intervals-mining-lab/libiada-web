@@ -113,7 +113,6 @@
                 bodyData[i].Add(languages[i]);
                 bodyData[i].Add(fastaHeaders[i]);
                 bodyData[i].Add(remoteIds[i]);
-
             }
 
             return helper.Table(headers, bodyData);

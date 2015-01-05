@@ -10,10 +10,11 @@
     using System.Web.Mvc;
     using System.Xml;
 
+    using Helpers;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
-    using Helpers;
     using Models;
     using Models.Repositories.Catalogs;
     using Models.Repositories.Chains;
@@ -139,8 +140,8 @@
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                     { "natures", new SelectList(db.nature, "id", "name") },
                     { "translators", new SelectList(db.translator, "id", "name") },
-                    { "natureLiterature", Aliases.NatureLiterature },
-                    { "natureGenetic", Aliases.NatureGenetic }
+                    { "natureLiterature", Aliases.Nature.Literature },
+                    { "natureGenetic", Aliases.Nature.Genetic }
                 };
             return View();
         }
@@ -233,7 +234,7 @@
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
 
-                    string stringChain = matter.nature_id == Aliases.NatureGenetic
+                    string stringChain = matter.nature_id == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
@@ -242,7 +243,7 @@
 
                     switch (matter.nature_id)
                     {
-                        case Aliases.NatureGenetic:
+                        case Aliases.Nature.Genetic:
                             // отделяем заголовок fasta файла от цепочки
                             string[] splittedFasta = stringChain.Split(new[] { '\n', '\r' });
                             var chainStringBuilder = new StringBuilder();
@@ -278,7 +279,7 @@
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
                             dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
                             break;
-                        case Aliases.NatureMusic:
+                        case Aliases.Nature.Music:
                             var doc = new XmlDocument();
                             doc.LoadXml(stringChain);
                             
@@ -286,7 +287,7 @@
                             // parser.Execute(doc, "test");
                             // ScoreTrack tempTrack = parser.ScoreModel;
                             break;
-                        case Aliases.NatureLiterature:
+                        case Aliases.Nature.Literature:
                             string[] text = stringChain.Split('\n');
                             for (int l = 0; l < text.Length - 1; l++)
                             {
@@ -352,8 +353,8 @@
                             remoteDbRepository.GetSelectListWithNature((int)remoteDbId) },
                         { "natures", new SelectList(db.nature, "id", "name", matter.nature_id) },
                         { "translators", new SelectList(db.translator, "id", "name") },
-                        { "natureLiterature", Aliases.NatureLiterature },
-                        { "natureGenetic", Aliases.NatureGenetic }
+                        { "natureLiterature", Aliases.Nature.Literature },
+                        { "natureGenetic", Aliases.Nature.Genetic }
                     };
             return View(matter);
         }

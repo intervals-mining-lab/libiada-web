@@ -7,283 +7,302 @@
     /// </summary>
     public static class Aliases
     {
-        #region Accidental
+        /// <summary>
+        /// The accidental.
+        /// </summary>
+        public static class Accidental
+        {
+            /// <summary>
+            /// The accidental double flat.
+            /// </summary>
+            public const int DoubleFlat = 1;
+
+            /// <summary>
+            /// The accidental flat.
+            /// </summary>
+            public const int Flat = 2;
+
+            /// <summary>
+            /// The accidental bekar.
+            /// </summary>
+            public const int Bekar = 3;
+
+            /// <summary>
+            /// The accidental sharp.
+            /// </summary>
+            public const int Sharp = 4;
+
+            /// <summary>
+            /// The accidental double sharp.
+            /// </summary>
+            public const int DoubleSharp = 5;
+        }
 
         /// <summary>
-        /// The accidental double flat.
+        /// The language.
         /// </summary>
-        public const int AccidentalDoubleFlat = 1;
+        public static class Language
+        {
+            /// <summary>
+            /// The language russian.
+            /// </summary>
+            public const int Russian = 1;
+
+            /// <summary>
+            /// The language english.
+            /// </summary>
+            public const int English = 2;
+
+            /// <summary>
+            /// The language german.
+            /// </summary>
+            public const int German = 3;
+        }
 
         /// <summary>
-        /// The accidental flat.
+        /// The link.
         /// </summary>
-        public const int AccidentalFlat = 2;
+        public static class Link
+        {
+            /// <summary>
+            /// The link none.
+            /// </summary>
+            public const int None = 0;
+
+            /// <summary>
+            /// The link start.
+            /// </summary>
+            public const int Start = 1;
+
+            /// <summary>
+            /// The link end.
+            /// </summary>
+            public const int End = 2;
+
+            /// <summary>
+            /// The link start end.
+            /// </summary>
+            public const int StartEnd = 3;
+
+            /// <summary>
+            /// The link cycle.
+            /// </summary>
+            public const int Cycle = 4;
+        }
 
         /// <summary>
-        /// The accidental bekar.
+        /// The nature.
         /// </summary>
-        public const int AccidentalBekar = 3;
+        public static class Nature
+        {
+            /// <summary>
+            /// The nature genetic.
+            /// </summary>
+            public const int Genetic = 1;
+
+            /// <summary>
+            /// The nature music.
+            /// </summary>
+            public const int Music = 2;
+
+            /// <summary>
+            /// The nature literature.
+            /// </summary>
+            public const int Literature = 3;
+        }
 
         /// <summary>
-        /// The accidental sharp.
+        /// The notation.
         /// </summary>
-        public const int AccidentalSharp = 4;
+        public static class Notation
+        {
+            /// <summary>
+            /// The notation nucleotide.
+            /// </summary>
+            public const int Nucleotide = 1;
+
+            /// <summary>
+            /// The notation triplet.
+            /// </summary>
+            public const int Triplet = 2;
+
+            /// <summary>
+            /// The notation amino acid.
+            /// </summary>
+            public const int AminoAcid = 3;
+
+            /// <summary>
+            /// The notation segmented.
+            /// </summary>
+            public const int Segmented = 4;
+
+            /// <summary>
+            /// The notation words.
+            /// </summary>
+            public const int Words = 5;
+
+            /// <summary>
+            /// The notation fmotives.
+            /// </summary>
+            public const int Fmotives = 6;
+
+            /// <summary>
+            /// The notation measures.
+            /// </summary>
+            public const int Measures = 7;
+
+            /// <summary>
+            /// The notation notes.
+            /// </summary>
+            public const int Notes = 8;
+
+            /// <summary>
+            /// The notation letters.
+            /// </summary>
+            public const int Letters = 9;
+
+            /// <summary>
+            /// Notations elements of which will not change.
+            /// </summary>
+            public static readonly List<int> StaticNotations = new List<int> { Nucleotide, Triplet, AminoAcid, Letters };
+        }
 
         /// <summary>
-        /// The accidental double sharp.
+        /// The note symbol.
         /// </summary>
-        public const int AccidentalDoubleSharp = 5;
+        public static class NoteSymbol
+        {
+            /// <summary>
+            /// The note symbol a.
+            /// </summary>
+            public const int A = 1;
 
-        #endregion
+            /// <summary>
+            /// The note symbol b.
+            /// </summary>
+            public const int B = 2;
 
-        #region Language
+            /// <summary>
+            /// The note symbol c.
+            /// </summary>
+            public const int C = 3;
+
+            /// <summary>
+            /// The note symbol d.
+            /// </summary>
+            public const int D = 4;
+
+            /// <summary>
+            /// The note symbol e.
+            /// </summary>
+            public const int E = 5;
+
+            /// <summary>
+            /// The note symbol f.
+            /// </summary>
+            public const int F = 6;
+
+            /// <summary>
+            /// The note symbol g.
+            /// </summary>
+            public const int G = 7;
+        }
 
         /// <summary>
-        /// The language russian.
+        /// The piece type.
         /// </summary>
-        public const int LanguageRussian = 1;
+        public static class PieceType
+        {
+            /// <summary>
+            /// The piece type full genome.
+            /// </summary>
+            public const int FullGenome = 1;
+
+            /// <summary>
+            /// The piece type full text.
+            /// </summary>
+            public const int FullText = 2;
+
+            /// <summary>
+            /// The piece type full song.
+            /// </summary>
+            public const int FullSong = 3;
+
+            /// <summary>
+            /// The piece type coding sequence.
+            /// </summary>
+            public const int CodingSequence = 4;
+
+            /// <summary>
+            /// The piece type rrna.
+            /// </summary>
+            public const int RRNA = 5;
+
+            /// <summary>
+            /// The piece type trna.
+            /// </summary>
+            public const int TRNA = 6;
+
+            /// <summary>
+            /// The piece type ncrna.
+            /// </summary>
+            public const int NCRNA = 7;
+
+            /// <summary>
+            /// The piece type tmrna.
+            /// </summary>
+            public const int TMRNA = 8;
+
+            /// <summary>
+            /// The piece type pseudo gen.
+            /// </summary>
+            public const int PseudoGen = 9;
+
+            /// <summary>
+            /// The piece type plasmid.
+            /// </summary>
+            public const int Plasmid = 10;
+
+            /// <summary>
+            /// The piece type mitochondrion genome.
+            /// </summary>
+            public const int MitochondrionGenome = 11;
+
+            /// <summary>
+            /// The piece type mitochondrion rrna.
+            /// </summary>
+            public const int MitochondrionRRNA = 12;
+
+            /// <summary>
+            /// The piece type repeat region.
+            /// </summary>
+            public const int RepeatRegion = 13;
+
+            /// <summary>
+            /// The piece type non coding sequence.
+            /// </summary>
+            public const int NonCodingSequence = 14;
+
+            /// <summary>
+            /// The piece type chloroplast genome.
+            /// </summary>
+            public const int ChloroplastGenome = 15;
+
+            /// <summary>
+            /// The piece type misc rna.
+            /// </summary>
+            public const int MiscRNA = 16;
+        }
 
         /// <summary>
-        /// The language english.
+        /// The remote db.
         /// </summary>
-        public const int LanguageEnglish = 2;
-
-        /// <summary>
-        /// The language german.
-        /// </summary>
-        public const int LanguageGerman = 3;
-
-        #endregion
-
-        #region Link
-
-        /// <summary>
-        /// The link start.
-        /// </summary>
-        public const int LinkStart = 1;
-
-        /// <summary>
-        /// The link end.
-        /// </summary>
-        public const int LinkEnd = 2;
-
-        /// <summary>
-        /// The link start end.
-        /// </summary>
-        public const int LinkStartEnd = 3;
-
-        /// <summary>
-        /// The link cycle.
-        /// </summary>
-        public const int LinkCycle = 4;
-
-        /// <summary>
-        /// The link none.
-        /// </summary>
-        public const int LinkNone = 5;
-
-        #endregion
-
-        #region Nature
-
-        /// <summary>
-        /// The nature genetic.
-        /// </summary>
-        public const int NatureGenetic = 1;
-
-        /// <summary>
-        /// The nature music.
-        /// </summary>
-        public const int NatureMusic = 2;
-
-        /// <summary>
-        /// The nature literature.
-        /// </summary>
-        public const int NatureLiterature = 3;
-
-        #endregion
-
-        #region Notation
-
-        /// <summary>
-        /// The notation nucleotide.
-        /// </summary>
-        public const int NotationNucleotide = 1;
-
-        /// <summary>
-        /// The notation triplet.
-        /// </summary>
-        public const int NotationTriplet = 2;
-
-        /// <summary>
-        /// The notation amino acid.
-        /// </summary>
-        public const int NotationAminoAcid = 3;
-
-        /// <summary>
-        /// The notation segmented.
-        /// </summary>
-        public const int NotationSegmented = 4;
-
-        /// <summary>
-        /// The notation words.
-        /// </summary>
-        public const int NotationWords = 5;
-
-        /// <summary>
-        /// The notation fmotivs.
-        /// </summary>
-        public const int NotationFmotivs = 6;
-
-        /// <summary>
-        /// The notation measures.
-        /// </summary>
-        public const int NotationMeasures = 7;
-
-        /// <summary>
-        /// The notation notes.
-        /// </summary>
-        public const int NotationNotes = 8;
-
-        /// <summary>
-        /// The notation letters.
-        /// </summary>
-        public const int NotationLetters = 9;
-
-        /// <summary>
-        /// The static notations.
-        /// </summary>
-        public static readonly List<int> StaticNotations = new List<int> { NotationNucleotide, NotationTriplet, NotationAminoAcid, NotationLetters }; 
-
-        #endregion
-
-        #region NoteSymbol
-
-        /// <summary>
-        /// The note symbol a.
-        /// </summary>
-        public const int NoteSymbolA = 1;
-
-        /// <summary>
-        /// The note symbol b.
-        /// </summary>
-        public const int NoteSymbolB = 2;
-
-        /// <summary>
-        /// The note symbol c.
-        /// </summary>
-        public const int NoteSymbolC = 3;
-
-        /// <summary>
-        /// The note symbol d.
-        /// </summary>
-        public const int NoteSymbolD = 4;
-
-        /// <summary>
-        /// The note symbol e.
-        /// </summary>
-        public const int NoteSymbolE = 5;
-
-        /// <summary>
-        /// The note symbol f.
-        /// </summary>
-        public const int NoteSymbolF = 6;
-
-        /// <summary>
-        /// The note symbol g.
-        /// </summary>
-        public const int NoteSymbolG = 7;
-
-        #endregion
-
-        #region PieceType
-
-        /// <summary>
-        /// The piece type full genome.
-        /// </summary>
-        public const int PieceTypeFullGenome = 1;
-
-        /// <summary>
-        /// The piece type full text.
-        /// </summary>
-        public const int PieceTypeFullText = 2;
-
-        /// <summary>
-        /// The piece type full song.
-        /// </summary>
-        public const int PieceTypeFullSong = 3;
-
-        /// <summary>
-        /// The piece type coding sequence.
-        /// </summary>
-        public const int PieceTypeCodingSequence = 4;
-
-        /// <summary>
-        /// The piece type rrna.
-        /// </summary>
-        public const int PieceTypeRRNA = 5;
-
-        /// <summary>
-        /// The piece type trna.
-        /// </summary>
-        public const int PieceTypeTRNA = 6;
-
-        /// <summary>
-        /// The piece type ncrna.
-        /// </summary>
-        public const int PieceTypeNCRNA = 7;
-
-        /// <summary>
-        /// The piece type tmrna.
-        /// </summary>
-        public const int PieceTypeTMRNA = 8;
-
-        /// <summary>
-        /// The piece type pseudo gen.
-        /// </summary>
-        public const int PieceTypePseudoGen = 9;
-
-        /// <summary>
-        /// The piece type plasmid.
-        /// </summary>
-        public const int PieceTypePlasmid = 10;
-
-        /// <summary>
-        /// The piece type mitochondrion genome.
-        /// </summary>
-        public const int PieceTypeMitochondrionGenome = 11;
-
-        /// <summary>
-        /// The piece type mitochondrion rrna.
-        /// </summary>
-        public const int PieceTypeMitochondrionRRNA = 12;
-
-        /// <summary>
-        /// The piece type repeat region.
-        /// </summary>
-        public const int PieceTypeRepeatRegion = 13;
-
-        /// <summary>
-        /// The piece type non coding sequence.
-        /// </summary>
-        public const int PieceTypeNonCodingSequence = 14;
-
-        /// <summary>
-        /// The piece type chloroplast genome.
-        /// </summary>
-        public const int PieceTypeChloroplastGenome = 15;
-
-        public const int PieceTypeMiscRNA = 16;
-
-        #endregion
-
-        #region RemoteDb
-
-        /// <summary>
-        /// The remote db ncbi.
-        /// </summary>
-        public const int RemoteDbNcbi = 1;
-
-        #endregion
+        public static class RemoteDb
+        {
+            /// <summary>
+            /// The remote db ncbi.
+            /// </summary>
+            public const int RemoteDbNcbi = 1;
+        }
     }
 }

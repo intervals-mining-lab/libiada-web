@@ -16,15 +16,15 @@
         private static readonly int CoreCount = Environment.ProcessorCount;
 
         /// <summary>
-        /// The created tasks counter.
-        /// </summary>
-        private static int taskCounter;
-        
-        /// <summary>
         /// Gets the tasks.
         /// </summary>
         private static readonly List<Task> Tasks = new List<Task>();
 
+        /// <summary>
+        /// The created tasks counter.
+        /// </summary>
+        private static int taskCounter;
+        
         /// <summary>
         /// The add task.
         /// </summary>
@@ -98,6 +98,12 @@
             }
         }
 
+        /// <summary>
+        /// The get tasks data.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{TaskData}"/>.
+        /// </returns>
         public static IEnumerable<TaskData> GetTasksData()
         {
             lock (Tasks)
@@ -239,6 +245,5 @@
             taskToStart.Thread = thread;
             thread.Start();
         }
-
     }
 }

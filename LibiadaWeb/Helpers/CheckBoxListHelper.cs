@@ -79,8 +79,10 @@
         /// The <see cref="List"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
+        /// Thrown if name is null or empty.
         /// </exception>
         /// <exception cref="ArgumentNullException">
+        /// Thrown if listInfo is null.
         /// </exception>
         public static List<MvcHtmlString> CheckBoxList(
             this HtmlHelper helper,

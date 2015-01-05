@@ -51,7 +51,7 @@
             <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value" />
             
             <div data-ng-switch="natureId">
-                <div data-ng-switch-when="@Aliases.NatureLiterature">
+                <div data-ng-switch-when="@Aliases.Nature.Literature">
                     <select title="Язык" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
                     <input type="hidden" name="languageIds" data-ng-value="characteristic.language.Value" />
 
@@ -59,10 +59,10 @@
                     <input type="hidden" name="translatorIds" data-ng-value="characteristic.translator.Value" />
                 </div>
 
-                <div data-ng-switch-when="@Aliases.NatureGenetic">
+                <div data-ng-switch-when="@Aliases.Nature.Genetic">
                 </div>
 
-                <div data-ng-switch-when="@Aliases.NatureMusic">
+                <div data-ng-switch-when="@Aliases.Nature.Music">
                 </div>
             </div>
 

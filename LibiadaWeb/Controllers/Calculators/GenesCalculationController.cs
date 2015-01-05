@@ -77,10 +77,10 @@
             
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
-                                         && p.id != Aliases.PieceTypeFullGenome 
-                                         && p.id != Aliases.PieceTypeChloroplastGenome 
-                                         && p.id != Aliases.PieceTypeMitochondrionGenome).Select(p => p.id);
+            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.Nature.Genetic 
+                                         && p.id != Aliases.PieceType.FullGenome 
+                                         && p.id != Aliases.PieceType.ChloroplastGenome 
+                                         && p.id != Aliases.PieceType.MitochondrionGenome).Select(p => p.id);
 
             var links = new SelectList(db.link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -89,7 +89,7 @@
                 {
                     { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.NatureGenetic), "id", "name") }, 
+                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.Nature.Genetic), "id", "name") }, 
                     { "links", links }, 
                     { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
                     { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }

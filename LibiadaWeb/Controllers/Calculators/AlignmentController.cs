@@ -59,6 +59,12 @@
         }
 
         // GET: Alignment
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
@@ -73,10 +79,10 @@
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic
-                                         && p.id != Aliases.PieceTypeFullGenome
-                                         && p.id != Aliases.PieceTypeChloroplastGenome
-                                         && p.id != Aliases.PieceTypeMitochondrionGenome).Select(p => p.id);
+            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.Nature.Genetic
+                                         && p.id != Aliases.PieceType.FullGenome
+                                         && p.id != Aliases.PieceType.ChloroplastGenome
+                                         && p.id != Aliases.PieceType.MitochondrionGenome).Select(p => p.id);
 
             var links = new SelectList(db.link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -85,7 +91,7 @@
                 {
                     { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.NatureGenetic), "id", "name") }, 
+                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.Nature.Genetic), "id", "name") }, 
                     { "links", links }, 
                     { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
                     { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
@@ -93,6 +99,36 @@
             return View();
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterId1">
+        /// The matter id 1.
+        /// </param>
+        /// <param name="matterId2">
+        /// The matter id 2.
+        /// </param>
+        /// <param name="characteristicId">
+        /// The characteristic id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="pieceTypeIds">
+        /// The piece type ids.
+        /// </param>
+        /// <param name="validationType">
+        /// The validation type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if validationType is unknown.
+        /// </exception>
         [HttpPost]
         public ActionResult Index(
             long matterId1,
@@ -105,13 +141,11 @@
         {
             return Action(() =>
             {
-
                 var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
                 var firstChainName = db.matter.Single(m => m.id == matterId1).name;
                 var firstChainProducts = new List<string>();
                 var firstChainPositions = new List<long>();
                 var firstChainPieceTypes = new List<string>();
-
 
                 var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
                 var secondChainName = db.matter.Single(m => m.id == matterId1).name;
@@ -140,7 +174,6 @@
                         default:
                             throw new ArgumentException("unknown validation type");
                     }
-
                 }
                 else
                 {
@@ -183,6 +216,36 @@
             });
         }
 
+        /// <summary>
+        /// The calculate characteristic.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="characteristicId">
+        /// The characteristic id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="pieceTypeIds">
+        /// The piece type ids.
+        /// </param>
+        /// <param name="characteristics">
+        /// The characteristics.
+        /// </param>
+        /// <param name="chainProducts">
+        /// The chain products.
+        /// </param>
+        /// <param name="chainPositions">
+        /// The chain positions.
+        /// </param>
+        /// <param name="chainPieceTypes">
+        /// The chain piece types.
+        /// </param>
         private void CalculateCharacteristic(
             long matterId,
             int characteristicId,
@@ -202,7 +265,6 @@
             var pieces = genes.Select(g => g.piece.First()).ToList();
 
             var chains = ExtractChains(pieces, chainId);
-
 
             string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
@@ -241,7 +303,6 @@
 
                 characteristics.Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
-
                 var productId = genes[d].product_id;
                 var pieceTypeId = genes[d].piece_type_id;
 
@@ -262,7 +323,7 @@
         /// The chain id.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Chain}"/>.
         /// </returns>
         private List<Chain> ExtractChains(List<piece> pieces, long chainId)
         {
@@ -286,6 +347,18 @@
             return chains;
         }
 
+        /// <summary>
+        /// The find maximum equality rotation.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         private int FindMaximumEqualityRotation(
             List<KeyValuePair<int, double>> first,
             List<KeyValuePair<int, double>> second)
@@ -307,6 +380,18 @@
             return optimal;
         }
 
+        /// <summary>
+        /// The find minimum difference rotation.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         private int FindMinimumDifferenceRotation(
             List<KeyValuePair<int, double>> first,
             List<KeyValuePair<int, double>> second)
@@ -328,6 +413,18 @@
             return optimal;
         }
 
+        /// <summary>
+        /// The find minimum normalized difference rotation.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         private int FindMinimumNormalizedDifferenceRotation(
             List<KeyValuePair<int, double>> first,
             List<KeyValuePair<int, double>> second)
@@ -349,6 +446,15 @@
             return optimal;
         }
 
+        /// <summary>
+        /// The rotate.
+        /// </summary>
+        /// <param name="list">
+        /// The list.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
         private List<KeyValuePair<int, double>> Rotate(List<KeyValuePair<int, double>> list)
         {
             KeyValuePair<int, double> first = list[0];
@@ -357,6 +463,18 @@
             return list;
         }
 
+        /// <summary>
+        /// The calculate match.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         private double CalculateMatch(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             double result = 0;
@@ -371,6 +489,18 @@
             return result;
         }
 
+        /// <summary>
+        /// The calculate difference.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         private double CalculateDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             double result = 0;
@@ -385,6 +515,18 @@
             return result;
         }
 
+        /// <summary>
+        /// The calculate normalized difference.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         private double CalculateNormalizedDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             double result = 0;

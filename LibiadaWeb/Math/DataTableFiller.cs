@@ -9,7 +9,6 @@
     /// </summary>
     public static class DataTableFiller
     {
-
         /// <summary>
         /// Метод, формирующий таблицу
         /// </summary>

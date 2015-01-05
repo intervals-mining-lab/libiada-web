@@ -107,7 +107,7 @@
         {
             matter matter = db.matter.Single(m => m.id == matterId);
             chain dataBaseChain;
-            if (matter.nature_id == Aliases.NatureLiterature)
+            if (matter.nature_id == Aliases.Nature.Literature)
             {
                 long chainId =
                     db.literature_chain.Single(l => l.matter_id == matterId && 
@@ -154,7 +154,7 @@
 
             switch (matter.nature_id)
             {
-                case Aliases.NatureGenetic:
+                case Aliases.Nature.Genetic:
                     dna_chain dnaChain = db.dna_chain.Single(c => c.id == dataBaseChain.id);
 
                     dnaChainRepository.Insert(
@@ -167,9 +167,9 @@
                         alphabet,
                         libiadaChain.Building);
                     break;
-                case Aliases.NatureMusic:
+                case Aliases.Nature.Music:
                     break;
-                case Aliases.NatureLiterature:
+                case Aliases.Nature.Literature:
 
                     literature_chain literatureChain = db.literature_chain.Single(c => c.id == dataBaseChain.id);
 

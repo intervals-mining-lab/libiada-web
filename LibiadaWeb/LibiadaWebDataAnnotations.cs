@@ -797,6 +797,5 @@
     /// </summary>
     public class TranslatorDataAnnotations : CommonDataAnnotations
     {
-        
     }
 }
