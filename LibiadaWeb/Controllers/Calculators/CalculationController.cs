@@ -66,16 +66,15 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var links = new SelectList(db.link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             var translators = new SelectList(db.translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
                 {
@@ -127,7 +126,6 @@
             {
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var characteristics = new List<List<double>>();
-                var chainNames = db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name).ToList();
                 var characteristicNames = new List<string>();
 
                 foreach (var matterId in matterIds)
@@ -160,7 +158,7 @@
                                                   c.chain_id == chainId &&
                                                   c.characteristic_type_id == characteristicId))
                         {
-                            double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
+                            double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || linkId == c.link_id) &&
                                                                                             c.chain_id == chainId &&
                                                                                             c.characteristic_type_id == characteristicId).value.Value;
                             characteristics.Last().Add(dataBaseCharacteristic);
@@ -172,7 +170,7 @@
                             string className =
                                 db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                            var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+                            var link = (Link)(linkId ?? 0);
                             var characteristicValue = calculator.Calculate(tempChain, link);
 
                             var dataBaseCharacteristic = new characteristic
@@ -190,12 +188,14 @@
                     }
                 }
 
+                var links = db.link;
+
                 for (int k = 0; k < characteristicIds.Length; k++)
                 {
                     int characteristicId = characteristicIds[k];
                     int? linkId = linkIds[k];
                     int notationId = notationIds[k];
-                    string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
+                    string linkName = linkId.HasValue ? links.Single(l => l.id == linkId).name : string.Empty;
 
                     characteristicNames.Add(string.Join("  ", db.characteristic_type.Single(c => c.id == characteristicId).name, linkName, db.notation.Single(n => n.id == notationId).name));
                 }
@@ -214,10 +214,10 @@
                 return new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
-                                         { "chainNames", chainNames }, 
+                                         { "chainNames", db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name) }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "characteristicIds", characteristicIds }, 
-                                         { "chainIds", new List<long>(matterIds) },
+                                         { "matterIds", matterIds },
                                          { "characteristicsList", characteristicsList }
                                      };
             });

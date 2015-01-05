@@ -67,24 +67,23 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chainIds = db.gene.Select(g => g.chain_id).Distinct().ToList();
+            var chainIds = db.gene.Select(g => g.chain_id).Distinct();
             var chains = db.dna_chain.Where(c => chainIds.Contains(c.id));
-                var matterIds = chains.Select(c => c.matter_id);
-
-            List<matter> matters = db.matter.Where(m => matterIds.Contains(m.id)).ToList();
-
-            IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
-
+            var matterIds = chains.Select(c => c.matter_id);
+            
+            var matters = db.matter.Where(m => matterIds.Contains(m.id));
+            
+            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var pieceTypeIds =
-                db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
+            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.NatureGenetic 
                                          && p.id != Aliases.PieceTypeFullGenome 
                                          && p.id != Aliases.PieceTypeChloroplastGenome 
                                          && p.id != Aliases.PieceTypeMitochondrionGenome).Select(p => p.id);
 
             var links = new SelectList(db.link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
                 {

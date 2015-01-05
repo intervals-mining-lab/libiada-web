@@ -73,12 +73,11 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            List<matter> matters = db.matter.Include("nature").ToList();
+            var matters = db.matter.Include("nature");
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
-            IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);

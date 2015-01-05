@@ -9,7 +9,7 @@
     <h2>Характеристики</h2>
     <script type='text/javascript'>
         var characteristics = new Array();
-        var chainIds = new Array();
+        var matterIds = new Array();
         var chainNames = new Array();
         var colors = new Array();
 
@@ -26,7 +26,7 @@
             {
                 <text>
             characteristics.push(new Array());
-            chainIds.push(@ViewBag.chainIds[j]);
+            matterIds.push(@ViewBag.matterIds[j]);
             chainNames.push('@ViewBag.chainNames[j]');
             </text>
 
@@ -48,7 +48,7 @@
             dataSeries[0].data = new Array();
             dataSeries[0].name = "Характеристики цепочек";
             dataSeries[0].color = colors[0];
-            for (var i = 0; i < chainIds.length; i++) {
+            for (var i = 0; i < matterIds.length; i++) {
                 var xcharacteristicId = $("#xaxis option:selected")[0].value;
                 var ycharacteristicId = $("#yaxis option:selected")[0].value;
                 var x = characteristics[i][xcharacteristicId];

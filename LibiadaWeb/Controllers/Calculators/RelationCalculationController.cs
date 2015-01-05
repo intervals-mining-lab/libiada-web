@@ -67,12 +67,12 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            List<chain> chains = db.chain.Include("matter").ToList();
+            var chains = db.chain.Include("matter");
             ViewBag.chainCheckBoxes = chainRepository.GetSelectListItems(chains, null);
             ViewBag.chains = chains;
             var languages = new List<string>();
             var fastaHeaders = new List<string>();
-            foreach (chain chain in ViewBag.chains)
+            foreach (var chain in chains)
             {
                 languages.Add(chain.matter.nature.id == Aliases.NatureLiterature
                                          ? db.literature_chain.Single(l => l.id == chain.id).language.name
@@ -80,15 +80,13 @@
                 fastaHeaders.Add(chain.matter.nature.id == Aliases.NatureGenetic
                                          ? db.dna_chain.Single(l => l.id == chain.id).fasta_header
                                          : null);
-
             }
 
             ViewBag.languages = languages;
             ViewBag.fastaHeaders = fastaHeaders;
 
             ViewBag.chainsList = chainRepository.GetSelectListItems(null);
-            IEnumerable<characteristic_type> characteristics =
-                db.characteristic_type.Where(c => c.binary_chain_applicable);
+            var characteristics = db.characteristic_type.Where(c => c.binary_chain_applicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
             return View();
@@ -152,12 +150,11 @@
 
                 chain dbChain = db.chain.Single(c => c.id == chainId);
 
-
                 Chain currentChain = chainRepository.ToLibiadaChain(dbChain.id);
                 string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
 
                 IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
-                Link link = (Link)linkId;
+                var link = (Link)linkId;
 
                 if (oneWord)
                 {

@@ -75,16 +75,15 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            IEnumerable<characteristic_type> characteristicsList =
-                db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
             var links = new SelectList(db.link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             var translators = new SelectList(db.translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Нет" });
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
                 {

@@ -45,7 +45,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            IEnumerable<characteristic_type> characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
