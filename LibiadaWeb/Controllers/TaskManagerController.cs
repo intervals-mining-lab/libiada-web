@@ -1,7 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Web.Mvc;
 
     using LibiadaWeb.Maintenance;
@@ -19,19 +18,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var tasks = new List<TaskData>();
-            var tasksFromManager = TaskManager.Tasks;
-            foreach (var task in tasksFromManager)
-            {
-                lock (task)
-                {
-                    tasks.Add(task.TaskData);
-                }
-            }
-
-            ViewBag.Tasks = tasks;
-
+            ViewBag.Tasks = TaskManager.GetTasksData();
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
+
             return View();
         }
 
@@ -47,18 +36,15 @@
         public ActionResult RedirectToResult(int id)
         {
             var task = TaskManager.GetTask(id);
-            lock (task)
+            switch (task.TaskData.TaskState)
             {
-                switch (task.TaskData.TaskState)
-                {
-                    case TaskState.Completed:
-                    case TaskState.Error:
-                        TempData["Result"] = task.Result;
-                        return RedirectToAction("Result", task.ControllerName);
-                    default:
-                        TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
-                        return RedirectToAction("Index");
-                }
+                case TaskState.Completed:
+                case TaskState.Error:
+                    TempData["Result"] = task.Result;
+                    return RedirectToAction("Result", task.ControllerName);
+                default:
+                    TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
+                    return RedirectToAction("Index");
             }
         }
 

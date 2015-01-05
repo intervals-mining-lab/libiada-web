@@ -19,19 +19,11 @@
         /// The created tasks counter.
         /// </summary>
         private static int taskCounter;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="TaskManager"/> class.
-        /// </summary>
-        static TaskManager()
-        {
-            Tasks = new List<Task>();
-        }
-
+        
         /// <summary>
         /// Gets the tasks.
         /// </summary>
-        public static List<Task> Tasks { get; private set; }
+        private static readonly List<Task> Tasks = new List<Task>();
 
         /// <summary>
         /// The add task.
@@ -106,6 +98,14 @@
             }
         }
 
+        public static IEnumerable<TaskData> GetTasksData()
+        {
+            lock (Tasks)
+            {
+                return Tasks.Select(t => t.TaskData.Clone());
+            }
+        }
+
         /// <summary>
         /// The get task.
         /// </summary>
@@ -148,6 +148,7 @@
                         }
                     }
                 }
+
                 while (activeTasks < CoreCount)
                 {
                     activeTasks++;
@@ -156,15 +157,8 @@
                     {
                         lock (taskToStart)
                         {
-                            if (taskToStart != null)
-                            {
-                                taskToStart.TaskData.TaskState = TaskState.InProgress;
-                                StartTask(taskToStart.TaskData.Id);
-                            }
-                            else
-                            {
-                                break;
-                            }
+                            taskToStart.TaskData.TaskState = TaskState.InProgress;
+                            StartTask(taskToStart.TaskData.Id);
                         }
                     }
                     else
@@ -245,5 +239,6 @@
             taskToStart.Thread = thread;
             thread.Start();
         }
+
     }
 }
