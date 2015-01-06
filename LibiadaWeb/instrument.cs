@@ -12,17 +12,17 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class instrument
+    public partial class Instrument
     {
-        public instrument()
+        public Instrument()
         {
-            this.pitch = new HashSet<pitch>();
+            this.Pitch = new HashSet<Pitch>();
         }
     
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<pitch> pitch { get; set; }
+        public virtual ICollection<Pitch> Pitch { get; set; }
     }
 }

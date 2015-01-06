@@ -32,7 +32,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// The element repository.
@@ -75,7 +75,7 @@
         public ChainController()
         {
             db = new LibiadaWebEntities();
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
@@ -94,10 +94,10 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chain = db.chain.Include(c => c.matter)
-                                .Include(c => c.notation)
-                                .Include(c => c.piece_type)
-                                .Include(c => c.remote_db);
+            var chain = db.CommonSequence.Include(c => c.Matter)
+                                .Include(c => c.Notation)
+                                .Include(c => c.PieceType)
+                                .Include(c => c.RemoteDb);
             return View(chain.ToList());
         }
 
@@ -117,13 +117,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = db.chain.Find(id);
-            if (chain == null)
+            CommonSequence sequence = db.CommonSequence.Find(id);
+            if (sequence == null)
             {
                 return HttpNotFound();
             }
 
-            return View(chain);
+            return View(sequence);
         }
 
         /// <summary>
@@ -136,17 +136,17 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(db.language, "id", "name") }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() }, 
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.nature, "id", "name") }, 
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }, 
                     { "natureGenetic", Aliases.Nature.Genetic }
@@ -157,7 +157,7 @@
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="sequence">
         /// The chain.
         /// </param>
         /// <param name="localFile">
@@ -193,7 +193,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain,
+            [Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] CommonSequence sequence,
             bool localFile,
             int languageId,
             bool original,
@@ -222,7 +222,7 @@
                     }
                     else
                     {
-                        webApiId = NcbiHelper.GetId(chain.remote_id);
+                        webApiId = NcbiHelper.GetId(sequence.RemoteId);
                         fileStream = NcbiHelper.GetFile(webApiId.ToString());
                     }
 
@@ -230,7 +230,7 @@
 
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
-                    int natureId = db.matter.Single(m => m.id == chain.matter_id).nature_id;
+                    int natureId = db.Matter.Single(m => m.Id == sequence.MatterId).NatureId;
 
                     // Copy the byte array into a string
                     string stringChain = natureId == Aliases.Nature.Genetic
@@ -256,17 +256,17 @@
 
                             libiadaChain = new BaseChain(resultStringChain);
 
-                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, chain.notation_id))
+                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, sequence.NotationId))
                             {
                                 throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
                             alphabet = elementRepository.ToDbElements(
                                 libiadaChain.Alphabet,
-                                chain.notation_id,
+                                sequence.NotationId,
                                 false);
                             dnaChainRepository.Insert(
-                                chain,
+                                sequence,
                                 fastaHeader,
                                 webApiId,
                                 productId,
@@ -296,11 +296,11 @@
 
                             alphabet = elementRepository.ToDbElements(
                                 libiadaChain.Alphabet,
-                                chain.notation_id,
+                                sequence.NotationId,
                                 true);
 
                             literatureChainRepository.Insert(
-                                chain,
+                                sequence,
                                 original,
                                 languageId,
                                 translatorId,
@@ -317,24 +317,24 @@
                 }
             }
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
             ViewBag.data = new Dictionary<string, object>
             {
-                { "matters", matterRepository.GetSelectListWithNature(chain.matter_id) }, 
-                { "notations", notationRepository.GetSelectListWithNature(chain.notation_id) }, 
-                { "languages", new SelectList(db.language, "id", "name", languageId) }, 
-                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(chain.piece_type_id) }, 
-                { "remoteDbs", chain.remote_db_id == null
+                { "matters", matterRepository.GetSelectListWithNature(sequence.MatterId) }, 
+                { "notations", notationRepository.GetSelectListWithNature(sequence.NotationId) }, 
+                { "languages", new SelectList(db.Language, "id", "name", languageId) }, 
+                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(sequence.PieceTypeId) }, 
+                { "remoteDbs", sequence.RemoteDbId == null
                         ? remoteDbRepository.GetSelectListWithNature()
-                        : remoteDbRepository.GetSelectListWithNature((int)chain.remote_db_id) }, 
-                { "natures", new SelectList(db.nature, "id", "name", db.matter.Single(m => m.id == chain.matter_id).nature_id) }, 
+                        : remoteDbRepository.GetSelectListWithNature((int)sequence.RemoteDbId) }, 
+                { "natures", new SelectList(db.Nature, "id", "name", db.Matter.Single(m => m.Id == sequence.MatterId).NatureId) }, 
                 { "natureLiterature", Aliases.Nature.Literature },
                 { "natureGenetic", Aliases.Nature.Genetic },
                     { "translators", translators }
             };
-            return View(chain);
+            return View(sequence);
         }
 
         /// <summary>
@@ -353,23 +353,23 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = db.chain.Find(id);
-            if (chain == null)
+            CommonSequence sequence = db.CommonSequence.Find(id);
+            if (sequence == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
-            return View(chain);
+            ViewBag.matter_id = new SelectList(db.Matter, "id", "name", sequence.MatterId);
+            ViewBag.notation_id = new SelectList(db.Notation, "id", "name", sequence.NotationId);
+            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name", sequence.PieceTypeId);
+            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name", sequence.RemoteDbId);
+            return View(sequence);
         }
 
         /// <summary>
         /// The edit.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="sequence">
         /// The chain.
         /// </param>
         /// <returns>
@@ -377,20 +377,20 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] chain chain)
+        public ActionResult Edit([Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] CommonSequence sequence)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(chain).State = EntityState.Modified;
+                db.Entry(sequence).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", chain.remote_db_id);
-            return View(chain);
+            ViewBag.matter_id = new SelectList(db.Matter, "id", "name", sequence.MatterId);
+            ViewBag.notation_id = new SelectList(db.Notation, "id", "name", sequence.NotationId);
+            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name", sequence.PieceTypeId);
+            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name", sequence.RemoteDbId);
+            return View(sequence);
         }
 
         /// <summary>
@@ -409,13 +409,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            chain chain = db.chain.Find(id);
-            if (chain == null)
+            CommonSequence sequence = db.CommonSequence.Find(id);
+            if (sequence == null)
             {
                 return HttpNotFound();
             }
 
-            return View(chain);
+            return View(sequence);
         }
 
         /// <summary>
@@ -431,8 +431,8 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            chain chain = db.chain.Find(id);
-            db.chain.Remove(chain);
+            CommonSequence sequence = db.CommonSequence.Find(id);
+            db.CommonSequence.Remove(sequence);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

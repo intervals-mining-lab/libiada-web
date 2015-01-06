@@ -24,7 +24,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainCheckController"/> class.
@@ -32,7 +32,7 @@
         public ChainCheckController() : base("ChainCheck", "Chain check")
         {
             db = new LibiadaWebEntities();
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>

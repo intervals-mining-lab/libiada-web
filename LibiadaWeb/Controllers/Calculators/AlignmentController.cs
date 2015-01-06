@@ -44,7 +44,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlignmentController"/> class.
@@ -55,7 +55,7 @@
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
         }
 
         // GET: Alignment
@@ -69,29 +69,29 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var chainIds = db.gene.Select(g => g.chain_id).Distinct();
-            var chains = db.dna_chain.Where(c => chainIds.Contains(c.id));
-            var matterIds = chains.Select(c => c.matter_id);
+            var chainIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var chains = db.DnaSequence.Where(c => chainIds.Contains(c.Id));
+            var matterIds = chains.Select(c => c.MatterId);
 
-            var matters = db.matter.Where(m => matterIds.Contains(m.id));
+            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
 
-            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var pieceTypeIds = db.piece_type.Where(p => p.nature_id == Aliases.Nature.Genetic
-                                         && p.id != Aliases.PieceType.FullGenome
-                                         && p.id != Aliases.PieceType.ChloroplastGenome
-                                         && p.id != Aliases.PieceType.MitochondrionGenome).Select(p => p.id);
+            var pieceTypeIds = db.PieceType.Where(p => p.NatureId == Aliases.Nature.Genetic
+                                         && p.Id != Aliases.PieceType.FullGenome
+                                         && p.Id != Aliases.PieceType.ChloroplastGenome
+                                         && p.Id != Aliases.PieceType.MitochondrionGenome).Select(p => p.Id);
 
-            var links = new SelectList(db.link, "id", "name").ToList();
+            var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", new SelectList(db.notation.Where(n => n.nature_id == Aliases.Nature.Genetic), "id", "name") }, 
+                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
                     { "links", links }, 
                     { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
                     { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
@@ -142,13 +142,13 @@
             return Action(() =>
             {
                 var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
-                var firstChainName = db.matter.Single(m => m.id == matterId1).name;
+                var firstChainName = db.Matter.Single(m => m.Id == matterId1).Name;
                 var firstChainProducts = new List<string>();
                 var firstChainPositions = new List<long>();
                 var firstChainPieceTypes = new List<string>();
 
                 var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
-                var secondChainName = db.matter.Single(m => m.id == matterId1).name;
+                var secondChainName = db.Matter.Single(m => m.Id == matterId1).Name;
                 var secondChainProducts = new List<string>();
                 var secondChainPositions = new List<long>();
                 var secondChainPieceTypes = new List<string>();
@@ -193,7 +193,7 @@
                     }
                 }
 
-                string characteristicName = db.characteristic_type.Single(c => c.id == characteristicId).name;
+                string characteristicName = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
 
                 return new Dictionary<string, object>
                 {
@@ -257,59 +257,59 @@
             List<long> chainPositions,
             List<string> chainPieceTypes)
         {
-            var chainId = db.dna_chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+            var chainId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
             var genes =
-                db.gene.Where(g => g.chain_id == chainId && pieceTypeIds.Contains(g.piece_type_id)).Include("piece").ToArray();
+                db.Gene.Where(g => g.SequenceId == chainId && pieceTypeIds.Contains(g.PieceTypeId)).Include("piece").ToArray();
 
-            var pieces = genes.Select(g => g.piece.First()).ToList();
+            var pieces = genes.Select(g => g.Piece.First()).ToList();
 
             var chains = ExtractChains(pieces, chainId);
 
-            string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+            string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-            var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+            var link = (Link)(linkId ?? 0);
 
             for (int j = 0; j < chains.Count; j++)
             {
-                long geneId = genes[j].id;
+                long geneId = genes[j].Id;
 
-                if (!db.characteristic.Any(c => c.chain_id == geneId &&
-                                                c.characteristic_type_id == characteristicId &&
-                                                ((linkId == null && c.link_id == null) || (linkId == c.link_id))))
+                if (!db.Characteristic.Any(c => c.SequenceId == geneId &&
+                                                c.CharacteristicTypeId == characteristicId &&
+                                                ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))))
                 {
                     double value = calculator.Calculate(chains[j], link);
-                    var currentCharacteristic = new characteristic
+                    var currentCharacteristic = new Characteristic
                     {
-                        chain_id = geneId,
-                        characteristic_type_id = characteristicId,
-                        link_id = linkId,
-                        value = value,
-                        value_string = value.ToString()
+                        SequenceId = geneId,
+                        CharacteristicTypeId = characteristicId,
+                        LinkId = linkId,
+                        Value = value,
+                        ValueString = value.ToString()
                     };
 
-                    db.characteristic.Add(currentCharacteristic);
+                    db.Characteristic.Add(currentCharacteristic);
                     db.SaveChanges();
                 }
             }
 
             for (int d = 0; d < chains.Count; d++)
             {
-                long geneId = genes[d].id;
-                double? characteristic = db.characteristic.Single(c =>
-                    c.chain_id == geneId &&
-                    c.characteristic_type_id == characteristicId &&
-                    ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
+                long geneId = genes[d].Id;
+                double? characteristic = db.Characteristic.Single(c =>
+                    c.SequenceId == geneId &&
+                    c.CharacteristicTypeId == characteristicId &&
+                    ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
 
                 characteristics.Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
-                var productId = genes[d].product_id;
-                var pieceTypeId = genes[d].piece_type_id;
+                var productId = genes[d].ProductId;
+                var pieceTypeId = genes[d].PieceTypeId;
 
-                chainProducts.Add(productId == null ? string.Empty : db.product.Single(p => productId == p.id).name);
-                chainPositions.Add(pieces[d].start);
+                chainProducts.Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
+                chainPositions.Add(pieces[d].Start);
 
-                chainPieceTypes.Add(db.piece_type.Single(p => pieceTypeId == p.id).name);
+                chainPieceTypes.Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
             }
         }
 
@@ -325,11 +325,11 @@
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        private List<Chain> ExtractChains(List<piece> pieces, long chainId)
+        private List<Chain> ExtractChains(List<Piece> pieces, long chainId)
         {
-            var starts = pieces.Select(p => p.start).ToList();
+            var starts = pieces.Select(p => p.Start).ToList();
 
-            var stops = pieces.Select(p => p.start + p.length).ToList();
+            var stops = pieces.Select(p => p.Start + p.Length).ToList();
 
             BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
 

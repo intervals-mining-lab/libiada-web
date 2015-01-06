@@ -12,7 +12,7 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Characteristic
+    public partial class BinaryCharacteristic
     {
         public long Id { get; set; }
         public long SequenceId { get; set; }
@@ -21,9 +21,13 @@ namespace LibiadaWeb
         public string ValueString { get; set; }
         public Nullable<int> LinkId { get; set; }
         public System.DateTimeOffset Created { get; set; }
+        public long FirstElementId { get; set; }
+        public long SecondElementId { get; set; }
         public Nullable<System.DateTimeOffset> Modified { get; set; }
     
+        public virtual Element FirstElement { get; set; }
         public virtual Link Link { get; set; }
+        public virtual Element SecondElement { get; set; }
         public virtual CommonSequence Sequence { get; set; }
         public virtual CharacteristicType CharacteristicType { get; set; }
     }

@@ -13,7 +13,7 @@
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
-          <Property Name="value" Type="float8" />
+          <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="value_string" Type="text" />
           <Property Name="link_id" Type="int4" />
           <Property Name="created" Type="timestamptz" />
@@ -45,7 +45,7 @@
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
-          <Property Name="value" Type="float8" />
+          <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="value_string" Type="text" />
           <Property Name="link_id" Type="int4" />
           <Property Name="created" Type="timestamptz" />
@@ -270,7 +270,7 @@
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
-          <Property Name="value" Type="float8" />
+          <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="value_string" Type="text" />
           <Property Name="link_id" Type="int4" />
           <Property Name="created" Type="timestamptz" />
@@ -1637,7 +1637,7 @@
           <Property Name="ClassName" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Linkable" Type="Boolean" Nullable="false" />
           <Property Name="FullSequenceApplicable" Type="Boolean" Nullable="false" />
-          <Property Name="CongenericSquenceApplicable" Type="Boolean" Nullable="false" />
+          <Property Name="CongenericSequenceApplicable" Type="Boolean" Nullable="false" />
           <Property Name="BinarySequenceApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="CharacteristicType" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_type" FromRole="CharacteristicType" ToRole="Characteristic" />
@@ -1797,10 +1797,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Matter" Relationship="Self.fk_matter_nature" FromRole="nature" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_notation_nature" FromRole="nature" ToRole="Notation" />
-          <NavigationProperty Name="PieceType" Relationship="Self.fk_piece_type_nature" FromRole="nature" ToRole="PieceType" />
-          <NavigationProperty Name="RemoteDb" Relationship="Self.fk_remote_db_nature" FromRole="nature" ToRole="RemoteDb" />
+          <NavigationProperty Name="Matter" Relationship="Self.fk_matter_nature" FromRole="Nature" ToRole="Matter" />
+          <NavigationProperty Name="Notation" Relationship="Self.fk_notation_nature" FromRole="Nature" ToRole="Notation" />
+          <NavigationProperty Name="PieceType" Relationship="Self.fk_piece_type_nature" FromRole="Nature" ToRole="PieceType" />
+          <NavigationProperty Name="RemoteDb" Relationship="Self.fk_remote_db_nature" FromRole="Nature" ToRole="RemoteDb" />
         </EntityType>
         
         <EntityType Name="Notation">
@@ -1872,13 +1872,13 @@
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="NatureId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_remote_db" FromRole="remote_db" ToRole="CommonSequence" />
-          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_remote_db" FromRole="remote_db" ToRole="DnaSequence" />
-          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_remote_db" FromRole="remote_db" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_remote_db" FromRole="remote_db" ToRole="MusicSequence" />
-          <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_remote_db" FromRole="remote_db" ToRole="Fmotiv" />
-          <NavigationProperty Name="Measure" Relationship="Self.fk_measure_remote_db" FromRole="remote_db" ToRole="Measure" />
-          <NavigationProperty Name="Nature" Relationship="Self.fk_remote_db_nature" FromRole="remote_db" ToRole="Nature" />
+          <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_remote_db" FromRole="RemoteDb" ToRole="CommonSequence" />
+          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_remote_db" FromRole="RemoteDb" ToRole="DnaSequence" />
+          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_remote_db" FromRole="RemoteDb" ToRole="LiteratureSequence" />
+          <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_remote_db" FromRole="RemoteDb" ToRole="MusicSequence" />
+          <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_remote_db" FromRole="RemoteDb" ToRole="Fmotiv" />
+          <NavigationProperty Name="Measure" Relationship="Self.fk_measure_remote_db" FromRole="RemoteDb" ToRole="Measure" />
+          <NavigationProperty Name="Nature" Relationship="Self.fk_remote_db_nature" FromRole="RemoteDb" ToRole="Nature" />
         </EntityType>
 
         <EntityType Name="Fmotiv">
@@ -2068,14 +2068,14 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Note" Relationship="Self.fk_note_tie" FromRole="tie" ToRole="Note" />
+          <NavigationProperty Name="Note" Relationship="Self.fk_note_tie" FromRole="Tie" ToRole="Note" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="1">
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CommonSequence">
               <PropertyRef Name="Id" />
@@ -2087,10 +2087,10 @@
         </Association>
 
         <Association Name="fk_characteristic_chain">
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="1">
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CommonSequence">
               <PropertyRef Name="Id" />
@@ -2102,10 +2102,10 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_dna_chain">
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="1">
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DnaSequence">
               <PropertyRef Name="Id" />
@@ -2117,10 +2117,10 @@
         </Association>
 
         <Association Name="fk_characteristic_dna_chain">
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="1">
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DnaSequence">
               <PropertyRef Name="Id" />
@@ -2132,10 +2132,10 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_literature_chain">
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="1">
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="LiteratureSequence">
               <PropertyRef Name="Id" />
@@ -2147,10 +2147,10 @@
         </Association>
 
         <Association Name="fk_congeneric_characteristic_literature_chain">
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="1">
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="LiteratureSequence">
               <PropertyRef Name="Id" />
@@ -2162,10 +2162,10 @@
         </Association>
 
         <Association Name="fk_characteristic_literature_chain">
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="1">
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="LiteratureSequence">
               <PropertyRef Name="Id" />
@@ -2177,8 +2177,8 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_first_element">
-          <End Role="Element" Type="Self.element" Multiplicity="1" />
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Element">
               <PropertyRef Name="Id" />
@@ -2190,8 +2190,8 @@
         </Association>
         
         <Association Name="fk_binary_characteristic_link">
-          <End Role="Link" Type="Self.link" Multiplicity="0..1" />
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="Link" Type="Self.Link" Multiplicity="0..1" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Link">
               <PropertyRef Name="Id" />
@@ -2203,8 +2203,8 @@
         </Association>
         
         <Association Name="fk_binary_characteristic_second_element">
-          <End Role="Element" Type="Self.element" Multiplicity="1" />
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Element">
               <PropertyRef Name="Id" />
@@ -2216,8 +2216,8 @@
         </Association>
         
         <Association Name="fk_binary_characteristic_characteristic_type">
-          <End Role="CharacteristicType" Type="Self.characteristic_type" Multiplicity="1" />
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="1" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CharacteristicType">
               <PropertyRef Name="Id" />
@@ -2229,8 +2229,8 @@
         </Association>
         
         <Association Name="fk_chain_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2242,8 +2242,8 @@
         </Association>
         
         <Association Name="fk_chain_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2255,8 +2255,8 @@
         </Association>
         
         <Association Name="fk_chain_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2268,8 +2268,8 @@
         </Association>
         
         <Association Name="fk_characteristic_link">
-          <End Role="Link" Type="Self.link" Multiplicity="0..1" />
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Link" Type="Self.Link" Multiplicity="0..1" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Link">
               <PropertyRef Name="Id" />
@@ -2281,8 +2281,8 @@
         </Association>
         
         <Association Name="fk_characteristic_type">
-          <End Role="CharacteristicType" Type="Self.characteristic_type" Multiplicity="1" />
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="1" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CharacteristicType">
               <PropertyRef Name="Id" />
@@ -2294,8 +2294,8 @@
         </Association>
         
         <Association Name="fk_characteristic_group">
-          <End Role="CharacteristicGroup" Type="Self.characteristic_group" Multiplicity="0..1" />
-          <End Role="CharacteristicType" Type="Self.characteristic_type" Multiplicity="*" />
+          <End Role="CharacteristicGroup" Type="Self.CharacteristicGroup" Multiplicity="0..1" />
+          <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CharacteristicGroup">
               <PropertyRef Name="Id" />
@@ -2307,8 +2307,8 @@
         </Association>
         
         <Association Name="fk_dna_chain_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2320,8 +2320,8 @@
         </Association>
         
         <Association Name="fk_dna_chain_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2333,8 +2333,8 @@
         </Association>
         
         <Association Name="fk_dna_chain_product">
-          <End Role="Product" Type="Self.product" Multiplicity="0..1" />
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="*" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="Id" />
@@ -2346,8 +2346,8 @@
         </Association>
         
         <Association Name="fk_dna_chain_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2359,8 +2359,8 @@
         </Association>
         
         <Association Name="fk_gene_dna_chain">
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="1" />
-          <End Role="Gene" Type="Self.gene" Multiplicity="*" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="1" />
+          <End Role="Gene" Type="Self.Gene" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DnaSequence">
               <PropertyRef Name="Id" />
@@ -2372,8 +2372,8 @@
         </Association>
           
         <Association Name="fk_gene_product">
-          <End Role="Product" Type="Self.product" Multiplicity="0..1" />
-          <End Role="Gene" Type="Self.gene" Multiplicity="*" />
+          <End Role="Product" Type="Self.Product" Multiplicity="0..1" />
+          <End Role="Gene" Type="Self.Gene" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Product">
               <PropertyRef Name="Id" />
@@ -2385,8 +2385,8 @@
         </Association>
         
         <Association Name="fk_gene_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="Gene" Type="Self.gene" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="Gene" Type="Self.Gene" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2398,8 +2398,8 @@
         </Association>
         
         <Association Name="fk_piece_gene">
-          <End Role="Gene" Type="Self.gene" Multiplicity="1" />
-          <End Role="Piece" Type="Self.piece" Multiplicity="*" />
+          <End Role="Gene" Type="Self.Gene" Multiplicity="1" />
+          <End Role="Piece" Type="Self.Piece" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Gene">
               <PropertyRef Name="Id" />
@@ -2411,8 +2411,8 @@
         </Association>
           
         <Association Name="fk_element_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="Element" Type="Self.element" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="Element" Type="Self.Element" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2424,8 +2424,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_language">
-          <End Role="Language" Type="Self.language" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="Language" Type="Self.Language" Multiplicity="1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Language">
               <PropertyRef Name="Id" />
@@ -2437,8 +2437,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2450,8 +2450,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2463,8 +2463,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2476,8 +2476,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_translator">
-          <End Role="Translator" Type="Self.translator" Multiplicity="0..1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="Translator" Type="Self.Translator" Multiplicity="0..1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Translator">
               <PropertyRef Name="Id" />
@@ -2489,8 +2489,8 @@
         </Association>
         
         <Association Name="fk_matter_nature">
-          <End Role="Nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="Matter" Type="Self.matter" Multiplicity="*" />
+          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nature">
               <PropertyRef Name="Id" />
@@ -2502,8 +2502,8 @@
         </Association>
         
         <Association Name="fk_remote_db_nature">
-          <End Role="Nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="*" />
+          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nature">
               <PropertyRef Name="Id" />
@@ -2515,8 +2515,8 @@
         </Association>
         
         <Association Name="fk_dna_chain_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="DnaSequence" Type="Self.dna_chain" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2528,8 +2528,8 @@
         </Association>
         
         <Association Name="fk_chain_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="CommonSequence" Type="Self.chain" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2541,8 +2541,8 @@
         </Association>
         
         <Association Name="fk_literature_chain_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="LiteratureSequence" Type="Self.literature_chain" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2554,8 +2554,8 @@
         </Association>
         
         <Association Name="fk_music_chain_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2567,8 +2567,8 @@
         </Association>
         
         <Association Name="fk_fmotiv_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2580,8 +2580,8 @@
         </Association>
         
         <Association Name="fk_measure_remote_db">
-          <End Role="RemoteDb" Type="Self.remote_db" Multiplicity="0..1" />
-          <End Role="Measure" Type="Self.measure" Multiplicity="*" />
+          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
+          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="RemoteDb">
               <PropertyRef Name="Id" />
@@ -2593,8 +2593,8 @@
         </Association>
         
         <Association Name="fk_notation_nature">
-          <End Role="Nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="Notation" Type="Self.notation" Multiplicity="*" />
+          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nature">
               <PropertyRef Name="Id" />
@@ -2606,8 +2606,8 @@
         </Association>
         
         <Association Name="fk_product_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="Product" Type="Self.product" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2619,8 +2619,8 @@
         </Association>
         
         <Association Name="fk_piece_type_nature">
-          <End Role="Nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="*" />
+          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Nature">
               <PropertyRef Name="Id" />
@@ -2632,8 +2632,8 @@
         </Association>
 
         <Association Name="fk_fmotiv_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2645,8 +2645,8 @@
         </Association>
         
         <Association Name="fk_fmotiv_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2658,8 +2658,8 @@
         </Association>
         
         <Association Name="fk_fmotiv_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2671,10 +2671,10 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_fmotiv">
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="1">
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fmotiv">
               <PropertyRef Name="Id" />
@@ -2686,10 +2686,10 @@
         </Association>
 
         <Association Name="fk_congeneric_characteristic_fmotiv">
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="1">
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fmotiv">
               <PropertyRef Name="Id" />
@@ -2701,10 +2701,10 @@
         </Association>
 
         <Association Name="fk_characteristic_fmotiv">
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="1">
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Fmotiv">
               <PropertyRef Name="Id" />
@@ -2716,8 +2716,8 @@
         </Association>
 
         <Association Name="fk_congeneric_characteristic_type">
-          <End Role="CharacteristicType" Type="Self.characteristic_type" Multiplicity="1" />
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="1" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CharacteristicType">
               <PropertyRef Name="Id" />
@@ -2729,8 +2729,8 @@
         </Association>
         
         <Association Name="fk_congeneric_characteristic_element">
-          <End Role="Element" Type="Self.element" Multiplicity="1" />
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Element">
               <PropertyRef Name="Id" />
@@ -2742,8 +2742,8 @@
         </Association>
         
         <Association Name="fk_congeneric_characteristic_link">
-          <End Role="Link" Type="Self.link" Multiplicity="0..1" />
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="Link" Type="Self.Link" Multiplicity="0..1" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Link">
               <PropertyRef Name="Id" />
@@ -2755,8 +2755,8 @@
         </Association>
 
         <Association Name="fk_measure_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="Measure" Type="Self.measure" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2768,8 +2768,8 @@
         </Association>
         
         <Association Name="fk_measure_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="Measure" Type="Self.measure" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2781,8 +2781,8 @@
         </Association>
         
         <Association Name="fk_measure_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="Measure" Type="Self.measure" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2794,10 +2794,10 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_measure">
-          <End Role="Measure" Type="Self.measure" Multiplicity="1">
+          <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Measure">
               <PropertyRef Name="Id" />
@@ -2809,10 +2809,10 @@
         </Association>
 
         <Association Name="fk_congeneric_characteristic_measure">
-          <End Role="Measure" Type="Self.measure" Multiplicity="1">
+          <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Measure">
               <PropertyRef Name="Id" />
@@ -2824,10 +2824,10 @@
         </Association>
 
         <Association Name="fk_characteristic_measure">
-          <End Role="Measure" Type="Self.measure" Multiplicity="1">
+          <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Measure">
               <PropertyRef Name="Id" />
@@ -2839,8 +2839,8 @@
         </Association>
 
         <Association Name="fk_music_chain_matter">
-          <End Role="Matter" Type="Self.matter" Multiplicity="1" />
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="*" />
+          <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Matter">
               <PropertyRef Name="Id" />
@@ -2852,8 +2852,8 @@
         </Association>
 
         <Association Name="fk_music_chain_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2865,8 +2865,8 @@
         </Association>
 
         <Association Name="fk_music_chain_piece_type">
-          <End Role="PieceType" Type="Self.piece_type" Multiplicity="1" />
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="*" />
+          <End Role="PieceType" Type="Self.PieceType" Multiplicity="1" />
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="PieceType">
               <PropertyRef Name="Id" />
@@ -2878,10 +2878,10 @@
         </Association>
 
         <Association Name="fk_binary_characteristic_music_chain">
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="1">
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="BinaryCharacteristic" Type="Self.binary_characteristic" Multiplicity="*" />
+          <End Role="BinaryCharacteristic" Type="Self.BinaryCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MusicSequence">
               <PropertyRef Name="Id" />
@@ -2893,10 +2893,10 @@
         </Association>
 
         <Association Name="fk_congeneric_characteristic_music_chain">
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="1">
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="CongenericCharacteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
+          <End Role="CongenericCharacteristic" Type="Self.CongenericCharacteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MusicSequence">
               <PropertyRef Name="Id" />
@@ -2908,10 +2908,10 @@
         </Association>
 
         <Association Name="fk_characteristic_music_chain">
-          <End Role="MusicSequence" Type="Self.music_chain" Multiplicity="1">
+          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="Characteristic" Type="Self.Characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="MusicSequence">
               <PropertyRef Name="Id" />
@@ -2923,8 +2923,8 @@
         </Association>
 
         <Association Name="fk_note_notation">
-          <End Role="Notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="Note" Type="Self.note" Multiplicity="*" />
+          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Notation">
               <PropertyRef Name="Id" />
@@ -2936,10 +2936,10 @@
         </Association>
         
         <Association Name="fk_pitch_note">
-          <End Role="Note" Type="Self.note" Multiplicity="1">
+          <End Role="Note" Type="Self.Note" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Role="Pitch" Type="Self.pitch" Multiplicity="*" />
+          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Note">
               <PropertyRef Name="Id" />
@@ -2951,8 +2951,8 @@
         </Association>
 
         <Association Name="fk_pitch_accidental">
-          <End Role="Accidental" Type="Self.accidental" Multiplicity="1" />
-          <End Role="Pitch" Type="Self.pitch" Multiplicity="*" />
+          <End Role="Accidental" Type="Self.Accidental" Multiplicity="1" />
+          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Accidental">
               <PropertyRef Name="Id" />
@@ -2964,8 +2964,8 @@
         </Association>
 
         <Association Name="fk_fmotiv_fmotiv_type">
-          <End Role="FmotivType" Type="Self.fmotiv_type" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.fmotiv" Multiplicity="*" />
+          <End Role="FmotivType" Type="Self.FmotivType" Multiplicity="1" />
+          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="FmotivType">
               <PropertyRef Name="Id" />
@@ -2977,8 +2977,8 @@
         </Association>
 
         <Association Name="fk_pitch_note_symbol">
-          <End Role="NoteSymbol" Type="Self.note_symbol" Multiplicity="1" />
-          <End Role="Pitch" Type="Self.pitch" Multiplicity="*" />
+          <End Role="NoteSymbol" Type="Self.NoteSymbol" Multiplicity="1" />
+          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="NoteSymbol">
               <PropertyRef Name="Id" />
@@ -2990,8 +2990,8 @@
         </Association>
 
         <Association Name="fk_note_tie">
-          <End Role="Tie" Type="Self.tie" Multiplicity="1" />
-          <End Role="Note" Type="Self.note" Multiplicity="*" />
+          <End Role="Tie" Type="Self.Tie" Multiplicity="1" />
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tie">
               <PropertyRef Name="Id" />
@@ -3003,8 +3003,8 @@
         </Association>
 
         <Association Name="fk_pitch_instrument">
-          <End Role="Instrument" Type="Self.instrument" Multiplicity="1" />
-          <End Role="Pitch" Type="Self.pitch" Multiplicity="*" />
+          <End Role="Instrument" Type="Self.Instrument" Multiplicity="1" />
+          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Instrument">
               <PropertyRef Name="Id" />
@@ -3017,36 +3017,36 @@
 
         <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
 
-          <EntitySet Name="BinaryCharacteristic" EntityType="Self.binary_characteristic" />
-          <EntitySet Name="CommonSequence" EntityType="Self.chain" />
-          <EntitySet Name="Characteristic" EntityType="Self.characteristic" />
-          <EntitySet Name="CharacteristicGroup" EntityType="Self.characteristic_group" />
-          <EntitySet Name="CharacteristicType" EntityType="Self.characteristic_type" />
-          <EntitySet Name="DnaSequence" EntityType="Self.dna_chain" />
-          <EntitySet Name="Gene" EntityType="Self.gene" />
-          <EntitySet Name="Piece" EntityType="Self.piece" />
-          <EntitySet Name="Element" EntityType="Self.element" />
-          <EntitySet Name="Language" EntityType="Self.language" />
-          <EntitySet Name="Link" EntityType="Self.link" />
-          <EntitySet Name="LiteratureSequence" EntityType="Self.literature_chain" />
-          <EntitySet Name="Matter" EntityType="Self.matter" />
-          <EntitySet Name="Nature" EntityType="Self.nature" />
-          <EntitySet Name="Notation" EntityType="Self.notation" />
-          <EntitySet Name="Product" EntityType="Self.product" />
-          <EntitySet Name="PieceType" EntityType="Self.piece_type" />
-          <EntitySet Name="Translator" EntityType="Self.translator" />
-          <EntitySet Name="RemoteDb" EntityType="Self.remote_db" />
-          <EntitySet Name="Fmotiv" EntityType="Self.fmotiv" />
-          <EntitySet Name="CongenericCharacteristic" EntityType="Self.congeneric_characteristic" />
-          <EntitySet Name="Instrument" EntityType="Self.instrument" />
-          <EntitySet Name="Measure" EntityType="Self.measure" />
-          <EntitySet Name="MusicSequence" EntityType="Self.music_chain" />
-          <EntitySet Name="Note" EntityType="Self.note" />
-          <EntitySet Name="Pitch" EntityType="Self.pitch" />
-          <EntitySet Name="Accidental" EntityType="Self.accidental" />
-          <EntitySet Name="FmotivType" EntityType="Self.fmotiv_type" />
-          <EntitySet Name="NoteSymbol" EntityType="Self.note_symbol" />
-          <EntitySet Name="Tie" EntityType="Self.tie" />
+          <EntitySet Name="BinaryCharacteristic" EntityType="Self.BinaryCharacteristic" />
+          <EntitySet Name="CommonSequence" EntityType="Self.CommonSequence" />
+          <EntitySet Name="Characteristic" EntityType="Self.Characteristic" />
+          <EntitySet Name="CharacteristicGroup" EntityType="Self.CharacteristicGroup" />
+          <EntitySet Name="CharacteristicType" EntityType="Self.CharacteristicType" />
+          <EntitySet Name="DnaSequence" EntityType="Self.DnaSequence" />
+          <EntitySet Name="Gene" EntityType="Self.Gene" />
+          <EntitySet Name="Piece" EntityType="Self.Piece" />
+          <EntitySet Name="Element" EntityType="Self.Element" />
+          <EntitySet Name="Language" EntityType="Self.Language" />
+          <EntitySet Name="Link" EntityType="Self.Link" />
+          <EntitySet Name="LiteratureSequence" EntityType="Self.LiteratureSequence" />
+          <EntitySet Name="Matter" EntityType="Self.Matter" />
+          <EntitySet Name="Nature" EntityType="Self.Nature" />
+          <EntitySet Name="Notation" EntityType="Self.Notation" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="PieceType" EntityType="Self.PieceType" />
+          <EntitySet Name="Translator" EntityType="Self.Translator" />
+          <EntitySet Name="RemoteDb" EntityType="Self.RemoteDb" />
+          <EntitySet Name="Fmotiv" EntityType="Self.Fmotiv" />
+          <EntitySet Name="CongenericCharacteristic" EntityType="Self.CongenericCharacteristic" />
+          <EntitySet Name="Instrument" EntityType="Self.Instrument" />
+          <EntitySet Name="Measure" EntityType="Self.Measure" />
+          <EntitySet Name="MusicSequence" EntityType="Self.MusicSequence" />
+          <EntitySet Name="Note" EntityType="Self.Note" />
+          <EntitySet Name="Pitch" EntityType="Self.Pitch" />
+          <EntitySet Name="Accidental" EntityType="Self.Accidental" />
+          <EntitySet Name="FmotivType" EntityType="Self.FmotivType" />
+          <EntitySet Name="NoteSymbol" EntityType="Self.NoteSymbol" />
+          <EntitySet Name="Tie" EntityType="Self.Tie" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -3424,406 +3424,406 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="chain">
-            <EntityTypeMapping TypeName="LibiadaWebModel.chain">
+          <EntitySetMapping Name="CommonSequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.CommonSequence">
               <MappingFragment StoreEntitySet="chain">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="characteristic">
-            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic">
+          <EntitySetMapping Name="Characteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Characteristic">
               <MappingFragment StoreEntitySet="characteristic">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
-                <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="value_string" ColumnName="value_string" />
-                <ScalarProperty Name="link_id" ColumnName="link_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
+                <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="ValueString" ColumnName="value_string" />
+                <ScalarProperty Name="LinkId" ColumnName="link_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="characteristic_group">
-            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic_group">
+          <EntitySetMapping Name="CharacteristicGroup">
+            <EntityTypeMapping TypeName="LibiadaWebModel.CharacteristicGroup">
               <MappingFragment StoreEntitySet="characteristic_group">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="characteristic_type">
-            <EntityTypeMapping TypeName="LibiadaWebModel.characteristic_type">
+          <EntitySetMapping Name="CharacteristicType">
+            <EntityTypeMapping TypeName="LibiadaWebModel.CharacteristicType">
               <MappingFragment StoreEntitySet="characteristic_type">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="characteristic_group_id" ColumnName="characteristic_group_id" />
-                <ScalarProperty Name="class_name" ColumnName="class_name" />
-                <ScalarProperty Name="linkable" ColumnName="linkable" />
-                <ScalarProperty Name="full_chain_applicable" ColumnName="full_chain_applicable" />
-                <ScalarProperty Name="congeneric_chain_applicable" ColumnName="congeneric_chain_applicable" />
-                <ScalarProperty Name="binary_chain_applicable" ColumnName="binary_chain_applicable" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="CharacteristicGroupId" ColumnName="characteristic_group_id" />
+                <ScalarProperty Name="ClassName" ColumnName="class_name" />
+                <ScalarProperty Name="Linkable" ColumnName="linkable" />
+                <ScalarProperty Name="FullSequenceApplicable" ColumnName="full_chain_applicable" />
+                <ScalarProperty Name="CongenericSequenceApplicable" ColumnName="congeneric_chain_applicable" />
+                <ScalarProperty Name="BinarySequenceApplicable" ColumnName="binary_chain_applicable" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="dna_chain">
-            <EntityTypeMapping TypeName="LibiadaWebModel.dna_chain">
+          <EntitySetMapping Name="DnaSequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.DnaSequence">
               <MappingFragment StoreEntitySet="dna_chain">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="product_id" ColumnName="product_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="fasta_header" ColumnName="fasta_header" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
-                <ScalarProperty Name="complement" ColumnName="complement" />
-                <ScalarProperty Name="partial" ColumnName="partial" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="ProductId" ColumnName="product_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="FastaHeader" ColumnName="fasta_header" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Complement" ColumnName="complement" />
+                <ScalarProperty Name="Partial" ColumnName="partial" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="gene">
-            <EntityTypeMapping TypeName="LibiadaWebModel.gene">
+          <EntitySetMapping Name="Gene">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Gene">
               <MappingFragment StoreEntitySet="gene">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
-                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
-                <ScalarProperty Name="product_id" ColumnName="product_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="web_api_id" ColumnName="web_api_id" />
-                <ScalarProperty Name="complement" ColumnName="complement" />
-                <ScalarProperty Name="partial" ColumnName="partial" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
+                <ScalarProperty Name="ProductId" ColumnName="product_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
+                <ScalarProperty Name="Complement" ColumnName="complement" />
+                <ScalarProperty Name="Partial" ColumnName="partial" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="piece">
-            <EntityTypeMapping TypeName="LibiadaWebModel.piece">
+          <EntitySetMapping Name="Piece">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Piece">
               <MappingFragment StoreEntitySet="piece">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="gene_id" ColumnName="gene_id" />
-                <ScalarProperty Name="start" ColumnName="start" />
-                <ScalarProperty Name="length" ColumnName="length" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="GeneId" ColumnName="gene_id" />
+                <ScalarProperty Name="Start" ColumnName="start" />
+                <ScalarProperty Name="Length" ColumnName="length" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
             
-          <EntitySetMapping Name="element">
-            <EntityTypeMapping TypeName="LibiadaWebModel.element">
+          <EntitySetMapping Name="Element">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Element">
               <MappingFragment StoreEntitySet="element">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="language">
-            <EntityTypeMapping TypeName="LibiadaWebModel.language">
+          <EntitySetMapping Name="Language">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Language">
               <MappingFragment StoreEntitySet="language">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="link">
-            <EntityTypeMapping TypeName="LibiadaWebModel.link">
+          <EntitySetMapping Name="Link">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Link">
               <MappingFragment StoreEntitySet="link">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="literature_chain">
-            <EntityTypeMapping TypeName="LibiadaWebModel.literature_chain">
+          <EntitySetMapping Name="LiteratureSequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.LiteratureSequence">
               <MappingFragment StoreEntitySet="literature_chain">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="translator_id" ColumnName="translator_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="original" ColumnName="original" />
-                <ScalarProperty Name="language_id" ColumnName="language_id" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="Original" ColumnName="original" />
+                <ScalarProperty Name="LanguageId" ColumnName="language_id" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="matter">
-            <EntityTypeMapping TypeName="LibiadaWebModel.matter">
+          <EntitySetMapping Name="Matter">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Matter">
               <MappingFragment StoreEntitySet="matter">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="nature">
-            <EntityTypeMapping TypeName="LibiadaWebModel.nature">
+          <EntitySetMapping Name="Nature">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Nature">
               <MappingFragment StoreEntitySet="nature">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="notation">
-            <EntityTypeMapping TypeName="LibiadaWebModel.notation">
+          <EntitySetMapping Name="Notation">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Notation">
               <MappingFragment StoreEntitySet="notation">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="product">
-            <EntityTypeMapping TypeName="LibiadaWebModel.product">
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Product">
               <MappingFragment StoreEntitySet="product">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="piece_type">
-            <EntityTypeMapping TypeName="LibiadaWebModel.piece_type">
+          <EntitySetMapping Name="PieceType">
+            <EntityTypeMapping TypeName="LibiadaWebModel.PieceType">
               <MappingFragment StoreEntitySet="piece_type">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="translator">
-            <EntityTypeMapping TypeName="LibiadaWebModel.translator">
+          <EntitySetMapping Name="Translator">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Translator">
               <MappingFragment StoreEntitySet="translator">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="remote_db">
-            <EntityTypeMapping TypeName="LibiadaWebModel.remote_db">
+          <EntitySetMapping Name="RemoteDb">
+            <EntityTypeMapping TypeName="LibiadaWebModel.RemoteDb">
               <MappingFragment StoreEntitySet="remote_db">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="nature_id" ColumnName="nature_id" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Url" ColumnName="url" />
+                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="fmotiv">
-            <EntityTypeMapping TypeName="LibiadaWebModel.fmotiv">
+          <EntitySetMapping Name="Fmotiv">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Fmotiv">
               <MappingFragment StoreEntitySet="fmotiv">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="fmotiv_type_id" ColumnName="fmotiv_type_id" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="FmotivTypeId" ColumnName="fmotiv_type_id" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="congeneric_characteristic">
-            <EntityTypeMapping TypeName="LibiadaWebModel.congeneric_characteristic">
+          <EntitySetMapping Name="CongenericCharacteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.CongenericCharacteristic">
               <MappingFragment StoreEntitySet="congeneric_characteristic">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="chain_id" ColumnName="chain_id" />
-                <ScalarProperty Name="characteristic_type_id" ColumnName="characteristic_type_id" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="value_string" ColumnName="value_string" />
-                <ScalarProperty Name="link_id" ColumnName="link_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="element_id" ColumnName="element_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
+                <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="ValueString" ColumnName="value_string" />
+                <ScalarProperty Name="LinkId" ColumnName="link_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="ElementId" ColumnName="element_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="instrument">
-            <EntityTypeMapping TypeName="LibiadaWebModel.instrument">
+          <EntitySetMapping Name="Instrument">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Instrument">
               <MappingFragment StoreEntitySet="instrument">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="measure">
-            <EntityTypeMapping TypeName="LibiadaWebModel.measure">
+          <EntitySetMapping Name="Measure">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Measure">
               <MappingFragment StoreEntitySet="measure">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="beats" ColumnName="beats" />
-                <ScalarProperty Name="beatbase" ColumnName="beatbase" />
-                <ScalarProperty Name="ticks_per_beat" ColumnName="ticks_per_beat" />
-                <ScalarProperty Name="fifths" ColumnName="fifths" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Beats" ColumnName="beats" />
+                <ScalarProperty Name="Beatbase" ColumnName="beatbase" />
+                <ScalarProperty Name="TicksPerBeat" ColumnName="ticks_per_beat" />
+                <ScalarProperty Name="Fifths" ColumnName="fifths" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="music_chain">
-            <EntityTypeMapping TypeName="LibiadaWebModel.music_chain">
+          <EntitySetMapping Name="MusicSequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.MusicSequence">
               <MappingFragment StoreEntitySet="music_chain">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="matter_id" ColumnName="matter_id" />
-                <ScalarProperty Name="piece_type_id" ColumnName="piece_type_id" />
-                <ScalarProperty Name="piece_position" ColumnName="piece_position" />
-                <ScalarProperty Name="remote_db_id" ColumnName="remote_db_id" />
-                <ScalarProperty Name="remote_id" ColumnName="remote_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="MatterId" ColumnName="matter_id" />
+                <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
+                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
+                <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="note">
-            <EntityTypeMapping TypeName="LibiadaWebModel.note">
+          <EntitySetMapping Name="Note">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Note">
               <MappingFragment StoreEntitySet="note">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="value" ColumnName="value" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="notation_id" ColumnName="notation_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="numerator" ColumnName="numerator" />
-                <ScalarProperty Name="denominator" ColumnName="denominator" />
-                <ScalarProperty Name="ticks" ColumnName="ticks" />
-                <ScalarProperty Name="onumerator" ColumnName="onumerator" />
-                <ScalarProperty Name="odenominator" ColumnName="odenominator" />
-                <ScalarProperty Name="triplet" ColumnName="triplet" />
-                <ScalarProperty Name="priority" ColumnName="priority" />
-                <ScalarProperty Name="tie_id" ColumnName="tie_id" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Numerator" ColumnName="numerator" />
+                <ScalarProperty Name="Denominator" ColumnName="denominator" />
+                <ScalarProperty Name="Ticks" ColumnName="ticks" />
+                <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
+                <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
+                <ScalarProperty Name="Triplet" ColumnName="triplet" />
+                <ScalarProperty Name="Priority" ColumnName="priority" />
+                <ScalarProperty Name="TieId" ColumnName="tie_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="pitch">
-            <EntityTypeMapping TypeName="LibiadaWebModel.pitch">
+          <EntitySetMapping Name="Pitch">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Pitch">
               <MappingFragment StoreEntitySet="pitch">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="octave" ColumnName="octave" />
-                <ScalarProperty Name="midinumber" ColumnName="midinumber" />
-                <ScalarProperty Name="instrument_id" ColumnName="instrument_id" />
-                <ScalarProperty Name="note_id" ColumnName="note_id" />
-                <ScalarProperty Name="accidental_id" ColumnName="accidental_id" />
-                <ScalarProperty Name="note_symbol_id" ColumnName="note_symbol_id" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="modified" ColumnName="modified" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Octave" ColumnName="octave" />
+                <ScalarProperty Name="Midinumber" ColumnName="midinumber" />
+                <ScalarProperty Name="InstrumentId" ColumnName="instrument_id" />
+                <ScalarProperty Name="NoteId" ColumnName="note_id" />
+                <ScalarProperty Name="AccidentalId" ColumnName="accidental_id" />
+                <ScalarProperty Name="NoteSymbolId" ColumnName="note_symbol_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="accidental">
-            <EntityTypeMapping TypeName="LibiadaWebModel.accidental">
+          <EntitySetMapping Name="Accidental">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Accidental">
               <MappingFragment StoreEntitySet="accidental">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="fmotiv_type">
-            <EntityTypeMapping TypeName="LibiadaWebModel.fmotiv_type">
+          <EntitySetMapping Name="FmotivType">
+            <EntityTypeMapping TypeName="LibiadaWebModel.FmotivType">
               <MappingFragment StoreEntitySet="fmotiv_type">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="note_symbol">
-            <EntityTypeMapping TypeName="LibiadaWebModel.note_symbol">
+          <EntitySetMapping Name="NoteSymbol">
+            <EntityTypeMapping TypeName="LibiadaWebModel.NoteSymbol">
               <MappingFragment StoreEntitySet="note_symbol">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="tie">
-            <EntityTypeMapping TypeName="LibiadaWebModel.tie">
+          <EntitySetMapping Name="Tie">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Tie">
               <MappingFragment StoreEntitySet="tie">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

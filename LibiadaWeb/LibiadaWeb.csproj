@@ -15,7 +15,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -203,7 +203,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="accidental.cs">
+    <Compile Include="Accidental.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -212,22 +212,22 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="binary_characteristic.cs">
+    <Compile Include="BinaryCharacteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="chain.cs">
+    <Compile Include="Characteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="characteristic.cs">
+    <Compile Include="CharacteristicGroup.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="characteristic_group.cs">
+    <Compile Include="CharacteristicType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="characteristic_type.cs">
+    <Compile Include="CommonSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="congeneric_characteristic.cs">
+    <Compile Include="CongenericCharacteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AbstractResultController.cs" />
@@ -276,19 +276,19 @@
     <Compile Include="Controllers\Catalogs\TieController.cs" />
     <Compile Include="Controllers\Catalogs\TranslatorController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
-    <Compile Include="dna_chain.cs">
+    <Compile Include="DnaSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="element.cs">
+    <Compile Include="Element.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="fmotiv.cs">
+    <Compile Include="Fmotiv.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="fmotiv_type.cs">
+    <Compile Include="FmotivType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="gene.cs">
+    <Compile Include="Gene.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -303,10 +303,10 @@
     <Compile Include="Helpers\NcbiHelper.cs" />
     <Compile Include="Helpers\RadioButtonListHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
-    <Compile Include="instrument.cs">
+    <Compile Include="Instrument.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="language.cs">
+    <Compile Include="Language.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="LibiadaWeb.Context.cs">
@@ -325,10 +325,10 @@
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
     <Compile Include="LibiadaWebDataAnnotations.cs" />
-    <Compile Include="link.cs">
+    <Compile Include="Link.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="literature_chain.cs">
+    <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Maintenance\Task.cs" />
@@ -338,10 +338,10 @@
     <Compile Include="Math\AutoCorelation.cs" />
     <Compile Include="Math\DataTableFiller.cs" />
     <Compile Include="Math\FastFourierTransform.cs" />
-    <Compile Include="matter.cs">
+    <Compile Include="Matter.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="measure.cs">
+    <Compile Include="Measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
@@ -372,42 +372,42 @@
     <Compile Include="Models\Repositories\Chains\ElementRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IElementRepository.cs" />
-    <Compile Include="music_chain.cs">
+    <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="nature.cs">
+    <Compile Include="Nature.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="notation.cs">
+    <Compile Include="Notation.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="note.cs">
+    <Compile Include="Note.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="note_symbol.cs">
+    <Compile Include="NoteSymbol.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="piece.cs">
+    <Compile Include="Piece.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="piece_type.cs">
+    <Compile Include="PieceType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="pitch.cs">
+    <Compile Include="Pitch.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="product.cs">
+    <Compile Include="Product.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="remote_db.cs">
+    <Compile Include="RemoteDb.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="tie.cs">
+    <Compile Include="Tie.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="translator.cs">
+    <Compile Include="Translator.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -743,7 +743,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>28103</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/LibiadaWeb</IISUrl>
+          <IISUrl>http://localhost:28103/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

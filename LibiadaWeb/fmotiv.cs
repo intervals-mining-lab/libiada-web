@@ -12,36 +12,36 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class fmotiv
+    public partial class Fmotiv
     {
-        public fmotiv()
+        public Fmotiv()
         {
-            this.binary_characteristic = new HashSet<binary_characteristic>();
-            this.congeneric_characteristic = new HashSet<congeneric_characteristic>();
-            this.characteristic = new HashSet<characteristic>();
+            this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
+            this.Characteristic = new HashSet<Characteristic>();
         }
     
-        public long id { get; set; }
-        public int notation_id { get; set; }
-        public System.DateTimeOffset created { get; set; }
-        public long matter_id { get; set; }
-        public int piece_type_id { get; set; }
-        public long piece_position { get; set; }
-        public string value { get; set; }
-        public string description { get; set; }
-        public string name { get; set; }
-        public int fmotiv_type_id { get; set; }
-        public Nullable<int> remote_db_id { get; set; }
-        public string remote_id { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
+        public long Id { get; set; }
+        public int NotationId { get; set; }
+        public System.DateTimeOffset Created { get; set; }
+        public long MatterId { get; set; }
+        public int PieceTypeId { get; set; }
+        public long PiecePosition { get; set; }
+        public string Value { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public int FmotivTypeId { get; set; }
+        public Nullable<int> RemoteDbId { get; set; }
+        public string RemoteId { get; set; }
+        public Nullable<System.DateTimeOffset> Modified { get; set; }
     
-        public virtual matter matter { get; set; }
-        public virtual notation notation { get; set; }
-        public virtual piece_type piece_type { get; set; }
-        public virtual ICollection<binary_characteristic> binary_characteristic { get; set; }
-        public virtual ICollection<congeneric_characteristic> congeneric_characteristic { get; set; }
-        public virtual ICollection<characteristic> characteristic { get; set; }
-        public virtual fmotiv_type fmotiv_type { get; set; }
-        public virtual remote_db remote_db { get; set; }
+        public virtual Matter Matter { get; set; }
+        public virtual Notation Notation { get; set; }
+        public virtual PieceType PieceType { get; set; }
+        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
+        public virtual ICollection<Characteristic> Characteristic { get; set; }
+        public virtual FmotivType FmotivType { get; set; }
+        public virtual RemoteDb RemoteDb { get; set; }
     }
 }

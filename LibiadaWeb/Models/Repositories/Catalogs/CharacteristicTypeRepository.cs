@@ -34,20 +34,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<characteristic_type> characteristicTypes)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<CharacteristicType> characteristicTypes)
         {
             HashSet<int> characteristicTypeIds = characteristicTypes != null
-                                                ? new HashSet<int>(characteristicTypes.Select(c => c.id))
+                                                ? new HashSet<int>(characteristicTypes.Select(c => c.Id))
                                                 : new HashSet<int>();
-            var allCharacteristicTypes = db.characteristic_type;
+            var allCharacteristicTypes = db.CharacteristicType;
             var characteristicTypesList = new List<SelectListItem>();
             foreach (var characteristicType in allCharacteristicTypes)
             {
                 characteristicTypesList.Add(new SelectListItem
                     {
-                        Value = characteristicType.id.ToString(), 
-                        Text = characteristicType.name, 
-                        Selected = characteristicTypeIds.Contains(characteristicType.id)
+                        Value = characteristicType.Id.ToString(),
+                        Text = characteristicType.Name,
+                        Selected = characteristicTypeIds.Contains(characteristicType.Id)
                     });
             }
 
@@ -67,13 +67,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The <see cref="List"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(
-            IEnumerable<characteristic_type> allcharacteristicTypes,
-            IEnumerable<characteristic_type> selectedCharacteristicTypes)
+            IEnumerable<CharacteristicType> allcharacteristicTypes,
+            IEnumerable<CharacteristicType> selectedCharacteristicTypes)
         {
             HashSet<int> characteristicTypeIds;
             if (selectedCharacteristicTypes != null)
             {
-                characteristicTypeIds = new HashSet<int>(selectedCharacteristicTypes.Select(c => c.id));
+                characteristicTypeIds = new HashSet<int>(selectedCharacteristicTypes.Select(c => c.Id));
             }
             else
             {
@@ -82,7 +82,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
             if (allcharacteristicTypes == null)
             {
-                allcharacteristicTypes = db.characteristic_type;
+                allcharacteristicTypes = db.CharacteristicType;
             }
 
             var characteristicTypesList = new List<SelectListItem>();
@@ -90,9 +90,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             {
                 characteristicTypesList.Add(new SelectListItem
                     {
-                        Value = characteristicType.id.ToString(), 
-                        Text = characteristicType.name, 
-                        Selected = characteristicTypeIds.Contains(characteristicType.id)
+                        Value = characteristicType.Id.ToString(),
+                        Text = characteristicType.Name,
+                        Selected = characteristicTypeIds.Contains(characteristicType.Id)
                     });
             }
 
@@ -114,16 +114,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The characteristic types.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithLinkable(IEnumerable<characteristic_type> characteristicTypes)
+        public IEnumerable<object> GetSelectListWithLinkable(IEnumerable<CharacteristicType> characteristicTypes)
         {
-            return db.characteristic_type.Where(c => characteristicTypes.Contains(c)).Select(c => new
+            return db.CharacteristicType.Where(c => characteristicTypes.Contains(c)).Select(c => new
             {
-                Value = c.id, 
-                Text = c.name, 
+                Value = c.Id, 
+                Text = c.Name, 
                 Selected = false, 
-                Linkable = c.linkable
+                Linkable = c.Linkable
             });
         }
     }

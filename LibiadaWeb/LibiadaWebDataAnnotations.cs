@@ -72,7 +72,7 @@
     /// The binary_characteristic.
     /// </summary>
     [MetadataType(typeof(BinaryCharacteristicDataAnnotations))]
-    public partial class binary_characteristic
+    public partial class BinaryCharacteristic
     {
     }
 
@@ -98,7 +98,7 @@
     /// The chain.
     /// </summary>
     [MetadataType(typeof(ChainDataAnnotations))]
-    public partial class chain
+    public partial class CommonSequence
     {
     }
 
@@ -154,7 +154,7 @@
     /// The characteristic.
     /// </summary>
     [MetadataType(typeof(CharacteristicDataAnnotations))]
-    public partial class characteristic
+    public partial class Characteristic
     {
     }
 
@@ -219,7 +219,7 @@
     /// The characteristic_type.
     /// </summary>
     [MetadataType(typeof(CharacteristicTypeDataAnnotations))]
-    public partial class characteristic_type
+    public partial class CharacteristicType
     {
     }
 
@@ -269,7 +269,7 @@
     /// The dna_chain.
     /// </summary>
     [MetadataType(typeof(DnaChainDataAnnotations))]
-    public partial class dna_chain
+    public partial class DnaSequence
     {
     }
 
@@ -289,7 +289,7 @@
     /// The element.
     /// </summary>
     [MetadataType(typeof(ElementDataAnnotations))]
-    public partial class element
+    public partial class Element
     {
     }
 
@@ -465,7 +465,7 @@
     /// The matter.
     /// </summary>
     [MetadataType(typeof(MatterDataAnnotations))]
-    public partial class matter
+    public partial class Matter
     {
     }
 
@@ -541,7 +541,7 @@
     /// The music_chain.
     /// </summary>
     [MetadataType(typeof(MusicChainDataAnnotations))]
-    public partial class music_chain
+    public partial class MusicSequence
     {
     }
 

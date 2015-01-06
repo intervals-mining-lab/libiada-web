@@ -23,8 +23,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristic_type = db.characteristic_type.Include(c => c.characteristic_group);
-            return View(characteristic_type.ToList());
+            var characteristicType = db.CharacteristicType.Include(c => c.CharacteristicGroup);
+            return View(characteristicType.ToList());
         }
 
         /// <summary>
@@ -43,13 +43,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            characteristic_type characteristic_type = db.characteristic_type.Find(id);
-            if (characteristic_type == null)
+            CharacteristicType characteristicType = db.CharacteristicType.Find(id);
+            if (characteristicType == null)
             {
                 return HttpNotFound();
             }
 
-            return View(characteristic_type);
+            return View(characteristicType);
         }
 
         /// <summary>

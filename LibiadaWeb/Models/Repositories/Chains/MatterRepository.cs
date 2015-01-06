@@ -34,9 +34,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<matter> selectedMatters)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> selectedMatters)
         {
-            return GetSelectListItems(db.matter, selectedMatters);
+            return GetSelectListItems(db.Matter, selectedMatters);
         }
 
         /// <summary>
@@ -51,24 +51,24 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<matter> allMatters, IEnumerable<matter> selectedMatters)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> allMatters, IEnumerable<Matter> selectedMatters)
         {
             HashSet<long> matterIds = selectedMatters != null
-                                          ? new HashSet<long>(selectedMatters.Select(c => c.id))
+                                          ? new HashSet<long>(selectedMatters.Select(c => c.Id))
                                           : new HashSet<long>();
             var mattersList = new List<SelectListItem>();
             if (allMatters == null)
             {
-                allMatters = db.matter;
+                allMatters = db.Matter;
             }
 
             foreach (var matter in allMatters)
             {
                 mattersList.Add(new SelectListItem
                     {
-                        Value = matter.id.ToString(), 
-                        Text = matter.name, 
-                        Selected = matterIds.Contains(matter.id)
+                        Value = matter.Id.ToString(), 
+                        Text = matter.Name, 
+                        Selected = matterIds.Contains(matter.Id)
                     });
             }
 
@@ -79,18 +79,18 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The get select list with nature.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.matter.OrderBy(m => m.name).Select(m => new
+            return db.Matter.OrderBy(m => m.Name).Select(m => new
             {
-                Value = m.id, 
-                Text = m.name, 
+                Value = m.Id, 
+                Text = m.Name, 
                 Selected = false, 
-                Nature = m.nature_id, 
-                description = m.description,
-                created = m.created.ToString()
+                Nature = m.NatureId, 
+                description = m.Description,
+                created = m.Created.ToString()
             });
         }
 
@@ -101,17 +101,17 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The selected matter.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(long selectedMatter)
         {
-            return db.matter.Select(m => new
+            return db.Matter.Select(m => new
             {
-                Value = m.id, 
-                Text = m.name, 
-                Selected = m.id == selectedMatter, 
-                Nature = m.nature_id, 
-                description = m.description
+                Value = m.Id, 
+                Text = m.Name, 
+                Selected = m.Id == selectedMatter, 
+                Nature = m.NatureId, 
+                description = m.Description
             });
         }
 
@@ -126,13 +126,13 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<long> selectedMatters)
         {
-            return db.matter.Select(m => new
+            return db.Matter.Select(m => new
             {
-                Value = m.id, 
-                Text = m.name, 
-                Selected = selectedMatters.Contains(m.id), 
-                Nature = m.nature_id, 
-                description = m.description
+                Value = m.Id, 
+                Text = m.Name, 
+                Selected = selectedMatters.Contains(m.Id), 
+                Nature = m.NatureId, 
+                description = m.Description
             });
         }
 

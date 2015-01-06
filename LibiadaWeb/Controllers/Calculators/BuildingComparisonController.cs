@@ -28,7 +28,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingComparisonController"/> class.
@@ -37,7 +37,7 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>

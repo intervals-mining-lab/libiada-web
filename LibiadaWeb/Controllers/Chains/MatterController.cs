@@ -32,7 +32,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// The element repository.
@@ -75,7 +75,7 @@
         public MatterController()
         {
             db = new LibiadaWebEntities();
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
@@ -94,7 +94,7 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var matter = db.matter.Include(m => m.nature);
+            var matter = db.Matter.Include(m => m.Nature);
             return View(matter.ToList());
         }
 
@@ -114,7 +114,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = db.matter.Find(id);
+            Matter matter = db.Matter.Find(id);
             if (matter == null)
             {
                 return HttpNotFound();
@@ -136,10 +136,10 @@
                 {
                     { "notations", notationRepository.GetSelectListWithNature() },
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() },
-                    { "languages", new SelectList(db.language, "id", "name") },
+                    { "languages", new SelectList(db.Language, "id", "name") },
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
-                    { "natures", new SelectList(db.nature, "id", "name") },
-                    { "translators", new SelectList(db.translator, "id", "name") },
+                    { "natures", new SelectList(db.Nature, "id", "name") },
+                    { "translators", new SelectList(db.Translator, "id", "name") },
                     { "natureLiterature", Aliases.Nature.Literature },
                     { "natureGenetic", Aliases.Nature.Genetic }
                 };
@@ -191,7 +191,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "name,nature_id,description")] matter matter,
+            [Bind(Include = "name,nature_id,description")] Matter matter,
             int notationId,
             int pieceTypeId,
             int? remoteDbId,
@@ -234,14 +234,14 @@
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
 
-                    string stringChain = matter.nature_id == Aliases.Nature.Genetic
+                    string stringChain = matter.NatureId == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
                     BaseChain libiadaChain;
                     long[] alphabet;
 
-                    switch (matter.nature_id)
+                    switch (matter.NatureId)
                     {
                         case Aliases.Nature.Genetic:
                             // отделяем заголовок fasta файла от цепочки
@@ -262,21 +262,21 @@
                                 throw new Exception("At least one element of new chain missing in db.");
                             }
 
-                            db.matter.Add(matter);
+                            db.Matter.Add(matter);
                             db.SaveChanges();
 
                             matterCreated = true;
 
-                            var dnaChain = new chain
+                            var dnaChain = new CommonSequence
                             {
-                                notation_id = notationId,
-                                piece_type_id = pieceTypeId,
-                                matter_id = matter.id,
-                                remote_db_id = remoteDbId,
-                                remote_id = remoteId
+                                NotationId = notationId,
+                                PieceTypeId = pieceTypeId,
+                                MatterId = matter.Id,
+                                RemoteDbId = remoteDbId,
+                                RemoteId = remoteId
                             };
 
-                            alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.notation_id, false);
+                            alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.NotationId, false);
                             dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.Nature.Music:
@@ -303,25 +303,25 @@
                                 libiadaChain.Set(new ValueString(text[i]), i);
                             }
 
-                            db.matter.Add(matter);
+                            db.Matter.Add(matter);
                             db.SaveChanges();
 
-                            var literatureChain = new chain
+                            var literatureSequence = new CommonSequence
                             {
-                                notation_id = notationId,
-                                piece_type_id = pieceTypeId,
-                                matter_id = matter.id,
-                                remote_db_id = remoteDbId,
-                                remote_id = remoteId
+                                NotationId = notationId,
+                                PieceTypeId = pieceTypeId,
+                                MatterId = matter.Id,
+                                RemoteDbId = remoteDbId,
+                                RemoteId = remoteId
                             };
 
                             alphabet = elementRepository.ToDbElements(
                                 libiadaChain.Alphabet,
-                                literatureChain.notation_id,
+                                literatureSequence.NotationId,
                                 true);
 
                             literatureChainRepository.Insert(
-                                literatureChain,
+                                literatureSequence,
                                 (bool)original,
                                 (int)languageId,
                                 translatorId,
@@ -347,12 +347,12 @@
                     {
                         { "notations", notationRepository.GetSelectListWithNature(notationId) },
                         { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeId) },
-                        { "languages", new SelectList(db.language, "id", "name", languageId) },
+                        { "languages", new SelectList(db.Language, "id", "name", languageId) },
                         { "remoteDbs", remoteDbId == null ? 
                             remoteDbRepository.GetSelectListWithNature() : 
                             remoteDbRepository.GetSelectListWithNature((int)remoteDbId) },
-                        { "natures", new SelectList(db.nature, "id", "name", matter.nature_id) },
-                        { "translators", new SelectList(db.translator, "id", "name") },
+                        { "natures", new SelectList(db.Nature, "id", "name", matter.NatureId) },
+                        { "translators", new SelectList(db.Translator, "id", "name") },
                         { "natureLiterature", Aliases.Nature.Literature },
                         { "natureGenetic", Aliases.Nature.Genetic }
                     };
@@ -375,13 +375,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = db.matter.Find(id);
+            Matter matter = db.Matter.Find(id);
             if (matter == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
+            ViewBag.nature_id = new SelectList(db.Nature, "id", "name", matter.NatureId);
             return View(matter);
         }
 
@@ -396,7 +396,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "name,nature_id,description")] matter matter)
+        public ActionResult Edit([Bind(Include = "name,nature_id,description")] Matter matter)
         {
             if (ModelState.IsValid)
             {
@@ -405,7 +405,7 @@
                 return RedirectToAction("Index");
             }
 
-            ViewBag.nature_id = new SelectList(db.nature, "id", "name", matter.nature_id);
+            ViewBag.nature_id = new SelectList(db.Nature, "id", "name", matter.NatureId);
             return View(matter);
         }
 
@@ -425,7 +425,7 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            matter matter = db.matter.Find(id);
+            Matter matter = db.Matter.Find(id);
             if (matter == null)
             {
                 return HttpNotFound();
@@ -447,8 +447,8 @@
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            matter matter = db.matter.Find(id);
-            db.matter.Remove(matter);
+            Matter matter = db.Matter.Find(id);
+            db.Matter.Remove(matter);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

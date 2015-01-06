@@ -26,7 +26,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="commonSequence">
         /// The chain.
         /// </param>
         /// <param name="original">
@@ -44,9 +44,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(chain chain, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
+        public void Insert(CommonSequence commonSequence, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(chain, alphabet, building);
+            var parameters = FillParams(commonSequence, alphabet, building);
 
             parameters.Add(new NpgsqlParameter
             {
@@ -105,43 +105,43 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The source.
         /// </param>
         /// <returns>
-        /// The <see cref="chain"/>.
+        /// The <see cref="CommonSequence"/>.
         /// </returns>
-        public chain ToChain(literature_chain source)
+        public CommonSequence ToCommonSequence(LiteratureSequence source)
         {
-            return new chain
+            return new CommonSequence
             {
-                id = source.id,
-                notation_id = source.notation_id, 
-                matter_id = source.matter_id, 
-                piece_type_id = source.piece_type_id, 
-                piece_position = source.piece_position
+                Id = source.Id,
+                NotationId = source.NotationId, 
+                MatterId = source.MatterId, 
+                PieceTypeId = source.PieceTypeId, 
+                PiecePosition = source.PiecePosition
             };
         }
 
         /// <summary>
         /// The get select list items.
         /// </summary>
-        /// <param name="chains">
+        /// <param name="sequences">
         /// The chains.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<literature_chain> chains)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<LiteratureSequence> sequences)
         {
-            HashSet<long> chainIds = chains != null
-                                         ? new HashSet<long>(chains.Select(c => c.id))
+            HashSet<long> chainIds = sequences != null
+                                         ? new HashSet<long>(sequences.Select(c => c.Id))
                                          : new HashSet<long>();
-            var allChains = db.literature_chain.Include("matter");
+            var allSequences = db.LiteratureSequence.Include("matter");
             var chainsList = new List<SelectListItem>();
-            foreach (var chain in allChains)
+            foreach (var sequence in allSequences)
             {
                 chainsList.Add(new SelectListItem
                     {
-                        Value = chain.id.ToString(), 
-                        Text = chain.matter.name, 
-                        Selected = chainIds.Contains(chain.id)
+                        Value = sequence.Id.ToString(), 
+                        Text = sequence.Matter.Name, 
+                        Selected = chainIds.Contains(sequence.Id)
                     });
             }
 

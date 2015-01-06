@@ -36,7 +36,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// The characteristic repository.
@@ -60,7 +60,7 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkRepository = new LinkRepository(db);
             notationRepository = new NotationRepository(db);

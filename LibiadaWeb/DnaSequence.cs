@@ -12,38 +12,38 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Measure
+    public partial class DnaSequence
     {
-        public Measure()
+        public DnaSequence()
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
             this.Characteristic = new HashSet<Characteristic>();
+            this.Gene = new HashSet<Gene>();
         }
     
         public long Id { get; set; }
         public int NotationId { get; set; }
+        public Nullable<int> ProductId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
         public int PieceTypeId { get; set; }
         public long PiecePosition { get; set; }
-        public string Value { get; set; }
-        public string Description { get; set; }
-        public string Name { get; set; }
-        public int Beats { get; set; }
-        public int Beatbase { get; set; }
-        public Nullable<int> TicksPerBeat { get; set; }
-        public int Fifths { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
+        public Nullable<int> WebApiId { get; set; }
         public string RemoteId { get; set; }
+        public string FastaHeader { get; set; }
         public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public bool Complement { get; set; }
+        public bool Partial { get; set; }
+        public string Description { get; set; }
     
+        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual Matter Matter { get; set; }
         public virtual Notation Notation { get; set; }
+        public virtual Product Product { get; set; }
         public virtual PieceType PieceType { get; set; }
-        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
-        public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
-        public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual RemoteDb RemoteDb { get; set; }
+        public virtual ICollection<Gene> Gene { get; set; }
     }
 }

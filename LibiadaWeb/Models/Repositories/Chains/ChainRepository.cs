@@ -11,7 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The chain repository.
     /// </summary>
-    public class ChainRepository : ChainImporter, IChainRepository
+    public class CommonSequenceRepository : ChainImporter, ICommonSequenceRepository
     {
         /// <summary>
         /// The element repository.
@@ -19,12 +19,12 @@ namespace LibiadaWeb.Models.Repositories.Chains
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainRepository"/> class.
+        /// Initializes a new instance of the <see cref="CommonSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public ChainRepository(LibiadaWebEntities db) : base(db)
+        public CommonSequenceRepository(LibiadaWebEntities db) : base(db)
         {
             elementRepository = new ElementRepository(db);
         }
@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="commonSequence">
         /// The chain.
         /// </param>
         /// <param name="alphabet">
@@ -41,9 +41,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(chain chain, long[] alphabet, int[] building)
+        public void Insert(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(chain, alphabet, building);
+            var parameters = FillParams(commonSequence, alphabet, building);
 
             const string Query = @"INSERT INTO chain (
                                         id, 
@@ -72,48 +72,48 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The get select list items.
         /// </summary>
-        /// <param name="selectedChains">
+        /// <param name="selectedSequences">
         /// The selected chains.
         /// </param>
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<chain> selectedChains)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> selectedSequences)
         {
-            return GetSelectListItems(null, selectedChains);
+            return GetSelectListItems(null, selectedSequences);
         }
 
         /// <summary>
         /// The get select list items.
         /// </summary>
-        /// <param name="allChains">
+        /// <param name="allSequences">
         /// The all chains.
         /// </param>
-        /// <param name="selectedChains">
+        /// <param name="selectedSequences">
         /// The selected chains.
         /// </param>
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<chain> allChains, IEnumerable<chain> selectedChains)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> allSequences, IEnumerable<CommonSequence> selectedSequences)
         {
-            if (allChains == null)
+            if (allSequences == null)
             {
-                allChains = db.chain.Include("matter");
+                allSequences = db.CommonSequence.Include("matter");
             }
 
-            HashSet<long> chainIds = selectedChains != null
-                                          ? new HashSet<long>(selectedChains.Select(c => c.id))
+            HashSet<long> chainIds = selectedSequences != null
+                                          ? new HashSet<long>(selectedSequences.Select(c => c.Id))
                                           : new HashSet<long>();
             var chainsList = new List<SelectListItem>();
             
-            foreach (var chain in allChains)
+            foreach (var sequence in allSequences)
             {
                 chainsList.Add(new SelectListItem
                 {
-                    Value = chain.id.ToString(), 
-                    Text = chain.matter.name, 
-                    Selected = chainIds.Contains(chain.id)
+                    Value = sequence.Id.ToString(), 
+                    Text = sequence.Matter.Name, 
+                    Selected = chainIds.Contains(sequence.Id)
                 });
             }
 
@@ -129,7 +129,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <returns>
         /// The <see cref="List{element}"/>.
         /// </returns>
-        public List<element> GetElements(long chainId)
+        public List<Element> GetElements(long chainId)
         {
             List<long> elementIds = GetElementIds(chainId);
             return elementRepository.GetElements(elementIds);

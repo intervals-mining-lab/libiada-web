@@ -29,7 +29,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// The element repository.
@@ -43,7 +43,7 @@
         {
             db = new LibiadaWebEntities();
             dnaChainRepository = new DnaChainRepository(db);
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
 

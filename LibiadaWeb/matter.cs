@@ -12,31 +12,31 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class matter
+    public partial class Matter
     {
-        public matter()
+        public Matter()
         {
-            this.chain = new HashSet<chain>();
-            this.dna_chain = new HashSet<dna_chain>();
-            this.literature_chain = new HashSet<literature_chain>();
-            this.fmotiv = new HashSet<fmotiv>();
-            this.measure = new HashSet<measure>();
-            this.music_chain = new HashSet<music_chain>();
+            this.Sequence = new HashSet<CommonSequence>();
+            this.DnaSequence = new HashSet<DnaSequence>();
+            this.LiteratureSequence = new HashSet<LiteratureSequence>();
+            this.Fmotiv = new HashSet<Fmotiv>();
+            this.Measure = new HashSet<Measure>();
+            this.MusicSequence = new HashSet<MusicSequence>();
         }
     
-        public long id { get; set; }
-        public string name { get; set; }
-        public int nature_id { get; set; }
-        public string description { get; set; }
-        public System.DateTimeOffset created { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public int NatureId { get; set; }
+        public string Description { get; set; }
+        public System.DateTimeOffset Created { get; set; }
+        public Nullable<System.DateTimeOffset> Modified { get; set; }
     
-        public virtual ICollection<chain> chain { get; set; }
-        public virtual ICollection<dna_chain> dna_chain { get; set; }
-        public virtual ICollection<literature_chain> literature_chain { get; set; }
-        public virtual nature nature { get; set; }
-        public virtual ICollection<fmotiv> fmotiv { get; set; }
-        public virtual ICollection<measure> measure { get; set; }
-        public virtual ICollection<music_chain> music_chain { get; set; }
+        public virtual ICollection<CommonSequence> Sequence { get; set; }
+        public virtual ICollection<DnaSequence> DnaSequence { get; set; }
+        public virtual ICollection<LiteratureSequence> LiteratureSequence { get; set; }
+        public virtual Nature Nature { get; set; }
+        public virtual ICollection<Fmotiv> Fmotiv { get; set; }
+        public virtual ICollection<Measure> Measure { get; set; }
+        public virtual ICollection<MusicSequence> MusicSequence { get; set; }
     }
 }

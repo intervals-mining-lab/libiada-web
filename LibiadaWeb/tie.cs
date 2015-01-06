@@ -12,17 +12,17 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class tie
+    public partial class Tie
     {
-        public tie()
+        public Tie()
         {
-            this.note = new HashSet<note>();
+            this.Note = new HashSet<Note>();
         }
     
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<note> note { get; set; }
+        public virtual ICollection<Note> Note { get; set; }
     }
 }

@@ -12,27 +12,27 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class gene
+    public partial class Gene
     {
-        public gene()
+        public Gene()
         {
-            this.piece = new HashSet<piece>();
+            this.Piece = new HashSet<Piece>();
         }
     
-        public long id { get; set; }
-        public Nullable<System.DateTimeOffset> created { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
-        public long chain_id { get; set; }
-        public int piece_type_id { get; set; }
-        public string description { get; set; }
-        public Nullable<int> web_api_id { get; set; }
-        public bool complement { get; set; }
-        public bool partial { get; set; }
-        public Nullable<int> product_id { get; set; }
+        public long Id { get; set; }
+        public Nullable<System.DateTimeOffset> Created { get; set; }
+        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public long SequenceId { get; set; }
+        public int PieceTypeId { get; set; }
+        public string Description { get; set; }
+        public Nullable<int> WebApiId { get; set; }
+        public bool Complement { get; set; }
+        public bool Partial { get; set; }
+        public Nullable<int> ProductId { get; set; }
     
-        public virtual dna_chain dna_chain { get; set; }
-        public virtual piece_type piece_type { get; set; }
-        public virtual product product { get; set; }
-        public virtual ICollection<piece> piece { get; set; }
+        public virtual DnaSequence DnaSequence { get; set; }
+        public virtual PieceType PieceType { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual ICollection<Piece> Piece { get; set; }
     }
 }

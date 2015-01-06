@@ -12,31 +12,31 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class note
+    public partial class Note
     {
-        public note()
+        public Note()
         {
-            this.pitch = new HashSet<pitch>();
+            this.Pitch = new HashSet<Pitch>();
         }
     
-        public long id { get; set; }
-        public string value { get; set; }
-        public string description { get; set; }
-        public string name { get; set; }
-        public int notation_id { get; set; }
-        public System.DateTimeOffset created { get; set; }
-        public int numerator { get; set; }
-        public int denominator { get; set; }
-        public Nullable<int> ticks { get; set; }
-        public int onumerator { get; set; }
-        public int odenominator { get; set; }
-        public bool triplet { get; set; }
-        public Nullable<int> priority { get; set; }
-        public int tie_id { get; set; }
-        public Nullable<System.DateTimeOffset> modified { get; set; }
+        public long Id { get; set; }
+        public string Value { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public int NotationId { get; set; }
+        public System.DateTimeOffset Created { get; set; }
+        public int Numerator { get; set; }
+        public int Denominator { get; set; }
+        public Nullable<int> Ticks { get; set; }
+        public int Onumerator { get; set; }
+        public int Odenominator { get; set; }
+        public bool Triplet { get; set; }
+        public Nullable<int> Priority { get; set; }
+        public int TieId { get; set; }
+        public Nullable<System.DateTimeOffset> Modified { get; set; }
     
-        public virtual notation notation { get; set; }
-        public virtual ICollection<pitch> pitch { get; set; }
-        public virtual tie tie { get; set; }
+        public virtual Notation Notation { get; set; }
+        public virtual ICollection<Pitch> Pitch { get; set; }
+        public virtual Tie Tie { get; set; }
     }
 }

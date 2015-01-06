@@ -12,19 +12,30 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Link
+    public partial class CommonSequence
     {
-        public Link()
+        public CommonSequence()
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
             this.Characteristic = new HashSet<Characteristic>();
         }
     
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public long Id { get; set; }
+        public int NotationId { get; set; }
+        public System.DateTimeOffset Created { get; set; }
+        public long MatterId { get; set; }
+        public int PieceTypeId { get; set; }
+        public long PiecePosition { get; set; }
+        public Nullable<int> RemoteDbId { get; set; }
+        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public string RemoteId { get; set; }
         public string Description { get; set; }
     
+        public virtual Matter Matter { get; set; }
+        public virtual Notation Notation { get; set; }
+        public virtual PieceType PieceType { get; set; }
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
+        public virtual RemoteDb RemoteDb { get; set; }
     }
 }

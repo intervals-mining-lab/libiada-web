@@ -25,35 +25,35 @@ namespace LibiadaWeb
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<binary_characteristic> binary_characteristic { get; set; }
-        public virtual DbSet<chain> chain { get; set; }
-        public virtual DbSet<characteristic> characteristic { get; set; }
-        public virtual DbSet<characteristic_group> characteristic_group { get; set; }
-        public virtual DbSet<characteristic_type> characteristic_type { get; set; }
-        public virtual DbSet<dna_chain> dna_chain { get; set; }
-        public virtual DbSet<gene> gene { get; set; }
-        public virtual DbSet<piece> piece { get; set; }
-        public virtual DbSet<element> element { get; set; }
-        public virtual DbSet<language> language { get; set; }
-        public virtual DbSet<link> link { get; set; }
-        public virtual DbSet<literature_chain> literature_chain { get; set; }
-        public virtual DbSet<matter> matter { get; set; }
-        public virtual DbSet<nature> nature { get; set; }
-        public virtual DbSet<notation> notation { get; set; }
-        public virtual DbSet<product> product { get; set; }
-        public virtual DbSet<piece_type> piece_type { get; set; }
-        public virtual DbSet<translator> translator { get; set; }
-        public virtual DbSet<remote_db> remote_db { get; set; }
-        public virtual DbSet<fmotiv> fmotiv { get; set; }
-        public virtual DbSet<congeneric_characteristic> congeneric_characteristic { get; set; }
-        public virtual DbSet<instrument> instrument { get; set; }
-        public virtual DbSet<measure> measure { get; set; }
-        public virtual DbSet<music_chain> music_chain { get; set; }
-        public virtual DbSet<note> note { get; set; }
-        public virtual DbSet<pitch> pitch { get; set; }
-        public virtual DbSet<accidental> accidental { get; set; }
-        public virtual DbSet<fmotiv_type> fmotiv_type { get; set; }
-        public virtual DbSet<note_symbol> note_symbol { get; set; }
-        public virtual DbSet<tie> tie { get; set; }
+        public virtual DbSet<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual DbSet<CommonSequence> CommonSequence { get; set; }
+        public virtual DbSet<Characteristic> Characteristic { get; set; }
+        public virtual DbSet<CharacteristicGroup> CharacteristicGroup { get; set; }
+        public virtual DbSet<CharacteristicType> CharacteristicType { get; set; }
+        public virtual DbSet<DnaSequence> DnaSequence { get; set; }
+        public virtual DbSet<Gene> Gene { get; set; }
+        public virtual DbSet<Piece> Piece { get; set; }
+        public virtual DbSet<Element> Element { get; set; }
+        public virtual DbSet<Language> Language { get; set; }
+        public virtual DbSet<Link> Link { get; set; }
+        public virtual DbSet<LiteratureSequence> LiteratureSequence { get; set; }
+        public virtual DbSet<Matter> Matter { get; set; }
+        public virtual DbSet<Nature> Nature { get; set; }
+        public virtual DbSet<Notation> Notation { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<PieceType> PieceType { get; set; }
+        public virtual DbSet<Translator> Translator { get; set; }
+        public virtual DbSet<RemoteDb> RemoteDb { get; set; }
+        public virtual DbSet<Fmotiv> Fmotiv { get; set; }
+        public virtual DbSet<CongenericCharacteristic> CongenericCharacteristic { get; set; }
+        public virtual DbSet<Instrument> Instrument { get; set; }
+        public virtual DbSet<Measure> Measure { get; set; }
+        public virtual DbSet<MusicSequence> MusicSequence { get; set; }
+        public virtual DbSet<Note> Note { get; set; }
+        public virtual DbSet<Pitch> Pitch { get; set; }
+        public virtual DbSet<Accidental> Accidental { get; set; }
+        public virtual DbSet<FmotivType> FmotivType { get; set; }
+        public virtual DbSet<NoteSymbol> NoteSymbol { get; set; }
+        public virtual DbSet<Tie> Tie { get; set; }
     }
 }

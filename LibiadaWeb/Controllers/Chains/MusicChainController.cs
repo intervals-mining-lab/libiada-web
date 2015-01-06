@@ -23,8 +23,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var music_chain = db.music_chain.Include(m => m.matter).Include(m => m.notation).Include(m => m.piece_type).Include(m => m.remote_db);
-            return View(music_chain.ToList());
+            var musicSequence = db.MusicSequence.Include(m => m.Matter).Include(m => m.Notation).Include(m => m.PieceType).Include(m => m.RemoteDb);
+            return View(musicSequence);
         }
 
         /// <summary>
@@ -43,13 +43,13 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            music_chain music_chain = db.music_chain.Find(id);
-            if (music_chain == null)
+            MusicSequence musicSequence = db.MusicSequence.Find(id);
+            if (musicSequence == null)
             {
                 return HttpNotFound();
             }
 
-            return View(music_chain);
+            return View(musicSequence);
         }
 
         /// <summary>
@@ -60,17 +60,17 @@
         /// </returns>
         public ActionResult Create()
         {
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name");
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name");
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name");
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name");
+            ViewBag.matter_id = new SelectList(db.Matter, "id", "name");
+            ViewBag.notation_id = new SelectList(db.Notation, "id", "name");
+            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name");
+            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name");
             return View();
         }
 
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="music_chain">
+        /// <param name="musicSequence">
         /// The music_chain.
         /// </param>
         /// <returns>
@@ -78,20 +78,20 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] music_chain music_chain)
+        public ActionResult Create([Bind(Include = "id,notation_id,created,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,modified,description")] MusicSequence musicSequence)
         {
             if (ModelState.IsValid)
             {
-                db.music_chain.Add(music_chain);
+                db.MusicSequence.Add(musicSequence);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.matter_id = new SelectList(db.matter, "id", "name", music_chain.matter_id);
-            ViewBag.notation_id = new SelectList(db.notation, "id", "name", music_chain.notation_id);
-            ViewBag.piece_type_id = new SelectList(db.piece_type, "id", "name", music_chain.piece_type_id);
-            ViewBag.remote_db_id = new SelectList(db.remote_db, "id", "name", music_chain.remote_db_id);
-            return View(music_chain);
+            ViewBag.matter_id = new SelectList(db.Matter, "id", "name", musicSequence.matter_id);
+            ViewBag.notation_id = new SelectList(db.Notation, "id", "name", musicSequence.notation_id);
+            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name", musicSequence.piece_type_id);
+            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name", musicSequence.RemoteDbId);
+            return View(musicSequence);
         }
 
         /// <summary>

@@ -33,7 +33,7 @@
         public static MvcHtmlString MattersTable(
             this HtmlHelper helper,
             IEnumerable<SelectListItem> listInfo,
-            List<matter> matters)
+            List<Matter> matters)
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
@@ -46,8 +46,8 @@
                 bodyData.Add(new List<string>());
 
                 bodyData[i].Add(checkBoxes[i].ToString());
-                bodyData[i].Add(matters[i].description);
-                bodyData[i].Add(matters[i].nature.name);
+                bodyData[i].Add(matters[i].Description);
+                bodyData[i].Add(matters[i].Nature.Name);
             }
 
             return helper.Table(headers, bodyData);
@@ -62,7 +62,7 @@
         /// <param name="listInfo">
         /// The list info.
         /// </param>
-        /// <param name="chains">
+        /// <param name="commonSequences">
         /// The chains.
         /// </param>
         /// <param name="languages">
@@ -80,7 +80,7 @@
         public static MvcHtmlString ChainsTable(
             this HtmlHelper helper,
             IEnumerable<SelectListItem> listInfo,
-            List<chain> chains,
+            List<CommonSequence> commonSequences,
             List<string> languages,
             List<string> fastaHeaders,
             List<string> remoteIds)
@@ -106,10 +106,10 @@
                 bodyData.Add(new List<string>());
 
                 bodyData[i].Add(checkBoxes[i].ToString());
-                bodyData[i].Add(chains[i].notation.name);
-                bodyData[i].Add(chains[i].created.ToString());
-                bodyData[i].Add(chains[i].piece_type.name);
-                bodyData[i].Add(chains[i].piece_position.ToString());
+                bodyData[i].Add(commonSequences[i].Notation.Name);
+                bodyData[i].Add(commonSequences[i].Created.ToString());
+                bodyData[i].Add(commonSequences[i].PieceType.Name);
+                bodyData[i].Add(commonSequences[i].PiecePosition.ToString());
                 bodyData[i].Add(languages[i]);
                 bodyData[i].Add(fastaHeaders[i]);
                 bodyData[i].Add(remoteIds[i]);

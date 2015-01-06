@@ -5,7 +5,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The ChainRepository interface.
     /// </summary>
-    public interface IChainRepository : IDisposable
+    public interface ICommonSequenceRepository : IDisposable
     {
     }
 }

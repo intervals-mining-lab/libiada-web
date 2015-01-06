@@ -30,7 +30,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="commonSequence">
         /// The chain.
         /// </param>
         /// <param name="fastaHeader">
@@ -55,7 +55,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The building.
         /// </param>
         public void Insert(
-            chain chain, 
+            CommonSequence commonSequence, 
             string fastaHeader, 
             int? webApiId, 
             int? productId, 
@@ -64,7 +64,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
             long[] alphabet, 
             int[] building)
         {
-            var parameters = FillParams(chain, alphabet, building);
+            var parameters = FillParams(commonSequence, alphabet, building);
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "fasta_header", 
@@ -133,7 +133,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="sequence">
         /// The chain.
         /// </param>
         /// <param name="alphabet">
@@ -142,9 +142,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(dna_chain chain, long[] alphabet, int[] building)
+        public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Insert(ToChain(chain), chain.fasta_header, chain.web_api_id, null, false, false, alphabet, building);
+            Insert(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, null, false, false, alphabet, building);
         }
 
         /// <summary>
@@ -154,66 +154,66 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The source.
         /// </param>
         /// <returns>
-        /// The <see cref="chain"/>.
+        /// The <see cref="CommonSequence"/>.
         /// </returns>
-        public chain ToChain(dna_chain source)
+        public CommonSequence ToCommonSequence(DnaSequence source)
         {
-            return new chain
+            return new CommonSequence
             {
-                id = source.id,
-                notation_id = source.notation_id, 
-                matter_id = source.matter_id, 
-                piece_type_id = source.piece_type_id, 
-                piece_position = source.piece_position
+                Id = source.Id,
+                NotationId = source.NotationId, 
+                MatterId = source.MatterId, 
+                PieceTypeId = source.PieceTypeId, 
+                PiecePosition = source.PiecePosition
             };
         }
 
         /// <summary>
         /// The get select list items.
         /// </summary>
-        /// <param name="chains">
+        /// <param name="sequences">
         /// The chains.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Object}"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<dna_chain> chains)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<DnaSequence> sequences)
         {
-            return GetSelectListItems(db.dna_chain.ToList(), chains);
+            return GetSelectListItems(db.DnaSequence.ToList(), sequences);
         }
 
         /// <summary>
         /// The get select list items.
         /// </summary>
-        /// <param name="allChains">
+        /// <param name="allSequences">
         /// The all chains.
         /// </param>
-        /// <param name="selectedChain">
+        /// <param name="selectedSequences">
         /// The selected chain.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Object}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(
-            IEnumerable<dna_chain> allChains,
-            IEnumerable<dna_chain> selectedChain)
+            IEnumerable<DnaSequence> allSequences,
+            IEnumerable<DnaSequence> selectedSequences)
         {
-            HashSet<long> chainIds = selectedChain != null
-                ? new HashSet<long>(selectedChain.Select(c => c.id))
+            HashSet<long> chainIds = selectedSequences != null
+                ? new HashSet<long>(selectedSequences.Select(c => c.Id))
                 : new HashSet<long>();
-            if (allChains == null)
+            if (allSequences == null)
             {
-                allChains = db.dna_chain.Include("matter");
+                allSequences = db.DnaSequence.Include("matter");
             }
 
             var chainsList = new List<SelectListItem>();
-            foreach (var chain in allChains)
+            foreach (var sequence in allSequences)
             {
                 chainsList.Add(new SelectListItem
                 {
-                    Value = chain.id.ToString(), 
-                    Text = chain.matter.name, 
-                    Selected = chainIds.Contains(chain.id)
+                    Value = sequence.Id.ToString(), 
+                    Text = sequence.Matter.Name, 
+                    Selected = chainIds.Contains(sequence.Id)
                 });
             }
 

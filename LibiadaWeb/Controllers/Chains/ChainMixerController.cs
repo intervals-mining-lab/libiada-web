@@ -33,7 +33,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly ChainRepository chainRepository;
+        private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
         /// The dna chain repository.
@@ -63,7 +63,7 @@
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
-            chainRepository = new ChainRepository(db);
+            chainRepository = new CommonSequenceRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
             elementRepository = new ElementRepository(db);

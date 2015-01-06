@@ -31,7 +31,7 @@
         /// <summary>
         /// The fill params.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="commonSequence">
         /// The chain.
         /// </param>
         /// <param name="alphabet">
@@ -43,11 +43,11 @@
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        protected List<object> FillParams(chain chain, long[] alphabet, int[] building)
+        protected List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
-            if (chain.id == default(long))
+            if (commonSequence.Id == default(long))
             {
-                chain.id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
+                commonSequence.Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
             }
 
             var parameters = new List<object>
@@ -56,25 +56,25 @@
                 {
                     ParameterName = "id", 
                     NpgsqlDbType = NpgsqlDbType.Bigint, 
-                    Value = chain.id
+                    Value = commonSequence.Id
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "notation_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = chain.notation_id
+                    Value = commonSequence.NotationId
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "matter_id", 
                     NpgsqlDbType = NpgsqlDbType.Bigint, 
-                    Value = chain.matter_id
+                    Value = commonSequence.MatterId
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "piece_type_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = chain.piece_type_id
+                    Value = commonSequence.PieceTypeId
                 }, 
                 new NpgsqlParameter
                 {
@@ -92,19 +92,19 @@
                 {
                     ParameterName = "remote_id", 
                     NpgsqlDbType = NpgsqlDbType.Varchar, 
-                    Value = chain.remote_id
+                    Value = commonSequence.RemoteId
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "remote_db_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = chain.remote_db_id
+                    Value = commonSequence.RemoteDbId
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "piece_position", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = chain.piece_position
+                    Value = commonSequence.PiecePosition
                 }
             };
             return parameters;

@@ -21,7 +21,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The cached values.
         /// </summary>
-        private element[] cachedElements;
+        private Element[] cachedElements;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementRepository"/> class.
@@ -117,11 +117,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
                 string stringElement = alphabet[i].ToString();
                 if (staticNotation)
                 {
-                    elementIds[i] = cachedElements.Single(e => e.notation_id == notationId && e.value.Equals(stringElement)).id;
+                    elementIds[i] = cachedElements.Single(e => e.NotationId == notationId && e.Value.Equals(stringElement)).Id;
                 }
                 else
                 {
-                    elementIds[i] = db.element.Single(e => e.notation_id == notationId && e.value.Equals(stringElement)).id;
+                    elementIds[i] = db.Element.Single(e => e.NotationId == notationId && e.Value.Equals(stringElement)).Id;
                 }
             }
 
@@ -142,8 +142,8 @@ namespace LibiadaWeb.Models.Repositories.Chains
             var alphabet = new Alphabet { NullValue.Instance() };
             foreach (long elementId in elementIds)
             {
-                element el = db.element.Single(e => e.id == elementId);
-                alphabet.Add(new ValueString(el.value));
+                Element el = db.Element.Single(e => e.Id == elementId);
+                alphabet.Add(new ValueString(el.Value));
             }
 
             return alphabet;
@@ -156,15 +156,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The element ids.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Element}"/>.
         /// </returns>
-        public List<element> GetElements(List<long> elementIds)
+        public List<Element> GetElements(List<long> elementIds)
         {
-            var elements = new List<element>();
+            var elements = new List<Element>();
             for (int i = 0; i < elementIds.Count(); i++)
             {
                 long elementId = elementIds[i];
-                elements.Add(db.element.Single(e => e.id == elementId));
+                elements.Add(db.Element.Single(e => e.Id == elementId));
             }
 
             return elements;
@@ -183,15 +183,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         public IEnumerable<SelectListItem> GetSelectListItems(
-            IEnumerable<element> allElements,
-            IEnumerable<element> selectedElements)
+            IEnumerable<Element> allElements,
+            IEnumerable<Element> selectedElements)
         {
             HashSet<long> elementIds = selectedElements != null
-                                     ? new HashSet<long>(selectedElements.Select(c => c.id))
+                                     ? new HashSet<long>(selectedElements.Select(c => c.Id))
                                      : new HashSet<long>();
             if (allElements == null)
             {
-                allElements = db.element;
+                allElements = db.Element;
             }
 
             var elementsList = new List<SelectListItem>();
@@ -199,9 +199,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
             {
                 elementsList.Add(new SelectListItem
                     {
-                        Value = element.id.ToString(), 
-                        Text = element.name, 
-                        Selected = elementIds.Contains(element.id)
+                        Value = element.Id.ToString(), 
+                        Text = element.Name, 
+                        Selected = elementIds.Contains(element.Id)
                     });
             }
 
@@ -215,22 +215,22 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The elements.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<element> elements)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<Element> elements)
         {
             HashSet<long> elementIds = elements != null
-                                           ? new HashSet<long>(elements.Select(c => c.id))
+                                           ? new HashSet<long>(elements.Select(c => c.Id))
                                            : new HashSet<long>();
-            var allElements = db.element;
+            var allElements = db.Element;
             var elementsList = new List<SelectListItem>();
             foreach (var element in allElements)
             {
                 elementsList.Add(new SelectListItem
                     {
-                        Value = element.id.ToString(), 
-                        Text = element.name, 
-                        Selected = elementIds.Contains(element.id)
+                        Value = element.Id.ToString(), 
+                        Text = element.Name, 
+                        Selected = elementIds.Contains(element.Id)
                     });
             }
 
@@ -258,7 +258,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         {
             if (cachedElements == null)
             {
-                cachedElements = db.element.Where(e => Aliases.Notation.StaticNotations.Contains(e.notation_id)).ToArray();
+                cachedElements = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
             }
         }
 
@@ -280,11 +280,11 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
             if (CheckNotationStatic(notationId))
             {
-                return cachedElements.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+                return cachedElements.Any(e => e.NotationId == notationId && e.Value.Equals(stringElement));
             }
             else
             {
-                return db.element.Any(e => e.notation_id == notationId && e.value.Equals(stringElement));
+                return db.Element.Any(e => e.NotationId == notationId && e.Value.Equals(stringElement));
             }
         }
 
@@ -310,14 +310,14 @@ namespace LibiadaWeb.Models.Repositories.Chains
 
                 if (!ElementInDb(libiadaAlphabet[j], notationId))
                 {
-                    var newElement = new element
+                    var newElement = new Element
                     {
-                        value = strElem,
-                        name = strElem,
-                        notation_id = notationId
+                        Value = strElem,
+                        Name = strElem,
+                        NotationId = notationId
                     };
 
-                    db.element.Add(newElement);
+                    db.Element.Add(newElement);
                 }
             }
 

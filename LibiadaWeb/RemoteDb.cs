@@ -12,33 +12,30 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Notation
+    public partial class RemoteDb
     {
-        public Notation()
+        public RemoteDb()
         {
             this.Sequence = new HashSet<CommonSequence>();
             this.DnaSequence = new HashSet<DnaSequence>();
-            this.Element = new HashSet<Element>();
             this.LiteratureSequence = new HashSet<LiteratureSequence>();
+            this.MusicSequence = new HashSet<MusicSequence>();
             this.Fmotiv = new HashSet<Fmotiv>();
             this.Measure = new HashSet<Measure>();
-            this.MusicSequence = new HashSet<MusicSequence>();
-            this.Note = new HashSet<Note>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Url { get; set; }
         public int NatureId { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }
-        public virtual ICollection<Element> Element { get; set; }
         public virtual ICollection<LiteratureSequence> LiteratureSequence { get; set; }
-        public virtual Nature Nature { get; set; }
+        public virtual ICollection<MusicSequence> MusicSequence { get; set; }
         public virtual ICollection<Fmotiv> Fmotiv { get; set; }
         public virtual ICollection<Measure> Measure { get; set; }
-        public virtual ICollection<MusicSequence> MusicSequence { get; set; }
-        public virtual ICollection<Note> Note { get; set; }
+        public virtual Nature Nature { get; set; }
     }
 }

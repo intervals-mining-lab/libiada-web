@@ -18,7 +18,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="chain">
+        /// <param name="commonSequence">
         /// The chain.
         /// </param>
         /// <param name="alphabet">
@@ -27,9 +27,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(chain chain, long[] alphabet, int[] building)
+        public void Insert(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(chain, alphabet, building);
+            var parameters = FillParams(commonSequence, alphabet, building);
 
             const string Query = @"INSERT INTO music_chain (
                                         id, 
@@ -62,17 +62,17 @@ namespace LibiadaWeb.Models.Repositories.Chains
         /// The source.
         /// </param>
         /// <returns>
-        /// The <see cref="chain"/>.
+        /// The <see cref="CommonSequence"/>.
         /// </returns>
-        public chain ToChain(music_chain source)
+        public CommonSequence ToCommonSequence(MusicSequence source)
         {
-            return new chain
+            return new CommonSequence
             {
-                id = source.id,
-                notation_id = source.notation_id, 
-                matter_id = source.matter_id, 
-                piece_type_id = source.piece_type_id, 
-                piece_position = source.piece_position
+                Id = source.Id,
+                NotationId = source.NotationId, 
+                MatterId = source.MatterId, 
+                PieceTypeId = source.PieceTypeId, 
+                PiecePosition = source.PiecePosition
             };
         }
 

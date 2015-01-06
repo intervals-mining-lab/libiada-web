@@ -12,17 +12,17 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class fmotiv_type
+    public partial class CharacteristicGroup
     {
-        public fmotiv_type()
+        public CharacteristicGroup()
         {
-            this.fmotiv = new HashSet<fmotiv>();
+            this.CharacteristicType = new HashSet<CharacteristicType>();
         }
     
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     
-        public virtual ICollection<fmotiv> fmotiv { get; set; }
+        public virtual ICollection<CharacteristicType> CharacteristicType { get; set; }
     }
 }
