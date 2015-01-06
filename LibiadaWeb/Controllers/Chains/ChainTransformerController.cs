@@ -55,7 +55,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var chains = db.dna_chain.Where(d => d.notation_id == Aliases.Notation.Nucleotide).Include("matter");
+            var chains = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include("matter");
             ViewBag.chains = chains.ToList();
             ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
             return View();
@@ -80,19 +80,19 @@
 
             foreach (var chainId in chainIds)
             {
-                chain dataBaseChain = db.chain.Single(c => c.id == chainId);
+                CommonSequence dataBaseSequence = db.CommonSequence.Single(c => c.Id == chainId);
                 Chain sourceChain = chainRepository.ToLibiadaChain(chainId);
 
                 BaseChain transformedChain = toAmino
                                                  ? DnaTransformer.Encode(sourceChain)
                                                  : DnaTransformer.EncodeTriplets(sourceChain);
 
-                var result = new dna_chain
+                var result = new DnaSequence
                     {
-                        matter_id = dataBaseChain.matter_id,
-                        notation_id = notationId,
-                        piece_type_id = Aliases.PieceType.FullGenome,
-                        piece_position = 0
+                        MatterId = dataBaseSequence.MatterId,
+                        NotationId = notationId,
+                        PieceTypeId = Aliases.PieceType.FullGenome,
+                        PiecePosition = 0
                     };
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
                 dnaChainRepository.Insert(result, alphabet, transformedChain.Building);

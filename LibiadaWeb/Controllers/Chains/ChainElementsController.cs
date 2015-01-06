@@ -24,7 +24,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChainElementsController"/> class.
@@ -32,7 +32,7 @@
         public ChainElementsController()
         {
             elementRepository = new ElementRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            sequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -42,12 +42,12 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
         /// </returns>
         public IEnumerable<SelectListItem> Get(int id)
         {
-            List<element> chainElements = chainRepository.GetElements(id);
-            return elementRepository.GetSelectListItems(chainElements, null);
+            List<Element> sequenceElements = sequenceRepository.GetElements(id);
+            return elementRepository.GetSelectListItems(sequenceElements, null);
         }
     }
 }

@@ -28,7 +28,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingComparisonController"/> class.
@@ -37,7 +37,7 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            sequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -76,14 +76,14 @@
         {
             return Action(() =>
             {
-                string chainName1 = db.matter.Single(m => m.id == firstMatterId).name;
-                string chainName2 = db.matter.Single(m => m.id == secondMatterId).name;
-                matter matter1 = db.matter.Single(m => m.id == firstMatterId);
-                long chainId1 = matter1.chain.Single(c => c.notation_id == Aliases.Notation.Nucleotide).id;
-                Chain libiadaChain1 = chainRepository.ToLibiadaChain(chainId1);
-                matter matter2 = db.matter.Single(m => m.id == secondMatterId);
-                long chainId2 = matter2.chain.Single(c => c.notation_id == Aliases.Notation.Nucleotide).id;
-                Chain libiadaChain2 = chainRepository.ToLibiadaChain(chainId2);
+                string chainName1 = db.Matter.Single(m => m.Id == firstMatterId).Name;
+                string chainName2 = db.Matter.Single(m => m.Id == secondMatterId).Name;
+                Matter matter1 = db.Matter.Single(m => m.Id == firstMatterId);
+                long chainId1 = matter1.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
+                Chain libiadaChain1 = sequenceRepository.ToLibiadaChain(chainId1);
+                Matter matter2 = db.Matter.Single(m => m.Id == secondMatterId);
+                long chainId2 = matter2.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
+                Chain libiadaChain2 = sequenceRepository.ToLibiadaChain(chainId2);
 
                 BaseChain res1 = null;
                 BaseChain res2 = null;

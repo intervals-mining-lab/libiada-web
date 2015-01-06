@@ -66,14 +66,14 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var links = new SelectList(db.link, "id", "name").ToList();
+            var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
@@ -81,9 +81,9 @@
                     { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.nature, "id", "name") }, 
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "links", links }, 
-                    { "languages", new SelectList(db.language, "id", "name") }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };
             return View();
@@ -135,69 +135,69 @@
                     {
                         int notationId = notationIds[i];
 
-                        long chainId;
-                        if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.Nature.Literature)
+                        long sequenceId;
+                        if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];
 
-                            chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
-                                        l.notation_id == notationId
-                                        && l.language_id == languageId
-                                        && ((translatorId == null && l.translator_id == null)
-                                                        || (translatorId == l.translator_id))).id;
+                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
+                                        l.NotationId == notationId
+                                        && l.LanguageId == languageId
+                                        && ((translatorId == null && l.TranslatorId == null)
+                                                        || (translatorId == l.TranslatorId))).Id;
                         }
                         else
                         {
-                            chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                         }
 
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
-                        if (db.characteristic.Any(c => ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
-                                                  c.chain_id == chainId &&
-                                                  c.characteristic_type_id == characteristicId))
+                        if (db.Characteristic.Any(c => ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
+                                                  c.SequenceId == sequenceId &&
+                                                  c.CharacteristicTypeId == characteristicId))
                         {
-                            double dataBaseCharacteristic = db.characteristic.Single(c => ((linkId == null && c.link_id == null) || linkId == c.link_id) &&
-                                                                                            c.chain_id == chainId &&
-                                                                                            c.characteristic_type_id == characteristicId).value.Value;
+                            double dataBaseCharacteristic = db.Characteristic.Single(c => ((linkId == null && c.LinkId == null) || linkId == c.LinkId) &&
+                                                                                            c.SequenceId == sequenceId &&
+                                                                                            c.CharacteristicTypeId == characteristicId).Value;
                             characteristics.Last().Add(dataBaseCharacteristic);
                         }
                         else
                         {
-                            Chain tempChain = chainRepository.ToLibiadaChain(chainId);
+                            Chain tempChain = chainRepository.ToLibiadaChain(sequenceId);
                             tempChain.FillIntervalManagers();
                             string className =
-                                db.characteristic_type.Single(ct => ct.id == characteristicId).class_name;
+                                db.CharacteristicType.Single(ct => ct.Id == characteristicId).ClassName;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                             var link = (Link)(linkId ?? 0);
                             var characteristicValue = calculator.Calculate(tempChain, link);
 
-                            var dataBaseCharacteristic = new characteristic
+                            var dataBaseCharacteristic = new Characteristic
                             {
-                                chain_id = chainId,
-                                characteristic_type_id = characteristicIds[i],
-                                link_id = linkId,
-                                value = characteristicValue,
-                                value_string = characteristicValue.ToString()
+                                SequenceId = sequenceId,
+                                CharacteristicTypeId = characteristicIds[i],
+                                LinkId = linkId,
+                                Value = characteristicValue,
+                                ValueString = characteristicValue.ToString()
                             };
-                            db.characteristic.Add(dataBaseCharacteristic);
+                            db.Characteristic.Add(dataBaseCharacteristic);
                             db.SaveChanges();
                             characteristics.Last().Add(characteristicValue);
                         }
                     }
                 }
 
-                var links = db.link;
+                var links = db.Link;
 
                 for (int k = 0; k < characteristicIds.Length; k++)
                 {
                     int characteristicId = characteristicIds[k];
                     int? linkId = linkIds[k];
                     int notationId = notationIds[k];
-                    string linkName = linkId.HasValue ? links.Single(l => l.id == linkId).name : string.Empty;
+                    string linkName = linkId.HasValue ? links.Single(l => l.Id == linkId).Name : string.Empty;
 
-                    characteristicNames.Add(string.Join("  ", db.characteristic_type.Single(c => c.id == characteristicId).name, linkName, db.notation.Single(n => n.id == notationId).name));
+                    characteristicNames.Add(string.Join("  ", db.CharacteristicType.Single(c => c.Id == characteristicId).Name, linkName, db.Notation.Single(n => n.Id == notationId).Name));
                 }
 
                 var characteristicsList = new List<SelectListItem>();
@@ -214,7 +214,7 @@
                 return new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
-                                         { "chainNames", db.matter.Where(m => matterIds.Contains(m.id)).OrderBy(m => m.id).Select(m => m.name) }, 
+                                         { "chainNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name) }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "characteristicIds", characteristicIds }, 
                                          { "matterIds", matterIds },

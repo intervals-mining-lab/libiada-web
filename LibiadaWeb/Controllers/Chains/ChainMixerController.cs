@@ -33,7 +33,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
         /// The dna chain repository.
@@ -63,7 +63,7 @@
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            sequenceRepository = new CommonSequenceRepository(db);
             dnaChainRepository = new DnaChainRepository(db);
             literatureChainRepository = new LiteratureChainRepository(db);
             elementRepository = new ElementRepository(db);
@@ -77,8 +77,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matters = db.matter.ToList();
-            ViewBag.language_id = new SelectList(db.language, "id", "name");
+            ViewBag.matters = db.Matter.ToList();
+            ViewBag.language_id = new SelectList(db.Language, "id", "name");
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();
@@ -105,22 +105,22 @@
         [HttpPost]
         public ActionResult Index(long matterId, int notationId, int languageId, int mixes)
         {
-            matter matter = db.matter.Single(m => m.id == matterId);
-            chain dataBaseChain;
-            if (matter.nature_id == Aliases.Nature.Literature)
+            Matter matter = db.Matter.Single(m => m.Id == matterId);
+            CommonSequence dataBaseSequence;
+            if (matter.NatureId == Aliases.Nature.Literature)
             {
                 long chainId =
-                    db.literature_chain.Single(l => l.matter_id == matterId && 
-                                               l.notation_id == notationId && 
-                                               l.language_id == languageId).id;
-                dataBaseChain = db.chain.Single(c => c.id == chainId);
+                    db.LiteratureSequence.Single(l => l.MatterId == matterId && 
+                                               l.NotationId == notationId && 
+                                               l.LanguageId == languageId).Id;
+                dataBaseSequence = db.CommonSequence.Single(c => c.Id == chainId);
             }
             else
             {
-                dataBaseChain = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId);
+                dataBaseSequence = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId);
             }
 
-            BaseChain libiadaChain = chainRepository.ToLibiadaBaseChain(dataBaseChain.id);
+            BaseChain libiadaChain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
             for (int i = 0; i < mixes; i++)
             {
                 int firstIndex = rndGenerator.Next(libiadaChain.GetLength());
@@ -132,38 +132,38 @@
                 libiadaChain[secondIndex] = firstElement;
             }
 
-            var resultMatter = new matter
+            var resultMatter = new Matter
                 {
-                    nature_id = matter.nature_id,
-                    name = matter.name + " " + mixes + " перемешиваний"
+                    NatureId = matter.NatureId,
+                    Name = matter.Name + " " + mixes + " перемешиваний"
                 };
-            db.matter.Add(resultMatter);
+            db.Matter.Add(resultMatter);
 
-            var resultChain = new chain
+            var resultChain = new CommonSequence
                 {
-                    notation_id = notationId,
-                    piece_type_id = dataBaseChain.piece_type_id,
-                    piece_position = dataBaseChain.piece_position,
-                    matter_id = resultMatter.id
+                    NotationId = notationId,
+                    PieceTypeId = dataBaseSequence.PieceTypeId,
+                    PiecePosition = dataBaseSequence.PiecePosition,
+                    MatterId = resultMatter.Id
                 };
 
             long[] alphabet = elementRepository.ToDbElements(
                         libiadaChain.Alphabet,
-                        dataBaseChain.notation_id,
+                        dataBaseSequence.NotationId,
                         false);
 
-            switch (matter.nature_id)
+            switch (matter.NatureId)
             {
                 case Aliases.Nature.Genetic:
-                    dna_chain dnaChain = db.dna_chain.Single(c => c.id == dataBaseChain.id);
+                    DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
 
                     dnaChainRepository.Insert(
                         resultChain,
-                        dnaChain.fasta_header,
+                        dnaSequence.FastaHeader,
                         null,
-                        dnaChain.product_id,
-                        dnaChain.complement,
-                        dnaChain.partial,
+                        dnaSequence.ProductId,
+                        dnaSequence.Complement,
+                        dnaSequence.Partial,
                         alphabet,
                         libiadaChain.Building);
                     break;
@@ -171,13 +171,13 @@
                     break;
                 case Aliases.Nature.Literature:
 
-                    literature_chain literatureChain = db.literature_chain.Single(c => c.id == dataBaseChain.id);
+                    LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
 
                     literatureChainRepository.Insert(
                         resultChain,
-                        literatureChain.original,
-                        literatureChain.language_id,
-                        literatureChain.translator_id,
+                        literatureSequence.Original,
+                        literatureSequence.LanguageId,
+                        literatureSequence.TranslatorId,
                         alphabet,
                         libiadaChain.Building);
                     break;

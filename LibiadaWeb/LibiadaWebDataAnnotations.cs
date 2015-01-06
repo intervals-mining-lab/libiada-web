@@ -439,7 +439,7 @@
     /// The literature_chain.
     /// </summary>
     [MetadataType(typeof(LiteratureChainDataAnnotations))]
-    public partial class literature_chain
+    public partial class LiteratureSequence
     {
     }
 
@@ -768,7 +768,7 @@
     /// The product.
     /// </summary>
     [MetadataType(typeof(ProductDataAnnotations))]
-    public partial class product
+    public partial class Product
     {
     }
 

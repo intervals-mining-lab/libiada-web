@@ -60,10 +60,10 @@
             ViewBag.data = new Dictionary<string, object>
                 {
                     {
-                        "chains", db.dna_chain.Where(c => c.web_api_id != null).Select(c => new
+                        "chains", db.DnaSequence.Where(c => c.WebApiId != null).Select(c => new
                         {
-                            Value = c.id,
-                            Text = c.matter.name,
+                            Value = c.Id,
+                            Text = c.Matter.Name,
                             Selected = false
                         }).OrderBy(c => c.Text)
                     }
@@ -92,7 +92,7 @@
         [HttpPost]
         public ActionResult Index(long chainId, bool localFile)
         {
-            dna_chain parentChain = db.dna_chain.Single(c => c.id == chainId);
+            DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == chainId);
             Stream stream;
             if (localFile)
             {
@@ -107,7 +107,7 @@
             }
             else
             {
-                stream = NcbiHelper.GetGenes(parentChain.web_api_id.ToString());
+                stream = NcbiHelper.GetGenes(parentSequence.WebApiId.ToString());
             }
 
             var input = new byte[stream.Length];
@@ -125,10 +125,10 @@
 
             string stringParentChain = chainRepository.ToLibiadaBaseChain(chainId).ToString();
 
-            var existingGenes = db.gene.Where(g => g.chain_id == parentChain.id).Select(g => g.id);
+            var existingGenes = db.Gene.Where(g => g.SequenceId == parentSequence.Id).Select(g => g.Id);
 
-            var existingChainsPositions = db.piece.Where(p => existingGenes.Contains(p.gene_id)).Select(p => p.start);
-            var products = db.product.ToList();
+            var existingChainsPositions = db.Piece.Where(p => existingGenes.Contains(p.GeneId)).Select(p => p.Start);
+            var products = db.Product.ToList();
 
             for (int i = 1; i < genes.Length; i++)
             {
@@ -239,40 +239,40 @@
                         throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                     }
 
-                    product dbProduct;
+                    Product dbProduct;
 
-                    if (products.Any(p => p.name.Equals(product)))
+                    if (products.Any(p => p.Name.Equals(product)))
                     {
-                        dbProduct = products.Single(p => p.name.Equals(product));
+                        dbProduct = products.Single(p => p.Name.Equals(product));
                     }
                     else
                     {
-                        dbProduct = new product { name = product, piece_type_id = pieceTypeId };
-                        db.product.Add(dbProduct);
+                        dbProduct = new Product { Name = product, PieceTypeId = pieceTypeId };
+                        db.Product.Add(dbProduct);
                         products.Add(dbProduct);
                     }
 
-                    var gene = new gene
+                    var gene = new Gene
                     {
-                        id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
-                        chain_id = parentChain.id,
-                        description = description,
-                        piece_type_id = pieceTypeId,
-                        complement = complement,
-                        partial = false,
-                        product = dbProduct
+                        Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        SequenceId = parentSequence.Id,
+                        Description = description,
+                        PieceTypeId = pieceTypeId,
+                        Complement = complement,
+                        Partial = false,
+                        Product = dbProduct
                     };
 
-                    db.gene.Add(gene);
+                    db.Gene.Add(gene);
 
-                    var piece = new piece
+                    var piece = new Piece
                     {
-                        gene = gene,
-                        start = starts.Last(),
-                        length = stops.Last() - starts.Last()
+                        Gene = gene,
+                        Start = starts.Last(),
+                        Length = stops.Last() - starts.Last()
                     };
 
-                    db.piece.Add(piece);
+                    db.Piece.Add(piece);
                 }
             }
 
@@ -285,26 +285,26 @@
                 int stop = stops[j];
                 if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
                 {
-                    var gene = new gene
+                    var gene = new Gene
                     {
-                        id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
-                        chain_id = parentChain.id,
-                        description = string.Empty,
-                        piece_type_id = Aliases.PieceType.NonCodingSequence,
-                        complement = false,
-                        partial = false
+                        Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        SequenceId = parentSequence.Id,
+                        Description = string.Empty,
+                        PieceTypeId = Aliases.PieceType.NonCodingSequence,
+                        Complement = false,
+                        Partial = false
                     };
 
-                    db.gene.Add(gene);
+                    db.Gene.Add(gene);
 
-                    var piece = new piece
+                    var piece = new Piece
                     {
-                        gene = gene,
-                        start = stops[j],
-                        length = starts[j] - stops[j]
+                        Gene = gene,
+                        Start = stops[j],
+                        Length = starts[j] - stops[j]
                     };
 
-                    db.piece.Add(piece);
+                    db.Piece.Add(piece);
                 }
             }
 
