@@ -20,43 +20,43 @@
         <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
         <table class="table">
             <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th>Создан</th>
-                </tr>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Создан</th>
+            </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="matter in matters | filter:{Nature: natureId}">
-                    <td>
-                        <input type="checkbox" name="matterIds" data-ng-value="matter.Value" />
-                        <span data-ng-bind="matter.Text"></span>
-                    </td>
-                    <td data-ng-bind="matter.description" />
-                    <td data-ng-bind="matter.created" />
-                </tr>
+            <tr data-ng-repeat="matter in matters | filter:{Nature: natureId}">
+                <td>
+                    <input type="checkbox" name="matterIds" data-ng-value="matter.Value"/>
+                    <span data-ng-bind="matter.Text"></span>
+                </td>
+                <td data-ng-bind="matter.description"/>
+                <td data-ng-bind="matter.created"/>
+            </tr>
             </tbody>
         </table>
-        <br />
+        <br/>
         <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
-        <br />
+        <br/>
         <div data-ng-repeat="characteristic in characteristics">
             <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" data-ng-value="characteristic.characteristicType.Value" />
+            <input type="hidden" name="characteristicIds" data-ng-value="characteristic.characteristicType.Value"/>
 
             <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value" />
+            <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value"/>
 
             <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notationsFiltered"></select>
-            <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value" />
-            
+            <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value"/>
+
             <div data-ng-switch="natureId">
                 <div data-ng-switch-when="@Aliases.Nature.Literature">
                     <select title="Язык" data-ng-model="characteristic.language" data-ng-options="l.Text for l in languages"></select>
-                    <input type="hidden" name="languageIds" data-ng-value="characteristic.language.Value" />
+                    <input type="hidden" name="languageIds" data-ng-value="characteristic.language.Value"/>
 
                     <select title="Переводчик" data-ng-model="characteristic.translator" data-ng-options="t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorIds" data-ng-value="characteristic.translator.Value" />
+                    <input type="hidden" name="translatorIds" data-ng-value="characteristic.translator.Value"/>
                 </div>
 
                 <div data-ng-switch-when="@Aliases.Nature.Genetic">
@@ -67,11 +67,11 @@
             </div>
 
             <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
-            <br />
+            <br/>
         </div>
-        <br />
-        <br />
-        <input type="submit" value="Вычислить" />
+        <br/>
+        <br/>
+        <input type="submit" value="Вычислить"/>
     </fieldset>
 }
 @section Scripts {

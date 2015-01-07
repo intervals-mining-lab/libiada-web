@@ -1,4 +1,4 @@
-﻿@model IEnumerable<chain>
+﻿@model IEnumerable<CommonSequence>
 
 @{
     ViewBag.Title = "Index";
@@ -12,31 +12,31 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.matter_id)
+            @Html.DisplayNameFor(model => model.MatterId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.notation_id)
+            @Html.DisplayNameFor(model => model.NotationId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.created)
+            @Html.DisplayNameFor(model => model.Created)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.modified)
+            @Html.DisplayNameFor(model => model.Modified)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.piece_position)
+            @Html.DisplayNameFor(model => model.PiecePosition)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.remote_id)
+            @Html.DisplayNameFor(model => model.RemoteId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.description)
+            @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.piece_type_id)
+            @Html.DisplayNameFor(model => model.PieceTypeId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.remote_db_id)
+            @Html.DisplayNameFor(model => model.RemoteDbId)
         </th>
         <th></th>
     </tr>
@@ -45,36 +45,36 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.matter.name)
+                @Html.DisplayFor(modelItem => item.Matter.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.notation.name)
+                @Html.DisplayFor(modelItem => item.Notation.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.created)
+                @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.modified)
+                @Html.DisplayFor(modelItem => item.Modified)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.piece_position)
+                @Html.DisplayFor(modelItem => item.PiecePosition)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.remote_id)
+                @Html.DisplayFor(modelItem => item.RemoteId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.description)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.piece_type.name)
+                @Html.DisplayFor(modelItem => item.PieceType.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.remote_db.name)
+                @Html.DisplayFor(modelItem => item.RemoteDb.Name)
             </td>
             <td>
-                @Html.ActionLink("Редактировать", "Edit", new { id = item.id }) |
-                @Html.ActionLink("Подробности", "Details", new { id = item.id }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.id })
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Подробности", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
             </td>
         </tr>
     }

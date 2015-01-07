@@ -43,8 +43,8 @@
 <h2>Вычисление бинарных характеристик</h2>
 @using (Html.BeginForm())
 {
-    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<chain>)ViewBag.chains, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
-    <br />
+    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<CommonSequence>)ViewBag.chains, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
+    <br/>
     @Html.Label("Характеристика:")
     <select name="characteristicId" id="characteristicId">
         @foreach (var option in ViewBag.characteristicsList)
@@ -52,7 +52,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
+    <br/>
     @Html.Label("Привязка:")
     <select name="linkId">
         @foreach (var option in ViewBag.linksList)
@@ -60,27 +60,27 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
-    <br />
+    <br/>
+    <br/>
     @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('filterDiv')" } })
-    <br />
+    <br/>
     <div id="filterDiv" hidden>
         @Html.Label("Число выводимых зависимостей")
-        <input type="number" name="filtersize" id="filtersize" min="1" value="10" />
+        <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
     </div>
-    <br />
+    <br/>
     @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('frequencyDiv')" } })
-    <br />
+    <br/>
     <div id="frequencyDiv" hidden>
         @Html.Label("X:")
-        <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10" />
+        <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
     </div>
-    <br />
+    <br/>
     @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('oneWordDiv')" } })
-    <br />
+    <br/>
     <div id="oneWordDiv" hidden>
 
     </div>
-    <br />
-    <input type="submit" value="Вычислить" />
+    <br/>
+    <input type="submit" value="Вычислить"/>
 }

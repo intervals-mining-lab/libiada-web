@@ -1,4 +1,4 @@
-﻿@model IEnumerable<matter>
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Index";
@@ -12,19 +12,19 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.name)
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.description)
+            @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.created)
+            @Html.DisplayNameFor(model => model.Created)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.modified)
+            @Html.DisplayNameFor(model => model.Modified)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.nature.name)
+            @Html.DisplayNameFor(model => model.Nature.Name)
         </th>
         <th></th>
     </tr>
@@ -33,24 +33,24 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.name)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.description)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.created)
+                @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.modified)
+                @Html.DisplayFor(modelItem => item.Modified)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.nature.name)
+                @Html.DisplayFor(modelItem => item.Nature.Name)
             </td>
             <td>
-                @Html.ActionLink("Редактировать", "Edit", new { id = item.id }) |
-                @Html.ActionLink("Подробности", "Details", new { id = item.id }) |
-                @Html.ActionLink("Удалить", "Delete", new { id = item.id })
+                @Html.ActionLink("Редактировать", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Подробности", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Удалить", "Delete", new { id = item.Id })
             </td>
         </tr>
     }

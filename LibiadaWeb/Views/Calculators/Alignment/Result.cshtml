@@ -8,90 +8,89 @@
 
 @if (ViewBag.Error == null)
 {
-
-        @ViewBag.firstChainName
+    @ViewBag.firstChainName
     <table id="resultTable">
         <thead>
-            <tr>
-                <th>
-                    Тип фрагмента
-                </th>
-                <th>
-                    Продукт гена
-                </th>
-                <th>
-                    Позиция гена
-                </th>
+        <tr>
+            <th>
+                Тип фрагмента
+            </th>
+            <th>
+                Продукт гена
+            </th>
+            <th>
+                Позиция гена
+            </th>
 
-                <th>
-                    @ViewBag.characteristicName
-                </th>
-            </tr>
+            <th>
+                @ViewBag.characteristicName
+            </th>
+        </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.firstChainCharacteristics.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.firstChainPieceTypes[i]
-                    </td>
-                    <td id="chainNameCell">
-                        @ViewBag.firstChainProducts[i]
-                    </td>
-                    <td>
-                        @ViewBag.firstChainPositions[i]
-                    </td>
-                    <td>
-                        @ViewBag.firstChainCharacteristics[i].Value
-                    </td>
-                </tr>
-            }
+        @for (int i = 0; i < ViewBag.firstChainCharacteristics.Count; i++)
+        {
+            <tr>
+                <td>
+                    @ViewBag.firstChainPieceTypes[i]
+                </td>
+                <td id="chainNameCell">
+                    @ViewBag.firstChainProducts[i]
+                </td>
+                <td>
+                    @ViewBag.firstChainPositions[i]
+                </td>
+                <td>
+                    @ViewBag.firstChainCharacteristics[i].Value
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
-    
+
     <br/>
-    
+
     @ViewBag.secondChainName
     <table id="resultTable">
         <thead>
-            <tr>
-                <th>
-                    Тип фрагмента
-                </th>
-                <th>
-                    Продукт гена
-                </th>
-                <th>
-                    Позиция гена
-                </th>
+        <tr>
+            <th>
+                Тип фрагмента
+            </th>
+            <th>
+                Продукт гена
+            </th>
+            <th>
+                Позиция гена
+            </th>
 
-                <th>
-                    @ViewBag.characteristicName
-                </th>
-            </tr>
+            <th>
+                @ViewBag.characteristicName
+            </th>
+        </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.secondChainCharacteristics.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.secondChainPieceTypes[i]
-                    </td>
-                    <td id="chainNameCell">
-                        @ViewBag.secondChainProducts[i]
-                    </td>
-                    <td>
-                        @ViewBag.secondChainPositions[i]
-                    </td>
-                    <td>
-                        @ViewBag.secondChainCharacteristics[i].Value
-                    </td>
-                </tr>
-            }
+        @for (int i = 0; i < ViewBag.secondChainCharacteristics.Count; i++)
+        {
+            <tr>
+                <td>
+                    @ViewBag.secondChainPieceTypes[i]
+                </td>
+                <td id="chainNameCell">
+                    @ViewBag.secondChainProducts[i]
+                </td>
+                <td>
+                    @ViewBag.secondChainPositions[i]
+                </td>
+                <td>
+                    @ViewBag.secondChainCharacteristics[i].Value
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
 
-    <br />
+    <br/>
     <div>
         Тип выравнивания: @ViewBag.validationType
     </div>
@@ -99,11 +98,10 @@
     <div>
         Оптимальный сдвиг: @ViewBag.optimalRotation
     </div>
-    
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-        @Scripts.Render("~/bundles/highCharts")
-        @Styles.Render("~/Content/slider")
-    }
-}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/slider")
+    @Scripts.Render("~/bundles/highCharts")
+    @Styles.Render("~/Content/slider")
+}}

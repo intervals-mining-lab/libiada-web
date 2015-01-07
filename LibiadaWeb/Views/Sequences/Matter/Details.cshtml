@@ -1,4 +1,4 @@
-﻿@model matter
+﻿@model Matter
 
 @{
     ViewBag.Title = "Подробности";
@@ -8,51 +8,51 @@
 
 <div>
     <h4>matter</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.name)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.name)
+            @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.description)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.description)
+            @Html.DisplayFor(model => model.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.created)
+            @Html.DisplayNameFor(model => model.Created)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.created)
+            @Html.DisplayFor(model => model.Created)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.modified)
+            @Html.DisplayNameFor(model => model.Modified)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.modified)
+            @Html.DisplayFor(model => model.Modified)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.nature.name)
+            @Html.DisplayNameFor(model => model.Nature.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.nature.name)
+            @Html.DisplayFor(model => model.Nature.Name)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Редактировать", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Редактировать", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Назад к списку", "Index")
 </p>

@@ -5,7 +5,7 @@
 }
 
 <h2>Проверка цепочек</h2>
-@using (Html.BeginForm("Index", "ChainCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "SequenceCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
     <fieldset>
@@ -15,13 +15,13 @@
             @Html.Label("цепочка")
         </div>
         <div class="editor-field">
-            @Html.DropDownList("matterId", String.Empty)
+            @Html.DropDownList("matterId", string.Empty)
         </div>
 
         <input type="file" name="file" id="file"/>
 
         <p>
-            <input type="submit" value="Проверить" />
+            <input type="submit" value="Проверить"/>
         </p>
     </fieldset>
 }

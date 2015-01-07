@@ -246,57 +246,57 @@
         }
 
     </script>
-    
-    for(int d = 0; d < ViewBag.characteristics.Count; d++)
-     {
+
+    for (int d = 0; d < ViewBag.characteristics.Count; d++)
+    {
         @ViewBag.chainNames[d]
         <table id="resultTable">
             <thead>
-                <tr>
+            <tr>
+                <th>
+                    Элемент
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
+                {
                     <th>
-                        Элемент
+                        @characteristicName
                     </th>
-                    @foreach (var characteristicName in ViewBag.characteristicNames)
-                     {
-                        <th>
-                            @characteristicName
-                        </th>
-                     }
-                </tr>
+                }
+            </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
-                 {
-                    <tr>
-                        <td id="chainNameCell">
-                            @ViewBag.elementNames[d][i]
+            @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
+            {
+                <tr>
+                    <td id="chainNameCell">
+                        @ViewBag.elementNames[d][i]
+                    </td>
+                    @foreach (var characteristic in ViewBag.characteristics[d])
+                    {
+                        <td>
+                            @characteristic[i].Value
                         </td>
-                        @foreach (var characteristic in ViewBag.characteristics[d])
-                         {
-                            <td>
-                                @characteristic[i].Value
-                            </td>
-                         }
-                    </tr>
-                 }
+                    }
+                </tr>
+            }
             </tbody>
         </table>
-     }
+    }
 
-    <br />
+    <br/>
     <div id="visualization_container" style="width: 800px; height: 500px"></div>
-    <br />
-    <br />
+    <br/>
+    <br/>
     <input type="checkbox" name="Rank" id="Rank" value="true" onclick=" SwitchXAxis() "/>
     <label for="Rank">Ранговое распределение</label>
-    <br />
+    <br/>
     <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() "/>
     <label for="allGraphics">Вывести все графики сразу</label>
-    <br />
+    <br/>
     <input type="checkbox" name="logarithmicScale" id="" value="true" disabled="disabled"/>
     <label for="logarithmicScale">Логарифмический масштаб</label>
-    <br />
-    <br />
+    <br/>
+    <br/>
     <div id="xhider">
         @Html.Label("Ось x")
         <select name="xaxis" id="xaxis">
@@ -306,7 +306,7 @@
             }
         </select>
     </div>
-    <br />
+    <br/>
     <div id="yhider">
         @Html.Label("Ось y")
         <select name="yaxis" id="yaxis">
@@ -316,6 +316,6 @@
             }
         </select>
     </div>
-    <br />
+    <br/>
     <button onclick=" DrawChart() ">Отобразить разбиение</button>
 }

@@ -36,7 +36,7 @@
                     string[] tempValue = characteristicList[i].ToString().Split(',');
                     string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                     @: characteristics[characteristics.length -1][@i] = @value;
-                            }
+                }
             }
         });
 
@@ -88,38 +88,38 @@
 
     <table id="resultTable" class="table">
         <thead>
-            <tr>
+        <tr>
+            <th>
+                Название цепочки
+            </th>
+            @foreach (var characteristicName in ViewBag.characteristicNames)
+            {
                 <th>
-                    Название цепочки
+                    @Html.Raw(characteristicName.Replace("  ", "<br/>"))
                 </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
-                    </th>
-                }
-            </tr>
+            }
+        </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.characteristics.Count; i++)
-            {
-                <tr>
-                    <td id="chainNameCell">
-                        @ViewBag.chainNames[i]
+        @for (int i = 0; i < ViewBag.characteristics.Count; i++)
+        {
+            <tr>
+                <td id="chainNameCell">
+                    @ViewBag.chainNames[i]
+                </td>
+                @foreach (var characteristic in ViewBag.characteristics[i])
+                {
+                    <td>
+                        @characteristic
                     </td>
-                    @foreach (var characteristic in ViewBag.characteristics[i])
-                    {
-                        <td>
-                            @characteristic
-                        </td>
-                    }
-                </tr>
-            }
+                }
+            </tr>
+        }
         </tbody>
     </table>
-    <br />
+    <br/>
     <div id="visualization_container" style="width: 800px; height: 800px"></div>
-    <br />
+    <br/>
     @Html.Label("Ось х")
     <select name="xaxis" id="xaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -127,7 +127,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
+    <br/>
     @Html.Label("Ось y")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -135,6 +135,6 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
+    <br/>
     <button onclick=" DrawChart() ">Отобразить разбиение</button>
 }

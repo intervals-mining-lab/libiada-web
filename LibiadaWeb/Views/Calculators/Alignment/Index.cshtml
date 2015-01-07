@@ -1,5 +1,5 @@
-﻿@model dynamic
-@using LibiadaWeb.Helpers
+﻿@using LibiadaWeb.Helpers
+@model dynamic
 
 @{
     ViewBag.Title = "Выравнивание генов";
@@ -38,75 +38,75 @@
         <legend>Характеристики цепочек</legend>
 
         <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
-            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value" />
+            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value"/>
             <span data-ng-bind="pieceTypeCheckBox.Text"></span>
         </div>
 
         <table>
             <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th>Создан</th>
-                </tr>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Создан</th>
+            </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="matter in matters">
-                    <td>
-                        <input type="radio" name="matterId1" data-ng-value="matter.Value" />
-                        <span data-ng-bind="matter.Text"></span>
-                    </td>
-                    <td data-ng-bind="matter.description" />
-                    <td data-ng-bind="matter.created" />
-                </tr>
+            <tr data-ng-repeat="matter in matters">
+                <td>
+                    <input type="radio" name="matterId1" data-ng-value="matter.Value"/>
+                    <span data-ng-bind="matter.Text"></span>
+                </td>
+                <td data-ng-bind="matter.description"/>
+                <td data-ng-bind="matter.created"/>
+            </tr>
             </tbody>
         </table>
 
         <table>
             <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Описание</th>
-                    <th>Создан</th>
-                </tr>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Создан</th>
+            </tr>
             </thead>
             <tbody>
-                <tr data-ng-repeat="matter in matters">
-                    <td>
-                        <input type="radio" name="matterId2" data-ng-value="matter.Value" />
-                        <span data-ng-bind="matter.Text"></span>
-                    </td>
-                    <td data-ng-bind="matter.description" />
-                    <td data-ng-bind="matter.created" />
-                </tr>
+            <tr data-ng-repeat="matter in matters">
+                <td>
+                    <input type="radio" name="matterId2" data-ng-value="matter.Value"/>
+                    <span data-ng-bind="matter.Text"></span>
+                </td>
+                <td data-ng-bind="matter.description"/>
+                <td data-ng-bind="matter.created"/>
+            </tr>
             </tbody>
         </table>
         <br/>
         <div>Способ сравнения при выравнивании:</div>
         <div>
-            <input type="radio" name="validationType" value="Equality" />
+            <input type="radio" name="validationType" value="Equality"/>
             <span> Степень совпадения</span>
         </div>
         <div>
-            <input type="radio" name="validationType" value="Difference" />
+            <input type="radio" name="validationType" value="Difference"/>
             <span> Степень расхождения</span>
         </div>
         <div>
-            <input type="radio" name="validationType" value="NormalizedDifference" />
+            <input type="radio" name="validationType" value="NormalizedDifference"/>
             <span> Нормализованная степень расхождения</span>
         </div>
-        <br />
+        <br/>
         <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-        <input type="hidden" name="characteristicId" data-ng-value="characteristic.characteristicType.Value" />
+        <input type="hidden" name="characteristicId" data-ng-value="characteristic.characteristicType.Value"/>
 
         <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-        <input type="hidden" name="linkId" data-ng-value="characteristic.link.Value" />
+        <input type="hidden" name="linkId" data-ng-value="characteristic.link.Value"/>
 
         <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
-        <input type="hidden" name="notationId" data-ng-value="characteristic.notation.Value" />
-        <br />
-        <br />
-        <input type="submit" value="Вычислить" />
+        <input type="hidden" name="notationId" data-ng-value="characteristic.notation.Value"/>
+        <br/>
+        <br/>
+        <input type="submit" value="Вычислить"/>
     </fieldset>
 }
 @section Scripts {

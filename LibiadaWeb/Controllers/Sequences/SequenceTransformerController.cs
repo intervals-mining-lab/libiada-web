@@ -96,7 +96,7 @@
                 dnaSequenceRepository.Insert(result, alphabet, transformedChain.Building);
             }
 
-            return RedirectToAction("Index", "Chain");
+            return RedirectToAction("Index", "CommonSequence");
         }
     }
 }

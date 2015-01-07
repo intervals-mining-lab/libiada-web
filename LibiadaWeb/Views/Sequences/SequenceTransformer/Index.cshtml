@@ -1,36 +1,37 @@
 ﻿@using LibiadaWeb.Helpers
-@model IEnumerable<matter>
+@model IEnumerable<Matter>
 
-    @{
-        ViewBag.Title = "Преобразование генетических текстов";
-    }
+@{
+    ViewBag.Title = "Преобразование генетических текстов";
+}
 
-    <h2>Преобразование генетических текстов</h2>
+<h2>Преобразование генетических текстов</h2>
 
-    @using (Html.BeginForm())
-    {
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.name)
-                </th>
-            </tr>
+@using (Html.BeginForm())
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+        </tr>
 
-            @{
-        var chainsList = Html.CheckBoxList("chainIds", (List<SelectListItem>)ViewBag.chainsList);
+        @{
+            var chainsList = Html.CheckBoxList("chainIds", (List<SelectListItem>)ViewBag.chainsList);
 
-        foreach (var item in chainsList)
-        {
-            <tr>
-                <td>
-                    @item
-                </td>
-            </tr>
-        }
+            foreach (var item in chainsList)
+            {
+                <tr>
+                    <td>
+                        @item
+                    </td>
+                </tr>
             }
-        </table>
-        <br />
-        @Html.CheckBox("toAmino", "Преобразовать в аминокислоты", null)
-        <br />
-        <input type="submit" value="Преобразовать" />
-    }
+
+        }
+    </table>
+    <br/>
+    @Html.CheckBox("toAmino", "Преобразовать в аминокислоты", null)
+    <br/>
+    <input type="submit" value="Преобразовать"/>
+}

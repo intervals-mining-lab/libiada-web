@@ -112,7 +112,7 @@
         public int RemoteDbId { get; set; }
 
         /// <summary>
-        /// Gets or sets the remote_id.
+        /// Gets or sets the RemoteId.
         /// </summary>
         [Display(Name = "id в сторонней БД")]
         public string RemoteId { get; set; }

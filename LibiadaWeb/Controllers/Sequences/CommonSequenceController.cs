@@ -91,11 +91,11 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chain = db.CommonSequence.Include(c => c.Matter)
+            var commonSequence = db.CommonSequence.Include(c => c.Matter)
                                 .Include(c => c.Notation)
                                 .Include(c => c.PieceType)
                                 .Include(c => c.RemoteDb);
-            return View(chain.ToList());
+            return View(commonSequence.ToList());
         }
 
         /// <summary>
@@ -189,8 +189,7 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] CommonSequence sequence,
+        public ActionResult Create([Bind(Include = "NotationId,MatterId,PieceTypeId,piecePosition,remoteDbId,RemoteId,Description")] CommonSequence sequence,
             bool localFile,
             int languageId,
             bool original,
@@ -374,7 +373,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "notation_id,matter_id,piece_type_id,piece_position,remote_db_id,remote_id,description")] CommonSequence sequence)
+        public ActionResult Edit([Bind(Include = "NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence sequence)
         {
             if (ModelState.IsValid)
             {

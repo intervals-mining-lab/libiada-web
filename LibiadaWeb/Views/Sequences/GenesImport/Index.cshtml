@@ -6,13 +6,15 @@
 <script>
     var app = angular.module('GenesImport', []);
 
-    app.controller('GenesImportCtrl', ['$scope', function($scope) {
+    app.controller('GenesImportCtrl', [
+        '$scope', function($scope) {
 
-        var data = @Html.Raw(Json.Encode(ViewBag.data));
+            var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-        MapModelFromJson($scope, data);
-        $scope.localFile = false;
-    }]);
+            MapModelFromJson($scope, data);
+            $scope.localFile = false;
+        }
+    ]);
 
 </script>
 
@@ -33,7 +35,7 @@
         <div class="form-group" data-ng-show="localFile">
             @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="file" id="file" />
+                <input type="file" name="file" id="file"/>
             </div>
         </div>
 
@@ -41,12 +43,12 @@
             @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
-                <input type="hidden" name="chainId" value="{{chainId}}" />
+                <input type="hidden" name="chainId" value="{{chainId}}"/>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Создать" class="btn btn-default" />
+                <input type="submit" value="Создать" class="btn btn-default"/>
             </div>
         </div>
     </div>

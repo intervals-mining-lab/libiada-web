@@ -1,4 +1,4 @@
-﻿@model matter
+﻿@model Matter
 
 @{
     ViewBag.Title = "Редактирование";
@@ -13,53 +13,53 @@
 
     <div class="form-horizontal">
         <h4>matter</h4>
-        <hr />
+        <hr/>
         @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.name)
-                @Html.ValidationMessageFor(model => model.name)
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.nature_id, "nature_id", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.NatureId, "NatureId", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("nature_id", string.Empty)
-                @Html.ValidationMessageFor(model => model.nature_id)
+                @Html.DropDownList("NatureId", string.Empty)
+                @Html.ValidationMessageFor(model => model.NatureId)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.description, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.description)
-                @Html.ValidationMessageFor(model => model.description)
+                @Html.EditorFor(model => model.Description)
+                @Html.ValidationMessageFor(model => model.Description)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.created, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Created, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.created)
-                @Html.ValidationMessageFor(model => model.created)
+                @Html.EditorFor(model => model.Created)
+                @Html.ValidationMessageFor(model => model.Created)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.modified, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Modified, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.modified)
-                @Html.ValidationMessageFor(model => model.modified)
+                @Html.EditorFor(model => model.Modified)
+                @Html.ValidationMessageFor(model => model.Modified)
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Сохранить изменения" class="btn btn-default" />
+                <input type="submit" value="Сохранить изменения" class="btn btn-default"/>
             </div>
         </div>
     </div>

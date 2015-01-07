@@ -1,4 +1,4 @@
-﻿@model chain
+﻿@model CommonSequence
 
 @{
     ViewBag.Title = "Удаление";
@@ -9,78 +9,78 @@
 <h3>Вы уверены, что хотите удалить данную запись?</h3>
 <div>
     <h4>chain</h4>
-    <hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.created)
+            @Html.DisplayNameFor(model => model.Created)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.created)
+            @Html.DisplayFor(model => model.Created)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.piece_position)
+            @Html.DisplayNameFor(model => model.PiecePosition)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.piece_position)
+            @Html.DisplayFor(model => model.PiecePosition)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.modified)
+            @Html.DisplayNameFor(model => model.Modified)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.modified)
+            @Html.DisplayFor(model => model.Modified)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.remote_id)
+            @Html.DisplayNameFor(model => model.RemoteId)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.remote_id)
+            @Html.DisplayFor(model => model.RemoteId)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.description)
+            @Html.DisplayNameFor(model => model.Description)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.description)
+            @Html.DisplayFor(model => model.Description)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.matter.name)
+            @Html.DisplayNameFor(model => model.Matter.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.matter.name)
+            @Html.DisplayFor(model => model.Matter.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.notation.name)
+            @Html.DisplayNameFor(model => model.Notation.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.notation.name)
+            @Html.DisplayFor(model => model.Notation.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.piece_type.name)
+            @Html.DisplayNameFor(model => model.PieceType.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.piece_type.name)
+            @Html.DisplayFor(model => model.PieceType.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.remote_db.name)
+            @Html.DisplayNameFor(model => model.RemoteDb.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.remote_db.name)
+            @Html.DisplayFor(model => model.RemoteDb.Name)
         </dd>
 
     </dl>
@@ -90,7 +90,7 @@
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default" /> |
+            <input type="submit" value="Удалить" class="btn btn-default"/> |
             @Html.ActionLink("Назад к списку", "Index")
         </div>
     }

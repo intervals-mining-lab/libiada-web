@@ -8,7 +8,6 @@
 
 @if (ViewBag.Error == null)
 {
-
     <script type='text/javascript'>
         var characteristics = new Array();
         var partNames = new Array();
@@ -31,13 +30,13 @@
                 for (int j = 0; j < ViewBag.characteristics.Count; j++)
                 {
                     @: points.push(new Array());
-                                @: characteristics.push(new Array());
+                    @: characteristics.push(new Array());
 
                     var characteristicList = ViewBag.characteristics[j];
                     for (int i = 0; i < characteristicList.Count; i++)
                     {
                         @: points[@j].push(new Array());
-                                    @: characteristics[@j].push(new Array());
+                        @: characteristics[@j].push(new Array());
 
                         var characteristic = characteristicList[i];
                         for (int k = 0; k < characteristic.Count; k++)
@@ -45,15 +44,15 @@
                             string[] tempValue = characteristic[k].ToString().Split(',');
                             string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                             @: characteristics[@j][@i][@k] = @value;
-                                        @: points[@j][@i][@k] = {x: @i, y: @value};
-                                    }
+                            @: points[@j][@i][@k] = {x: @i, y: @value};
+                        }
                     }
                 }
 
                 for (int k = 0; k < ViewBag.chainNames.Count; k++)
                 {
                     @:chainNames.push("@ViewBag.chainNames[k]");
-                            }
+                }
 
             }
 
@@ -283,63 +282,63 @@
         <div>@ViewBag.chainNames[k]</div>
         <table>
             <thead>
-                <tr>
+            <tr>
+                <th>
+                    Начало
+                </th>
+                <th>
+                    Длина
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
+                {
                     <th>
-                        Начало
+                        @characteristicName
                     </th>
-                    <th>
-                        Длина
-                    </th>
-                    @foreach (var characteristicName in ViewBag.characteristicNames)
-                    {
-                        <th>
-                            @characteristicName
-                        </th>
-                    }
-                </tr>
+                }
+            </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < ViewBag.characteristics[k].Count; i++)
-                {
-                    <tr>
-                        <td id="chainNameCell">
-                            @ViewBag.starts[k][i]
+            @for (int i = 0; i < ViewBag.characteristics[k].Count; i++)
+            {
+                <tr>
+                    <td id="chainNameCell">
+                        @ViewBag.starts[k][i]
+                    </td>
+                    <td id="chainNameCell">
+                        @ViewBag.lengthes[k][i]
+                    </td>
+                    @foreach (var characteristic in ViewBag.characteristics[k][i])
+                    {
+                        <td>
+                            @characteristic
                         </td>
-                        <td id="chainNameCell">
-                            @ViewBag.lengthes[k][i]
-                        </td>
-                        @foreach (var characteristic in ViewBag.characteristics[k][i])
-                        {
-                            <td>
-                                @characteristic
-                            </td>
-                        }
-                    </tr>
-                }
+                    }
+                </tr>
+            }
             </tbody>
         </table>
     }
 
-    <br />
+    <br/>
     <div id="visualization_container" style="width: 800px; height: 520px; margin-bottom: 15px;"></div>
-    <br />
+    <br/>
     <div style="width: 755px; height: 30px; margin-left: 35px; margin-top: 5px;">
         <div id="slider_container">
         </div>
     </div>
-    <br />
+    <br/>
     <div style="width: 800px; height: 300px;">
         <div id="control-form" style="clear: both">
             <label>
                 Левая граница
-                <input type="number" id="leftArrow" name="leftArrow" value="5" />
+                <input type="number" id="leftArrow" name="leftArrow" value="5"/>
             </label>
             <label>
                 Правая граница
-                <input type="number" id="rightArrow" name="rightArrow" value="10" />
+                <input type="number" id="rightArrow" name="rightArrow" value="10"/>
             </label>
-            <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); " />
-            <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); " />
+            <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); "/>
+            <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); "/>
         </div>
         <div id="new-params" style="clear: both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
             <label>Изменить параметры разбиения</label>
@@ -351,10 +350,10 @@
                 Размер окна
                 <input type="number" id="widthOfWindow" name="" value="10">
             </label>
-            <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); " />
+            <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); "/>
         </div>
     </div>
-    <br />
+    <br/>
     @Html.Label("Ось y")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -362,16 +361,15 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
-    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" />
+    <br/>
+    <input type="checkbox" name="allGraphics" id="allGraphics" value="true"/>
     <label for="allGraphics">Вывести все графики сразу</label>
-    <br />
-    <button onclick=" DrawChart()">Отобразить разбиение</button>
+    <br/>
+    <button onclick=" DrawChart() ">Отобразить разбиение</button>
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-        @Scripts.Render("~/bundles/highCharts")
-        @Styles.Render("~/Content/slider")
-    }
-}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/slider")
+    @Scripts.Render("~/bundles/highCharts")
+    @Styles.Render("~/Content/slider")
+}}
