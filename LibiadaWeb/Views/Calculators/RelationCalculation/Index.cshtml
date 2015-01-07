@@ -8,16 +8,16 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        $('input[name="chainId"]').each(function(i, item) {
-            $(item).click(GetChainElements);
+        $('input[name="sequenceId"]').each(function (i, item) {
+            $(item).click(GetSequenceElements);
         });
 
         AddDataTablesWithSubmit();
     });
 
-    function GetChainElements(event) {
+    function GetSequenceElements(event) {
         $.ajax({
-            url: "/api/ChainElements/" + event.target.value,
+            url: "/api/SequenceElements/" + event.target.value,
             type: "GET",
             success: function(elements) {
                 $("#oneWordDiv")[0].innerHTML = "";
@@ -43,7 +43,7 @@
 <h2>Вычисление бинарных характеристик</h2>
 @using (Html.BeginForm())
 {
-    @Html.ChainsTable((List<SelectListItem>)ViewBag.chainCheckBoxes, (List<CommonSequence>)ViewBag.chains, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
+    @Html.SequencesTable((List<SelectListItem>)ViewBag.sequenceCheckBoxes, (List<CommonSequence>)ViewBag.sequences, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
     <br/>
     @Html.Label("Характеристика:")
     <select name="characteristicId" id="characteristicId">

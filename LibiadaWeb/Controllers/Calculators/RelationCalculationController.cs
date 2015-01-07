@@ -36,7 +36,7 @@
         private readonly LinkRepository linkRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -67,8 +67,8 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
             var sequences = db.CommonSequence.Include("matter");
-            ViewBag.chainCheckBoxes = commonSequenceRepository.GetSelectListItems(sequences, null);
-            ViewBag.chains = sequences;
+            ViewBag.sequenceCheckBoxes = commonSequenceRepository.GetSelectListItems(sequences, null);
+            ViewBag.sequences = sequences;
             var languages = new List<string>();
             var fastaHeaders = new List<string>();
             foreach (var sequence in sequences)
@@ -84,7 +84,7 @@
             ViewBag.languages = languages;
             ViewBag.fastaHeaders = fastaHeaders;
 
-            ViewBag.chainsList = commonSequenceRepository.GetSelectListItems(null);
+            ViewBag.sequencesList = commonSequenceRepository.GetSelectListItems(null);
             var characteristics = db.CharacteristicType.Where(c => c.BinarySequenceApplicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
@@ -94,8 +94,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <param name="characteristicId">
         /// The characteristic id.
@@ -126,7 +126,7 @@
         /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long chainId, 
+            long sequenceId, 
             int characteristicId, 
             int linkId, 
             int filterSize, 
@@ -147,7 +147,7 @@
                 var secondElements = new List<Element>();
                 string word = null;
 
-                CommonSequence dbSequence = db.CommonSequence.Single(c => c.Id == chainId);
+                CommonSequence dbSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
 
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(dbSequence.Id);
                 string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
@@ -236,8 +236,8 @@
                     { "filterSize", filterSize },
                     { "elements", elements },
                     { "characteristicName", db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name },
-                    { "chainName", db.CommonSequence.Single(m => m.Id == chainId).Matter.Name },
-                    { "notationName", db.CommonSequence.Single(c => c.Id == chainId).Notation.Name },
+                    { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
+                    { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.Name },
                     { "filteredResult1", filteredResult1 },
                     { "filteredResult2", filteredResult2 },
                     { "oneWord", oneWord },
@@ -258,10 +258,10 @@
         /// <param name="wordId">
         /// The word id.
         /// </param>
-        /// <param name="dbSequence">
-        /// The db chain.
+        /// <param name="sequence">
+        /// The db sequence.
         /// </param>
-        /// <param name="currentChain">
+        /// <param name="chain">
         /// The current chain.
         /// </param>
         /// <param name="calculator">
@@ -277,33 +277,33 @@
             int characteristicId,
             int linkId,
             long wordId,
-            CommonSequence dbSequence,
-            Chain currentChain,
+            CommonSequence sequence,
+            Chain chain,
             IBinaryCalculator calculator,
             Link link)
         {
-            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == dbSequence.Id &&
+            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
                                                                       b.CharacteristicTypeId == characteristicId &&
                                                                       b.LinkId == linkId && b.FirstElementId == wordId);
-            List<long> sequenceElements = commonSequenceRepository.GetElementIds(dbSequence.Id);
-            if (calculatedCount < currentChain.Alphabet.Cardinality)
+            List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
+            if (calculatedCount < chain.Alphabet.Cardinality)
             {
                 // TODO: проверить что + - 1 нигде к индексам не надо добавлять
                 int firstElementNumber = sequenceElements.IndexOf(wordId);
-                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
+                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                 {
                     long secondElementId = sequenceElements[i];
                     if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == dbSequence.Id &&
+                                                      b.SequenceId == sequence.Id &&
                                                       b.CharacteristicTypeId == characteristicId &&
                                                       b.FirstElementId == wordId &&
                                                       b.SecondElementId == secondElementId &&
                                                       b.LinkId == linkId))
                     {
-                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
+                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
 
                         binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbSequence.Id,
+                            sequence.Id,
                             characteristicId,
                             linkId,
                             wordId,
@@ -313,26 +313,26 @@
                 }
             }
 
-            calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == dbSequence.Id &&
+            calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
                                                                   b.CharacteristicTypeId == characteristicId &&
                                                                   b.LinkId == linkId && b.SecondElementId == wordId);
 
-            if (calculatedCount < currentChain.Alphabet.Cardinality)
+            if (calculatedCount < chain.Alphabet.Cardinality)
             {
                 int secondElementNumber = sequenceElements.IndexOf(wordId);
-                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
+                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                 {
                     long firstElementId = sequenceElements[i];
                     if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == dbSequence.Id &&
+                                                      b.SequenceId == sequence.Id &&
                                                       b.CharacteristicTypeId == characteristicId &&
                                                       b.FirstElementId == firstElementId &&
                                                       b.SecondElementId == wordId &&
                                                       b.LinkId == linkId))
                     {
-                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
+                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
                         binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbSequence.Id,
+                            sequence.Id,
                             characteristicId,
                             linkId,
                             firstElementId,
@@ -354,10 +354,10 @@
         /// <param name="linkId">
         /// The link id.
         /// </param>
-        /// <param name="dbSequence">
-        /// The db chain.
+        /// <param name="sequence">
+        /// The db sequence.
         /// </param>
-        /// <param name="currentChain">
+        /// <param name="chain">
         /// The current chain.
         /// </param>
         /// <param name="calculator">
@@ -369,34 +369,34 @@
         private void NotFrequencyCharacteristic(
             int characteristicId,
             int linkId,
-            CommonSequence dbSequence,
-            Chain currentChain,
+            CommonSequence sequence,
+            Chain chain,
             IBinaryCalculator calculator,
             Link link)
         {
-            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == dbSequence.Id &&
+            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
                                                                  b.CharacteristicTypeId == characteristicId &&
                                                                  b.LinkId == linkId);
-            if (calculatedCount < currentChain.Alphabet.Cardinality * currentChain.Alphabet.Cardinality)
+            if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
-                List<long> sequenceElements = commonSequenceRepository.GetElementIds(dbSequence.Id);
-                for (int i = 0; i < currentChain.Alphabet.Cardinality; i++)
+                List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
+                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                 {
-                    for (int j = 0; j < currentChain.Alphabet.Cardinality; j++)
+                    for (int j = 0; j < chain.Alphabet.Cardinality; j++)
                     {
                         long firstElementId = sequenceElements[i];
                         long secondElementId = sequenceElements[i];
                         if (!db.BinaryCharacteristic.Any(b =>
-                                                          b.SequenceId == dbSequence.Id &&
+                                                          b.SequenceId == sequence.Id &&
                                                           b.CharacteristicTypeId == characteristicId &&
                                                           b.FirstElementId == firstElementId &&
                                                           b.SecondElementId == secondElementId &&
                                                           b.LinkId == linkId))
                         {
-                            double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
+                            double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                             binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                                dbSequence.Id,
+                                sequence.Id,
                                 characteristicId,
                                 linkId,
                                 firstElementId,
@@ -420,11 +420,11 @@
         /// <param name="frequencyCount">
         /// The frequency count.
         /// </param>
-        /// <param name="currentChain">
+        /// <param name="chain">
         /// The current chain.
         /// </param>
-        /// <param name="dbSequence">
-        /// The db chain.
+        /// <param name="sequence">
+        /// The db sequence.
         /// </param>
         /// <param name="calculator">
         /// The calculator.
@@ -436,48 +436,47 @@
             int characteristicId,
             int linkId,
             int frequencyCount,
-            Chain currentChain,
-            CommonSequence dbSequence,
+            Chain chain,
+            CommonSequence sequence,
             IBinaryCalculator calculator,
             Link link)
         {
-            List<long> sequenceElements = commonSequenceRepository.GetElementIds(dbSequence.Id);
+            List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
 
             // считаем частоты слов
-            var frequences = new List<KeyValuePair<IBaseObject, double>>();
-            for (int f = 0; f < currentChain.Alphabet.Cardinality; f++)
+            var frequencies = new List<KeyValuePair<IBaseObject, double>>();
+            for (int f = 0; f < chain.Alphabet.Cardinality; f++)
             {
-                var calc = new Probability();
-                frequences.Add(new KeyValuePair<IBaseObject, double>(
-                        currentChain.Alphabet[f],
-                        calc.Calculate(currentChain.CongenericChain(f), Link.Both)));
+                var probabilityCalculator = new Probability();
+                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.Both);
+                frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
             }
 
             // сортируем алфавит по частоте
-            SortKeyValuePairList(frequences);
+            SortKeyValuePairList(frequencies);
 
             // для заданного числа слов с наибольшей частотой считаем зависимости
             for (int i = 0; i < frequencyCount; i++)
             {
                 for (int j = 0; j < frequencyCount; j++)
                 {
-                    int firstElementNumber = currentChain.Alphabet.IndexOf(frequences[i].Key) + 1;
-                    int secondElementNumber = currentChain.Alphabet.IndexOf(frequences[j].Key) + 1;
+                    int firstElementNumber = chain.Alphabet.IndexOf(frequencies[i].Key) + 1;
+                    int secondElementNumber = chain.Alphabet.IndexOf(frequencies[j].Key) + 1;
                     long firstElementId = sequenceElements[firstElementNumber];
                     long secondElementId = sequenceElements[secondElementNumber];
 
                     // проверяем не посчитана ли уже эта характеристика
                     if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == dbSequence.Id &&
+                                                      b.SequenceId == sequence.Id &&
                                                       b.CharacteristicTypeId == characteristicId &&
                                                       b.FirstElementId == firstElementId &&
                                                       b.SecondElementId == secondElementId &&
                                                       b.LinkId == linkId))
                     {
-                        double result = calculator.Calculate(currentChain.GetRelationIntervalsManager(i + 1, j + 1), link);
+                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
                         binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            dbSequence.Id,
+                            sequence.Id,
                             characteristicId,
                             linkId,
                             firstElementId,
@@ -496,8 +495,7 @@
         /// </param>
         private void SortKeyValuePairList(List<KeyValuePair<IBaseObject, double>> arrayForSort)
         {
-            arrayForSort.Sort(
-                (firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
+            arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
         }
     }
 }

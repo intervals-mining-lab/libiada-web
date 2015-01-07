@@ -17,7 +17,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The chain controller.
+    /// The sequence controller.
     /// </summary>
     public class CommonSequenceController : Controller
     {
@@ -155,7 +155,7 @@
         /// The create.
         /// </summary>
         /// <param name="sequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="localFile">
         /// The local file.
@@ -185,11 +185,12 @@
         /// Thrown if file is null.
         /// </exception>
         /// <exception cref="Exception">
-        /// Thrown if element of created chain is not found in db.
+        /// Thrown if element of created sequence is not found in db.
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "NotationId,MatterId,PieceTypeId,piecePosition,remoteDbId,RemoteId,Description")] CommonSequence sequence,
+        public ActionResult Create(
+            [Bind(Include = "NotationId,MatterId,PieceTypeId,piecePosition,remoteDbId,RemoteId,Description")] CommonSequence sequence,
             bool localFile,
             int languageId,
             bool original,
@@ -229,38 +230,35 @@
                     int natureId = db.Matter.Single(m => m.Id == sequence.MatterId).NatureId;
 
                     // Copy the byte array into a string
-                    string stringChain = natureId == Aliases.Nature.Genetic
+                    string stringSequence = natureId == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
-                    BaseChain libiadaChain;
+                    BaseChain chain;
                     long[] alphabet;
                     switch (natureId)
                     {
                         case Aliases.Nature.Genetic:
 
                             // отделяем заголовок fasta файла от цепочки
-                            string[] splittedFasta = stringChain.Split('\n', '\r');
-                            var chainStringBuilder = new StringBuilder();
+                            string[] splittedFasta = stringSequence.Split('\n', '\r');
+                            var sequenceStringBuilder = new StringBuilder();
                             string fastaHeader = splittedFasta[0];
                             for (int j = 1; j < splittedFasta.Length; j++)
                             {
-                                chainStringBuilder.Append(splittedFasta[j]);
+                                sequenceStringBuilder.Append(splittedFasta[j]);
                             }
 
-                            string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
+                            string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
 
-                            libiadaChain = new BaseChain(resultStringChain);
+                            chain = new BaseChain(resultStringSequence);
 
-                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, sequence.NotationId))
+                            if (!elementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
                             {
                                 throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
-                            alphabet = elementRepository.ToDbElements(
-                                libiadaChain.Alphabet,
-                                sequence.NotationId,
-                                false);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
                             dnaSequenceRepository.Insert(
                                 sequence,
                                 fastaHeader,
@@ -269,31 +267,28 @@
                                 complement,
                                 partial,
                                 alphabet,
-                                libiadaChain.Building);
+                                chain.Building);
                             break;
                         case Aliases.Nature.Music:
                             break;
                         case Aliases.Nature.Literature:
-                            string[] text = stringChain.Split('\n');
+                            string[] text = stringSequence.Split('\n');
                             for (int l = 0; l < text.Length - 1; l++)
                             {
                                 // убираем \r
                                 text[l] = text[l].Substring(0, text[l].Length - 1);
                             }
 
-                            libiadaChain = new BaseChain(text.Length - 1);
+                            chain = new BaseChain(text.Length - 1);
 
                             // в конце файла всегда пустая строка поэтому последний элемент не считаем
                             // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце а лучше сделать нормальный trim
                             for (int i = 0; i < text.Length - 1; i++)
                             {
-                                libiadaChain.Set(new ValueString(text[i]), i);
+                                chain.Set(new ValueString(text[i]), i);
                             }
 
-                            alphabet = elementRepository.ToDbElements(
-                                libiadaChain.Alphabet,
-                                sequence.NotationId,
-                                true);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, true);
 
                             literatureSequenceRepository.Insert(
                                 sequence,
@@ -301,7 +296,7 @@
                                 languageId,
                                 translatorId,
                                 alphabet,
-                                libiadaChain.Building);
+                                chain.Building);
                             break;
                     }
 
@@ -366,7 +361,7 @@
         /// The edit.
         /// </summary>
         /// <param name="sequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.

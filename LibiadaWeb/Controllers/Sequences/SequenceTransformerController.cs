@@ -20,12 +20,12 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The dna chain repository.
+        /// The dna sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -53,17 +53,17 @@
         /// </returns>
         public ActionResult Index()
         {
-            var chains = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include("matter");
-            ViewBag.chains = chains.ToList();
-            ViewBag.chainsList = dnaSequenceRepository.GetSelectListItems(chains, null);
+            var sequences = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include("matter");
+            ViewBag.sequences = sequences.ToList();
+            ViewBag.sequencesList = dnaSequenceRepository.GetSelectListItems(sequences, null);
             return View();
         }
 
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="chainIds">
-        /// The chain ids.
+        /// <param name="sequenceIds">
+        /// The sequence ids.
         /// </param>
         /// <param name="toAmino">
         /// The to amino.
@@ -72,14 +72,14 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(IEnumerable<long> chainIds, bool toAmino)
+        public ActionResult Index(IEnumerable<long> sequenceIds, bool toAmino)
         {
             int notationId = toAmino ? Aliases.Notation.AminoAcid : Aliases.Notation.Triplet;
 
-            foreach (var chainId in chainIds)
+            foreach (var sequenceId in sequenceIds)
             {
-                CommonSequence dataBaseSequence = db.CommonSequence.Single(c => c.Id == chainId);
-                Chain sourceChain = commonSequenceRepository.ToLibiadaChain(chainId);
+                CommonSequence dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
+                Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
                 BaseChain transformedChain = toAmino
                                                  ? DnaTransformer.Encode(sourceChain)

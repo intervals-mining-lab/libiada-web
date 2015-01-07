@@ -36,7 +36,7 @@
         private readonly CharacteristicTypeRepository characteristicRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -66,9 +66,9 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var chainIds = db.Gene.Select(g => g.SequenceId).Distinct();
-            var chains = db.DnaSequence.Where(c => chainIds.Contains(c.Id));
-            var matterIds = chains.Select(c => c.MatterId);
+            var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var sequences = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id));
+            var matterIds = sequences.Select(c => c.MatterId);
             
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
             
@@ -132,34 +132,33 @@
             return Action(() =>
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
-                var chainNames = new List<string>();
-                var chainsProduct = new List<List<string>>();
-                var chainsPosition = new List<List<long>>();
-                var chainsPieceTypes = new List<List<string>>();
+                var matterNames = new List<string>();
+                var sequenceProducts = new List<List<string>>();
+                var sequencesPositions = new List<List<long>>();
+                var sequencePieceTypes = new List<List<string>>();
                 var characteristicNames = new List<string>();
 
                 // Перебор всех цепочек; первый уровень массива характеристик
                 for (int w = 0; w < matterIds.Length; w++)
                 {
                     long matterId = matterIds[w];
-                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    chainsProduct.Add(new List<string>());
-                    chainsPosition.Add(new List<long>());
-                    chainsPieceTypes.Add(new List<string>());
+                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                    sequenceProducts.Add(new List<string>());
+                    sequencesPositions.Add(new List<long>());
+                    sequencePieceTypes.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
                     var notationId = notationIds[w];
 
-                    var chainId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                    var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
                     var genes =
-                        db.Gene.Where(g => g.SequenceId == chainId && pieceTypeIds.Contains(g.PieceTypeId))
-                            .Include("piece")
-                            .ToArray();
+                        db.Gene.Where(g => g.SequenceId == sequenceId 
+                                           && pieceTypeIds.Contains(g.PieceTypeId)).Include("piece").ToArray();
 
                     var pieces = genes.Select(g => g.Piece.First()).ToList();
 
-                    var chains = ExtractChains(pieces, chainId);
+                    var chains = ExtractChains(pieces, sequenceId);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicIds.Length; i++)
@@ -211,13 +210,12 @@
                                 var productId = genes[d].ProductId;
                                 var pieceTypeId = genes[d].PieceTypeId;
 
-                                chainsProduct.Last()
-                                    .Add(productId == null
+                                sequenceProducts.Last().Add(productId == null
                                         ? string.Empty
                                         : db.Product.Single(p => productId == p.Id).Name);
-                                chainsPosition.Last().Add(pieces[d].Start);
+                                sequencesPositions.Last().Add(pieces[d].Start);
 
-                                chainsPieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
+                                sequencePieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
                             }
                         }
                     }
@@ -258,10 +256,10 @@
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
-                    { "chainNames", chainNames },
-                    { "chainsProduct", chainsProduct },
-                    { "chainsPosition", chainsPosition },
-                    { "chainsPieceTypes", chainsPieceTypes },
+                    { "matterNames", matterNames },
+                    { "sequenceProducts", sequenceProducts },
+                    { "sequencesPositions", sequencesPositions },
+                    { "sequencePieceTypes", sequencePieceTypes },
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },
                     { "characteristicsList", characteristicsList }

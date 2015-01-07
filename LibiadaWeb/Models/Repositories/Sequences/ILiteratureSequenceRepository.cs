@@ -3,7 +3,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
 
     /// <summary>
-    /// The LiteratureChainRepository interface.
+    /// The LiteratureSequenceRepository interface.
     /// </summary>
     public interface ILiteratureSequenceRepository : IDisposable
     {

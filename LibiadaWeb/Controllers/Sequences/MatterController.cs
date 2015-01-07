@@ -27,7 +27,7 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -37,12 +37,12 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The dna chain repository.
+        /// The dna sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
-        /// The literature chain repository.
+        /// The literature sequence repository.
         /// </summary>
         private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
@@ -188,7 +188,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "name,nature_id,description")] Matter matter,
+            [Bind(Include = "Name,NatureId,Description")] Matter matter,
             int notationId,
             int pieceTypeId,
             int? remoteDbId,
@@ -215,7 +215,7 @@
 
                         if (file == null || file.ContentLength == 0)
                         {
-                            throw new ArgumentNullException("file", "Chain file is null or empty");
+                            throw new ArgumentNullException("file", "Sequence file is null or empty");
                         }
 
                         fileStream = file.InputStream;
@@ -231,32 +231,32 @@
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
 
-                    string stringChain = matter.NatureId == Aliases.Nature.Genetic
+                    string stringSequence = matter.NatureId == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
-                    BaseChain libiadaChain;
+                    BaseChain chain;
                     long[] alphabet;
 
                     switch (matter.NatureId)
                     {
                         case Aliases.Nature.Genetic:
                             // отделяем заголовок fasta файла от цепочки
-                            string[] splittedFasta = stringChain.Split(new[] { '\n', '\r' });
-                            var chainStringBuilder = new StringBuilder();
+                            string[] splittedFasta = stringSequence.Split('\n', '\r');
+                            var sequenceStringBuilder = new StringBuilder();
                             string fastaHeader = splittedFasta[0];
                             for (int j = 1; j < splittedFasta.Length; j++)
                             {
-                                chainStringBuilder.Append(splittedFasta[j]);
+                                sequenceStringBuilder.Append(splittedFasta[j]);
                             }
 
-                            string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
+                            string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
 
-                            libiadaChain = new BaseChain(resultStringChain);
+                            chain = new BaseChain(resultStringSequence);
 
-                            if (!elementRepository.ElementsInDb(libiadaChain.Alphabet, notationId))
+                            if (!elementRepository.ElementsInDb(chain.Alphabet, notationId))
                             {
-                                throw new Exception("At least one element of new chain missing in db.");
+                                throw new Exception("At least one element of new sequence missing in db.");
                             }
 
                             db.Matter.Add(matter);
@@ -264,7 +264,7 @@
 
                             matterCreated = true;
 
-                            var dnaChain = new CommonSequence
+                            var dnaSequence = new CommonSequence
                             {
                                 NotationId = notationId,
                                 PieceTypeId = pieceTypeId,
@@ -273,31 +273,31 @@
                                 RemoteId = remoteId
                             };
 
-                            alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.NotationId, false);
-                            dnaSequenceRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, dnaSequence.NotationId, false);
+                            dnaSequenceRepository.Insert(dnaSequence, fastaHeader, webApiId, productId, complement ?? false, partial ?? false, alphabet, chain.Building);
                             break;
                         case Aliases.Nature.Music:
                             var doc = new XmlDocument();
-                            doc.LoadXml(stringChain);
+                            doc.LoadXml(stringSequence);
                             
                             // MusicXmlParser parser = new MusicXmlParser();
                             // parser.Execute(doc, "test");
                             // ScoreTrack tempTrack = parser.ScoreModel;
                             break;
                         case Aliases.Nature.Literature:
-                            string[] text = stringChain.Split('\n');
+                            string[] text = stringSequence.Split('\n');
                             for (int l = 0; l < text.Length - 1; l++)
                             {
                                 // убираем \r
                                 text[l] = text[l].Substring(0, text[l].Length - 1);
                             }
 
-                            libiadaChain = new BaseChain(text.Length - 1);
+                            chain = new BaseChain(text.Length - 1);
 
                             // в конце файла всегда пустая строка поэтому последний элемент не считаем
                             for (int i = 0; i < text.Length - 1; i++)
                             {
-                                libiadaChain.Set(new ValueString(text[i]), i);
+                                chain.Set(new ValueString(text[i]), i);
                             }
 
                             db.Matter.Add(matter);
@@ -313,17 +313,17 @@
                             };
 
                             alphabet = elementRepository.ToDbElements(
-                                libiadaChain.Alphabet,
+                                chain.Alphabet,
                                 literatureSequence.NotationId,
                                 true);
 
                             literatureSequenceRepository.Insert(
                                 literatureSequence,
-                                (bool)original,
-                                (int)languageId,
+                                original ?? false,
+                                languageId ?? 0,
                                 translatorId,
                                 alphabet,
-                                libiadaChain.Building);
+                                chain.Building);
 
                             break;
                     }
@@ -393,7 +393,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "name,nature_id,description")] Matter matter)
+        public ActionResult Edit([Bind(Include = "Name,NatureId,Description")] Matter matter)
         {
             if (ModelState.IsValid)
             {

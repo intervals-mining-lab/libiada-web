@@ -7,7 +7,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using Npgsql;
 
     /// <summary>
-    /// The chain repository.
+    /// The sequence repository.
     /// </summary>
     public class CommonSequenceRepository : CommonSequenceImporter, ICommonSequenceRepository
     {
@@ -31,7 +31,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The insert.
         /// </summary>
         /// <param name="commonSequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="alphabet">
         /// The alphabet.
@@ -71,10 +71,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The get select list items.
         /// </summary>
         /// <param name="selectedSequences">
-        /// The selected chains.
+        /// The selected sequences.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> selectedSequences)
         {
@@ -85,13 +85,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The get select list items.
         /// </summary>
         /// <param name="allSequences">
-        /// The all chains.
+        /// The all sequences.
         /// </param>
         /// <param name="selectedSequences">
-        /// The selected chains.
+        /// The selected sequences.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> allSequences, IEnumerable<CommonSequence> selectedSequences)
         {
@@ -100,110 +100,110 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 allSequences = db.CommonSequence.Include("matter");
             }
 
-            HashSet<long> chainIds = selectedSequences != null
+            HashSet<long> sequenceIds = selectedSequences != null
                                           ? new HashSet<long>(selectedSequences.Select(c => c.Id))
                                           : new HashSet<long>();
-            var chainsList = new List<SelectListItem>();
+            var sequencesList = new List<SelectListItem>();
             
             foreach (var sequence in allSequences)
             {
-                chainsList.Add(new SelectListItem
+                sequencesList.Add(new SelectListItem
                 {
                     Value = sequence.Id.ToString(), 
                     Text = sequence.Matter.Name, 
-                    Selected = chainIds.Contains(sequence.Id)
+                    Selected = sequenceIds.Contains(sequence.Id)
                 });
             }
 
-            return chainsList;
+            return sequencesList;
         }
 
         /// <summary>
         /// The get elements.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="List{element}"/>.
         /// </returns>
-        public List<Element> GetElements(long chainId)
+        public List<Element> GetElements(long sequenceId)
         {
-            List<long> elementIds = GetElementIds(chainId);
+            List<long> elementIds = GetElementIds(sequenceId);
             return elementRepository.GetElements(elementIds);
         }
 
         /// <summary>
         /// The get alphabet.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="Alphabet"/>.
         /// </returns>
-        public Alphabet GetAlphabet(long chainId)
+        public Alphabet GetAlphabet(long sequenceId)
         {
-            List<long> elements = GetElementIds(chainId);
+            List<long> elements = GetElementIds(sequenceId);
             return elementRepository.ToLibiadaAlphabet(elements);
         }
 
         /// <summary>
         /// The get element ids.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Int64}"/>.
         /// </returns>
-        public List<long> GetElementIds(long chainId)
+        public List<long> GetElementIds(long sequenceId)
         {
             const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", chainId)).ToList();
+            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
         }
 
         /// <summary>
         /// The get building.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="int[]"/>.
         /// </returns>
-        public int[] GetBuilding(long chainId)
+        public int[] GetBuilding(long sequenceId)
         {
             const string Query = "SELECT unnest(building) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", chainId)).ToArray();
+            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
         }
 
         /// <summary>
-        /// The to l base chain.
+        /// The to libiada BaseChain.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="BaseChain"/>.
         /// </returns>
-        public BaseChain ToLibiadaBaseChain(long chainId)
+        public BaseChain ToLibiadaBaseChain(long sequenceId)
         {
-            return new BaseChain(GetBuilding(chainId), GetAlphabet(chainId));
+            return new BaseChain(GetBuilding(sequenceId), GetAlphabet(sequenceId));
         }
 
         /// <summary>
-        /// The to libiada chain.
+        /// The to libiada Chain.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="Chain"/>.
         /// </returns>
-        public Chain ToLibiadaChain(long chainId)
+        public Chain ToLibiadaChain(long sequenceId)
         {
-            return new Chain(GetBuilding(chainId), GetAlphabet(chainId));
+            return new Chain(GetBuilding(sequenceId), GetAlphabet(sequenceId));
         }
 
         /// <summary>

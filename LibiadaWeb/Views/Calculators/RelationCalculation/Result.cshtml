@@ -5,14 +5,14 @@
 }
 @if (ViewBag.Error == null)
 {
-    <h2>@ViewBag.chainName</h2>
+    <h2>@ViewBag.matterName</h2>
     <h2>@ViewBag.characteristicName</h2>
     <h2>@ViewBag.notationName</h2>
 
     if (ViewBag.OneWord)
     {
         <h2>Зависимости слов от @ViewBag.word</h2>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th>
@@ -39,7 +39,7 @@
         </table>
 
         <h2>Зависимости слова @ViewBag.word от других слов</h2>
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th>
@@ -69,7 +69,7 @@
     {
         if (!ViewBag.isFilter)
         {
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
                     <th>
@@ -103,7 +103,7 @@
         }
         else
         {
-            <table>
+            <table class="table">
                 <thead>
                 <tr>
                     <th>

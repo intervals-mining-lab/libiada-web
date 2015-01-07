@@ -11,9 +11,9 @@
     <script type='text/javascript'>
         var characteristics = new Array();
         var clusters = new Array();
-        var chainIds = new Array();
+        var matterIds = new Array();
         var colors = new Array();
-        var chainNames = new Array();
+        var sequenceNames = new Array();
 
         $(document).ready(function() {
             colors.push('rgba(223, 83, 83, .5)');
@@ -29,17 +29,18 @@
             var clusterNumber = 0;
             for (var i = 1; i < rows.length; i++) {
                 if (clusterNumber < rows[i].cells[0].textContent) {
-                    chainNames.push(new Array());
+                    sequenceNames.push(new Array());
                     clusterNumber++;
                 }
-                chainNames[clusterNumber - 1].push(rows[i].cells[1].textContent);
+
+                sequenceNames[clusterNumber - 1].push(rows[i].cells[1].textContent);
             }
 
             @for (int j = 0; j < ViewBag.characteristics.Count; j++)
             {
                 <text>
                     characteristics.push(new Array());
-                    chainIds.push(@ViewBag.chainIds[j]);
+                    matterIds.push(@ViewBag.matterIds[j]);
                 </text>
 
                 var characteristicList = ViewBag.characteristics[j];
@@ -71,12 +72,12 @@
                 dataSeries[i].name = "Кластер " + (i + 1);
                 dataSeries[i].color = colors[i];
                 for (var j = 0; j < clusters[i].length; j++) {
-                    var chainIndex = chainIds.indexOf(clusters[i][j]);
+                    var matterIndex = matterIds.indexOf(clusters[i][j]);
                     var xcharacteristicId = $("#xaxis option:selected")[0].value;
                     var ycharacteristicId = $("#yaxis option:selected")[0].value;
-                    var x = characteristics[chainIndex][xcharacteristicId];
-                    var y = characteristics[chainIndex][ycharacteristicId];
-                    var pointName = chainNames[i][j];
+                    var x = characteristics[matterIndex][xcharacteristicId];
+                    var y = characteristics[matterIndex][ycharacteristicId];
+                    var pointName = sequenceNames[i][j];
                     dataSeries[i].data[j] = new Object();
                     dataSeries[i].data[j].x = x;
                     dataSeries[i].data[j].y = y;
@@ -111,7 +112,7 @@
     </script>
 
     <h2>Результаты кластеризации</h2>
-    <table id="resultTable">
+    <table class="table" id="resultTable">
         <thead>
         <tr>
             <th>
@@ -126,17 +127,17 @@
         <tbody>
         @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
         {
-            foreach (var chain in ViewBag.clusterNames[i])
+            foreach (var sequence in ViewBag.clusterNames[i])
             {
                 <tr>
                     <td>
                         @(i + 1)
                     </td>
                     <td>
-                        @chain
+                        @sequence
                     </td>
                     <td>
-                        @ViewBag.chainIds[ViewBag.chainNames.IndexOf(chain)]
+                        @ViewBag.matterIds[ViewBag.sequenceNames.IndexOf(sequence)]
                     </td>
                 </tr>
             }

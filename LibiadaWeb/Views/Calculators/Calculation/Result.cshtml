@@ -10,7 +10,7 @@
     <script type='text/javascript'>
         var characteristics = new Array();
         var matterIds = new Array();
-        var chainNames = new Array();
+        var matterNames = new Array();
         var colors = new Array();
 
         $(document).ready(function() {
@@ -27,7 +27,7 @@
                 <text>
             characteristics.push(new Array());
             matterIds.push(@ViewBag.matterIds[j]);
-            chainNames.push('@ViewBag.chainNames[j]');
+            matterNames.push('@ViewBag.matterNames[j]');
             </text>
 
                 var characteristicList = ViewBag.characteristics[j];
@@ -53,7 +53,7 @@
                 var ycharacteristicId = $("#yaxis option:selected")[0].value;
                 var x = characteristics[i][xcharacteristicId];
                 var y = characteristics[i][ycharacteristicId];
-                var pointName = chainNames[i];
+                var pointName = matterNames[i];
                 dataSeries[0].data[i] = new Object();
                 dataSeries[0].data[i].x = x;
                 dataSeries[0].data[i].y = y;
@@ -104,8 +104,8 @@
         @for (int i = 0; i < ViewBag.characteristics.Count; i++)
         {
             <tr>
-                <td id="chainNameCell">
-                    @ViewBag.chainNames[i]
+                <td>
+                    @ViewBag.matterNames[i]
                 </td>
                 @foreach (var characteristic in ViewBag.characteristics[i])
                 {

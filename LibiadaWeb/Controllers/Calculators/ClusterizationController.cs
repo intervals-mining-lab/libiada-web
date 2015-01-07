@@ -33,7 +33,7 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -146,32 +146,31 @@
             {
                 var characteristics = new List<List<double>>();
                 var characteristicNames = new List<string>();
-                var chainNames = new List<string>();
+                var sequenceNames = new List<string>();
                 foreach (var matterId in matterIds)
                 {
-                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                    sequenceNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     characteristics.Add(new List<double>());
                     for (int i = 0; i < notationIds.Length; i++)
                     {
-                        long chainId = db.Matter.Single(m => m.Id == matterId)
-                            .Sequence.Single(c => c.NotationId == notationIds[i]).Id;
+                        long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.NotationId == notationIds[i]).Id;
 
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
                         if (db.Characteristic.Any(c =>
                             ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
-                            c.SequenceId == chainId &&
+                            c.SequenceId == sequenceId &&
                             c.CharacteristicTypeId == characteristicId))
                         {
                             characteristics.Last()
                                 .Add((double)db.Characteristic.Single(c =>
                                     ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
-                                    c.SequenceId == chainId &&
+                                    c.SequenceId == sequenceId &&
                                     c.CharacteristicTypeId == characteristicIds[i]).Value);
                         }
                         else
                         {
-                            Chain tempChain = commonSequenceRepository.ToLibiadaChain(chainId);
+                            Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
                             string className =
                                 db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
@@ -235,8 +234,8 @@
                     { "characteristicNames", characteristicNames },
                     { "characteristicIds", new List<int>(characteristicIds) },
                     { "characteristics", characteristics },
-                    { "chainNames", chainNames },
-                    { "chainIds", new List<long>(matterIds) },
+                    { "sequenceNames", sequenceNames },
+                    { "matterIds", new List<long>(matterIds) },
                     { "clusterNames", clusterNames },
                     { "characteristicsList", characteristicsList }
                 };

@@ -17,9 +17,9 @@
         </tr>
 
         @{
-            var chainsList = Html.CheckBoxList("chainIds", (List<SelectListItem>)ViewBag.chainsList);
+            var sequencesList = Html.CheckBoxList("sequenceIds", (List<SelectListItem>)ViewBag.sequencesList);
 
-            foreach (var item in chainsList)
+            foreach (var item in sequencesList)
             {
                 <tr>
                     <td>

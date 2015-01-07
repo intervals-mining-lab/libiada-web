@@ -1,7 +1,7 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     /// <summary>
-    /// The music chain repository.
+    /// The music sequence repository.
     /// </summary>
     public class MusicSequenceRepository : CommonSequenceImporter, IMusicSequenceRepository
     {
@@ -19,7 +19,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The insert.
         /// </summary>
         /// <param name="commonSequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="alphabet">
         /// The alphabet.
@@ -56,7 +56,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to chain.
+        /// The to sequence.
         /// </summary>
         /// <param name="source">
         /// The source.

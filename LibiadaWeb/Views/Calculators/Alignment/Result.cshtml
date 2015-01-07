@@ -8,89 +8,6 @@
 
 @if (ViewBag.Error == null)
 {
-    @ViewBag.firstChainName
-    <table id="resultTable">
-        <thead>
-        <tr>
-            <th>
-                Тип фрагмента
-            </th>
-            <th>
-                Продукт гена
-            </th>
-            <th>
-                Позиция гена
-            </th>
-
-            <th>
-                @ViewBag.characteristicName
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (int i = 0; i < ViewBag.firstChainCharacteristics.Count; i++)
-        {
-            <tr>
-                <td>
-                    @ViewBag.firstChainPieceTypes[i]
-                </td>
-                <td id="chainNameCell">
-                    @ViewBag.firstChainProducts[i]
-                </td>
-                <td>
-                    @ViewBag.firstChainPositions[i]
-                </td>
-                <td>
-                    @ViewBag.firstChainCharacteristics[i].Value
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-
-    <br/>
-
-    @ViewBag.secondChainName
-    <table id="resultTable">
-        <thead>
-        <tr>
-            <th>
-                Тип фрагмента
-            </th>
-            <th>
-                Продукт гена
-            </th>
-            <th>
-                Позиция гена
-            </th>
-
-            <th>
-                @ViewBag.characteristicName
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @for (int i = 0; i < ViewBag.secondChainCharacteristics.Count; i++)
-        {
-            <tr>
-                <td>
-                    @ViewBag.secondChainPieceTypes[i]
-                </td>
-                <td id="chainNameCell">
-                    @ViewBag.secondChainProducts[i]
-                </td>
-                <td>
-                    @ViewBag.secondChainPositions[i]
-                </td>
-                <td>
-                    @ViewBag.secondChainCharacteristics[i].Value
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-
-    <br/>
     <div>
         Тип выравнивания: @ViewBag.validationType
     </div>
@@ -99,9 +16,94 @@
         Оптимальный сдвиг: @ViewBag.optimalRotation
     </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/slider")
-    @Scripts.Render("~/bundles/highCharts")
-    @Styles.Render("~/Content/slider")
-}}
+    <br />
+
+    @ViewBag.firstSequenceName
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Тип фрагмента
+                </th>
+                <th>
+                    Продукт гена
+                </th>
+                <th>
+                    Позиция гена
+                </th>
+
+                <th>
+                    @ViewBag.characteristicName
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.firstSequenceCharacteristics.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.firstSequencePieceTypes[i]
+                    </td>
+                    <td>
+                        @ViewBag.firstSequenceProducts[i]
+                    </td>
+                    <td>
+                        @ViewBag.firstSequencePositions[i]
+                    </td>
+                    <td>
+                        @ViewBag.firstSequenceCharacteristics[i].Value
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <br />
+
+    @ViewBag.secondSequenceName
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Тип фрагмента
+                </th>
+                <th>
+                    Продукт гена
+                </th>
+                <th>
+                    Позиция гена
+                </th>
+
+                <th>
+                    @ViewBag.characteristicName
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.secondSequenceCharacteristics.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.secondSequencePieceTypes[i]
+                    </td>
+                    <td>
+                        @ViewBag.secondSequenceProducts[i]
+                    </td>
+                    <td>
+                        @ViewBag.secondSequencePositions[i]
+                    </td>
+                    <td>
+                        @ViewBag.secondSequenceCharacteristics[i].Value
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/slider")
+        @Scripts.Render("~/bundles/highCharts")
+        @Styles.Render("~/Content/slider")
+    }
+}

@@ -46,7 +46,7 @@
         private readonly LinkRepository linkRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -120,7 +120,7 @@
         /// The is growing window.
         /// </param>
         /// <param name="isAutocorrelation">
-        /// The is autocorelation.
+        /// The is auto corelation.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -151,7 +151,7 @@
                     linkIds,
                     step);
 
-                var chainNames = new List<string>();
+                var matterNames = new List<string>();
                 var characteristicNames = new List<string>();
                 var partNames = new List<List<string>>();
                 var starts = new List<List<int>>();
@@ -160,29 +160,29 @@
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
-                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     partNames.Add(new List<string>());
                     starts.Add(new List<int>());
                     lengthes.Add(new List<int>());
 
-                    long chainId;
+                    long sequenceId;
                     if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
                     {
-                        chainId =
+                        sequenceId =
                             db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                             && l.NotationId == notationId
                                                             && l.LanguageId == languageId).Id;
                     }
                     else
                     {
-                        chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                        sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                     }
 
-                    Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
+                    Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
                     CutRule cutRule = isGrowingWindow
-                        ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
-                        : new SimpleCutRule(libiadaChain.GetLength(), step, length);
+                        ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
+                        : new SimpleCutRule(chain.GetLength(), step, length);
 
                     CutRuleIterator iter = cutRule.GetIterator();
 
@@ -192,7 +192,7 @@
 
                         for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                         {
-                            tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
+                            tempChain.Set(chain[iter.GetStartPosition() + i], i);
                         }
 
                         partNames.Last().Add(tempChain.ToString());
@@ -239,12 +239,12 @@
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
-                    { "chainNames", chainNames },
+                    { "matterNames", matterNames },
                     { "starts", starts },
                     { "lengthes", lengthes },
                     { "characteristicIds", new List<int>(characteristicIds) },
                     { "characteristicNames", characteristicNames },
-                    { "chainIds", matterIds },
+                    { "matterIds", matterIds },
                     { "characteristicsList", characteristicsList }
                 };
             });
@@ -326,23 +326,23 @@
                 long matterId = matterIds[k];
                 characteristics.Add(new List<List<double>>());
 
-                long chainId;
+                long sequenceId;
                 if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
                 {
-                    chainId = db.LiteratureSequence.Single(l => l.MatterId == matterId && 
+                    sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId && 
                                                               l.NotationId == notationId && 
                                                               l.LanguageId == languageId).Id;
                 }
                 else
                 {
-                    chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                    sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                 }
 
-                Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
+                Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                 
                 CutRule cutRule = isGrowingWindow
-                    ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
-                    : new SimpleCutRule(libiadaChain.GetLength(), step, length);
+                    ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
+                    : new SimpleCutRule(chain.GetLength(), step, length);
 
                 CutRuleIterator iter = cutRule.GetIterator();
 
@@ -354,7 +354,7 @@
 
                     for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
                     {
-                        tempChain.Set(libiadaChain[iter.GetStartPosition() + i], i);
+                        tempChain.Set(chain[iter.GetStartPosition() + i], i);
                     }
 
                     for (int i = 0; i < characteristicIds.Length; i++)

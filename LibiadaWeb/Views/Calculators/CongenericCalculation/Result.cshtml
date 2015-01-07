@@ -14,7 +14,7 @@
         var colors = new Array();
         var theoreticalRanks = new Array();
         var characteristicNames = new Array();
-        var chainNames = new Array();
+        var matterNames = new Array();
 
         $(document).ready(function() {
             colors.push('rgba(223, 83, 83, .5)');
@@ -40,9 +40,9 @@
                     }
                 }
 
-                for (int h = 0; h < ViewBag.chainNames.Count; h++)
+                for (int h = 0; h < ViewBag.matterNames.Count; h++)
                 {
-                    @: chainNames[@h] = "@ViewBag.chainNames[h]";
+                    @: matterNames[@h] = "@ViewBag.matterNames[h]";
                 }
 
                 for (int k = 0; k < ViewBag.characteristics.Count; k++)
@@ -116,7 +116,7 @@
             for (var k = 0; k < characteristics.length; k++) {
                 var series = new Object();
                 series.data = new Array();
-                series.name = chainNames[k];
+                series.name = matterNames[k];
                 for (var i = 0; i < characteristics[k][characteristicId].length; i++) {
                     var x = characteristics[k][characteristicId][i].value;
                     var y;
@@ -146,7 +146,7 @@
                 var series = new Object();
                 series.data = new Array();
                 series.type = 'area';
-                series.name = chainNames[j];
+                series.name = matterNames[j];
                 for (var i = 0; i < characteristics[j][characteristicId].length; i++) {
                     var y = characteristics[j][characteristicId][i].value;
                     var pointName = elementNames[j][i];
@@ -168,7 +168,7 @@
                 var series = new Object();
                 series.data = new Array();
                 series.type = 'area';
-                series.name = "Теоретическое распределение для " + chainNames[j];
+                series.name = "Теоретическое распределение для " + matterNames[j];
                 for (var i = 0; i < theoreticalRanks[j][characteristicId].length; i++) {
                     var y = theoreticalRanks[j][characteristicId][i];
                     var pointName = i + 1;
@@ -249,8 +249,8 @@
 
     for (int d = 0; d < ViewBag.characteristics.Count; d++)
     {
-        @ViewBag.chainNames[d]
-        <table id="resultTable">
+        @ViewBag.matterNames[d]
+        <table class="table" id="resultTable">
             <thead>
             <tr>
                 <th>
@@ -268,7 +268,7 @@
             @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
             {
                 <tr>
-                    <td id="chainNameCell">
+                    <td>
                         @ViewBag.elementNames[d][i]
                     </td>
                     @foreach (var characteristic in ViewBag.characteristics[d])
@@ -293,7 +293,7 @@
     <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() "/>
     <label for="allGraphics">Вывести все графики сразу</label>
     <br/>
-    <input type="checkbox" name="logarithmicScale" id="" value="true" disabled="disabled"/>
+    <input type="checkbox" name="logarithmicScale" id="logarithmicScale" value="true" disabled="disabled" />
     <label for="logarithmicScale">Логарифмический масштаб</label>
     <br/>
     <br/>

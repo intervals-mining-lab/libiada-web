@@ -11,7 +11,7 @@
     <script type='text/javascript'>
         var characteristics = new Array();
         var partNames = new Array();
-        var chainNames = new Array();
+        var matterNames = new Array();
         var points = new Array();
         var slider;
 
@@ -49,16 +49,14 @@
                     }
                 }
 
-                for (int k = 0; k < ViewBag.chainNames.Count; k++)
+                for (int k = 0; k < ViewBag.matterNames.Count; k++)
                 {
-                    @:chainNames.push("@ViewBag.chainNames[k]");
+                    @:matterNames.push("@ViewBag.matterNames[k]");
                 }
-
             }
 
             // make the container smaller and add a second container for the master chart
-            var container = $('#visualization_container')
-                .css('position', 'relative');
+            var container = $('#visualization_container').css('position', 'relative');
 
             var detailContainer = $('<div id="detail-container">')
                 .css({ position: 'absolute', top: 0, height: 600, width: '100%' })
@@ -70,7 +68,6 @@
         function setScale() {
             var min = $("#slider_container").rangeSlider("min");
             var max = $("#slider_container").rangeSlider("max");
-
 
             min = +min;
             max = +max;
@@ -173,7 +170,7 @@
                 var series = new Object();
                 series.data = new Array();
                 series.type = 'area';
-                series.name = chainNames[i];
+                series.name = matterNames[i];
                 for (var j = 0; j < partNames[i].length; j++) {
                     var y = characteristics[i][j][characteristicId];
                     var pointName = partNames[i][j];
@@ -279,72 +276,72 @@
 
     for (int d = 0; d < ViewBag.characteristics.Count; d++)
     {
-        @ViewBag.chainNames[d]
-        <table id="resultTable">
+        @ViewBag.matterNames[d]
+        <table class="table" id="resultTable">
             <thead>
-            <tr>
-                <th>
-                    Тип фрагмента
-                </th>
-                <th>
-                    Продукт гена
-                </th>
-                <th>
-                    Позиция гена
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @characteristicName
-                    </th>
-                }
-            </tr>
-            </thead>
-            <tbody>
-            @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
-            {
                 <tr>
-                    <td>
-                        @ViewBag.chainsPieceTypes[d][i]
-                    </td>
-                    <td id="chainNameCell">
-                        @ViewBag.chainsProduct[d][i]
-                    </td>
-                    <td>
-                        @ViewBag.chainsPosition[d][i]
-                    </td>
-                    @foreach (var characteristic in ViewBag.characteristics[d])
+                    <th>
+                        Тип фрагмента
+                    </th>
+                    <th>
+                        Продукт гена
+                    </th>
+                    <th>
+                        Позиция гена
+                    </th>
+                    @foreach (var characteristicName in ViewBag.characteristicNames)
                     {
-                        <td>
-                            @characteristic[i].Value
-                        </td>
+                        <th>
+                            @characteristicName
+                        </th>
                     }
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.sequencePieceTypes[d][i]
+                        </td>
+                        <td>
+                            @ViewBag.sequenceProducts[d][i]
+                        </td>
+                        <td>
+                            @ViewBag.sequencesPositions[d][i]
+                        </td>
+                        @foreach (var characteristic in ViewBag.characteristics[d])
+                        {
+                            <td>
+                                @characteristic[i].Value
+                            </td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
     }
 
-    <br/>
+    <br />
     <div id="visualization_container" style="width: 800px; height: 520px; margin-bottom: 15px;"></div>
-    <br/>
+    <br />
     <div style="width: 755px; height: 30px; margin-left: 35px; margin-top: 5px;">
         <div id="slider_container">
         </div>
     </div>
-    <br/>
+    <br />
     <div style="width: 800px; height: 300px;">
         <div id="control-form" style="clear: both">
             <label>
                 Левая граница
-                <input type="number" id="leftArrow" name="leftArrow" value="5"/>
+                <input type="number" id="leftArrow" name="leftArrow" value="5" />
             </label>
             <label>
                 Правая граница
-                <input type="number" id="rightArrow" name="rightArrow" value="10"/>
+                <input type="number" id="rightArrow" name="rightArrow" value="10" />
             </label>
-            <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); "/>
-            <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); "/>
+            <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); " />
+            <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); " />
         </div>
         <div id="new-params" style="clear: both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
             <label>Изменить параметры разбиения</label>
@@ -356,10 +353,10 @@
                 Размер окна
                 <input type="number" id="widthOfWindow" name="" value="10">
             </label>
-            <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); "/>
+            <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); " />
         </div>
     </div>
-    <br/>
+    <br />
     @Html.Label("Ось y")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -367,15 +364,16 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
-    <input type="checkbox" name="allGraphics" id="allGraphics" value="true"/>
+    <br />
+    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" />
     <label for="allGraphics">Вывести все графики сразу</label>
-    <br/>
+    <br />
     <button onclick=" DrawChart() ">Отобразить разбиение</button>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/slider")
-    @Scripts.Render("~/bundles/highCharts")
-    @Styles.Render("~/Content/slider")
-}}
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/slider")
+        @Scripts.Render("~/bundles/highCharts")
+        @Styles.Render("~/Content/slider")
+    }
+}

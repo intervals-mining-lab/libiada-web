@@ -22,12 +22,12 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The dna chain repository.
+        /// The dna sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -59,7 +59,7 @@
             ViewBag.data = new Dictionary<string, object>
                 {
                     {
-                        "chains", db.DnaSequence.Where(c => c.WebApiId != null).Select(c => new
+                        "sequences", db.DnaSequence.Where(c => c.WebApiId != null).Select(c => new
                         {
                             Value = c.Id,
                             Text = c.Matter.Name,
@@ -73,8 +73,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <param name="localFile">
         /// The local file.
@@ -89,9 +89,9 @@
         /// Thrown if unknown part is found.
         /// </exception>
         [HttpPost]
-        public ActionResult Index(long chainId, bool localFile)
+        public ActionResult Index(long sequenceId, bool localFile)
         {
-            DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == chainId);
+            DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
             Stream stream;
             if (localFile)
             {
@@ -99,7 +99,7 @@
 
                 if (file == null || file.ContentLength == 0)
                 {
-                    throw new ArgumentNullException("file", "Файл цепочки не задан или пуст");
+                    throw new ArgumentNullException("file", "Sequence file is empty");
                 }
 
                 stream = file.InputStream;
@@ -122,11 +122,11 @@
             var starts = new List<int>();
             var stops = new List<int> { 0 };
 
-            string stringParentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
+            string stringParentChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId).ToString();
 
             var existingGenes = db.Gene.Where(g => g.SequenceId == parentSequence.Id).Select(g => g.Id);
 
-            var existingChainsPositions = db.Piece.Where(p => existingGenes.Contains(p.GeneId)).Select(p => p.Start);
+            var existingSequencesPositions = db.Piece.Where(p => existingGenes.Contains(p.GeneId)).Select(p => p.Start);
             var products = db.Product.ToList();
 
             for (int i = 1; i < genes.Length; i++)
@@ -143,7 +143,7 @@
 
                 int start = starts.Last();
 
-                if (!existingChainsPositions.Contains(start))
+                if (!existingSequencesPositions.Contains(start))
                 {
                     string sequenceType = string.Empty;
                     for (int j = 1; j < temp2.Length; j++)
@@ -282,7 +282,7 @@
             for (int j = 0; j < stops.Count; j++)
             {
                 int stop = stops[j];
-                if (starts[j] > stops[j] && !existingChainsPositions.Contains(stop))
+                if (starts[j] > stops[j] && !existingSequencesPositions.Contains(stop))
                 {
                     var gene = new Gene
                     {

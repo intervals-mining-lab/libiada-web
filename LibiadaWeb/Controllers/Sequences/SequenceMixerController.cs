@@ -9,7 +9,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The chain mixer controller.
+    /// The sequence mixer controller.
     /// </summary>
     public class SequenceMixerController : Controller
     {
@@ -29,17 +29,17 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
-        /// The dna chain repository.
+        /// The dna sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
-        /// The literature chain repository.
+        /// The literature sequence repository.
         /// </summary>
         private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
@@ -107,27 +107,26 @@
             CommonSequence dataBaseSequence;
             if (matter.NatureId == Aliases.Nature.Literature)
             {
-                long chainId =
-                    db.LiteratureSequence.Single(l => l.MatterId == matterId && 
-                                               l.NotationId == notationId && 
-                                               l.LanguageId == languageId).Id;
-                dataBaseSequence = db.CommonSequence.Single(c => c.Id == chainId);
+                long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
+                                                                    && l.NotationId == notationId 
+                                                                    && l.LanguageId == languageId).Id;
+                dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
             }
             else
             {
                 dataBaseSequence = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId);
             }
 
-            BaseChain libiadaChain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
+            BaseChain chain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
             for (int i = 0; i < mixes; i++)
             {
-                int firstIndex = rndGenerator.Next(libiadaChain.GetLength());
-                int secondIndex = rndGenerator.Next(libiadaChain.GetLength());
+                int firstIndex = rndGenerator.Next(chain.GetLength());
+                int secondIndex = rndGenerator.Next(chain.GetLength());
 
-                IBaseObject firstElement = libiadaChain[firstIndex];
-                IBaseObject secondElement = libiadaChain[secondIndex];
-                libiadaChain[firstIndex] = secondElement;
-                libiadaChain[secondIndex] = firstElement;
+                IBaseObject firstElement = chain[firstIndex];
+                IBaseObject secondElement = chain[secondIndex];
+                chain[firstIndex] = secondElement;
+                chain[secondIndex] = firstElement;
             }
 
             var resultMatter = new Matter
@@ -137,7 +136,7 @@
                 };
             db.Matter.Add(resultMatter);
 
-            var resultChain = new CommonSequence
+            var resultsequence = new CommonSequence
                 {
                     NotationId = notationId,
                     PieceTypeId = dataBaseSequence.PieceTypeId,
@@ -145,10 +144,7 @@
                     MatterId = resultMatter.Id
                 };
 
-            long[] alphabet = elementRepository.ToDbElements(
-                        libiadaChain.Alphabet,
-                        dataBaseSequence.NotationId,
-                        false);
+            long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, dataBaseSequence.NotationId, false);
 
             switch (matter.NatureId)
             {
@@ -156,14 +152,14 @@
                     DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
 
                     dnaSequenceRepository.Insert(
-                        resultChain,
+                        resultsequence,
                         dnaSequence.FastaHeader,
                         null,
                         dnaSequence.ProductId,
                         dnaSequence.Complement,
                         dnaSequence.Partial,
                         alphabet,
-                        libiadaChain.Building);
+                        chain.Building);
                     break;
                 case Aliases.Nature.Music:
                     break;
@@ -172,12 +168,12 @@
                     LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
 
                     literatureSequenceRepository.Insert(
-                        resultChain,
+                        resultsequence,
                         literatureSequence.Original,
                         literatureSequence.LanguageId,
                         literatureSequence.TranslatorId,
                         alphabet,
-                        libiadaChain.Building);
+                        chain.Building);
                     break;
             }
 

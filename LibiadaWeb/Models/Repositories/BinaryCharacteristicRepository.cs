@@ -26,8 +26,8 @@ namespace LibiadaWeb.Models.Repositories
         /// <summary>
         /// The create binary characteristic.
         /// </summary>
-        /// <param name="chainId">
-        /// The chain id.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <param name="characteristicId">
         /// The characteristic id.
@@ -47,11 +47,11 @@ namespace LibiadaWeb.Models.Repositories
         /// <returns>
         /// The <see cref="long"/>.
         /// </returns>
-        public long CreateBinaryCharacteristic(long chainId, int characteristicId, int linkId, long firstElementId, long secondElementId, double value)
+        public long CreateBinaryCharacteristic(long sequenceId, int characteristicId, int linkId, long firstElementId, long secondElementId, double value)
         {
             var characteristic = new BinaryCharacteristic
             {
-                SequenceId = chainId, 
+                SequenceId = sequenceId, 
                 CharacteristicTypeId = characteristicId, 
                 LinkId = linkId, 
                 FirstElementId = firstElementId, 

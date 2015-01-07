@@ -40,7 +40,7 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -137,17 +137,17 @@
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
                 var theoreticalRanks = new List<List<List<double>>>();
-                var chainNames = new List<string>();
+                var matterNames = new List<string>();
                 var elementNames = new List<List<string>>();
                 var characteristicNames = new List<string>();
 
-                bool isLiteratureChain = false;
+                bool isLiteratureSequence = false;
 
                 // Перебор всех цепочек; первый уровень массива характеристик
                 for (int w = 0; w < matterIds.Length; w++)
                 {
                     long matterId = matterIds[w];
-                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     elementNames.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
                     theoreticalRanks.Add(new List<List<double>>());
@@ -157,28 +157,27 @@
                     {
                         int notationId = notationIds[i];
 
-                        long chainId;
+                        long sequenceId;
 
                         if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];
 
-                            isLiteratureChain = true;
-                            chainId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                      l.NotationId == notationId
+                            isLiteratureSequence = true;
+                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
+                                                                      && l.NotationId == notationId
                                                                       && l.LanguageId == languageId
-                                                                      &&
-                                                                      ((translatorId == null && l.TranslatorId == null) ||
-                                                                       (translatorId == l.TranslatorId))).Id;
+                                                                      && ((translatorId == null && l.TranslatorId == null) 
+                                                                      || (translatorId == l.TranslatorId))).Id;
                         }
                         else
                         {
-                            chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                         }
 
-                        Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
-                        libiadaChain.FillIntervalManagers();
+                        Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                        chain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
@@ -186,29 +185,28 @@
                         string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
                         var link = (Link)(linkId ?? 0);
-                        List<long> chainElements = commonSequenceRepository.GetElementIds(chainId);
-                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == chainId &&
-                                                                                 c.CharacteristicTypeId ==
-                                                                                 characteristicId &&
-                                                                                 ((linkId == null && c.LinkId == null) ||
-                                                                                  (linkId == c.LinkId)));
-                        if (calculated < libiadaChain.Alphabet.Cardinality)
+                        List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequenceId);
+                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId 
+                                                                                && c.CharacteristicTypeId == characteristicId 
+                                                                                && ((linkId == null && c.LinkId == null) 
+                                                                                || (linkId == c.LinkId)));
+                        if (calculated < chain.Alphabet.Cardinality)
                         {
-                            for (int j = 0; j < libiadaChain.Alphabet.Cardinality; j++)
+                            for (int j = 0; j < chain.Alphabet.Cardinality; j++)
                             {
-                                long elementId = chainElements[j];
+                                long elementId = sequenceElements[j];
 
-                                CongenericChain tempChain = libiadaChain.CongenericChain(j);
+                                CongenericChain tempChain = chain.CongenericChain(j);
 
                                 if (!db.CongenericCharacteristic.Any(b =>
-                                    b.SequenceId == chainId &&
+                                    b.SequenceId == sequenceId &&
                                     b.CharacteristicTypeId == characteristicId &&
                                     b.ElementId == elementId && b.LinkId == linkId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
                                     var currentCharacteristic = new CongenericCharacteristic
                                     {
-                                        SequenceId = chainId,
+                                        SequenceId = sequenceId,
                                         CharacteristicTypeId = characteristicId,
                                         LinkId = linkId,
                                         ElementId = elementId,
@@ -223,12 +221,12 @@
                         }
 
                         // Перебор всех элементов алфавита; третий уровень массива характеристик
-                        for (int d = 0; d < libiadaChain.Alphabet.Cardinality; d++)
+                        for (int d = 0; d < chain.Alphabet.Cardinality; d++)
                         {
-                            long elementId = chainElements[d];
+                            long elementId = sequenceElements[d];
 
                             double? characteristic = db.CongenericCharacteristic.Single(c =>
-                                c.SequenceId == chainId &&
+                                c.SequenceId == sequenceId &&
                                 c.CharacteristicTypeId == characteristicId &&
                                 c.ElementId == elementId &&
                                 ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
@@ -237,7 +235,7 @@
 
                             if (i == 0)
                             {
-                                elementNames.Last().Add(libiadaChain.Alphabet[d].ToString());
+                                elementNames.Last().Add(chain.Alphabet[d].ToString());
                             }
                         }
 
@@ -248,24 +246,24 @@
                             ICongenericCalculator countCalculator =
                                 CalculatorsFactory.CreateCongenericCalculator("Count");
                             var counts = new List<int>();
-                            for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
+                            for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
-                                counts.Add((int)countCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
+                                counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.End));
                             }
 
                             ICongenericCalculator frequencyCalculator =
                                 CalculatorsFactory.CreateCongenericCalculator("Probability");
                             var frequency = new List<double>();
-                            for (int f = 0; f < libiadaChain.Alphabet.Cardinality; f++)
+                            for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
-                                frequency.Add(frequencyCalculator.Calculate(libiadaChain.CongenericChain(f), Link.End));
+                                frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.End));
                             }
 
                             double maxFrequency = frequency.Max();
                             double k = 1 / Math.Log(counts.Max());
                             double b = (k / maxFrequency) - 1;
                             int n = 1;
-                            double plow = libiadaChain.GetLength();
+                            double plow = chain.GetLength();
                             double p = k / (b + n);
                             while (p >= (1 / plow))
                             {
@@ -283,7 +281,7 @@
                     int characteristicId = characteristicIds[k];
 
                     string characteristicType = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
-                    if (isLiteratureChain)
+                    if (isLiteratureSequence)
                     {
                         int languageId = languageIds[k];
                         string language = db.Language.Single(l => l.Id == languageId).Name;
@@ -321,7 +319,7 @@
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
-                    { "chainNames", chainNames },
+                    { "matterNames", matterNames },
                     { "elementNames", elementNames },
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },

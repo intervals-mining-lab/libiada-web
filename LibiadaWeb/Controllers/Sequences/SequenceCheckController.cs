@@ -10,7 +10,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The chain check controller.
+    /// The sequence check controller.
     /// </summary>
     public class SequenceCheckController : AbstractResultController
     {
@@ -20,7 +20,7 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -79,22 +79,22 @@
                 fileStream.Read(input, 0, fileLen);
 
                 // Copy the byte array into a string.
-                string stringChain = Encoding.ASCII.GetString(input);
-                string[] tempString = stringChain.Split('\n', '\r');
+                string stringSequence = Encoding.ASCII.GetString(input);
+                string[] tempString = stringSequence.Split('\n', '\r');
 
-                var chainStringBuilder = new StringBuilder();
+                var sequenceStringBuilder = new StringBuilder();
                 string fastaHeader = tempString[0];
 
                 for (int j = 1; j < tempString.Length; j++)
                 {
-                    chainStringBuilder.Append(tempString[j]);
+                    sequenceStringBuilder.Append(tempString[j]);
                 }
 
-                string resultStringChain = DataTransformers.CleanFastaFile(chainStringBuilder.ToString());
+                string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
 
-                var libiadaChain = new BaseChain(resultStringChain);
+                var chain = new BaseChain(resultStringSequence);
 
-                long chainId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
+                long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
 
                 string message;
 
@@ -105,45 +105,45 @@
                     return new Dictionary<string, object> { { "message", message } };
                 }
 
-                BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
+                BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 
-                if (dataBaseChain.Equals(libiadaChain))
+                if (dataBaseChain.Equals(chain))
                 {
                     message = "Цепочки в БД и в файле идентичны";
                 }
                 else
                 {
-                    if (libiadaChain.Alphabet.Cardinality != dataBaseChain.Alphabet.Cardinality)
+                    if (chain.Alphabet.Cardinality != dataBaseChain.Alphabet.Cardinality)
                     {
                         message = "Размеры алфавитов не совпадают. В базе - " + dataBaseChain.Alphabet.Cardinality +
-                                  ". В файле - " + libiadaChain.Alphabet.Cardinality;
+                                  ". В файле - " + chain.Alphabet.Cardinality;
 
                         return new Dictionary<string, object> { { "message", message } };
                     }
 
-                    for (int i = 0; i < libiadaChain.Alphabet.Cardinality; i++)
+                    for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                     {
-                        if (!libiadaChain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
+                        if (!chain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
                         {
                             message = i + "Элементы алфавитов не равны. В базе - " + dataBaseChain.Alphabet[i] +
-                                      ". В файле - " + libiadaChain.Alphabet[i];
+                                      ". В файле - " + chain.Alphabet[i];
 
                             return new Dictionary<string, object> { { "message", message } };
                         }
                     }
 
-                    if (libiadaChain.GetLength() != dataBaseChain.GetLength())
+                    if (chain.GetLength() != dataBaseChain.GetLength())
                     {
                         message = "Длина цепочки в базе " + dataBaseChain.GetLength() + ", а длина цепочки из файла " +
-                                  libiadaChain.GetLength();
+                                  chain.GetLength();
 
                         return new Dictionary<string, object> { { "message", message } };
                     }
 
-                    int[] libiadaBuilding = libiadaChain.Building;
+                    int[] libiadaBuilding = chain.Building;
                     int[] dataBaseBuilding = dataBaseChain.Building;
 
-                    for (int j = 0; j < libiadaChain.GetLength(); j++)
+                    for (int j = 0; j < chain.GetLength(); j++)
                     {
                         if (libiadaBuilding[j] != dataBaseBuilding[j])
                         {

@@ -10,7 +10,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using NpgsqlTypes;
 
     /// <summary>
-    /// The dna chain repository.
+    /// The dna sequence repository.
     /// </summary>
     public class DnaSequenceRepository : CommonSequenceImporter, IDnaSequenceRepository
     {
@@ -28,7 +28,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The insert.
         /// </summary>
         /// <param name="commonSequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="fastaHeader">
         /// The fasta header.
@@ -131,7 +131,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The insert.
         /// </summary>
         /// <param name="sequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="alphabet">
         /// The alphabet.
@@ -145,7 +145,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to chain.
+        /// The to sequence.
         /// </summary>
         /// <param name="source">
         /// The source.
@@ -169,10 +169,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The get select list items.
         /// </summary>
         /// <param name="sequences">
-        /// The chains.
+        /// The sequences.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Object}"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<DnaSequence> sequences)
         {
@@ -183,10 +183,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The get select list items.
         /// </summary>
         /// <param name="allSequences">
-        /// The all chains.
+        /// The all sequences.
         /// </param>
         /// <param name="selectedSequences">
-        /// The selected chain.
+        /// The selected sequence.
         /// </param>
         /// <returns>
         /// The <see cref="List{Object}"/>.
@@ -195,7 +195,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             IEnumerable<DnaSequence> allSequences,
             IEnumerable<DnaSequence> selectedSequences)
         {
-            HashSet<long> chainIds = selectedSequences != null
+            HashSet<long> sequenceIds = selectedSequences != null
                 ? new HashSet<long>(selectedSequences.Select(c => c.Id))
                 : new HashSet<long>();
             if (allSequences == null)
@@ -203,18 +203,18 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 allSequences = db.DnaSequence.Include("matter");
             }
 
-            var chainsList = new List<SelectListItem>();
+            var sequencesList = new List<SelectListItem>();
             foreach (var sequence in allSequences)
             {
-                chainsList.Add(new SelectListItem
+                sequencesList.Add(new SelectListItem
                 {
                     Value = sequence.Id.ToString(), 
                     Text = sequence.Matter.Name, 
-                    Selected = chainIds.Contains(sequence.Id)
+                    Selected = sequenceIds.Contains(sequence.Id)
                 });
             }
 
-            return chainsList;
+            return sequencesList;
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The <see cref="ValueString"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// Thrown if any element in chain is not recognized as nucleotide.
+        /// Thrown if any element in sequence is not recognized as nucleotide.
         /// </exception>
         public ValueString GetComplementElement(IBaseObject source)
         {

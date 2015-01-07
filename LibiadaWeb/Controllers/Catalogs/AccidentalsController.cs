@@ -1,21 +1,40 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Net;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Catalogs
+﻿namespace LibiadaWeb.Controllers.Catalogs
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Net;
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// The accidentals controller.
+    /// </summary>
     public class AccidentalsController : Controller
     {
-        private LibiadaWebEntities db = new LibiadaWebEntities();
+        /// <summary>
+        /// The db.
+        /// </summary>
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
-        // GET: Accidentals
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             return View(db.Accidental.ToList());
         }
 
-        // GET: Accidentals/Details/5
+        /// <summary>
+        /// The details.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -30,15 +49,26 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(accidental);
         }
 
-        // GET: Accidentals/Create
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Accidentals/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <param name="accidental">
+        /// The accidental.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Name,Description")] Accidental accidental)
@@ -53,7 +83,15 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(accidental);
         }
 
-        // GET: Accidentals/Edit/5
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -68,9 +106,15 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(accidental);
         }
 
-        // POST: Accidentals/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// The edit.
+        /// </summary>
+        /// <param name="accidental">
+        /// The accidental.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,Name,Description")] Accidental accidental)
@@ -84,7 +128,15 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(accidental);
         }
 
-        // GET: Accidentals/Delete/5
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -99,7 +151,15 @@ namespace LibiadaWeb.Controllers.Catalogs
             return View(accidental);
         }
 
-        // POST: Accidentals/Delete/5
+        /// <summary>
+        /// The delete confirmed.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -110,6 +170,12 @@ namespace LibiadaWeb.Controllers.Catalogs
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        /// <param name="disposing">
+        /// The disposing.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

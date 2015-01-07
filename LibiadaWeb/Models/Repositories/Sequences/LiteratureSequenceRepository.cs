@@ -7,7 +7,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using NpgsqlTypes;
 
     /// <summary>
-    /// The literature chain repository.
+    /// The literature sequence repository.
     /// </summary>
     public class LiteratureSequenceRepository : CommonSequenceImporter, ILiteratureSequenceRepository
     {
@@ -25,7 +25,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The insert.
         /// </summary>
         /// <param name="commonSequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="original">
         /// The original.
@@ -97,7 +97,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to chain.
+        /// The to sequence.
         /// </summary>
         /// <param name="source">
         /// The source.
@@ -121,29 +121,29 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The get select list items.
         /// </summary>
         /// <param name="sequences">
-        /// The chains.
+        /// The sequences.
         /// </param>
         /// <returns>
         /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<LiteratureSequence> sequences)
         {
-            HashSet<long> chainIds = sequences != null
+            HashSet<long> sequenceIds = sequences != null
                                          ? new HashSet<long>(sequences.Select(c => c.Id))
                                          : new HashSet<long>();
             var allSequences = db.LiteratureSequence.Include("matter");
-            var chainsList = new List<SelectListItem>();
+            var sequencesList = new List<SelectListItem>();
             foreach (var sequence in allSequences)
             {
-                chainsList.Add(new SelectListItem
+                sequencesList.Add(new SelectListItem
                     {
                         Value = sequence.Id.ToString(), 
                         Text = sequence.Matter.Name, 
-                        Selected = chainIds.Contains(sequence.Id)
+                        Selected = sequenceIds.Contains(sequence.Id)
                     });
             }
 
-            return chainsList;
+            return sequencesList;
         }
 
         /// <summary>

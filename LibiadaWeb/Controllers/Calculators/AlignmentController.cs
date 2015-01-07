@@ -58,7 +58,6 @@
             commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
-        // GET: Alignment
         /// <summary>
         /// The index.
         /// </summary>
@@ -102,10 +101,10 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="matterId1">
+        /// <param name="firstMatterId">
         /// The matter id 1.
         /// </param>
-        /// <param name="matterId2">
+        /// <param name="secondMatterId">
         /// The matter id 2.
         /// </param>
         /// <param name="characteristicId">
@@ -131,8 +130,8 @@
         /// </exception>
         [HttpPost]
         public ActionResult Index(
-            long matterId1,
-            long matterId2,
+            long firstMatterId,
+            long secondMatterId,
             int characteristicId,
             int? linkId,
             int notationId,
@@ -142,19 +141,19 @@
             return Action(() =>
             {
                 var firstSequenceCharacteristics = new List<KeyValuePair<int, double>>();
-                var firstSequenceName = db.Matter.Single(m => m.Id == matterId1).Name;
+                var firstSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
                 var firstSequenceProducts = new List<string>();
                 var firstSequencePositions = new List<long>();
                 var firstSequencePieceTypes = new List<string>();
 
                 var secondSequenceCharacteristics = new List<KeyValuePair<int, double>>();
-                var secondSequenceName = db.Matter.Single(m => m.Id == matterId1).Name;
+                var secondSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
                 var secondSequenceProducts = new List<string>();
                 var secondSequencePositions = new List<long>();
                 var secondSequencePieceTypes = new List<string>();
 
-                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstSequenceCharacteristics, firstSequenceProducts, firstSequencePositions, firstSequencePieceTypes);
-                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondSequenceCharacteristics, secondSequenceProducts, secondSequencePositions, secondSequencePieceTypes);
+                CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds, firstSequenceCharacteristics, firstSequenceProducts, firstSequencePositions, firstSequencePieceTypes);
+                CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds, secondSequenceCharacteristics, secondSequenceProducts, secondSequencePositions, secondSequencePieceTypes);
 
                 int optimalRotation = 0;
 
@@ -197,19 +196,19 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "firstChainCharacteristics", firstSequenceCharacteristics },
-                    { "firstChainName", firstSequenceName },
-                    { "firstChainProducts", firstSequenceProducts },
-                    { "firstChainPositions", firstSequencePositions },
-                    { "firstChainPieceTypes", firstSequencePieceTypes },
-                    { "secondChainCharacteristics", secondSequenceCharacteristics },
-                    { "secondChainName", secondSequenceName },
-                    { "secondChainProducts", secondSequenceProducts },
-                    { "secondChainPositions", secondSequencePositions },
-                    { "secondChainPieceTypes", secondSequencePieceTypes },
+                    { "firstSequenceCharacteristics", firstSequenceCharacteristics },
+                    { "firstSequenceName", firstSequenceName },
+                    { "firstSequenceProducts", firstSequenceProducts },
+                    { "firstSequencePositions", firstSequencePositions },
+                    { "firstSequencePieceTypes", firstSequencePieceTypes },
+                    { "secondSequenceCharacteristics", secondSequenceCharacteristics },
+                    { "secondSequenceName", secondSequenceName },
+                    { "secondSequenceProducts", secondSequenceProducts },
+                    { "secondSequencePositions", secondSequencePositions },
+                    { "secondSequencePieceTypes", secondSequencePieceTypes },
                     { "characteristicName", characteristicName },
-                    { "matterId1", matterId1 },
-                    { "matterId2", matterId2 },
+                    { "firstMatterId", firstMatterId },
+                    { "secondMatterId", secondMatterId },
                     { "optimalRotation", optimalRotation },
                     { "validationType", validationType }
                 };
@@ -237,14 +236,14 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        /// <param name="chainProducts">
-        /// The chain products.
+        /// <param name="sequenceProducts">
+        /// The sequence products.
         /// </param>
-        /// <param name="chainPositions">
-        /// The chain positions.
+        /// <param name="sequencePositions">
+        /// The sequence positions.
         /// </param>
-        /// <param name="chainPieceTypes">
-        /// The chain piece types.
+        /// <param name="sequencePieceTypes">
+        /// The sequence piece types.
         /// </param>
         private void CalculateCharacteristic(
             long matterId,
@@ -253,24 +252,24 @@
             int notationId,
             int[] pieceTypeIds,
             List<KeyValuePair<int, double>> characteristics,
-            List<string> chainProducts,
-            List<long> chainPositions,
-            List<string> chainPieceTypes)
+            List<string> sequenceProducts,
+            List<long> sequencePositions,
+            List<string> sequencePieceTypes)
         {
-            var chainId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
             var genes =
-                db.Gene.Where(g => g.SequenceId == chainId && pieceTypeIds.Contains(g.PieceTypeId)).Include("piece").ToArray();
+                db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include("piece").ToArray();
 
             var pieces = genes.Select(g => g.Piece.First()).ToList();
 
-            var chains = ExtractChains(pieces, chainId);
+            var sequences = ExtractChains(pieces, sequenceId);
 
             string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
             var link = (Link)(linkId ?? 0);
 
-            for (int j = 0; j < chains.Count; j++)
+            for (int j = 0; j < sequences.Count; j++)
             {
                 long geneId = genes[j].Id;
 
@@ -278,7 +277,7 @@
                                                 c.CharacteristicTypeId == characteristicId &&
                                                 ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))))
                 {
-                    double value = calculator.Calculate(chains[j], link);
+                    double value = calculator.Calculate(sequences[j], link);
                     var currentCharacteristic = new Characteristic
                     {
                         SequenceId = geneId,
@@ -293,7 +292,7 @@
                 }
             }
 
-            for (int d = 0; d < chains.Count; d++)
+            for (int d = 0; d < sequences.Count; d++)
             {
                 long geneId = genes[d].Id;
                 double? characteristic = db.Characteristic.Single(c =>
@@ -306,10 +305,10 @@
                 var productId = genes[d].ProductId;
                 var pieceTypeId = genes[d].PieceTypeId;
 
-                chainProducts.Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
-                chainPositions.Add(pieces[d].Start);
+                sequenceProducts.Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
+                sequencePositions.Add(pieces[d].Start);
 
-                chainPieceTypes.Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
+                sequencePieceTypes.Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
             }
         }
 
@@ -320,7 +319,7 @@
         /// The pieces.
         /// </param>
         /// <param name="chainId">
-        /// The chain id.
+        /// The sequence id.
         /// </param>
         /// <returns>
         /// The <see cref="List{Chain}"/>.

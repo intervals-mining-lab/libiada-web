@@ -25,7 +25,7 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository sequenceRepository;
 
@@ -75,36 +75,36 @@
         {
             return Action(() =>
             {
-                string chainName1 = db.Matter.Single(m => m.Id == firstMatterId).Name;
-                string chainName2 = db.Matter.Single(m => m.Id == secondMatterId).Name;
-                Matter matter1 = db.Matter.Single(m => m.Id == firstMatterId);
-                long chainId1 = matter1.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
-                Chain libiadaChain1 = sequenceRepository.ToLibiadaChain(chainId1);
-                Matter matter2 = db.Matter.Single(m => m.Id == secondMatterId);
-                long chainId2 = matter2.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
-                Chain libiadaChain2 = sequenceRepository.ToLibiadaChain(chainId2);
+                string firstSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
+                string secondSequenceName = db.Matter.Single(m => m.Id == secondMatterId).Name;
+                Matter firstMatter = db.Matter.Single(m => m.Id == firstMatterId);
+                long firstSequenceId = firstMatter.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
+                Chain firstLibiadaChain = sequenceRepository.ToLibiadaChain(firstSequenceId);
+                Matter secondMatter = db.Matter.Single(m => m.Id == secondMatterId);
+                long secondSequencesId = secondMatter.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
+                Chain secondLibiadaChain = sequenceRepository.ToLibiadaChain(secondSequencesId);
 
                 BaseChain res1 = null;
                 BaseChain res2 = null;
 
                 int i = 0;
                 int j = 0;
-                var iter1 = new IteratorStart(libiadaChain1, length, 1);
+                var iter1 = new IteratorStart(firstLibiadaChain, length, 1);
                 bool duplicate = false;
                 while (!duplicate && iter1.Next())
                 {
                     i++;
-                    var tempChain1 = (BaseChain)iter1.Current();
-                    var iter2 = new IteratorStart(libiadaChain2, length, 1);
+                    var firstTempChain = (BaseChain)iter1.Current();
+                    var iter2 = new IteratorStart(secondLibiadaChain, length, 1);
                     j = 0;
                     while (!duplicate && iter2.Next())
                     {
                         j++;
-                        var tempChain2 = (BaseChain)iter2.Current();
+                        var secondTempChain = (BaseChain)iter2.Current();
 
                         if (congeneric)
                         {
-                            for (int a = 0; a < tempChain1.Alphabet.Cardinality; a++)
+                            for (int a = 0; a < firstTempChain.Alphabet.Cardinality; a++)
                             {
                                 /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
                               for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
@@ -122,11 +122,11 @@
                         }
                         else
                         {
-                            if (!tempChain1.Equals(tempChain2) &&
-                                CompareBuildings(tempChain2.Building, tempChain1.Building))
+                            if (!firstTempChain.Equals(secondTempChain) &&
+                                CompareBuildings(secondTempChain.Building, firstTempChain.Building))
                             {
-                                res1 = tempChain1;
-                                res2 = tempChain2;
+                                res1 = firstTempChain;
+                                res2 = secondTempChain;
                                 duplicate = true;
                             }
                         }
@@ -136,8 +136,8 @@
                 return new Dictionary<string, object>
                 {
                     { "duplicate", duplicate },
-                    { "chainName1", chainName1 },
-                    { "chainName2", chainName2 },
+                    { "firstSequenceName", firstSequenceName },
+                    { "secondSequenceName", secondSequenceName },
                     { "res1", res1 },
                     { "res2", res2 },
                     { "pos1", i },

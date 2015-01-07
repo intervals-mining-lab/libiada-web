@@ -39,7 +39,7 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
@@ -213,7 +213,7 @@
                 return new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
-                                         { "chainNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name) }, 
+                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name) }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "characteristicIds", characteristicIds }, 
                                          { "matterIds", matterIds },

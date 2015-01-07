@@ -4,14 +4,14 @@
     ViewBag.Title = "Локальные характеристики";
 }
 
-<h2>Локальные характеристики цепочки @ViewBag.chainName</h2>
+<h2>Локальные характеристики цепочки</h2>
 
 @if (ViewBag.Error == null)
 {
     <script type='text/javascript'>
         var characteristics = new Array();
         var partNames = new Array();
-        var chainNames = new Array();
+        var matterNames = new Array();
         var points = new Array();
         var slider;
 
@@ -49,9 +49,9 @@
                     }
                 }
 
-                for (int k = 0; k < ViewBag.chainNames.Count; k++)
+                for (int k = 0; k < ViewBag.matterNames.Count; k++)
                 {
-                    @:chainNames.push("@ViewBag.chainNames[k]");
+                    @:matterNames.push("@ViewBag.matterNames[k]");
                 }
 
             }
@@ -173,7 +173,7 @@
                 var series = new Object();
                 series.data = new Array();
                 series.type = 'area';
-                series.name = chainNames[i];
+                series.name = matterNames[i];
                 for (var j = 0; j < partNames[i].length; j++) {
                     var y = characteristics[i][j][characteristicId];
                     var pointName = partNames[i][j];
@@ -277,10 +277,10 @@
 
     </script>
 
-    for (int k = 0; k < ViewBag.chainNames.Count; k++)
+    for (int k = 0; k < ViewBag.matterNames.Count; k++)
     {
-        <div>@ViewBag.chainNames[k]</div>
-        <table>
+        <div>@ViewBag.matterNames[k]</div>
+        <table class="table">
             <thead>
             <tr>
                 <th>
@@ -301,10 +301,10 @@
             @for (int i = 0; i < ViewBag.characteristics[k].Count; i++)
             {
                 <tr>
-                    <td id="chainNameCell">
+                    <td>
                         @ViewBag.starts[k][i]
                     </td>
-                    <td id="chainNameCell">
+                    <td>
                         @ViewBag.lengthes[k][i]
                     </td>
                     @foreach (var characteristic in ViewBag.characteristics[k][i])

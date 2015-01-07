@@ -6,8 +6,7 @@
 <script>
     var app = angular.module('GenesImport', []);
 
-    app.controller('GenesImportCtrl', [
-        '$scope', function($scope) {
+    app.controller('GenesImportCtrl', ['$scope', function($scope) {
 
             var data = @Html.Raw(Json.Encode(ViewBag.data));
 
@@ -42,8 +41,8 @@
         <div class="form-group">
             @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="chainId" data-ng-options="m.Value as m.Text for m in chains"></select>
-                <input type="hidden" name="chainId" value="{{chainId}}"/>
+                <select data-ng-model="sequenceId" data-ng-options="m.Value as m.Text for m in sequences"></select>
+                <input type="hidden" name="sequenceId" value="{{sequenceId}}" />
             </div>
         </div>
         <div class="form-group">

@@ -54,7 +54,7 @@
         }
 
         /// <summary>
-        /// The chains table.
+        /// The sequences table.
         /// </summary>
         /// <param name="helper">
         /// The helper.
@@ -63,7 +63,7 @@
         /// The list info.
         /// </param>
         /// <param name="commonSequences">
-        /// The chains.
+        /// The sequences.
         /// </param>
         /// <param name="languages">
         /// The languages.
@@ -77,7 +77,7 @@
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
-        public static MvcHtmlString ChainsTable(
+        public static MvcHtmlString SequencesTable(
             this HtmlHelper helper,
             IEnumerable<SelectListItem> listInfo,
             List<CommonSequence> commonSequences,

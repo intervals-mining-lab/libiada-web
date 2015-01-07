@@ -6,7 +6,7 @@
     using NpgsqlTypes;
 
     /// <summary>
-    /// The chain importer.
+    /// The sequence importer.
     /// </summary>
     public abstract class CommonSequenceImporter
     {
@@ -30,7 +30,7 @@
         /// The fill params.
         /// </summary>
         /// <param name="commonSequence">
-        /// The chain.
+        /// The sequence.
         /// </param>
         /// <param name="alphabet">
         /// The alphabet.
@@ -39,7 +39,7 @@
         /// The building.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Object}"/>.
         /// </returns>
         protected List<object> FillParams(CommonSequence commonSequence, long[] alphabet, int[] building)
         {

@@ -6,7 +6,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The chain elements controller.
+    /// The sequence elements controller.
     /// </summary>
     public class SequenceElementsController : ApiController
     {
@@ -21,7 +21,7 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository sequenceRepository;
 

@@ -61,14 +61,14 @@
         /// <param name="linkIds">
         /// The link ids.
         /// </param>
-        /// <param name="chain">
-        /// The chain.
+        /// <param name="sequence">
+        /// The sequence.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int[] characteristicIds, int[] linkIds, string chain)
+        public ActionResult Index(int[] characteristicIds, int[] linkIds, string sequence)
         {
             return Action(() =>
             {
@@ -80,14 +80,13 @@
                     var characteristicId = characteristicIds[i];
                     var linkId = linkIds[i];
 
-                    var tempChain = new Chain(chain);
+                    var chain = new Chain(sequence);
 
-                    characteristicNames.Add(
-                        db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name);
+                    characteristicNames.Add(db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name);
                     var className = db.CharacteristicType.Single(charact => charact.Id == characteristicId).ClassName;
                     var calculator = CalculatorsFactory.CreateFullCalculator(className);
 
-                    characteristics.Add(calculator.Calculate(tempChain, (Link)linkId));
+                    characteristics.Add(calculator.Calculate(chain, (Link)linkId));
                 }
 
                 var characteristicsList = new List<SelectListItem>();

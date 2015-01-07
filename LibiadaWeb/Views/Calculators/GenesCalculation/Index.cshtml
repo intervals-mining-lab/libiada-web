@@ -10,10 +10,9 @@
 <script type="text/javascript">
     "use strict";
 
-    var app = angular.module('GenesCalculation', []);
+    var app = angular.module("GenesCalculation", []);
 
-    app.controller('GenesCalculationCtrl', [
-        '$scope', function($scope) {
+    app.controller("GenesCalculationCtrl", ["$scope", function($scope) {
 
             var data = @Html.Raw(Json.Encode(ViewBag.data));
 
@@ -50,7 +49,7 @@
             <span data-ng-bind="pieceTypeCheckBox.Text"></span>
         </div>
 
-        <table>
+        <table class="table">
             <thead>
             <tr>
                 <th>Название</th>
@@ -70,7 +69,7 @@
             </tbody>
         </table>
         <br/>
-        @Html.CheckBox("isSort", "Ранжировать", null)
+        @Html.CheckBox("isSort", "Sort results", null)
         <br/>
         <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
         <br/>
