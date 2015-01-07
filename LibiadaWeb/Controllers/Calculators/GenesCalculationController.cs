@@ -38,7 +38,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The piece type repository.
@@ -53,7 +53,7 @@
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
         }
 
@@ -279,7 +279,7 @@
         /// The chain id.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Chain}"/>.
         /// </returns>
         private List<Chain> ExtractChains(List<Piece> pieces, long chainId)
         {
@@ -287,7 +287,7 @@
 
             var stops = pieces.Select(p => p.Start + p.Length).ToList();
 
-            BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
+            BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
 
             var iterator = new DefaultCutRule(starts, stops);
 

@@ -39,12 +39,12 @@
         /// <summary>
         /// The dna sequence repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The literature sequence repository.
         /// </summary>
-        private readonly LiteratureSequenceRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
         /// <summary>
         /// The matter repository.
@@ -74,8 +74,8 @@
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
-            dnaChainRepository = new DnaSequenceRepository(db);
-            literatureChainRepository = new LiteratureSequenceRepository(db);
+            dnaSequenceRepository = new DnaSequenceRepository(db);
+            literatureSequenceRepository = new LiteratureSequenceRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -262,7 +262,7 @@
                                 libiadaChain.Alphabet,
                                 sequence.NotationId,
                                 false);
-                            dnaChainRepository.Insert(
+                            dnaSequenceRepository.Insert(
                                 sequence,
                                 fastaHeader,
                                 webApiId,
@@ -296,7 +296,7 @@
                                 sequence.NotationId,
                                 true);
 
-                            literatureChainRepository.Insert(
+                            literatureSequenceRepository.Insert(
                                 sequence,
                                 original,
                                 languageId,

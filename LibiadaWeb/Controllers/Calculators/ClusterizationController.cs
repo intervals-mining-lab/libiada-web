@@ -35,7 +35,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The characteristic repository.
@@ -59,7 +59,7 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             linkRepository = new LinkRepository(db);
             notationRepository = new NotationRepository(db);
@@ -171,7 +171,7 @@
                         }
                         else
                         {
-                            Chain tempChain = chainRepository.ToLibiadaChain(chainId);
+                            Chain tempChain = commonSequenceRepository.ToLibiadaChain(chainId);
 
                             string className =
                                 db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;

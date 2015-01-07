@@ -24,12 +24,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The db.
@@ -43,8 +43,8 @@
         {
             db = new LibiadaWebEntities();
             elementRepository = new ElementRepository(db);
-            dnaChainRepository = new DnaSequenceRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            dnaSequenceRepository = new DnaSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@
 
                 if (file == null || file.ContentLength == 0)
                 {
-                    throw new ArgumentNullException("Файл цепочки не задан или пуст");
+                    throw new ArgumentNullException("file", "Файл цепочки не задан или пуст");
                 }
 
                 stream = file.InputStream;
@@ -122,7 +122,7 @@
             var starts = new List<int>();
             var stops = new List<int> { 0 };
 
-            string stringParentChain = chainRepository.ToLibiadaBaseChain(chainId).ToString();
+            string stringParentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
 
             var existingGenes = db.Gene.Where(g => g.SequenceId == parentSequence.Id).Select(g => g.Id);
 

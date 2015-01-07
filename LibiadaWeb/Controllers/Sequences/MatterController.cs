@@ -29,7 +29,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The element repository.
@@ -39,12 +39,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The literature chain repository.
         /// </summary>
-        private readonly LiteratureSequenceRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
         /// <summary>
         /// The matter repository.
@@ -72,10 +72,10 @@
         public MatterController()
         {
             db = new LibiadaWebEntities();
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
-            dnaChainRepository = new DnaSequenceRepository(db);
-            literatureChainRepository = new LiteratureSequenceRepository(db);
+            dnaSequenceRepository = new DnaSequenceRepository(db);
+            literatureSequenceRepository = new LiteratureSequenceRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             notationRepository = new NotationRepository(db);
@@ -215,7 +215,7 @@
 
                         if (file == null || file.ContentLength == 0)
                         {
-                            throw new ArgumentNullException("Chain file is null or empty");
+                            throw new ArgumentNullException("file", "Chain file is null or empty");
                         }
 
                         fileStream = file.InputStream;
@@ -274,7 +274,7 @@
                             };
 
                             alphabet = elementRepository.ToDbElements(libiadaChain.Alphabet, dnaChain.NotationId, false);
-                            dnaChainRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
+                            dnaSequenceRepository.Insert(dnaChain, fastaHeader, webApiId, productId, (bool)complement, (bool)partial, alphabet, libiadaChain.Building);
                             break;
                         case Aliases.Nature.Music:
                             var doc = new XmlDocument();
@@ -317,7 +317,7 @@
                                 literatureSequence.NotationId,
                                 true);
 
-                            literatureChainRepository.Insert(
+                            literatureSequenceRepository.Insert(
                                 literatureSequence,
                                 (bool)original,
                                 (int)languageId,

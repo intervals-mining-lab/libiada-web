@@ -42,7 +42,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
@@ -53,7 +53,7 @@
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@
                             chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                         }
 
-                        Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
+                        Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
                         libiadaChain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicId = characteristicIds[i];
@@ -186,7 +186,7 @@
                         string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
                         var link = (Link)(linkId ?? 0);
-                        List<long> chainElements = chainRepository.GetElementIds(chainId);
+                        List<long> chainElements = commonSequenceRepository.GetElementIds(chainId);
                         int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == chainId &&
                                                                                  c.CharacteristicTypeId ==
                                                                                  characteristicId &&

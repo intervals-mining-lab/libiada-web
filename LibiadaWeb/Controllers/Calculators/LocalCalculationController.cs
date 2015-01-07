@@ -48,7 +48,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
@@ -60,7 +60,7 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             linkRepository = new LinkRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@
                         chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                     }
 
-                    Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
+                    Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
 
                     CutRule cutRule = isGrowingWindow
                         ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)
@@ -338,7 +338,7 @@
                     chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                 }
 
-                Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
+                Chain libiadaChain = commonSequenceRepository.ToLibiadaChain(chainId);
                 
                 CutRule cutRule = isGrowingWindow
                     ? (CutRule)new CutRuleWithFixedStart(libiadaChain.GetLength(), step)

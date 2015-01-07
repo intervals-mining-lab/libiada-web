@@ -22,12 +22,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The element repository.
@@ -40,8 +40,8 @@
         public SequenceTransformerController()
         {
             db = new LibiadaWebEntities();
-            dnaChainRepository = new DnaSequenceRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            dnaSequenceRepository = new DnaSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
 
@@ -55,7 +55,7 @@
         {
             var chains = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include("matter");
             ViewBag.chains = chains.ToList();
-            ViewBag.chainsList = dnaChainRepository.GetSelectListItems(chains, null);
+            ViewBag.chainsList = dnaSequenceRepository.GetSelectListItems(chains, null);
             return View();
         }
 
@@ -79,7 +79,7 @@
             foreach (var chainId in chainIds)
             {
                 CommonSequence dataBaseSequence = db.CommonSequence.Single(c => c.Id == chainId);
-                Chain sourceChain = chainRepository.ToLibiadaChain(chainId);
+                Chain sourceChain = commonSequenceRepository.ToLibiadaChain(chainId);
 
                 BaseChain transformedChain = toAmino
                                                  ? DnaTransformer.Encode(sourceChain)
@@ -93,7 +93,7 @@
                         PiecePosition = 0
                     };
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
-                dnaChainRepository.Insert(result, alphabet, transformedChain.Building);
+                dnaSequenceRepository.Insert(result, alphabet, transformedChain.Building);
             }
 
             return RedirectToAction("Index", "Chain");

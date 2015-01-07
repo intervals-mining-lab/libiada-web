@@ -41,7 +41,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
@@ -52,7 +52,7 @@
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@
                         }
                         else
                         {
-                            Chain tempChain = chainRepository.ToLibiadaChain(sequenceId);
+                            Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                             tempChain.FillIntervalManagers();
                             string className =
                                 db.CharacteristicType.Single(ct => ct.Id == characteristicId).ClassName;

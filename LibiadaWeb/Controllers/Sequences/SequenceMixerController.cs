@@ -36,12 +36,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The literature chain repository.
         /// </summary>
-        private readonly LiteratureSequenceRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
         /// <summary>
         /// The element repository.
@@ -62,8 +62,8 @@
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
-            dnaChainRepository = new DnaSequenceRepository(db);
-            literatureChainRepository = new LiteratureSequenceRepository(db);
+            dnaSequenceRepository = new DnaSequenceRepository(db);
+            literatureSequenceRepository = new LiteratureSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
 
@@ -155,7 +155,7 @@
                 case Aliases.Nature.Genetic:
                     DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
 
-                    dnaChainRepository.Insert(
+                    dnaSequenceRepository.Insert(
                         resultChain,
                         dnaSequence.FastaHeader,
                         null,
@@ -171,7 +171,7 @@
 
                     LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
 
-                    literatureChainRepository.Insert(
+                    literatureSequenceRepository.Insert(
                         resultChain,
                         literatureSequence.Original,
                         literatureSequence.LanguageId,

@@ -22,7 +22,7 @@
         /// <summary>
         /// The chain repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
@@ -30,7 +30,7 @@
         public SequenceCheckController() : base("SequenceCheck", "Sequence check")
         {
             db = new LibiadaWebEntities();
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@
                     return new Dictionary<string, object> { { "message", message } };
                 }
 
-                BaseChain dataBaseChain = chainRepository.ToLibiadaBaseChain(chainId);
+                BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
 
                 if (dataBaseChain.Equals(libiadaChain))
                 {
