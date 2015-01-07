@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -9,20 +9,17 @@
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
-
-    using Helpers;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-
-    using Models;
-    using Models.Repositories.Catalogs;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The chain controller.
     /// </summary>
-    public class ChainController : Controller
+    public class CommonSequenceController : Controller
     {
         /// <summary>
         /// The db.
@@ -70,9 +67,9 @@
         private readonly RemoteDbRepository remoteDbRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainController"/> class.
+        /// Initializes a new instance of the <see cref="CommonSequenceController"/> class.
         /// </summary>
-        public ChainController()
+        public CommonSequenceController()
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

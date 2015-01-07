@@ -42,8 +42,8 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
                         "~/Scripts/Controllers/calculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/matterChainCreate").Include(
-                        "~/Scripts/Controllers/matterChainCreate.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
+                        "~/Scripts/Controllers/matterSequenceCreate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/highCharts").Include(
                         "~/Scripts/Highcharts-2.3.5/highcharts.js"));

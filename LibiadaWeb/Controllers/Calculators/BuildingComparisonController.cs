@@ -6,9 +6,8 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Misc.Iterators;
-
+    using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
-    using Models.Repositories.Chains;
 
     /// <summary>
     /// The building comparison controller.

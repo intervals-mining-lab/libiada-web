@@ -1,4 +1,4 @@
-namespace LibiadaWeb.Models.Repositories.Chains
+namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
     using System.Linq;

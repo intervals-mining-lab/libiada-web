@@ -9,10 +9,9 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-
+    using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
     using Models.Repositories.Catalogs;
-    using Models.Repositories.Chains;
 
     /// <summary>
     /// The calculation controller.

@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -7,10 +7,9 @@
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
-
-    using Helpers;
-    using Models;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The genes import controller.

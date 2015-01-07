@@ -14,7 +14,7 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The alignment controller.
@@ -69,9 +69,9 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var chainIds = db.Gene.Select(g => g.SequenceId).Distinct();
-            var chains = db.DnaSequence.Where(c => chainIds.Contains(c.Id));
-            var matterIds = chains.Select(c => c.MatterId);
+            var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var sequences = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id));
+            var matterIds = sequences.Select(c => c.MatterId);
 
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
 
@@ -141,35 +141,35 @@
         {
             return Action(() =>
             {
-                var firstChainCharacteristics = new List<KeyValuePair<int, double>>();
-                var firstChainName = db.Matter.Single(m => m.Id == matterId1).Name;
-                var firstChainProducts = new List<string>();
-                var firstChainPositions = new List<long>();
-                var firstChainPieceTypes = new List<string>();
+                var firstSequenceCharacteristics = new List<KeyValuePair<int, double>>();
+                var firstSequenceName = db.Matter.Single(m => m.Id == matterId1).Name;
+                var firstSequenceProducts = new List<string>();
+                var firstSequencePositions = new List<long>();
+                var firstSequencePieceTypes = new List<string>();
 
-                var secondChainCharacteristics = new List<KeyValuePair<int, double>>();
-                var secondChainName = db.Matter.Single(m => m.Id == matterId1).Name;
-                var secondChainProducts = new List<string>();
-                var secondChainPositions = new List<long>();
-                var secondChainPieceTypes = new List<string>();
+                var secondSequenceCharacteristics = new List<KeyValuePair<int, double>>();
+                var secondSequenceName = db.Matter.Single(m => m.Id == matterId1).Name;
+                var secondSequenceProducts = new List<string>();
+                var secondSequencePositions = new List<long>();
+                var secondSequencePieceTypes = new List<string>();
 
-                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstChainCharacteristics, firstChainProducts, firstChainPositions, firstChainPieceTypes);
-                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondChainCharacteristics, secondChainProducts, secondChainPositions, secondChainPieceTypes);
+                CalculateCharacteristic(matterId1, characteristicId, linkId, notationId, pieceTypeIds, firstSequenceCharacteristics, firstSequenceProducts, firstSequencePositions, firstSequencePieceTypes);
+                CalculateCharacteristic(matterId2, characteristicId, linkId, notationId, pieceTypeIds, secondSequenceCharacteristics, secondSequenceProducts, secondSequencePositions, secondSequencePieceTypes);
 
                 int optimalRotation = 0;
 
-                if (firstChainCharacteristics.Count >= secondChainCharacteristics.Count)
+                if (firstSequenceCharacteristics.Count >= secondSequenceCharacteristics.Count)
                 {
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(firstChainCharacteristics, secondChainCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstChainCharacteristics, secondChainCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -180,13 +180,13 @@
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(secondChainCharacteristics, firstChainCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondChainCharacteristics, firstChainCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -197,16 +197,16 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "firstChainCharacteristics", firstChainCharacteristics },
-                    { "firstChainName", firstChainName },
-                    { "firstChainProducts", firstChainProducts },
-                    { "firstChainPositions", firstChainPositions },
-                    { "firstChainPieceTypes", firstChainPieceTypes },
-                    { "secondChainCharacteristics", secondChainCharacteristics },
-                    { "secondChainName", secondChainName },
-                    { "secondChainProducts", secondChainProducts },
-                    { "secondChainPositions", secondChainPositions },
-                    { "secondChainPieceTypes", secondChainPieceTypes },
+                    { "firstChainCharacteristics", firstSequenceCharacteristics },
+                    { "firstChainName", firstSequenceName },
+                    { "firstChainProducts", firstSequenceProducts },
+                    { "firstChainPositions", firstSequencePositions },
+                    { "firstChainPieceTypes", firstSequencePieceTypes },
+                    { "secondChainCharacteristics", secondSequenceCharacteristics },
+                    { "secondChainName", secondSequenceName },
+                    { "secondChainProducts", secondSequenceProducts },
+                    { "secondChainPositions", secondSequencePositions },
+                    { "secondChainPieceTypes", secondSequencePieceTypes },
                     { "characteristicName", characteristicName },
                     { "matterId1", matterId1 },
                     { "matterId2", matterId2 },

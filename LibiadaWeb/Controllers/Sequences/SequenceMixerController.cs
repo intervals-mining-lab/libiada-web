@@ -1,19 +1,17 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Linq;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
-
-    using Models;
-    using Models.Repositories.Catalogs;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The chain mixer controller.
     /// </summary>
-    public class ChainMixerController : Controller
+    public class SequenceMixerController : Controller
     {
         /// <summary>
         /// The db.
@@ -56,9 +54,9 @@
         private readonly Random rndGenerator = new Random();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainMixerController"/> class.
+        /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
         /// </summary>
-        public ChainMixerController()
+        public SequenceMixerController()
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);

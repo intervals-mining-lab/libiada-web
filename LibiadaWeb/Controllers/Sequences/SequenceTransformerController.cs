@@ -1,20 +1,18 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Misc.DataTransformers;
-
-    using Models;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The dna transformation controller.
     /// </summary>
-    public class ChainTransformerController : Controller
+    public class SequenceTransformerController : Controller
     {
         /// <summary>
         /// The db.
@@ -37,9 +35,9 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainTransformerController"/> class.
+        /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
-        public ChainTransformerController()
+        public SequenceTransformerController()
         {
             db = new LibiadaWebEntities();
             dnaChainRepository = new DnaSequenceRepository(db);

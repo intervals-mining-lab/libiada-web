@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -9,15 +9,12 @@
     using System.Text;
     using System.Web.Mvc;
     using System.Xml;
-
-    using Helpers;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-
-    using Models;
-    using Models.Repositories.Catalogs;
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The matter controller.

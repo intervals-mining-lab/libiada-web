@@ -10,11 +10,10 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
-
+    using LibiadaWeb.Models.Repositories.Sequences;
     using Math;
 
     using Models.Repositories.Catalogs;
-    using Models.Repositories.Chains;
 
     /// <summary>
     /// The local calculation controller.

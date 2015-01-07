@@ -1,15 +1,14 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Collections.Generic;
     using System.Web.Http;
     using System.Web.Mvc;
-
-    using Models.Repositories.Chains;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The chain elements controller.
     /// </summary>
-    public class ChainElementsController : ApiController
+    public class SequenceElementsController : ApiController
     {
         /// <summary>
         /// The db.
@@ -27,9 +26,9 @@
         private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainElementsController"/> class.
+        /// Initializes a new instance of the <see cref="SequenceElementsController"/> class.
         /// </summary>
-        public ChainElementsController()
+        public SequenceElementsController()
         {
             elementRepository = new ElementRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);

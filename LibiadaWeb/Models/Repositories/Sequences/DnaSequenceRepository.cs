@@ -1,15 +1,12 @@
-namespace LibiadaWeb.Models.Repositories.Chains
+namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-
     using Npgsql;
-
     using NpgsqlTypes;
 
     /// <summary>

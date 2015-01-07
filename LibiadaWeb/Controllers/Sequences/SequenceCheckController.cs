@@ -1,20 +1,18 @@
-﻿namespace LibiadaWeb.Controllers.Chains
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Web.Mvc;
-
     using LibiadaCore.Core;
-
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Chains;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The chain check controller.
     /// </summary>
-    public class ChainCheckController : AbstractResultController
+    public class SequenceCheckController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -27,9 +25,9 @@
         private readonly CommonSequenceRepository chainRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainCheckController"/> class.
+        /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public ChainCheckController() : base("ChainCheck", "Chain check")
+        public SequenceCheckController() : base("SequenceCheck", "Sequence check")
         {
             db = new LibiadaWebEntities();
             chainRepository = new CommonSequenceRepository(db);
