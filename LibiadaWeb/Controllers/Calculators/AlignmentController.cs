@@ -42,9 +42,9 @@
         private readonly PieceTypeRepository pieceTypeRepository;
 
         /// <summary>
-        /// The chain repository.
+        /// The common sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AlignmentController"/> class.
@@ -55,7 +55,7 @@
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         // GET: Alignment
@@ -331,7 +331,7 @@
 
             var stops = pieces.Select(p => p.Start + p.Length).ToList();
 
-            BaseChain parentChain = chainRepository.ToLibiadaBaseChain(chainId);
+            BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
 
             var iterator = new DefaultCutRule(starts, stops);
 

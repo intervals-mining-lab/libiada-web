@@ -15,15 +15,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The dna chain repository.
     /// </summary>
-    public class DnaChainRepository : ChainImporter, IDnaChainRepository
+    public class DnaSequenceRepository : CommonSequenceImporter, IDnaSequenceRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DnaChainRepository"/> class.
+        /// Initializes a new instance of the <see cref="DnaSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public DnaChainRepository(LibiadaWebEntities db) : base(db)
+        public DnaSequenceRepository(LibiadaWebEntities db) : base(db)
         {
         }
 

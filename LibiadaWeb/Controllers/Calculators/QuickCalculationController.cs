@@ -45,7 +45,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
@@ -83,12 +83,11 @@
                     var tempChain = new Chain(chain);
 
                     characteristicNames.Add(
-                        db.characteristic_type.Single(charact => charact.id == characteristicId).name);
-                    var className = db.characteristic_type.Single(charact => charact.id == characteristicId).class_name;
+                        db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name);
+                    var className = db.CharacteristicType.Single(charact => charact.Id == characteristicId).ClassName;
                     var calculator = CalculatorsFactory.CreateFullCalculator(className);
-                    var link = (Link)db.link.Single(l => l.id == linkId).id;
 
-                    characteristics.Add(calculator.Calculate(tempChain, link));
+                    characteristics.Add(calculator.Calculate(tempChain, (Link)linkId));
                 }
 
                 var characteristicsList = new List<SelectListItem>();

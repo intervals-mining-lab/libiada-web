@@ -241,18 +241,15 @@
     <Compile Include="Controllers\Calculators\QuickCalculationController.cs" />
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Chains\ChainCheckController.cs" />
     <Compile Include="Controllers\Chains\ChainElementsController.cs" />
     <Compile Include="Controllers\Chains\ChainMixerController.cs" />
     <Compile Include="Controllers\Chains\ChainTransformerController.cs" />
     <Compile Include="Controllers\Chains\GenesImportController.cs" />
     <Compile Include="Controllers\Chains\ChainController.cs" />
-    <Compile Include="Controllers\Chains\FmotivController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Chains\MatterController.cs" />
-    <Compile Include="Controllers\Chains\MeasureController.cs" />
-    <Compile Include="Controllers\Chains\NoteController.cs" />
-    <Compile Include="Controllers\Chains\PitchController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
     <Compile Include="DnaSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -336,17 +333,17 @@
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\ChainImporter.cs" />
-    <Compile Include="Models\Repositories\Chains\ChainRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\DnaChainRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\IChainRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\IDnaChainRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\ILiteratureChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\CommonSequenceImporter.cs" />
+    <Compile Include="Models\Repositories\Chains\CommonSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\DnaSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\ICommonSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IDnaSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\ILiteratureSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IMatterRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\IMusicChainRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\LiteratureChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\IMusicSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\LiteratureSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Chains\MatterRepository.cs" />
-    <Compile Include="Models\Repositories\Chains\MusicChainRepository.cs" />
+    <Compile Include="Models\Repositories\Chains\MusicSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Chains\ElementRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Chains\IElementRepository.cs" />
@@ -533,31 +530,11 @@
     <Content Include="Views\Chains\Chain\Details.cshtml" />
     <Content Include="Views\Chains\Chain\Edit.cshtml" />
     <Content Include="Views\Chains\Chain\Index.cshtml" />
-    <Content Include="Views\Chains\Fmotiv\Create.cshtml" />
-    <Content Include="Views\Chains\Fmotiv\Delete.cshtml" />
-    <Content Include="Views\Chains\Fmotiv\Details.cshtml" />
-    <Content Include="Views\Chains\Fmotiv\Edit.cshtml" />
-    <Content Include="Views\Chains\Fmotiv\Index.cshtml" />
     <Content Include="Views\Chains\Matter\Create.cshtml" />
     <Content Include="Views\Chains\Matter\Delete.cshtml" />
     <Content Include="Views\Chains\Matter\Details.cshtml" />
     <Content Include="Views\Chains\Matter\Edit.cshtml" />
     <Content Include="Views\Chains\Matter\Index.cshtml" />
-    <Content Include="Views\Chains\Measure\Create.cshtml" />
-    <Content Include="Views\Chains\Measure\Delete.cshtml" />
-    <Content Include="Views\Chains\Measure\Details.cshtml" />
-    <Content Include="Views\Chains\Measure\Edit.cshtml" />
-    <Content Include="Views\Chains\Measure\Index.cshtml" />
-    <Content Include="Views\Chains\Note\Create.cshtml" />
-    <Content Include="Views\Chains\Note\Delete.cshtml" />
-    <Content Include="Views\Chains\Note\Details.cshtml" />
-    <Content Include="Views\Chains\Note\Edit.cshtml" />
-    <Content Include="Views\Chains\Note\Index.cshtml" />
-    <Content Include="Views\Chains\Pitch\Create.cshtml" />
-    <Content Include="Views\Chains\Pitch\Delete.cshtml" />
-    <Content Include="Views\Chains\Pitch\Details.cshtml" />
-    <Content Include="Views\Chains\Pitch\Edit.cshtml" />
-    <Content Include="Views\Chains\Pitch\Index.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\BuildingComparison\Index.cshtml" />
@@ -582,17 +559,19 @@
     <Content Include="Views\Calculators\Alignment\Index.cshtml" />
     <Content Include="Views\Calculators\Alignment\Result.cshtml" />
     <Content Include="Views\TaskManager\Index.cshtml" />
+    <Content Include="Views\Catalogs\Accidentals\Create.cshtml" />
+    <Content Include="Views\Catalogs\Accidentals\Delete.cshtml" />
+    <Content Include="Views\Catalogs\Accidentals\Details.cshtml" />
+    <Content Include="Views\Catalogs\Accidentals\Edit.cshtml" />
+    <Content Include="Views\Catalogs\Accidentals\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Catalogs\" />
     <Folder Include="Controllers\Characteristics\" />
-    <Folder Include="Views\Catalogs\" />
     <Folder Include="Views\Characteristics\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

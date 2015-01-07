@@ -42,12 +42,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaChainRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaChainRepository;
 
         /// <summary>
         /// The literature chain repository.
         /// </summary>
-        private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureChainRepository;
 
         /// <summary>
         /// The matter repository.
@@ -77,8 +77,8 @@
             db = new LibiadaWebEntities();
             chainRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
-            dnaChainRepository = new DnaChainRepository(db);
-            literatureChainRepository = new LiteratureChainRepository(db);
+            dnaChainRepository = new DnaSequenceRepository(db);
+            literatureChainRepository = new LiteratureSequenceRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             notationRepository = new NotationRepository(db);

@@ -11,15 +11,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The literature chain repository.
     /// </summary>
-    public class LiteratureChainRepository : ChainImporter, ILiteratureChainRepository
+    public class LiteratureSequenceRepository : CommonSequenceImporter, ILiteratureSequenceRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="LiteratureChainRepository"/> class.
+        /// Initializes a new instance of the <see cref="LiteratureSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public LiteratureChainRepository(LibiadaWebEntities db) : base(db)
+        public LiteratureSequenceRepository(LibiadaWebEntities db) : base(db)
         {
         }
 

@@ -73,16 +73,16 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var matters = db.matter.Include("nature");
+            var matters = db.Matter.Include("nature");
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
-            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
             ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
 
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             ViewBag.linksList = linkRepository.GetSelectListItems(null);
-            ViewBag.languagesList = new SelectList(db.language, "id", "name");
+            ViewBag.languagesList = new SelectList(db.Language, "id", "name");
 
             return View();
         }
@@ -161,22 +161,22 @@
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
-                    chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     partNames.Add(new List<string>());
                     starts.Add(new List<int>());
                     lengthes.Add(new List<int>());
 
                     long chainId;
-                    if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                    if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
                     {
                         chainId =
-                            db.literature_chain.Single(l => l.matter_id == matterId
-                                                            && l.notation_id == notationId
-                                                            && l.language_id == languageId).id;
+                            db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                            && l.NotationId == notationId
+                                                            && l.LanguageId == languageId).Id;
                     }
                     else
                     {
-                        chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                        chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                     }
 
                     Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
@@ -222,8 +222,8 @@
                 {
                     int characteristicId = characteristicIds[i];
                     int linkId = linkIds[i];
-                    characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
-                                            db.link.Single(l => l.id == linkId).name);
+                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " +
+                                            db.Link.Single(l => l.Id == linkId).Name);
                 }
 
                 var characteristicsList = new List<SelectListItem>();
@@ -317,7 +317,7 @@
             for (int i = 0; i < characteristicIds.Length; i++)
             {
                 int characteristicId = characteristicIds[i];
-                string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                 calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
             }
 
@@ -328,15 +328,15 @@
                 characteristics.Add(new List<List<double>>());
 
                 long chainId;
-                if (db.matter.Single(m => m.id == matterId).nature_id == 3)
+                if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
                 {
-                    chainId = db.literature_chain.Single(l => l.matter_id == matterId && 
-                                                              l.notation_id == notationId && 
-                                                              l.language_id == languageId).id;
+                    chainId = db.LiteratureSequence.Single(l => l.MatterId == matterId && 
+                                                              l.NotationId == notationId && 
+                                                              l.LanguageId == languageId).Id;
                 }
                 else
                 {
-                    chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                    chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                 }
 
                 Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);

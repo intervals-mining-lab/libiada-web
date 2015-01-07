@@ -10,7 +10,7 @@
     /// <summary>
     /// The chain importer.
     /// </summary>
-    public abstract class ChainImporter
+    public abstract class CommonSequenceImporter
     {
         /// <summary>
         /// The db.
@@ -18,12 +18,12 @@
         protected readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ChainImporter"/> class.
+        /// Initializes a new instance of the <see cref="CommonSequenceImporter"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        protected ChainImporter(LibiadaWebEntities db)
+        protected CommonSequenceImporter(LibiadaWebEntities db)
         {
             this.db = db;
         }

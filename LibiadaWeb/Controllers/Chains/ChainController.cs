@@ -30,9 +30,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The chain repository.
+        /// The common sequence repository.
         /// </summary>
-        private readonly CommonSequenceRepository chainRepository;
+        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The element repository.
@@ -40,14 +40,14 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The dna chain repository.
+        /// The dna sequence repository.
         /// </summary>
-        private readonly DnaChainRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaChainRepository;
 
         /// <summary>
-        /// The literature chain repository.
+        /// The literature sequence repository.
         /// </summary>
-        private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureChainRepository;
 
         /// <summary>
         /// The matter repository.
@@ -75,10 +75,10 @@
         public ChainController()
         {
             db = new LibiadaWebEntities();
-            chainRepository = new CommonSequenceRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
-            dnaChainRepository = new DnaChainRepository(db);
-            literatureChainRepository = new LiteratureChainRepository(db);
+            dnaChainRepository = new DnaSequenceRepository(db);
+            literatureChainRepository = new LiteratureSequenceRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             notationRepository = new NotationRepository(db);

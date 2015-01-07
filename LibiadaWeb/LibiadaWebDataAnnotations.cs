@@ -12,20 +12,20 @@
         /// Gets or sets the name.
         /// </summary>
         [Display(Name = "Название")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         [Display(Name = "Описание")]
-        public string description { get; set; }
+        public string Description { get; set; }
     }
 
     /// <summary>
     /// The accidental.
     /// </summary>
     [MetadataType(typeof(AccidentalDataAnnotations))]
-    public partial class accidental
+    public partial class Accidental
     {
     }
 
@@ -37,39 +37,7 @@
     }
 
     /// <summary>
-    /// The alphabet.
-    /// </summary>
-    [MetadataType(typeof(AlphabetDataAnnotations))]
-    public partial class alphabet
-    {
-    }
-
-    /// <summary>
-    /// The alphabet data annotations.
-    /// </summary>
-    public class AlphabetDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the chain_id.
-        /// </summary>
-        [Display(Name = "Принадлежит цепочке")]
-        public long chain_id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the element_id.
-        /// </summary>
-        [Display(Name = "Содержит элемент")]
-        public int element_id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the number.
-        /// </summary>
-        [Display(Name = "Номер элемента в алфавите")]
-        public int number { get; set; }
-    }
-
-    /// <summary>
-    /// The binary_characteristic.
+    /// The binary characteristic.
     /// </summary>
     [MetadataType(typeof(BinaryCharacteristicDataAnnotations))]
     public partial class BinaryCharacteristic
@@ -85,69 +53,69 @@
         /// Gets or sets the first_element_id.
         /// </summary>
         [Display(Name = "Первый элемент")]
-        public int first_element_id { get; set; }
+        public int FirstElementId { get; set; }
 
         /// <summary>
         /// Gets or sets the second_element_id.
         /// </summary>
         [Display(Name = "Второй элемент")]
-        public int second_element_id { get; set; }
+        public int SecondElementId { get; set; }
     }
 
     /// <summary>
-    /// The chain.
+    /// The common sequence.
     /// </summary>
-    [MetadataType(typeof(ChainDataAnnotations))]
+    [MetadataType(typeof(CommonSequenceDataAnnotations))]
     public partial class CommonSequence
     {
     }
 
     /// <summary>
-    /// The chain data annotations.
+    /// The sequence data annotations.
     /// </summary>
-    public class ChainDataAnnotations
+    public class CommonSequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets the notation_id.
         /// </summary>
         [Display(Name = "Форма записи")]
-        public long notation_id { get; set; }
+        public long NotationId { get; set; }
 
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
         [Display(Name = "Дата создания")]
-        public DateTimeOffset created { get; set; }
+        public DateTimeOffset Created { get; set; }
 
         /// <summary>
         /// Gets or sets the matter_id.
         /// </summary>
         [Display(Name = "Принадлежит объекту исследования")]
-        public long matter_id { get; set; }
+        public long MatterId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece_type_id.
         /// </summary>
         [Display(Name = "Тип фрагмента цепочки")]
-        public int piece_type_id { get; set; }
+        public int PieceTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece_position.
         /// </summary>
         [Display(Name = "Позиция с которой начинается цепочка")]
-        public long piece_position { get; set; }
+        public long PiecePosition { get; set; }
 
         /// <summary>
         /// Gets or sets the remote_db_id.
         /// </summary>
         [Display(Name = "Сторонняя БД")]
-        public int remote_db_id { get; set; }
+        public int RemoteDbId { get; set; }
 
         /// <summary>
         /// Gets or sets the remote_id.
         /// </summary>
         [Display(Name = "id в сторонней БД")]
-        public string remote_id { get; set; }
+        public string RemoteId { get; set; }
     }
 
     /// <summary>
@@ -164,47 +132,47 @@
     public class CharacteristicDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the chain_id.
+        /// Gets or sets the sequence id.
         /// </summary>
         [Display(Name = "Принадлежит цепочке")]
-        public long chain_id { get; set; }
+        public long SequenceId { get; set; }
 
         /// <summary>
         /// Gets or sets the characteristic_type_id.
         /// </summary>
         [Display(Name = "Тип характеристики")]
-        public int characteristic_type_id { get; set; }
+        public int CharacteristicTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         [Display(Name = "Значение")]
-        public double value { get; set; }
+        public double Value { get; set; }
 
         /// <summary>
         /// Gets or sets the value_string.
         /// </summary>
         [Display(Name = "Значение в виде строки")]
-        public string value_string { get; set; }
+        public string ValueString { get; set; }
 
         /// <summary>
         /// Gets or sets the link_id.
         /// </summary>
         [Display(Name = "Привязка")]
-        public int link_id { get; set; }
+        public int LinkId { get; set; }
 
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
         [Display(Name = "Дата создания")]
-        public DateTimeOffset created { get; set; }
+        public DateTimeOffset Created { get; set; }
     }
 
     /// <summary>
     /// The characteristic_group.
     /// </summary>
     [MetadataType(typeof(CharacteristicGroupDataAnnotations))]
-    public partial class characteristic_group
+    public partial class CharacteristicGroup
     {
     }
 
@@ -232,57 +200,57 @@
         /// Gets or sets the characteristic_group_id.
         /// </summary>
         [Display(Name = "Группа характеристик")]
-        public int characteristic_group_id { get; set; }
+        public int CharacteristicGroupId { get; set; }
 
         /// <summary>
         /// Gets or sets the class_name.
         /// </summary>
         [Display(Name = "Класс-калькулятор")]
-        public string class_name { get; set; }
+        public string ClassName { get; set; }
 
         /// <summary>
         /// Gets or sets the linkable.
         /// </summary>
         [Display(Name = "Привязываемость")]
-        public int linkable { get; set; }
+        public int Linkable { get; set; }
 
         /// <summary>
-        /// Gets or sets the full_chain_applicable.
+        /// Gets or sets the full sequence applicable.
         /// </summary>
         [Display(Name = "Применимо к полным цепочкам")]
-        public int full_chain_applicable { get; set; }
+        public bool FullSequenceApplicable { get; set; }
 
         /// <summary>
-        /// Gets or sets the binary_chain_applicable.
+        /// Gets or sets the binary sequence applicable.
         /// </summary>
         [Display(Name = "Применимо к бинарным цепочкам")]
-        public int binary_chain_applicable { get; set; }
+        public bool BinarySequenceApplicable { get; set; }
 
         /// <summary>
-        /// Gets or sets the congeneric_chain_applicable.
+        /// Gets or sets the congeneric sequence applicable.
         /// </summary>
         [Display(Name = "Применимо к однородным цепочкам")]
-        public int congeneric_chain_applicable { get; set; }
+        public bool CongenericSequenceApplicable { get; set; }
     }
 
     /// <summary>
-    /// The dna_chain.
+    /// The dna sequence.
     /// </summary>
-    [MetadataType(typeof(DnaChainDataAnnotations))]
+    [MetadataType(typeof(DnaSequenceDataAnnotations))]
     public partial class DnaSequence
     {
     }
 
     /// <summary>
-    /// The dna chain data annotations.
+    /// The dna sequence data annotations.
     /// </summary>
-    public class DnaChainDataAnnotations : ChainDataAnnotations
+    public class DnaSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets the fasta_header.
         /// </summary>
         [Display(Name = "Заголовок FASTA файла")]
-        public string fasta_header { get; set; }
+        public string FastaHeader { get; set; }
     }
 
     /// <summary>
@@ -302,64 +270,64 @@
         /// Gets or sets the value.
         /// </summary>
         [Display(Name = "Значение")]
-        public string value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the notation_id.
         /// </summary>
         [Display(Name = "Форма записи")]
-        public long notation_id { get; set; }
+        public long NotationId { get; set; }
 
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
         [Display(Name = "Дата создания")]
-        public DateTimeOffset created { get; set; }
+        public DateTimeOffset Created { get; set; }
     }
 
     /// <summary>
     /// The fmotiv.
     /// </summary>
     [MetadataType(typeof(FmotivDataAnnotations))]
-    public partial class fmotiv
+    public partial class Fmotiv
     {
     }
 
     /// <summary>
     /// The fmotiv data annotations.
     /// </summary>
-    public class FmotivDataAnnotations : ChainDataAnnotations
+    public class FmotivDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         [Display(Name = "Значение")]
-        public string value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Display(Name = "Название")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         [Display(Name = "Описание")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the fmotiv_type_id.
         /// </summary>
         [Display(Name = "Тип ф-мотива")]
-        public int fmotiv_type_id { get; set; }
+        public int FmotivTypeId { get; set; }
     }
 
     /// <summary>
     /// The fmotiv_type.
     /// </summary>
     [MetadataType(typeof(FmotivTypeDataAnnotations))]
-    public partial class fmotiv_type
+    public partial class FmotivType
     {
     }
 
@@ -374,7 +342,7 @@
     /// The congeneric_characteristic.
     /// </summary>
     [MetadataType(typeof(CongenericCharacteristicDataAnnotations))]
-    public partial class congeneric_characteristic
+    public partial class CongenericCharacteristic
     {
     }
 
@@ -387,14 +355,14 @@
         /// Gets or sets the element_id.
         /// </summary>
         [Display(Name = "Элемент")]
-        public int element_id { get; set; }
+        public int ElementId { get; set; }
     }
 
     /// <summary>
     /// The instrument.
     /// </summary>
     [MetadataType(typeof(InstrumentDataAnnotations))]
-    public partial class instrument
+    public partial class Instrument
     {
     }
 
@@ -409,7 +377,7 @@
     /// The language.
     /// </summary>
     [MetadataType(typeof(LanguageDataAnnotations))]
-    public partial class language
+    public partial class Language
     {
     }
 
@@ -424,7 +392,7 @@
     /// The link.
     /// </summary>
     [MetadataType(typeof(LinkDataAnnotations))]
-    public partial class link
+    public partial class Link
     {
     }
 
@@ -436,29 +404,29 @@
     }
 
     /// <summary>
-    /// The literature_chain.
+    /// The literature sequence.
     /// </summary>
-    [MetadataType(typeof(LiteratureChainDataAnnotations))]
+    [MetadataType(typeof(LiteratureSequenceDataAnnotations))]
     public partial class LiteratureSequence
     {
     }
 
     /// <summary>
-    /// The literature chain data annotations.
+    /// The literature sequence data annotations.
     /// </summary>
-    public class LiteratureChainDataAnnotations : ChainDataAnnotations
+    public class LiteratureSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets the language_id.
         /// </summary>
         [Display(Name = "Язык")]
-        public int language_id { get; set; }
+        public int LanguageId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether original.
         /// </summary>
         [Display(Name = "Оригинал")]
-        public bool original { get; set; }
+        public bool Original { get; set; }
     }
 
     /// <summary>
@@ -478,77 +446,77 @@
         /// Gets or sets the nature_id.
         /// </summary>
         [Display(Name = "Природа")]
-        public int nature_id { get; set; }
+        public int NatureId { get; set; }
     }
 
     /// <summary>
     /// The measure.
     /// </summary>
     [MetadataType(typeof(MeasureDataAnnotations))]
-    public partial class measure
+    public partial class Measure
     {
     }
 
     /// <summary>
     /// The measure data annotations.
     /// </summary>
-    public class MeasureDataAnnotations : ChainDataAnnotations
+    public class MeasureDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
         [Display(Name = "Значение")]
-        public string value { get; set; }
+        public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Display(Name = "Название")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
         [Display(Name = "Описание")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the beats.
         /// </summary>
         [Display(Name = "? я чото п")]
-        public int beats { get; set; }
+        public int Beats { get; set; }
 
         /// <summary>
         /// Gets or sets the beatbase.
         /// </summary>
         [Display(Name = "? я чото п")]
-        public int beatbase { get; set; }
+        public int Beatbase { get; set; }
 
         /// <summary>
         /// Gets or sets the ticks_per_beat.
         /// </summary>
         [Display(Name = "? я чото п")]
-        public int ticks_per_beat { get; set; }
+        public int TicksPerBeat { get; set; }
 
         /// <summary>
         /// Gets or sets the fifths.
         /// </summary>
         [Display(Name = "? я чото п")]
-        public int fifths { get; set; }
+        public int Fifths { get; set; }
     }
 
     /// <summary>
-    /// The music_chain.
+    /// The music sequence.
     /// </summary>
-    [MetadataType(typeof(MusicChainDataAnnotations))]
+    [MetadataType(typeof(MusicSequenceDataAnnotations))]
     public partial class MusicSequence
     {
     }
 
     /// <summary>
-    /// The music chain data annotations.
+    /// The music sequence data annotations.
     /// </summary>
-    public class MusicChainDataAnnotations : ChainDataAnnotations
+    public class MusicSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
     }
 
@@ -556,7 +524,7 @@
     /// The nature.
     /// </summary>
     [MetadataType(typeof(NatureDataAnnotations))]
-    public partial class nature
+    public partial class Nature
     {
     }
 
@@ -571,7 +539,7 @@
     /// The notation.
     /// </summary>
     [MetadataType(typeof(NotationDataAnnotations))]
-    public partial class notation
+    public partial class Notation
     {
     }
 
@@ -584,14 +552,14 @@
         /// Gets or sets the nature_id.
         /// </summary>
         [Display(Name = "Природа")]
-        public int nature_id { get; set; }
+        public int NatureId { get; set; }
     }
 
     /// <summary>
     /// The note.
     /// </summary>
     [MetadataType(typeof(NoteDataAnnotations))]
-    public partial class note
+    public partial class Note
     {
     }
 
@@ -604,56 +572,56 @@
         /// Gets or sets the numerator.
         /// </summary>
         [Display(Name = "Числитель в дроби доли")]
-        public int numerator { get; set; }
+        public int Numerator { get; set; }
 
         /// <summary>
         /// Gets or sets the denominator.
         /// </summary>
         [Display(Name = "Знаменатель в дроби доли")]
-        public int denominator { get; set; }
+        public int Denominator { get; set; }
 
         /// <summary>
         /// Gets or sets the ticks.
         /// </summary>
         [Display(Name = "Количество МИДИ тиков в доле")]
-        public int ticks { get; set; }
+        public int Ticks { get; set; }
 
         /// <summary>
         /// Gets or sets the onumerator.
         /// </summary>
         [Display(Name = "Оригинальный числитель в дроби доли")]
-        public int onumerator { get; set; }
+        public int Onumerator { get; set; }
 
         /// <summary>
         /// Gets or sets the odenominator.
         /// </summary>
         [Display(Name = "Оригинальный знаменатель в дроби доли")]
-        public int odenominator { get; set; }
+        public int Odenominator { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether triplet.
         /// </summary>
         [Display(Name = "Триоль")]
-        public bool triplet { get; set; }
+        public bool Triplet { get; set; }
 
         /// <summary>
         /// Gets or sets the priority.
         /// </summary>
         [Display(Name = "Приоритет")]
-        public int priority { get; set; }
+        public int Priority { get; set; }
 
         /// <summary>
         /// Gets or sets the tie_id.
         /// </summary>
         [Display(Name = "Лига")]
-        public int tie_id { get; set; }
+        public int TieId { get; set; }
     }
 
     /// <summary>
     /// The note_symbol.
     /// </summary>
     [MetadataType(typeof(NoteSymbolDataAnnotations))]
-    public partial class note_symbol
+    public partial class NoteSymbol
     {
     }
 
@@ -668,7 +636,7 @@
     /// The piece_type.
     /// </summary>
     [MetadataType(typeof(PieceTypeDataAnnotations))]
-    public partial class piece_type
+    public partial class PieceType
     {
     }
 
@@ -683,7 +651,7 @@
     /// The pitch.
     /// </summary>
     [MetadataType(typeof(PitchDataAnnotations))]
-    public partial class pitch
+    public partial class Pitch
     {
     }
 
@@ -696,44 +664,44 @@
         /// Gets or sets the octave.
         /// </summary>
         [Display(Name = "Номер октавы")]
-        public int octave { get; set; }
+        public int Octave { get; set; }
 
         /// <summary>
         /// Gets or sets the midinumber.
         /// </summary>
         [Display(Name = "Уникальный номер ноты по миди стандарту")]
-        public int midinumber { get; set; }
+        public int Midinumber { get; set; }
 
         /// <summary>
         /// Gets or sets the instrument_id.
         /// </summary>
         [Display(Name = "Инструмент")]
-        public int instrument_id { get; set; }
+        public int InstrumentId { get; set; }
 
         /// <summary>
         /// Gets or sets the note_id.
         /// </summary>
         [Display(Name = "Принадлежит ноте")]
-        public long note_id { get; set; }
+        public long NoteId { get; set; }
 
         /// <summary>
         /// Gets or sets the accidental_id.
         /// </summary>
         [Display(Name = "Знак альтерации")]
-        public int accidental_id { get; set; }
+        public int AccidentalId { get; set; }
 
         /// <summary>
         /// Gets or sets the note_symbol_id.
         /// </summary>
         [Display(Name = "Обозначение ноты")]
-        public int note_symbol_id { get; set; }
+        public int NoteSymbolId { get; set; }
     }
 
     /// <summary>
     /// The remote_db.
     /// </summary>
     [MetadataType(typeof(RemoteDbDataAnnotations))]
-    public partial class remote_db
+    public partial class RemoteDb
     {
     }
 
@@ -746,14 +714,14 @@
         /// Gets or sets the url.
         /// </summary>
         [Display(Name = "url адрес")]
-        public string url { get; set; }
+        public string Url { get; set; }
     }
 
     /// <summary>
     /// The tie.
     /// </summary>
     [MetadataType(typeof(TieDataAnnotations))]
-    public partial class tie
+    public partial class Tie
     {
     }
 
@@ -781,14 +749,14 @@
         /// Gets or sets the piece_type_id.
         /// </summary>
         [Display(Name = "Тип фрагмента цепочки")]
-        public int piece_type_id { get; set; }
+        public int PieceTypeId { get; set; }
     }
 
     /// <summary>
     /// The translator.
     /// </summary>
     [MetadataType(typeof(TranslatorDataAnnotations))]
-    public partial class translator
+    public partial class Translator
     {
     }
 

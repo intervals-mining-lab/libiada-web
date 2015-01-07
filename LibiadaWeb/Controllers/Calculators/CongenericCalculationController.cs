@@ -66,18 +66,18 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var matters = db.matter.Include("nature");
+            var matters = db.Matter.Include("nature");
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
-            var characteristicsList = db.characteristic_type.Where(c => c.congeneric_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.CongenericSequenceApplicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var links = new SelectList(db.link, "id", "name").ToList();
+            var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
@@ -85,9 +85,9 @@
                     { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.nature, "id", "name") }, 
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "links", links }, 
-                    { "languages", new SelectList(db.language, "id", "name") }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };
             return View();
@@ -148,7 +148,7 @@
                 for (int w = 0; w < matterIds.Length; w++)
                 {
                     long matterId = matterIds[w];
-                    chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     elementNames.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
                     theoreticalRanks.Add(new List<List<double>>());
@@ -160,22 +160,22 @@
 
                         long chainId;
 
-                        if (db.matter.Single(m => m.id == matterId).nature_id == Aliases.Nature.Literature)
+                        if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];
 
                             isLiteratureChain = true;
-                            chainId = db.literature_chain.Single(l => l.matter_id == matterId &&
-                                                                      l.notation_id == notationId
-                                                                      && l.language_id == languageId
+                            chainId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
+                                                                      l.NotationId == notationId
+                                                                      && l.LanguageId == languageId
                                                                       &&
-                                                                      ((translatorId == null && l.translator_id == null) ||
-                                                                       (translatorId == l.translator_id))).id;
+                                                                      ((translatorId == null && l.TranslatorId == null) ||
+                                                                       (translatorId == l.TranslatorId))).Id;
                         }
                         else
                         {
-                            chainId = db.chain.Single(c => c.matter_id == matterId && c.notation_id == notationId).id;
+                            chainId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                         }
 
                         Chain libiadaChain = chainRepository.ToLibiadaChain(chainId);
@@ -184,15 +184,15 @@
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
 
-                        string className = db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                        string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
-                        var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+                        var link = (Link)(linkId ?? 0);
                         List<long> chainElements = chainRepository.GetElementIds(chainId);
-                        int calculated = db.congeneric_characteristic.Count(c => c.chain_id == chainId &&
-                                                                                 c.characteristic_type_id ==
+                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == chainId &&
+                                                                                 c.CharacteristicTypeId ==
                                                                                  characteristicId &&
-                                                                                 ((linkId == null && c.link_id == null) ||
-                                                                                  (linkId == c.link_id)));
+                                                                                 ((linkId == null && c.LinkId == null) ||
+                                                                                  (linkId == c.LinkId)));
                         if (calculated < libiadaChain.Alphabet.Cardinality)
                         {
                             for (int j = 0; j < libiadaChain.Alphabet.Cardinality; j++)
@@ -201,23 +201,23 @@
 
                                 CongenericChain tempChain = libiadaChain.CongenericChain(j);
 
-                                if (!db.congeneric_characteristic.Any(b =>
-                                    b.chain_id == chainId &&
-                                    b.characteristic_type_id == characteristicId &&
-                                    b.element_id == elementId && b.link_id == linkId))
+                                if (!db.CongenericCharacteristic.Any(b =>
+                                    b.SequenceId == chainId &&
+                                    b.CharacteristicTypeId == characteristicId &&
+                                    b.ElementId == elementId && b.LinkId == linkId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
-                                    var currentCharacteristic = new congeneric_characteristic
+                                    var currentCharacteristic = new CongenericCharacteristic
                                     {
-                                        chain_id = chainId,
-                                        characteristic_type_id = characteristicId,
-                                        link_id = linkId,
-                                        element_id = elementId,
-                                        value = value,
-                                        value_string = value.ToString(),
+                                        SequenceId = chainId,
+                                        CharacteristicTypeId = characteristicId,
+                                        LinkId = linkId,
+                                        ElementId = elementId,
+                                        Value = value,
+                                        ValueString = value.ToString(),
                                     };
 
-                                    db.congeneric_characteristic.Add(currentCharacteristic);
+                                    db.CongenericCharacteristic.Add(currentCharacteristic);
                                     db.SaveChanges();
                                 }
                             }
@@ -228,11 +228,11 @@
                         {
                             long elementId = chainElements[d];
 
-                            double? characteristic = db.congeneric_characteristic.Single(c =>
-                                c.chain_id == chainId &&
-                                c.characteristic_type_id == characteristicId &&
-                                c.element_id == elementId &&
-                                ((linkId == null && c.link_id == null) || (linkId == c.link_id))).value;
+                            double? characteristic = db.CongenericCharacteristic.Single(c =>
+                                c.SequenceId == chainId &&
+                                c.CharacteristicTypeId == characteristicId &&
+                                c.ElementId == elementId &&
+                                ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
@@ -283,11 +283,11 @@
                 {
                     int characteristicId = characteristicIds[k];
 
-                    string characteristicType = db.characteristic_type.Single(c => c.id == characteristicId).name;
+                    string characteristicType = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
                     if (isLiteratureChain)
                     {
                         int languageId = languageIds[k];
-                        string language = db.language.Single(l => l.id == languageId).name;
+                        string language = db.Language.Single(l => l.Id == languageId).Name;
                         characteristicNames.Add(characteristicType + " " + language);
                     }
                     else

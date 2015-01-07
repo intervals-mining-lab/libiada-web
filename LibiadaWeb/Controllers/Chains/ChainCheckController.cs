@@ -43,7 +43,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matterId = new SelectList(db.matter, "id", "name");
+            ViewBag.matterId = new SelectList(db.Matter, "id", "name");
             return View();
         }
 
@@ -96,11 +96,11 @@
 
                 var libiadaChain = new BaseChain(resultStringChain);
 
-                long chainId = db.chain.Single(c => c.matter_id == matterId).id;
+                long chainId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
 
                 string message;
 
-                if (!db.dna_chain.Any(d => d.fasta_header.Equals(fastaHeader)))
+                if (!db.DnaSequence.Any(d => d.FastaHeader.Equals(fastaHeader)))
                 {
                     message = "объекта с заголовком " + fastaHeader + " не существует";
 

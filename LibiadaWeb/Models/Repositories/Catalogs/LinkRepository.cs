@@ -34,20 +34,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="List"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<link> links)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<Link> links)
         {
             HashSet<int> linkIds = links != null
-                                         ? new HashSet<int>(links.Select(c => c.id))
+                                         ? new HashSet<int>(links.Select(c => c.Id))
                                          : new HashSet<int>();
-            var allLinks = db.link;
+            var allLinks = db.Link;
             var linksList = new List<SelectListItem>();
             foreach (var link in allLinks)
             {
                 linksList.Add(new SelectListItem
                     {
-                        Value = link.id.ToString(), 
-                        Text = link.name, 
-                        Selected = linkIds.Contains(link.id)
+                        Value = link.Id.ToString(), 
+                        Text = link.Name, 
+                        Selected = linkIds.Contains(link.Id)
                     });
             }
 

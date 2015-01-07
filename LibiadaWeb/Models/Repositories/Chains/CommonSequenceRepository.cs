@@ -11,7 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The chain repository.
     /// </summary>
-    public class CommonSequenceRepository : ChainImporter, ICommonSequenceRepository
+    public class CommonSequenceRepository : CommonSequenceImporter, ICommonSequenceRepository
     {
         /// <summary>
         /// The element repository.

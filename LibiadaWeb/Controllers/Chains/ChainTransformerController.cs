@@ -24,7 +24,7 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaChainRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaChainRepository;
 
         /// <summary>
         /// The chain repository.
@@ -42,7 +42,7 @@
         public ChainTransformerController()
         {
             db = new LibiadaWebEntities();
-            dnaChainRepository = new DnaChainRepository(db);
+            dnaChainRepository = new DnaSequenceRepository(db);
             chainRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }

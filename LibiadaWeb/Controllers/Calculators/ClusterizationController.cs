@@ -75,14 +75,14 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var characteristicsList = db.characteristic_type.Where(c => c.full_chain_applicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var links = new SelectList(db.link, "id", "name").ToList();
+            var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            var translators = new SelectList(db.translator, "id", "name").ToList();
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
             ViewBag.data = new Dictionary<string, object>
@@ -90,9 +90,9 @@
                     { "matters", matterRepository.GetSelectListWithNature() }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.nature, "id", "name") }, 
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "links", links }, 
-                    { "languages", new SelectList(db.language, "id", "name") }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };
             return View();
@@ -150,34 +150,34 @@
                 var chainNames = new List<string>();
                 foreach (var matterId in matterIds)
                 {
-                    chainNames.Add(db.matter.Single(m => m.id == matterId).name);
+                    chainNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     characteristics.Add(new List<double>());
                     for (int i = 0; i < notationIds.Length; i++)
                     {
-                        long chainId = db.matter.Single(m => m.id == matterId)
-                            .chain.Single(c => c.notation_id == notationIds[i]).id;
+                        long chainId = db.Matter.Single(m => m.Id == matterId)
+                            .Sequence.Single(c => c.NotationId == notationIds[i]).Id;
 
                         int characteristicId = characteristicIds[i];
                         int? linkId = linkIds[i];
-                        if (db.characteristic.Any(c =>
-                            ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
-                            c.chain_id == chainId &&
-                            c.characteristic_type_id == characteristicId))
+                        if (db.Characteristic.Any(c =>
+                            ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
+                            c.SequenceId == chainId &&
+                            c.CharacteristicTypeId == characteristicId))
                         {
                             characteristics.Last()
-                                .Add((double)db.characteristic.Single(c =>
-                                    ((linkId == null && c.link_id == null) || (linkId == c.link_id)) &&
-                                    c.chain_id == chainId &&
-                                    c.characteristic_type_id == characteristicIds[i]).value);
+                                .Add((double)db.Characteristic.Single(c =>
+                                    ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
+                                    c.SequenceId == chainId &&
+                                    c.CharacteristicTypeId == characteristicIds[i]).Value);
                         }
                         else
                         {
                             Chain tempChain = chainRepository.ToLibiadaChain(chainId);
 
                             string className =
-                                db.characteristic_type.Single(c => c.id == characteristicId).class_name;
+                                db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                            var link = linkId != null ? (Link)db.link.Single(l => l.id == linkId).id : Link.None;
+                            var link = (Link)(linkId ?? 0);
                             characteristics.Last().Add(calculator.Calculate(tempChain, link));
                         }
                     }
@@ -189,11 +189,11 @@
                     int? linkId = linkIds[k];
                     int notationId = notationIds[k];
 
-                    string linkName = linkId != null ? db.link.Single(l => l.id == linkId).name : string.Empty;
+                    string linkName = linkId != null ? db.Link.Single(l => l.Id == linkId).Name : string.Empty;
 
-                    characteristicNames.Add(db.characteristic_type.Single(c => c.id == characteristicId).name + " " +
+                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " +
                                             linkName + " " +
-                                            db.notation.Single(n => n.id == notationId).name);
+                                            db.Notation.Single(n => n.Id == notationId).Name);
                 }
 
                 DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
@@ -215,7 +215,7 @@
                     clusterNames.Add(new List<string>());
                     foreach (var matterId in cluster)
                     {
-                        clusterNames.Last().Add(db.matter.Single(m => m.id == matterId).name);
+                        clusterNames.Last().Add(db.Matter.Single(m => m.Id == matterId).Name);
                     }
                 }
 

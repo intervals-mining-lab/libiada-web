@@ -3,9 +3,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
     using System;
 
     /// <summary>
-    /// The DnaChainRepository interface.
+    /// The LiteratureChainRepository interface.
     /// </summary>
-    public interface IDnaChainRepository : IDisposable
+    public interface ILiteratureSequenceRepository : IDisposable
     {
     }
 }

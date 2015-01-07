@@ -38,12 +38,12 @@
         /// <summary>
         /// The dna chain repository.
         /// </summary>
-        private readonly DnaChainRepository dnaChainRepository;
+        private readonly DnaSequenceRepository dnaChainRepository;
 
         /// <summary>
         /// The literature chain repository.
         /// </summary>
-        private readonly LiteratureChainRepository literatureChainRepository;
+        private readonly LiteratureSequenceRepository literatureChainRepository;
 
         /// <summary>
         /// The element repository.
@@ -64,8 +64,8 @@
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
-            dnaChainRepository = new DnaChainRepository(db);
-            literatureChainRepository = new LiteratureChainRepository(db);
+            dnaChainRepository = new DnaSequenceRepository(db);
+            literatureChainRepository = new LiteratureSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
 

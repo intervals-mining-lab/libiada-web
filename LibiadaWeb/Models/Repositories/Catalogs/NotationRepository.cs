@@ -32,22 +32,22 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The notations.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<notation> notations)
+        public List<SelectListItem> GetSelectListItems(IEnumerable<Notation> notations)
         {
             HashSet<int> notationIds = notations != null
-                                           ? new HashSet<int>(notations.Select(c => c.id))
+                                           ? new HashSet<int>(notations.Select(c => c.Id))
                                            : new HashSet<int>();
-            var allNotations = db.notation;
+            var allNotations = db.Notation;
             var notationsList = new List<SelectListItem>();
             foreach (var notation in allNotations)
             {
                 notationsList.Add(new SelectListItem
                     {
-                        Value = notation.id.ToString(), 
-                        Text = notation.name, 
-                        Selected = notationIds.Contains(notation.id)
+                        Value = notation.Id.ToString(), 
+                        Text = notation.Name, 
+                        Selected = notationIds.Contains(notation.Id)
                     });
             }
 
@@ -62,12 +62,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.notation.Select(n => new
+            return db.Notation.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
+                Value = n.Id, 
+                Text = n.Name, 
                 Selected = false, 
-                Nature = n.nature_id
+                Nature = n.NatureId
             });
         }
 
@@ -82,12 +82,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedNotation)
         {
-            return db.notation.Select(n => new
+            return db.Notation.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
-                Selected = n.id == selectedNotation, 
-                Nature = n.nature_id
+                Value = n.Id, 
+                Text = n.Name, 
+                Selected = n.Id == selectedNotation, 
+                Nature = n.NatureId
             });
         }
 
@@ -102,12 +102,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> selectedNotations)
         {
-            return db.notation.Select(n => new
+            return db.Notation.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
-                Selected = selectedNotations.Contains(n.id), 
-                Nature = n.nature_id
+                Value = n.Id, 
+                Text = n.Name, 
+                Selected = selectedNotations.Contains(n.Id), 
+                Nature = n.NatureId
             });
         }
 

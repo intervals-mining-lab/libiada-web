@@ -28,16 +28,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get select list with nature.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.remote_db.Select(n => new
+            return db.RemoteDb.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
+                Value = n.Id, 
+                Text = n.Name, 
                 Selected = false, 
-                Nature = n.nature_id
+                Nature = n.NatureId
             });
         }
 
@@ -48,16 +48,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The selected db.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedDb)
         {
-            return db.remote_db.Select(n => new
+            return db.RemoteDb.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
-                Selected = n.id == selectedDb, 
-                Nature = n.nature_id
+                Value = n.Id, 
+                Text = n.Name, 
+                Selected = n.Id == selectedDb, 
+                Nature = n.NatureId
             });
         }
 
@@ -72,12 +72,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> selectedDbs)
         {
-            return db.remote_db.Select(n => new
+            return db.RemoteDb.Select(n => new
             {
-                Value = n.id, 
-                Text = n.name, 
-                Selected = selectedDbs.Contains(n.id), 
-                Nature = n.nature_id
+                Value = n.Id, 
+                Text = n.Name, 
+                Selected = selectedDbs.Contains(n.Id), 
+                Nature = n.NatureId
             });
         }
 

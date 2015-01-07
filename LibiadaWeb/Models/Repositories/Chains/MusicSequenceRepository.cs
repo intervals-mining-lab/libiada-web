@@ -3,15 +3,15 @@ namespace LibiadaWeb.Models.Repositories.Chains
     /// <summary>
     /// The music chain repository.
     /// </summary>
-    public class MusicChainRepository : ChainImporter, IMusicChainRepository
+    public class MusicSequenceRepository : CommonSequenceImporter, IMusicSequenceRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MusicChainRepository"/> class.
+        /// Initializes a new instance of the <see cref="MusicSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public MusicChainRepository(LibiadaWebEntities db) : base(db)
+        public MusicSequenceRepository(LibiadaWebEntities db) : base(db)
         {
         }
 

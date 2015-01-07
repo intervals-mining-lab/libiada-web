@@ -3,9 +3,9 @@ namespace LibiadaWeb.Models.Repositories.Chains
     using System;
 
     /// <summary>
-    /// The MusicChainRepository interface.
+    /// The DnaChainRepository interface.
     /// </summary>
-    public interface IMusicChainRepository : IDisposable
+    public interface IDnaSequenceRepository : IDisposable
     {
     }
 }

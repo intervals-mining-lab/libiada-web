@@ -49,19 +49,19 @@ namespace LibiadaWeb.Models.Repositories
         /// </returns>
         public long CreateBinaryCharacteristic(long chainId, int characteristicId, int linkId, long firstElementId, long secondElementId, double value)
         {
-            var characteristic = new binary_characteristic
+            var characteristic = new BinaryCharacteristic
             {
-                chain_id = chainId, 
-                characteristic_type_id = characteristicId, 
-                link_id = linkId, 
-                first_element_id = firstElementId, 
-                second_element_id = secondElementId, 
-                value = value, 
-                value_string = value.ToString()
+                SequenceId = chainId, 
+                CharacteristicTypeId = characteristicId, 
+                LinkId = linkId, 
+                FirstElementId = firstElementId, 
+                SecondElementId = secondElementId, 
+                Value = value, 
+                ValueString = value.ToString()
             };
-            db.binary_characteristic.Add(characteristic);
+            db.BinaryCharacteristic.Add(characteristic);
             db.SaveChanges();
-            return characteristic.id;
+            return characteristic.Id;
         }
 
         /// <summary>

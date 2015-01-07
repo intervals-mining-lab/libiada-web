@@ -36,16 +36,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get select list with nature.
         /// </summary>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.piece_type.Select(p => new
+            return db.PieceType.Select(p => new
             {
-                Value = p.id, 
-                Text = p.name, 
+                Value = p.Id, 
+                Text = p.Name, 
                 Selected = false, 
-                Nature = p.nature_id
+                Nature = p.NatureId
             });
         }
 
@@ -56,16 +56,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The selected piece type.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedPieceType)
         {
-            return db.piece_type.Select(p => new
+            return db.PieceType.Select(p => new
             {
-                Value = p.id, 
-                Text = p.name, 
-                Selected = p.id == selectedPieceType, 
-                Nature = p.nature_id
+                Value = p.Id, 
+                Text = p.Name, 
+                Selected = p.Id == selectedPieceType, 
+                Nature = p.NatureId
             });
         }
 
@@ -76,16 +76,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The selected piece types.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes)
         {
-            return db.piece_type.Select(p => new
+            return db.PieceType.Select(p => new
             {
-                Value = p.id, 
-                Text = p.name, 
-                Selected = selectedPieceTypes.Contains(p.id), 
-                Nature = p.nature_id
+                Value = p.Id, 
+                Text = p.Name, 
+                Selected = selectedPieceTypes.Contains(p.Id), 
+                Nature = p.NatureId
             });
         }
 
@@ -99,16 +99,16 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The filter.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes, IEnumerable<int> filter)
         {
-            return db.piece_type.Where(p => filter.Contains(p.id)).Select(p => new
+            return db.PieceType.Where(p => filter.Contains(p.Id)).Select(p => new
             {
-                Value = p.id, 
-                Text = p.name, 
-                Selected = selectedPieceTypes.Contains(p.id), 
-                Nature = p.nature_id
+                Value = p.Id, 
+                Text = p.Name, 
+                Selected = selectedPieceTypes.Contains(p.Id), 
+                Nature = p.NatureId
             });
         }
     }
