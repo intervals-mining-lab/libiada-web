@@ -21,17 +21,17 @@
 @using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImport" }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" data-ng-controller="GenesImportCtrl">
+    <div class="form-horizontal" ng-controller="GenesImportCtrl">
         @Html.ValidationSummary(true)
 
         <div class="form-group">
             @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
+                @Html.CheckBox("localFile", new { ng_model = "localFile" })
             </div>
         </div>
 
-        <div class="form-group" data-ng-show="localFile">
+        <div class="form-group" ng-show="localFile">
             @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" id="file"/>
@@ -41,8 +41,8 @@
         <div class="form-group">
             @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="sequenceId" data-ng-options="m.Value as m.Text for m in sequences"></select>
-                <input type="hidden" name="sequenceId" value="{{sequenceId}}" />
+                <select ng-model="sequenceId" ng-options="m.Value as m.Text for m in sequences"></select>
+                <input type="hidden" name="sequenceId" ng-value="sequenceId" />
             </div>
         </div>
         <div class="form-group">

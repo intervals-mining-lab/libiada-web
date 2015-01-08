@@ -18,7 +18,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" data-ng-controller="MattersequenceCreateCtrl">
+    <div class="form-horizontal" ng-controller="MattersequenceCreateCtrl">
         <h4>Объект</h4>
         <hr />
         @Html.ValidationSummary(true)
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="form-group" data-ng-show="localFile">
+        <div class="form-group" ng-show="localFile">
             @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" id="file" />
@@ -56,8 +56,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.NatureId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
-                <input type="hidden" name="NatureId" data-ng-value="natureId" />
+                <select ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
+                <input type="hidden" name="NatureId" ng-value="natureId" />
                 @Html.ValidationMessageFor(model => model.NatureId)
             </div>
         </div>
@@ -65,41 +65,41 @@
         <div class="form-group">
             @Html.Label("Форма записи цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
-                <input type="hidden" name="notationId" data-ng-value="notationId" />
+                <select ng-model="notationId" ng-options="n.Value as n.Text for n in notationsFiltered"></select>
+                <input type="hidden" name="notationId" ng-value="notationId" />
             </div>
         </div>
 
         <div class="form-group">
             @Html.Label("Тип цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
-                <input type="hidden" name="pieceTypeId" data-ng-value="pieceTypeId" />
+                <select ng-model="pieceTypeId" ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
+                <input type="hidden" name="pieceTypeId" ng-value="pieceTypeId" />
             </div>
         </div>
 
         <div class="form-group">
             @Html.Label("Стороняя БД", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="remoteDbId" data-ng-value="remoteDbId" />
+                <select ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
+                <input type="hidden" name="remoteDbId" ng-value="remoteDbId" />
             </div>
         </div>
 
-        <div class="form-group" data-ng-show="isRemoteDbDefined()">
+        <div class="form-group" ng-show="isRemoteDbDefined()">
             @Html.Label("id в сторонней БД", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="text" name="remoteId" data-ng-model="remoteId" />
+                <input type="text" name="remoteId" ng-model="remoteId" />
             </div>
         </div>
 
-        <div data-ng-switch="natureId">
-            <div data-ng-switch-when="@Aliases.Nature.Genetic">
+        <div ng-switch="natureId">
+            <div ng-switch-when="@Aliases.Nature.Genetic">
                 <div class="form-group">
                     @Html.Label("Продукт последовательности", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        <select data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
-                        <input type="hidden" name="productId" data-ng-value="productId" />
+                        <select ng-model="productId" ng-options="l.Value as l.Text for l in products"></select>
+                        <input type="hidden" name="productId" ng-value="productId" />
                     </div>
                 </div>
 
@@ -118,12 +118,12 @@
                 </div>
             </div>
 
-            <div data-ng-switch-when="@Aliases.Nature.Literature">
+            <div ng-switch-when="@Aliases.Nature.Literature">
                 <div class="form-group">
                     @Html.Label("Язык литературного произведения", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        <select data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
-                        <input type="hidden" name="languageId" data-ng-value="languageId" />
+                        <select ng-model="languageId" ng-options="l.Value as l.Text for l in languages"></select>
+                        <input type="hidden" name="languageId" ng-value="languageId" />
                     </div>
                 </div>
 
@@ -137,13 +137,13 @@
                 <div class="form-group">
                     @Html.Label("Переводчик", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        <select data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
-                        <input type="hidden" name="translatorId" data-ng-value="translatorId" />
+                        <select ng-model="translatorId" ng-options="t.Value as t.Text for t in translators"></select>
+                        <input type="hidden" name="translatorId" ng-value="translatorId" />
                     </div>
                 </div>
             </div>
 
-            <div data-ng-switch-when="@Aliases.Nature.Music">
+            <div ng-switch-when="@Aliases.Nature.Music">
 
             </div>
         </div>

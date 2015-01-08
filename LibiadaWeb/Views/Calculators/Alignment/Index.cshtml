@@ -34,12 +34,12 @@
 
 @using (Html.BeginForm("Index", "Alignment", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Alignment" }))
 {
-    <fieldset data-ng-controller="AlignmentCtrl">
+    <fieldset ng-controller="AlignmentCtrl">
         <legend>Характеристики цепочек</legend>
 
-        <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
-            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value"/>
-            <span data-ng-bind="pieceTypeCheckBox.Text"></span>
+        <div ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
+            <input type="checkbox" name="pieceTypeIds" ng-value="pieceTypeCheckBox.Value"/>
+            <span ng-bind="pieceTypeCheckBox.Text"></span>
         </div>
 
         <table class="table">
@@ -51,13 +51,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="matter in matters">
+            <tr ng-repeat="matter in matters">
                 <td>
-                    <input type="radio" name="matterId1" data-ng-value="matter.Value"/>
-                    <span data-ng-bind="matter.Text"></span>
+                    <input type="radio" name="matterId1" ng-value="matter.Value"/>
+                    <span ng-bind="matter.Text"></span>
                 </td>
-                <td data-ng-bind="matter.description"/>
-                <td data-ng-bind="matter.created"/>
+                <td ng-bind="matter.description"/>
+                <td ng-bind="matter.created"/>
             </tr>
             </tbody>
         </table>
@@ -71,13 +71,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="matter in matters">
+            <tr ng-repeat="matter in matters">
                 <td>
-                    <input type="radio" name="matterId2" data-ng-value="matter.Value"/>
-                    <span data-ng-bind="matter.Text"></span>
+                    <input type="radio" name="matterId2" ng-value="matter.Value"/>
+                    <span ng-bind="matter.Text"></span>
                 </td>
-                <td data-ng-bind="matter.description"/>
-                <td data-ng-bind="matter.created"/>
+                <td ng-bind="matter.description"/>
+                <td ng-bind="matter.created"/>
             </tr>
             </tbody>
         </table>
@@ -96,14 +96,14 @@
             <span> Нормализованная степень расхождения</span>
         </div>
         <br/>
-        <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-        <input type="hidden" name="characteristicId" data-ng-value="characteristic.characteristicType.Value"/>
+        <select title="Характеристика" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+        <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value"/>
 
-        <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-        <input type="hidden" name="linkId" data-ng-value="characteristic.link.Value"/>
+        <select title="Привязка" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+        <input type="hidden" name="linkId" ng-value="characteristic.link.Value"/>
 
-        <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
-        <input type="hidden" name="notationId" data-ng-value="characteristic.notation.Value"/>
+        <select title="Форма записи" ng-model="characteristic.notation" ng-options="n.Text for n in notations"></select>
+        <input type="hidden" name="notationId" ng-value="characteristic.notation.Value"/>
         <br/>
         <br/>
         <input type="submit" value="Вычислить"/>

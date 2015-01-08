@@ -41,12 +41,12 @@
 
 @using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesCalculation" }))
 {
-    <fieldset data-ng-controller="GenesCalculationCtrl">
+    <fieldset ng-controller="GenesCalculationCtrl">
         <legend>Характеристики цепочек</legend>
 
-        <div data-ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
-            <input type="checkbox" name="pieceTypeIds" data-ng-value="pieceTypeCheckBox.Value"/>
-            <span data-ng-bind="pieceTypeCheckBox.Text"></span>
+        <div ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
+            <input type="checkbox" name="pieceTypeIds" ng-value="pieceTypeCheckBox.Value"/>
+            <span ng-bind="pieceTypeCheckBox.Text"></span>
         </div>
 
         <table class="table">
@@ -58,32 +58,32 @@
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="matter in matters">
+            <tr ng-repeat="matter in matters">
                 <td>
-                    <input type="checkbox" name="matterIds" data-ng-value="matter.Value"/>
-                    <span data-ng-bind="matter.Text"></span>
+                    <input type="checkbox" name="matterIds" ng-value="matter.Value"/>
+                    <span ng-bind="matter.Text"></span>
                 </td>
-                <td data-ng-bind="matter.description"/>
-                <td data-ng-bind="matter.created"/>
+                <td ng-bind="matter.description"/>
+                <td ng-bind="matter.created"/>
             </tr>
             </tbody>
         </table>
         <br/>
         @Html.CheckBox("isSort", "Sort results", null)
         <br/>
-        <button type="button" data-ng-init="addCharacteristic()" data-ng-click="addCharacteristic()">Добавить характеристику</button>
+        <button type="button" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Добавить характеристику</button>
         <br/>
-        <div data-ng-repeat="characteristic in characteristics">
-            <select title="Характеристика" data-ng-model="characteristic.characteristicType" data-ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" data-ng-value="characteristic.characteristicType.Value"/>
+        <div ng-repeat="characteristic in characteristics">
+            <select title="Характеристика" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value"/>
 
-            <select title="Привязка" data-ng-show="isLinkable(characteristic)" data-ng-model="characteristic.link" data-ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" data-ng-value="characteristic.link.Value"/>
+            <select title="Привязка" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
 
-            <select title="Форма записи" data-ng-model="characteristic.notation" data-ng-options="n.Text for n in notations"></select>
-            <input type="hidden" name="notationIds" data-ng-value="characteristic.notation.Value"/>
+            <select title="Форма записи" ng-model="characteristic.notation" ng-options="n.Text for n in notations"></select>
+            <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value"/>
 
-            <button type="button" data-ng-click="deleteCharacteristic(characteristic)" data-ng-disabled="characteristics.length <= 1">Удалить</button>
+            <button type="button" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Удалить</button>
             <br/>
         </div>
         <br/>
