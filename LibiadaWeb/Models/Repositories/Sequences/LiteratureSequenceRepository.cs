@@ -93,7 +93,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @language_id,
                                         @translator_id
                                     );";
-            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             HashSet<long> sequenceIds = sequences != null
                                          ? new HashSet<long>(sequences.Select(c => c.Id))
                                          : new HashSet<long>();
-            var allSequences = db.LiteratureSequence.Include("matter");
+            var allSequences = Db.LiteratureSequence.Include("matter");
             var sequencesList = new List<SelectListItem>();
             foreach (var sequence in allSequences)
             {
@@ -151,7 +151,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
+            Db.Dispose();
         }
     }
 }

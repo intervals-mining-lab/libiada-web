@@ -64,7 +64,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             if (allSequences == null)
             {
-                allSequences = db.CommonSequence.Include("matter");
+                allSequences = Db.CommonSequence.Include("matter");
             }
 
             HashSet<long> sequenceIds = selectedSequences != null
@@ -160,7 +160,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public List<long> GetElementIds(long sequenceId)
         {
             const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
+            return Db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public int[] GetBuilding(long sequenceId)
         {
             const string Query = "SELECT unnest(building) FROM chain WHERE id = @id";
-            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
+            return Db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
+            Db.Dispose();
         }
     }
 }

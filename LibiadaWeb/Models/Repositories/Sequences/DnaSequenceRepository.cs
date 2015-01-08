@@ -124,7 +124,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @partial,
                                         @complement
                                     );";
-            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<DnaSequence> sequences)
         {
-            return GetSelectListItems(db.DnaSequence.ToList(), sequences);
+            return GetSelectListItems(Db.DnaSequence.ToList(), sequences);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 : new HashSet<long>();
             if (allSequences == null)
             {
-                allSequences = db.DnaSequence.Include("matter");
+                allSequences = Db.DnaSequence.Include("matter");
             }
 
             var sequencesList = new List<SelectListItem>();
@@ -276,7 +276,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
+            Db.Dispose();
         }
     }
 }

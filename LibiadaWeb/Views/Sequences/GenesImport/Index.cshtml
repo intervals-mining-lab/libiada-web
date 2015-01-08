@@ -1,12 +1,15 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Genes import";
 }
-<script>
-    var app = angular.module('GenesImport', []);
 
-    app.controller('GenesImportCtrl', ['$scope', function($scope) {
+<script>
+    "use strict";
+
+    var app = angular.module("GenesImport", []);
+
+    app.controller("GenesImportCtrl", ["$scope", function($scope) {
 
             var data = @Html.Raw(Json.Encode(ViewBag.data));
 
@@ -14,37 +17,40 @@
             $scope.localFile = false;
         }
     ]);
-
 </script>
 
-<h2>title</h2>
-@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesImport" }))
+<h2>Genes import</h2>
+
+@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "GenesImport" }))
 {
     @Html.AntiForgeryToken()
     <div class="form-horizontal" ng-controller="GenesImportCtrl">
-        @Html.ValidationSummary(true)
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-group">
-            @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            <div class="col-md-offset-2 col-md-10">
                 @Html.CheckBox("localFile", new { ng_model = "localFile" })
+                @Html.Label("localFile", "Загружать цепочку из локального файла")
             </div>
         </div>
 
         <div class="form-group" ng-show="localFile">
-            @Html.Label("Файл цепочки", new { @class = "control-label col-md-2" })
+            @Html.Label("file", "Файл цепочки", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="file" name="file" id="file"/>
+                <input type="file" name="file" />
+                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.Label("Цепочка", new { @class = "control-label col-md-2" })
+            @Html.Label("sequenceId", "Цепочка", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select ng-model="sequenceId" ng-options="m.Value as m.Text for m in sequences"></select>
-                <input type="hidden" name="sequenceId" ng-value="sequenceId" />
+                <select class="form-control" ng-model="sequenceId" ng-options="m.Value as m.Text for m in sequences"></select>
+                <input type="hidden" name="sequenceId" ng-value="sequenceId"/>
+                @Html.ValidationMessage("sequenceId", "", new { @class = "text-danger" })
             </div>
         </div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Создать" class="btn btn-default"/>
@@ -58,5 +64,3 @@
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
 }
-
-

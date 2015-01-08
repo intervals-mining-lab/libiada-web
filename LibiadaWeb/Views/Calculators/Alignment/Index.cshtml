@@ -1,114 +1,177 @@
-﻿@using LibiadaWeb.Helpers
-@model dynamic
+﻿@model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Выравнивание генов";
+    ViewBag.Title = "Genes alignment";
 }
-
-<h2>Выравнивание генов</h2>
 
 <script type="text/javascript">
     "use strict";
 
-    var app = angular.module('Alignment', []);
+    var app = angular.module("Alignment", []);
 
-    app.controller('AlignmentCtrl', [
-        '$scope', function($scope) {
+    app.controller("AlignmentCtrl", ["$scope", function($scope) {
 
-            var data = @Html.Raw(Json.Encode(ViewBag.data));
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-            MapModelFromJson($scope, data);
+        MapModelFromJson($scope, data);
 
-            $scope.characteristic = {
-                characteristicType: $scope.characteristicTypes[0],
-                link: $scope.links[0],
-                notation: $scope.notations[0]
-            };
+        $scope.characteristic = {
+            characteristicType: $scope.characteristicTypes[0],
+            link: $scope.links[0],
+            notation: $scope.notations[0]
+        };
 
-            $scope.isLinkable = function(characteristic) {
-                return characteristic.characteristicType.Linkable;
-            };
-        }
-    ]);
+        $scope.isLinkable = function(characteristic) {
+            return characteristic.characteristicType.Linkable;
+        };
+    }]);
 </script>
 
-@using (Html.BeginForm("Index", "Alignment", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Alignment" }))
+<h2>Genes alignment</h2>
+
+@using (Html.BeginForm("Index", "Alignment", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Alignment" }))
 {
-    <fieldset ng-controller="AlignmentCtrl">
-        <legend>Характеристики цепочек</legend>
-
+    <div class="form-horizontal" ng-controller="AlignmentCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        @Html.Label("firstMatterId", "First sequence", new { @class = "control-label" })
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Modified)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="matter in matters">
+                    <td>
+                        <label>
+                            <input type="radio" name="firstMatterId" ng-value="matter.Value" />
+                            {{matter.Text}}
+                        </label>
+                    </td>
+                    <td ng-bind="matter.description" />
+                    <td ng-bind="matter.created" />
+                    <td ng-bind="matter.modified" />
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+        @Html.Label("secondMatterId", "Second sequence", new { @class = "control-label" })
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Modified)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="matter in matters">
+                    <td>
+                        <label>
+                            <input type="radio" name="secondMatterId" ng-value="matter.Value" />
+                            {{matter.Text}}
+                        </label>
+                    </td>
+                    <td ng-bind="matter.description" />
+                    <td ng-bind="matter.created" />
+                    <td ng-bind="matter.modified" />
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <br />
+        @Html.LabelFor(model => model.First().Sequence.First().PieceTypeId, new { @class = "control-label" })
         <div ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
-            <input type="checkbox" name="pieceTypeIds" ng-value="pieceTypeCheckBox.Value"/>
-            <span ng-bind="pieceTypeCheckBox.Text"></span>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceTypeCheckBox.Value" })
+                        {{pieceTypeCheckBox.Text}}
+                    </label>
+                </div>
+            </div>
         </div>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Создан</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="matter in matters">
-                <td>
-                    <input type="radio" name="matterId1" ng-value="matter.Value"/>
-                    <span ng-bind="matter.Text"></span>
-                </td>
-                <td ng-bind="matter.description"/>
-                <td ng-bind="matter.created"/>
-            </tr>
-            </tbody>
-        </table>
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Создан</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="matter in matters">
-                <td>
-                    <input type="radio" name="matterId2" ng-value="matter.Value"/>
-                    <span ng-bind="matter.Text"></span>
-                </td>
-                <td ng-bind="matter.description"/>
-                <td ng-bind="matter.created"/>
-            </tr>
-            </tbody>
-        </table>
-        <br/>
-        <div>Способ сравнения при выравнивании:</div>
-        <div>
-            <input type="radio" name="validationType" value="Equality"/>
-            <span> Степень совпадения</span>
+        <br />
+        @Html.Label("validationType", "Alignment validation type", new { @class = "control-label" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" value="Equality"/>
+                    Equality
+                </label>
+            </div>
         </div>
-        <div>
-            <input type="radio" name="validationType" value="Difference"/>
-            <span> Степень расхождения</span>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" value="Difference" />
+                    Difference
+                </label>
+            </div>
         </div>
-        <div>
-            <input type="radio" name="validationType" value="NormalizedDifference"/>
-            <span> Нормализованная степень расхождения</span>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" value="NormalizedDifference" />
+                    Normalized difference
+                </label>
+            </div>
         </div>
         <br/>
-        <select title="Характеристика" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-        <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value"/>
-
-        <select title="Привязка" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-        <input type="hidden" name="linkId" ng-value="characteristic.link.Value"/>
-
-        <select title="Форма записи" ng-model="characteristic.notation" ng-options="n.Text for n in notations"></select>
-        <input type="hidden" name="notationId" ng-value="characteristic.notation.Value"/>
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+                <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value"/>
+                @Html.ValidationMessage("characteristicId", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="Link" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+                <input type="hidden" name="linkId" ng-value="characteristic.link.Value" />
+                @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations"></select>
+                <input type="hidden" name="notationId" ng-value="characteristic.notation.Value" />
+                @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+            </div>
+        </div>
         <br/>
-        <br/>
-        <input type="submit" value="Вычислить"/>
-    </fieldset>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
+
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")

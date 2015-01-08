@@ -102,10 +102,10 @@
         /// The index.
         /// </summary>
         /// <param name="firstMatterId">
-        /// The matter id 1.
+        /// Id of first matter.
         /// </param>
         /// <param name="secondMatterId">
-        /// The matter id 2.
+        /// Id of second matter.
         /// </param>
         /// <param name="characteristicId">
         /// The characteristic id.

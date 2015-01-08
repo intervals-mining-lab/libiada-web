@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose() 
         {
-            db.Dispose();
+            Db.Dispose();
         }
     }
 }

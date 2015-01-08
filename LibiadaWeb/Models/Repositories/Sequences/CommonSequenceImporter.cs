@@ -1,8 +1,11 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
-    using System.Linq;
+
+    using LibiadaWeb.Helpers;
+
     using Npgsql;
+
     using NpgsqlTypes;
 
     /// <summary>
@@ -13,7 +16,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        protected readonly LibiadaWebEntities db;
+        protected readonly LibiadaWebEntities Db;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonSequenceImporter"/> class.
@@ -23,7 +26,7 @@
         /// </param>
         protected CommonSequenceImporter(LibiadaWebEntities db)
         {
-            this.db = db;
+            Db = db;
         }
 
         /// <summary>
@@ -45,7 +48,7 @@
         {
             if (commonSequence.Id == default(long))
             {
-                commonSequence.Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
+                commonSequence.Id = DbHelper.GetNewElementId(Db);
             }
 
             var parameters = new List<object>

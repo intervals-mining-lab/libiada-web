@@ -5,13 +5,15 @@
     ViewBag.Title = "Create sequence";
 }
 
-<h2>Create sequence</h2>
-
 <script>
+    "use strict";
+
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-@using (Html.BeginForm("Create", "CommonSequences", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "MatterSequenceCreate" }))
+<h2>Create sequence</h2>
+
+@using (Html.BeginForm("Create", "CommonSequences", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "MatterSequenceCreate" }))
 {
     @Html.AntiForgeryToken()
 

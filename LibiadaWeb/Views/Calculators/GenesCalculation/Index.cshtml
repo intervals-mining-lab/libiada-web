@@ -5,8 +5,6 @@
     ViewBag.Title = "Вычисление характеристик генов";
 }
 
-<h2>Вычисление характеристик генов</h2>
-
 <script type="text/javascript">
     "use strict";
 
@@ -14,32 +12,34 @@
 
     app.controller("GenesCalculationCtrl", ["$scope", function($scope) {
 
-            var data = @Html.Raw(Json.Encode(ViewBag.data));
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
 
-            MapModelFromJson($scope, data);
+        MapModelFromJson($scope, data);
 
-            $scope.characteristics = new Array();
+        $scope.characteristics = new Array();
 
-            $scope.addCharacteristic = function() {
-                $scope.characteristics.push({
-                    characteristicType: $scope.characteristicTypes[0],
-                    link: $scope.links[0],
-                    notation: $scope.notations[0]
-                });
-            };
+        $scope.addCharacteristic = function() {
+            $scope.characteristics.push({
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.links[0],
+                notation: $scope.notations[0]
+            });
+        };
 
-            $scope.deleteCharacteristic = function(characteristic) {
-                $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-            };
+        $scope.deleteCharacteristic = function(characteristic) {
+            $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
+        };
 
-            $scope.isLinkable = function(characteristic) {
-                return characteristic.characteristicType.Linkable;
-            };
-        }
-    ]);
+        $scope.isLinkable = function(characteristic) {
+            return characteristic.characteristicType.Linkable;
+        };
+    }]);
 </script>
 
-@using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "GenesCalculation" }))
+<h2>Вычисление характеристик генов</h2>
+
+
+@using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "GenesCalculation" }))
 {
     <fieldset ng-controller="GenesCalculationCtrl">
         <legend>Характеристики цепочек</legend>
@@ -91,7 +91,9 @@
         <input type="submit" value="Вычислить"/>
     </fieldset>
 }
+
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
 }
+

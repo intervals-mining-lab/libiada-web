@@ -5,15 +5,15 @@
     ViewBag.Title = "Кластеризация";
 }
 
-<h2>Кластеризация</h2>
-
 <script type="text/javascript">
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
+<h2>Кластеризация</h2>
+
+@using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
 {
     <fieldset ng-controller="CalculationCtrl">
         <legend>Характеристики полных цепочек</legend>
@@ -84,6 +84,7 @@
         <input type="submit" value="Группировать"/>
     </fieldset>
 }
+
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")

@@ -6,8 +6,6 @@
     ViewBag.Title = "Вычисление характеристик однородных цепочек";
 }
 
-<h2>Вычисление характеристик однородных последовательностей</h2>
-
 <script type="text/javascript">
     "use strict";
 
@@ -15,7 +13,9 @@
 
 </script>
 
-@using (Html.BeginForm("Index", "CongenericCalculation", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "Calculation" }))
+<h2>Вычисление характеристик однородных последовательностей</h2>
+
+@using (Html.BeginForm("Index", "CongenericCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
 {
     <fieldset ng-controller="CalculationCtrl">
         <legend>Характеристики однородных цепочек</legend>
@@ -80,6 +80,7 @@
         <input type="submit" value="Вычислить"/>
     </fieldset>
 }
+
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")

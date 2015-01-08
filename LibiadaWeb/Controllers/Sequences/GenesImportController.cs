@@ -17,14 +17,9 @@
     public class GenesImportController : Controller
     {
         /// <summary>
-        /// The element repository.
+        /// The db.
         /// </summary>
-        private readonly ElementRepository elementRepository;
-
-        /// <summary>
-        /// The dna sequence repository.
-        /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
+        private readonly LibiadaWebEntities db;
 
         /// <summary>
         /// The sequence repository.
@@ -32,18 +27,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
         public GenesImportController()
         {
             db = new LibiadaWebEntities();
-            elementRepository = new ElementRepository(db);
-            dnaSequenceRepository = new DnaSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
@@ -238,28 +226,28 @@
                         throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                     }
 
-                    Product dbProduct;
+                    Product dataBaseProduct;
 
                     if (products.Any(p => p.Name.Equals(product)))
                     {
-                        dbProduct = products.Single(p => p.Name.Equals(product));
+                        dataBaseProduct = products.Single(p => p.Name.Equals(product));
                     }
                     else
                     {
-                        dbProduct = new Product { Name = product, PieceTypeId = pieceTypeId };
-                        db.Product.Add(dbProduct);
-                        products.Add(dbProduct);
+                        dataBaseProduct = new Product { Name = product, PieceTypeId = pieceTypeId };
+                        db.Product.Add(dataBaseProduct);
+                        products.Add(dataBaseProduct);
                     }
 
                     var gene = new Gene
                     {
-                        Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        Id = DbHelper.GetNewElementId(db),
                         SequenceId = parentSequence.Id,
                         Description = description,
                         PieceTypeId = pieceTypeId,
                         Complement = complement,
                         Partial = false,
-                        Product = dbProduct
+                        Product = dataBaseProduct
                     };
 
                     db.Gene.Add(gene);
@@ -286,7 +274,7 @@
                 {
                     var gene = new Gene
                     {
-                        Id = db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First(),
+                        Id = DbHelper.GetNewElementId(db),
                         SequenceId = parentSequence.Id,
                         Description = string.Empty,
                         PieceTypeId = Aliases.PieceType.NonCodingSequence,

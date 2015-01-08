@@ -5,16 +5,18 @@
     ViewBag.Title = "Создание";
 }
 
+<script>
+    "use strict";
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+</script>
+
 <h2>Создание</h2>
 
 @Html.ValidationMessage("Error")
 
-<script>
-    var data = @Html.Raw(Json.Encode(ViewBag.data));
-</script>
 
-
-@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "MattersequenceCreate" }))
+@using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "MattersequenceCreate" }))
 {
     @Html.AntiForgeryToken()
 
@@ -42,7 +44,7 @@
         <div class="form-group">
             @Html.Label("Загружать цепочку из локального файла", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.CheckBox("localFile", new { data_ng_model = "localFile" })
+                @Html.CheckBox("localFile", new { ng_model = "localFile" })
             </div>
         </div>
 

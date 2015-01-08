@@ -12,7 +12,7 @@
         /// Get data base name from data base.
         /// </summary>
         /// <param name="db">
-        /// The connection.
+        /// Data base connection.
         /// </param>
         /// <returns>
         /// The <see cref="string"/> representing db name.
@@ -30,6 +30,20 @@
             }
 
             return result;
-        }    
+        }
+
+        /// <summary>
+        /// Gets new element id from data base.
+        /// </summary>
+        /// <param name="db">
+        /// Data base connection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/> value of new id.
+        /// </returns>
+        public static long GetNewElementId(LibiadaWebEntities db)
+        {
+            return db.Database.SqlQuery<long>("SELECT nextval('elements_id_seq');").First();
+        }
     }
 }
