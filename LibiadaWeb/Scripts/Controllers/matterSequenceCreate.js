@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-var app = angular.module('MattersequenceCreate', []);
+var app = angular.module('MatterSequenceCreate', []);
 
-app.controller('MattersequenceCreateCtrl', ['$scope', 'filterFilter', function ($scope, filterFilter) {
+app.controller('MatterSequenceCreateCtrl', ['$scope', 'filterFilter', function ($scope, filterFilter) {
 
     MapModelFromJson($scope, data);
 

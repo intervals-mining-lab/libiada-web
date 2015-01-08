@@ -1,15 +1,14 @@
 ﻿@model CommonSequence
 
 @{
-    ViewBag.Title = "Удаление";
+    ViewBag.Title = "Sequence details";
 }
 
-<h2>Удаление</h2>
+<h2>Details</h2>
 
-<h3>Вы уверены, что хотите удалить данную запись?</h3>
 <div>
     <h4>Sequence</h4>
-    <hr/>
+    <hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.Created)
@@ -84,14 +83,8 @@
         </dd>
 
     </dl>
-
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="form-actions no-color">
-            <input type="submit" value="Удалить" class="btn btn-default"/> |
-            @Html.ActionLink("Назад к списку", "Index")
-        </div>
-    }
 </div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

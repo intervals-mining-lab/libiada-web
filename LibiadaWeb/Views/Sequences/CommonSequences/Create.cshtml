@@ -1,0 +1,173 @@
+﻿@using LibiadaWeb.Models
+@model CommonSequence
+
+@{
+    ViewBag.Title = "Create sequence";
+}
+
+<h2>Create sequence</h2>
+
+<script>
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+</script>
+
+@using (Html.BeginForm("Create", "CommonSequence", FormMethod.Post, new { enctype = "multipart/form-data", data_ng_app = "MatterSequenceCreate" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal" data-ng-controller="MatterSequenceCreateCtrl">
+        <h4>Sequence</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" data-ng-model="natureId" data-ng-options="n.Value as n.Text for n in natures"></select>
+                @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MatterId, "MatterId", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" data-ng-model="matterId" data-ng-options="m.Value as m.Text for m in mattersFiltered"></select>
+                <input type="hidden" name="MatterId" data-ng-value="matterId" />
+                @Html.ValidationMessageFor(model => model.MatterId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBox("localFile", new { ng_model = "localFile" })
+                @Html.Label("localFile", "Загружать цепочку из локального файла")
+            </div>
+        </div>
+
+        <div class="form-group" data-ng-show="localFile">
+            @Html.Label("file", "Файл цепочки", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" />
+                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" data-ng-model="notationId" data-ng-options="n.Value as n.Text for n in notationsFiltered"></select>
+                <input type="hidden" name="notation_id" data-ng-value="notationId" />
+                @Html.ValidationMessageFor(model => model.NotationId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PieceTypeId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" data-ng-model="pieceTypeId" data-ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
+                <input type="hidden" name="piece_type_id" data-ng-value="pieceTypeId" />
+                @Html.ValidationMessageFor(model => model.PieceTypeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RemoteDbId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" data-ng-model="remoteDbId" data-ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
+                <input type="hidden" name="remote_db_id" data-ng-value="remoteDbId" />
+                @Html.ValidationMessageFor(model => model.RemoteDbId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" data-ng-show="isRemoteDbDefined()">
+            @Html.LabelFor(model => model.RemoteId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RemoteId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RemoteId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div data-ng-switch="natureId">
+            <div data-ng-switch-when="@Aliases.Nature.Genetic">
+                <div class="form-group">
+                    @Html.Label("productId", "Продукт последовательности", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" data-ng-model="productId" data-ng-options="l.Value as l.Text for l in products"></select>
+                        <input type="hidden" name="productId" data-ng-value="productId"/>
+                        @Html.ValidationMessage("productId", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.CheckBox("partial")
+                        @Html.Label("partial", "Неполная последовательность")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.CheckBox("complement")
+                        @Html.Label("complement", "Комплементарная цепочка")
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-switch-when="@Aliases.Nature.Literature">
+                <div class="form-group">
+                    @Html.Label("languageId", "Язык литературного произведения", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" data-ng-model="languageId" data-ng-options="l.Value as l.Text for l in languages"></select>
+                        <input type="hidden" name="languageId" data-ng-value="languageId" />
+                        @Html.ValidationMessage("languageId", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.CheckBox("original")
+                        @Html.Label("original", "Произведение является оригиналом, а не переводом")
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.Label("translatorId", "Переводчик", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" data-ng-model="translatorId" data-ng-options="t.Value as t.Text for t in translators"></select>
+                        <input type="hidden" name="translatorId" data-ng-value="translatorId" />
+                        @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div data-ng-switch-when="@Aliases.Nature.Music">
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Создать" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/matterSequenceCreate")
+}

@@ -7,29 +7,27 @@
     using System.Linq;
     using System.Net;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The sequence controller.
+    /// The common sequences controller.
     /// </summary>
-    public class CommonSequenceController : Controller
+    public class CommonSequencesController : Controller
     {
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         /// <summary>
         /// The element repository.
@@ -67,12 +65,11 @@
         private readonly RemoteDbRepository remoteDbRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommonSequenceController"/> class.
+        /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
         /// </summary>
-        public CommonSequenceController()
+        public CommonSequencesController()
         {
             db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
             dnaSequenceRepository = new DnaSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
@@ -86,16 +83,16 @@
         /// The index.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
             var commonSequence = db.CommonSequence.Include(c => c.Matter)
                                 .Include(c => c.Notation)
                                 .Include(c => c.PieceType)
                                 .Include(c => c.RemoteDb);
-            return View(commonSequence.ToList());
+            return View(await commonSequence.ToListAsync());
         }
 
         /// <summary>
@@ -105,22 +102,22 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Details(long? id)
+        public async Task<ActionResult> Details(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence sequence = db.CommonSequence.Find(id);
-            if (sequence == null)
+            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+            if (commonSequence == null)
             {
                 return HttpNotFound();
             }
 
-            return View(sequence);
+            return View(commonSequence);
         }
 
         /// <summary>
@@ -148,49 +145,22 @@
                     { "natureLiterature", Aliases.Nature.Literature }, 
                     { "natureGenetic", Aliases.Nature.Genetic }
                 };
+
             return View();
         }
 
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="sequence">
-        /// The sequence.
-        /// </param>
-        /// <param name="localFile">
-        /// The local file.
-        /// </param>
-        /// <param name="languageId">
-        /// The language id.
-        /// </param>
-        /// <param name="original">
-        /// The original.
-        /// </param>
-        /// <param name="translatorId">
-        /// The translator id.
-        /// </param>
-        /// <param name="productId">
-        /// The product id.
-        /// </param>
-        /// <param name="partial">
-        /// The partial.
-        /// </param>
-        /// <param name="complement">
-        /// The complement.
+        /// <param name="commonSequence">
+        /// The common sequence.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown if file is null.
-        /// </exception>
-        /// <exception cref="Exception">
-        /// Thrown if element of created sequence is not found in db.
-        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(Include = "NotationId,MatterId,PieceTypeId,piecePosition,remoteDbId,RemoteId,Description")] CommonSequence sequence,
+        public async Task<ActionResult> Create([Bind(Include = "Id,NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence,
             bool localFile,
             int languageId,
             bool original,
@@ -219,7 +189,7 @@
                     }
                     else
                     {
-                        webApiId = NcbiHelper.GetId(sequence.RemoteId);
+                        webApiId = NcbiHelper.GetId(commonSequence.RemoteId);
                         fileStream = NcbiHelper.GetFile(webApiId.ToString());
                     }
 
@@ -227,7 +197,7 @@
 
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
-                    int natureId = db.Matter.Single(m => m.Id == sequence.MatterId).NatureId;
+                    int natureId = db.Matter.Single(m => m.Id == commonSequence.MatterId).NatureId;
 
                     // Copy the byte array into a string
                     string stringSequence = natureId == Aliases.Nature.Genetic
@@ -253,14 +223,14 @@
 
                             chain = new BaseChain(resultStringSequence);
 
-                            if (!elementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
+                            if (!elementRepository.ElementsInDb(chain.Alphabet, commonSequence.NotationId))
                             {
                                 throw new Exception("В БД отсутствует как минимум один элемент алфавита, добавляемой цепочки");
                             }
 
-                            alphabet = elementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, commonSequence.NotationId, false);
                             dnaSequenceRepository.Insert(
-                                sequence,
+                                commonSequence,
                                 fastaHeader,
                                 webApiId,
                                 productId,
@@ -288,10 +258,10 @@
                                 chain.Set(new ValueString(text[i]), i);
                             }
 
-                            alphabet = elementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, true);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, commonSequence.NotationId, true);
 
                             literatureSequenceRepository.Insert(
-                                sequence,
+                                commonSequence,
                                 original,
                                 languageId,
                                 translatorId,
@@ -313,19 +283,19 @@
 
             ViewBag.data = new Dictionary<string, object>
             {
-                { "matters", matterRepository.GetSelectListWithNature(sequence.MatterId) }, 
-                { "notations", notationRepository.GetSelectListWithNature(sequence.NotationId) }, 
+                { "matters", matterRepository.GetSelectListWithNature(commonSequence.MatterId) }, 
+                { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
                 { "languages", new SelectList(db.Language, "id", "name", languageId) }, 
-                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(sequence.PieceTypeId) }, 
-                { "remoteDbs", sequence.RemoteDbId == null
+                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
+                { "remoteDbs", commonSequence.RemoteDbId == null
                         ? remoteDbRepository.GetSelectListWithNature()
-                        : remoteDbRepository.GetSelectListWithNature((int)sequence.RemoteDbId) }, 
-                { "natures", new SelectList(db.Nature, "id", "name", db.Matter.Single(m => m.Id == sequence.MatterId).NatureId) }, 
+                        : remoteDbRepository.GetSelectListWithNature((int)commonSequence.RemoteDbId) }, 
+                { "natures", new SelectList(db.Nature, "id", "name", db.Matter.Single(m => m.Id == commonSequence.MatterId).NatureId) }, 
                 { "natureLiterature", Aliases.Nature.Literature },
                 { "natureGenetic", Aliases.Nature.Genetic },
                     { "translators", translators }
             };
-            return View(sequence);
+            return View(commonSequence);
         }
 
         /// <summary>
@@ -335,53 +305,53 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Edit(long? id)
+        public async Task<ActionResult> Edit(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence sequence = db.CommonSequence.Find(id);
-            if (sequence == null)
+            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+            if (commonSequence == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.matter_id = new SelectList(db.Matter, "id", "name", sequence.MatterId);
-            ViewBag.notation_id = new SelectList(db.Notation, "id", "name", sequence.NotationId);
-            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name", sequence.PieceTypeId);
-            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name", sequence.RemoteDbId);
-            return View(sequence);
+            ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+            ViewBag.NotationId = new SelectList(db.Notation, "Id", "Name", commonSequence.NotationId);
+            ViewBag.PieceTypeId = new SelectList(db.PieceType, "Id", "Name", commonSequence.PieceTypeId);
+            ViewBag.RemoteDbId = new SelectList(db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
+            return View(commonSequence);
         }
 
         /// <summary>
         /// The edit.
         /// </summary>
-        /// <param name="sequence">
-        /// The sequence.
+        /// <param name="commonSequence">
+        /// The common sequence.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence sequence)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(sequence).State = EntityState.Modified;
-                db.SaveChanges();
+                db.Entry(commonSequence).State = EntityState.Modified;
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.matter_id = new SelectList(db.Matter, "id", "name", sequence.MatterId);
-            ViewBag.notation_id = new SelectList(db.Notation, "id", "name", sequence.NotationId);
-            ViewBag.piece_type_id = new SelectList(db.PieceType, "id", "name", sequence.PieceTypeId);
-            ViewBag.remote_db_id = new SelectList(db.RemoteDb, "id", "name", sequence.RemoteDbId);
-            return View(sequence);
+            ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+            ViewBag.NotationId = new SelectList(db.Notation, "Id", "Name", commonSequence.NotationId);
+            ViewBag.PieceTypeId = new SelectList(db.PieceType, "Id", "Name", commonSequence.PieceTypeId);
+            ViewBag.RemoteDbId = new SelectList(db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
+            return View(commonSequence);
         }
 
         /// <summary>
@@ -391,22 +361,22 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Delete(long? id)
+        public async Task<ActionResult> Delete(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence sequence = db.CommonSequence.Find(id);
-            if (sequence == null)
+            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+            if (commonSequence == null)
             {
                 return HttpNotFound();
             }
 
-            return View(sequence);
+            return View(commonSequence);
         }
 
         /// <summary>
@@ -416,15 +386,15 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
+        public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            CommonSequence sequence = db.CommonSequence.Find(id);
-            db.CommonSequence.Remove(sequence);
-            db.SaveChanges();
+            CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+            db.CommonSequence.Remove(commonSequence);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

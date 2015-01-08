@@ -15,7 +15,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -242,12 +242,12 @@
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
+    <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceTransformerController.cs" />
     <Compile Include="Controllers\Sequences\GenesImportController.cs" />
-    <Compile Include="Controllers\Sequences\CommonSequenceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Sequences\MatterController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
@@ -525,11 +525,7 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Sequences\CommonSequence\Create.cshtml" />
-    <Content Include="Views\Sequences\CommonSequence\Delete.cshtml" />
-    <Content Include="Views\Sequences\CommonSequence\Details.cshtml" />
-    <Content Include="Views\Sequences\CommonSequence\Edit.cshtml" />
-    <Content Include="Views\Sequences\CommonSequence\Index.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />
     <Content Include="Views\Sequences\Matter\Create.cshtml" />
     <Content Include="Views\Sequences\Matter\Delete.cshtml" />
     <Content Include="Views\Sequences\Matter\Details.cshtml" />
@@ -564,6 +560,10 @@
     <Content Include="Views\Catalogs\Accidentals\Details.cshtml" />
     <Content Include="Views\Catalogs\Accidentals\Edit.cshtml" />
     <Content Include="Views\Catalogs\Accidentals\Index.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Delete.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Details.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Edit.cshtml" />
+    <Content Include="Views\Sequences\CommonSequences\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -594,7 +594,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>28103</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:28103/</IISUrl>
+          <IISUrl>http://localhost/LibiadaWeb</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
