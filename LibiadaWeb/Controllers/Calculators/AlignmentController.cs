@@ -88,11 +88,10 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", new SelectList(matters, "id", "name") }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
                     { "links", links }, 
-                    { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
+                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
+                    { "matters", matterRepository.GetMatterSelectList(matters) }, 
                     { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
             return View();

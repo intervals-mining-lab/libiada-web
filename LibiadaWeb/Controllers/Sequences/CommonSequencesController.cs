@@ -135,7 +135,7 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "matters", matterRepository.GetSelectListWithNature() }, 
+                    { "matters", matterRepository.GetMatterSelectList() }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() }, 
@@ -283,7 +283,7 @@
 
             ViewBag.data = new Dictionary<string, object>
             {
-                { "matters", matterRepository.GetSelectListWithNature(commonSequence.MatterId) }, 
+                { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
                 { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
                 { "languages", new SelectList(db.Language, "id", "name", languageId) }, 
                 { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 

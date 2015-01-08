@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The selected matters.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> selectedMatters)
         {
@@ -49,7 +49,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The selected matters.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{SelectListItem}"/>.
         /// </returns>
         public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> allMatters, IEnumerable<Matter> selectedMatters)
         {
@@ -81,7 +81,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature()
+        public IEnumerable<object> GetMatterSelectList()
         {
             return db.Matter.OrderBy(m => m.Name).Select(m => new
             {
@@ -89,8 +89,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Text = m.Name, 
                 Selected = false, 
                 Nature = m.NatureId, 
-                description = m.Description,
-                created = m.Created.ToString()
+                Description = m.Description,
+                Created = m.Created.ToString(),
+                Modified = m.Modified.ToString()
             });
         }
 
@@ -103,7 +104,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(long selectedMatter)
+        public IEnumerable<object> GetMatterSelectList(long selectedMatter)
         {
             return db.Matter.Select(m => new
             {
@@ -111,7 +112,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Text = m.Name, 
                 Selected = m.Id == selectedMatter, 
                 Nature = m.NatureId, 
-                description = m.Description
+                Description = m.Description,
+                Created = m.Created.ToString(),
+                Modified = m.Modified.ToString()
             });
         }
 
@@ -122,9 +125,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The selected matters.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<long> selectedMatters)
+        public IEnumerable<object> GetMatterSelectList(IEnumerable<long> selectedMatters)
         {
             return db.Matter.Select(m => new
             {
@@ -132,7 +135,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Text = m.Name, 
                 Selected = selectedMatters.Contains(m.Id), 
                 Nature = m.NatureId, 
-                description = m.Description
+                Description = m.Description,
+                Created = m.Created.ToString(),
+                Modified = m.Modified.ToString()
+            });
+        }
+
+        /// <summary>
+        /// The get select list with nature.
+        /// </summary>
+        /// <param name="matters">
+        /// The matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
+        {
+            return matters.Select(m => new
+            {
+                Value = m.Id,
+                Text = m.Name,
+                Selected = false,
+                Nature = m.NatureId,
+                Description = m.Description,
+                Created = m.Created.ToString(),
+                Modified = m.Modified.ToString()
             });
         }
 
