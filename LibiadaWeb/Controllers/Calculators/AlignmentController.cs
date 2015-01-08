@@ -92,7 +92,7 @@
                     { "links", links }, 
                     { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
                     { "matters", matterRepository.GetMatterSelectList(matters) }, 
-                    { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
+                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
             return View();
         }

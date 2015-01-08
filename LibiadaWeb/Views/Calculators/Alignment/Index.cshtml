@@ -105,12 +105,12 @@
         <br />
         <br />
         @Html.LabelFor(model => model.First().Sequence.First().PieceTypeId, new { @class = "control-label" })
-        <div ng-repeat="pieceTypeCheckBox in pieceTypesCheckBoxes">
+        <div ng-repeat="pieceType in pieceTypes">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceTypeCheckBox.Value" })
-                        {{pieceTypeCheckBox.Text}}
+                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceType.Value" })
+                        {{pieceType.Text}}
                     </label>
                 </div>
             </div>
@@ -149,9 +149,9 @@
                 @Html.ValidationMessage("characteristicId", "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" ng-show="isLinkable(characteristic)">
             <div class="col-md-10">
-                <select class="form-control" title="Link" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+                <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
                 <input type="hidden" name="linkId" ng-value="characteristic.link.Value" />
                 @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
             </div>
