@@ -215,19 +215,19 @@
         public int Linkable { get; set; }
 
         /// <summary>
-        /// Gets or sets the full sequence applicable.
+        /// Gets or sets a value indicating whether applicable to full sequence.
         /// </summary>
         [Display(Name = "Применимо к полным цепочкам")]
         public bool FullSequenceApplicable { get; set; }
 
         /// <summary>
-        /// Gets or sets the binary sequence applicable.
+        /// Gets or sets a value indicating whether applicable to binary sequence.
         /// </summary>
         [Display(Name = "Применимо к бинарным цепочкам")]
         public bool BinarySequenceApplicable { get; set; }
 
         /// <summary>
-        /// Gets or sets the congeneric sequence applicable.
+        /// Gets or sets a value indicating whether applicable to congeneric sequence.
         /// </summary>
         [Display(Name = "Применимо к однородным цепочкам")]
         public bool CongenericSequenceApplicable { get; set; }
