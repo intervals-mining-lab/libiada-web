@@ -50,12 +50,12 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @Html.CheckBox("localFile", new { ng_model = "localFile" })
-                @Html.Label("localFile", "Загружать цепочку из локального файла")
+                @Html.Label("localFile", "Load sequence from local file")
             </div>
         </div>
 
         <div class="form-group" ng-show="localFile">
-            @Html.Label("file", "Файл цепочки", new { @class = "control-label col-md-2" })
+            @Html.Label("file", "Sequence file", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" />
                 @Html.ValidationMessage("file", "", new { @class = "text-danger" })
@@ -100,7 +100,7 @@
         <div ng-switch="natureId">
             <div ng-switch-when="@Aliases.Nature.Genetic">
                 <div class="form-group">
-                    @Html.Label("productId", "Продукт последовательности", new { @class = "control-label col-md-2" })
+                    @Html.Label("productId", "Sequence product", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <select class="form-control" ng-model="productId" ng-options="l.Value as l.Text for l in products"></select>
                         <input type="hidden" name="productId" ng-value="productId"/>
@@ -111,21 +111,21 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         @Html.CheckBox("partial")
-                        @Html.Label("partial", "Неполная последовательность")
+                        @Html.Label("partial", "Sequence is partial (incomplete)")
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         @Html.CheckBox("complement")
-                        @Html.Label("complement", "Комплементарная цепочка")
+                        @Html.Label("complement", "Sequence is complementary to source sequence")
                     </div>
                 </div>
             </div>
 
             <div ng-switch-when="@Aliases.Nature.Literature">
                 <div class="form-group">
-                    @Html.Label("languageId", "Язык литературного произведения", new { @class = "control-label col-md-2" })
+                    @Html.Label("languageId", "Language of literary work", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages"></select>
                         <input type="hidden" name="languageId" ng-value="languageId" />
@@ -135,13 +135,13 @@
 
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.CheckBox("original")
-                        @Html.Label("original", "Произведение является оригиналом, а не переводом")
+                        @Html.CheckBox("original", new { ng_model = "original" })
+                        @Html.Label("original", "Literary work is in original language (not in translation)")
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.Label("translatorId", "Переводчик", new { @class = "control-label col-md-2" })
+                <div class="form-group" ng-hide="original">
+                    @Html.Label("translatorId", "Translator", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators"></select>
                         <input type="hidden" name="translatorId" ng-value="translatorId" />

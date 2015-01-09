@@ -1,8 +1,8 @@
 ﻿@using LibiadaWeb.Models
-@model dynamic
+@model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Кластеризация";
+    ViewBag.Title = "Clusterization";
 }
 
 <script type="text/javascript">
@@ -11,78 +11,147 @@
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-<h2>Кластеризация</h2>
+<h2>Clusterization</h2>
 
 @using (Html.BeginForm("Index", "Clusterization", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
 {
-    <fieldset ng-controller="CalculationCtrl">
-        <legend>Характеристики полных цепочек</legend>
-        <select ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
-        <table class="table">
+    <div class="form-horizontal" ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.First().NatureId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
+                @Html.ValidationMessage("natureId", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.Label("matterIds", "Sequences", new { @class = "control-label" })
+        <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Создан</th>
-            </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Modified)
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
-                <td>
-                    <input type="checkbox" name="matterIds" ng-value="matter.Value"/>
-                    <span ng-bind="matter.Text"></span>
-                </td>
-                <td ng-bind="matter.description"/>
-                <td ng-bind="matter.created"/>
-            </tr>
+                <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+                    <td>
+                        <label>
+                            <input type="checkbox" name="matterIds" ng-value="matter.Value" />
+                            {{matter.Text}}
+                        </label>
+                    </td>
+                    <td ng-bind="matter.Description" />
+                    <td ng-bind="matter.Created" />
+                    <td ng-bind="matter.Modified" />
+                </tr>
             </tbody>
         </table>
-        <br/>
-        <button type="button" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Добавить характеристику</button>
-        <br/>
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
+            </div>
+        </div>
         <div ng-repeat="characteristic in characteristics">
-            <select title="Характеристика" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value"/>
-
-            <select title="Привязка" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
-
-            <select title="Форма записи" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
-            <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value"/>
-
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+                    <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
+                    @Html.ValidationMessage("characteristicIds", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" ng-show="isLinkable(characteristic)">
+                <div class="col-md-10">
+                    <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+                    <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
+                    @Html.ValidationMessage("linkIds", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value" />
+                    @Html.ValidationMessage("notationIds", "", new { @class = "text-danger" })
+                </div>
+            </div>
             <div ng-switch="natureId">
                 <div ng-switch-when="@Aliases.Nature.Literature">
-                    <select title="Язык" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                    <input type="hidden" name="languageIds" ng-value="characteristic.language.Value"/>
-
-                    <select title="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value"/>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
+                            <input type="hidden" name="languageIds" ng-value="characteristic.language.Value" />
+                            @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
+                            <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value" />
+                            @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
-
                 <div ng-switch-when="@Aliases.Nature.Genetic">
                 </div>
-
                 <div ng-switch-when="@Aliases.Nature.Music">
                 </div>
             </div>
-
-            <button type="button" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Удалить</button>
-            <br/>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-default" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
+                </div>
+            </div>
+            <hr />
+            <br />
         </div>
-        @Html.Label("Количество таксонов")
-        <input class="text-box single-line" id="clustersCount" name="clustersCount" type="number" value="2"/>
-        <br/>
-        @Html.Label("Вес равномощности таксонов")
-        <input class="text-box single-line" id="powerWeight" name="powerWeight" type="number" value="4"/>
-        <br/>
-        @Html.Label("Вес нормализованного расстояния")
-        <input class="text-box single-line" id="normalizedDistanseWeight" name="normalizedDistanseWeight" type="number" value="2"/>
-        <br/>
-        @Html.Label("Вес расстояния")
-        <input class="text-box single-line" id="distanseWeight" name="distanseWeight" type="number" value="1"/>
-        <br/>
-        <input type="submit" value="Группировать"/>
-    </fieldset>
+        <div class="form-group">
+            @Html.Label("clustersCount", "Clusters count", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" name="clustersCount" type="number" value="2" min="2" />
+                @Html.ValidationMessage("clustersCount", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("equipotencyWeight", "Equipotency weight", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" name="equipotencyWeight" type="number" value="4" min="0" />
+                @Html.ValidationMessage("equipotencyWeight", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("normalizedDistanceWeight", "Normalized distance weight", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" name="normalizedDistanceWeight" type="number" value="2" min="0" />
+                @Html.ValidationMessage("normalizedDistanceWeight", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("distanceWeight", "Normalized distance weight", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" name="distanceWeight" type="number" value="1" min="0"/>
+                @Html.ValidationMessage("distanceWeight", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
 
 @section Scripts {

@@ -76,9 +76,9 @@
     public class CommonSequenceDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the notation_id.
+        /// Gets or sets the notation id.
         /// </summary>
-        [Display(Name = "Форма записи")]
+        [Display(Name = "Notation of elements in sequence")]
         public long NotationId { get; set; }
 
         /// <summary>
@@ -88,31 +88,37 @@
         public DateTimeOffset Created { get; set; }
 
         /// <summary>
-        /// Gets or sets the matter_id.
+        /// Gets or sets the modified.
+        /// </summary>
+        [Display(Name = "Last modification date")]
+        public DateTimeOffset Modified { get; set; }
+
+        /// <summary>
+        /// Gets or sets the matter id.
         /// </summary>
         [Display(Name = "Принадлежит объекту исследования")]
         public long MatterId { get; set; }
 
         /// <summary>
-        /// Gets or sets the piece_type_id.
+        /// Gets or sets the piece type id.
         /// </summary>
         [Display(Name = "Тип фрагмента цепочки")]
         public int PieceTypeId { get; set; }
 
         /// <summary>
-        /// Gets or sets the piece_position.
+        /// Gets or sets the piece position.
         /// </summary>
         [Display(Name = "Позиция с которой начинается цепочка")]
         public long PiecePosition { get; set; }
 
         /// <summary>
-        /// Gets or sets the remote_db_id.
+        /// Gets or sets the remote db id.
         /// </summary>
         [Display(Name = "Сторонняя БД")]
         public int RemoteDbId { get; set; }
 
         /// <summary>
-        /// Gets or sets the RemoteId.
+        /// Gets or sets the remote id.
         /// </summary>
         [Display(Name = "id в сторонней БД")]
         public string RemoteId { get; set; }
@@ -199,37 +205,37 @@
         /// <summary>
         /// Gets or sets the characteristic_group_id.
         /// </summary>
-        [Display(Name = "Группа характеристик")]
+        [Display(Name = "Characteristic belogs to group")]
         public int CharacteristicGroupId { get; set; }
 
         /// <summary>
         /// Gets or sets the class_name.
         /// </summary>
-        [Display(Name = "Класс-калькулятор")]
+        [Display(Name = "Calculator class name")]
         public string ClassName { get; set; }
 
         /// <summary>
         /// Gets or sets the linkable.
         /// </summary>
-        [Display(Name = "Привязываемость")]
+        [Display(Name = "Characteristic is linkable")]
         public int Linkable { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether applicable to full sequence.
         /// </summary>
-        [Display(Name = "Применимо к полным цепочкам")]
+        [Display(Name = "Applicable to full sequence")]
         public bool FullSequenceApplicable { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether applicable to binary sequence.
         /// </summary>
-        [Display(Name = "Применимо к бинарным цепочкам")]
+        [Display(Name = "Applicable to binary sequence")]
         public bool BinarySequenceApplicable { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether applicable to congeneric sequence.
         /// </summary>
-        [Display(Name = "Применимо к однородным цепочкам")]
+        [Display(Name = "Applicable to congeneric sequence")]
         public bool CongenericSequenceApplicable { get; set; }
     }
 
@@ -249,8 +255,26 @@
         /// <summary>
         /// Gets or sets the fasta_header.
         /// </summary>
-        [Display(Name = "Заголовок FASTA файла")]
+        [Display(Name = "FASTA file header")]
         public string FastaHeader { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether partial.
+        /// </summary>
+        [Display(Name = "Sequence is partial (incomplete)")]
+        public bool Partial { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether complement.
+        /// </summary>
+        [Display(Name = "Sequence is complementary to source sequence")]
+        public bool Complement { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product id.
+        /// </summary>
+        [Display(Name = "Sequence product")]
+        public int ProductId { get; set; }
     }
 
     /// <summary>
@@ -417,16 +441,22 @@
     public class LiteratureSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the language_id.
+        /// Gets or sets the language id.
         /// </summary>
-        [Display(Name = "Язык")]
+        [Display(Name = "Language of literary work")]
         public int LanguageId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether original.
+        /// Gets or sets a value indicating whether literary work is in original language (not in translation).
         /// </summary>
-        [Display(Name = "Оригинал")]
+        [Display(Name = "Literary work is in original language (not in translation)")]
         public bool Original { get; set; }
+
+        /// <summary>
+        /// Gets or sets the translator id.
+        /// </summary>
+        [Display(Name = "Translator")]
+        public int TranslatorId { get; set; }
     }
 
     /// <summary>

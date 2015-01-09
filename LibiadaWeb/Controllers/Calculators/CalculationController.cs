@@ -77,11 +77,11 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "matters", matterRepository.GetMatterSelectList() }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "links", links }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };
