@@ -10,11 +10,11 @@
     <div class="error-message">
         @ViewBag.ErrorMessage
     </div>
-    <br/>
+    <br />
 }
 
 <div>
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <tr>
             <th>
                 Id
@@ -62,8 +62,8 @@
                     {
                         @Html.AntiForgeryToken()
 
-                        <input type="hidden" name="id" value="@item.Id"/>
-                        <input type="submit" value="Delete task" class="btn btn-default"/>
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="submit" value="Delete task" class="btn btn-default" />
                     }
                 </td>
             </tr>
@@ -71,7 +71,7 @@
     </table>
 </div>
 
-<br/>
+<br />
 <div>
     @using (Html.BeginForm("DeleteAll", "TaskManager", FormMethod.Post))
     {
@@ -80,7 +80,7 @@
         <div class="form-horizontal">
             <div class="form-group">
                 <div class="col-md-offset-0 col-md-10">
-                    <input type="submit" value="Delete all tasks" class="btn btn-default"/>
+                    <input type="submit" value="Delete all tasks" class="btn btn-default" />
                 </div>
             </div>
         </div>

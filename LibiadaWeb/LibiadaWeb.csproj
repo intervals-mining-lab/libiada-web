@@ -336,6 +336,7 @@
     <Compile Include="Models\Repositories\Sequences\CommonSequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DnaSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\GeneRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ICommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IDnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ILiteratureSequenceRepository.cs" />
@@ -460,6 +461,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\Controllers\genesCalculation.js" />
     <Content Include="Scripts\Controllers\matterSequenceCreate.js" />
     <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.js" />
     <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.src.js" />

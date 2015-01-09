@@ -15,7 +15,7 @@
         var colors = new Array();
         var sequenceNames = new Array();
 
-        $(document).ready(function() {
+        $(document).ready(function () {
             colors.push('rgba(223, 83, 83, .5)');
             colors.push('rgba( 83, 223, 83, .5)');
             colors.push('rgba( 83, 83, 223, .5)');
@@ -39,9 +39,9 @@
             @for (int j = 0; j < ViewBag.characteristics.Count; j++)
             {
                 <text>
-                    characteristics.push(new Array());
-                    matterIds.push(@ViewBag.matterIds[j]);
-                </text>
+            characteristics.push(new Array());
+            matterIds.push(@ViewBag.matterIds[j]);
+            </text>
 
                 var characteristicList = ViewBag.characteristics[j];
                 for (int i = 0; i < characteristicList.Count; i++)
@@ -49,15 +49,15 @@
                     string[] tempValue = characteristicList[i].ToString().Split(',');
                     string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                     @: characteristics[characteristics.length - 1].push(@value);
-                }
+                            }
             }
             @for (int i = 0; i < ViewBag.clusters.Count; i++)
             {
                 @: clusters.push(new Array());
-                for (int j = 0; j < ViewBag.clusters[i].Count; j++)
+                            for (int j = 0; j < ViewBag.clusters[i].Count; j++)
                 {
                     @: clusters[clusters.length - 1].push(@ViewBag.clusters[i][j]);
-                }
+                            }
             }
         });
 
@@ -95,7 +95,7 @@
                 title: { text: 'Результаты кластеризации' },
 
                 tooltip: {
-                    formatter: function() {
+                    formatter: function () {
                         return this.point.name + '<br/>' + this.x + '<br/> ' + this.y;
                     }
                 },
@@ -112,42 +112,42 @@
     </script>
 
     <h2>Результаты кластеризации</h2>
-    <table class="table" id="resultTable">
+    <table class="table table-bordered table-hover" id="resultTable">
         <thead>
-        <tr>
-            <th>
-                Номер кластера
-            </th>
-            <th>
-                Название объекта
-            </th>
-            <th>id цепочки</th>
-        </tr>
+            <tr>
+                <th>
+                    Номер кластера
+                </th>
+                <th>
+                    Название объекта
+                </th>
+                <th>id цепочки</th>
+            </tr>
         </thead>
         <tbody>
-        @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
-        {
-            foreach (var sequence in ViewBag.clusterNames[i])
+            @for (int i = 0; i < ViewBag.clusterNames.Count; i++)
             {
-                <tr>
-                    <td>
-                        @(i + 1)
-                    </td>
-                    <td>
-                        @sequence
-                    </td>
-                    <td>
-                        @ViewBag.matterIds[ViewBag.sequenceNames.IndexOf(sequence)]
-                    </td>
-                </tr>
+                foreach (var sequence in ViewBag.clusterNames[i])
+                {
+                    <tr>
+                        <td>
+                            @(i + 1)
+                        </td>
+                        <td>
+                            @sequence
+                        </td>
+                        <td>
+                            @ViewBag.matterIds[ViewBag.sequenceNames.IndexOf(sequence)]
+                        </td>
+                    </tr>
+                }
             }
-        }
         </tbody>
     </table>
-    <br/>
+    <br />
 
     <div id="visualization_container" style="width: 800px; height: 800px"></div>
-    <br/>
+    <br />
     @Html.Label("Ось х")
     <select name="xaxis" id="xaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -155,7 +155,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
+    <br />
     @Html.Label("Ось y")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -163,6 +163,6 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
+    <br />
     <button onclick=" DrawChart() ">Отобразить разбиение</button>
 }

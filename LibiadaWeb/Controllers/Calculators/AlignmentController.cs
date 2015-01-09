@@ -12,8 +12,6 @@
     using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -27,19 +25,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
+        /// The gene repository.
         /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
-        /// The piece type repository.
-        /// </summary>
-        private readonly PieceTypeRepository pieceTypeRepository;
+        private readonly GeneRepository geneRepository;
 
         /// <summary>
         /// The common sequence repository.
@@ -52,9 +40,7 @@
         public AlignmentController() : base("Alignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
-            pieceTypeRepository = new PieceTypeRepository(db);
+            geneRepository = new GeneRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
@@ -68,32 +54,7 @@
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
 
-            var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
-            var sequences = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id));
-            var matterIds = sequences.Select(c => c.MatterId);
-
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
-
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
-
-            var pieceTypeIds = db.PieceType.Where(p => p.NatureId == Aliases.Nature.Genetic
-                                         && p.Id != Aliases.PieceType.FullGenome
-                                         && p.Id != Aliases.PieceType.ChloroplastGenome
-                                         && p.Id != Aliases.PieceType.MitochondrionGenome).Select(p => p.Id);
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "links", links }, 
-                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
-                    { "matters", matterRepository.GetMatterSelectList(matters) }, 
-                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
-                };
+            ViewBag.data = geneRepository.GetGenesCalculationData();
             return View();
         }
 

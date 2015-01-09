@@ -118,14 +118,14 @@
         /// <param name="clustersCount">
         /// The clusters count.
         /// </param>
-        /// <param name="powerWeight">
+        /// <param name="equipotencyWeight">
         /// The power weight.
         /// </param>
-        /// <param name="normalizedDistanseWeight">
-        /// The normalized distanse weight.
+        /// <param name="normalizedDistanceWeight">
+        /// The normalized distance weight.
         /// </param>
-        /// <param name="distanseWeight">
-        /// The distanse weight.
+        /// <param name="distanceWeight">
+        /// The distance weight.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -138,9 +138,9 @@
             int[] notationIds,
             int[] languageIds,
             int clustersCount,
-            double powerWeight,
-            double normalizedDistanseWeight,
-            double distanseWeight)
+            double equipotencyWeight,
+            double normalizedDistanceWeight,
+            double distanceWeight)
         {
             return Action(() =>
             {
@@ -195,7 +195,7 @@
                 }
 
                 DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
-                var clusterizator = new KrabClusterization(data, powerWeight, normalizedDistanseWeight, distanseWeight);
+                var clusterizator = new KrabClusterization(data, equipotencyWeight, normalizedDistanceWeight, distanceWeight);
                 ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
                 var clusters = new List<List<long>>();
                 for (int i = 0; i < result.Clusters.Count; i++)

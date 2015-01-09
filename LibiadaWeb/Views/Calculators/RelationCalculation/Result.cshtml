@@ -12,56 +12,56 @@
     if (ViewBag.OneWord)
     {
         <h2>Зависимости слов от @ViewBag.word</h2>
-        <table class="table">
+        <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>
-                    Зависимый элемент
-                </th>
-                <th>
-                    @ViewBag.characteristicName
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        Зависимый элемент
+                    </th>
+                    <th>
+                        @ViewBag.characteristicName
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            @for (int l = 0; l < ViewBag.filteredResult1.Count; l++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.elements[l].value
-                    </td>
-                    <td>
-                        @ViewBag.filteredResult1[l].value
-                    </td>
-                </tr>
-            }
+                @for (int l = 0; l < ViewBag.filteredResult1.Count; l++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.elements[l].value
+                        </td>
+                        <td>
+                            @ViewBag.filteredResult1[l].value
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
         <h2>Зависимости слова @ViewBag.word от других слов</h2>
-        <table class="table">
+        <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>
-                    Элемент
-                </th>
-                <th>
-                    @ViewBag.characteristicName
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        Элемент
+                    </th>
+                    <th>
+                        @ViewBag.characteristicName
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            @for (int l = 0; l < ViewBag.filteredResult1.Count; l++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.elements[l].value
-                    </td>
-                    <td>
-                        @ViewBag.filteredResult2[l].value
-                    </td>
-                </tr>
-            }
+                @for (int l = 0; l < ViewBag.filteredResult1.Count; l++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.elements[l].value
+                        </td>
+                        <td>
+                            @ViewBag.filteredResult2[l].value
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     }
@@ -69,35 +69,35 @@
     {
         if (!ViewBag.isFilter)
         {
-            <table class="table">
+            <table class="table table-bordered table-hover">
                 <thead>
-                <tr>
-                    <th>
-                        Первый элемент\Второй элемент
-                    </th>
-                    @for (int k = 0; k < ViewBag.elements.Count; k++)
-                    {
-                        <th>
-                            @ViewBag.elements[k].name
-                        </th>
-                    }
-                </tr>
-                </thead>
-                <tbody>
-                @for (int i = 0; i < ViewBag.elements.Count; i++)
-                {
                     <tr>
-                        <td>
-                            @ViewBag.elements[i].name
-                        </td>
-                        @for (int j = 0; j < ViewBag.elements.Count; j++)
+                        <th>
+                            Первый элемент\Второй элемент
+                        </th>
+                        @for (int k = 0; k < ViewBag.elements.Count; k++)
                         {
-                            <td>
-                                @ViewBag.characteristics[i * ViewBag.elements.Count + j].value
-                            </td>
+                            <th>
+                                @ViewBag.elements[k].name
+                            </th>
                         }
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < ViewBag.elements.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @ViewBag.elements[i].name
+                            </td>
+                            @for (int j = 0; j < ViewBag.elements.Count; j++)
+                            {
+                                <td>
+                                    @ViewBag.characteristics[i * ViewBag.elements.Count + j].value
+                                </td>
+                            }
+                        </tr>
+                    }
                 </tbody>
             </table>
         }
@@ -105,33 +105,33 @@
         {
             <table class="table">
                 <thead>
-                <tr>
-                    <th>
-                        Первый элемент
-                    </th>
-                    <th>
-                        Второй элемент
-                    </th>
-                    <th>
-                        @ViewBag.characteristicName
-                    </th>
-                </tr>
+                    <tr>
+                        <th>
+                            Первый элемент
+                        </th>
+                        <th>
+                            Второй элемент
+                        </th>
+                        <th>
+                            @ViewBag.characteristicName
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
-                @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.firstElements[l].value
-                        </td>
-                        <td>
-                            @ViewBag.secondElements[l].value
-                        </td>
-                        <td>
-                            @ViewBag.filteredResult[l].value
-                        </td>
-                    </tr>
-                }
+                    @for (int l = 0; l < ViewBag.filteredResult.Count; l++)
+                    {
+                        <tr>
+                            <td>
+                                @ViewBag.firstElements[l].value
+                            </td>
+                            <td>
+                                @ViewBag.secondElements[l].value
+                            </td>
+                            <td>
+                                @ViewBag.filteredResult[l].value
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }

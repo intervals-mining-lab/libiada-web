@@ -42,6 +42,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
                         "~/Scripts/Controllers/calculation.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/genesCalculation").Include(
+                        "~/Scripts/Controllers/genesCalculation.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
                         "~/Scripts/Controllers/matterSequenceCreate.js"));
 

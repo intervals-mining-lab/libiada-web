@@ -9,7 +9,7 @@
 
 @using (Html.BeginForm())
 {
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -17,21 +17,21 @@
         </tr>
 
         @{
-            var sequencesList = Html.CheckBoxList("sequenceIds", (List<SelectListItem>)ViewBag.sequencesList);
+    var sequencesList = Html.CheckBoxList("sequenceIds", (List<SelectListItem>)ViewBag.sequencesList);
 
-            foreach (var item in sequencesList)
-            {
-                <tr>
-                    <td>
-                        @item
-                    </td>
-                </tr>
-            }
+    foreach (var item in sequencesList)
+    {
+        <tr>
+            <td>
+                @item
+            </td>
+        </tr>
+    }
 
         }
     </table>
-    <br/>
+    <br />
     @Html.CheckBox("toAmino", "Преобразовать в аминокислоты", null)
-    <br/>
-    <input type="submit" value="Преобразовать"/>
+    <br />
+    <input type="submit" value="Преобразовать" />
 }

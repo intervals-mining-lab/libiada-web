@@ -15,7 +15,6 @@
 
 @using (Html.BeginForm("Index", "Calculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
 {
-
     <div class="form-horizontal" ng-controller="CalculationCtrl">
         <h4>Sequences and parameters</h4>
         <hr />
@@ -29,7 +28,7 @@
             </div>
         </div>
         @Html.Label("matterIds", "Sequences", new { @class = "control-label" })
-        <table class="table">
+        <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>
@@ -47,10 +46,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+                <tr ng-repeat="matter in matters | filter: { Nature: natureId }">
                     <td>
-                        <input type="checkbox" name="matterIds" ng-value="matter.Value" />
-                        <span ng-bind="matter.Text"></span>
+                        <label>
+                            <input type="checkbox" name="matterIds" ng-value="matter.Value" />
+                            {{matter.Text}}
+                        </label>
                     </td>
                     <td ng-bind="matter.Description" />
                     <td ng-bind="matter.Created" />

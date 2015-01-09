@@ -9,14 +9,14 @@
 
     var formTable;
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         formTable = $("table").dataTable({
             aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
             bJQueryUI: true,
             sPaginationType: "full_numbers"
         });
 
-        $('form').submit(function() {
+        $('form').submit(function () {
             $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
         });
     });
@@ -26,40 +26,40 @@
 
 @using (Html.BeginForm())
 {
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>
-                Название объекта
-            </th>
-            <th>
-                Тип цепочки
-            </th>
-        </tr>
+            <tr>
+                <th>
+                    Название объекта
+                </th>
+                <th>
+                    Тип цепочки
+                </th>
+            </tr>
         </thead>
         <tbody>
-        @{
-            List<MvcHtmlString> mattersList = Html.RadioButtonList("matterId", (List<SelectListItem>)ViewBag.mattersList);
+            @{
+    List<MvcHtmlString> mattersList = Html.RadioButtonList("matterId", (List<SelectListItem>)ViewBag.mattersList);
 
-            for (int i = 0; i < mattersList.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @mattersList[i]
-                    </td>
-                    <td>
-                        @ViewBag.matters[i].nature.name
-                    </td>
-                </tr>
+    for (int i = 0; i < mattersList.Count; i++)
+    {
+        <tr>
+            <td>
+                @mattersList[i]
+            </td>
+            <td>
+                @ViewBag.matters[i].nature.name
+            </td>
+        </tr>
+    }
+
             }
-
-        }
         </tbody>
     </table>
-    <br/>
+    <br />
     @Html.Label("Количество попарных перестановок:")
-    <input type="number" id="mixes" name="mixes" value="1"/>
-    <br/>
+    <input type="number" id="mixes" name="mixes" value="1" />
+    <br />
     @Html.Label("Форма записи:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
@@ -67,7 +67,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
+    <br />
     @Html.Label("Язык литературного произведения:")
     <select name="languageId">
         @foreach (var option in ViewBag.language_id)
@@ -75,7 +75,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br/>
-    <br/>
-    <input type="submit" value="Вычислить"/>
+    <br />
+    <br />
+    <input type="submit" value="Вычислить" />
 }

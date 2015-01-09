@@ -2,7 +2,7 @@
 @model Matter
 
 @{
-    ViewBag.Title = "Создание";
+    ViewBag.Title = "Create matter";
 }
 
 <script>
@@ -11,9 +11,7 @@
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-<h2>Создание</h2>
-
-@Html.ValidationMessage("Error")
+<h2>Create matter</h2>
 
 
 @using (Html.BeginForm("Create", "Matter", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "MattersequenceCreate" }))
@@ -21,7 +19,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal" ng-controller="MattersequenceCreateCtrl">
-        <h4>Объект</h4>
+        <h4>Matter</h4>
         <hr />
         @Html.ValidationSummary(true)
 
@@ -159,7 +157,7 @@
 }
 
 <div>
-    @Html.ActionLink("Назад к списку", "Index")
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {

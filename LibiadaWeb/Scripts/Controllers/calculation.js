@@ -1,8 +1,8 @@
 ﻿"use strict";
 
-var app = angular.module("Calculation", []);
+angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
 
-app.controller("CalculationCtrl", ["$scope", "filterFilter", function ($scope, filterFilter) {
+function calculation($scope, filterFilter) {
 
     MapModelFromJson($scope, data);
 
@@ -39,4 +39,4 @@ app.controller("CalculationCtrl", ["$scope", "filterFilter", function ($scope, f
     };
 
     $scope.$watch("natureId", filterByNature, true);
-}]);
+}

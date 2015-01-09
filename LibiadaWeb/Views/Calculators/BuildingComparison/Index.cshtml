@@ -9,7 +9,7 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         AddDataTablesWithSubmit();
     });
 
@@ -17,44 +17,43 @@
 
 @using (Html.BeginForm())
 {
-    <table class="table">
+    <table class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>
-                Название первого объекта
-            </th>
-            <th>
-                Название второго объекта
-            </th>
-        </tr>
+            <tr>
+                <th>
+                    Название первого объекта
+                </th>
+                <th>
+                    Название второго объекта
+                </th>
+            </tr>
         </thead>
         <tbody>
-        @{
-            List<MvcHtmlString> mattersList1 = Html.RadioButtonList("firstMatterId", (List<SelectListItem>)ViewBag.mattersList);
-            List<MvcHtmlString> mattersList2 = Html.RadioButtonList("secondMatterId", (List<SelectListItem>)ViewBag.mattersList);
+            @{
+                List<MvcHtmlString> mattersList1 = Html.RadioButtonList("firstMatterId", (List<SelectListItem>)ViewBag.mattersList);
+                List<MvcHtmlString> mattersList2 = Html.RadioButtonList("secondMatterId", (List<SelectListItem>)ViewBag.mattersList);
 
-            for (int i = 0; i < mattersList1.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @mattersList1[i]
-                    </td>
-                    <td>
-                        @mattersList2[i]
-                    </td>
-                </tr>
+                for (int i = 0; i < mattersList1.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @mattersList1[i]
+                        </td>
+                        <td>
+                            @mattersList2[i]
+                        </td>
+                    </tr>
+                }
             }
-
-        }
         </tbody>
     </table>
 
-    <br/>
+    <br />
     @Html.CheckBox("congeneric", "Сравнивать строи однородных цепочек", null)
-    <br/>
+    <br />
     @Html.Label("Размер окна:")
-    <input type="number" id="length" name="length" value="10"/>
-    <br/>
-    <br/>
-    <input type="submit" value="Вычислить"/>
+    <input type="number" id="length" name="length" value="10" />
+    <br />
+    <br />
+    <input type="submit" value="Вычислить" />
 }

@@ -34,3 +34,4 @@
 /// <reference path="angular-mocks.js" />
 /// <reference path="angular.min.js" />
 /// <reference path="controllers/mattersequencecreate.js" />
+/// <reference path="controllers/genescalculation.js" />

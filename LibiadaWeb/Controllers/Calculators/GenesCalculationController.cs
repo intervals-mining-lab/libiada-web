@@ -12,8 +12,6 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
     using LibiadaWeb.Models.Repositories.Sequences;
-    using Models;
-    using Models.Repositories.Catalogs;
 
     /// <summary>
     /// The genes calculation controller.
@@ -26,24 +24,14 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The piece type repository.
+        /// The gene repository.
         /// </summary>
-        private readonly PieceTypeRepository pieceTypeRepository;
+        private readonly GeneRepository geneRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
@@ -51,10 +39,8 @@
         public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            pieceTypeRepository = new PieceTypeRepository(db);
+            geneRepository = new GeneRepository(db);
         }
 
         /// <summary>
@@ -66,33 +52,8 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
-            var sequences = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id));
-            var matterIds = sequences.Select(c => c.MatterId);
-            
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
-            
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-            
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            var pieceTypeIds = db.PieceType.Where(p => p.NatureId == Aliases.Nature.Genetic 
-                                         && p.Id != Aliases.PieceType.FullGenome 
-                                         && p.Id != Aliases.PieceType.ChloroplastGenome 
-                                         && p.Id != Aliases.PieceType.MitochondrionGenome).Select(p => p.Id);
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "matters", new SelectList(matters, "id", "name") }, 
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
-                    { "links", links }, 
-                    { "matterCheckBoxes", matterRepository.GetSelectListItems(matters, null) }, 
-                    { "pieceTypesCheckBoxes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
-                };
+            ViewBag.data = geneRepository.GetGenesCalculationData();
             return View();
         }
 

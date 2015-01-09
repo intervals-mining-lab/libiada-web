@@ -1,22 +1,22 @@
 ﻿function AppendLabel(elem, text) {
-    elem.append($('<div/>').attr('class', 'editor-label').text(text));
+    elem.append($("<div/>").attr("class", "editor-label").text(text));
 }
 
 function AppendBr(elem) {
-    elem.append($('<br/>'));
+    elem.append($("<br/>"));
 }
 
 function DeleteElementByName(elemName) {
-    $('#' + elemName).remove();
+    $("#" + elemName).remove();
     return false;
 }
 
 function CreateOption(value, text) {
-    return $('<option/>').attr('value', value).text(text);
+    return $("<option/>").attr("value", value).text(text);
 }
 
 function CreateSelectList(options, name) {
-    var selectList = $('<select/>').attr('name', name);
+    var selectList = $("<select/>").attr("name", name);
     for (var i = 0; i < options.length; i++) {
         selectList.append(options[i]);
     }
@@ -37,21 +37,21 @@ function SwitchVisibilityByName(name) {
 }
 
 function CreateCharacteristicsBlock(divNumber, paramsList) {
-    var characteristicsDiv = $("<div/>").attr('name', 'characteristc' + divNumber).attr('id', 'characteristic' + divNumber);
+    var characteristicsDiv = $("<div/>").attr("name", "characteristc" + divNumber).attr("id", "characteristic" + divNumber);
 
     for(var name in paramsList) {
         var selectList = CreateSelectList(paramsList[name], name);
         characteristicsDiv.append(selectList); 
     }
 
-    //функция, возвращающая функцию для call back'а
+    //функция, возвращающая функцию для call back"а
     var deleteFunction = function (element) {
         return function () {
             DeleteElementByName(element.elemName);
         };
     };
-    var callBackDeleteFunction = deleteFunction({ elemName: 'characteristic' + divNumber });
-    characteristicsDiv.append($('<input/>').attr('type', 'button').attr('value', 'Удалить').click(callBackDeleteFunction));
+    var callBackDeleteFunction = deleteFunction({ elemName: "characteristic" + divNumber });
+    characteristicsDiv.append($("<input/>").attr("type", "button").attr("value", "Удалить").click(callBackDeleteFunction));
     AppendBr(characteristicsDiv);
 
     return characteristicsDiv;
@@ -67,9 +67,9 @@ function AddDataTables() {
 
 function AddDataTablesWithSubmit(name) {
     AddDataTables();
-    name = name || 'form';
+    name = name || "form";
     $(name).submit(function () {
-        $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
+        $(formTable.fnGetHiddenNodes()).find("input:checked").attr("hidden", true).appendTo(this);
     });
 }
 

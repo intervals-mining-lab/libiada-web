@@ -30,13 +30,13 @@
                 for (int j = 0; j < ViewBag.characteristics.Count; j++)
                 {
                     @: points.push(new Array());
-                    @: characteristics.push(new Array());
+                                @: characteristics.push(new Array());
 
                     var characteristicList = ViewBag.characteristics[j];
                     for (int i = 0; i < characteristicList.Count; i++)
                     {
                         @: points[@j].push(new Array());
-                        @: characteristics[@j].push(new Array());
+                                    @: characteristics[@j].push(new Array());
 
                         var characteristic = characteristicList[i];
                         for (int k = 0; k < characteristic.Count; k++)
@@ -44,15 +44,15 @@
                             string[] tempValue = characteristic[k].Value.ToString().Split(',');
                             string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                             @: characteristics[@j][@i][@k] = @value;
-                            @: points[@j][@i][@k] = {x: @i, y: @value};
-                        }
+                                        @: points[@j][@i][@k] = {x: @i, y: @value};
+                                    }
                     }
                 }
 
                 for (int k = 0; k < ViewBag.matterNames.Count; k++)
                 {
                     @:matterNames.push("@ViewBag.matterNames[k]");
-                }
+                            }
             }
 
             // make the container smaller and add a second container for the master chart
@@ -277,7 +277,7 @@
     for (int d = 0; d < ViewBag.characteristics.Count; d++)
     {
         @ViewBag.matterNames[d]
-        <table class="table" id="resultTable">
+        <table class="table table-bordered table-hover" id="resultTable">
             <thead>
                 <tr>
                     <th>

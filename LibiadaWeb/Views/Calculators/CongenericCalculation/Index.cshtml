@@ -1,84 +1,141 @@
-﻿@using LibiadaWeb.Helpers
-@using LibiadaWeb.Models
-@model dynamic
+﻿@using LibiadaWeb.Models
+@model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Вычисление характеристик однородных цепочек";
+    ViewBag.Title = "Congeneric sequences characteristics calculation";
 }
 
 <script type="text/javascript">
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-
 </script>
 
-<h2>Вычисление характеристик однородных последовательностей</h2>
+<h2>Congeneric sequences characteristics calculation</h2>
 
 @using (Html.BeginForm("Index", "CongenericCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
 {
-    <fieldset ng-controller="CalculationCtrl">
-        <legend>Характеристики однородных цепочек</legend>
-        <select ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
-        <table class="table">
+    <div class="form-horizontal" ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+        <br />
+        <div class="form-group">
+            @Html.LabelFor(model => model.First().NatureId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
+                @Html.ValidationMessage("natureId", string.Empty, new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.Label("matterIds", "Sequences", new { @class = "control-label" })
+        <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Создан</th>
-            </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Created)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Modified)
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
-                <td>
-                    <input type="checkbox" name="matterIds" ng-value="matter.Value"/>
-                    <span ng-bind="matter.Text"></span>
-                </td>
-                <td ng-bind="matter.description"></td>
-                <td ng-bind="matter.created"/>
-            </tr>
+                <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+                    <td>
+                        <label>
+                            <input type="checkbox" name="matterIds" ng-value="matter.Value" />
+                            {{matter.Text}}
+                        </label>
+                    </td>
+                    <td ng-bind="matter.Description" />
+                    <td ng-bind="matter.Created" />
+                    <td ng-bind="matter.Modified" />
+                </tr>
             </tbody>
         </table>
-        <br/>
-        <button type="button" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Добавить характеристику</button>
-        <br/>
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
+            </div>
+        </div>
         <div ng-repeat="characteristic in characteristics">
-            <select title="Характеристика" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value"/>
-
-            <select title="Привязка" ng-show="isLinkable(characteristic)" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
-
-            <select title="Форма записи" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
-            <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value"/>
-
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+                    <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
+                    @Html.ValidationMessage("characteristicIds", string.Empty, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" ng-show="isLinkable(characteristic)">
+                <div class="col-md-10">
+                    <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
+                    <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
+                    @Html.ValidationMessage("linkIds", string.Empty, new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value" />
+                    @Html.ValidationMessage("notationIds", string.Empty, new { @class = "text-danger" })
+                </div>
+            </div>
             <div ng-switch="natureId">
                 <div ng-switch-when="@Aliases.Nature.Literature">
-                    <select title="Язык" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                    <input type="hidden" name="languageIds" ng-value="characteristic.language.Value"/>
-
-                    <select title="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value"/>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
+                            <input type="hidden" name="languageIds" ng-value="characteristic.language.Value" />
+                            @Html.ValidationMessage("languageIds", string.Empty, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
+                            <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value" />
+                            @Html.ValidationMessage("translatorIds", string.Empty, new { @class = "text-danger" })
+                        </div>
+                    </div>
                 </div>
-
                 <div ng-switch-when="@Aliases.Nature.Genetic">
                 </div>
-
                 <div ng-switch-when="@Aliases.Nature.Music">
                 </div>
             </div>
-
-            <button type="button" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Удалить</button>
-            <br/>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-default" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
+                </div>
+            </div>
+            <hr />
+            <br />
         </div>
-        <br/>
-        @Html.CheckBox("isSort", "Ранжировать", null)
-        <br/>
-        @Html.CheckBox("theoretical", "Строить теоретическое распределение", null)
-        <br/>
-        <br/>
-        <input type="submit" value="Вычислить"/>
-    </fieldset>
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBox("isSort")
+                @Html.Label("isSort", "Sort results in descending order")
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.CheckBox("theoretical")
+                @Html.Label("theoretical", "Calculate theoretical rank distribution")
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
 }
 
 @section Scripts {
