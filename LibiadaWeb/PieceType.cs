@@ -22,6 +22,7 @@ namespace LibiadaWeb
             this.Fmotiv = new HashSet<Fmotiv>();
             this.Measure = new HashSet<Measure>();
             this.MusicSequence = new HashSet<MusicSequence>();
+            this.DataSequence = new HashSet<DataSequence>();
             this.Gene = new HashSet<Gene>();
         }
     
@@ -37,6 +38,7 @@ namespace LibiadaWeb
         public virtual ICollection<Fmotiv> Fmotiv { get; set; }
         public virtual ICollection<Measure> Measure { get; set; }
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }
+        public virtual ICollection<DataSequence> DataSequence { get; set; }
         public virtual ICollection<Gene> Gene { get; set; }
     }
 }

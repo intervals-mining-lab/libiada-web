@@ -22,7 +22,7 @@ namespace LibiadaWeb
         public Nullable<int> LinkId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long ElementId { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual CharacteristicType CharacteristicType { get; set; }
         public virtual Element Element { get; set; }

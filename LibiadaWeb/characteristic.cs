@@ -21,7 +21,7 @@ namespace LibiadaWeb
         public string ValueString { get; set; }
         public Nullable<int> LinkId { get; set; }
         public System.DateTimeOffset Created { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Link Link { get; set; }
         public virtual CommonSequence Sequence { get; set; }

@@ -22,6 +22,7 @@ namespace LibiadaWeb
             this.Fmotiv = new HashSet<Fmotiv>();
             this.Measure = new HashSet<Measure>();
             this.MusicSequence = new HashSet<MusicSequence>();
+            this.DataSequence = new HashSet<DataSequence>();
         }
     
         public long Id { get; set; }
@@ -29,7 +30,7 @@ namespace LibiadaWeb
         public int NatureId { get; set; }
         public string Description { get; set; }
         public System.DateTimeOffset Created { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }
@@ -38,5 +39,6 @@ namespace LibiadaWeb
         public virtual ICollection<Fmotiv> Fmotiv { get; set; }
         public virtual ICollection<Measure> Measure { get; set; }
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }
+        public virtual ICollection<DataSequence> DataSequence { get; set; }
     }
 }

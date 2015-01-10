@@ -27,7 +27,7 @@ namespace LibiadaWeb
         public string Name { get; set; }
         public int NotationId { get; set; }
         public System.DateTimeOffset Created { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual ICollection<BinaryCharacteristic> FirstElementBinaryCharacteristic { get; set; }
         public virtual ICollection<BinaryCharacteristic> SecondElementBinaryCharacteristic { get; set; }

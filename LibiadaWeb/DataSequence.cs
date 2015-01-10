@@ -12,9 +12,9 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class LiteratureSequence
+    public partial class DataSequence
     {
-        public LiteratureSequence()
+        public DataSequence()
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
             this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
@@ -26,23 +26,18 @@ namespace LibiadaWeb
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
         public int PieceTypeId { get; set; }
-        public Nullable<int> TranslatorId { get; set; }
         public long PiecePosition { get; set; }
-        public bool Original { get; set; }
-        public int LanguageId { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public string Description { get; set; }
     
-        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
-        public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
-        public virtual ICollection<Characteristic> Characteristic { get; set; }
-        public virtual Language Language { get; set; }
         public virtual Matter Matter { get; set; }
         public virtual Notation Notation { get; set; }
         public virtual PieceType PieceType { get; set; }
-        public virtual Translator Translator { get; set; }
+        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
+        public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual RemoteDb RemoteDb { get; set; }
     }
 }

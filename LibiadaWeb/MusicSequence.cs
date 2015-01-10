@@ -29,7 +29,7 @@ namespace LibiadaWeb
         public long PiecePosition { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
         public string RemoteId { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
         public string Description { get; set; }
     
         public virtual Matter Matter { get; set; }

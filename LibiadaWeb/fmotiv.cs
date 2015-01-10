@@ -33,7 +33,7 @@ namespace LibiadaWeb
         public int FmotivTypeId { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
         public string RemoteId { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Matter Matter { get; set; }
         public virtual Notation Notation { get; set; }

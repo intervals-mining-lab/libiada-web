@@ -49,6 +49,7 @@ namespace LibiadaWeb
         public virtual DbSet<Instrument> Instrument { get; set; }
         public virtual DbSet<Measure> Measure { get; set; }
         public virtual DbSet<MusicSequence> MusicSequence { get; set; }
+        public virtual DbSet<DataSequence> DataSequence { get; set; }
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<Pitch> Pitch { get; set; }
         public virtual DbSet<Accidental> Accidental { get; set; }

@@ -125,4 +125,77 @@ UPDATE link set id = 0 WHERE id = 5;
 ALTER TABLE dna_chain RENAME COLUMN complement TO complementary;
 ALTER TABLE gene RENAME COLUMN complement TO complementary;
 
+-- 05.01.2015
+-- Added translator check to literature_chain.
+
+ALTER TABLE literature_chain ADD CONSTRAINT chk_original_translator CHECK ((original AND translator_id IS NULL) OR NOT original);
+
+-- 05.01.2015
+-- Created table for measurement sequences.
+
+CREATE TABLE data_chain
+(
+  id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass), -- Уникальный внутренний идентификатор цепочки.
+  notation_id integer NOT NULL, -- Форма записи цепочки в зависимости от элементов (буквы, слова, нуклеотиды, триплеты, etc).
+  created timestamp with time zone NOT NULL DEFAULT now(), -- Дата создания цепочки.
+  matter_id bigint NOT NULL, -- Ссылка на объект исследования.
+  piece_type_id integer NOT NULL DEFAULT 1, -- Тип фрагмента.
+  piece_position bigint NOT NULL DEFAULT 0, -- Позиция фрагмента.
+  alphabet bigint[] NOT NULL, -- Алфавит цепочки.
+  building integer[] NOT NULL, -- Строй цепочки.
+  remote_id character varying(255), -- id цепочки в удалённой БД.
+  remote_db_id integer, -- id удалённой базы данных, из которой взята данная цепочка.
+  modified timestamp with time zone NOT NULL DEFAULT now(), -- Дата и время последнего изменения записи в таблице.
+  description text, -- Описание отдельной цепочки.
+  CONSTRAINT data_chain_pkey PRIMARY KEY (id),
+  CONSTRAINT chk_remote_id CHECK (remote_db_id IS NULL AND remote_id IS NULL OR remote_db_id IS NOT NULL AND remote_id IS NOT NULL)
+)
+INHERITS (chain);
+
+COMMENT ON TABLE data_chain IS 'Таблица массивов данных измерений.';
+COMMENT ON COLUMN data_chain.id IS 'Уникальный внутренний идентификатор цепочки.';
+COMMENT ON COLUMN data_chain.notation_id IS 'Форма записи цепочки в зависимости от элементов (буквы, слова, нуклеотиды, триплеты, etc).';
+COMMENT ON COLUMN data_chain.created IS 'Дата создания цепочки.';
+COMMENT ON COLUMN data_chain.matter_id IS 'Ссылка на объект исследования.';
+COMMENT ON COLUMN data_chain.piece_type_id IS 'Тип фрагмента.';
+COMMENT ON COLUMN data_chain.piece_position IS 'Позиция фрагмента.';
+COMMENT ON COLUMN data_chain.alphabet IS 'Алфавит цепочки.';
+COMMENT ON COLUMN data_chain.building IS 'Строй цепочки.';
+COMMENT ON COLUMN data_chain.remote_id IS 'id цепочки в удалённой БД.';
+COMMENT ON COLUMN data_chain.remote_db_id IS 'id удалённой базы данных, из которой взята данная цепочка.';
+COMMENT ON COLUMN data_chain.modified IS 'Дата и время последнего изменения записи в таблице.';
+COMMENT ON COLUMN data_chain.description IS 'Описание отдельной цепочки.';
+
+CREATE INDEX data_chain_alphabet_idx ON data_chain USING gin (alphabet);
+
+CREATE INDEX data_chain_matter_id_idx ON data_chain USING btree (matter_id);
+COMMENT ON INDEX data_chain_matter_id_idx IS 'Индекс по объектам исследования которым принадлежат цепочки.';
+
+CREATE INDEX data_chain_notation_id_idx ON data_chain USING btree (notation_id);
+COMMENT ON INDEX data_chain_notation_id_idx IS 'Индекс по формам записи цепочек.';
+
+CREATE INDEX data_chain_piece_type_id_idx ON data_chain USING btree (piece_type_id);
+COMMENT ON INDEX data_chain_piece_type_id_idx IS 'Индекс по типам частей цепочек.';
+
+ALTER TABLE data_chain ADD CONSTRAINT fk_data_chain_chain_key FOREIGN KEY (id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE data_chain ADD CONSTRAINT fk_data_chain_matter FOREIGN KEY (matter_id) REFERENCES matter (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE data_chain ADD CONSTRAINT fk_data_chain_notation FOREIGN KEY (notation_id) REFERENCES notation (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE data_chain ADD CONSTRAINT fk_data_chain_piece_type FOREIGN KEY (piece_type_id) REFERENCES piece_type (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE data_chain ADD CONSTRAINT fk_data_chain_remote_db FOREIGN KEY (remote_db_id) REFERENCES remote_db (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+CREATE TRIGGER tgi_data_chain_building_check BEFORE INSERT ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_building_check();
+COMMENT ON TRIGGER tgi_data_chain_building_check ON data_chain IS 'Триггер, проверяющий строй цепочки.';
+
+CREATE TRIGGER tgiu_data_chain_alphabet AFTER INSERT OR UPDATE OF alphabet ON data_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_check_alphabet();
+COMMENT ON TRIGGER tgiu_data_chain_alphabet ON data_chain IS 'Проверяет наличие всех элементов добавляемого или изменяемого алфавита в БД.';
+
+CREATE TRIGGER tgiu_data_chain_modified BEFORE INSERT OR UPDATE ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_data_chain_modified ON data_chain IS 'Тригер для вставки даты последнего изменения записи.';
+
+CREATE TRIGGER tgiud_data_chain_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON data_chain FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+COMMENT ON TRIGGER tgiud_data_chain_chain_key_bound ON data_chain IS 'Дублирует добавление, изменение и удаление записей в таблице chain в таблицу chain_key.';
+
+CREATE TRIGGER tgu_data_chain_characteristics AFTER UPDATE ON data_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_data_chain_characteristics ON data_chain IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
 COMMIT;

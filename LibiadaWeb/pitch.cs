@@ -22,7 +22,7 @@ namespace LibiadaWeb
         public int AccidentalId { get; set; }
         public int NoteSymbolId { get; set; }
         public System.DateTimeOffset Created { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Note Note { get; set; }
         public virtual Instrument Instrument { get; set; }

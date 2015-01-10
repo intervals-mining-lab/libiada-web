@@ -20,8 +20,8 @@ namespace LibiadaWeb
         }
     
         public long Id { get; set; }
-        public Nullable<System.DateTimeOffset> Created { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Created { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
         public long SequenceId { get; set; }
         public int PieceTypeId { get; set; }
         public string Description { get; set; }

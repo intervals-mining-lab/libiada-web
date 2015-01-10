@@ -33,7 +33,7 @@ namespace LibiadaWeb
         public bool Triplet { get; set; }
         public Nullable<int> Priority { get; set; }
         public int TieId { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Notation Notation { get; set; }
         public virtual ICollection<Pitch> Pitch { get; set; }

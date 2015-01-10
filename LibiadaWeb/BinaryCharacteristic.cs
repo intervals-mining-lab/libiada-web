@@ -23,7 +23,7 @@ namespace LibiadaWeb
         public System.DateTimeOffset Created { get; set; }
         public long FirstElementId { get; set; }
         public long SecondElementId { get; set; }
-        public Nullable<System.DateTimeOffset> Modified { get; set; }
+        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Element FirstElement { get; set; }
         public virtual Link Link { get; set; }

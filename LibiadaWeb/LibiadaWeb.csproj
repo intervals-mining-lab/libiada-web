@@ -251,6 +251,9 @@
     <Compile Include="Controllers\Sequences\GenesImportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
+    <Compile Include="DataSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="DnaSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
