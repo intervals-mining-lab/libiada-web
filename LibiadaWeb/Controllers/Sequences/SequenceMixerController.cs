@@ -156,7 +156,7 @@
                         dnaSequence.FastaHeader,
                         null,
                         dnaSequence.ProductId,
-                        dnaSequence.Complement,
+                        dnaSequence.Complementary,
                         dnaSequence.Partial,
                         alphabet,
                         chain.Building);
@@ -177,7 +177,7 @@
                     break;
             }
 
-            return RedirectToAction("Index", "Matter");
+            return RedirectToAction("Index", "Matters");
         }
     }
 }

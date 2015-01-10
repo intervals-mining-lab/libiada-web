@@ -173,8 +173,8 @@
         /// <param name="partial">
         /// The partial.
         /// </param>
-        /// <param name="complement">
-        /// The complement.
+        /// <param name="complementary">
+        /// The complementary.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
@@ -189,7 +189,7 @@
             int? translatorId,
             int? productId,
             bool partial,
-            bool complement)
+            bool complementary)
         {
             if (ModelState.IsValid)
             {
@@ -256,7 +256,7 @@
                                 fastaHeader,
                                 webApiId,
                                 productId,
-                                complement,
+                                complementary,
                                 partial,
                                 alphabet,
                                 chain.Building);

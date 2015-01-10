@@ -245,7 +245,7 @@
                         SequenceId = parentSequence.Id,
                         Description = description,
                         PieceTypeId = pieceTypeId,
-                        Complement = complement,
+                        Complementary = complement,
                         Partial = false,
                         Product = dataBaseProduct
                     };
@@ -278,7 +278,7 @@
                         SequenceId = parentSequence.Id,
                         Description = string.Empty,
                         PieceTypeId = Aliases.PieceType.NonCodingSequence,
-                        Complement = false,
+                        Complementary = false,
                         Partial = false
                     };
 

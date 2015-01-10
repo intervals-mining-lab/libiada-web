@@ -33,7 +33,7 @@ namespace LibiadaWeb
         public string RemoteId { get; set; }
         public string FastaHeader { get; set; }
         public Nullable<System.DateTimeOffset> Modified { get; set; }
-        public bool Complement { get; set; }
+        public bool Complementary { get; set; }
         public bool Partial { get; set; }
         public string Description { get; set; }
     

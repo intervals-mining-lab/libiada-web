@@ -169,8 +169,8 @@
         /// <param name="partial">
         /// The partial.
         /// </param>
-        /// <param name="complement">
-        /// The complement.
+        /// <param name="complementary">
+        /// The complementary.
         /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
@@ -189,7 +189,7 @@
             int? translatorId,
             int? productId,
             bool? partial,
-            bool? complement)
+            bool? complementary)
         {
             if (ModelState.IsValid)
             {
@@ -264,7 +264,7 @@
                             };
 
                             alphabet = elementRepository.ToDbElements(chain.Alphabet, dnaSequence.NotationId, false);
-                            dnaSequenceRepository.Insert(dnaSequence, fastaHeader, webApiId, productId, complement ?? false, partial ?? false, alphabet, chain.Building);
+                            dnaSequenceRepository.Insert(dnaSequence, fastaHeader, webApiId, productId, complementary ?? false, partial ?? false, alphabet, chain.Building);
                             break;
                         case Aliases.Nature.Music:
                             var doc = new XmlDocument();

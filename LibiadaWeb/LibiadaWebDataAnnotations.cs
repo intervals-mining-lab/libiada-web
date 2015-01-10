@@ -265,10 +265,36 @@
         public bool Partial { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether complement.
+        /// Gets or sets a value indicating whether sequence complementary.
         /// </summary>
         [Display(Name = "Sequence is complementary to source sequence")]
-        public bool Complement { get; set; }
+        public bool Complementary { get; set; }
+
+        /// <summary>
+        /// Gets or sets the product id.
+        /// </summary>
+        [Display(Name = "Sequence product")]
+        public int ProductId { get; set; }
+    }
+
+    /// <summary>
+    /// The gene.
+    /// </summary>
+    [MetadataType(typeof(GeneDataAnnotations))]
+    public partial class Gene
+    {
+    }
+
+    /// <summary>
+    /// The gene data annotations.
+    /// </summary>
+    public class GeneDataAnnotations
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether sequence complementary.
+        /// </summary>
+        [Display(Name = "Sequence is complementary to source sequence")]
+        public bool Complementary { get; set; }
 
         /// <summary>
         /// Gets or sets the product id.

@@ -26,7 +26,7 @@ namespace LibiadaWeb
         public int PieceTypeId { get; set; }
         public string Description { get; set; }
         public Nullable<int> WebApiId { get; set; }
-        public bool Complement { get; set; }
+        public bool Complementary { get; set; }
         public bool Partial { get; set; }
         public Nullable<int> ProductId { get; set; }
     

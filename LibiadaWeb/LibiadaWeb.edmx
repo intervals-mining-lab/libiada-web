@@ -92,7 +92,7 @@
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="web_api_id" Type="int4" />
           <Property Name="modified" Type="timestamptz"/>
-          <Property Name="complement" Type="bool" Nullable="false" />
+          <Property Name="complementary" Type="bool" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -108,7 +108,7 @@
           <Property Name="piece_type_id" Type="int4" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="web_api_id" Type="int4" />
-          <Property Name="complement" Type="bool" Nullable="false" />
+          <Property Name="complementary" Type="bool" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="product_id" Type="int4" />
         </EntityType>
@@ -1661,7 +1661,7 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="FastaHeader" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Precision="7" />
-          <Property Name="Complement" Type="Boolean" Nullable="false" />
+          <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_dna_chain" FromRole="DnaSequence" ToRole="BinaryCharacteristic" />
@@ -1685,7 +1685,7 @@
           <Property Name="PieceTypeId" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" Unicode="true" Nullable="false" FixedLength="false" />
           <Property Name="WebApiId" Type="Int32" />
-          <Property Name="Complement" Type="Boolean" Nullable="false" />
+          <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
           <Property Name="ProductId" Type="Int32" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_gene_dna_chain" FromRole="Gene" ToRole="DnaSequence" />
@@ -3497,7 +3497,7 @@
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
-                <ScalarProperty Name="Complement" ColumnName="complement" />
+                <ScalarProperty Name="Complementary" ColumnName="complementary" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
                 <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
@@ -3514,7 +3514,7 @@
                 <ScalarProperty Name="ProductId" ColumnName="product_id" />
                 <ScalarProperty Name="PieceTypeId" ColumnName="piece_type_id" />
                 <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
-                <ScalarProperty Name="Complement" ColumnName="complement" />
+                <ScalarProperty Name="Complementary" ColumnName="complementary" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
                 <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>

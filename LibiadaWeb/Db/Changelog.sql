@@ -119,4 +119,10 @@ ALTER TABLE chain DROP COLUMN dissimilar;
 
 UPDATE link set id = 0 WHERE id = 5;
 
+-- 10.01.2015
+-- Renamed complement into complementary.
+
+ALTER TABLE dna_chain RENAME COLUMN complement TO complementary;
+ALTER TABLE gene RENAME COLUMN complement TO complementary;
+
 COMMIT;

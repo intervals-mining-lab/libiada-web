@@ -39,8 +39,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="productId">
         /// The product id.
         /// </param>
-        /// <param name="complement">
-        /// The complement.
+        /// <param name="complementary">
+        /// The complementary.
         /// </param>
         /// <param name="partial">
         /// The partial.
@@ -55,8 +55,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             CommonSequence commonSequence, 
             string fastaHeader, 
             int? webApiId, 
-            int? productId, 
-            bool complement, 
+            int? productId,
+            bool complementary, 
             bool partial, 
             long[] alphabet, 
             int[] building)
@@ -88,9 +88,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             });
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "complement", 
-                NpgsqlDbType = NpgsqlDbType.Boolean, 
-                Value = complement
+                ParameterName = "complementary", 
+                NpgsqlDbType = NpgsqlDbType.Boolean,
+                Value = complementary
             });
 
             const string Query = @"INSERT INTO dna_chain (
@@ -107,7 +107,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         web_api_id,
                                         product_id,
                                         partial,
-                                        complement
+                                        complementary
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
@@ -122,7 +122,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @web_api_id,
                                         @product_id,
                                         @partial,
-                                        @complement
+                                        @complementary
                                     );";
             Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
         }
@@ -218,7 +218,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create complement alphabet.
+        /// The create complementary alphabet.
         /// </summary>
         /// <param name="alphabet">
         /// The alphabet.
@@ -226,20 +226,20 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="Alphabet"/>.
         /// </returns>
-        public Alphabet CreateComplementAlphabet(Alphabet alphabet)
+        public Alphabet CreateComplementaryAlphabet(Alphabet alphabet)
         {
             var newAlphabet = new Alphabet { NullValue.Instance() };
 
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
-                newAlphabet.Add(GetComplementElement(alphabet[i]));
+                newAlphabet.Add(GetComplementaryElement(alphabet[i]));
             }
 
             return newAlphabet;
         }
 
         /// <summary>
-        /// The get complement element.
+        /// The get complementary element.
         /// </summary>
         /// <param name="source">
         /// The source.
@@ -250,7 +250,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <exception cref="ArgumentException">
         /// Thrown if any element in sequence is not recognized as nucleotide.
         /// </exception>
-        public ValueString GetComplementElement(IBaseObject source)
+        public ValueString GetComplementaryElement(IBaseObject source)
         {
             switch (source.ToString())
             {
