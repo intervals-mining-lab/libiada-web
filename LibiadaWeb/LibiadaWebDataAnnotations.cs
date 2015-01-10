@@ -50,15 +50,15 @@
     public class BinaryCharacteristicDataAnnotations : CharacteristicDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the first_element_id.
+        /// Gets or sets the first element id.
         /// </summary>
-        [Display(Name = "Первый элемент")]
+        [Display(Name = "First element")]
         public int FirstElementId { get; set; }
 
         /// <summary>
-        /// Gets or sets the second_element_id.
+        /// Gets or sets the second element id.
         /// </summary>
-        [Display(Name = "Второй элемент")]
+        [Display(Name = "Second element")]
         public int SecondElementId { get; set; }
     }
 
@@ -144,9 +144,9 @@
         public long SequenceId { get; set; }
 
         /// <summary>
-        /// Gets or sets the characteristic_type_id.
+        /// Gets or sets the characteristic type id.
         /// </summary>
-        [Display(Name = "Тип характеристики")]
+        [Display(Name = "Characteristic name")]
         public int CharacteristicTypeId { get; set; }
 
         /// <summary>
@@ -156,15 +156,15 @@
         public double Value { get; set; }
 
         /// <summary>
-        /// Gets or sets the value_string.
+        /// Gets or sets the value string.
         /// </summary>
-        [Display(Name = "Значение в виде строки")]
+        [Display(Name = "Value as string")]
         public string ValueString { get; set; }
 
         /// <summary>
-        /// Gets or sets the link_id.
+        /// Gets or sets the link id.
         /// </summary>
-        [Display(Name = "Привязка")]
+        [Display(Name = "Link of characteristic")]
         public int LinkId { get; set; }
 
         /// <summary>
@@ -175,7 +175,7 @@
     }
 
     /// <summary>
-    /// The characteristic_group.
+    /// The characteristic group.
     /// </summary>
     [MetadataType(typeof(CharacteristicGroupDataAnnotations))]
     public partial class CharacteristicGroup
@@ -190,7 +190,7 @@
     }
 
     /// <summary>
-    /// The characteristic_type.
+    /// The characteristic type.
     /// </summary>
     [MetadataType(typeof(CharacteristicTypeDataAnnotations))]
     public partial class CharacteristicType
@@ -203,13 +203,13 @@
     public class CharacteristicTypeDataAnnotations : CommonDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the characteristic_group_id.
+        /// Gets or sets the characteristic group id.
         /// </summary>
-        [Display(Name = "Characteristic belogs to group")]
+        [Display(Name = "Group Characteristic belogs to")]
         public int CharacteristicGroupId { get; set; }
 
         /// <summary>
-        /// Gets or sets the class_name.
+        /// Gets or sets the class name.
         /// </summary>
         [Display(Name = "Calculator class name")]
         public string ClassName { get; set; }
@@ -348,7 +348,7 @@
     }
 
     /// <summary>
-    /// The fmotiv_type.
+    /// The fmotiv type.
     /// </summary>
     [MetadataType(typeof(FmotivTypeDataAnnotations))]
     public partial class FmotivType
@@ -473,9 +473,9 @@
     public class MatterDataAnnotations : CommonDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the nature_id.
+        /// Gets or sets the nature id.
         /// </summary>
-        [Display(Name = "Природа")]
+        [Display(Name = "Nature")]
         public int NatureId { get; set; }
     }
 
@@ -579,9 +579,9 @@
     public class NotationDataAnnotations : CommonDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the nature_id.
+        /// Gets or sets the nature id.
         /// </summary>
-        [Display(Name = "Природа")]
+        [Display(Name = "Nature of notation")]
         public int NatureId { get; set; }
     }
 
@@ -641,7 +641,7 @@
         public int Priority { get; set; }
 
         /// <summary>
-        /// Gets or sets the tie_id.
+        /// Gets or sets the tie id.
         /// </summary>
         [Display(Name = "Лига")]
         public int TieId { get; set; }
@@ -663,7 +663,7 @@
     }
 
     /// <summary>
-    /// The piece_type.
+    /// The piece type.
     /// </summary>
     [MetadataType(typeof(PieceTypeDataAnnotations))]
     public partial class PieceType
@@ -703,7 +703,7 @@
         public int Midinumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the instrument_id.
+        /// Gets or sets the instrument id.
         /// </summary>
         [Display(Name = "Инструмент")]
         public int InstrumentId { get; set; }
@@ -715,20 +715,20 @@
         public long NoteId { get; set; }
 
         /// <summary>
-        /// Gets or sets the accidental_id.
+        /// Gets or sets the accidental id.
         /// </summary>
         [Display(Name = "Знак альтерации")]
         public int AccidentalId { get; set; }
 
         /// <summary>
-        /// Gets or sets the note_symbol_id.
+        /// Gets or sets the note symbol id.
         /// </summary>
         [Display(Name = "Обозначение ноты")]
         public int NoteSymbolId { get; set; }
     }
 
     /// <summary>
-    /// The remote_db.
+    /// The remote db.
     /// </summary>
     [MetadataType(typeof(RemoteDbDataAnnotations))]
     public partial class RemoteDb
@@ -776,9 +776,9 @@
     public class ProductDataAnnotations : CommonDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the piece_type_id.
+        /// Gets or sets the piece type id.
         /// </summary>
-        [Display(Name = "Тип фрагмента цепочки")]
+        [Display(Name = "Type of product")]
         public int PieceTypeId { get; set; }
     }
 

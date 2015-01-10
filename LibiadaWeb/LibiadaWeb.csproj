@@ -243,13 +243,13 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
+    <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceTransformerController.cs" />
     <Compile Include="Controllers\Sequences\GenesImportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Sequences\MatterController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
     <Compile Include="DnaSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -528,11 +528,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />
-    <Content Include="Views\Sequences\Matter\Create.cshtml" />
-    <Content Include="Views\Sequences\Matter\Delete.cshtml" />
-    <Content Include="Views\Sequences\Matter\Details.cshtml" />
-    <Content Include="Views\Sequences\Matter\Edit.cshtml" />
-    <Content Include="Views\Sequences\Matter\Index.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\BuildingComparison\Index.cshtml" />
@@ -566,6 +561,11 @@
     <Content Include="Views\Sequences\CommonSequences\Details.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Edit.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Index.cshtml" />
+    <Content Include="Views\Sequences\Matters\Create.cshtml" />
+    <Content Include="Views\Sequences\Matters\Delete.cshtml" />
+    <Content Include="Views\Sequences\Matters\Details.cshtml" />
+    <Content Include="Views\Sequences\Matters\Edit.cshtml" />
+    <Content Include="Views\Sequences\Matters\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -155,12 +155,34 @@
         /// <param name="commonSequence">
         /// The common sequence.
         /// </param>
+        /// <param name="localFile">
+        /// The local file.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="original">
+        /// The original.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
+        /// <param name="productId">
+        /// The product id.
+        /// </param>
+        /// <param name="partial">
+        /// The partial.
+        /// </param>
+        /// <param name="complement">
+        /// The complement.
+        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence,
+        public async Task<ActionResult> Create(
+            [Bind(Include = "Id,NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence,
             bool localFile,
             int languageId,
             bool original,

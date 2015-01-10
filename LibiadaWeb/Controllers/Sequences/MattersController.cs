@@ -4,32 +4,29 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Web.Mvc;
     using System.Xml;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The matter controller.
+    /// The matters controller.
     /// </summary>
-    public class MatterController : Controller
+    public class MattersController : Controller
     {
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         /// <summary>
         /// The element repository.
@@ -45,11 +42,6 @@
         /// The literature sequence repository.
         /// </summary>
         private readonly LiteratureSequenceRepository literatureSequenceRepository;
-
-        /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
 
         /// <summary>
         /// The piece type repository.
@@ -69,14 +61,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="MatterController"/> class.
         /// </summary>
-        public MatterController()
+        public MattersController()
         {
             db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
             dnaSequenceRepository = new DnaSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
-            matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             notationRepository = new NotationRepository(db);
             remoteDbRepository = new RemoteDbRepository(db);
@@ -86,13 +76,13 @@
         /// The index.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
             var matter = db.Matter.Include(m => m.Nature);
-            return View(matter.ToList());
+            return View(await matter.ToListAsync());
         }
 
         /// <summary>
@@ -102,16 +92,16 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Details(long? id)
+        public async Task<ActionResult> Details(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Matter matter = db.Matter.Find(id);
+            Matter matter = await db.Matter.FindAsync(id);
             if (matter == null)
             {
                 return HttpNotFound();
@@ -150,31 +140,31 @@
         /// The matter.
         /// </param>
         /// <param name="notationId">
-        /// The notation Id.
+        /// The notation id.
         /// </param>
         /// <param name="pieceTypeId">
-        /// The piece Type Id.
+        /// The piece type id.
         /// </param>
         /// <param name="remoteDbId">
-        /// The remote Db Id.
+        /// The remote db id.
         /// </param>
         /// <param name="remoteId">
-        /// The remote Id.
+        /// The remote id.
         /// </param>
         /// <param name="localFile">
-        /// The local File.
+        /// The local file.
         /// </param>
         /// <param name="languageId">
-        /// The language Id.
+        /// The language id.
         /// </param>
         /// <param name="original">
         /// The original.
         /// </param>
         /// <param name="translatorId">
-        /// The translator Id.
+        /// The translator id.
         /// </param>
         /// <param name="productId">
-        /// The product Id.
+        /// The product id.
         /// </param>
         /// <param name="partial">
         /// The partial.
@@ -183,12 +173,12 @@
         /// The complement.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(Include = "Name,NatureId,Description")] Matter matter,
+        public async Task<ActionResult> Create(
+            [Bind(Include = "Id,Name,NatureId,Description")] Matter matter,
             int notationId,
             int pieceTypeId,
             int? remoteDbId,
@@ -363,22 +353,22 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Edit(long? id)
+        public async Task<ActionResult> Edit(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Matter matter = db.Matter.Find(id);
+            Matter matter = await db.Matter.FindAsync(id);
             if (matter == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.nature_id = new SelectList(db.Nature, "id", "name", matter.NatureId);
+            ViewBag.NatureId = new SelectList(db.Nature, "Id", "Name", matter.NatureId);
             return View(matter);
         }
 
@@ -389,20 +379,20 @@
         /// The matter.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Name,NatureId,Description")] Matter matter)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,NatureId,Description")] Matter matter)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(matter).State = EntityState.Modified;
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.nature_id = new SelectList(db.Nature, "id", "name", matter.NatureId);
+            ViewBag.NatureId = new SelectList(db.Nature, "Id", "Name", matter.NatureId);
             return View(matter);
         }
 
@@ -413,16 +403,16 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
-        public ActionResult Delete(long? id)
+        public async Task<ActionResult> Delete(long? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Matter matter = db.Matter.Find(id);
+            Matter matter = await db.Matter.FindAsync(id);
             if (matter == null)
             {
                 return HttpNotFound();
@@ -438,15 +428,15 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// The <see cref="Task"/>.
         /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
+        public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            Matter matter = db.Matter.Find(id);
+            Matter matter = await db.Matter.FindAsync(id);
             db.Matter.Remove(matter);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

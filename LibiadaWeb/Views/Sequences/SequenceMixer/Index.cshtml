@@ -70,7 +70,7 @@
     <br />
     @Html.Label("Язык литературного произведения:")
     <select name="languageId">
-        @foreach (var option in ViewBag.language_id)
+        @foreach (var option in ViewBag.languageId)
         {
             <option value="@option.Value">@option.Text</option>
         }

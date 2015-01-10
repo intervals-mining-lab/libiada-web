@@ -76,7 +76,7 @@
         public ActionResult Index()
         {
             ViewBag.matters = db.Matter.ToList();
-            ViewBag.language_id = new SelectList(db.Language, "id", "name");
+            ViewBag.languageId = new SelectList(db.Language, "id", "name");
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
             ViewBag.notationsList = notationRepository.GetSelectListItems(null);
             return View();
