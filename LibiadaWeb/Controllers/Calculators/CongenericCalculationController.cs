@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Data.Entity;
 
     using Helpers;
 
@@ -65,7 +66,7 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var matters = db.Matter.Include("nature");
+            var matters = db.Matter.Include(m => m.Nature);
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 

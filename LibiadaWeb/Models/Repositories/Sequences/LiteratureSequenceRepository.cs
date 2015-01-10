@@ -3,6 +3,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Data.Entity;
+
     using Npgsql;
     using NpgsqlTypes;
 
@@ -131,7 +133,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             HashSet<long> sequenceIds = sequences != null
                                          ? new HashSet<long>(sequences.Select(c => c.Id))
                                          : new HashSet<long>();
-            var allSequences = Db.LiteratureSequence.Include("matter");
+            var allSequences = Db.LiteratureSequence.Include(s => s.Matter);
             var sequencesList = new List<SelectListItem>();
             foreach (var sequence in allSequences)
             {

@@ -3,7 +3,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Data.Entity;
+
     using LibiadaCore.Core;
+    
     using Npgsql;
 
     /// <summary>
@@ -97,7 +100,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             if (allSequences == null)
             {
-                allSequences = Db.CommonSequence.Include("matter");
+                allSequences = Db.CommonSequence.Include(s => s.Matter);
             }
 
             HashSet<long> sequenceIds = selectedSequences != null

@@ -4,6 +4,7 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
+
     using LibiadaCore.Core;
     using LibiadaCore.Misc.DataTransformers;
     using LibiadaWeb.Models;
@@ -53,7 +54,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var sequences = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include("matter");
+            var sequences = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include(s => s.Matter);
             ViewBag.sequences = sequences.ToList();
             ViewBag.sequencesList = dnaSequenceRepository.GetSelectListItems(sequences, null);
             return View();

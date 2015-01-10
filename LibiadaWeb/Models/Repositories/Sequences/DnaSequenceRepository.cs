@@ -4,8 +4,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Data.Entity;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
+    
     using Npgsql;
     using NpgsqlTypes;
 
@@ -200,7 +203,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 : new HashSet<long>();
             if (allSequences == null)
             {
-                allSequences = Db.DnaSequence.Include("matter");
+                allSequences = Db.DnaSequence.Include(s => s.Matter);
             }
 
             var sequencesList = new List<SelectListItem>();

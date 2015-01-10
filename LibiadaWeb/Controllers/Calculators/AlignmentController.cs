@@ -219,7 +219,7 @@
             var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
             var genes =
-                db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include("piece").ToArray();
+                db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
 
             var pieces = genes.Select(g => g.Piece.First()).ToList();
 

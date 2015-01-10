@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Data.Entity;
 
     using Helpers;
 
@@ -66,7 +67,7 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var sequences = db.CommonSequence.Include("matter");
+            var sequences = db.CommonSequence.Include(s => s.Matter);
             ViewBag.sequenceCheckBoxes = commonSequenceRepository.GetSelectListItems(sequences, null);
             ViewBag.sequences = sequences;
             var languages = new List<string>();
