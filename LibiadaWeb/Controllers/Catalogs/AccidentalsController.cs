@@ -41,11 +41,13 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Accidental accidental = db.Accidental.Find(id);
             if (accidental == null)
             {
                 return HttpNotFound();
             }
+
             return View(accidental);
         }
 
@@ -103,6 +105,7 @@
             {
                 return HttpNotFound();
             }
+
             return View(accidental);
         }
 
@@ -125,6 +128,7 @@
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(accidental);
         }
 
@@ -143,11 +147,13 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Accidental accidental = db.Accidental.Find(id);
             if (accidental == null)
             {
                 return HttpNotFound();
             }
+
             return View(accidental);
         }
 
@@ -182,6 +188,7 @@
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

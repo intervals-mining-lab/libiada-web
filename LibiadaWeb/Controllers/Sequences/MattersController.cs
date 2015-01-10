@@ -59,7 +59,7 @@
         private readonly RemoteDbRepository remoteDbRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MatterController"/> class.
+        /// Initializes a new instance of the <see cref="MattersController"/> class.
         /// </summary>
         public MattersController()
         {
