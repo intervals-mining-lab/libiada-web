@@ -19,7 +19,7 @@ CREATE INDEX ix_piece_gene_id ON piece (gene_id ASC NULLS LAST);
 -- 05.10.2014
 -- Добавлен новый тип РНК.
 
-INSET INTO piece_type (name, description, nature_id) VALUES ('Различная РНК', 'misc_RNA - miscellaneous other RNA', 1)
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Различная РНК', 'misc_RNA - miscellaneous other RNA', 1)
 
 -- 24.12.2014
 -- Updating db_integrity_test function.
@@ -197,5 +197,12 @@ COMMENT ON TRIGGER tgiud_data_chain_chain_key_bound ON data_chain IS 'Дублирует 
 
 CREATE TRIGGER tgu_data_chain_characteristics AFTER UPDATE ON data_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 COMMENT ON TRIGGER tgu_data_chain_characteristics ON data_chain IS 'Триггер удаляющий все характеристки при обновлении цепочки.';
+
+-- 10.01.2015
+-- Added new nature, notation and piece type for data chains.
+
+INSERT INTO nature (id, name, description) VALUES (4, 'Measurement data sequences', 'Ordered arrays of measurement data');
+INSERT INTO notation (id, name, description, nature_id) VALUES (10, 'Integer values', 'Numeric values of measured parameter', 4);
+INSERT INTO piece_type (id, name, description, nature_id) VALUES (17, 'Complete numeric sequence', 'Full sequence of measured values', 4);
 
 COMMIT;
