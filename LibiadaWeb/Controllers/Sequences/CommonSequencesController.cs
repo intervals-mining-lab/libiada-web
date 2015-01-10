@@ -309,13 +309,13 @@
                 { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
                 { "languages", new SelectList(db.Language, "id", "name", languageId) }, 
                 { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
-                { "remoteDbs", commonSequence.RemoteDbId == null
-                        ? remoteDbRepository.GetSelectListWithNature()
-                        : remoteDbRepository.GetSelectListWithNature((int)commonSequence.RemoteDbId) }, 
+                { "remoteDbs", commonSequence.RemoteDbId.HasValue ? 
+                        remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value) :
+                        remoteDbRepository.GetSelectListWithNature() }, 
                 { "natures", new SelectList(db.Nature, "id", "name", db.Matter.Single(m => m.Id == commonSequence.MatterId).NatureId) }, 
                 { "natureLiterature", Aliases.Nature.Literature },
                 { "natureGenetic", Aliases.Nature.Genetic },
-                    { "translators", translators }
+                { "translators", translators }
             };
             return View(commonSequence);
         }

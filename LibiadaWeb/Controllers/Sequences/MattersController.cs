@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Data.Entity;
     using System.IO;
+    using System.Linq;
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
@@ -119,6 +121,10 @@
         public ActionResult Create()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
+
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
+
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "notations", notationRepository.GetSelectListWithNature() },
@@ -126,7 +132,7 @@
                     { "languages", new SelectList(db.Language, "id", "name") },
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                     { "natures", new SelectList(db.Nature, "id", "name") },
-                    { "translators", new SelectList(db.Translator, "id", "name") },
+                    { "translators", translators },
                     { "natureLiterature", Aliases.Nature.Literature },
                     { "natureGenetic", Aliases.Nature.Genetic }
                 };
@@ -178,11 +184,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(
-            [Bind(Include = "Id,Name,NatureId,Description")] Matter matter,
-            int notationId,
-            int pieceTypeId,
-            int? remoteDbId,
-            string remoteId,
+            [Bind(Include = "Id,NotationId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
             int? languageId,
             bool? original,
@@ -212,7 +214,7 @@
                     }
                     else
                     {
-                        webApiId = NcbiHelper.GetId(remoteId);
+                        webApiId = NcbiHelper.GetId(commonSequence.RemoteId);
                         fileStream = NcbiHelper.GetFile(webApiId.ToString());
                     }
 
@@ -221,14 +223,14 @@
                     // Read the file into the byte array
                     fileStream.Read(input, 0, (int)fileStream.Length);
 
-                    string stringSequence = matter.NatureId == Aliases.Nature.Genetic
+                    string stringSequence = commonSequence.Matter.NatureId == Aliases.Nature.Genetic
                         ? Encoding.ASCII.GetString(input)
                         : Encoding.UTF8.GetString(input);
 
                     BaseChain chain;
                     long[] alphabet;
 
-                    switch (matter.NatureId)
+                    switch (commonSequence.Matter.NatureId)
                     {
                         case Aliases.Nature.Genetic:
                             // отделяем заголовок fasta файла от цепочки
@@ -244,27 +246,21 @@
 
                             chain = new BaseChain(resultStringSequence);
 
-                            if (!elementRepository.ElementsInDb(chain.Alphabet, notationId))
+                            if (!elementRepository.ElementsInDb(chain.Alphabet, commonSequence.NotationId))
                             {
                                 throw new Exception("At least one element of new sequence missing in db.");
                             }
 
-                            db.Matter.Add(matter);
+                            commonSequence.Matter.Sequence = new Collection<CommonSequence>();
+                            
+                            db.Matter.Add(commonSequence.Matter);
                             db.SaveChanges();
 
+                            commonSequence.MatterId = commonSequence.Matter.Id;
                             matterCreated = true;
 
-                            var dnaSequence = new CommonSequence
-                            {
-                                NotationId = notationId,
-                                PieceTypeId = pieceTypeId,
-                                MatterId = matter.Id,
-                                RemoteDbId = remoteDbId,
-                                RemoteId = remoteId
-                            };
-
-                            alphabet = elementRepository.ToDbElements(chain.Alphabet, dnaSequence.NotationId, false);
-                            dnaSequenceRepository.Insert(dnaSequence, fastaHeader, webApiId, productId, complementary ?? false, partial ?? false, alphabet, chain.Building);
+                            alphabet = elementRepository.ToDbElements(chain.Alphabet, commonSequence.NotationId, false);
+                            dnaSequenceRepository.Insert(commonSequence, fastaHeader, webApiId, productId, complementary ?? false, partial ?? false, alphabet, chain.Building);
                             break;
                         case Aliases.Nature.Music:
                             var doc = new XmlDocument();
@@ -290,25 +286,20 @@
                                 chain.Set(new ValueString(text[i]), i);
                             }
 
-                            db.Matter.Add(matter);
+                            commonSequence.Matter.Sequence = new Collection<CommonSequence>();
+
+                            db.Matter.Add(commonSequence.Matter);
                             db.SaveChanges();
 
-                            var literatureSequence = new CommonSequence
-                            {
-                                NotationId = notationId,
-                                PieceTypeId = pieceTypeId,
-                                MatterId = matter.Id,
-                                RemoteDbId = remoteDbId,
-                                RemoteId = remoteId
-                            };
+                            commonSequence.MatterId = commonSequence.Matter.Id;
 
                             alphabet = elementRepository.ToDbElements(
                                 chain.Alphabet,
-                                literatureSequence.NotationId,
+                                commonSequence.NotationId,
                                 true);
 
                             literatureSequenceRepository.Insert(
-                                literatureSequence,
+                                commonSequence,
                                 original ?? false,
                                 languageId ?? 0,
                                 translatorId,
@@ -332,18 +323,18 @@
 
             ViewBag.data = new Dictionary<string, object>
                     {
-                        { "notations", notationRepository.GetSelectListWithNature(notationId) },
-                        { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeId) },
+                        { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) },
+                        { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) },
                         { "languages", new SelectList(db.Language, "id", "name", languageId) },
-                        { "remoteDbs", remoteDbId == null ? 
-                            remoteDbRepository.GetSelectListWithNature() : 
-                            remoteDbRepository.GetSelectListWithNature((int)remoteDbId) },
-                        { "natures", new SelectList(db.Nature, "id", "name", matter.NatureId) },
+                        { "remoteDbs", commonSequence.RemoteDbId.HasValue ? 
+                            remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value) :
+                            remoteDbRepository.GetSelectListWithNature() },
+                        { "natures", new SelectList(db.Nature, "id", "name", commonSequence.Matter.NatureId) },
                         { "translators", new SelectList(db.Translator, "id", "name") },
                         { "natureLiterature", Aliases.Nature.Literature },
                         { "natureGenetic", Aliases.Nature.Genetic }
                     };
-            return View(matter);
+            return View(commonSequence.Matter);
         }
 
         /// <summary>

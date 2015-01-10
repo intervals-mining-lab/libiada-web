@@ -1,5 +1,5 @@
 ﻿@using LibiadaWeb.Models
-@model Matter
+@model CommonSequence
 
 @{
     ViewBag.Title = "Create matter";
@@ -22,19 +22,26 @@
         <h4>Matter and sequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
+                <input type="hidden" name="Matter.NatureId" ng-value="natureId" />
+                @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Matter.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Matter.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Matter.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Matter.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Matter.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Matter.Description, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
@@ -51,43 +58,34 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.NatureId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
-                <input type="hidden" name="NatureId" ng-value="natureId" />
-                @Html.ValidationMessageFor(model => model.NatureId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.Label("notationId", "Sequence notation", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notationsFiltered"></select>
-                <input type="hidden" name="notationId" ng-value="notationId" />
-                @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+                <input type="hidden" name="NotationId" ng-value="notationId" />
+                @Html.ValidationMessageFor(model => model.NotationId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("pieceTypeId", "Sequence is of type", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PieceTypeId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="pieceTypeId" ng-options="p.Value as p.Text for p in pieceTypesFiltered"></select>
-                <input type="hidden" name="pieceTypeId" ng-value="pieceTypeId" />
-                @Html.ValidationMessage("pieceTypeId", "", new { @class = "text-danger" })
+                <input type="hidden" name="PieceTypeId" ng-value="pieceTypeId" />
+                @Html.ValidationMessageFor(model => model.PieceTypeId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.Label("remoteDbId", "Sequence from remote data base", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RemoteDbId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="remoteDbId" ng-value="remoteDbId" />
-                @Html.ValidationMessage("remoteDbId", "", new { @class = "text-danger" })
+                <input type="hidden" name="RemoteDbId" ng-value="remoteDbId" />
+                @Html.ValidationMessageFor(model => model.RemoteDbId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group" ng-show="isRemoteDbDefined()">
-            @Html.Label("remoteId", "Sequence id in remote db", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RemoteId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <input type="text" name="remoteId" ng-model="remoteId" />
-                @Html.Editor("remoteId", new { htmlAttributes = new { @class = "form-control", ng_model="remoteId"  } })
-                @Html.ValidationMessage("remoteId", "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.RemoteId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RemoteId, "", new { @class = "text-danger" })
             </div>
         </div>
         <div ng-switch="natureId">

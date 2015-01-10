@@ -76,7 +76,7 @@
             @Html.LabelFor(model => model.RemoteDbId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbsFiltered"></select>
-                <input type="hidden" name="RemoteBbId" ng-value="remoteDbId" />
+                <input type="hidden" name="RemoteDbId" ng-value="remoteDbId" />
                 @Html.ValidationMessageFor(model => model.RemoteDbId, "", new { @class = "text-danger" })
             </div>
         </div>
