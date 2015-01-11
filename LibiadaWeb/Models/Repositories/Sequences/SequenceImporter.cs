@@ -11,7 +11,7 @@
     /// <summary>
     /// The sequence importer.
     /// </summary>
-    public abstract class CommonSequenceImporter
+    public abstract class SequenceImporter
     {
         /// <summary>
         /// The db.
@@ -19,12 +19,12 @@
         protected readonly LibiadaWebEntities Db;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommonSequenceImporter"/> class.
+        /// Initializes a new instance of the <see cref="SequenceImporter"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        protected CommonSequenceImporter(LibiadaWebEntities db)
+        protected SequenceImporter(LibiadaWebEntities db)
         {
             Db = db;
         }

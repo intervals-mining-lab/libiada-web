@@ -15,7 +15,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     /// <summary>
     /// The dna sequence repository.
     /// </summary>
-    public class DnaSequenceRepository : CommonSequenceImporter, IDnaSequenceRepository
+    public class DnaSequenceRepository : SequenceImporter, IDnaSequenceRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DnaSequenceRepository"/> class.

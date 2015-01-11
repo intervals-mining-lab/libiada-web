@@ -13,7 +13,7 @@
         /// <summary>
         /// The db.
         /// </summary>
-        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
+        private readonly LibiadaWebEntities db;
 
         /// <summary>
         /// The element repository.
@@ -30,6 +30,7 @@
         /// </summary>
         public SequenceElementsController()
         {
+            db = new LibiadaWebEntities();
             elementRepository = new ElementRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
         }

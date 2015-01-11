@@ -94,7 +94,7 @@
             }
             else
             {
-                stream = NcbiHelper.GetGenes(parentSequence.WebApiId.ToString());
+                stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
             }
 
             var input = new byte[stream.Length];

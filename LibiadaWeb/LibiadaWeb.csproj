@@ -247,6 +247,7 @@
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
+    <Compile Include="Controllers\Sequences\SequencesMattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceTransformerController.cs" />
     <Compile Include="Controllers\Sequences\GenesImportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Helpers\CheckBoxListHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\JavaScriptHelper.cs" />
     <Compile Include="Helpers\NcbiHelper.cs" />
@@ -336,7 +338,8 @@
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
-    <Compile Include="Models\Repositories\Sequences\CommonSequenceImporter.cs" />
+    <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\GeneRepository.cs" />
@@ -574,6 +577,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\Characteristics\" />
     <Folder Include="Views\Characteristics\" />
+    <Folder Include="Views\SequencesMatters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

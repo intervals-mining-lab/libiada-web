@@ -13,27 +13,27 @@
         public static class Accidental
         {
             /// <summary>
-            /// The accidental double flat.
+            /// Double flat accidental .
             /// </summary>
             public const int DoubleFlat = 1;
 
             /// <summary>
-            /// The accidental flat.
+            /// Flat accidental.
             /// </summary>
             public const int Flat = 2;
 
             /// <summary>
-            /// The accidental bekar.
+            /// Bekar accidental.
             /// </summary>
             public const int Bekar = 3;
 
             /// <summary>
-            /// The accidental sharp.
+            /// Sharp accidental.
             /// </summary>
             public const int Sharp = 4;
 
             /// <summary>
-            /// The accidental double sharp.
+            /// Double sharp accidental.
             /// </summary>
             public const int DoubleSharp = 5;
         }
@@ -44,17 +44,17 @@
         public static class Language
         {
             /// <summary>
-            /// The language russian.
+            /// Russian language.
             /// </summary>
             public const int Russian = 1;
 
             /// <summary>
-            /// The language english.
+            /// English language.
             /// </summary>
             public const int English = 2;
 
             /// <summary>
-            /// The language german.
+            /// German language.
             /// </summary>
             public const int German = 3;
         }
@@ -75,17 +75,17 @@
             public const int Start = 1;
 
             /// <summary>
-            /// The link end.
+            /// End link.
             /// </summary>
             public const int End = 2;
 
             /// <summary>
-            /// The link start end.
+            /// Start and end link .
             /// </summary>
             public const int StartEnd = 3;
 
             /// <summary>
-            /// The link cycle.
+            /// Cycle link .
             /// </summary>
             public const int Cycle = 4;
         }
@@ -96,19 +96,24 @@
         public static class Nature
         {
             /// <summary>
-            /// The nature genetic.
+            /// The genetic nature.
             /// </summary>
             public const int Genetic = 1;
 
             /// <summary>
-            /// The nature music.
+            /// The music nature.
             /// </summary>
             public const int Music = 2;
 
             /// <summary>
-            /// The nature literature.
+            /// The literature nature.
             /// </summary>
             public const int Literature = 3;
+
+            /// <summary>
+            /// The data nature.
+            /// </summary>
+            public const int Data = 4;
         }
 
         /// <summary>
@@ -117,7 +122,7 @@
         public static class Notation
         {
             /// <summary>
-            /// The notation nucleotide.
+            /// Nucleotide notation.
             /// </summary>
             public const int Nucleotide = 1;
 
@@ -127,39 +132,44 @@
             public const int Triplet = 2;
 
             /// <summary>
-            /// The notation amino acid.
+            /// Amino acid notation.
             /// </summary>
             public const int AminoAcid = 3;
 
             /// <summary>
-            /// The notation segmented.
+            /// Segmented dna notation.
             /// </summary>
             public const int Segmented = 4;
 
             /// <summary>
-            /// The notation words.
+            /// Words notation.
             /// </summary>
             public const int Words = 5;
 
             /// <summary>
-            /// The notation fmotives.
+            /// Fmotives notation.
             /// </summary>
             public const int Fmotives = 6;
 
             /// <summary>
-            /// The notation measures.
+            /// Measures notation.
             /// </summary>
             public const int Measures = 7;
 
             /// <summary>
-            /// The notation notes.
+            /// Notes notation.
             /// </summary>
             public const int Notes = 8;
 
             /// <summary>
-            /// The notation letters.
+            /// Letters The notation.
             /// </summary>
             public const int Letters = 9;
+
+            /// <summary>
+            /// The integer values.
+            /// </summary>
+            public const int IntegerValues = 10;
 
             /// <summary>
             /// Notations elements of which will not change.
@@ -173,37 +183,37 @@
         public static class NoteSymbol
         {
             /// <summary>
-            /// The note symbol a.
+            /// The note symbol A.
             /// </summary>
             public const int A = 1;
 
             /// <summary>
-            /// The note symbol b.
+            /// The note symbol B.
             /// </summary>
             public const int B = 2;
 
             /// <summary>
-            /// The note symbol c.
+            /// The note symbol C.
             /// </summary>
             public const int C = 3;
 
             /// <summary>
-            /// The note symbol d.
+            /// The note symbol D.
             /// </summary>
             public const int D = 4;
 
             /// <summary>
-            /// The note symbol e.
+            /// The note symbol E.
             /// </summary>
             public const int E = 5;
 
             /// <summary>
-            /// The note symbol f.
+            /// The note symbol F.
             /// </summary>
             public const int F = 6;
 
             /// <summary>
-            /// The note symbol g.
+            /// The note symbol G.
             /// </summary>
             public const int G = 7;
         }
@@ -292,6 +302,11 @@
             /// The piece type misc rna.
             /// </summary>
             public const int MiscRNA = 16;
+
+            /// <summary>
+            /// The complete numeric sequence.
+            /// </summary>
+            public const int CompleteNumericSequence = 17;
         }
 
         /// <summary>

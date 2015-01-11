@@ -1,6 +1,7 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -23,6 +24,38 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public MatterRepository(LibiadaWebEntities db)
         {
             this.db = db;
+        }
+
+        /// <summary>
+        /// The create matter.
+        /// </summary>
+        /// <param name="commonSequence">
+        /// The common sequence.
+        /// </param>
+        public void CreateMatterFromSequence(CommonSequence commonSequence)
+        {
+            var matter = commonSequence.Matter;
+            if (matter != null)
+            {
+                matter.Sequence = new Collection<CommonSequence>();
+                commonSequence.MatterId = CreateMatter(matter);
+            }
+        }
+
+        /// <summary>
+        /// The create matter.
+        /// </summary>
+        /// <param name="matter">
+        /// The matter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
+        private long CreateMatter(Matter matter)
+        {
+            db.Matter.Add(matter);
+            db.SaveChanges();
+            return matter.Id;
         }
 
         /// <summary>

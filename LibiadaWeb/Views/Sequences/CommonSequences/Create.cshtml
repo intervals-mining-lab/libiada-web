@@ -18,7 +18,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal" ng-controller="MatterSequenceCreateCtrl">
-        <h4>Sequence</h4>
+        <h4>Sequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -93,7 +93,7 @@
                     @Html.Label("productId", "Sequence product", new { @class = "control-label col-md-2" })
                     <div class="col-md-10">
                         <select class="form-control" ng-model="productId" ng-options="l.Value as l.Text for l in products"></select>
-                        <input type="hidden" name="productId" ng-value="productId"/>
+                        <input type="hidden" name="productId" ng-value="productId" />
                         @Html.ValidationMessage("productId", "", new { @class = "text-danger" })
                     </div>
                 </div>

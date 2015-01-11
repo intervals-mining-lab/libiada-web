@@ -11,7 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     /// <summary>
     /// The literature sequence repository.
     /// </summary>
-    public class LiteratureSequenceRepository : CommonSequenceImporter, ILiteratureSequenceRepository
+    public class LiteratureSequenceRepository : SequenceImporter, ILiteratureSequenceRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LiteratureSequenceRepository"/> class.

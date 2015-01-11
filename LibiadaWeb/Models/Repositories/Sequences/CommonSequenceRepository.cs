@@ -1,18 +1,18 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using LibiadaCore.Core;
-    
+
     using Npgsql;
 
     /// <summary>
     /// The sequence repository.
     /// </summary>
-    public class CommonSequenceRepository : CommonSequenceImporter, ICommonSequenceRepository
+    public class CommonSequenceRepository : SequenceImporter, ICommonSequenceRepository
     {
         /// <summary>
         /// The element repository.
