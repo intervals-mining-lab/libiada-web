@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using LibiadaWeb.Helpers;
+
     /// <summary>
     /// The data sequence repository.
     /// </summary>
@@ -52,45 +54,8 @@
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
-        }
 
-        /// <summary>
-        /// The insert.
-        /// </summary>
-        /// <param name="sequence">
-        /// The sequence.
-        /// </param>
-        /// <param name="alphabet">
-        /// The alphabet.
-        /// </param>
-        /// <param name="building">
-        /// The building.
-        /// </param>
-        public void Insert(DataSequence sequence, long[] alphabet, int[] building)
-        {
-            Insert(ToCommonSequence(sequence), alphabet, building);
-        }
-
-        /// <summary>
-        /// The to sequence.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommonSequence"/>.
-        /// </returns>
-        public CommonSequence ToCommonSequence(DataSequence source)
-        {
-            return new CommonSequence
-            {
-                Id = source.Id,
-                NotationId = source.NotationId,
-                MatterId = source.MatterId,
-                PieceTypeId = source.PieceTypeId,
-                PiecePosition = source.PiecePosition
-            };
+            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
     }
 }

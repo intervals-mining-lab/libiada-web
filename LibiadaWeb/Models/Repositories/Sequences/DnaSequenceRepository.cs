@@ -2,14 +2,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-    
+
+    using LibiadaWeb.Helpers;
+
     using Npgsql;
+
     using NpgsqlTypes;
 
     /// <summary>
@@ -127,7 +130,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @partial,
                                         @complementary
                                     );";
-            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+
+            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
 
         /// <summary>

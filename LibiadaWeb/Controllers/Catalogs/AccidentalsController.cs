@@ -100,6 +100,7 @@
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Accidental accidental = db.Accidental.Find(id);
             if (accidental == null)
             {

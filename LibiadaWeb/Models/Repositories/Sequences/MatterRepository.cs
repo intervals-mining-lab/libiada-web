@@ -51,7 +51,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="long"/>.
         /// </returns>
-        private long CreateMatter(Matter matter)
+        public long CreateMatter(Matter matter)
         {
             db.Matter.Add(matter);
             db.SaveChanges();

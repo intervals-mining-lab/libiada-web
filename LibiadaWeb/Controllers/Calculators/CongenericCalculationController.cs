@@ -2,16 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using Helpers;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+
     using LibiadaWeb.Models.Repositories.Sequences;
+
     using Models;
     using Models.Repositories.Catalogs;
 
@@ -186,7 +188,7 @@
                         string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
                         var link = (Link)(linkId ?? 0);
-                        List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequenceId);
+                        List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
                         int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId 
                                                                                 && c.CharacteristicTypeId == characteristicId 
                                                                                 && ((linkId == null && c.LinkId == null) 

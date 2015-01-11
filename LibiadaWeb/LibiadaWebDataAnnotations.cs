@@ -25,7 +25,7 @@
     /// The accidental.
     /// </summary>
     [MetadataType(typeof(AccidentalDataAnnotations))]
-    public partial class Accidental
+    public partial class Accidental 
     {
     }
 
@@ -275,6 +275,21 @@
         /// </summary>
         [Display(Name = "Sequence product")]
         public int ProductId { get; set; }
+    }
+
+    /// <summary>
+    /// The dna sequence.
+    /// </summary>
+    [MetadataType(typeof(DataSequenceDataAnnotations))]
+    public partial class DataSequence
+    {
+    }
+
+    /// <summary>
+    /// The dna sequence data annotations.
+    /// </summary>
+    public class DataSequenceDataAnnotations : CommonSequenceDataAnnotations
+    {
     }
 
     /// <summary>

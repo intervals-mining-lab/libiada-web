@@ -2,16 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using Helpers;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+
     using LibiadaWeb.Models.Repositories.Sequences;
+
     using Models;
     using Models.Repositories;
     using Models.Repositories.Catalogs;
@@ -286,7 +288,7 @@
             int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
                                                                       b.CharacteristicTypeId == characteristicId &&
                                                                       b.LinkId == linkId && b.FirstElementId == wordId);
-            List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
+            List<long> sequenceElements = DbHelper.GetElementIds(db, sequence.Id);
             if (calculatedCount < chain.Alphabet.Cardinality)
             {
                 // TODO: проверить что + - 1 нигде к индексам не надо добавлять
@@ -380,7 +382,7 @@
                                                                  b.LinkId == linkId);
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
-                List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
+                List<long> sequenceElements = DbHelper.GetElementIds(db, sequence.Id);
                 for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                 {
                     for (int j = 0; j < chain.Alphabet.Cardinality; j++)
@@ -442,7 +444,7 @@
             IBinaryCalculator calculator,
             Link link)
         {
-            List<long> sequenceElements = commonSequenceRepository.GetElementIds(sequence.Id);
+            List<long> sequenceElements = DbHelper.GetElementIds(db, sequence.Id);
 
             // считаем частоты слов
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();

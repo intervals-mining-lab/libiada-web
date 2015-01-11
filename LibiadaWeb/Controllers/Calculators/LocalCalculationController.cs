@@ -1,9 +1,9 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using Helpers;
 
@@ -11,7 +11,9 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
+
     using LibiadaWeb.Models.Repositories.Sequences;
+
     using Math;
 
     using Models.Repositories.Catalogs;

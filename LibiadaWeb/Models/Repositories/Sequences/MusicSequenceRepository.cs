@@ -1,5 +1,7 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using LibiadaWeb.Helpers;
+
     /// <summary>
     /// The music sequence repository.
     /// </summary>
@@ -52,7 +54,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
 
         /// <summary>

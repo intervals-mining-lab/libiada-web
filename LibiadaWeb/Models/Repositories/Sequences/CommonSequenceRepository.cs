@@ -7,7 +7,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaCore.Core;
 
-    using Npgsql;
+    using LibiadaWeb.Helpers;
 
     /// <summary>
     /// The sequence repository.
@@ -67,7 +67,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id
                                     );";
-            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+
+            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public List<Element> GetElements(long sequenceId)
         {
-            List<long> elementIds = GetElementIds(sequenceId);
+            List<long> elementIds = DbHelper.GetElementIds(Db, sequenceId);
             return elementRepository.GetElements(elementIds);
         }
 
@@ -147,38 +148,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Alphabet GetAlphabet(long sequenceId)
         {
-            List<long> elements = GetElementIds(sequenceId);
+            List<long> elements = DbHelper.GetElementIds(Db, sequenceId);
             return elementRepository.ToLibiadaAlphabet(elements);
-        }
-
-        /// <summary>
-        /// The get element ids.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Int64}"/>.
-        /// </returns>
-        public List<long> GetElementIds(long sequenceId)
-        {
-            const string Query = "SELECT unnest(alphabet) FROM chain WHERE id = @id";
-            return Db.Database.SqlQuery<long>(Query, new NpgsqlParameter("@id", sequenceId)).ToList();
-        }
-
-        /// <summary>
-        /// The get building.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int[]"/>.
-        /// </returns>
-        public int[] GetBuilding(long sequenceId)
-        {
-            const string Query = "SELECT unnest(building) FROM chain WHERE id = @id";
-            return Db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
         }
 
         /// <summary>
@@ -192,7 +163,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public BaseChain ToLibiadaBaseChain(long sequenceId)
         {
-            return new BaseChain(GetBuilding(sequenceId), GetAlphabet(sequenceId));
+            return new BaseChain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId));
         }
 
         /// <summary>
@@ -206,7 +177,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain ToLibiadaChain(long sequenceId)
         {
-            return new Chain(GetBuilding(sequenceId), GetAlphabet(sequenceId));
+            return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId));
         }
 
         /// <summary>

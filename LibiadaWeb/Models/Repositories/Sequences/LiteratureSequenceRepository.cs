@@ -5,6 +5,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Web.Mvc;
     using System.Data.Entity;
 
+    using LibiadaWeb.Helpers;
+
     using Npgsql;
     using NpgsqlTypes;
 
@@ -95,7 +97,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @language_id,
                                         @translator_id
                                     );";
-            Db.Database.ExecuteSqlCommand(Query, parameters.ToArray());
+
+            DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
         }
 
         /// <summary>
