@@ -31,7 +31,7 @@
         {
             var parameters = FillParams(commonSequence, alphabet, building);
 
-            const string Query = @"INSERT INTO chain (
+            const string Query = @"INSERT INTO data_chain (
                                         id, 
                                         notation_id,
                                         matter_id, 

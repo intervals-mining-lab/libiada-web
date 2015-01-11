@@ -213,7 +213,7 @@
                 return new Dictionary<string, object>
                                      {
                                          { "characteristics", characteristics }, 
-                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name) }, 
+                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToList() }, 
                                          { "characteristicNames", characteristicNames }, 
                                          { "characteristicIds", characteristicIds }, 
                                          { "matterIds", matterIds },

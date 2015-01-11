@@ -42,9 +42,12 @@
             @Html.Raw(ViewBag.ErrorMessage)
         </div>
         <br/>
-        <div class="stack-trace">
-            @Html.Raw(ViewBag.StackTrace)
-        </div>
+        if (ViewBag.StackTrace != null)
+        {
+            <div class="stack-trace">
+                @Html.Raw(ViewBag.StackTrace)
+            </div>
+        }
     }
     <hr/>
     <footer>
