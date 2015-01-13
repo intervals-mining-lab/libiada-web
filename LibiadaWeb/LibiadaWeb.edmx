@@ -21,6 +21,23 @@
           <Property Name="second_element_id" Type="int8" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
+
+        <EntityType Name="accordance_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="first_chain_id" Type="int8" Nullable="false" />
+          <Property Name="second_chain_id" Type="int8" Nullable="false" />
+          <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
+          <Property Name="value" Type="float8" Nullable="false" />
+          <Property Name="value_string" Type="text" />
+          <Property Name="link_id" Type="int4" />
+          <Property Name="created" Type="timestamptz" Nullable="false" />
+          <Property Name="first_element_id" Type="int8" Nullable="false" />
+          <Property Name="second_element_id" Type="int8" Nullable="false" />
+          <Property Name="modified" Type="timestamptz" Nullable="false" />
+        </EntityType>
         
         <EntityType Name="chain">
           <Key>
@@ -452,6 +469,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+
+        <Association Name="fk_accordance_characteristic_first_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
+              <PropertyRef Name="first_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_link">
+          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="link">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
+              <PropertyRef Name="link_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_second_element">
+          <End Role="element" Type="Self.element" Multiplicity="1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="element">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
+              <PropertyRef Name="second_element_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         
         <Association Name="fk_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
@@ -539,6 +595,19 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="binary_characteristic">
+              <PropertyRef Name="characteristic_type_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_characteristic_type">
+          <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="characteristic_type">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
               <PropertyRef Name="characteristic_type_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -895,6 +964,32 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_accordance_characteristic_first_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
+              <PropertyRef Name="first_chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        
+        <Association Name="fk_accordance_characteristic_second_chain">
+          <End Role="chain" Type="Self.chain" Multiplicity="1" />
+          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="chain">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accordance_characteristic">
+              <PropertyRef Name="second_chain_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        
         <Association Name="fk_congeneric_characteristic_chain">
           <End Role="chain" Type="Self.literature_chain" Multiplicity="1" />
           <End Role="congeneric_characteristic" Type="Self.congeneric_characteristic" Multiplicity="*" />
@@ -1406,6 +1501,7 @@
 
         <EntityContainer Name="LibiadaWebModelStoreContainer">
           <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="accordance_characteristic" EntityType="Self.accordance_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain" EntityType="Self.chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic" EntityType="Self.characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic_group" EntityType="Self.characteristic_group" store:Type="Tables" Schema="public"/>
@@ -1437,6 +1533,7 @@
           <EntitySet Name="tie" EntityType="Self.tie" store:Type="Tables" Schema="public"/>
           <EntitySet Name="translator" EntityType="Self.translator" store:Type="Tables" Schema="public"/>
 
+
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="element" EntitySet="element" />
             <End Role="binary_characteristic" EntitySet="binary_characteristic" />
@@ -1449,6 +1546,20 @@
             <End Role="element" EntitySet="element" />
             <End Role="binary_characteristic" EntitySet="binary_characteristic" />
           </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_first_element" Association="Self.fk_accordance_characteristic_first_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_accordance_characteristic_link" Association="Self.fk_accordance_characteristic_link">
+            <End Role="link" EntitySet="link" />
+            <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_accordance_characteristic_second_element" Association="Self.fk_accordance_characteristic_second_element">
+            <End Role="element" EntitySet="element" />
+            <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
+          </AssociationSet>
+          
           <AssociationSet Name="fk_chain_matter" Association="Self.fk_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="chain" EntitySet="chain" />
@@ -1476,6 +1587,10 @@
           <AssociationSet Name="fk_binary_characteristic_characteristic_type" Association="Self.fk_binary_characteristic_characteristic_type">
             <End Role="characteristic_type" EntitySet="characteristic_type" />
             <End Role="binary_characteristic" EntitySet="binary_characteristic" />
+          </AssociationSet>
+          <AssociationSet Name="fk_accordance_characteristic_characteristic_type" Association="Self.fk_accordance_characteristic_characteristic_type">
+            <End Role="characteristic_type" EntitySet="characteristic_type" />
+            <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
           </AssociationSet>
           <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
             <End Role="matter" EntitySet="matter" />
@@ -1726,7 +1841,30 @@
           <NavigationProperty Name="Sequence" Relationship="Self.fk_binary_characteristic_chain" FromRole="BinaryCharacteristic" ToRole="CommonSequence" />
           <NavigationProperty Name="CharacteristicType" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="BinaryCharacteristic" ToRole="CharacteristicType" />
         </EntityType>
-        
+
+        <EntityType Name="AccordanceCharacteristic">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
+          <Property Name="FirstSequenceId" Type="Int64" Nullable="false" />
+          <Property Name="SecondSequenceId" Type="Int64" Nullable="false" />
+          <Property Name="CharacteristicTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="LinkId" Type="Int32" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="FirstElementId" Type="Int64" Nullable="false" />
+          <Property Name="SecondElementId" Type="Int64" Nullable="false" />
+          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <NavigationProperty Name="FirstElement" Relationship="Self.fk_accordance_characteristic_first_element" FromRole="AccordanceCharacteristic" ToRole="Element" />
+          <NavigationProperty Name="Link" Relationship="Self.fk_accordance_characteristic_link" FromRole="AccordanceCharacteristic" ToRole="Link" />
+          <NavigationProperty Name="SecondElement" Relationship="Self.fk_accordance_characteristic_second_element" FromRole="AccordanceCharacteristic" ToRole="Element" />
+          <NavigationProperty Name="FirstSequence" Relationship="Self.fk_accordance_characteristic_first_chain" FromRole="AccordanceCharacteristic" ToRole="CommonSequence" />
+          <NavigationProperty Name="SecondSequence" Relationship="Self.fk_accordance_characteristic_second_chain" FromRole="AccordanceCharacteristic" ToRole="CommonSequence" />
+          <NavigationProperty Name="CharacteristicType" Relationship="Self.fk_accordance_characteristic_characteristic_type" FromRole="AccordanceCharacteristic" ToRole="CharacteristicType" />
+        </EntityType>
+
         <EntityType Name="CommonSequence">
           <Key>
             <PropertyRef Name="Id" />
@@ -1790,6 +1928,7 @@
           <Property Name="CongenericSequenceApplicable" Type="Boolean" Nullable="false" />
           <Property Name="BinarySequenceApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="CharacteristicType" ToRole="BinaryCharacteristic" />
+          <NavigationProperty Name="AccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_characteristic_type" FromRole="CharacteristicType" ToRole="AccordanceCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_type" FromRole="CharacteristicType" ToRole="Characteristic" />
           <NavigationProperty Name="CharacteristicGroup" Relationship="Self.fk_characteristic_group" FromRole="CharacteristicType" ToRole="CharacteristicGroup" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_type" FromRole="CharacteristicType" ToRole="CongenericCharacteristic" />
@@ -1868,6 +2007,8 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="FirstElementBinaryCharacteristic" Relationship="Self.fk_binary_characteristic_first_element" FromRole="Element" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="SecondElementBinaryCharacteristic" Relationship="Self.fk_binary_characteristic_second_element" FromRole="Element" ToRole="BinaryCharacteristic" />
+          <NavigationProperty Name="FirstElementAccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_first_element" FromRole="Element" ToRole="AccordanceCharacteristic" />
+          <NavigationProperty Name="SecondElementAccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_second_element" FromRole="Element" ToRole="AccordanceCharacteristic" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_element_notation" FromRole="Element" ToRole="Notation" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_element" FromRole="Element" ToRole="CongenericCharacteristic" />
         </EntityType>
@@ -1890,6 +2031,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_link" FromRole="Link" ToRole="BinaryCharacteristic" />
+          <NavigationProperty Name="AccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_link" FromRole="Link" ToRole="AccordanceCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_link" FromRole="Link" ToRole="Characteristic" />
         </EntityType>
         
@@ -2263,6 +2405,36 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_accordance_characteristic_first_chain">
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonSequence">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
+              <PropertyRef Name="FirstSequenceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_second_chain">
+          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CommonSequence">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
+              <PropertyRef Name="SecondSequenceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
         <Association Name="fk_characteristic_chain">
           <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2400,6 +2572,58 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="BinaryCharacteristic">
+              <PropertyRef Name="CharacteristicTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_first_element">
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Element">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
+              <PropertyRef Name="FirstElementId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_link">
+          <End Role="Link" Type="Self.Link" Multiplicity="0..1" />
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Link">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
+              <PropertyRef Name="LinkId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_second_element">
+          <End Role="Element" Type="Self.Element" Multiplicity="1" />
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Element">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
+              <PropertyRef Name="SecondElementId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
+        <Association Name="fk_accordance_characteristic_characteristic_type">
+          <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="1" />
+          <End Role="AccordanceCharacteristic" Type="Self.AccordanceCharacteristic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CharacteristicType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AccordanceCharacteristic">
               <PropertyRef Name="CharacteristicTypeId" />
             </Dependent>
           </ReferentialConstraint>
@@ -3291,6 +3515,7 @@
 
         <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
 
+          <EntitySet Name="AccordanceCharacteristic" EntityType="Self.AccordanceCharacteristic" />
           <EntitySet Name="BinaryCharacteristic" EntityType="Self.BinaryCharacteristic" />
           <EntitySet Name="CommonSequence" EntityType="Self.CommonSequence" />
           <EntitySet Name="Characteristic" EntityType="Self.Characteristic" />
@@ -3341,6 +3566,26 @@
           <AssociationSet Name="fk_binary_characteristic_characteristic_type" Association="Self.fk_binary_characteristic_characteristic_type">
             <End Role="CharacteristicType" EntitySet="CharacteristicType" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_first_element" Association="Self.fk_accordance_characteristic_first_element">
+            <End Role="Element" EntitySet="Element" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_link" Association="Self.fk_accordance_characteristic_link">
+            <End Role="Link" EntitySet="Link" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_second_element" Association="Self.fk_accordance_characteristic_second_element">
+            <End Role="Element" EntitySet="Element" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_characteristic_type" Association="Self.fk_accordance_characteristic_characteristic_type">
+            <End Role="CharacteristicType" EntitySet="CharacteristicType" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
           </AssociationSet>
           
           <AssociationSet Name="fk_chain_matter" Association="Self.fk_chain_matter">
@@ -3501,6 +3746,16 @@
           <AssociationSet Name="fk_binary_characteristic_chain" Association="Self.fk_binary_characteristic_chain">
             <End Role="CommonSequence" EntitySet="CommonSequence" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_first_chain" Association="Self.fk_accordance_characteristic_first_chain">
+            <End Role="CommonSequence" EntitySet="CommonSequence" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_accordance_characteristic_second_chain" Association="Self.fk_accordance_characteristic_second_chain">
+            <End Role="CommonSequence" EntitySet="CommonSequence" />
+            <End Role="AccordanceCharacteristic" EntitySet="AccordanceCharacteristic" />
           </AssociationSet>
 
           <AssociationSet Name="fk_characteristic_chain" Association="Self.fk_characteristic_chain">
@@ -3722,6 +3977,24 @@
               <MappingFragment StoreEntitySet="binary_characteristic">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
+                <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
+                <ScalarProperty Name="Value" ColumnName="value" />
+                <ScalarProperty Name="ValueString" ColumnName="value_string" />
+                <ScalarProperty Name="LinkId" ColumnName="link_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
+                <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="AccordanceCharacteristic">
+            <EntityTypeMapping TypeName="LibiadaWebModel.AccordanceCharacteristic">
+              <MappingFragment StoreEntitySet="accordance_characteristic">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="FirstSequenceId" ColumnName="first_chain_id" />
+                <ScalarProperty Name="SecondSequenceId" ColumnName="second_chain_id" />
                 <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="ValueString" ColumnName="value_string" />

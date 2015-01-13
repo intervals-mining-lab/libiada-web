@@ -17,6 +17,7 @@ namespace LibiadaWeb
         public Link()
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            this.AccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
             this.Characteristic = new HashSet<Characteristic>();
         }
     
@@ -25,6 +26,7 @@ namespace LibiadaWeb
         public string Description { get; set; }
     
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual ICollection<AccordanceCharacteristic> AccordanceCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
     }
 }

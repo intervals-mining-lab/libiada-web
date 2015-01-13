@@ -25,6 +25,7 @@ namespace LibiadaWeb
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AccordanceCharacteristic> AccordanceCharacteristic { get; set; }
         public virtual DbSet<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual DbSet<CommonSequence> CommonSequence { get; set; }
         public virtual DbSet<Characteristic> Characteristic { get; set; }

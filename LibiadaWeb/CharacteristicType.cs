@@ -17,6 +17,7 @@ namespace LibiadaWeb
         public CharacteristicType()
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            this.AccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
             this.Characteristic = new HashSet<Characteristic>();
             this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
         }
@@ -32,6 +33,7 @@ namespace LibiadaWeb
         public bool BinarySequenceApplicable { get; set; }
     
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
+        public virtual ICollection<AccordanceCharacteristic> AccordanceCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual CharacteristicGroup CharacteristicGroup { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }

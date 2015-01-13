@@ -18,6 +18,8 @@ namespace LibiadaWeb
         {
             this.FirstElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
             this.SecondElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            this.FirstElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
+            this.SecondElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
             this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
         }
     
@@ -31,6 +33,8 @@ namespace LibiadaWeb
     
         public virtual ICollection<BinaryCharacteristic> FirstElementBinaryCharacteristic { get; set; }
         public virtual ICollection<BinaryCharacteristic> SecondElementBinaryCharacteristic { get; set; }
+        public virtual ICollection<AccordanceCharacteristic> FirstElementAccordanceCharacteristic { get; set; }
+        public virtual ICollection<AccordanceCharacteristic> SecondElementAccordanceCharacteristic { get; set; }
         public virtual Notation Notation { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
     }
