@@ -51,7 +51,7 @@ function CreateCharacteristicsBlock(divNumber, paramsList) {
         };
     };
     var callBackDeleteFunction = deleteFunction({ elemName: "characteristic" + divNumber });
-    characteristicsDiv.append($("<input/>").attr("type", "button").attr("value", "Удалить").click(callBackDeleteFunction));
+    characteristicsDiv.append($("<input/>").attr("type", "button").attr("value", "Delete").click(callBackDeleteFunction));
     AppendBr(characteristicsDiv);
 
     return characteristicsDiv;
@@ -59,7 +59,7 @@ function CreateCharacteristicsBlock(divNumber, paramsList) {
 
 function AddDataTables() {
     window.formTable = $("table").dataTable({
-        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
+        aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "All"]],
         bJQueryUI: true,
         sPaginationType: "full_numbers"
     });

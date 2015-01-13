@@ -132,7 +132,7 @@
             var resultMatter = new Matter
                 {
                     NatureId = matter.NatureId,
-                    Name = matter.Name + " " + mixes + " перемешиваний"
+                    Name = matter.Name + " " + mixes + " mixes"
                 };
             db.Matter.Add(resultMatter);
 

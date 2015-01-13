@@ -99,7 +99,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 }
                 else
                 {
-                    throw new Exception("Как минимум один из элементов создаваемого алфавита отсутствуент в БД.");
+                    throw new Exception("At least one element of alphabet is not found in database.");
                 }
             }
 
@@ -179,7 +179,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The selected elements.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
         /// </returns>
         public IEnumerable<SelectListItem> GetSelectListItems(
             IEnumerable<Element> allElements,

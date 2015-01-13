@@ -2,7 +2,7 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Вычисление бинарных характеристик";
+    ViewBag.Title = "Relation characteristics";
 }
 
 <script type="text/javascript">
@@ -40,12 +40,12 @@
 
 </script>
 
-<h2>Вычисление бинарных характеристик</h2>
+<h2>Relation characteristics</h2>
 @using (Html.BeginForm())
 {
     @Html.SequencesTable((List<SelectListItem>)ViewBag.sequenceCheckBoxes, (List<CommonSequence>)ViewBag.sequences, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
     <br/>
-    @Html.Label("Характеристика:")
+    @Html.Label("Characteristic:")
     <select name="characteristicId" id="characteristicId">
         @foreach (var option in ViewBag.characteristicsList)
         {
@@ -53,7 +53,7 @@
         }
     </select>
     <br/>
-    @Html.Label("Привязка:")
+    @Html.Label("Link:")
     <select name="linkId">
         @foreach (var option in ViewBag.linksList)
         {
@@ -62,21 +62,21 @@
     </select>
     <br/>
     <br/>
-    @Html.CheckBox("filter", "Фильтрация", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('filterDiv')" } })
+    @Html.CheckBox("filter", "Filtration", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('filterDiv')" } })
     <br/>
     <div id="filterDiv" hidden>
-        @Html.Label("Число выводимых зависимостей")
-        <input type="number" name="filtersize" id="filtersize" min="1" value="10"/>
+        @Html.Label("Shown dependencies")
+        <input type="number" name="filtersize" min="1" value="10"/>
     </div>
     <br/>
-    @Html.CheckBox("frequency", "Считать зависимости только для Х самых частых элементов", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('frequencyDiv')" } })
+    @Html.CheckBox("frequency", "Calculate only for X most frequent elements", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('frequencyDiv')" } })
     <br/>
     <div id="frequencyDiv" hidden>
         @Html.Label("X:")
-        <input type="number" name="frequencyCount" id="frequencyCount" min="1" value="10"/>
+        <input type="number" id="frequencyCount" name="frequencyCount" min="1" value="10" />
     </div>
     <br/>
-    @Html.CheckBox("oneWord", "Считать зависимости только для указанного слова", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('oneWordDiv')" } })
+    @Html.CheckBox("oneWord", "Calculate dependencies only for given element", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('oneWordDiv')" } })
     <br/>
     <div id="oneWordDiv" hidden>
 

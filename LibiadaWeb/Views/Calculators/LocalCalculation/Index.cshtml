@@ -2,10 +2,10 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Вычисление локальных характеристик";
+    ViewBag.Title = "Local characteristics";
 }
 
-<h2>Вычисление локальных характеристик</h2>
+<h2>Local characteristics</h2>
 
 <script type="text/javascript">
 
@@ -35,22 +35,22 @@
 {
     @Html.MattersTable((List<SelectListItem>)ViewBag.matterCheckBoxes, (List<Matter>)ViewBag.matters)
     <br/>
-    @Html.Label("Размер окна:")
+    @Html.Label("Window size:")
     <input type="number" id="length" name="length" value="50"/>
-    @Html.Label("Размер шага:")
+    @Html.Label("Step size:")
     <input type="number" id="step" name="step" value="2"/>
     <br/>
     <br/>
     @Html.CheckBox("isDelta", "Считать разницу между характеристиками", null)
     <br/>
-    @Html.CheckBox("isGrowingWindow", "Считать увеличивающееся окно", null)
+    @Html.CheckBox("isGrowingWindow", "Growing window (start is fixed at 0)", null)
     <br/>
-    @Html.CheckBox("isFourier", "Быстрое преобразование Фурье", null)
+    @Html.CheckBox("isFourier", "Calculate Fast fourier transform", null)
     <br/>
-    @Html.CheckBox("isAutocorrelation", "Вычислить авторикорреляционную функцию", null)
+    @Html.CheckBox("isAutocorrelation", "Calculate autocorrelation", null)
     <br/>
     <br/>
-    @Html.Label("Форма записи:")
+    @Html.Label("Notation:")
     <select name="notationId">
         @foreach (var option in ViewBag.notationsList)
         {
@@ -58,7 +58,7 @@
         }
     </select>
     <br/>
-    @Html.Label("Язык:")
+    @Html.Label("Language:")
     <select name="languageId">
         @foreach (var option in ViewBag.languagesList)
         {
@@ -67,12 +67,12 @@
     </select>
     <br/>
     <br/>
-    <input type="button" onclick=" AddCharacteristic() " value="Добавить характеристику"/>
+    <input type="button" onclick=" AddCharacteristic() " value="Add characteristic"/>
     <br/>
     <div id="characteristics_list"></div>
     <br/>
     <br/>
-    <input type="submit" value="Вычислить"/>
+    <input type="submit" value="Calculate"/>
 }
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")

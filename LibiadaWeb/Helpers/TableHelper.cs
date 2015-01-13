@@ -37,7 +37,7 @@
         {
             List<MvcHtmlString> checkBoxes = helper.CheckBoxList("matterIds", listInfo);
 
-            var headers = new List<string> { "Название", "Описание", "Природа" };
+            var headers = new List<string> { "Name", "Description", "Nature" };
 
             var bodyData = new List<List<string>>();
 
@@ -89,14 +89,14 @@
 
             var headers = new List<string>
                 {
-                    "Название", 
-                    "Форма записи", 
-                    "Дата создания", 
-                    "Тип фрагмента", 
-                    "Позиция фрагмента", 
-                    "Язык", 
-                    "Заголовок fasta файла", 
-                    "id удалённой БД"
+                    "Name", 
+                    "Notation", 
+                    "Created", 
+                    "Piece type", 
+                    "Position", 
+                    "Language", 
+                    "Fasta file header", 
+                    "Remote id"
                 };
 
             var bodyData = new List<List<string>>();

@@ -2,10 +2,10 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Сравнение строёв";
+    ViewBag.Title = "Buildings comparison";
 }
 
-<h2>Сравнение строёв</h2>
+<h2>Buildings comparison</h2>
 
 <script type="text/javascript">
 
@@ -21,10 +21,10 @@
         <thead>
             <tr>
                 <th>
-                    Название первого объекта
+                    First sequence name
                 </th>
                 <th>
-                    Название второго объекта
+                    Second sequence name
                 </th>
             </tr>
         </thead>
@@ -49,10 +49,10 @@
     </table>
 
     <br />
-    @Html.CheckBox("congeneric", "Сравнивать строи однородных цепочек", null)
+    @Html.CheckBox("congeneric", "Compare buildings of congeneric sequences", null)
     <br />
-    @Html.Label("Размер окна:")
-    <input type="number" id="length" name="length" value="10" />
+    @Html.Label("Window size:")
+    <input type="number" name="length" value="10" />
     <br />
     <br />
     <input type="submit" value="Вычислить" />

@@ -536,19 +536,19 @@
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        [Display(Name = "Значение")]
+        [Display(Name = "Value")]
         public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Display(Name = "Название")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        [Display(Name = "Описание")]
+        [Display(Name = "Description")]
         public string Description { get; set; }
 
         /// <summary>

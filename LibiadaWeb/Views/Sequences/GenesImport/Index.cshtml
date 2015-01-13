@@ -26,31 +26,27 @@
     @Html.AntiForgeryToken()
     <div class="form-horizontal" ng-controller="GenesImportCtrl">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @Html.CheckBox("localFile", new { ng_model = "localFile" })
-                @Html.Label("localFile", "Загружать цепочку из локального файла")
+                @Html.Label("localFile", "Load sequence from local file")
             </div>
         </div>
-
         <div class="form-group" ng-show="localFile">
-            @Html.Label("file", "Файл цепочки", new { @class = "control-label col-md-2" })
+            @Html.Label("file", "Sequence file", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" />
                 @Html.ValidationMessage("file", "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
-            @Html.Label("sequenceId", "Цепочка", new { @class = "control-label col-md-2" })
+            @Html.Label("sequenceId", "Sequence", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="sequenceId" ng-options="m.Value as m.Text for m in sequences"></select>
                 <input type="hidden" name="sequenceId" ng-value="sequenceId"/>
                 @Html.ValidationMessage("sequenceId", "", new { @class = "text-danger" })
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Создать" class="btn btn-default"/>

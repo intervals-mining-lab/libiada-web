@@ -1,19 +1,19 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Выравнивание генов";
+    ViewBag.Title = "Genes alignment";
 }
 
-<h2>Выравнивание генов</h2>
+<h2>Genes alignment</h2>
 
 @if (ViewBag.Error == null)
 {
     <div>
-        Тип выравнивания: @ViewBag.validationType
+        Alignment type: @ViewBag.validationType
     </div>
 
     <div>
-        Оптимальный сдвиг: @ViewBag.optimalRotation
+        Optimal shift: @ViewBag.optimalRotation
     </div>
 
     <br />
@@ -23,15 +23,14 @@
         <thead>
             <tr>
                 <th>
-                    Тип фрагмента
+                    Piece type
                 </th>
                 <th>
-                    Продукт гена
+                    Gene product
                 </th>
                 <th>
-                    Позиция гена
+                    Gene position
                 </th>
-
                 <th>
                     @ViewBag.characteristicName
                 </th>
@@ -65,15 +64,14 @@
         <thead>
             <tr>
                 <th>
-                    Тип фрагмента
+                    Piece type
                 </th>
                 <th>
-                    Продукт гена
+                    Gene product
                 </th>
                 <th>
-                    Позиция гена
+                    Gene position
                 </th>
-
                 <th>
                     @ViewBag.characteristicName
                 </th>

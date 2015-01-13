@@ -1,10 +1,10 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Распределения генов";
+    ViewBag.Title = "Genes characteristics";
 }
 
-<h2>Распределения генов</h2>
+<h2>Genes characteristics</h2>
 
 @if (ViewBag.Error == null)
 {
@@ -87,8 +87,6 @@
                 }
                 detailChart.series[i].setData(detailData);
             }
-
-
         }
 
         // create the detail chart
@@ -206,7 +204,6 @@
                 yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
                 series: dataSeries
-
             });
 
         }
@@ -281,13 +278,13 @@
             <thead>
                 <tr>
                     <th>
-                        Тип фрагмента
+                        Piece type
                     </th>
                     <th>
-                        Продукт гена
+                        Gene product
                     </th>
                     <th>
-                        Позиция гена
+                        Gene position
                     </th>
                     @foreach (var characteristicName in ViewBag.characteristicNames)
                     {
@@ -333,31 +330,31 @@
     <div style="width: 800px; height: 300px;">
         <div id="control-form" style="clear: both">
             <label>
-                Левая граница
+                Left border
                 <input type="number" id="leftArrow" name="leftArrow" value="5" />
             </label>
             <label>
-                Правая граница
+                Right border
                 <input type="number" id="rightArrow" name="rightArrow" value="10" />
             </label>
-            <input type="button" value="сдвиг" onclick=" stepSlider(stepOfWindow.value); " />
-            <input type="button" value="значение" onclick=" shift(leftArrow.value, rightArrow.value); " />
+            <input type="button" value="shift" onclick=" stepSlider(stepOfWindow.value); " />
+            <input type="button" value="value" onclick=" shift(leftArrow.value, rightArrow.value); " />
         </div>
         <div id="new-params" style="clear: both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
-            <label>Изменить параметры разбиения</label>
+            <label>Change division parameters</label>
             <label>
-                Шаг окна
+                window step
                 <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
             </label>
             <label>
-                Размер окна
+                Window size
                 <input type="number" id="widthOfWindow" name="" value="10">
             </label>
-            <input type="button" value="значение" onclick=" shift(stepOfWindow.value, widthOfWindow.value); " />
+            <input type="button" value="value" onclick=" shift(stepOfWindow.value, widthOfWindow.value); " />
         </div>
     </div>
     <br />
-    @Html.Label("Ось y")
+    @Html.Label("Y axis")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
         {
@@ -366,9 +363,9 @@
     </select>
     <br />
     <input type="checkbox" name="allGraphics" id="allGraphics" value="true" />
-    <label for="allGraphics">Вывести все графики сразу</label>
+    <label for="allGraphics">Show all charts</label>
     <br />
-    <button onclick=" DrawChart() ">Отобразить разбиение</button>
+    <button onclick=" DrawChart() ">Show</button>
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryui")

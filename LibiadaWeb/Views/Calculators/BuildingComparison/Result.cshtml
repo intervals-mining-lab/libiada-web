@@ -1,17 +1,17 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Локальные характеристики";
+    ViewBag.Title = "Buildings comparison";
 }
 
 @if (ViewBag.Error == null)
 {
-    <h2>Сравнение строёв цепочек @ViewBag.firstSequenceName и @ViewBag.secondSequenceName </h2>
+    <h2>Comparison of buildins of @ViewBag.firstSequenceName and @ViewBag.secondSequenceName </h2>
 
     <h1>
         @if (ViewBag.duplicate)
         {
-            @: Совпадение начиная с позиций @ViewBag.pos1 и @ViewBag.pos2
+            @: Equals from positions @ViewBag.pos1 and @ViewBag.pos2
         }
     </h1>
     <div>
@@ -46,7 +46,7 @@
         }
         else
         {
-            @:Совпадений строя не найдено
+            @:No coincidence found.
         }
     </div>
 }

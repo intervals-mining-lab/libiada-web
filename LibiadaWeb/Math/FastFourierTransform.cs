@@ -42,7 +42,8 @@
                     complex.Add(new Complex(0, 0));
                 }
 
-                Complex[] data = FourierTransform(complex.ToArray()); // вернёт массив
+                // вернёт массив
+                Complex[] data = FourierTransform(complex.ToArray()); 
 
                 // переводим в массив double
                 for (int g = 0; g < characteristics.Last().Count; g++)

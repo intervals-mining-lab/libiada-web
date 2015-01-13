@@ -2,10 +2,10 @@
 @model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Преобразование генетических текстов";
+    ViewBag.Title = "Transformation of genetic sequences";
 }
 
-<h2>Преобразование генетических текстов</h2>
+<h2>Transformation of genetic sequences</h2>
 
 @using (Html.BeginForm())
 {
@@ -31,7 +31,7 @@
         }
     </table>
     <br />
-    @Html.CheckBox("toAmino", "Преобразовать в аминокислоты", null)
+    @Html.CheckBox("toAmino", "Transform to amino acids", null)
     <br />
-    <input type="submit" value="Преобразовать" />
+    <input type="submit" value="Transform" />
 }

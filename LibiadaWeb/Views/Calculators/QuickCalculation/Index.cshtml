@@ -2,10 +2,10 @@
 @model dynamic
 
 @{
-    ViewBag.Title = "Вычисление характеристик произвольной цепочки";
+    ViewBag.Title = "Custom sequence characteristics";
 }
 
-<h2>Вычисление характеристик произвольной цепочки</h2>
+<h2>Custom sequence characteristics</h2>
 
 <script type="text/javascript">
 
@@ -33,10 +33,10 @@
 
 @using (Html.BeginForm())
 {
-    @Html.Label("Цепочка")
+    @Html.Label("Sequence")
     @Html.Editor("sequence")
     <br/>
-    <input type="button" onclick=" AddCharacteristic() " value="Добавить характеристику"/>
+    <input type="button" onclick=" AddCharacteristic() " value="Add characteristic"/>
     <div id="characteristics_list"></div>
     <br/>
     <br/>

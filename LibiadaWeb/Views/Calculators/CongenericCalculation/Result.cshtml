@@ -1,10 +1,10 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Характеристики однородных цепочек";
+    ViewBag.Title = "Congeneric sequences characteristics";
 }
 
-<h2>Характеристики однородных цепочек</h2>
+<h2>Congeneric sequences characteristics</h2>
 
 @if (ViewBag.Error == null)
 {
@@ -17,38 +17,38 @@
         var matterNames = new Array();
 
         $(document).ready(function() {
-            colors.push('rgba(223, 83, 83, .5)');
-            colors.push('rgba( 83, 223, 83, .5)');
-            colors.push('rgba( 83, 83, 223, .5)');
-            colors.push('rgba( 83, 83, 83, .5)');
-            colors.push('rgba( 150, 0, 0, .5)');
-            colors.push('rgba( 0, 150, 0, .5)');
-            colors.push('rgba( 0, 0, 150  .5)');
+            colors.push("rgba(223, 83, 83, .5)");
+            colors.push("rgba( 83, 223, 83, .5)");
+            colors.push("rgba( 83, 83, 223, .5)");
+            colors.push("rgba( 83, 83, 83, .5)");
+            colors.push("rgba( 150, 0, 0, .5)");
+            colors.push("rgba( 0, 150, 0, .5)");
+            colors.push("rgba( 0, 0, 150  .5)");
 
             @{
                 for (int r = 0; r < ViewBag.characteristicNames.Count; r++)
                 {
                     @: characteristicNames[@r] = "@ViewBag.characteristicNames[r]";
-                            }
+                }
 
                 for (int t = 0; t < ViewBag.elementNames.Count; t++)
                 {
                     @: elementNames[@t] = new Array();
-                                for (int y = 0; y < ViewBag.elementNames[t].Count; y++)
+                    for (int y = 0; y < ViewBag.elementNames[t].Count; y++)
                     {
                         @: elementNames[@t][@y] = "@ViewBag.elementNames[t][y]";
-                                }
+                    }
                 }
 
                 for (int h = 0; h < ViewBag.matterNames.Count; h++)
                 {
                     @: matterNames[@h] = "@ViewBag.matterNames[h]";
-                            }
+                }
 
                 for (int k = 0; k < ViewBag.characteristics.Count; k++)
                 {
                     @: characteristics[@k] = new Array();
-                                for (int j = 0; j < ViewBag.characteristics[k].Count; j++)
+                    for (int j = 0; j < ViewBag.characteristics[k].Count; j++)
                     {
                         @: characteristics[@k][@j] = new Array();
 
@@ -58,7 +58,7 @@
                             string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                             int key = ViewBag.characteristics[k][j][i].Key;
                             @: characteristics[@k][@j][@i] = {key: @key, value: @value} ;
-                                    }
+                        }
                     }
                 }
 
@@ -67,15 +67,15 @@
                     for (int c = 0; c < ViewBag.theoreticalRanks.Count; c++)
                     {
                         @:theoreticalRanks[@c] = new Array();
-                                    for (int f = 0; f < ViewBag.theoreticalRanks[c].Count; f++)
+                        for (int f = 0; f < ViewBag.theoreticalRanks[c].Count; f++)
                         {
                             @:theoreticalRanks[@c][@f] = new Array();
-                                        for (int g = 0; g < ViewBag.theoreticalRanks[c][f].Count; g++)
+                            for (int g = 0; g < ViewBag.theoreticalRanks[c][f].Count; g++)
                             {
                                 string[] tempValue = ViewBag.theoreticalRanks[c][f][g].ToString().Split(',');
                                 string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                                 @:theoreticalRanks[@c][@f][@g] = @value;
-                                        }
+                            }
                         }
                     }
                 }
@@ -145,7 +145,7 @@
             for (var j = 0; j < characteristics.length; j++) {
                 var series = new Object();
                 series.data = new Array();
-                series.type = 'area';
+                series.type = "area";
                 series.name = matterNames[j];
                 for (var i = 0; i < characteristics[j][characteristicId].length; i++) {
                     var y = characteristics[j][characteristicId][i].value;
@@ -167,8 +167,8 @@
             for (var j = 0; j < theoreticalRanks.length; j++) {
                 var series = new Object();
                 series.data = new Array();
-                series.type = 'area';
-                series.name = "Теоретическое распределение для " + matterNames[j];
+                series.type = "area";
+                series.name = "Theoretical distribution for " + matterNames[j];
                 for (var i = 0; i < theoreticalRanks[j][characteristicId].length; i++) {
                     var y = theoreticalRanks[j][characteristicId][i];
                     var pointName = i + 1;
@@ -187,21 +187,21 @@
 
         function CreateChart(dataSeries, minY, minX, rank, logarithmic) {
             chart = new Highcharts.Chart({
-                chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: rank ? 'x' : 'xy' },
+                chart: { renderTo: "visualization_container", defaultSeriesType: "scatter", zoomType: rank ? "x" : "xy" },
 
-                legend: { align: 'right', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 0, y: 50 },
+                legend: { align: "right", backgroundColor: "#FFFFFF", borderWidth: 1, floating: true, layout: "vertical", verticalAlign: "top", x: 0, y: 50 },
 
                 plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
 
-                title: { text: 'Характеристики однородных цепочек' },
+                title: { text: "Congeneric sequences distribution" },
 
                 tooltip: {
                     formatter: function() {
-                        return this.point.name + '<br/> ' + this.x + '<br/>' + this.y;
+                        return this.point.name + "<br/> " + this.x + "<br/>" + this.y;
                     }
                 },
 
-                xAxis: { min: logarithmic ? 1 : minX, type: logarithmic ? 'logarithmic' : 'linear', minorTickInterval: logarithmic ? 0.1 : 0, title: { text: rank ? 'Ранг' : $("#xaxis option:selected")[0].text } },
+                xAxis: { min: logarithmic ? 1 : minX, type: logarithmic ? "logarithmic" : "linear", minorTickInterval: logarithmic ? 0.1 : 0, title: { text: rank ? "Rank" : $("#xaxis option:selected")[0].text } },
 
                 yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
 
@@ -252,53 +252,53 @@
         @ViewBag.matterNames[d]
         <table class="table table-bordered table-hover" id="resultTable">
             <thead>
-                <tr>
+            <tr>
+                <th>
+                    Element
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
+                {
                     <th>
-                        Элемент
+                        @characteristicName
                     </th>
-                    @foreach (var characteristicName in ViewBag.characteristicNames)
-                    {
-                        <th>
-                            @characteristicName
-                        </th>
-                    }
-                </tr>
+                }
+            </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
-                {
-                    <tr>
+            @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.elementNames[d][i]
+                    </td>
+                    @foreach (var characteristic in ViewBag.characteristics[d])
+                    {
                         <td>
-                            @ViewBag.elementNames[d][i]
+                            @characteristic[i].Value
                         </td>
-                        @foreach (var characteristic in ViewBag.characteristics[d])
-                        {
-                            <td>
-                                @characteristic[i].Value
-                            </td>
-                        }
-                    </tr>
-                }
+                    }
+                </tr>
+            }
             </tbody>
         </table>
     }
 
-    <br />
+    <br/>
     <div id="visualization_container" style="width: 800px; height: 500px"></div>
-    <br />
-    <br />
-    <input type="checkbox" name="Rank" id="Rank" value="true" onclick=" SwitchXAxis() " />
-    <label for="Rank">Ранговое распределение</label>
-    <br />
-    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() " />
-    <label for="allGraphics">Вывести все графики сразу</label>
-    <br />
-    <input type="checkbox" name="logarithmicScale" id="logarithmicScale" value="true" disabled="disabled" />
-    <label for="logarithmicScale">Логарифмический масштаб</label>
-    <br />
-    <br />
+    <br/>
+    <br/>
+    <input type="checkbox" name="Rank" id="Rank" value="true" onclick=" SwitchXAxis() "/>
+    <label for="Rank">Rank distribution</label>
+    <br/>
+    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() "/>
+    <label for="allGraphics">Show all charts</label>
+    <br/>
+    <input type="checkbox" name="logarithmicScale" id="logarithmicScale" value="true" disabled="disabled"/>
+    <label for="logarithmicScale">Log scale</label>
+    <br/>
+    <br/>
     <div id="xhider">
-        @Html.Label("Ось x")
+        @Html.Label("X axis")
         <select name="xaxis" id="xaxis">
             @foreach (var option in ViewBag.characteristicsList)
             {
@@ -306,9 +306,9 @@
             }
         </select>
     </div>
-    <br />
+    <br/>
     <div id="yhider">
-        @Html.Label("Ось y")
+        @Html.Label("Y axis")
         <select name="yaxis" id="yaxis">
             @foreach (var option in ViewBag.characteristicsList)
             {
@@ -316,6 +316,6 @@
             }
         </select>
     </div>
-    <br />
-    <button onclick=" DrawChart() ">Отобразить разбиение</button>
+    <br/>
+    <button onclick=" DrawChart() ">Show</button>
 }

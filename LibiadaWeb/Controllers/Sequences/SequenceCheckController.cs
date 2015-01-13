@@ -100,7 +100,7 @@
 
                 if (!db.DnaSequence.Any(d => d.FastaHeader.Equals(fastaHeader)))
                 {
-                    message = "объекта с заголовком " + fastaHeader + " не существует";
+                    message = "Object  with header" + fastaHeader + " doesn't exist";
 
                     return new Dictionary<string, object> { { "message", message } };
                 }
@@ -109,14 +109,13 @@
 
                 if (dataBaseChain.Equals(chain))
                 {
-                    message = "Цепочки в БД и в файле идентичны";
+                    message = "Sequence in db and in file are equal";
                 }
                 else
                 {
                     if (chain.Alphabet.Cardinality != dataBaseChain.Alphabet.Cardinality)
                     {
-                        message = "Размеры алфавитов не совпадают. В базе - " + dataBaseChain.Alphabet.Cardinality +
-                                  ". В файле - " + chain.Alphabet.Cardinality;
+                        message = "Alphabet sizes are not equal. In db - " + dataBaseChain.Alphabet.Cardinality + ". In file - " + chain.Alphabet.Cardinality;
 
                         return new Dictionary<string, object> { { "message", message } };
                     }
@@ -125,8 +124,7 @@
                     {
                         if (!chain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
                         {
-                            message = i + "Элементы алфавитов не равны. В базе - " + dataBaseChain.Alphabet[i] +
-                                      ". В файле - " + chain.Alphabet[i];
+                            message = i + "Elements in alphabet are not equal. Indb - " + dataBaseChain.Alphabet[i] + ". In file - " + chain.Alphabet[i];
 
                             return new Dictionary<string, object> { { "message", message } };
                         }
@@ -134,8 +132,7 @@
 
                     if (chain.GetLength() != dataBaseChain.GetLength())
                     {
-                        message = "Длина цепочки в базе " + dataBaseChain.GetLength() + ", а длина цепочки из файла " +
-                                  chain.GetLength();
+                        message = "Sequence length in db " + dataBaseChain.GetLength() + ", and sequence length from file" + chain.GetLength();
 
                         return new Dictionary<string, object> { { "message", message } };
                     }
@@ -147,14 +144,13 @@
                     {
                         if (libiadaBuilding[j] != dataBaseBuilding[j])
                         {
-                            message = j + "Элементы цепочек не совпадают. В базе " + dataBaseBuilding[j] + ". В файле " +
-                                      libiadaBuilding[j];
+                            message = j + "Sequences elements are not equal. In db " + dataBaseBuilding[j] + ". In file " + libiadaBuilding[j];
 
                             return new Dictionary<string, object> { { "message", message } };
                         }
                     }
 
-                    message = "Цепочки Шрёдингера - они равны и не равны одновременно";
+                    message = "Sequences are equal and not equal at the same time.";
                 }
 
                 return new Dictionary<string, object> { { "message", message } };

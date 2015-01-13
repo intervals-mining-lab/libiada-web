@@ -1,12 +1,12 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Характеристики";
+    ViewBag.Title = "Characteristics";
 }
 
 @if (ViewBag.Error == null)
 {
-    <h2>Характеристики</h2>
+    <h2>Characteristics</h2>
     <script type='text/javascript'>
         var characteristics = new Array();
         var matterIds = new Array();
@@ -14,13 +14,13 @@
         var colors = new Array();
 
         $(document).ready(function() {
-            colors.push('rgba(223, 83, 83, .5)');
-            colors.push('rgba( 83, 223, 83, .5)');
-            colors.push('rgba( 83, 83, 223, .5)');
-            colors.push('rgba( 83, 83, 83, .5)');
-            colors.push('rgba( 150, 0, 0, .5)');
-            colors.push('rgba( 0, 150, 0, .5)');
-            colors.push('rgba( 0, 0, 150  .5)');
+            colors.push("rgba(223, 83, 83, .5)");
+            colors.push("rgba( 83, 223, 83, .5)");
+            colors.push("rgba( 83, 83, 223, .5)");
+            colors.push("rgba( 83, 83, 83, .5)");
+            colors.push("rgba( 150, 0, 0, .5)");
+            colors.push("rgba( 0, 150, 0, .5)");
+            colors.push("rgba( 0, 0, 150  .5)");
 
             @for (int j = 0; j < ViewBag.characteristics.Count; j++)
             {
@@ -36,7 +36,7 @@
                     string[] tempValue = characteristicList[i].ToString().Split(',');
                     string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
                     @: characteristics[characteristics.length -1][@i] = @value;
-                            }
+                }
             }
         });
 
@@ -46,7 +46,7 @@
             var dataSeries = new Array();
             dataSeries.push(new Object());
             dataSeries[0].data = new Array();
-            dataSeries[0].name = "Характеристики цепочек";
+            dataSeries[0].name = "Characteristics";
             dataSeries[0].color = colors[0];
             for (var i = 0; i < matterIds.length; i++) {
                 var xcharacteristicId = $("#xaxis option:selected")[0].value;
@@ -61,17 +61,17 @@
             }
 
             chart = new Highcharts.Chart({
-                chart: { renderTo: 'visualization_container', defaultSeriesType: 'scatter', zoomType: 'xy' },
+                chart: { renderTo: "visualization_container", defaultSeriesType: "scatter", zoomType: "xy" },
 
-                legend: { align: 'left', backgroundColor: '#FFFFFF', borderWidth: 1, floating: true, layout: 'vertical', verticalAlign: 'top', x: 100, y: 50 },
+                legend: { align: "left", backgroundColor: "#FFFFFF", borderWidth: 1, floating: true, layout: "vertical", verticalAlign: "top", x: 100, y: 50 },
 
-                plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: '#646464' } } }, states: { hover: { enabled: true } } } },
+                plotOptions: { scatter: { marker: { radius: 5, states: { hover: { enabled: true, lineColor: "#646464" } } }, states: { hover: { enabled: true } } } },
 
-                title: { text: 'Результаты кластеризации' },
+                title: { text: "Результаты кластеризации" },
 
                 tooltip: {
                     formatter: function() {
-                        return this.point.name + '<br/>' + this.x + '<br/> ' + this.y;
+                        return this.point.name + "<br/>" + this.x + "<br/> " + this.y;
                     }
                 },
 
@@ -86,40 +86,40 @@
         }
     </script>
 
-    <table id="resultTable" class="table table-bordered table-hover">
+    <table class="table table-bordered table-hover">
         <thead>
-            <tr>
+        <tr>
+            <th>
+                Sequence name
+            </th>
+            @foreach (var characteristicName in ViewBag.characteristicNames)
+            {
                 <th>
-                    Название цепочки
+                    @Html.Raw(characteristicName.Replace("  ", "<br/>"))
                 </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
-                    </th>
-                }
-            </tr>
+            }
+        </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.characteristics.Count; i++)
-            {
-                <tr>
+        @for (int i = 0; i < ViewBag.characteristics.Count; i++)
+        {
+            <tr>
+                <td>
+                    @ViewBag.matterNames[i]
+                </td>
+                @foreach (var characteristic in ViewBag.characteristics[i])
+                {
                     <td>
-                        @ViewBag.matterNames[i]
+                        @characteristic
                     </td>
-                    @foreach (var characteristic in ViewBag.characteristics[i])
-                    {
-                        <td>
-                            @characteristic
-                        </td>
-                    }
-                </tr>
-            }
+                }
+            </tr>
+        }
         </tbody>
     </table>
-    <br />
+    <br/>
     <div id="visualization_container" style="width: 800px; height: 800px"></div>
-    <br />
+    <br/>
     @Html.Label("Ось х")
     <select name="xaxis" id="xaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -127,7 +127,7 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
+    <br/>
     @Html.Label("Ось y")
     <select name="yaxis" id="yaxis">
         @foreach (var option in ViewBag.characteristicsList)
@@ -135,6 +135,6 @@
             <option value="@option.Value">@option.Text</option>
         }
     </select>
-    <br />
-    <button onclick=" DrawChart() ">Отобразить разбиение</button>
+    <br/>
+    <button onclick=" DrawChart() ">Show</button>
 }
