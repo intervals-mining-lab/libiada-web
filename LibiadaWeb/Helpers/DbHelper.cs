@@ -12,10 +12,10 @@
     public static class DbHelper
     {
         /// <summary>
-        /// Get data base name from data base.
+        /// Get database name from database.
         /// </summary>
         /// <param name="db">
-        /// Data base connection.
+        /// Database connection.
         /// </param>
         /// <returns>
         /// The <see cref="string"/> representing db name.
@@ -36,10 +36,10 @@
         }
 
         /// <summary>
-        /// Gets new element id from data base.
+        /// Gets new element id from database.
         /// </summary>
         /// <param name="db">
-        /// Data base connection.
+        /// Database connection.
         /// </param>
         /// <returns>
         /// The <see cref="long"/> value of new id.
@@ -53,7 +53,7 @@
         /// The get element ids.
         /// </summary>
         /// <param name="db">
-        /// Data base connection.
+        /// Database connection.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
@@ -71,7 +71,7 @@
         /// Gets building of sequence by id..
         /// </summary>
         /// <param name="db">
-        /// Data base connection.
+        /// Database connection.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.

@@ -11,13 +11,13 @@
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Display(Name = "Название")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        [Display(Name = "Описание")]
+        [Display(Name = "Description")]
         public string Description { get; set; }
     }
 
@@ -84,7 +84,7 @@
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
-        [Display(Name = "Дата создания")]
+        [Display(Name = "Created")]
         public DateTimeOffset Created { get; set; }
 
         /// <summary>
@@ -96,31 +96,31 @@
         /// <summary>
         /// Gets or sets the matter id.
         /// </summary>
-        [Display(Name = "Принадлежит объекту исследования")]
+        [Display(Name = "Matter of sequence")]
         public long MatterId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece type id.
         /// </summary>
-        [Display(Name = "Тип фрагмента цепочки")]
+        [Display(Name = "Type of fragment")]
         public int PieceTypeId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece position.
         /// </summary>
-        [Display(Name = "Позиция с которой начинается цепочка")]
+        [Display(Name = "Position of fragment")]
         public long PiecePosition { get; set; }
 
         /// <summary>
         /// Gets or sets the remote db id.
         /// </summary>
-        [Display(Name = "Сторонняя БД")]
+        [Display(Name = "Remote database")]
         public int RemoteDbId { get; set; }
 
         /// <summary>
         /// Gets or sets the remote id.
         /// </summary>
-        [Display(Name = "id в сторонней БД")]
+        [Display(Name = "Id in remote database")]
         public string RemoteId { get; set; }
     }
 
@@ -140,7 +140,7 @@
         /// <summary>
         /// Gets or sets the sequence id.
         /// </summary>
-        [Display(Name = "Принадлежит цепочке")]
+        [Display(Name = "Sequence")]
         public long SequenceId { get; set; }
 
         /// <summary>
@@ -152,7 +152,7 @@
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        [Display(Name = "Значение")]
+        [Display(Name = "Value")]
         public double Value { get; set; }
 
         /// <summary>
@@ -170,7 +170,7 @@
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
-        [Display(Name = "Дата создания")]
+        [Display(Name = "Created")]
         public DateTimeOffset Created { get; set; }
     }
 
@@ -334,19 +334,19 @@
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        [Display(Name = "Значение")]
+        [Display(Name = "Value")]
         public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the notation_id.
         /// </summary>
-        [Display(Name = "Форма записи")]
+        [Display(Name = "Notation")]
         public long NotationId { get; set; }
 
         /// <summary>
         /// Gets or sets the created.
         /// </summary>
-        [Display(Name = "Дата создания")]
+        [Display(Name = "Created")]
         public DateTimeOffset Created { get; set; }
     }
 
@@ -366,25 +366,25 @@
         /// <summary>
         /// Gets or sets the value.
         /// </summary>
-        [Display(Name = "Значение")]
+        [Display(Name = "Value")]
         public string Value { get; set; }
 
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Display(Name = "Название")]
+        [Display(Name = "Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
-        [Display(Name = "Описание")]
+        [Display(Name = "Description")]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the fmotiv_type_id.
         /// </summary>
-        [Display(Name = "Тип ф-мотива")]
+        [Display(Name = "Fmotif type")]
         public int FmotivTypeId { get; set; }
     }
 
@@ -419,7 +419,7 @@
         /// <summary>
         /// Gets or sets the element_id.
         /// </summary>
-        [Display(Name = "Элемент")]
+        [Display(Name = "Element")]
         public int ElementId { get; set; }
     }
 
@@ -746,7 +746,7 @@
         /// <summary>
         /// Gets or sets the instrument id.
         /// </summary>
-        [Display(Name = "Инструмент")]
+        [Display(Name = "Instrument")]
         public int InstrumentId { get; set; }
 
         /// <summary>
@@ -784,7 +784,7 @@
         /// <summary>
         /// Gets or sets the url.
         /// </summary>
-        [Display(Name = "url адрес")]
+        [Display(Name = "url address")]
         public string Url { get; set; }
     }
 
