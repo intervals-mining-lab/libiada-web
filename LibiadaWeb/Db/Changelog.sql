@@ -205,4 +205,99 @@ INSERT INTO nature (id, name, description) VALUES (4, 'Measurement data sequence
 INSERT INTO notation (id, name, description, nature_id) VALUES (10, 'Integer values', 'Numeric values of measured parameter', 4);
 INSERT INTO piece_type (id, name, description, nature_id) VALUES (17, 'Complete numeric sequence', 'Full sequence of measured values', 4);
 
+-- 13.01.2015
+-- Added accordance characteristics table.
+
+CREATE OR REPLACE FUNCTION trigger_check_elements_in_alphabets()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var check_element_in_alphabet = plv8.find_function("check_element_in_alphabet");
+	var firstElementInAlphabet = check_element_in_alphabet(NEW.first_chain_id, NEW.first_element_id);
+	var secondElementInAlphabet = check_element_in_alphabet(NEW.second_chain_id, NEW.second_element_id);
+	if(firstElementInAlphabet && secondElementInAlphabet){
+		return NEW;
+	}
+	else if(firstElementInAlphabet){
+		plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. second_element_id = ', NEW.second_element_id,' ; chain_id = ', NEW.first_chain_id);
+	} else{
+		plv8.elog(ERROR, 'Добавлемая характеристика привязана к элементу, отсутствующему в алфавите цепочки. first_element_id = ', NEW.first_element_id,' ; chain_id = ', NEW.second_chain_id);
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями chain_id, first_element_id и second_element_id');
+}$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+COMMENT ON FUNCTION trigger_check_elements_in_alphabets() IS 'Триггерная функция, проверяющая что элементы для которых вычислен коэффициент соответствия присутствуют в алфавитах указанных цепочек. По сути замена для внешних ключей ссылающихся на алфавит.';
+
+CREATE TABLE accordance_characteristic
+(
+  id bigserial NOT NULL, -- Уникальный внутренний идентификатор.
+  first_chain_id bigint NOT NULL, -- Цепочка для которой вычислялась характеристика.
+  second_chain_id bigint NOT NULL, -- Цепочка для которой вычислялась характеристика.
+  characteristic_type_id integer NOT NULL, -- Вычисляемая характеристика.
+  value double precision, -- Числовое значение характеристики.
+  value_string text, -- Строковое значение характеристики.
+  link_id integer, -- Привязка (если она используется).
+  created timestamp with time zone NOT NULL DEFAULT now(), -- Дата вычисления характеристики.
+  first_element_id bigint NOT NULL, -- id первого элемента из пары для которой вычисляется характеристика.
+  second_element_id bigint NOT NULL, -- id второго элемента из пары для которой вычисляется характеристика.
+  modified timestamp with time zone NOT NULL DEFAULT now(), -- Дата и время последнего изменения записи в таблице.
+  CONSTRAINT pk_accordance_characteristic PRIMARY KEY (id),
+  CONSTRAINT fk_accordance_characteristic_first_chain_key FOREIGN KEY (first_chain_id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_accordance_characteristic_second_chain_key FOREIGN KEY (second_chain_id) REFERENCES chain_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE,
+  CONSTRAINT fk_accordance_characteristic_characteristic_type FOREIGN KEY (characteristic_type_id) REFERENCES characteristic_type (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT fk_accordance_characteristic_element_key_first FOREIGN KEY (first_element_id) REFERENCES element_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT fk_accordance_characteristic_element_key_second FOREIGN KEY (second_element_id) REFERENCES element_key (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION,
+  CONSTRAINT fk_accordance_characteristic_link FOREIGN KEY (link_id) REFERENCES link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION
+);
+ALTER TABLE accordance_characteristic OWNER TO postgres;
+COMMENT ON TABLE accordance_characteristic IS 'Таблица со значениями характеристик зависимостей элементов.';
+COMMENT ON COLUMN accordance_characteristic.id IS 'Уникальный внутренний идентификатор.';
+COMMENT ON COLUMN accordance_characteristic.first_chain_id IS 'Первая цепочка для которой вычислялась характеристика.';
+COMMENT ON COLUMN accordance_characteristic.second_chain_id IS 'Вторая цепочка для которой вычислялась характеристика.';
+COMMENT ON COLUMN accordance_characteristic.characteristic_type_id IS 'Вычисляемая характеристика.';
+COMMENT ON COLUMN accordance_characteristic.value IS 'Числовое значение характеристики.';
+COMMENT ON COLUMN accordance_characteristic.value_string IS 'Строковое значение характеристики.';
+COMMENT ON COLUMN accordance_characteristic.link_id IS 'Привязка (если она используется).';
+COMMENT ON COLUMN accordance_characteristic.created IS 'Дата вычисления характеристики.';
+COMMENT ON COLUMN accordance_characteristic.first_element_id IS 'id первого элемента из пары для которой вычисляется характеристика.';
+COMMENT ON COLUMN accordance_characteristic.second_element_id IS 'id второго элемента из пары для которой вычисляется характеристика.';
+COMMENT ON COLUMN accordance_characteristic.modified IS 'Дата и время последнего изменения записи в таблице.';
+
+CREATE INDEX ix_accordance_characteristic_first_chain_id ON accordance_characteristic USING btree (first_chain_id);
+COMMENT ON INDEX ix_accordance_characteristic_first_chain_id IS 'Индекс бинарных характеристик по цепочкам.';
+
+CREATE INDEX ix_accordance_characteristic_second_chain_id ON accordance_characteristic USING btree (second_chain_id);
+COMMENT ON INDEX ix_accordance_characteristic_second_chain_id IS 'Индекс бинарных характеристик по цепочкам.';
+
+CREATE INDEX ix_accordance_characteristic_chain_link_characteristic_type ON accordance_characteristic USING btree (first_chain_id, second_chain_id, characteristic_type_id, link_id);
+COMMENT ON INDEX ix_accordance_characteristic_chain_link_characteristic_type IS 'Индекс для выбора характеристики определённой цепочки с определённой привязкой.';
+
+CREATE INDEX ix_accordance_characteristic_created ON accordance_characteristic USING btree (created);
+COMMENT ON INDEX ix_accordance_characteristic_created IS 'Индекс характерисктик по датам их вычисления.';
+
+CREATE UNIQUE INDEX uk_accordance_characteristic_value_link_not_null ON accordance_characteristic USING btree (first_chain_id, second_chain_id, characteristic_type_id, link_id, first_element_id, second_element_id) WHERE link_id IS NOT NULL;
+
+CREATE UNIQUE INDEX uk_accordance_characteristic_value_link_null ON accordance_characteristic USING btree (first_chain_id, second_chain_id, characteristic_type_id, first_element_id, second_element_id) WHERE link_id IS NULL;
+
+CREATE TRIGGER tgiu_accordance_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
+COMMENT ON TRIGGER tgiu_accordance_characteristic_applicability ON accordance_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+CREATE TRIGGER tgiu_accordance_characteristic_link BEFORE INSERT OR UPDATE OF characteristic_type_id, link_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_characteristics_link();
+COMMENT ON TRIGGER tgiu_accordance_characteristic_link ON accordance_characteristic IS 'Триггер, проверяющий правильность привязки.';
+
+CREATE TRIGGER tgiu_accordance_characteristic_modified BEFORE INSERT OR UPDATE ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_accordance_characteristic_modified ON accordance_characteristic IS 'Тригер для вставки даты последнего изменения записи.';
+
+CREATE TRIGGER tgiu_binary_chracteristic_elements_in_alphabets BEFORE INSERT OR UPDATE OF first_chain_id, second_chain_id, first_element_id, second_element_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_elements_in_alphabets();
+COMMENT ON TRIGGER tgiu_binary_chracteristic_elements_in_alphabets ON accordance_characteristic IS 'Триггер, проверяющий что оба элемента связываемые коэффициентом зависимости присутствуют в алфавите данной цепочки.';
+
+
 COMMIT;
