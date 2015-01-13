@@ -35,3 +35,4 @@
 /// <reference path="angular.min.js" />
 /// <reference path="controllers/mattersequencecreate.js" />
 /// <reference path="controllers/genescalculation.js" />
+/// <reference path="smart-table.min.js" />

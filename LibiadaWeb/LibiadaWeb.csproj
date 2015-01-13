@@ -206,6 +206,9 @@
     <Compile Include="Accidental.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="AccordanceCharacteristic.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\LibiadaRazorViewEngine.cs" />
@@ -231,6 +234,7 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AbstractResultController.cs" />
+    <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\AlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -509,6 +513,8 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\smart-table.debug.js" />
+    <Content Include="Scripts\smart-table.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -572,6 +578,7 @@
     <Content Include="Views\Sequences\Matters\Details.cshtml" />
     <Content Include="Views\Sequences\Matters\Edit.cshtml" />
     <Content Include="Views\Sequences\Matters\Index.cshtml" />
+    <None Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

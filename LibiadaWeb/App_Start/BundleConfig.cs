@@ -34,7 +34,8 @@
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
-                     "~/Scripts/angular.js"));
+                     "~/Scripts/angular.js",
+                     "~/Scripts/smart-table.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
                         "~/Scripts/procedures.js"));
