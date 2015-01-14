@@ -512,7 +512,6 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <None Include="Scripts\_references.js" />
     <Content Include="Scripts\smart-table.debug.js" />
     <Content Include="Scripts\smart-table.min.js" />
     <Content Include="Web.config" />
