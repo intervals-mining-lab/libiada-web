@@ -7,8 +7,11 @@ UPDATE characteristic_type SET class_name = 'AverageRemotenessDispersion' WHERE 
 UPDATE characteristic_type SET class_name = 'AverageRemotenessStandardDeviation' WHERE id = 29;
 UPDATE characteristic_type SET class_name = 'AverageRemotenessSkewness' WHERE id = 30;
 
-INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Нормированная ассиметрия средних удаленностей', 'коэффициент ассиметрии (скошенность) распределения средних удаленностей однородных цепей', NULL, 'NormalizedAverageRemotenessSkewness', true, true, false, false);
-INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) VALUES ('Коэффициент соответствия', 'Коэффициент соответствия двух однородных цепей друг другу', NULL, 'ComplianceDegree', false, false, false, true);
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable)
+ VALUES ('Нормированная ассиметрия средних удаленностей', 'коэффициент ассиметрии (скошенность) распределения средних удаленностей однородных цепей', NULL, 'NormalizedAverageRemotenessSkewness', true, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable)
+ VALUES ('Коэффициент соответствия', 'Коэффициент соответствия двух однородных цепей друг другу', NULL, 'ComplianceDegree', false, false, false, true);
 
 -- 06.09.2014
 -- Добавлены индексы на гены.
@@ -299,5 +302,28 @@ COMMENT ON TRIGGER tgiu_accordance_characteristic_modified ON accordance_charact
 CREATE TRIGGER tgiu_binary_chracteristic_elements_in_alphabets BEFORE INSERT OR UPDATE OF first_chain_id, second_chain_id, first_element_id, second_element_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_elements_in_alphabets();
 COMMENT ON TRIGGER tgiu_binary_chracteristic_elements_in_alphabets ON accordance_characteristic IS 'Триггер, проверяющий что оба элемента связываемые коэффициентом зависимости присутствуют в алфавите данной цепочки.';
 
+-- 14.01.2015 
+-- Added statisitical characteristics to characteristic_type
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('GC Ratio', '(G + C) / All * 100%', NULL, 'GCRatio', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('GC Skew', '(G - C) / (G + C)', NULL, 'GCSkew', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('AT Skew', '(A - T) / (A + T)', NULL, 'ATSkew', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('GC/AT Ratio', '(G + C) / (A + T)', NULL, 'GCToATRatio', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('MK Skew', '(C + A) - (G + T) / All', NULL, 'MKSkew', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('RY Skew', '(G + A) - (C + T) / All', NULL, 'RYSkew', false, true, false, false);
+
+INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('SW Skew', '(G + C) - (A + T) / All', NULL, 'SWSkew', false, true, false, false);
 
 COMMIT;
