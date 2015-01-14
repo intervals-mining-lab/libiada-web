@@ -584,7 +584,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\Characteristics\" />
     <Folder Include="Views\Characteristics\" />
-    <Folder Include="Views\SequencesMatters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
