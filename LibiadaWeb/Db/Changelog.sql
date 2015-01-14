@@ -306,24 +306,24 @@ COMMENT ON TRIGGER tgiu_binary_chracteristic_elements_in_alphabets ON accordance
 -- Added statisitical characteristics to characteristic_type
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('GC Ratio', '(G + C) / All * 100%', NULL, 'GCRatio', false, true, false, false);
+  VALUES ('GC ratio', '(G + C) / All * 100%', NULL, 'GCRatio', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('GC Skew', '(G - C) / (G + C)', NULL, 'GCSkew', false, true, false, false);
+  VALUES ('GC skew', '(G - C) / (G + C)', NULL, 'GCSkew', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('AT Skew', '(A - T) / (A + T)', NULL, 'ATSkew', false, true, false, false);
+  VALUES ('AT skew', '(A - T) / (A + T)', NULL, 'ATSkew', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('GC/AT Ratio', '(G + C) / (A + T)', NULL, 'GCToATRatio', false, true, false, false);
+  VALUES ('GC/AT ratio', '(G + C) / (A + T)', NULL, 'GCToATRatio', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('MK Skew', '(C + A) - (G + T) / All', NULL, 'MKSkew', false, true, false, false);
+  VALUES ('MK skew', '((C + A) - (G + T)) / All', NULL, 'MKSkew', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('RY Skew', '(G + A) - (C + T) / All', NULL, 'RYSkew', false, true, false, false);
+  VALUES ('RY skew', '((G + A) - (C + T)) / All', NULL, 'RYSkew', false, true, false, false);
 
 INSERT INTO characteristic_type (name, description, characteristic_group_id, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('SW Skew', '(G + C) - (A + T) / All', NULL, 'SWSkew', false, true, false, false);
+  VALUES ('SW skew', '((G + C) - (A + T)) / All', NULL, 'SWSkew', false, true, false, false);
 
 COMMIT;
