@@ -151,7 +151,7 @@
                 case Aliases.Nature.Genetic:
                     DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
 
-                    dnaSequenceRepository.Insert(
+                    dnaSequenceRepository.Create(
                         resultsequence,
                         dnaSequence.FastaHeader,
                         null,
@@ -167,7 +167,7 @@
 
                     LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
 
-                    literatureSequenceRepository.Insert(
+                    literatureSequenceRepository.Create(
                         resultsequence,
                         literatureSequence.Original,
                         literatureSequence.LanguageId,

@@ -5,6 +5,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Web.Mvc;
     using System.Data.Entity;
 
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+
     using LibiadaWeb.Helpers;
 
     using Npgsql;
@@ -26,9 +29,51 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The insert.
+        /// The create literature sequence.
         /// </summary>
         /// <param name="commonSequence">
+        /// The common sequence.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="original">
+        /// The original.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
+        /// <param name="stringSequence">
+        /// The string sequence.
+        /// </param>
+        public void Create(CommonSequence commonSequence, int languageId, bool original, int? translatorId, string stringSequence)
+        {
+            string[] text = stringSequence.Split('\n');
+            for (int l = 0; l < text.Length - 1; l++)
+            {
+                // убираем \r
+                text[l] = text[l].Substring(0, text[l].Length - 1);
+            }
+
+            var chain = new BaseChain(text.Length - 1);
+
+            // в конце файла всегда пустая строка поэтому последний элемент не считаем
+            // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце, а лучше сделать нормальный trim
+            for (int i = 0; i < text.Length - 1; i++)
+            {
+                chain.Set(new ValueString(text[i]), i);
+            }
+
+            MatterRepository.CreateMatterFromSequence(commonSequence);
+
+            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.NotationId, true);
+            Create(commonSequence, original, languageId, translatorId, alphabet, chain.Building);
+        }
+
+        /// <summary>
+        /// The insert.
+        /// </summary>
+        /// <param name="sequence">
         /// The sequence.
         /// </param>
         /// <param name="original">
@@ -46,9 +91,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(CommonSequence commonSequence, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(commonSequence, alphabet, building);
+            var parameters = FillParams(sequence, alphabet, building);
 
             parameters.Add(new NpgsqlParameter
             {

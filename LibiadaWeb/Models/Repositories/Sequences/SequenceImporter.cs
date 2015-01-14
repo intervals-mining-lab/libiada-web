@@ -18,6 +18,10 @@
         /// </summary>
         protected readonly LibiadaWebEntities Db;
 
+        protected readonly MatterRepository MatterRepository;
+
+        protected readonly ElementRepository ElementRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceImporter"/> class.
         /// </summary>
@@ -27,6 +31,8 @@
         protected SequenceImporter(LibiadaWebEntities db)
         {
             Db = db;
+            this.MatterRepository = new MatterRepository(db);
+            this.ElementRepository = new ElementRepository(db);
         }
 
         /// <summary>

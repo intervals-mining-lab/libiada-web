@@ -15,11 +15,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     public class CommonSequenceRepository : SequenceImporter, ICommonSequenceRepository
     {
         /// <summary>
-        /// The element repository.
-        /// </summary>
-        private readonly ElementRepository elementRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CommonSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
@@ -27,13 +22,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public CommonSequenceRepository(LibiadaWebEntities db) : base(db)
         {
-            elementRepository = new ElementRepository(db);
         }
 
         /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="commonSequence">
+        /// <param name="sequence">
         /// The sequence.
         /// </param>
         /// <param name="alphabet">
@@ -42,9 +36,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(CommonSequence commonSequence, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(commonSequence, alphabet, building);
+            var parameters = FillParams(sequence, alphabet, building);
 
             const string Query = @"INSERT INTO chain (
                                         id, 
@@ -134,7 +128,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public List<Element> GetElements(long sequenceId)
         {
             List<long> elementIds = DbHelper.GetElementIds(Db, sequenceId);
-            return elementRepository.GetElements(elementIds);
+            return this.ElementRepository.GetElements(elementIds);
         }
 
         /// <summary>
@@ -149,7 +143,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Alphabet GetAlphabet(long sequenceId)
         {
             List<long> elements = DbHelper.GetElementIds(Db, sequenceId);
-            return elementRepository.ToLibiadaAlphabet(elements);
+            return this.ElementRepository.ToLibiadaAlphabet(elements);
         }
 
         /// <summary>

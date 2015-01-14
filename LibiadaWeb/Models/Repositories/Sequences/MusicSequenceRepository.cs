@@ -1,5 +1,7 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System.Xml;
+
     using LibiadaWeb.Helpers;
 
     /// <summary>
@@ -17,6 +19,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
         }
 
+        public void Create(CommonSequence commonSequence, string stringSequence)
+        {
+            var doc = new XmlDocument();
+            doc.LoadXml(stringSequence);
+
+            // MusicXmlParser parser = new MusicXmlParser();
+            // parser.Execute(doc, "test");
+            // ScoreTrack tempTrack = parser.ScoreModel;
+        }
+
         /// <summary>
         /// The insert.
         /// </summary>
@@ -29,7 +41,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(CommonSequence commonSequence, long[] alphabet, int[] building)
+        public void Create(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
             var parameters = FillParams(commonSequence, alphabet, building);
 

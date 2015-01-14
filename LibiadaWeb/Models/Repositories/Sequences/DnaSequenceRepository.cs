@@ -4,6 +4,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
+    using System.Text;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -31,9 +32,59 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
+        /// The create dna sequence.
+        /// </summary>
+        /// <param name="sequence">
+        /// The common sequence.
+        /// </param>
+        /// <param name="productId">
+        /// The product id.
+        /// </param>
+        /// <param name="partial">
+        /// The partial.
+        /// </param>
+        /// <param name="complementary">
+        /// The complementary.
+        /// </param>
+        /// <param name="stringSequence">
+        /// The string sequence.
+        /// </param>
+        /// <param name="webApiId">
+        /// The web api id.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if at least one element of new sequence is missing in db.
+        /// </exception>
+        public void Create(CommonSequence sequence, int? productId, bool partial, bool complementary, string stringSequence, int? webApiId)
+        {
+            // отделяем заголовок fasta файла от цепочки
+            string[] splittedFasta = stringSequence.Split('\n', '\r');
+            var sequenceStringBuilder = new StringBuilder();
+            string fastaHeader = splittedFasta[0];
+            for (int j = 1; j < splittedFasta.Length; j++)
+            {
+                sequenceStringBuilder.Append(splittedFasta[j]);
+            }
+
+            string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
+
+            var chain = new BaseChain(resultStringSequence);
+
+            if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
+            {
+                throw new Exception("At least one element of new sequence is missing in db.");
+            }
+
+            MatterRepository.CreateMatterFromSequence(sequence);
+
+            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
+            Create(sequence, fastaHeader, webApiId, productId, complementary, partial, alphabet, chain.Building);
+        }
+
+        /// <summary>
         /// The insert.
         /// </summary>
-        /// <param name="commonSequence">
+        /// <param name="sequence">
         /// The sequence.
         /// </param>
         /// <param name="fastaHeader">
@@ -57,17 +108,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Insert(
-            CommonSequence commonSequence, 
-            string fastaHeader, 
-            int? webApiId, 
-            int? productId,
-            bool complementary, 
-            bool partial, 
-            long[] alphabet, 
-            int[] building)
+        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, int? productId, bool complementary, bool partial, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(commonSequence, alphabet, building);
+            var parameters = FillParams(sequence, alphabet, building);
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "fasta_header", 
@@ -148,7 +191,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Insert(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, null, false, false, alphabet, building);
+            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, null, false, false, alphabet, building);
         }
 
         /// <summary>
