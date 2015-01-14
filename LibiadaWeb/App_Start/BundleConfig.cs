@@ -35,22 +35,22 @@
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                      "~/Scripts/angular.js",
-                     "~/Scripts/smart-table.min.js"));
+                     "~/Scripts/smart-table.debug.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
                         "~/Scripts/procedures.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
-                        "~/Scripts/Controllers/calculation.js"));
+                        "~/Scripts/Angular/Controllers/calculation.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/genesCalculation").Include(
-                        "~/Scripts/Controllers/genesCalculation.js"));
+                        "~/Scripts/Angular/Controllers/genesCalculation.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
-                        "~/Scripts/Controllers/matterSequenceCreate.js"));
+                        "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/highCharts").Include(
-                        "~/Scripts/Highcharts-2.3.5/highcharts.js"));
+                        "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
                         "~/Scripts/jQAllRangeSliders-withRuler-min.js",
@@ -62,6 +62,8 @@
 
             bundles.Add(new StyleBundle("~/Content/slider").Include(
                 "~/Content/themes/JQAllRange/iThing.css"));
+
+            // BundleTable.EnableOptimizations = true;
         }
     }
 }

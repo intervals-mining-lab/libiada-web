@@ -463,15 +463,15 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\Controllers\calculation.js" />
+    <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Scripts\angular.min.js.map" />
-    <Content Include="Scripts\Controllers\genesCalculation.js" />
-    <Content Include="Scripts\Controllers\matterSequenceCreate.js" />
+    <Content Include="Scripts\Angular\Controllers\genesCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
     <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.js" />
     <Content Include="Scripts\Highcharts-2.3.5\adapters\mootools-adapter.src.js" />
     <Content Include="Scripts\Highcharts-2.3.5\adapters\prototype-adapter.js" />
@@ -514,6 +514,7 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\smart-table.debug.js" />
     <Content Include="Scripts\smart-table.min.js" />
+    <None Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
