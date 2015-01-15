@@ -1,11 +1,9 @@
 ﻿"use strict";
 
-angular.module("GenesCalculation", []).controller("GenesCalculationCtrl", ["$scope", genesCalculation]);
-
 function genesCalculation($scope) {
     MapModelFromJson($scope, data);
 
-    $scope.characteristics = new Array();
+    $scope.characteristics = [];
 
     $scope.addCharacteristic = function () {
         $scope.characteristics.push({
@@ -23,3 +21,6 @@ function genesCalculation($scope) {
         return characteristic.characteristicType.Linkable;
     };
 }
+
+angular.module("GenesCalculation", []).controller("GenesCalculationCtrl", ["$scope", genesCalculation]);
+

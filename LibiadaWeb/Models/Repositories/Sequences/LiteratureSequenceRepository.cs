@@ -1,9 +1,9 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
-    using System.Data.Entity;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
@@ -11,6 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaWeb.Helpers;
 
     using Npgsql;
+
     using NpgsqlTypes;
 
     /// <summary>

@@ -1,13 +1,11 @@
 ﻿"use strict";
 
-angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
-
 function calculation($scope, filterFilter) {
 
     MapModelFromJson($scope, data);
 
-    $scope.characteristics = new Array();
-    $scope.notationsFiltered = new Array();
+    $scope.characteristics = [];
+    $scope.notationsFiltered = [];
 
     $scope.natureId = $scope.natures[0].Value;
 
@@ -40,3 +38,5 @@ function calculation($scope, filterFilter) {
 
     $scope.$watch("natureId", filterByNature, true);
 }
+
+angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);

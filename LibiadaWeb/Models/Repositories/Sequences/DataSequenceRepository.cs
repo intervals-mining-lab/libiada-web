@@ -14,7 +14,6 @@
     /// </summary>
     public class DataSequenceRepository : SequenceImporter
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DataSequenceRepository"/> class.
         /// </summary>
@@ -44,7 +43,7 @@
 
             for (int i = 0; i < cleanedSequence.Count; i++)
             {
-                //removing ".0"
+                // removing ".0"
                 cleanedSequence[i] = cleanedSequence[i].Substring(0, cleanedSequence[i].Length - 2);
                 elements.Add(new ValueInt(int.Parse(cleanedSequence[i])));
             }

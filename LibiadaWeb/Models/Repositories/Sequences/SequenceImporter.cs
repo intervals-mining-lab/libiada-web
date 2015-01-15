@@ -18,8 +18,14 @@
         /// </summary>
         protected readonly LibiadaWebEntities Db;
 
+        /// <summary>
+        /// The matters repository.
+        /// </summary>
         protected readonly MatterRepository MatterRepository;
 
+        /// <summary>
+        /// The elements repository.
+        /// </summary>
         protected readonly ElementRepository ElementRepository;
 
         /// <summary>

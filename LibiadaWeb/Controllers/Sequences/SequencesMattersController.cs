@@ -6,10 +6,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Xml;
-
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.SimpleTypes;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
@@ -36,6 +32,9 @@
         /// </summary>
         private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
+        /// <summary>
+        /// The music sequence repository.
+        /// </summary>
         private readonly MusicSequenceRepository musicSequenceRepository;
 
         /// <summary>

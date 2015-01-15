@@ -83,7 +83,7 @@
                 Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
                 BaseChain transformedChain = toAmino
-                                                 ? DnaTransformer.Encode(sourceChain)
+                                                 ? DnaTransformer.EncodeAmino(sourceChain)
                                                  : DnaTransformer.EncodeTriplets(sourceChain);
 
                 var result = new DnaSequence

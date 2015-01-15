@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    /// <summary>
+    /// The accordance calculation controller.
+    /// </summary>
     public class AccordanceCalculationController : AbstractResultController
     {
         /// <summary>
@@ -32,8 +33,8 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </summary>
         private readonly NotationRepository notationRepository;
 
-                /// <summary>
-        /// Initializes a new instance of the <see cref="AlignmentController"/> class.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
         public AccordanceCalculationController() : base("Alignment", "Genes alignment")
         {
@@ -43,7 +44,12 @@ namespace LibiadaWeb.Controllers.Calculators
             notationRepository = new NotationRepository(db);
         }
 
-        // GET: AccordanceCalculation
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);

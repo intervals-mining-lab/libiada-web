@@ -85,6 +85,18 @@
             return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).ToArray();
         }
 
+        /// <summary>
+        /// The execute custom sql command with parameters.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <param name="parameters">
+        /// The parameters.
+        /// </param>
         public static void ExecuteCommand(LibiadaWebEntities db, string query, object[] parameters)
         {
             db.Database.ExecuteSqlCommand(query, parameters);

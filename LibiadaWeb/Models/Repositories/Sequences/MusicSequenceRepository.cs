@@ -19,6 +19,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
         }
 
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <param name="commonSequence">
+        /// The common sequence.
+        /// </param>
+        /// <param name="stringSequence">
+        /// The string sequence.
+        /// </param>
         public void Create(CommonSequence commonSequence, string stringSequence)
         {
             var doc = new XmlDocument();
