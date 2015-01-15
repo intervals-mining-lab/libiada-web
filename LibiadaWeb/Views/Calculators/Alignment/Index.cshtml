@@ -109,7 +109,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceType.Value" })
+                        <input type="checkbox" name="pieceTypeIds" ng-value="pieceType.Value" checked />
                         {{pieceType.Text}}
                     </label>
                 </div>
@@ -120,7 +120,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="radio" name="validationType" value="Equality"/>
+                    <input type="radio" name="validationType" value="Equality" checked />
                     Equality
                 </label>
             </div>
@@ -142,6 +142,21 @@
             </div>
         </div>
         <br/>
+        <hr/>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBox("cyclicShift")
+                @Html.Label("cyclicShift", "Cyclic shift")
+            </div>
+        </div>
+        <br/>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBox("sort")
+                @Html.Label("sort", "Sort into rank distribution")
+            </div>
+        </div>
+        <br />
         <div class="form-group">
             <div class="col-md-10">
                 <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>

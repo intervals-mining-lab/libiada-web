@@ -139,7 +139,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList(long selectedMatter)
         {
-            return db.Matter.Select(m => new
+            return db.Matter.OrderBy(m => m.Name).Select(m => new
             {
                 Value = m.Id, 
                 Text = m.Name, 
@@ -162,7 +162,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList(IEnumerable<long> selectedMatters)
         {
-            return db.Matter.Select(m => new
+            return db.Matter.OrderBy(m => m.Name).Select(m => new
             {
                 Value = m.Id, 
                 Text = m.Name, 
@@ -185,7 +185,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
         {
-            return matters.Select(m => new
+            return matters.OrderBy(m => m.Name).Select(m => new
             {
                 Value = m.Id,
                 Text = m.Name,

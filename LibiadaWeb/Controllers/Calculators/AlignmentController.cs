@@ -37,7 +37,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AlignmentController"/> class.
         /// </summary>
-        public AlignmentController() : base("Alignment", "Genes alignment")
+        public AlignmentController()
+            : base("Alignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
@@ -82,6 +83,12 @@
         /// <param name="validationType">
         /// The validation type.
         /// </param>
+        /// <param name="cyclicShift">
+        /// The cyclic shift.
+        /// </param>
+        /// <param name="sort">
+        /// The sort.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -96,7 +103,9 @@
             int? linkId,
             int notationId,
             int[] pieceTypeIds,
-            string validationType)
+            string validationType,
+            bool cyclicShift,
+            bool sort)
         {
             return Action(() =>
             {
@@ -115,20 +124,35 @@
                 CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds, firstSequenceCharacteristics, firstSequenceProducts, firstSequencePositions, firstSequencePieceTypes);
                 CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds, secondSequenceCharacteristics, secondSequenceProducts, secondSequencePositions, secondSequencePieceTypes);
 
-                int optimalRotation = 0;
+                if (sort)
+                {
+                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v.Value).ToList();
+                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v.Value).ToList();
+                }
+                
+                int optimalRotation;
 
                 if (firstSequenceCharacteristics.Count >= secondSequenceCharacteristics.Count)
                 {
+                    var tempFirstSequenceCharacteristics = new List<KeyValuePair<int, double>>(firstSequenceCharacteristics);
+                    if (!cyclicShift)
+                    {
+                        for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
+                        {
+                            tempFirstSequenceCharacteristics.Add(new KeyValuePair<int, double>(0, 0));
+                        }
+                    }
+
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(firstSequenceCharacteristics, secondSequenceCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -136,16 +160,25 @@
                 }
                 else
                 {
+                    var tempSecondSequenceCharacteristics = new List<KeyValuePair<int, double>>(secondSequenceCharacteristics);
+                    if (!cyclicShift)
+                    {
+                        for (int i = 0; i < secondSequenceCharacteristics.Count; i++)
+                        {
+                            tempSecondSequenceCharacteristics.Add(new KeyValuePair<int, double>(0, 0));
+                        }
+                    }
+
                     switch (validationType)
                     {
                         case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
+                            optimalRotation = FindMaximumEqualityRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
+                            optimalRotation = FindMinimumDifferenceRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(secondSequenceCharacteristics, firstSequenceCharacteristics);
+                            optimalRotation = FindMinimumNormalizedDifferenceRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
                             break;
                         default:
                             throw new ArgumentException("unknown validation type");
@@ -255,12 +288,12 @@
             for (int d = 0; d < sequences.Count; d++)
             {
                 long geneId = genes[d].Id;
-                double? characteristic = db.Characteristic.Single(c =>
+                double characteristic = db.Characteristic.Single(c =>
                     c.SequenceId == geneId &&
                     c.CharacteristicTypeId == characteristicId &&
                     ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
 
-                characteristics.Add(new KeyValuePair<int, double>(d, (double)characteristic));
+                characteristics.Add(new KeyValuePair<int, double>(d, characteristic));
 
                 var productId = genes[d].ProductId;
                 var pieceTypeId = genes[d].PieceTypeId;
@@ -318,9 +351,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        private int FindMaximumEqualityRotation(
-            List<KeyValuePair<int, double>> first,
-            List<KeyValuePair<int, double>> second)
+        private int FindMaximumEqualityRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             int optimal = 0;
             double match = 0;
@@ -351,9 +382,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        private int FindMinimumDifferenceRotation(
-            List<KeyValuePair<int, double>> first,
-            List<KeyValuePair<int, double>> second)
+        private int FindMinimumDifferenceRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             int optimal = 0;
             double difference = double.MaxValue;
@@ -384,9 +413,7 @@
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        private int FindMinimumNormalizedDifferenceRotation(
-            List<KeyValuePair<int, double>> first,
-            List<KeyValuePair<int, double>> second)
+        private int FindMinimumNormalizedDifferenceRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
         {
             int optimal = 0;
             double difference = double.MaxValue;
@@ -441,7 +468,7 @@
             {
                 if (first[i].Value * second[i].Value > 0)
                 {
-                    result += System.Math.Abs(System.Math.Min(first[i].Value, second[i].Value));
+                    result += Math.Abs(Math.Min(first[i].Value, second[i].Value));
                 }
             }
 
@@ -467,7 +494,7 @@
             {
                 if (first[i].Value * second[i].Value > 0)
                 {
-                    result += System.Math.Abs(first[i].Value - second[i].Value);
+                    result += Math.Abs(first[i].Value - second[i].Value);
                 }
             }
 
@@ -493,7 +520,7 @@
             {
                 if (first[i].Value * second[i].Value > 0)
                 {
-                    result += System.Math.Abs((first[i].Value - second[i].Value) / (first[i].Value + second[i].Value));
+                    result += Math.Abs((first[i].Value - second[i].Value) / (first[i].Value + second[i].Value));
                 }
             }
 
