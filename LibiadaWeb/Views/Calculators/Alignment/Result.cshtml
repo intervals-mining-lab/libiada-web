@@ -15,86 +15,36 @@
     <div>
         Optimal shift: @ViewBag.optimalRotation
     </div>
+    <div>
+        Characteristics sorted descending: @ViewBag.sort
+    </div>
+    <div>
+        Cyclic shift is used: @ViewBag.cyclicShift
+    </div>
 
-    <br />
 
     @ViewBag.firstSequenceName
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Piece type
-                </th>
-                <th>
-                    Gene product
-                </th>
-                <th>
-                    Gene position
-                </th>
-                <th>
-                    @ViewBag.characteristicName
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.firstSequenceCharacteristics.Count; i++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.firstSequencePieceTypes[i]
-                    </td>
-                    <td>
-                        @ViewBag.firstSequenceProducts[i]
-                    </td>
-                    <td>
-                        @ViewBag.firstSequencePositions[i]
-                    </td>
-                    <td>
-                        @ViewBag.firstSequenceCharacteristics[i].Value
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
     <br />
-
     @ViewBag.secondSequenceName
+    <br />
+    @ViewBag.characteristicName
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
-                    Piece type
-                </th>
-                <th>
-                    Gene product
-                </th>
-                <th>
-                    Gene position
-                </th>
-                <th>
-                    @ViewBag.characteristicName
+                    Distances
                 </th>
             </tr>
         </thead>
         <tbody>
-            @for (int i = 0; i < ViewBag.secondSequenceCharacteristics.Count; i++)
-            {
-                <tr>
+            <tr>
+                @foreach (var distance in ViewBag.distances)
+                {
                     <td>
-                        @ViewBag.secondSequencePieceTypes[i]
+                        @distance
                     </td>
-                    <td>
-                        @ViewBag.secondSequenceProducts[i]
-                    </td>
-                    <td>
-                        @ViewBag.secondSequencePositions[i]
-                    </td>
-                    <td>
-                        @ViewBag.secondSequenceCharacteristics[i].Value
-                    </td>
-                </tr>
-            }
+                }
+            </tr>
         </tbody>
     </table>
 

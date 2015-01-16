@@ -109,103 +109,85 @@
         {
             return Action(() =>
             {
-                var firstSequenceCharacteristics = new List<KeyValuePair<int, double>>();
-                var firstSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
-                var firstSequenceProducts = new List<string>();
-                var firstSequencePositions = new List<long>();
-                var firstSequencePieceTypes = new List<string>();
-
-                var secondSequenceCharacteristics = new List<KeyValuePair<int, double>>();
-                var secondSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
-                var secondSequenceProducts = new List<string>();
-                var secondSequencePositions = new List<long>();
-                var secondSequencePieceTypes = new List<string>();
-
-                CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds, firstSequenceCharacteristics, firstSequenceProducts, firstSequencePositions, firstSequencePieceTypes);
-                CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds, secondSequenceCharacteristics, secondSequenceProducts, secondSequencePositions, secondSequencePieceTypes);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds);
 
                 if (sort)
                 {
-                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v.Value).ToList();
-                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v.Value).ToList();
+                    firstSequenceCharacteristics = firstSequenceCharacteristics.OrderByDescending(v => v).ToList();
+                    secondSequenceCharacteristics = secondSequenceCharacteristics.OrderByDescending(v => v).ToList();
                 }
-                
-                int optimalRotation;
 
+                List<double> longer;
+                List<double> shorter;
                 if (firstSequenceCharacteristics.Count >= secondSequenceCharacteristics.Count)
                 {
-                    var tempFirstSequenceCharacteristics = new List<KeyValuePair<int, double>>(firstSequenceCharacteristics);
-                    if (!cyclicShift)
-                    {
-                        for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
-                        {
-                            tempFirstSequenceCharacteristics.Add(new KeyValuePair<int, double>(0, 0));
-                        }
-                    }
-
-                    switch (validationType)
-                    {
-                        case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
-                            break;
-                        case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
-                            break;
-                        case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(tempFirstSequenceCharacteristics, secondSequenceCharacteristics);
-                            break;
-                        default:
-                            throw new ArgumentException("unknown validation type");
-                    }
+                    longer = firstSequenceCharacteristics;
+                    shorter = secondSequenceCharacteristics;
                 }
                 else
                 {
-                    var tempSecondSequenceCharacteristics = new List<KeyValuePair<int, double>>(secondSequenceCharacteristics);
-                    if (!cyclicShift)
-                    {
-                        for (int i = 0; i < secondSequenceCharacteristics.Count; i++)
-                        {
-                            tempSecondSequenceCharacteristics.Add(new KeyValuePair<int, double>(0, 0));
-                        }
-                    }
+                    longer = secondSequenceCharacteristics;
+                    shorter = firstSequenceCharacteristics;
+                }
 
-                    switch (validationType)
+                if (!cyclicShift)
+                {
+                    for (int i = 0; i < longer.Count; i++)
                     {
-                        case "Equality":
-                            optimalRotation = FindMaximumEqualityRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
-                            break;
-                        case "Difference":
-                            optimalRotation = FindMinimumDifferenceRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
-                            break;
-                        case "NormalizedDifference":
-                            optimalRotation = FindMinimumNormalizedDifferenceRotation(tempSecondSequenceCharacteristics, firstSequenceCharacteristics);
-                            break;
-                        default:
-                            throw new ArgumentException("unknown validation type");
+                        longer.Add(0);
                     }
                 }
 
-                string characteristicName = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
+                var distanceCalculator = GetDistanceCalculator(validationType);
+                List<double> distances = new List<double>();
+                var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
                 return new Dictionary<string, object>
                 {
-                    { "firstSequenceCharacteristics", firstSequenceCharacteristics },
-                    { "firstSequenceName", firstSequenceName },
-                    { "firstSequenceProducts", firstSequenceProducts },
-                    { "firstSequencePositions", firstSequencePositions },
-                    { "firstSequencePieceTypes", firstSequencePieceTypes },
-                    { "secondSequenceCharacteristics", secondSequenceCharacteristics },
-                    { "secondSequenceName", secondSequenceName },
-                    { "secondSequenceProducts", secondSequenceProducts },
-                    { "secondSequencePositions", secondSequencePositions },
-                    { "secondSequencePieceTypes", secondSequencePieceTypes },
-                    { "characteristicName", characteristicName },
-                    { "firstMatterId", firstMatterId },
-                    { "secondMatterId", secondMatterId },
+                    { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
+                    { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
+                    { "characteristicName", db.CharacteristicType.Single(c => c.Id == characteristicId).Name },
+                    { "pieceTypes", db.PieceType.Where(p => pieceTypeIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "optimalRotation", optimalRotation },
-                    { "validationType", validationType }
+                    { "distances", distances },
+                    { "validationType", validationType },
+                    { "cyclicShift", cyclicShift },
+                    { "sort", sort }
                 };
             });
+        }
+
+        /// <summary>
+        /// The get distance calculator.
+        /// </summary>
+        /// <param name="validationType">
+        /// The validation type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Func{Double, Double, Double}"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if validation type is unknown.
+        /// </exception>
+        private static Func<double, double, double> GetDistanceCalculator(string validationType)
+        {
+            Func<double, double, double> distanceCalculator;
+            switch (validationType)
+            {
+                case "Equality":
+                    distanceCalculator = (first, second) => -Math.Abs(Math.Min(first, second));
+                    break;
+                case "Difference":
+                    distanceCalculator = (first, second) => Math.Abs(first - second);
+                    break;
+                case "NormalizedDifference":
+                    distanceCalculator = (first, second) => Math.Abs((first - second) / (first + second));
+                    break;
+                default:
+                    throw new ArgumentException("unknown validation type");
+            }
+            return distanceCalculator;
         }
 
         /// <summary>
@@ -226,33 +208,21 @@
         /// <param name="pieceTypeIds">
         /// The piece type ids.
         /// </param>
-        /// <param name="characteristics">
-        /// The characteristics.
-        /// </param>
-        /// <param name="sequenceProducts">
-        /// The sequence products.
-        /// </param>
-        /// <param name="sequencePositions">
-        /// The sequence positions.
-        /// </param>
-        /// <param name="sequencePieceTypes">
-        /// The sequence piece types.
-        /// </param>
-        private void CalculateCharacteristic(
+        /// <returns>
+        /// The <see cref="List{Double}"/>.
+        /// </returns>
+        private List<double> CalculateCharacteristic(
             long matterId,
             int characteristicId,
             int? linkId,
             int notationId,
-            int[] pieceTypeIds,
-            List<KeyValuePair<int, double>> characteristics,
-            List<string> sequenceProducts,
-            List<long> sequencePositions,
-            List<string> sequencePieceTypes)
+            int[] pieceTypeIds)
         {
+            var characteristics = new List<double>();
+
             var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
-            var genes =
-                db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
+            var genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
 
             var pieces = genes.Select(g => g.Piece.First()).ToList();
 
@@ -281,9 +251,10 @@
                     };
 
                     db.Characteristic.Add(currentCharacteristic);
-                    db.SaveChanges();
                 }
             }
+
+            db.SaveChanges();
 
             for (int d = 0; d < sequences.Count; d++)
             {
@@ -293,16 +264,10 @@
                     c.CharacteristicTypeId == characteristicId &&
                     ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
 
-                characteristics.Add(new KeyValuePair<int, double>(d, characteristic));
-
-                var productId = genes[d].ProductId;
-                var pieceTypeId = genes[d].PieceTypeId;
-
-                sequenceProducts.Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
-                sequencePositions.Add(pieces[d].Start);
-
-                sequencePieceTypes.Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
+                characteristics.Add(characteristic);
             }
+
+            return characteristics;
         }
 
         /// <summary>
@@ -340,7 +305,7 @@
         }
 
         /// <summary>
-        /// The find maximum equality rotation.
+        /// The calculate measure for rotation.
         /// </summary>
         /// <param name="first">
         /// The first.
@@ -348,88 +313,33 @@
         /// <param name="second">
         /// The second.
         /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private int FindMaximumEqualityRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
-        {
-            int optimal = 0;
-            double match = 0;
-            for (int i = 0; i < first.Count; i++)
-            {
-                double currentMatch = CalculateMatch(first, second);
-                if (currentMatch > match)
-                {
-                    match = currentMatch;
-                    optimal = i;
-                }
-
-                first = Rotate(first);
-            }
-
-            return optimal;
-        }
-
-        /// <summary>
-        /// The find minimum difference rotation.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
+        /// <param name="distances">
+        /// The distances.
         /// </param>
-        /// <param name="second">
-        /// The second.
+        /// <param name="measure">
+        /// The measure.
         /// </param>
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        private int FindMinimumDifferenceRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
+        private int CalculateMeasureForRotation(List<double> first, List<double> second, List<double> distances, Func<double, double, double> measure)
         {
-            int optimal = 0;
-            double difference = double.MaxValue;
+            int optimalRotation = 0;
+            double minimumDistance = double.MaxValue;
             for (int i = 0; i < first.Count; i++)
             {
-                double currentDifference = CalculateDifference(first, second);
-                if (currentDifference < difference)
+                var distance = Measure(first, second, measure);
+                if (minimumDistance > distance)
                 {
-                    difference = currentDifference;
-                    optimal = i;
+                    optimalRotation = i;
+                    minimumDistance = distance;
                 }
 
+                distances.Add(distance);
                 first = Rotate(first);
             }
 
-            return optimal;
-        }
-
-        /// <summary>
-        /// The find minimum normalized difference rotation.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
-        /// </param>
-        /// <param name="second">
-        /// The second.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private int FindMinimumNormalizedDifferenceRotation(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
-        {
-            int optimal = 0;
-            double difference = double.MaxValue;
-            for (int i = 0; i < first.Count; i++)
-            {
-                double currentDifference = CalculateNormalizedDifference(first, second);
-                if (currentDifference < difference)
-                {
-                    difference = currentDifference;
-                    optimal = i;
-                }
-
-                first = Rotate(first);
-            }
-
-            return optimal;
+            return optimalRotation;
         }
 
         /// <summary>
@@ -439,18 +349,18 @@
         /// The list.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<KeyValuePair<int, double>> Rotate(List<KeyValuePair<int, double>> list)
+        private List<double> Rotate(List<double> list)
         {
-            KeyValuePair<int, double> first = list[0];
+            var first = list[0];
             list.RemoveAt(0);
             list.Add(first);
             return list;
         }
 
         /// <summary>
-        /// The calculate match.
+        /// The measure.
         /// </summary>
         /// <param name="first">
         /// The first.
@@ -458,69 +368,20 @@
         /// <param name="second">
         /// The second.
         /// </param>
-        /// <returns>
-        /// The <see cref="double"/>.
-        /// </returns>
-        private double CalculateMatch(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
-        {
-            double result = 0;
-            for (int i = 0; i < second.Count; i++)
-            {
-                if (first[i].Value * second[i].Value > 0)
-                {
-                    result += Math.Abs(Math.Min(first[i].Value, second[i].Value));
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The calculate difference.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
-        /// </param>
-        /// <param name="second">
-        /// The second.
+        /// <param name="measure">
+        /// The measurer.
         /// </param>
         /// <returns>
         /// The <see cref="double"/>.
         /// </returns>
-        private double CalculateDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
+        private double Measure(List<double> first, List<double> second, Func<double, double, double> measure)
         {
             double result = 0;
             for (int i = 0; i < second.Count; i++)
             {
-                if (first[i].Value * second[i].Value > 0)
+                if ((first[i] * second[i]) > 0)
                 {
-                    result += Math.Abs(first[i].Value - second[i].Value);
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The calculate normalized difference.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
-        /// </param>
-        /// <param name="second">
-        /// The second.
-        /// </param>
-        /// <returns>
-        /// The <see cref="double"/>.
-        /// </returns>
-        private double CalculateNormalizedDifference(List<KeyValuePair<int, double>> first, List<KeyValuePair<int, double>> second)
-        {
-            double result = 0;
-            for (int i = 0; i < second.Count; i++)
-            {
-                if (first[i].Value * second[i].Value > 0)
-                {
-                    result += Math.Abs((first[i].Value - second[i].Value) / (first[i].Value + second[i].Value));
+                    result += measure(first[i], second[i]);
                 }
             }
 

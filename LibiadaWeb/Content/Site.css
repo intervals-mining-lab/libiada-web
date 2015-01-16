@@ -16,6 +16,15 @@ textarea {
     max-width: 280px;
 }
 
+table {
+    font-family: monospace;
+	font-size: 16px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 30px;
+}
+
 /* styles for validation helpers */
 .field-validation-error {
     color: #b94a48;
