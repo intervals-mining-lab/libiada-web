@@ -18,7 +18,7 @@
         $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.links[0],
-            notation: $scope.notations[0]
+            notation: $scope.notationsFiltered[0]
         };
 
         $scope.isLinkable = function(characteristic) {
@@ -156,29 +156,8 @@
                 @Html.Label("sort", "Sort into rank distribution")
             </div>
         </div>
-        <br />
-        <div class="form-group">
-            <div class="col-md-10">
-                <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-                <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value"/>
-                @Html.ValidationMessage("characteristicId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group" ng-show="isLinkable(characteristic)">
-            <div class="col-md-10">
-                <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-                <input type="hidden" name="linkId" ng-value="characteristic.link.Value" />
-                @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-10">
-                <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations"></select>
-                <input type="hidden" name="notationId" ng-value="characteristic.notation.Value" />
-                @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <br/>
+        <hr/>
+        @Html.Partial("_Characteristic")
         <div class="form-group">
             <div class="col-md-10">
                 <input type="submit" value="Calculate" class="btn btn-default" />

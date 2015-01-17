@@ -37,14 +37,16 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                @foreach (var distance in ViewBag.distances)
+        @foreach (var distance in ViewBag.distances)
                 {
-                    <td>
-                        @distance
-                    </td>
+                    <tr>
+
+                        <td>
+                            @distance
+                        </td>
+
+                    </tr>
                 }
-            </tr>
         </tbody>
     </table>
 

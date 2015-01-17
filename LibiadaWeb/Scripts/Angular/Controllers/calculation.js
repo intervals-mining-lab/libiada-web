@@ -1,7 +1,6 @@
 ﻿"use strict";
 
 function calculation($scope, filterFilter) {
-
     MapModelFromJson($scope, data);
 
     $scope.characteristics = [];

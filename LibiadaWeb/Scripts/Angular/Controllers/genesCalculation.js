@@ -9,7 +9,7 @@ function genesCalculation($scope) {
         $scope.characteristics.push({
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.links[0],
-            notation: $scope.notations[0]
+            notation: $scope.notationsFiltered[0]
         });
     };
 

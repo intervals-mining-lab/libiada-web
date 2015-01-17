@@ -162,11 +162,13 @@
                             c.SequenceId == sequenceId &&
                             c.CharacteristicTypeId == characteristicId))
                         {
+
+
                             characteristics.Last()
-                                .Add((double)db.Characteristic.Single(c =>
+                                .Add(db.Characteristic.Single(c =>
                                     ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
                                     c.SequenceId == sequenceId &&
-                                    c.CharacteristicTypeId == characteristicIds[i]).Value);
+                                    c.CharacteristicTypeId == characteristicId).Value);
                         }
                         else
                         {

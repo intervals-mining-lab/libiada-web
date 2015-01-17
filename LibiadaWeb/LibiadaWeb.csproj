@@ -579,6 +579,8 @@
     <Content Include="Views\Sequences\Matters\Edit.cshtml" />
     <Content Include="Views\Sequences\Matters\Index.cshtml" />
     <None Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
+    <Content Include="Views\Partial\_Characteristic.cshtml" />
+    <Content Include="Views\Partial\_Characteristics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -59,49 +59,20 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceType.Value" })
+                        <input type="checkbox" name="pieceTypeIds" ng-value="pieceType.Value" />
                         {{pieceType.Text}}
                     </label>
                 </div>
             </div>
         </div>
-        <br />
         <div class="form-group">
-            <div class="col-md-10">
-                <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
+            <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBox("sort")
+                @Html.Label("sort", "Sort into rank distribution")
             </div>
         </div>
-        <div ng-repeat="characteristic in characteristics">
-            <div class="form-group">
-                <div class="col-md-10">
-                    <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-                    <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
-                    @Html.ValidationMessage("characteristicIds", string.Empty, new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group" ng-show="isLinkable(characteristic)">
-                <div class="col-md-10">
-                    <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-                    <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
-                    @Html.ValidationMessage("linkIds", string.Empty, new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
-                    <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value" />
-                    @Html.ValidationMessage("notationIds", string.Empty, new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <button type="button" class="btn btn-default" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
-                </div>
-            </div>
-            <hr />
-            <br />
-        </div>
-        <br />
+        <hr/>
+        @Html.Partial("_Characteristics")
         <div class="form-group">
             <div class="col-md-10">
                 <input type="submit" value="Calculate" class="btn btn-default" />

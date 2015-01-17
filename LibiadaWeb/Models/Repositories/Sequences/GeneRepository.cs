@@ -76,7 +76,8 @@
                     { "matters", matterRepository.GetMatterSelectList(matters) }, 
                     { "characteristicTypes", characteristicTypes }, 
                     { "links", links }, 
-                    { "notations", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") }, 
+                    { "notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") },
+                    { "natureId", Aliases.Nature.Genetic },
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
         } 

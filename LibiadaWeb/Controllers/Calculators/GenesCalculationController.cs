@@ -75,7 +75,7 @@
         /// <param name="pieceTypeIds">
         /// The piece type ids.
         /// </param>
-        /// <param name="isSort">
+        /// <param name="sort">
         /// The is sort.
         /// </param>
         /// <returns>
@@ -88,7 +88,7 @@
             int?[] linkIds,
             int[] notationIds,
             int[] pieceTypeIds,
-            bool isSort)
+            bool sort)
         {
             return Action(() =>
             {
@@ -190,7 +190,7 @@
                 }
 
                 // ранговая сортировка
-                if (isSort)
+                if (sort)
                 {
                     for (int f = 0; f < matterIds.Length; f++)
                     {

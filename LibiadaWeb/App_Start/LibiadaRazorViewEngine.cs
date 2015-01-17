@@ -19,7 +19,8 @@
                     "~/Views/Sequences/{1}/{0}.cshtml", 
                     "~/Views/Calculators/{1}/{0}.cshtml", 
                     "~/Views/Catalogs/{1}/{0}.cshtml", 
-                    "~/Views/Characteristics/{1}/{0}.cshtml"
+                    "~/Views/Characteristics/{1}/{0}.cshtml",
+                    "~/Views/Partial/{0}.cshtml"
                 };
 
             PartialViewLocationFormats = ViewLocationFormats;
