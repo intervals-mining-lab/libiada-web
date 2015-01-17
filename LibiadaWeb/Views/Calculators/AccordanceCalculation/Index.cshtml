@@ -103,19 +103,7 @@
             </tbody>
         </table>
         <br />
-        <br />
-        @Html.LabelFor(model => model.First().Sequence.First().PieceTypeId, new { @class = "control-label" })
-        <div ng-repeat="pieceType in pieceTypes">
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        @Html.CheckBox("pieceTypeIds", new { ng_value = "pieceType.Value" })
-                        {{pieceType.Text}}
-                    </label>
-                </div>
-            </div>
-        </div>
-        <br />
+        @Html.Partial("_PieceTypesSelect")
         @Html.Label("calculationType", "Calculation type", new { @class = "control-label" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

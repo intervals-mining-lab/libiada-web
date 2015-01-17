@@ -1,0 +1,16 @@
+﻿@model CommonSequence
+
+<br />
+@Html.LabelFor(model => model.PieceTypeId, new { @class = "control-label" })
+<div ng-repeat="pieceType in pieceTypes">
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <label>
+                <input type="checkbox" name="pieceTypeIds" ng-value="pieceType.Value" checked/>
+                {{pieceType.Text}}
+            </label>
+        </div>
+    </div>
+</div>
+<hr/>
+<br/>

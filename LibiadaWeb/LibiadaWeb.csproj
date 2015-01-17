@@ -581,6 +581,9 @@
     <None Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
     <Content Include="Views\Partial\_Characteristic.cshtml" />
     <Content Include="Views\Partial\_Characteristics.cshtml" />
+    <Content Include="Views\Partial\_MattersTable.cshtml" />
+    <Content Include="Views\Partial\_NatureSelect.cshtml" />
+    <Content Include="Views\Partial\_PieceTypesSelect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

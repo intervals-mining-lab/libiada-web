@@ -2,30 +2,25 @@
 @model dynamic
 
 <br />
-<div class="form-group">
-    <div class="col-md-10">
-        <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
-    </div>
-</div>
 <div ng-repeat="characteristic in characteristics">
     <div class="form-group">
         <div class="col-md-10">
             <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
-            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
+            <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value"/>
             @Html.ValidationMessage("characteristicIds", "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group" ng-show="isLinkable(characteristic)">
         <div class="col-md-10">
             <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in links"></select>
-            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
+            <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
             @Html.ValidationMessage("linkIds", "", new { @class = "text-danger" })
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-10">
             <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
-            <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value" />
+            <input type="hidden" name="notationIds" ng-value="characteristic.notation.Value"/>
             @Html.ValidationMessage("notationIds", "", new { @class = "text-danger" })
         </div>
     </div>
@@ -34,14 +29,14 @@
             <div class="form-group">
                 <div class="col-md-10">
                     <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                    <input type="hidden" name="languageIds" ng-value="characteristic.language.Value" />
+                    <input type="hidden" name="languageIds" ng-value="characteristic.language.Value"/>
                     @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-10">
                     <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                    <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value" />
+                    <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value"/>
                     @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -50,13 +45,21 @@
         </div>
         <div ng-switch-when="@Aliases.Nature.Music">
         </div>
+        <div ng-switch-when="@Aliases.Nature.Data">
+        </div>
     </div>
     <div class="form-group">
         <div class="col-md-10">
             <button type="button" class="btn btn-default" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
         </div>
     </div>
-    <hr />
-    <br />
+    <hr/>
+    <br/>
 </div>
+<div class="form-group">
+    <div class="col-md-10">
+        <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
+    </div>
+</div>
+<hr/>
 <br />

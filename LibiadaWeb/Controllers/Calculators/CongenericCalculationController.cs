@@ -116,7 +116,7 @@
         /// <param name="translatorIds">
         /// The translator ids.
         /// </param>
-        /// <param name="isSort">
+        /// <param name="sort">
         /// The is sort.
         /// </param>
         /// <param name="theoretical">
@@ -133,7 +133,7 @@
             int[] notationIds, 
             int[] languageIds, 
             int?[] translatorIds, 
-            bool isSort, 
+            bool sort,
             bool theoretical)
         {
             return Action(() =>
@@ -297,7 +297,7 @@
                 }
 
                 // ранговая сортировка
-                if (isSort)
+                if (sort)
                 {
                     for (int f = 0; f < matterIds.Length; f++)
                     {

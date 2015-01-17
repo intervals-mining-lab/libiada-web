@@ -20,45 +20,8 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <br />
-        <div class="form-group">
-            @Html.LabelFor(model => model.First().NatureId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
-                @Html.ValidationMessage("natureId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        @Html.Label("matterIds", "Sequences", new { @class = "control-label" })
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Created)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Modified)
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
-                    <td>
-                        <label>
-                            <input type="checkbox" name="matterIds" ng-value="matter.Value" />
-                            {{matter.Text}}
-                        </label>
-                    </td>
-                    <td ng-bind="matter.Description" />
-                    <td ng-bind="matter.Created" />
-                    <td ng-bind="matter.Modified" />
-                </tr>
-            </tbody>
-        </table>
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
         @Html.Partial("_Characteristics")
         <div class="form-group">
             @Html.Label("clustersCount", "Clusters count", new { @class = "control-label col-md-2" })
