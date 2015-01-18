@@ -3,6 +3,21 @@
 function genesCalculation($scope) {
     MapModelFromJson($scope, data);
 
+    $scope.matterSelectionLimit = Number.MAX_VALUE;
+    $scope.selectedMatters = 0;
+
+    $scope.matterCheckChanged = function (matter) {
+        if (matter.Selected) {
+            $scope.selectedMatters++;
+        } else {
+            $scope.selectedMatters--;
+        }
+    }
+
+    $scope.disableMattersSelect = function (matter) {
+        return false;
+    }
+
     $scope.characteristics = [];
 
     $scope.addCharacteristic = function () {

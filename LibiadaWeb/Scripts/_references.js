@@ -36,3 +36,5 @@
 /// <reference path="angular/controllers/calculation.js" />
 /// <reference path="angular/controllers/genescalculation.js" />
 /// <reference path="angular/controllers/mattersequencecreate.js" />
+/// <reference path="angular/controllers/alignment.js" />
+/// <reference path="angular/controllers/accordance.js" />

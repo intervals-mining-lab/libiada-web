@@ -62,11 +62,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="firstMatterId">
-        /// Id of first matter.
-        /// </param>
-        /// <param name="secondMatterId">
-        /// Id of second matter.
+        /// <param name="matterIds">
+        /// The matter ids.
         /// </param>
         /// <param name="characteristicId">
         /// The characteristic id.
@@ -94,11 +91,11 @@
         /// </returns>
         /// <exception cref="ArgumentException">
         /// Thrown if validationType is unknown.
+        /// Or if count of matters is not 2.
         /// </exception>
         [HttpPost]
         public ActionResult Index(
-            long firstMatterId,
-            long secondMatterId,
+            long[] matterIds,
             int characteristicId,
             int? linkId,
             int notationId,
@@ -109,6 +106,15 @@
         {
             return Action(() =>
             {
+
+                if (matterIds.Length != 2)
+                {
+                    throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
+                }
+
+                var firstMatterId = matterIds[0];
+                var secondMatterId = matterIds[1];
+
                 var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds);
                 var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds);
 

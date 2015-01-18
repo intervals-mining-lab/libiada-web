@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -26,6 +27,8 @@
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
@@ -44,17 +47,12 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    {
-                        "sequences", db.DnaSequence.Where(c => c.WebApiId != null).Select(c => new
-                        {
-                            Value = c.Id,
-                            Text = c.Matter.Name,
-                            Selected = false
-                        }).OrderBy(c => c.Text)
-                    }
-                };
+
+            var genesSequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var sequences = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Include(c => c.Matter);
+            var selectList = new SelectList(sequences, "Id", "Matter.Name").OrderBy(c => c.Text);
+
+            ViewBag.data = new Dictionary<string, object> { { "sequences", selectList } };
             return View();
         }
 

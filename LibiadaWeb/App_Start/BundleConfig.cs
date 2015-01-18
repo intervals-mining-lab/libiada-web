@@ -40,6 +40,12 @@
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
                         "~/Scripts/procedures.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
+                        "~/Scripts/Angular/Controllers/accordance.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/alignment").Include(
+                        "~/Scripts/Angular/Controllers/alignment.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
                         "~/Scripts/Angular/Controllers/calculation.js"));
 

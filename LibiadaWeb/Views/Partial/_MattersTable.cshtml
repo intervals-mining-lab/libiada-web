@@ -23,7 +23,7 @@
     <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
         <td>
             <label>
-                <input type="checkbox" name="matterIds" ng-value="matter.Value"/>
+                <input type="checkbox" name="matterIds" ng-value="matter.Value" ng-model="matter.Selected" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
                 {{matter.Text}}
             </label>
         </td>
