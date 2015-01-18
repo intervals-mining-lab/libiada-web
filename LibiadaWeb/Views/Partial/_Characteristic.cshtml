@@ -27,15 +27,15 @@
         <div class="form-group">
             <div class="col-md-10">
                 <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                <input type="hidden" name="languageIds" ng-value="characteristic.language.Value"/>
-                @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
+                <input type="hidden" name="languageId" ng-value="characteristic.language.Value"/>
+                @Html.ValidationMessage("languageId", "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value"/>
-                @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
+                <select class="form-control" itle="Translator" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
+                <input type="hidden" name="translatorId" ng-value="characteristic.translator.Value"/>
+                @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
             </div>
         </div>
     </div>

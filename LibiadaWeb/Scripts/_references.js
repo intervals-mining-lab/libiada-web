@@ -38,3 +38,4 @@
 /// <reference path="angular/controllers/mattersequencecreate.js" />
 /// <reference path="angular/controllers/alignment.js" />
 /// <reference path="angular/controllers/accordance.js" />
+/// <reference path="angular/controllers/buildingcomparison.js" />

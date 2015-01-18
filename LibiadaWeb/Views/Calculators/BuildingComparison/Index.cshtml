@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Helpers
+﻿@using LibiadaWeb.Models
 @model dynamic
 
 @{
@@ -8,52 +8,78 @@
 <h2>Buildings comparison</h2>
 
 <script type="text/javascript">
+    "use strict";
 
-    $(document).ready(function () {
-        AddDataTablesWithSubmit();
-    });
-
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
 @using (Html.BeginForm())
 {
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    First sequence name
-                </th>
-                <th>
-                    Second sequence name
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                List<MvcHtmlString> mattersList1 = Html.RadioButtonList("firstMatterId", (List<SelectListItem>)ViewBag.mattersList);
-                List<MvcHtmlString> mattersList2 = Html.RadioButtonList("secondMatterId", (List<SelectListItem>)ViewBag.mattersList);
+    <div ng-app="BuildingComparison">
+        <div class="form-horizontal" ng-controller="BuildingComparisonCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_NatureSelect")
+            @Html.Partial("_MattersTable")
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.CheckBox("congeneric")
+                    @Html.Label("congeneric", "Compare buildings of congeneric sequences")
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <input type="hidden" name="notationId" ng-value="characteristic.notation.Value" />
+                    @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div ng-switch="natureId">
+                <div ng-switch-when="@Aliases.Nature.Literature">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
+                            <input type="hidden" name="languageIds" ng-value="characteristic.language.Value" />
+                            @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
+                            <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value" />
+                            @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Genetic">
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Music">
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Data">
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                @Html.Label("length", "Window size", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" name="length" type="number" value="10" min="1" />
+                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters < 2" />
+                </div>
+            </div>
 
-                for (int i = 0; i < mattersList1.Count; i++)
-                {
-                    <tr>
-                        <td>
-                            @mattersList1[i]
-                        </td>
-                        <td>
-                            @mattersList2[i]
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-
-    <br />
-    @Html.CheckBox("congeneric", "Compare buildings of congeneric sequences", null)
-    <br />
-    @Html.Label("Window size:")
-    <input type="number" name="length" value="10" />
-    <br />
-    <br />
-    <input type="submit" value="Вычислить" />
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/buildingComparison")
 }

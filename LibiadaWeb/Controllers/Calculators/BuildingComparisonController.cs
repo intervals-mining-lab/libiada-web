@@ -1,11 +1,15 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Misc.Iterators;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
 
@@ -30,13 +34,20 @@
         private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
+        /// The notation repository.
+        /// </summary>
+        private readonly NotationRepository notationRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="BuildingComparisonController"/> class.
         /// </summary>
-        public BuildingComparisonController() : base("BuildingComparison", "Building comparison")
+        public BuildingComparisonController()
+            : base("BuildingComparison", "Building comparison")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
+            notationRepository = new NotationRepository(db);
         }
 
         /// <summary>
@@ -47,6 +58,20 @@
         /// </returns>
         public ActionResult Index()
         {
+            ViewBag.dbName = DbHelper.GetDbName(db);
+
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
+                    { "matters", matterRepository.GetMatterSelectList() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
+                    { "translators", translators }
+                };
+
             ViewBag.mattersList = matterRepository.GetSelectListItems(null);
 
             return View();
@@ -55,11 +80,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="firstMatterId">
-        /// The first matter id.
-        /// </param>
-        /// <param name="secondMatterId">
-        /// The second matter id.
+        /// <param name="matterIds">
+        /// The matter ids.
         /// </param>
         /// <param name="length">
         /// The length.
@@ -67,57 +89,99 @@
         /// <param name="congeneric">
         /// The congeneric.
         /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if count of matters is not 2.
+        /// </exception>
         [HttpPost]
-        public ActionResult Index(long firstMatterId, long secondMatterId, int length, bool congeneric)
+        public ActionResult Index(long[] matterIds, int length, bool congeneric, int notationId, int? languageId, int? translatorId)
         {
             return Action(() =>
             {
-                string firstSequenceName = db.Matter.Single(m => m.Id == firstMatterId).Name;
-                string secondSequenceName = db.Matter.Single(m => m.Id == secondMatterId).Name;
-                Matter firstMatter = db.Matter.Single(m => m.Id == firstMatterId);
-                long firstSequenceId = firstMatter.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
-                Chain firstLibiadaChain = sequenceRepository.ToLibiadaChain(firstSequenceId);
-                Matter secondMatter = db.Matter.Single(m => m.Id == secondMatterId);
-                long secondSequencesId = secondMatter.Sequence.Single(c => c.NotationId == Aliases.Notation.Nucleotide).Id;
-                Chain secondLibiadaChain = sequenceRepository.ToLibiadaChain(secondSequencesId);
+                if (matterIds.Length != 2)
+                {
+                    throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
+                }
 
-                BaseChain res1 = null;
-                BaseChain res2 = null;
+                var firstMatterId = matterIds[0];
+                var secondMatterId = matterIds[1];
+
+                long firstSequenceId;
+                if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
+                {
+                    firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
+                                l.NotationId == notationId
+                                && l.LanguageId == languageId
+                                && ((translatorId == null && l.TranslatorId == null)
+                                                || (translatorId == l.TranslatorId))).Id;
+                }
+                else
+                {
+                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                }
+
+                Chain firstLibiadaChain = sequenceRepository.ToLibiadaChain(firstSequenceId);
+
+                long secondSequenceId;
+                if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
+                {
+                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
+                                l.NotationId == notationId
+                                && l.LanguageId == languageId
+                                && ((translatorId == null && l.TranslatorId == null)
+                                                || (translatorId == l.TranslatorId))).Id;
+                }
+                else
+                {
+                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                }
+
+                Chain secondLibiadaChain = sequenceRepository.ToLibiadaChain(secondSequenceId);
+
+                AbstractChain res1 = null;
+                AbstractChain res2 = null;
 
                 int i = 0;
                 int j = 0;
-                var iter1 = new IteratorStart(firstLibiadaChain, length, 1);
+                var firstIterator = new IteratorStart(firstLibiadaChain, length, 1);
                 bool duplicate = false;
-                while (!duplicate && iter1.Next())
+                while (!duplicate && firstIterator.Next())
                 {
                     i++;
-                    var firstTempChain = (BaseChain)iter1.Current();
-                    var iter2 = new IteratorStart(secondLibiadaChain, length, 1);
+                    var firstTempChain = (Chain)firstIterator.Current();
+                    var secondIterator = new IteratorStart(secondLibiadaChain, length, 1);
                     j = 0;
-                    while (!duplicate && iter2.Next())
+                    while (!duplicate && secondIterator.Next())
                     {
                         j++;
-                        var secondTempChain = (BaseChain)iter2.Current();
+                        var secondTempChain = (Chain)secondIterator.Current();
 
                         if (congeneric)
                         {
                             for (int a = 0; a < firstTempChain.Alphabet.Cardinality; a++)
                             {
-                                /*  CongenericChain firstChain = tempChain1.CongenericChain(a);
-                              for (int b = 0; b < tempChain2.Alphabet.Cardinality; b++)
-                              {
-
-                                  CongenericChain secondChain = tempChain2.CongenericChain(b);
-                                  if (!firstChain.Equals(secondChain) && this.CompareBuldings(firstChain.Building, secondChain.Building))
-                                  {
-                                      res1 = firstChain;
-                                      res2 = secondChain;
-                                      duplicate = true;
-                                  }
-                              }*/
+                                CongenericChain firstChain = firstTempChain.CongenericChain(a);
+                                for (int b = 0; b < secondTempChain.Alphabet.Cardinality; b++)
+                                {
+                                    CongenericChain secondChain = secondTempChain.CongenericChain(b);
+                                    if (!firstChain.Equals(secondChain) && CompareBuildings(firstChain.Building, secondChain.Building))
+                                    {
+                                        res1 = firstChain;
+                                        res2 = secondChain;
+                                        duplicate = true;
+                                    }
+                                }
                             }
                         }
                         else
@@ -136,8 +200,8 @@
                 return new Dictionary<string, object>
                 {
                     { "duplicate", duplicate },
-                    { "firstSequenceName", firstSequenceName },
-                    { "secondSequenceName", secondSequenceName },
+                    { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
+                    { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "res1", res1 },
                     { "res2", res2 },
                     { "pos1", i },

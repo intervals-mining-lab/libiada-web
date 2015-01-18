@@ -12,6 +12,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Math;
@@ -75,17 +76,26 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var matters = db.Matter.Include(m => m.Nature);
-            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
-            ViewBag.matters = matters;
 
             var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
 
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
-            ViewBag.linksList = linkRepository.GetSelectListItems(null);
-            ViewBag.languagesList = new SelectList(db.Language, "id", "name");
+            var links = new SelectList(db.Link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
+                    { "matters", matterRepository.GetMatterSelectList() }, 
+                    { "characteristicTypes", characteristicTypes }, 
+                    { "links", links }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
+                    { "translators", translators }
+                };
             return View();
         }
 
@@ -101,10 +111,13 @@
         /// <param name="linkIds">
         /// The link ids.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="languageIds">
         /// The language id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="translatorIds">
+        /// The translators ids.
+        /// </param>
+        /// <param name="notationIds">
         /// The notation id.
         /// </param>
         /// <param name="length">
@@ -113,16 +126,16 @@
         /// <param name="step">
         /// The step.
         /// </param>
-        /// <param name="isDelta">
+        /// <param name="delta">
         /// The is delta.
         /// </param>
-        /// <param name="isFourier">
+        /// <param name="fourier">
         /// The Fourier transform flag.
         /// </param>
-        /// <param name="isGrowingWindow">
+        /// <param name="growingWindow">
         /// The is growing window.
         /// </param>
-        /// <param name="isAutocorrelation">
+        /// <param name="autocorrelation">
         /// The is auto corelation.
         /// </param>
         /// <returns>
@@ -133,22 +146,24 @@
             long[] matterIds, 
             int[] characteristicIds, 
             int[] linkIds, 
-            int languageId, 
-            int notationId, 
+            int?[] languageIds, 
+            int?[] translatorIds,
+            int[] notationIds, 
             int length, 
             int step,
-            bool isDelta,
-            bool isFourier, 
-            bool isGrowingWindow,
-            bool isAutocorrelation)
+            bool delta,
+            bool fourier, 
+            bool growingWindow,
+            bool autocorrelation)
         {
             return Action(() =>
             {
                 List<List<List<double>>> characteristics = CalculateCharacteristics(
                     matterIds,
-                    isGrowingWindow,
-                    notationId,
-                    languageId,
+                    growingWindow,
+                    notationIds,
+                    languageIds,
+                    translatorIds,
                     length,
                     characteristicIds,
                     linkIds,
@@ -169,12 +184,16 @@
                     lengthes.Add(new List<int>());
 
                     long sequenceId;
-                    if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
+                    var notationId = notationIds[k];
+                    if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
                     {
-                        sequenceId =
-                            db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                            && l.NotationId == notationId
-                                                            && l.LanguageId == languageId).Id;
+                        var languageId = languageIds[k];
+                        var translatorId = translatorIds[k];
+
+                        sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
+                                                                  l.NotationId == notationId &&
+                                                                  l.LanguageId == languageId &&
+                                                                  l.TranslatorId == translatorId).Id;
                     }
                     else
                     {
@@ -183,7 +202,7 @@
 
                     Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                    CutRule cutRule = isGrowingWindow
+                    CutRule cutRule = growingWindow
                         ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
                         : new SimpleCutRule(chain.GetLength(), step, length);
 
@@ -203,18 +222,18 @@
                         lengthes.Last().Add(tempChain.GetLength());
                     }
 
-                    if (isDelta)
+                    if (delta)
                     {
                         CalculateDelta(characteristics);
                     }
 
-                    if (isFourier)
+                    if (fourier)
                     {
                         FastFourierTransform.FourierTransform(characteristics);
                     }
                 }
 
-                if (isAutocorrelation)
+                if (autocorrelation)
                 {
                     var autoCorrelation = new AutoCorrelation();
                     autoCorrelation.CalculateAutocorrelation(characteristics);
@@ -224,8 +243,7 @@
                 {
                     int characteristicId = characteristicIds[i];
                     int linkId = linkIds[i];
-                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " +
-                                            db.Link.Single(l => l.Id == linkId).Name);
+                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " + db.Link.Single(l => l.Id == linkId).Name);
                 }
 
                 var characteristicsList = new List<SelectListItem>();
@@ -280,14 +298,17 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="isGrowingWindow">
+        /// <param name="gowingWindow">
         /// The is growing window.
         /// </param>
-        /// <param name="notationId">
-        /// The notation id.
+        /// <param name="notationIds">
+        /// The notations ids.
         /// </param>
-        /// <param name="languageId">
-        /// The language id.
+        /// <param name="languageIds">
+        /// The languages ids.
+        /// </param>
+        /// <param name="translatorIds">
+        /// The translators ids.
         /// </param>
         /// <param name="length">
         /// The length.
@@ -302,13 +323,14 @@
         /// The step.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="List{List{List{Double}}}"/>.
         /// </returns>
         private List<List<List<double>>> CalculateCharacteristics(
             long[] matterIds,
-            bool isGrowingWindow,
-            int notationId,
-            int languageId,
+            bool gowingWindow,
+            int[] notationIds,
+            int?[] languageIds,
+            int?[] translatorIds,
             int length,
             int[] characteristicIds,
             int[] linkIds,
@@ -330,11 +352,16 @@
                 characteristics.Add(new List<List<double>>());
 
                 long sequenceId;
-                if (db.Matter.Single(m => m.Id == matterId).NatureId == 3)
+                var notationId = notationIds[k];
+                if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
                 {
-                    sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId && 
-                                                              l.NotationId == notationId && 
-                                                              l.LanguageId == languageId).Id;
+                    var languageId = languageIds[k];
+                    var translatorId = translatorIds[k];
+
+                    sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
+                                                              l.NotationId == notationId &&
+                                                              l.LanguageId == languageId &&
+                                                              l.TranslatorId == translatorId).Id;
                 }
                 else
                 {
@@ -343,7 +370,7 @@
 
                 Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                 
-                CutRule cutRule = isGrowingWindow
+                CutRule cutRule = gowingWindow
                     ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
                     : new SimpleCutRule(chain.GetLength(), step, length);
 

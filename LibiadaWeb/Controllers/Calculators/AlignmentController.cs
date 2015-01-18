@@ -106,7 +106,6 @@
         {
             return Action(() =>
             {
-
                 if (matterIds.Length != 2)
                 {
                     throw new ArgumentException("Count of selected matters must be 2.", "matterIds");

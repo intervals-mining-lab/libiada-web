@@ -6,37 +6,39 @@
 
 <script type="text/javascript">
     "use strict";
+
     var data = @(Html.Raw(Json.Encode(ViewBag.data)));
 </script>
 
 <h2>Congeneric sequences characteristics calculation</h2>
 
-@using (Html.BeginForm("Index", "CongenericCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "Calculation" }))
+@using (Html.BeginForm())
 {
-    <div class="form-horizontal" ng-controller="CalculationCtrl">
-        <h4>Sequences and parameters</h4>
-        <hr/>
-        @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
-        <br/>
-        @Html.Partial("_NatureSelect")
-        @Html.Partial("_MattersTable")
-        @Html.Partial("_Characteristics")
-        <div class="form-group">
-            <div class="col-md-10">
-                @(Html.CheckBox("sort"))
-                @(Html.Label("sort", "Sort results in descending order"))
+    <div ng-app="Calculation">
+        <div class="form-horizontal" ng-controller="CalculationCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
+            @Html.Partial("_NatureSelect")
+            @Html.Partial("_MattersTable")
+            @Html.Partial("_Characteristics")
+            <div class="form-group">
+                <div class="col-md-10">
+                    @(Html.CheckBox("sort"))
+                    @(Html.Label("sort", "Sort results in descending order"))
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-10">
-                @(Html.CheckBox("theoretical"))
-                @(Html.Label("theoretical", "Calculate theoretical rank distribution"))
+            <div class="form-group">
+                <div class="col-md-10">
+                    @(Html.CheckBox("theoretical"))
+                    @(Html.Label("theoretical", "Calculate theoretical rank distribution"))
+                </div>
             </div>
-        </div>
-        <br/>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
+            <br />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
+                </div>
             </div>
         </div>
     </div>

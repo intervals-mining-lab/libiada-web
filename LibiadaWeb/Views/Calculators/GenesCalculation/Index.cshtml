@@ -15,23 +15,24 @@
 
 @using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "GenesCalculation" }))
 {
-    <div class="form-horizontal" ng-controller="GenesCalculationCtrl">
-        <h4>Sequences and parameters</h4>
-        <hr />
-        @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-        @Html.Partial("_MattersTable")
-        @Html.Partial("_PieceTypesSelect")
-        @Html.Partial("_Characteristics")
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                @Html.CheckBox("sort")
-                @Html.Label("sort", "Sort into rank distribution")
+    <div ng-app="GenesCalculation">
+        <div class="form-horizontal" ng-controller="GenesCalculationCtrl">
+            <h4>Sequences and parameters</h4>
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+            @Html.Partial("_MattersTable")
+            @Html.Partial("_PieceTypesSelect")
+            @Html.Partial("_Characteristics")
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.CheckBox("sort")
+                    @Html.Label("sort", "Sort into rank distribution")
+                </div>
             </div>
-        </div>
-        <hr />
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
+            <hr />
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
+                </div>
             </div>
         </div>
     </div>

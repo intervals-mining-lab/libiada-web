@@ -1,7 +1,5 @@
 ﻿"use strict";
 
-var app = angular.module("Alignment", []);
-
 function Alignment ($scope) {
     MapModelFromJson($scope, data);
 
