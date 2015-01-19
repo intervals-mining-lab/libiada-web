@@ -138,7 +138,8 @@
 
                 if (!cyclicShift)
                 {
-                    for (int i = 0; i < longer.Count; i++)
+                    var length = longer.Count;
+                    for (int i = 0; i < length; i++)
                     {
                         longer.Add(0);
                     }
