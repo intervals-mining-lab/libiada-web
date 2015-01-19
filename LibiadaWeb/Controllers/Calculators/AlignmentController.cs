@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
+    using System.Runtime.ExceptionServices;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -181,18 +182,22 @@
             Func<double, double, double> distanceCalculator;
             switch (validationType)
             {
-                case "Equality":
-                    distanceCalculator = (first, second) => -Math.Abs(Math.Min(first, second));
+                case "Similarity":
+                    distanceCalculator = (first, second) => Math.Abs(Math.Min(first, second));
                     break;
                 case "Difference":
-                    distanceCalculator = (first, second) => Math.Abs(first - second);
+                    distanceCalculator = (first, second) => -Math.Abs(first - second);
                     break;
                 case "NormalizedDifference":
-                    distanceCalculator = (first, second) => Math.Abs((first - second) / (first + second));
+                    distanceCalculator = (first, second) => -Math.Abs((first - second) / (first + second));
+                    break;
+                case "Equality":
+                    distanceCalculator = (first, second) => Math.Abs(first - second) < (Math.Abs(first + second) / 20) ? 1 : 0;
                     break;
                 default:
                     throw new ArgumentException("unknown validation type");
             }
+
             return distanceCalculator;
         }
 
@@ -331,14 +336,14 @@
         private int CalculateMeasureForRotation(List<double> first, List<double> second, List<double> distances, Func<double, double, double> measure)
         {
             int optimalRotation = 0;
-            double minimumDistance = double.MaxValue;
+            double maximumEquality = 0;
             for (int i = 0; i < first.Count; i++)
             {
                 var distance = Measure(first, second, measure);
-                if (minimumDistance > distance)
+                if (maximumEquality < distance)
                 {
                     optimalRotation = i;
-                    minimumDistance = distance;
+                    maximumEquality = distance;
                 }
 
                 distances.Add(distance);
