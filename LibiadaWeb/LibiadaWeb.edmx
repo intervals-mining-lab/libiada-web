@@ -89,6 +89,7 @@
           <Property Name="class_name" Type="varchar" Nullable="false" MaxLength="255" />
           <Property Name="linkable" Type="bool" Nullable="false" />
           <Property Name="full_chain_applicable" Type="bool" Nullable="false" />
+          <Property Name="accordance_applicable" Type="bool" Nullable="false" />
           <Property Name="congeneric_chain_applicable" Type="bool" Nullable="false" />
           <Property Name="binary_chain_applicable" Type="bool" Nullable="false" />
         </EntityType>
@@ -1925,6 +1926,7 @@
           <Property Name="ClassName" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Linkable" Type="Boolean" Nullable="false" />
           <Property Name="FullSequenceApplicable" Type="Boolean" Nullable="false" />
+          <Property Name="AccordanceApplicable" Type="Boolean" Nullable="false" />
           <Property Name="CongenericSequenceApplicable" Type="Boolean" Nullable="false" />
           <Property Name="BinarySequenceApplicable" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_characteristic_type" FromRole="CharacteristicType" ToRole="BinaryCharacteristic" />
@@ -4059,6 +4061,7 @@
                 <ScalarProperty Name="ClassName" ColumnName="class_name" />
                 <ScalarProperty Name="Linkable" ColumnName="linkable" />
                 <ScalarProperty Name="FullSequenceApplicable" ColumnName="full_chain_applicable" />
+                <ScalarProperty Name="AccordanceApplicable" ColumnName="accordance_applicable" />
                 <ScalarProperty Name="CongenericSequenceApplicable" ColumnName="congeneric_chain_applicable" />
                 <ScalarProperty Name="BinarySequenceApplicable" ColumnName="binary_chain_applicable" />
               </MappingFragment>

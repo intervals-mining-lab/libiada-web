@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Accordance calculator";
+    ViewBag.Title = "Accordance calculation";
 }
 
 <script type="text/javascript">
@@ -10,7 +10,7 @@
     var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
-<h2>Genes alignment</h2>
+<h2>Accordance calculation</h2>
 
 @using (Html.BeginForm())
 {
@@ -19,14 +19,14 @@
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_NatureSelect")
             @Html.Partial("_MattersTable")
-            @Html.Partial("_PieceTypesSelect")
             @Html.Partial("_Characteristic")
             @Html.Label("calculationType", "Calculation type", new { @class = "control-label" })
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="calculationType" value="Equality" />
+                        <input type="radio" name="calculationType" value="Equality" checked />
                         Equality of elements
                     </label>
                 </div>
@@ -60,5 +60,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
-    @Scripts.Render("~/bundles/controllers/calculation")
+    @Scripts.Render("~/bundles/controllers/accordance")
 }

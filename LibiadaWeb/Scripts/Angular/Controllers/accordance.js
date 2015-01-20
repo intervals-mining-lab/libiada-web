@@ -25,10 +25,7 @@ function Accordance ($scope, filterFilter) {
     var filterByNature = function () {
         FilterOptionsByNature($scope, filterFilter, "notations");
         var notation = $scope.notationsFiltered[0];
-
-        angular.forEach($scope.characteristics, function (characteristic) {
-            characteristic.notation = notation;
-        });
+        $scope.characteristic.notation = notation;
     };
 
     $scope.characteristic = {

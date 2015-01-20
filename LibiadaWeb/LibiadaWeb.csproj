@@ -322,6 +322,7 @@
     <Compile Include="Math\AutoCorelation.cs" />
     <Compile Include="Math\DataTableFiller.cs" />
     <Compile Include="Math\FastFourierTransform.cs" />
+    <Compile Include="Math\MathLogic.cs" />
     <Compile Include="Matter.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -587,6 +588,7 @@
     <Content Include="Views\Partial\_MattersTable.cshtml" />
     <Content Include="Views\Partial\_NatureSelect.cshtml" />
     <Content Include="Views\Partial\_PieceTypesSelect.cshtml" />
+    <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

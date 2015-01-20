@@ -29,6 +29,7 @@ namespace LibiadaWeb
         public string ClassName { get; set; }
         public bool Linkable { get; set; }
         public bool FullSequenceApplicable { get; set; }
+        public bool AccordanceApplicable { get; set; }
         public bool CongenericSequenceApplicable { get; set; }
         public bool BinarySequenceApplicable { get; set; }
     
