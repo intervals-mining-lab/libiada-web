@@ -355,4 +355,18 @@ INSERT INTO characteristic_type (name, description, class_name, linkable, full_c
   
 UPDATE characteristic_type SET name = 'Average remoteness skewness coefficient', description = 'Average remoteness assymetry coefficient', class_name = 'AverageRemotenessSkewnessCoefficient' WHERE id = '31';
   
+-- 20.01.2015
+-- Added new column to characteristic type indicating if characteristic is accordance characteristic.
+    
+ALTER TABLE characteristic_type ADD COLUMN accordance_applicable boolean NOT NULL DEFAULT false;  
+
+ALTER TABLE characteristic_type DROP CONSTRAINT chk_characteristic_applicable;
+
+ALTER TABLE characteristic_type ADD CONSTRAINT chk_characteristic_applicable CHECK (full_chain_applicable OR binary_chain_applicable OR congeneric_chain_applicable OR accordance_applicable);
+COMMENT ON CONSTRAINT chk_characteristic_applicable ON characteristic_type IS 'Проверяет что характеристика применима хотя бы к одному типу цепочек.';
+
+
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Compliance degree', NULL, 'ComplianceDegree', true, false, false, false, true);
+
 COMMIT;
