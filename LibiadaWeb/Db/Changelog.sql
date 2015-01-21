@@ -368,5 +368,26 @@ COMMENT ON CONSTRAINT chk_characteristic_applicable ON characteristic_type IS 'Ï
 
 INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
   VALUES ('Compliance degree', NULL, 'ComplianceDegree', true, false, false, false, true);
+  
+-- 21.01.2015
+-- Added entropy characteristics
+
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy dispersion', NULL, 'EntropyDispersion', true, true, false, false);
+  
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy kurtosis', 'entropy excess', 'EntropyKurtosis', true, true, false, false);
+
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy kurtosis coefficient', 'Entropy excess coefficient', 'EntropyKurtosisCoefficient', true, true, false, false);
+
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy skewness', 'Entropy assymetry', 'EntropySkewness', true, true, false, false);
+  
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy skewness coefficient', 'Entropy assymetry coefficient', 'EntropySkewnessCoefficient', true, true, false, false);
+  
+ INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
+  VALUES ('Entropy standard deviation', NULL, 'EntropyStandardDeviation', true, true, false, false);
 
 COMMIT;
