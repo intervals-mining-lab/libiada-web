@@ -39,3 +39,4 @@
 /// <reference path="angular/controllers/alignment.js" />
 /// <reference path="angular/controllers/accordance.js" />
 /// <reference path="angular/controllers/buildingcomparison.js" />
+/// <reference path="angular/controllers/customcalculation.js" />

@@ -465,6 +465,7 @@
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\alignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingComparison.js" />
+    <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
