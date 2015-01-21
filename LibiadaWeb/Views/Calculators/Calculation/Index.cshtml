@@ -22,11 +22,7 @@
             @Html.Partial("_NatureSelect")
             @Html.Partial("_MattersTable")
             @Html.Partial("_Characteristics")
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
-                </div>
-            </div>
+            @Html.Partial("_MattersSubmit", 1)
         </div>
     </div>
 }

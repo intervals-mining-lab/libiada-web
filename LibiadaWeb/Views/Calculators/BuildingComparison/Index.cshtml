@@ -68,13 +68,8 @@
                     @Html.ValidationMessage("length", "", new { @class = "text-danger" })
                 </div>
             </div>
-            <hr />
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters < 2" />
-                </div>
-            </div>
-
+            <hr/>
+            @Html.Partial("_MattersSubmit", 2)
         </div>
     </div>
 }

@@ -34,12 +34,8 @@
                     @(Html.Label("theoretical", "Calculate theoretical rank distribution"))
                 </div>
             </div>
-            <br />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
-                </div>
-            </div>
+            <br/>
+            @Html.Partial("_MattersSubmit", 1)
         </div>
     </div>
 }

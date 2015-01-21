@@ -28,12 +28,8 @@
                     @Html.Label("sort", "Sort into rank distribution")
                 </div>
             </div>
-            <hr />
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters == 0" />
-                </div>
-            </div>
+            <hr/>
+            @Html.Partial("_MattersSubmit", 1)
         </div>
     </div>
 }

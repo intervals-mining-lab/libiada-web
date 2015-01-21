@@ -589,6 +589,7 @@
     <Content Include="Views\Partial\_NatureSelect.cshtml" />
     <Content Include="Views\Partial\_PieceTypesSelect.cshtml" />
     <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
+    <Content Include="Views\Partial\_MattersSubmit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
