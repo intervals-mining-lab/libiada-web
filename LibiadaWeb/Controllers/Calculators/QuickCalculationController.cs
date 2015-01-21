@@ -5,6 +5,9 @@
     using System.Web.Mvc;
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
+
+    using LibiadaWeb.Helpers;
+
     using Models.Repositories.Catalogs;
 
     /// <summary>
@@ -45,10 +48,22 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristicsList, null);
+            ViewBag.dbName = DbHelper.GetDbName(db);
 
-            ViewBag.linksList = linkRepository.GetSelectListItems(null);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
+
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+
+            var links = new SelectList(db.Link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+          
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "characteristicTypes", characteristicTypes }, 
+                    { "links", links }
+                };
             return View();
         }
 

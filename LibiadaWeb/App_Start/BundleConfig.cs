@@ -52,6 +52,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
                         "~/Scripts/Angular/Controllers/calculation.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/customCalculation").Include(
+                        "~/Scripts/Angular/Controllers/customCalculation.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/genesCalculation").Include(
                         "~/Scripts/Angular/Controllers/genesCalculation.js"));
 
