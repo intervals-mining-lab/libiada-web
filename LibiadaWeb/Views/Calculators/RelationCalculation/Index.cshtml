@@ -1,86 +1,62 @@
-﻿@using LibiadaWeb.Helpers
-@model dynamic
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Relation characteristics";
 }
 
 <script type="text/javascript">
+    "use strict";
 
-    $(document).ready(function() {
-        $('input[name="sequenceId"]').each(function (i, item) {
-            $(item).click(GetSequenceElements);
-        });
-
-        AddDataTablesWithSubmit();
-    });
-
-    function GetSequenceElements(event) {
-        $.ajax({
-            url: "/api/SequenceElements/" + event.target.value,
-            type: "GET",
-            success: function(elements) {
-                $("#oneWordDiv")[0].innerHTML = "";
-
-                var table = $('<table/>').attr('id', 'elementsTable');
-                var header = $('<thead/>').append($('<tr/>').append($('<th/>').text('Элемент')));
-                var body = $('<tbody/>');
-
-                $(elements).each(function(i, item) {
-                    var checkbox = $('<label/>').html(item.Text).prepend($('<input/>').attr('type', "radio").attr('name', 'wordId').attr('value', item.Value));
-                    body.append($('<tr/>').append($('<td/>').append(checkbox)));
-                });
-
-                table.append(header).append(body);
-                $("#oneWordDiv").append(table);
-                AddDataTablesWithSubmit("#elementsTable");
-            }
-        });
-    }
-
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
 </script>
 
 <h2>Relation characteristics</h2>
 @using (Html.BeginForm())
 {
-    @Html.SequencesTable((List<SelectListItem>)ViewBag.sequenceCheckBoxes, (List<CommonSequence>)ViewBag.sequences, (List<string>)ViewBag.languages, (List<string>)ViewBag.fastaHeaders, (List<string>)ViewBag.remoteIds)
-    <br/>
-    @Html.Label("Characteristic:")
-    <select name="characteristicId" id="characteristicId">
-        @foreach (var option in ViewBag.characteristicsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br/>
-    @Html.Label("Link:")
-    <select name="linkId">
-        @foreach (var option in ViewBag.linksList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br/>
-    <br/>
-    @Html.CheckBox("filter", "Filtration", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('filterDiv')" } })
-    <br/>
-    <div id="filterDiv" hidden>
-        @Html.Label("Shown dependencies")
-        <input type="number" name="filtersize" min="1" value="10"/>
+    <div ng-app="Accordance">
+        <div class="form-horizontal" ng-controller="AccordanceCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_NatureSelect")
+            @Html.Partial("_MattersTable")
+            @Html.Partial("_Characteristic")
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.CheckBox("filter", new { ng_model = "showFilters" })
+                    @Html.Label("filter", "Filtration")
+                </div>
+            </div>
+            <div ng-show="showFilters">
+                <div class="form-group">
+                    @Html.Label("filterSize", "Count of strongest dependencies to show", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control" name="filterSize" type="number" value="10" min="1" />
+                        @Html.ValidationMessage("filterSize", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @Html.CheckBox("frequencyFilter", new { ng_model = "frequencyFilter" })
+                        @Html.Label("frequencyFilter", "Calculate only for X most frequent elements")
+                    </div>
+                </div>
+                <div class="form-group" ng-show="frequencyFilter">
+                    @Html.Label("frequencyCount", "X", new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input class="form-control" name="frequencyCount" type="number" value="10" min="1" />
+                        @Html.ValidationMessage("frequencyCount", "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            @Html.Partial("_MattersSubmit", 2)
+        </div>
     </div>
-    <br/>
-    @Html.CheckBox("frequency", "Calculate only for X most frequent elements", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('frequencyDiv')" } })
-    <br/>
-    <div id="frequencyDiv" hidden>
-        @Html.Label("X:")
-        <input type="number" id="frequencyCount" name="frequencyCount" min="1" value="10" />
-    </div>
-    <br/>
-    @Html.CheckBox("oneWord", "Calculate dependencies only for given element", new Dictionary<string, object> { { "onclick", "SwitchVisibilityByName('oneWordDiv')" } })
-    <br/>
-    <div id="oneWordDiv" hidden>
+}
 
-    </div>
-    <br/>
-    <input type="submit" value="Вычислить"/>
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/accordance")
 }

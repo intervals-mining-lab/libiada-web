@@ -49,6 +49,13 @@
         private readonly BinaryCharacteristicRepository binaryCharacteristicRepository;
 
         /// <summary>
+        /// The matter repository.
+        /// </summary>
+        private readonly MatterRepository matterRepository;
+
+        private readonly NotationRepository notationRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
         public RelationCalculationController() : base("RelationCalculation", "Relation calculation")
@@ -58,6 +65,8 @@
             linkRepository = new LinkRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
+            matterRepository = new MatterRepository(db);
+            notationRepository = new NotationRepository(db);
         }
 
         /// <summary>
@@ -69,28 +78,27 @@
         public ActionResult Index()
         {
             ViewBag.dbName = DbHelper.GetDbName(db);
-            var sequences = db.CommonSequence.Include(s => s.Matter);
-            ViewBag.sequenceCheckBoxes = commonSequenceRepository.GetSelectListItems(sequences, null);
-            ViewBag.sequences = sequences;
-            var languages = new List<string>();
-            var fastaHeaders = new List<string>();
-            foreach (var sequence in sequences)
-            {
-                languages.Add(sequence.Matter.Nature.Id == Aliases.Nature.Literature
-                                         ? db.LiteratureSequence.Single(l => l.Id == sequence.Id).Language.Name
-                                         : null);
-                fastaHeaders.Add(sequence.Matter.Nature.Id == Aliases.Nature.Genetic
-                                         ? db.DnaSequence.Single(l => l.Id == sequence.Id).FastaHeader
-                                         : null);
-            }
 
-            ViewBag.languages = languages;
-            ViewBag.fastaHeaders = fastaHeaders;
+            var characteristicsList = db.CharacteristicType.Where(c => c.BinarySequenceApplicable);
 
-            ViewBag.sequencesList = commonSequenceRepository.GetSelectListItems(null);
-            var characteristics = db.CharacteristicType.Where(c => c.BinarySequenceApplicable);
-            ViewBag.characteristicsList = characteristicRepository.GetSelectListItems(characteristics, null);
-            ViewBag.linksList = linkRepository.GetSelectListItems(null);
+            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+
+            var links = new SelectList(db.Link, "id", "name").ToList();
+            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
+                    { "matters", matterRepository.GetMatterSelectList() }, 
+                    { "characteristicTypes", characteristicTypes }, 
+                    { "links", links }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
+                    { "translators", translators }
+                };
             return View();
         }
 
@@ -112,32 +120,24 @@
         /// <param name="filter">
         /// The filter.
         /// </param>
-        /// <param name="frequency">
+        /// <param name="frequencyFilter">
         /// The frequency.
         /// </param>
         /// <param name="frequencyCount">
         /// The frequency count.
-        /// </param>
-        /// <param name="oneWord">
-        /// The one word.
-        /// </param>
-        /// <param name="wordId">
-        /// The word id.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long sequenceId, 
-            int characteristicId, 
-            int linkId, 
-            int filterSize, 
-            bool filter, 
-            bool frequency, 
-            int frequencyCount, 
-            bool oneWord, 
-            long wordId = 0)
+            long sequenceId,
+            int characteristicId,
+            int linkId,
+            int filterSize,
+            bool filter,
+            bool frequencyFilter,
+            int frequencyCount)
         {
             return Action(() =>
             {
@@ -148,7 +148,6 @@
                 List<BinaryCharacteristic> filteredResult2 = null;
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
-                string word = null;
 
                 CommonSequence dbSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
 
@@ -158,74 +157,48 @@
                 IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
                 var link = (Link)linkId;
 
-                if (oneWord)
+
+                if (frequencyFilter)
                 {
-                    word = OneWordCharacteristic(characteristicId, linkId, wordId, dbSequence, currentChain, calculator, link);
+                    FrequencyCharacteristic(characteristicId, linkId, frequencyCount, currentChain, dbSequence, calculator, link);
+                }
+                else
+                {
+                    NotFrequencyCharacteristic(characteristicId, linkId, dbSequence, currentChain, calculator, link);
+                }
 
-                    filteredResult1 = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
-                                                                          b.CharacteristicTypeId == characteristicId &&
-                                                                          b.LinkId == linkId &&
-                                                                          b.FirstElementId == wordId)
-                        .OrderBy(b => b.SecondElementId)
-                        .ToList();
+                if (filter)
+                {
+                    filteredResult = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
+                                                                         b.CharacteristicTypeId == characteristicId &&
+                                                                         b.LinkId == linkId)
+                        .OrderByDescending(b => b.Value)
+                        .Take(filterSize).ToList();
 
-                    filteredResult2 = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
-                                                                          b.CharacteristicTypeId == characteristicId &&
-                                                                          b.LinkId == linkId &&
-                                                                          b.SecondElementId == wordId)
-                        .OrderBy(b => b.FirstElementId)
-                        .ToList();
-
-                    for (int l = 0; l < currentChain.Alphabet.Cardinality; l++)
+                    for (int l = 0; l < filterSize; l++)
                     {
-                        long elementId = filteredResult1[l].SecondElementId;
-                        elements.Add(db.Element.Single(e => e.Id == elementId));
+                        long firstElementId = filteredResult[l].FirstElementId;
+                        firstElements.Add(db.Element.Single(e => e.Id == firstElementId));
+                    }
+
+                    for (int m = 0; m < filterSize; m++)
+                    {
+                        long secondElementId = filteredResult[m].SecondElementId;
+                        secondElements.Add(db.Element.Single(e => e.Id == secondElementId));
                     }
                 }
                 else
                 {
-                    if (frequency)
+                    characteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
+                                                                          b.CharacteristicTypeId == characteristicId &&
+                                                                          b.LinkId == linkId)
+                        .OrderBy(b => b.SecondElementId)
+                        .ThenBy(b => b.FirstElementId)
+                        .ToList();
+                    for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
                     {
-                        FrequencyCharacteristic(characteristicId, linkId, frequencyCount, currentChain, dbSequence, calculator, link);
-                    }
-                    else
-                    {
-                        NotFrequencyCharacteristic(characteristicId, linkId, dbSequence, currentChain, calculator, link);
-                    }
-
-                    if (filter)
-                    {
-                        filteredResult = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
-                                                                             b.CharacteristicTypeId == characteristicId &&
-                                                                             b.LinkId == linkId)
-                            .OrderByDescending(b => b.Value)
-                            .Take(filterSize).ToList();
-
-                        for (int l = 0; l < filterSize; l++)
-                        {
-                            long firstElementId = filteredResult[l].FirstElementId;
-                            firstElements.Add(db.Element.Single(e => e.Id == firstElementId));
-                        }
-
-                        for (int m = 0; m < filterSize; m++)
-                        {
-                            long secondElementId = filteredResult[m].SecondElementId;
-                            secondElements.Add(db.Element.Single(e => e.Id == secondElementId));
-                        }
-                    }
-                    else
-                    {
-                        characteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == dbSequence.Id &&
-                                                                              b.CharacteristicTypeId == characteristicId &&
-                                                                              b.LinkId == linkId)
-                            .OrderBy(b => b.SecondElementId)
-                            .ThenBy(b => b.FirstElementId)
-                            .ToList();
-                        for (int m = 0; m < Math.Sqrt(characteristics.Count()); m++)
-                        {
-                            long firstElementId = characteristics[m].FirstElementId;
-                            elements.Add(db.Element.Single(e => e.Id == firstElementId));
-                        }
+                        long firstElementId = characteristics[m].FirstElementId;
+                        elements.Add(db.Element.Single(e => e.Id == firstElementId));
                     }
                 }
 
@@ -242,9 +215,7 @@
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.Name },
                     { "filteredResult1", filteredResult1 },
-                    { "filteredResult2", filteredResult2 },
-                    { "oneWord", oneWord },
-                    { "word", word }
+                    { "filteredResult2", filteredResult2 }
                 };
             });
         }
