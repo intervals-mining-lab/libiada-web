@@ -27,8 +27,6 @@
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>

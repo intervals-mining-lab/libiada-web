@@ -41,6 +41,9 @@
         /// </summary>
         private readonly NotationRepository notationRepository;
 
+        /// <summary>
+        /// The common sequence repository.
+        /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
@@ -89,6 +92,39 @@
             return View();
         }
 
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <param name="characteristicId">
+        /// The characteristic id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
+        /// <param name="calculationType">
+        /// The calculation type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// Thrown if count of matter ids is not 2.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Thrown alphabets of sequences are not equal.
+        /// </exception>
         [HttpPost]
         public ActionResult Index(
             long[] matterIds,
@@ -107,7 +143,6 @@
                 }
 
                 var characteristics = new List<double>();
-                var characteristicName = string.Empty;
 
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
@@ -155,7 +190,6 @@
                         
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
-
                             var element = firstChain.Alphabet[i];
                             var intervalManager = new BinaryIntervalsManager(firstChain.CongenericChain(element), secondChain.CongenericChain(element));
                             var characteristicValue = calculator.Calculate(intervalManager, link);
@@ -168,7 +202,7 @@
                 var linkName = linkId.HasValue ? db.Link.Single(l => l.Id == linkId).Name : string.Empty;
                 var characteristicTypeName = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
                 var notationName = db.Notation.Single(n => n.Id == notationId).Name;
-                characteristicName = string.Join("  ", characteristicTypeName, linkName, notationName);
+                var characteristicName = string.Join("  ", characteristicTypeName, linkName, notationName);
 
                 return new Dictionary<string, object>
                                      {

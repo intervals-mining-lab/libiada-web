@@ -162,8 +162,6 @@
                             c.SequenceId == sequenceId &&
                             c.CharacteristicTypeId == characteristicId))
                         {
-
-
                             characteristics.Last()
                                 .Add(db.Characteristic.Single(c =>
                                     ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&

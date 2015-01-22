@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Matter>
+
+@{
+    ViewBag.Title = "Genes characteristics distribution";
+}
+
+<script type="text/javascript">
+    "use strict";
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+</script>
+
+<h2>Genes characteristics distribution</h2>
+
+
+@using (Html.BeginForm("Index", "GenesCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "GenesCalculation" }))
+{
+    <div ng-app="GenesCalculation">
+        <div class="form-horizontal" ng-controller="GenesCalculationCtrl">
+            <h4>Sequences and parameters</h4>
+            @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
+            @Html.Partial("_MattersTable")
+            @Html.Partial("_PieceTypesSelect")
+            @Html.Partial("_Characteristics")
+            @Html.Partial("_MattersSubmit", 1)
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/genesCalculation")
+}
+

@@ -57,8 +57,6 @@
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-          
-
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "characteristicTypes", characteristicTypes }, 

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -34,11 +33,6 @@
         private readonly CharacteristicTypeRepository characteristicRepository;
 
         /// <summary>
-        /// The link repository.
-        /// </summary>
-        private readonly LinkRepository linkRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
@@ -53,6 +47,9 @@
         /// </summary>
         private readonly MatterRepository matterRepository;
 
+        /// <summary>
+        /// The notation repository.
+        /// </summary>
         private readonly NotationRepository notationRepository;
 
         /// <summary>
@@ -62,7 +59,6 @@
         {
             db = new LibiadaWebEntities();
             characteristicRepository = new CharacteristicTypeRepository(db);
-            linkRepository = new LinkRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
             matterRepository = new MatterRepository(db);
@@ -102,7 +98,42 @@
             return View();
         }
 
-
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="characteristicId">
+        /// The characteristic id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="languageId">
+        /// The language id.
+        /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
+        /// <param name="filterSize">
+        /// The filter size.
+        /// </param>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <param name="frequencyFilter">
+        /// The frequency filter.
+        /// </param>
+        /// <param name="frequencyCount">
+        /// The frequency count.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult Index(
             long matterId,
@@ -205,7 +236,7 @@
         }
 
         /// <summary>
-        /// The one word characteristic.
+        /// The not frequency characteristic.
         /// </summary>
         /// <param name="characteristicId">
         /// The characteristic id.
@@ -213,14 +244,11 @@
         /// <param name="linkId">
         /// The link id.
         /// </param>
-        /// <param name="wordId">
-        /// The word id.
-        /// </param>
-        /// <param name="sequence">
-        /// The db sequence.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
         /// <param name="chain">
-        /// The current chain.
+        /// The chain.
         /// </param>
         /// <param name="calculator">
         /// The calculator.
@@ -228,82 +256,6 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private string OneWordCharacteristic(
-            int characteristicId,
-            int linkId,
-            long wordId,
-            CommonSequence sequence,
-            Chain chain,
-            IBinaryCalculator calculator,
-            Link link)
-        {
-            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
-                                                                      b.CharacteristicTypeId == characteristicId &&
-                                                                      b.LinkId == linkId && b.FirstElementId == wordId);
-            List<long> sequenceElements = DbHelper.GetElementIds(db, sequence.Id);
-            if (calculatedCount < chain.Alphabet.Cardinality)
-            {
-                // TODO: проверить что + - 1 нигде к индексам не надо добавлять
-                int firstElementNumber = sequenceElements.IndexOf(wordId);
-                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
-                {
-                    long secondElementId = sequenceElements[i];
-                    if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == sequence.Id &&
-                                                      b.CharacteristicTypeId == characteristicId &&
-                                                      b.FirstElementId == wordId &&
-                                                      b.SecondElementId == secondElementId &&
-                                                      b.LinkId == linkId))
-                    {
-                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(firstElementNumber + 1, i + 1), link);
-
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            sequence.Id,
-                            characteristicId,
-                            linkId,
-                            wordId,
-                            secondElementId,
-                            result);
-                    }
-                }
-            }
-
-            calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequence.Id &&
-                                                                  b.CharacteristicTypeId == characteristicId &&
-                                                                  b.LinkId == linkId && b.SecondElementId == wordId);
-
-            if (calculatedCount < chain.Alphabet.Cardinality)
-            {
-                int secondElementNumber = sequenceElements.IndexOf(wordId);
-                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
-                {
-                    long firstElementId = sequenceElements[i];
-                    if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == sequence.Id &&
-                                                      b.CharacteristicTypeId == characteristicId &&
-                                                      b.FirstElementId == firstElementId &&
-                                                      b.SecondElementId == wordId &&
-                                                      b.LinkId == linkId))
-                    {
-                        double result = calculator.Calculate(chain.GetRelationIntervalsManager(secondElementNumber, i + 1), link);
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            sequence.Id,
-                            characteristicId,
-                            linkId,
-                            firstElementId,
-                            wordId,
-                            result);
-                    }
-                }
-            }
-
-            return db.Element.Single(e => e.Id == wordId).Name;
-        }
-
-
         private void NotFrequencyCharacteristic(
             int characteristicId,
             int? linkId,
@@ -346,7 +298,30 @@
             }
         }
 
-
+        /// <summary>
+        /// The frequency characteristic.
+        /// </summary>
+        /// <param name="characteristicId">
+        /// The characteristic id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <param name="frequencyCount">
+        /// The frequency count.
+        /// </param>
+        /// <param name="chain">
+        /// The chain.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <param name="calculator">
+        /// The calculator.
+        /// </param>
+        /// <param name="link">
+        /// The link.
+        /// </param>
         private void FrequencyCharacteristic(
             int characteristicId,
             int? linkId,

@@ -241,6 +241,7 @@
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
     <Compile Include="Controllers\Calculators\GenesCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\GenesDistributionController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationController.cs" />
     <Compile Include="Controllers\Calculators\QuickCalculationController.cs" />
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
@@ -591,6 +592,8 @@
     <Content Include="Views\Partial\_PieceTypesSelect.cshtml" />
     <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
+    <None Include="Views\Calculators\GenesDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\GenesDistribution\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
