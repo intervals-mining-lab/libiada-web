@@ -47,7 +47,7 @@ namespace LibiadaWeb.Models.Repositories
         /// <returns>
         /// The <see cref="long"/>.
         /// </returns>
-        public long CreateBinaryCharacteristic(long sequenceId, int characteristicId, int linkId, long firstElementId, long secondElementId, double value)
+        public long CreateBinaryCharacteristic(long sequenceId, int characteristicId, int? linkId, long firstElementId, long secondElementId, double value)
         {
             var characteristic = new BinaryCharacteristic
             {
