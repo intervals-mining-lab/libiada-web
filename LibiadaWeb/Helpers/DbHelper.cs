@@ -11,28 +11,21 @@
     /// </summary>
     public static class DbHelper
     {
-        /// <summary>
-        /// Get database name from database.
-        /// </summary>
-        /// <param name="db">
-        /// Database connection.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/> representing db name.
-        /// </returns>
-        public static string GetDbName(LibiadaWebEntities db)
+        public static string DbName;
+
+        static DbHelper()
         {
-            string result;
             try
             {
-                result = db.Database.SqlQuery<string>("SELECT current_database()").First();
+                using (var db = new LibiadaWebEntities())
+                {
+                    DbName = db.Database.SqlQuery<string>("SELECT current_database()").First();
+                } 
             }
             catch (Exception e)
             {
-                result = "Error: " + e.Message;
-            }
-
-            return result;
+                DbName = "No connection to db. Reason: " + e.Message;
+            } 
         }
 
         /// <summary>

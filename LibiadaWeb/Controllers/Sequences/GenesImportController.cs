@@ -44,8 +44,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(db);
-
             var genesSequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
             var sequences = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Include(c => c.Matter);
             var selectList = new SelectList(sequences, "Id", "Matter.Name").OrderBy(c => c.Text);

@@ -86,8 +86,6 @@
         /// </returns>
         public ActionResult Create()
         {
-            ViewBag.dbName = DbHelper.GetDbName(Db);
-
             var translators = new SelectList(Db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 

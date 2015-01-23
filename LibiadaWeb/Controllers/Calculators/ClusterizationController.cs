@@ -73,7 +73,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(db);
             var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
 
             var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);

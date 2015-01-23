@@ -54,8 +54,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(db);
-
             ViewBag.data = geneRepository.GetGenesCalculationData();
             return View();
         }

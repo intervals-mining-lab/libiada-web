@@ -20,7 +20,6 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(Db);
             var matter = Db.Matter.Include(m => m.Nature);
             return View(await matter.ToListAsync());
         }

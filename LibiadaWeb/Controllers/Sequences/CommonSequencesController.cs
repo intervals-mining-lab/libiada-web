@@ -20,7 +20,6 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            ViewBag.dbName = DbHelper.GetDbName(Db);
             var commonSequence = Db.CommonSequence.Include(c => c.Matter)
                                 .Include(c => c.Notation)
                                 .Include(c => c.PieceType)
