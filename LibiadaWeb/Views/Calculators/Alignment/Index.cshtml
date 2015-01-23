@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Matter>
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Genes alignment";
@@ -8,6 +8,7 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
+    AccordanceController(data);
 </script>
 
 <h2>Genes alignment</h2>

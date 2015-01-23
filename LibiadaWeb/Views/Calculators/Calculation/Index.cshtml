@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Matter>
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Characteristics calculation";
@@ -8,6 +8,7 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
+    CalculationController(data);
 </script>
 
 <h2>Characteristics calculation</h2>

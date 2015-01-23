@@ -9,6 +9,7 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
+    matterSequenceCreateController(data);
 </script>
 
 <h2>Create sequence</h2>

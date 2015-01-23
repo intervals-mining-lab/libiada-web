@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Matter>
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Congeneric sequences characteristics calculation";
@@ -8,6 +8,7 @@
     "use strict";
 
     var data = @(Html.Raw(Json.Encode(ViewBag.data)));
+    CalculationController(data);
 </script>
 
 <h2>Congeneric sequences characteristics calculation</h2>

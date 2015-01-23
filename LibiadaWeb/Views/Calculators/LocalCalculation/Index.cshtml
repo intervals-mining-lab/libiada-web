@@ -10,6 +10,7 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
+    CalculationController(data);
 </script>
 
 @using (Html.BeginForm())

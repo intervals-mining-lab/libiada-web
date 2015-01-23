@@ -284,7 +284,6 @@
     <Compile Include="Helpers\DbHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\Helper.cs" />
-    <Compile Include="Helpers\JavaScriptHelper.cs" />
     <Compile Include="Helpers\NcbiHelper.cs" />
     <Compile Include="Helpers\RadioButtonListHelper.cs" />
     <Compile Include="Helpers\TableHelper.cs" />
