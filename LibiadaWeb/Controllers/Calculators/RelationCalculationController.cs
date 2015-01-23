@@ -85,12 +85,14 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "links", links }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(db.Language, "id", "name") }, 
+                    { "minimumSelectedMatters", 1 },
+                    { "maximumSelectedMatters", 1 },
+                    { "natures", new SelectList(db.Nature, "id", "name") },
+                    { "matters", matterRepository.GetMatterSelectList() },
+                    { "characteristicTypes", characteristicTypes },
+                    { "links", links },
+                    { "notations", notationRepository.GetSelectListWithNature() },
+                    { "languages", new SelectList(db.Language, "id", "name") },
                     { "translators", translators }
                 };
             return View();

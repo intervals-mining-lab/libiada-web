@@ -3,7 +3,6 @@
 function genesCalculation($scope) {
     MapModelFromJson($scope, data);
 
-    $scope.matterSelectionLimit = Number.MAX_VALUE;
     $scope.selectedMatters = 0;
 
     $scope.matterCheckChanged = function (matter) {
@@ -16,6 +15,10 @@ function genesCalculation($scope) {
 
     $scope.disableMattersSelect = function (matter) {
         return false;
+    }
+
+    $scope.disableSubmit = function () {
+        return $scope.selectedMatters < $scope.minimumSelectedMatters;
     }
 
     $scope.characteristics = [];

@@ -54,7 +54,10 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.data = geneRepository.GetGenesCalculationData();
+            var data = geneRepository.GetGenesCalculationData();
+            data.Add("minimumSelectedMatters", 2);
+            data.Add("maximumSelectedMatters", 2);
+            ViewBag.data = data;
             return View();
         }
 

@@ -3,8 +3,11 @@
 function customCalculation($scope) {
     MapModelFromJson($scope, data);
 
-    $scope.characteristics = [];
+    $scope.disableSubmit = function () {
+        return false;
+    }
 
+    $scope.characteristics = [];
 
     $scope.addCharacteristic = function () {
         $scope.characteristics.push({

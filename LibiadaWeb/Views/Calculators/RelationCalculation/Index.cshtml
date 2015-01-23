@@ -42,7 +42,7 @@
                     <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
                         <td>
                             <label>
-                                <input type="radio" name="matterId" ng-value="matter.Value" />
+                                <input type="radio" ng-model="matter.Selected" ng-change="matterCheckChanged(matter)" name="matterId" ng-value="matter.Value" />
                                 {{matter.Text}}
                             </label>
                         </td>
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <br />
-            @Html.Partial("_MattersSubmit", 2)
+            @Html.Partial("_MattersSubmit")
         </div>
     </div>
 }

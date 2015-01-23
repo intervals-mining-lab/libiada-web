@@ -1,7 +1,7 @@
-﻿@model int
+﻿@model dynamic
 
 <div class="form-group">
     <div class="col-md-10">
-        <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters < @Model" />
+        <input type="submit" value="Calculate" class="btn btn-default" ng-disabled="selectedMatters < minimumSelectedMatters" />
     </div>
 </div>

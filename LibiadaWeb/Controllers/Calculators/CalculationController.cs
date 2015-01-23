@@ -75,6 +75,8 @@
 
             ViewBag.data = new Dictionary<string, object>
                 {
+                    { "minimumSelectedMatters", 1 },
+                    { "maximumSelectedMatters", int.MaxValue },
                     { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "matters", matterRepository.GetMatterSelectList() }, 
                     { "characteristicTypes", characteristicTypes }, 

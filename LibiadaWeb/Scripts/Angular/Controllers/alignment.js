@@ -3,7 +3,6 @@
 function Alignment ($scope) {
     MapModelFromJson($scope, data);
 
-    $scope.matterSelectionLimit = 2;
     $scope.selectedMatters = 0;
 
     $scope.matterCheckChanged = function(matter){
@@ -15,7 +14,11 @@ function Alignment ($scope) {
     }
 
     $scope.disableMattersSelect = function(matter) {
-        return $scope.selectedMatters == $scope.matterSelectionLimit && !matter.Selected;
+        return ($scope.selectedMatters == $scope.maximumSelectedMatters) && !matter.Selected;
+    }
+
+    $scope.disableSubmit = function () {
+        return $scope.selectedMatters < $scope.minimumSelectedMatters;
     }
 
     $scope.characteristic = {
