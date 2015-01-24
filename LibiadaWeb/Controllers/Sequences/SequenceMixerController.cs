@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
@@ -75,10 +76,19 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matters = db.Matter.ToList();
-            ViewBag.languageId = new SelectList(db.Language, "id", "name");
-            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
-            ViewBag.notationsList = notationRepository.GetSelectListItems(null);
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "minimumSelectedMatters", 1 },
+                    { "maximumSelectedMatters", 1 },
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
+                    { "matters", matterRepository.GetMatterSelectList() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() }, 
+                    { "languages", new SelectList(db.Language, "id", "name") }, 
+                    { "translators", translators }
+                };
             return View();
         }
 
@@ -94,6 +104,9 @@
         /// <param name="languageId">
         /// The language id.
         /// </param>
+        /// <param name="translatorId">
+        /// The translator id.
+        /// </param>
         /// <param name="mixes">
         /// The mixes.
         /// </param>
@@ -101,15 +114,17 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(long matterId, int notationId, int languageId, int mixes)
+        public ActionResult Index(long matterId, int notationId, int? languageId, int? translatorId, int mixes)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
             if (matter.NatureId == Aliases.Nature.Literature)
             {
                 long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
-                                                                    && l.NotationId == notationId 
-                                                                    && l.LanguageId == languageId).Id;
+                                                                    && l.NotationId == notationId
+                                                                    && l.LanguageId == languageId
+                                                                    && ((translatorId == null && l.TranslatorId == null)
+                                                                        || (translatorId == l.TranslatorId))).Id;
                 dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
             }
             else

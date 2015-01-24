@@ -1,37 +1,50 @@
-﻿@using LibiadaWeb.Helpers
-@model IEnumerable<Matter>
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Transformation of genetic sequences";
 }
 
+<script language="javascript">
+    "use strict";
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    GenesCalculationController(data);
+</script>
+
 <h2>Transformation of genetic sequences</h2>
 
 @using (Html.BeginForm())
 {
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-        </tr>
-
-        @{
-    var sequencesList = Html.CheckBoxList("sequenceIds", (List<SelectListItem>)ViewBag.sequencesList);
-
-    foreach (var item in sequencesList)
-    {
-        <tr>
-            <td>
-                @item
-            </td>
-        </tr>
-    }
-
-        }
-    </table>
-    <br />
-    @Html.CheckBox("toAmino", "Transform to amino acids", null)
-    <br />
-    <input type="submit" value="Transform" />
+    <div ng-app="GenesCalculation">
+        <div class="form-horizontal" ng-controller="GenesCalculationCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_MattersTable")
+            @Html.Label("transformType", "Transform nucleotide sequences To", new { @class = "control-label" })
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="transformType" value="toAmino" checked />
+                        Amino
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="transformType" value="toTriplet" />
+                        Triplet
+                    </label>
+                </div>
+            </div>
+            <hr />
+            @Html.Partial("_MattersSubmit")
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/genesCalculation")
 }

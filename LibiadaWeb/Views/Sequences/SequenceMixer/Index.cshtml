@@ -1,81 +1,106 @@
-﻿@using LibiadaWeb.Helpers
-@model dynamic
+﻿@using LibiadaWeb.Models
+@model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Генерация перемешаннных цепочек";
+    ViewBag.Title = "Generate sequence rearrangements";
 }
 
 <script language="javascript">
+    "use strict";
 
-    var formTable;
-
-    $(document).ready(function () {
-        formTable = $("table").dataTable({
-            aLengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Все"]],
-            bJQueryUI: true,
-            sPaginationType: "full_numbers"
-        });
-
-        $('form').submit(function () {
-            $(formTable.fnGetHiddenNodes()).find('input:checked').attr("hidden", true).appendTo(this);
-        });
-    });
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    BuildingComparisonController(data);
 </script>
 
-<h2>Генерация перемешаннных цепочек</h2>
+<h2>Generate sequence rearrangements</h2>
 
 @using (Html.BeginForm())
 {
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Название объекта
-                </th>
-                <th>
-                    Тип цепочки
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-    List<MvcHtmlString> mattersList = Html.RadioButtonList("matterId", (List<SelectListItem>)ViewBag.mattersList);
-
-    for (int i = 0; i < mattersList.Count; i++)
-    {
-        <tr>
-            <td>
-                @mattersList[i]
-            </td>
-            <td>
-                @ViewBag.matters[i].nature.name
-            </td>
-        </tr>
-    }
-
-            }
-        </tbody>
-    </table>
-    <br />
-    @Html.Label("Количество попарных перестановок:")
-    <input type="number" id="mixes" name="mixes" value="1" />
-    <br />
-    @Html.Label("Форма записи:")
-    <select name="notationId">
-        @foreach (var option in ViewBag.notationsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br />
-    @Html.Label("Язык литературного произведения:")
-    <select name="languageId">
-        @foreach (var option in ViewBag.languageId)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br />
-    <br />
-    <input type="submit" value="Вычислить" />
+    <div ng-app="BuildingComparison">
+        <div class="form-horizontal" ng-controller="BuildingComparisonCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_NatureSelect")
+            <br />
+            @(Html.Label("matterIds", "Sequences", new { @class = "control-label" }))
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @(Html.DisplayNameFor(model => model.Name))
+                        </th>
+                        <th>
+                            @(Html.DisplayNameFor(model => model.Description))
+                        </th>
+                        <th>
+                            @(Html.DisplayNameFor(model => model.Created))
+                        </th>
+                        <th>
+                            @(Html.DisplayNameFor(model => model.Modified))
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+                        <td>
+                            <label>
+                                <input type="radio" ng-model="matter.Selected" ng-change="matterCheckChanged(matter)" name="matterId" ng-value="matter.Value" />
+                                {{matter.Text}}
+                            </label>
+                        </td>
+                        <td ng-bind="matter.Description" />
+                        <td ng-bind="matter.Created" />
+                        <td ng-bind="matter.Modified" />
+                    </tr>
+                </tbody>
+            </table>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <input type="hidden" name="notationId" ng-value="notation.Value" />
+                    @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div ng-switch="natureId">
+                <div ng-switch-when="@Aliases.Nature.Literature">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages"></select>
+                            <input type="hidden" name="languageIds" ng-value="language.Value" />
+                            @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <select class="form-control" itle="Переводчик" ng-model="translator" ng-options="t.Text for t in translators"></select>
+                            <input type="hidden" name="translatorIds" ng-value="translator.Value" />
+                            @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Genetic">
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Music">
+                </div>
+                <div ng-switch-when="@Aliases.Nature.Data">
+                </div>
+            </div>
+            <hr />
+            <div class="form-group">
+                @Html.Label("scrambling", "Scrambling count", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input class="form-control" name="scrambling" type="number" value="10" min="1" />
+                    @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr />
+            @Html.Partial("_MattersSubmit")
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/procedures")
+    @Scripts.Render("~/bundles/controllers/buildingComparison")
 }

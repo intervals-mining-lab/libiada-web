@@ -32,8 +32,8 @@
             <hr />
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
-                    <input type="hidden" name="notationId" ng-value="characteristic.notation.Value" />
+                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <input type="hidden" name="notationId" ng-value="notation.Value" />
                     @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -41,15 +41,15 @@
                 <div ng-switch-when="@Aliases.Nature.Literature">
                     <div class="form-group">
                         <div class="col-md-10">
-                            <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                            <input type="hidden" name="languageIds" ng-value="characteristic.language.Value" />
+                            <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages"></select>
+                            <input type="hidden" name="languageIds" ng-value="language.Value" />
                             @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <select class="form-control" itle="Переводчик" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                            <input type="hidden" name="translatorIds" ng-value="characteristic.translator.Value" />
+                            <select class="form-control" itle="Переводчик" ng-model="translator" ng-options="t.Text for t in translators"></select>
+                            <input type="hidden" name="translatorIds" ng-value="translator.Value" />
                             @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
                         </div>
                     </div>

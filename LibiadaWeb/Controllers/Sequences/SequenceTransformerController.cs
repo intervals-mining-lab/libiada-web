@@ -36,6 +36,11 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
+        /// The matter repository.
+        /// </summary>
+        private readonly MatterRepository matterRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
         public SequenceTransformerController()
@@ -44,6 +49,7 @@
             dnaSequenceRepository = new DnaSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
+            matterRepository = new MatterRepository(db);
         }
 
         /// <summary>
@@ -54,41 +60,49 @@
         /// </returns>
         public ActionResult Index()
         {
-            var sequences = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Include(s => s.Matter);
-            ViewBag.sequences = sequences.ToList();
-            ViewBag.sequencesList = dnaSequenceRepository.GetSelectListItems(sequences, null);
+            var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId);
+
+            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "minimumSelectedMatters", 1 },
+                    { "maximumSelectedMatters", int.MaxValue },
+                    { "natureId", Aliases.Nature.Genetic }, 
+                    { "matters", matterRepository.GetMatterSelectList(matters) }
+                };
             return View();
         }
 
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="sequenceIds">
+        /// <param name="matterIds">
         /// The sequence ids.
         /// </param>
-        /// <param name="toAmino">
+        /// <param name="transformType">
         /// The to amino.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(IEnumerable<long> sequenceIds, bool toAmino)
+        public ActionResult Index(IEnumerable<long> matterIds, string transformType)
         {
-            int notationId = toAmino ? Aliases.Notation.AminoAcid : Aliases.Notation.Triplet;
+            int notationId = transformType.Equals("toAmino") ? Aliases.Notation.AminoAcid : Aliases.Notation.Triplet;
 
-            foreach (var sequenceId in sequenceIds)
+            foreach (var matterId in matterIds)
             {
-                CommonSequence dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
+                var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
                 Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                BaseChain transformedChain = toAmino
+                BaseChain transformedChain = transformType.Equals("toAmino")
                                                  ? DnaTransformer.EncodeAmino(sourceChain)
                                                  : DnaTransformer.EncodeTriplets(sourceChain);
 
                 var result = new DnaSequence
                     {
-                        MatterId = dataBaseSequence.MatterId,
+                        MatterId = matterId,
                         NotationId = notationId,
                         PieceTypeId = Aliases.PieceType.FullGenome,
                         PiecePosition = 0
