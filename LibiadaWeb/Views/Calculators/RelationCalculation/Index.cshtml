@@ -20,40 +20,7 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             @Html.Partial("_NatureSelect")
-            <br />
-            @(Html.Label("matterIds", "Sequences", new { @class = "control-label" }))
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Name))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Description))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Created))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Modified))
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
-                        <td>
-                            <label>
-                                <input type="radio" ng-model="matter.Selected" ng-change="matterCheckChanged(matter)" name="matterId" ng-value="matter.Value" />
-                                {{matter.Text}}
-                            </label>
-                        </td>
-                        <td ng-bind="matter.Description" />
-                        <td ng-bind="matter.Created" />
-                        <td ng-bind="matter.Modified" />
-                    </tr>
-                </tbody>
-            </table>
-            <br />
+            @Html.Partial("_MattersRadioTable")
             @Html.Partial("_Characteristic")
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">

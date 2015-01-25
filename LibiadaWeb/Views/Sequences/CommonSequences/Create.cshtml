@@ -44,19 +44,7 @@
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                @Html.CheckBox("localFile", new { ng_model = "localFile" })
-                @Html.Label("localFile", "Load sequence from local file")
-            </div>
-        </div>
-        <div class="form-group" ng-show="localFile">
-            @Html.Label("file", "Sequence file", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="file" />
-                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.Partial("_LocalFile")
         <div class="form-group">
             @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">

@@ -11,8 +11,14 @@
     /// </summary>
     public static class DbHelper
     {
+        /// <summary>
+        /// The db name.
+        /// </summary>
         public static string DbName;
 
+        /// <summary>
+        /// Initializes static members of the <see cref="DbHelper"/> class.
+        /// </summary>
         static DbHelper()
         {
             try

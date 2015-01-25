@@ -58,6 +58,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/genesCalculation").Include(
                         "~/Scripts/Angular/Controllers/genesCalculation.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/genesImport").Include(
+                        "~/Scripts/Angular/Controllers/genesImport.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 

@@ -10,7 +10,6 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Core.IntervalsManagers;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;

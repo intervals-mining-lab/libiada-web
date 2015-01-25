@@ -46,7 +46,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Calculation", " Characteristics calculation")
+        public CalculationController()
+            : base("Calculation", "Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);

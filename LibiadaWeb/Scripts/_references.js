@@ -40,3 +40,4 @@
 /// <reference path="angular/controllers/accordance.js" />
 /// <reference path="angular/controllers/buildingcomparison.js" />
 /// <reference path="angular/controllers/customcalculation.js" />
+/// <reference path="angular/controllers/genesimport.js" />

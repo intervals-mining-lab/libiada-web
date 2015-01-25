@@ -1,0 +1,65 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Genes characteristics";
+}
+
+<h2>@ViewBag.matterName</h2>
+
+
+@if (ViewBag.Error == null)
+{
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Piece type
+                    </th>
+                    <th>
+                        Gene product
+                    </th>
+                    <th>
+                        Gene position
+                    </th>
+                    <th>
+                        Gene length
+                    </th>
+                    <th>
+                        Complementary
+                    </th>
+                    <th>
+                        Partial
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                for (int d = 0; d < ViewBag.genes.Count; d++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.genes.PieceType.Name
+                        </td>
+                        <td>
+                            @ViewBag.genes.Product.Name
+                        </td>
+                        <td>
+                            @ViewBag.genes.Piece.Start
+                        </td>
+                        <td>
+                            @ViewBag.genes.Piece.Length
+                        </td>
+                        <td>
+                            @ViewBag.genes.Complementary
+                        </td>
+                        <td>
+                            @ViewBag.genes.Partial
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+    }
+}
