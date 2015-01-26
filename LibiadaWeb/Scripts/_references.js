@@ -41,3 +41,4 @@
 /// <reference path="angular/controllers/buildingcomparison.js" />
 /// <reference path="angular/controllers/customcalculation.js" />
 /// <reference path="angular/controllers/genesimport.js" />
+/// <reference path="angular/controllers/genesdistribution.js" />
