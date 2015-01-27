@@ -55,20 +55,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public bool ElementsInDb(Alphabet alphabet, int notationId)
         {
-            if (CheckNotationStatic(notationId))
-            {
-                FillElementsCache();
-            }
+            var elements = from IBaseObject element in alphabet select element.ToString();
 
-            for (int i = 0; i < alphabet.Cardinality; i++)
-            {
-                if (!ElementInDb(alphabet[i], notationId))
-                {
-                    return false;
-                }
-            }
+            int existingElementsCount = db.Element.Count(e => elements.Contains(e.Value) && e.NotationId == notationId);
 
-            return true;
+            return alphabet.Cardinality == existingElementsCount;
         }
 
         /// <summary>
@@ -198,8 +189,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 elementsList.Add(new SelectListItem
                     {
-                        Value = element.Id.ToString(), 
-                        Text = element.Name, 
+                        Value = element.Id.ToString(),
+                        Text = element.Name,
                         Selected = elementIds.Contains(element.Id)
                     });
             }
@@ -227,8 +218,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 elementsList.Add(new SelectListItem
                     {
-                        Value = element.Id.ToString(), 
-                        Text = element.Name, 
+                        Value = element.Id.ToString(),
+                        Text = element.Name,
                         Selected = elementIds.Contains(element.Id)
                     });
             }
@@ -262,32 +253,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The element in db.
-        /// </summary>
-        /// <param name="element">
-        /// The element.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool ElementInDb(IBaseObject element, int notationId)
-        {
-            string stringElement = element.ToString();
-
-            if (CheckNotationStatic(notationId))
-            {
-                return cachedElements.Any(e => e.NotationId == notationId && e.Value.Equals(stringElement));
-            }
-            else
-            {
-                return db.Element.Any(e => e.NotationId == notationId && e.Value.Equals(stringElement));
-            }
-        }
-
-        /// <summary>
         /// The create lacking elements.
         /// </summary>
         /// <param name="libiadaAlphabet">
@@ -298,26 +263,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
         {
-            if (CheckNotationStatic(notationId))
-            {
-                FillElementsCache();
-            }
+            List<string> elements = (from IBaseObject element in libiadaAlphabet select element.ToString()).ToList();
 
-            for (int j = 0; j < libiadaAlphabet.Cardinality; j++)
-            {
-                string strElem = libiadaAlphabet[j].ToString();
+            var existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.NotationId == notationId).Select(e => e.Value);
 
-                if (!ElementInDb(libiadaAlphabet[j], notationId))
+            var notExistingElements = elements.Where(e => !existingElements.Contains(e)).ToList();
+
+            foreach (var element in notExistingElements)
+            {
+                var newElement = new Element
                 {
-                    var newElement = new Element
-                    {
-                        Value = strElem,
-                        Name = strElem,
-                        NotationId = notationId
-                    };
+                    Value = element,
+                    Name = element,
+                    NotationId = notationId
+                };
 
-                    db.Element.Add(newElement);
-                }
+                db.Element.Add(newElement);
             }
 
             db.SaveChanges();

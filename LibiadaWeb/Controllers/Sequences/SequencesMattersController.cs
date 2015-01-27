@@ -148,6 +148,7 @@
             bool? partial,
             bool? complementary)
         {
+            string errorMessage = string.Empty;
             if (ModelState.IsValid)
             {
                 try
@@ -191,6 +192,7 @@
                 catch (Exception e)
                 {
                     ModelState.AddModelError("Error", e.Message);
+                    errorMessage = e.Message;
                 }
             }
 
@@ -205,15 +207,16 @@
 
             ViewBag.data = new Dictionary<string, object>
             {
-                    { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
-                    { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
-                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
-                    { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
-                    { "remoteDbs", remoteDbs }, 
-                    { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 
-                    { "natureId", sequenceNatureId },
-                    { "translators", translators }, 
-                    { "natureLiterature", Aliases.Nature.Literature }
+                { "ErrorMessage", errorMessage },
+                { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
+                { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
+                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
+                { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
+                { "remoteDbs", remoteDbs }, 
+                { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 
+                { "natureId", sequenceNatureId },
+                { "translators", translators }, 
+                { "natureLiterature", Aliases.Nature.Literature }
             };
             return View(commonSequence);
         }

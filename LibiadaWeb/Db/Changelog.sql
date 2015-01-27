@@ -370,7 +370,7 @@ INSERT INTO characteristic_type (name, description, class_name, linkable, full_c
   VALUES ('Compliance degree', NULL, 'ComplianceDegree', true, false, false, false, true);
   
 -- 21.01.2015
--- Added entropy characteristics
+-- Added entropy characteristics.
 
 INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
   VALUES ('Entropy dispersion', NULL, 'EntropyDispersion', true, true, false, false);
@@ -390,4 +390,13 @@ INSERT INTO characteristic_type (name, description, class_name, linkable, full_c
  INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
   VALUES ('Entropy standard deviation', NULL, 'EntropyStandardDeviation', true, true, false, false);
 
+-- 28.01.2015
+-- New index on elements value.
+
+CREATE INDEX ix_element_value ON element USING btree (value);
+COMMENT ON INDEX ix_element_value IS 'Index in value of element.';
+
+CREATE INDEX ix_element_value_notation ON element USING btree (value, notation_id);
+COMMENT ON INDEX ix_element_value_notation IS 'Index on value and notation of element.';
+  
 COMMIT;
