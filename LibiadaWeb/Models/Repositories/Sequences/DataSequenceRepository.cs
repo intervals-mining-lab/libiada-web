@@ -35,7 +35,7 @@
         /// </param>
         public void Create(CommonSequence sequence, string stringSequence)
         {
-            string[] text = stringSequence.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             var cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToList();
 
@@ -43,8 +43,12 @@
 
             for (int i = 0; i < cleanedSequence.Count; i++)
             {
-                // removing ".0"
-                cleanedSequence[i] = cleanedSequence[i].Substring(0, cleanedSequence[i].Length - 2);
+                var element = cleanedSequence[i];
+                if (element.Substring(element.Length - 2, 2).Equals(".0"))
+                {
+                    cleanedSequence[i] = cleanedSequence[i].Substring(0, cleanedSequence[i].Length - 2);
+                }
+                
                 elements.Add(new ValueInt(int.Parse(cleanedSequence[i])));
             }
 

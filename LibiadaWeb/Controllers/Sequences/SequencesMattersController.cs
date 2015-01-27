@@ -197,16 +197,21 @@
             var translators = new SelectList(Db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
+            var remoteDbs = commonSequence.RemoteDbId.HasValue
+                                ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
+                                : remoteDbRepository.GetSelectListWithNature();
+
+            var sequenceNatureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
+
             ViewBag.data = new Dictionary<string, object>
             {
                     { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
                     { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
                     { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
-                    { "remoteDbs", commonSequence.RemoteDbId.HasValue ? 
-                        remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value) :
-                        remoteDbRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(Db.Nature, "id", "name", Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId) }, 
+                    { "remoteDbs", remoteDbs }, 
+                    { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 
+                    { "natureId", sequenceNatureId },
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
             };
