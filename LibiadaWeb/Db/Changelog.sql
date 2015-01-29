@@ -372,23 +372,23 @@ INSERT INTO characteristic_type (name, description, class_name, linkable, full_c
 -- 21.01.2015
 -- Added entropy characteristics.
 
-INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy dispersion', NULL, 'EntropyDispersion', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy dispersion', NULL, 'EntropyDispersion', true, true, false, false, false);
   
-INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy kurtosis', 'entropy excess', 'EntropyKurtosis', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy kurtosis', 'entropy excess', 'EntropyKurtosis', true, true, false, false, false);
 
-INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy kurtosis coefficient', 'Entropy excess coefficient', 'EntropyKurtosisCoefficient', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy kurtosis coefficient', 'Entropy excess coefficient', 'EntropyKurtosisCoefficient', true, true, false, false, false);
 
-INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy skewness', 'Entropy assymetry', 'EntropySkewness', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy skewness', 'Entropy assymetry', 'EntropySkewness', true, true, false, false, false);
   
-INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy skewness coefficient', 'Entropy assymetry coefficient', 'EntropySkewnessCoefficient', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy skewness coefficient', 'Entropy assymetry coefficient', 'EntropySkewnessCoefficient', true, true, false, false, false);
   
- INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable) 
-  VALUES ('Entropy standard deviation', NULL, 'EntropyStandardDeviation', true, true, false, false);
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Entropy standard deviation', NULL, 'EntropyStandardDeviation', true, true, false, false, false);
 
 -- 28.01.2015
 -- New index on elements value.
@@ -398,5 +398,22 @@ COMMENT ON INDEX ix_element_value IS 'Index in value of element.';
 
 CREATE INDEX ix_element_value_notation ON element USING btree (value, notation_id);
 COMMENT ON INDEX ix_element_value_notation IS 'Index on value and notation of element.';
-  
+
+-- 29.01.2015
+-- Added forgotten characteristics types and deleted lost.
+
+INSERT INTO characteristic_type (name, description, class_name, linkable, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) 
+  VALUES ('Average word length', 'Arithmetic mean of length of element in sequence', 'AverageWordLength', false, true, false, false, false);
+
+DELETE FROM characteristic_type WHERE id = 19 AND class_name = 'BinaryGeometricMean';
+DELETE FROM characteristic_type WHERE id = 32 AND class_name = 'ComplianceDegree';
+DELETE FROM characteristic_type WHERE id = 13 AND class_name = 'ComplianceDegree';
+
+UPDATE characteristic_type SET name = 'Elements count', class_name = 'ElementsCount', full_chain_applicable = true WHERE id = 4 AND class_name = 'Count';
+UPDATE characteristic_type SET name = 'Cutting length', class_name = 'CuttingLength', congeneric_chain_applicable = true WHERE id = 5 AND class_name = 'CutLength';
+UPDATE characteristic_type SET name = 'Cutting length vocabulary entropy', class_name = 'CuttingLengthVocabularyEntropy', congeneric_chain_applicable = true WHERE id = 6 AND class_name = 'CutLengthVocabularyEntropy';
+UPDATE characteristic_type SET name = 'Geometric mean',  binary_chain_applicable = true WHERE id = 9 AND class_name = 'GeometricMean';
+UPDATE characteristic_type SET name = 'Phantom messages count',  congeneric_chain_applicable = true WHERE id = 15 AND class_name = 'PhantomMessagesCount';
+UPDATE characteristic_type SET name = 'Probability', description = 'Or frequency',  full_chain_applicable = true WHERE id = 15 AND class_name = 'Probability';
+
 COMMIT;
