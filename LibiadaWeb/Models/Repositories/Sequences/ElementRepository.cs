@@ -17,10 +17,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         private readonly LibiadaWebEntities db;
 
+        private Element[] lazyCache;
+
         /// <summary>
         /// The cached values.
         /// </summary>
-        private Element[] cachedElements;
+        private Element[] cachedElements
+        {
+            get
+            {
+                if (lazyCache == null)
+                {
+                    lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
+                }
+                return lazyCache;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementRepository"/> class.
@@ -95,12 +107,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
 
             var elementIds = new long[alphabet.Cardinality];
-            var staticNotation = CheckNotationStatic(notationId);
-
-            if (staticNotation)
-            {
-                FillElementsCache();
-            }
+            var staticNotation = Aliases.Notation.StaticNotations.Contains(notationId);
 
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
@@ -111,6 +118,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 }
                 else
                 {
+                    // TODO: отрефакторить чтобы доставались сразу все элементы в нужном порядке.
                     elementIds[i] = db.Element.Single(e => e.NotationId == notationId && e.Value.Equals(stringElement)).Id;
                 }
             }
@@ -225,31 +233,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
 
             return elementsList;
-        }
-
-        /// <summary>
-        /// The check notation static.
-        /// </summary>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private static bool CheckNotationStatic(int notationId)
-        {
-            return Aliases.Notation.StaticNotations.Contains(notationId);
-        }
-
-        /// <summary>
-        /// The fill elements cache.
-        /// </summary>
-        private void FillElementsCache()
-        {
-            if (cachedElements == null)
-            {
-                cachedElements = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
-            }
         }
 
         /// <summary>
