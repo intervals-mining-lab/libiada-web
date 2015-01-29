@@ -12,26 +12,35 @@
     public static class DbHelper
     {
         /// <summary>
-        /// The db name.
+        /// The database name.
         /// </summary>
-        public static string DbName;
+        private static string databaseName;
 
         /// <summary>
-        /// Initializes static members of the <see cref="DbHelper"/> class.
+        /// Gets the db name.
         /// </summary>
-        static DbHelper()
+        public static string DbName
         {
-            try
+            get
             {
-                using (var db = new LibiadaWebEntities())
+                if (string.IsNullOrEmpty(databaseName))
                 {
-                    DbName = db.Database.SqlQuery<string>("SELECT current_database()").First();
-                } 
+                    try
+                    {
+                        using (var db = new LibiadaWebEntities())
+                        {
+                            databaseName = db.Database.SqlQuery<string>("SELECT current_database()").First();
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        databaseName = "No connection to db. Reason: " + e.Message;
+                    }
+                }
+
+                return databaseName;
             }
-            catch (Exception e)
-            {
-                DbName = "No connection to db. Reason: " + e.Message;
-            } 
         }
 
         /// <summary>

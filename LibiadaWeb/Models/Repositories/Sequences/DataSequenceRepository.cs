@@ -33,7 +33,10 @@
         /// <param name="stringSequence">
         /// The string sequence.
         /// </param>
-        public void Create(CommonSequence sequence, string stringSequence)
+        /// <param name="precision">
+        /// Precision of data sequence.
+        /// </param>
+        public void Create(CommonSequence sequence, string stringSequence, int precision)
         {
             string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -48,8 +51,13 @@
                 {
                     cleanedSequence[i] = cleanedSequence[i].Substring(0, cleanedSequence[i].Length - 2);
                 }
-                
-                elements.Add(new ValueInt(int.Parse(cleanedSequence[i])));
+
+                int intElement = int.Parse(cleanedSequence[i]);
+                int multiplier = (int)Math.Pow(10, precision);
+                intElement /= multiplier;
+                intElement *= multiplier;
+
+                elements.Add(new ValueInt(intElement));
             }
 
             var chain = new BaseChain(elements);

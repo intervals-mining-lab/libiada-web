@@ -130,6 +130,9 @@
         /// <param name="complementary">
         /// The complementary.
         /// </param>
+        /// <param name="precision">
+        /// Precision of data sequence.
+        /// </param>
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
@@ -146,7 +149,8 @@
             int? translatorId,
             int? productId,
             bool? partial,
-            bool? complementary)
+            bool? complementary,
+            int? precision)
         {
             string errorMessage = string.Empty;
             if (ModelState.IsValid)
@@ -181,7 +185,7 @@
                             literatureSequenceRepository.Create(commonSequence, languageId ?? 0, original ?? false, translatorId, stringSequence);
                             break;
                         case Aliases.Nature.Data:
-                            dataSequenceRepository.Create(commonSequence, stringSequence);
+                            dataSequenceRepository.Create(commonSequence, stringSequence, precision ?? 0);
                             break;
                         default:
                             throw new Exception("Unknown nature.");

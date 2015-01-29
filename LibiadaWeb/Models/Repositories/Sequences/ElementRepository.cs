@@ -118,7 +118,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                             this.CachedElements.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList() :
                             db.Element.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList();
 
-            return (from stringElement in stringElements join element in elements on stringElement equals element.Value select element.Id).ToArray();
+            return (from stringElement in stringElements 
+                         join element in elements 
+                         on stringElement equals element.Value 
+                    select element.Id).ToArray();
         }
 
         /// <summary>
