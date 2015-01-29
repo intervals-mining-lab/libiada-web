@@ -17,22 +17,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         private readonly LibiadaWebEntities db;
 
-        private Element[] lazyCache;
-
         /// <summary>
-        /// The cached values.
+        /// The lazy cache.
         /// </summary>
-        private Element[] cachedElements
-        {
-            get
-            {
-                if (lazyCache == null)
-                {
-                    lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
-                }
-                return lazyCache;
-            }
-        }
+        private Element[] lazyCache;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementRepository"/> class.
@@ -43,6 +31,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public ElementRepository(LibiadaWebEntities db)
         {
             this.db = db;
+        }
+
+        /// <summary>
+        /// Gets the cached elements.
+        /// </summary>
+        private Element[] CachedElements
+        {
+            get
+            {
+                if (lazyCache == null)
+                {
+                    lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
+                }
+
+                return lazyCache;
+            }
         }
 
         /// <summary>
@@ -106,24 +110,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 }
             }
 
-            var elementIds = new long[alphabet.Cardinality];
             var staticNotation = Aliases.Notation.StaticNotations.Contains(notationId);
 
-            for (int i = 0; i < alphabet.Cardinality; i++)
-            {
-                string stringElement = alphabet[i].ToString();
-                if (staticNotation)
-                {
-                    elementIds[i] = cachedElements.Single(e => e.NotationId == notationId && e.Value.Equals(stringElement)).Id;
-                }
-                else
-                {
-                    // TODO: отрефакторить чтобы доставались сразу все элементы в нужном порядке.
-                    elementIds[i] = db.Element.Single(e => e.NotationId == notationId && e.Value.Equals(stringElement)).Id;
-                }
-            }
+            var stringElements = (from object element in alphabet select element.ToString()).ToList();
 
-            return elementIds;
+            var elements = staticNotation ?
+                            this.CachedElements.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList() :
+                            db.Element.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList();
+
+            return (from stringElement in stringElements join element in elements on stringElement equals element.Value select element.Id).ToArray();
         }
 
         /// <summary>

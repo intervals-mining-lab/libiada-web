@@ -45,6 +45,11 @@
         private readonly LiteratureSequenceRepository literatureSequenceRepository;
 
         /// <summary>
+        /// The data sequence repository.
+        /// </summary>
+        private readonly DataSequenceRepository dataSequenceRepository;
+
+        /// <summary>
         /// The element repository.
         /// </summary>
         private readonly ElementRepository elementRepository;
@@ -65,6 +70,7 @@
             sequenceRepository = new CommonSequenceRepository(db);
             dnaSequenceRepository = new DnaSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
+            dataSequenceRepository = new DataSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
 
@@ -107,14 +113,17 @@
         /// <param name="translatorId">
         /// The translator id.
         /// </param>
-        /// <param name="mixes">
+        /// <param name="scrambling">
         /// The mixes.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if sequence nature is unknown.
+        /// </exception>
         [HttpPost]
-        public ActionResult Index(long matterId, int notationId, int? languageId, int? translatorId, int mixes)
+        public ActionResult Index(long matterId, int notationId, int? languageId, int? translatorId, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
@@ -133,7 +142,7 @@
             }
 
             BaseChain chain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
-            for (int i = 0; i < mixes; i++)
+            for (int i = 0; i < scrambling; i++)
             {
                 int firstIndex = rndGenerator.Next(chain.GetLength());
                 int secondIndex = rndGenerator.Next(chain.GetLength());
@@ -147,9 +156,10 @@
             var resultMatter = new Matter
                 {
                     NatureId = matter.NatureId,
-                    Name = matter.Name + " " + mixes + " mixes"
+                    Name = matter.Name + " " + scrambling + " mixes"
                 };
             db.Matter.Add(resultMatter);
+            db.SaveChanges();
 
             var resultsequence = new CommonSequence
                 {
@@ -190,6 +200,11 @@
                         alphabet,
                         chain.Building);
                     break;
+                case Aliases.Nature.Data:
+                    dataSequenceRepository.Create(resultsequence, alphabet, chain.Building);
+                    break;
+                default:
+                    throw new Exception("Unknown sequence nature.");
             }
 
             return RedirectToAction("Index", "Matters");
