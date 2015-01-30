@@ -10,7 +10,6 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -36,8 +35,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesDistributionController"/> class.
         /// </summary>
-        public GenesDistributionController()
-            : base("GenesDistribution", "Genes distribution")
+        public GenesDistributionController() : base("GenesDistribution", "Genes distribution")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

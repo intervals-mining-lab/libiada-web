@@ -5,8 +5,6 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Helpers;
-
     /// <summary>
     /// The common sequences controller.
     /// </summary>

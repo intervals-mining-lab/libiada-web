@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Runtime.ExceptionServices;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
@@ -12,13 +11,12 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The alignment controller.
     /// </summary>
-    public class AlignmentController : AbstractResultController
+    public class GenesAlignmentController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -36,10 +34,9 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AlignmentController"/> class.
+        /// Initializes a new instance of the <see cref="GenesAlignmentController"/> class.
         /// </summary>
-        public AlignmentController()
-            : base("Alignment", "Genes alignment")
+        public GenesAlignmentController() : base("GenesAlignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);

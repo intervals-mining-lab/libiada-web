@@ -1,0 +1,59 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Genes alignment";
+}
+
+<h2>Genes alignment</h2>
+
+@if (ViewBag.Error == null)
+{
+    <div>
+        Alignment type: @ViewBag.validationType
+    </div>
+
+    <div>
+        Optimal shift: @ViewBag.optimalRotation
+    </div>
+    <div>
+        Characteristics sorted descending: @ViewBag.sort
+    </div>
+    <div>
+        Cyclic shift is used: @ViewBag.cyclicShift
+    </div>
+
+
+    @ViewBag.firstSequenceName
+    <br />
+    @ViewBag.secondSequenceName
+    <br />
+    @ViewBag.characteristicName
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Distances
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var distance in ViewBag.distances)
+                {
+                    <tr>
+
+                        <td>
+                            @distance
+                        </td>
+
+                    </tr>
+                }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/slider")
+        @Scripts.Render("~/bundles/highCharts")
+        @Styles.Render("~/Content/slider")
+    }
+}

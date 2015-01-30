@@ -6,8 +6,6 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
 
-    using LibiadaWeb.Helpers;
-
     using Models.Repositories.Catalogs;
 
     /// <summary>

@@ -1,11 +1,9 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
-    using Helpers;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
@@ -45,11 +43,6 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// The link repository.
-        /// </summary>
-        private readonly LinkRepository linkRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
@@ -63,7 +56,6 @@
             matterRepository = new MatterRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            linkRepository = new LinkRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
         }
 

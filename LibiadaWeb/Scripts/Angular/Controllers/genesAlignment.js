@@ -1,7 +1,7 @@
-﻿function AlignmentController(data) {
+﻿function GenesAlignmentController(data) {
     "use strict";
 
-    function alignment($scope) {
+    function genesAlignment($scope) {
         MapModelFromJson($scope, data);
 
         $scope.selectedMatters = 0;
@@ -33,5 +33,5 @@
         };
     }
 
-    angular.module("Alignment", []).controller("AlignmentCtrl", ["$scope", alignment]);
+    angular.module("GenesAlignment", []).controller("GenesAlignmentCtrl", ["$scope", genesAlignment]);
 }

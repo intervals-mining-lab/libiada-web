@@ -8,7 +8,6 @@
     using LibiadaCore.Core;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;

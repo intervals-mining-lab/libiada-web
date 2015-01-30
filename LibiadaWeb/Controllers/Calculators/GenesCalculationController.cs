@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Helpers;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;

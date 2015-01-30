@@ -8,15 +8,15 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-    AccordanceController(data);
+    GenesAlignmentController(data);
 </script>
 
 <h2>Genes alignment</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="Alignment">
-        <div class="form-horizontal" ng-controller="AlignmentCtrl">
+    <div ng-app="GenesAlignment">
+        <div class="form-horizontal" ng-controller="GenesAlignmentCtrl">
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

@@ -235,13 +235,14 @@
     </Compile>
     <Compile Include="Controllers\AbstractResultController.cs" />
     <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
-    <Compile Include="Controllers\Calculators\AlignmentController.cs" />
+    <Compile Include="Controllers\Calculators\GenesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
     <Compile Include="Controllers\Calculators\GenesCalculationController.cs" />
     <Compile Include="Controllers\Calculators\GenesDistributionController.cs" />
+    <Compile Include="Controllers\Calculators\GenesSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationController.cs" />
     <Compile Include="Controllers\Calculators\QuickCalculationController.cs" />
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
@@ -458,7 +459,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
-    <Content Include="Scripts\Angular\Controllers\alignment.js" />
+    <Content Include="Scripts\Angular\Controllers\genesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingComparison.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\genesDistribution.js" />
@@ -563,8 +564,8 @@
     <Content Include="Views\Sequences\SequenceCheck\Result.cshtml" />
     <Content Include="Views\Sequences\SequenceMixer\Index.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Index.cshtml" />
-    <Content Include="Views\Calculators\Alignment\Index.cshtml" />
-    <Content Include="Views\Calculators\Alignment\Result.cshtml" />
+    <Content Include="Views\Calculators\GenesAlignment\Index.cshtml" />
+    <Content Include="Views\Calculators\GenesAlignment\Result.cshtml" />
     <Content Include="Views\TaskManager\Index.cshtml" />
     <Content Include="Views\Catalogs\Accidentals\Create.cshtml" />
     <Content Include="Views\Catalogs\Accidentals\Delete.cshtml" />
@@ -593,11 +594,14 @@
     <Content Include="Views\Partial\_MattersRadioTable.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
+    <Content Include="Views\Calculators\GenesSimilarity\Result.cshtml" />
+    <Content Include="Views\Calculators\GenesSimilarity\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Controllers\Characteristics\" />
     <Folder Include="Views\Characteristics\" />
+    <Folder Include="Views\GenesSimilarity\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

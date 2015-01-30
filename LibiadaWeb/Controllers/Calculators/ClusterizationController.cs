@@ -7,8 +7,6 @@
     using Clusterizator;
     using Clusterizator.Krab;
 
-    using Helpers;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
