@@ -112,8 +112,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             var staticNotation = Aliases.Notation.StaticNotations.Contains(notationId);
 
-            var stringElements = (from object element in alphabet select element.ToString()).ToList();
-
+            var stringElements = alphabet.Select(element => element.ToString()).ToList();
+            
             var elements = staticNotation ?
                             this.CachedElements.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList() :
                             db.Element.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList();
