@@ -31,7 +31,6 @@
                         {
                             databaseName = db.Database.SqlQuery<string>("SELECT current_database()").First();
                         }
-
                     }
                     catch (Exception e)
                     {

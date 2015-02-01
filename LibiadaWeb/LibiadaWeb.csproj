@@ -328,6 +328,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeRepository.cs" />

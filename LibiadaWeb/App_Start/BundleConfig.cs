@@ -43,8 +43,8 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/alignment").Include(
-                        "~/Scripts/Angular/Controllers/alignment.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/genesAlignment").Include(
+                        "~/Scripts/Angular/Controllers/genesAlignment.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/buildingComparison").Include(
                         "~/Scripts/Angular/Controllers/buildingComparison.js"));

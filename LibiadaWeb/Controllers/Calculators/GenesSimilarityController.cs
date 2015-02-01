@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -11,10 +12,11 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The alignment controller.
+    /// The genes similarity controller.
     /// </summary>
     public class GenesSimilarityController : AbstractResultController
     {
@@ -76,7 +78,7 @@
         /// <param name="pieceTypeIds">
         /// The piece type ids.
         /// </param>
-        /// <param name="precision">
+        /// <param name="maxDifference">
         /// The precision.
         /// </param>
         /// <returns>
@@ -92,7 +94,7 @@
             int? linkId,
             int notationId,
             int[] pieceTypeIds,
-            double precision)
+            string maxDifference)
         {
             return Action(() =>
             {
@@ -104,23 +106,27 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds);
+                List<Gene> firstSequenceGenes;
+                List<Gene> secondSequenceGenes;
 
-                List<double> longer;
-                List<double> shorter;
-                if (firstSequenceCharacteristics.Count >= secondSequenceCharacteristics.Count)
-                {
-                    longer = firstSequenceCharacteristics;
-                    shorter = secondSequenceCharacteristics;
-                }
-                else
-                {
-                    longer = secondSequenceCharacteristics;
-                    shorter = firstSequenceCharacteristics;
-                }
+                var firstSequences = ExtractSequences(firstMatterId, notationId, pieceTypeIds, out firstSequenceGenes);
+                var secondSequences = ExtractSequences(secondMatterId, notationId, pieceTypeIds, out secondSequenceGenes);
 
-                List<double> distances = new List<double>();
+                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicId, linkId, firstSequences, firstSequenceGenes);
+                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicId, linkId, secondSequences, secondSequenceGenes);
+
+                var similarGenes = new List<IntPair>();
+
+                for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
+                {
+                    for (int j = 0; j < secondSequenceCharacteristics.Count; j++)
+                    {
+                        if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) < double.Parse(maxDifference, CultureInfo.InvariantCulture))
+                        {
+                            similarGenes.Add(new IntPair(i, j));
+                        }
+                    }
+                }
 
                 return new Dictionary<string, object>
                 {
@@ -128,84 +134,38 @@
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", db.CharacteristicType.Single(c => c.Id == characteristicId).Name },
                     { "pieceTypes", db.PieceType.Where(p => pieceTypeIds.Contains(p.Id)).Select(p => p.Name).ToList() },
-                    { "distances", distances }
+                    { "similarGenes", similarGenes },
+                    { "firstSequenceGenes", firstSequenceGenes },
+                    { "secondSequenceGenes", secondSequenceGenes }
                 };
             });
         }
 
         /// <summary>
-        /// The get distance calculator.
-        /// </summary>
-        /// <param name="validationType">
-        /// The validation type.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Func{Double, Double, Double}"/>.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown if validation type is unknown.
-        /// </exception>
-        private static Func<double, double, double> GetDistanceCalculator(string validationType)
-        {
-            Func<double, double, double> distanceCalculator;
-            switch (validationType)
-            {
-                case "Similarity":
-                    distanceCalculator = (first, second) => Math.Abs(Math.Min(first, second));
-                    break;
-                case "Difference":
-                    distanceCalculator = (first, second) => -Math.Abs(first - second);
-                    break;
-                case "NormalizedDifference":
-                    distanceCalculator = (first, second) => -Math.Abs((first - second) / (first + second));
-                    break;
-                case "Equality":
-                    distanceCalculator = (first, second) => Math.Abs(first - second) < (Math.Abs(first + second) / 20) ? 1 : 0;
-                    break;
-                default:
-                    throw new ArgumentException("unknown validation type");
-            }
-
-            return distanceCalculator;
-        }
-
-        /// <summary>
         /// The calculate characteristic.
         /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
-        /// </param>
         /// <param name="characteristicId">
         /// The characteristic id.
         /// </param>
         /// <param name="linkId">
         /// The link id.
         /// </param>
-        /// <param name="notationId">
-        /// The notation id.
+        /// <param name="sequences">
+        /// The sequences.
         /// </param>
-        /// <param name="pieceTypeIds">
-        /// The piece type ids.
+        /// <param name="genes">
+        /// The genes.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Double}"/>.
+        /// The <see cref="List{Gene}"/>.
         /// </returns>
         private List<double> CalculateCharacteristic(
-            long matterId,
             int characteristicId,
             int? linkId,
-            int notationId,
-            int[] pieceTypeIds)
+            List<Chain> sequences,
+            List<Gene> genes)
         {
             var characteristics = new List<double>();
-
-            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-
-            var genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
-
-            var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-            var sequences = ExtractChains(pieces, sequenceId);
 
             string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
@@ -250,6 +210,36 @@
         }
 
         /// <summary>
+        /// The extract sequences.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="pieceTypeIds">
+        /// The piece type ids.
+        /// </param>
+        /// <param name="genes">
+        /// The genes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Gene}"/>.
+        /// </returns>
+        private List<Chain> ExtractSequences(long matterId, int notationId, int[] pieceTypeIds, out List<Gene> genes)
+        {
+            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+
+            genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).Include(g => g.Product).ToList();
+
+            var pieces = genes.Select(g => g.Piece.First()).ToList();
+
+            var sequences = ExtractChains(pieces, sequenceId);
+            return sequences;
+        }
+
+        /// <summary>
         /// The extract chains.
         /// </summary>
         /// <param name="pieces">
@@ -281,90 +271,6 @@
             }
 
             return chains;
-        }
-
-        /// <summary>
-        /// The calculate measure for rotation.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
-        /// </param>
-        /// <param name="second">
-        /// The second.
-        /// </param>
-        /// <param name="distances">
-        /// The distances.
-        /// </param>
-        /// <param name="measure">
-        /// The measure.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        private int CalculateMeasureForRotation(List<double> first, List<double> second, List<double> distances, Func<double, double, double> measure)
-        {
-            int optimalRotation = 0;
-            double maximumEquality = 0;
-            for (int i = 0; i < first.Count; i++)
-            {
-                var distance = Measure(first, second, measure);
-                if (maximumEquality < distance)
-                {
-                    optimalRotation = i;
-                    maximumEquality = distance;
-                }
-
-                distances.Add(distance);
-                first = Rotate(first);
-            }
-
-            return optimalRotation;
-        }
-
-        /// <summary>
-        /// The rotate.
-        /// </summary>
-        /// <param name="list">
-        /// The list.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Double}"/>.
-        /// </returns>
-        private List<double> Rotate(List<double> list)
-        {
-            var first = list[0];
-            list.RemoveAt(0);
-            list.Add(first);
-            return list;
-        }
-
-        /// <summary>
-        /// The measure.
-        /// </summary>
-        /// <param name="first">
-        /// The first.
-        /// </param>
-        /// <param name="second">
-        /// The second.
-        /// </param>
-        /// <param name="measure">
-        /// The measurer.
-        /// </param>
-        /// <returns>
-        /// The <see cref="double"/>.
-        /// </returns>
-        private double Measure(List<double> first, List<double> second, Func<double, double, double> measure)
-        {
-            double result = 0;
-            for (int i = 0; i < second.Count; i++)
-            {
-                if ((first[i] * second[i]) > 0)
-                {
-                    result += measure(first[i], second[i]);
-                }
-            }
-
-            return result;
         }
     }
 }

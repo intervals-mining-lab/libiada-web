@@ -24,10 +24,10 @@
             @Html.Partial("_PieceTypesSelect")
             @Html.Partial("_Characteristic")
             <div class="form-group">
-                @Html.Label("precision", "Precision of comparison", new { @class = "control-label col-md-2" })
+                @Html.Label("maxDifference", "Maximum difference", new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    <input class="form-control" name="precision" type="number" value="0" min="0" max="100" />
-                    @Html.ValidationMessage("precision", "", new { @class = "text-danger" })
+                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" />
+                    @Html.ValidationMessage("maxDifference", "", new { @class = "text-danger" })
                 </div>
             </div>
             <hr />
@@ -39,5 +39,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
-    @Scripts.Render("~/bundles/controllers/alignment")
+    @Scripts.Render("~/bundles/controllers/genesAlignment")
 }

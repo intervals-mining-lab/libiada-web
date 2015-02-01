@@ -1,59 +1,68 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Genes alignment";
+    ViewBag.Title = "Genes similarity";
 }
 
-<h2>Genes alignment</h2>
+<h2>Genes similarity</h2>
 
 @if (ViewBag.Error == null)
 {
-    <div>
-        Alignment type: @ViewBag.validationType
-    </div>
-
-    <div>
-        Optimal shift: @ViewBag.optimalRotation
-    </div>
-    <div>
-        Characteristics sorted descending: @ViewBag.sort
-    </div>
-    <div>
-        Cyclic shift is used: @ViewBag.cyclicShift
-    </div>
-
-
     @ViewBag.firstSequenceName
     <br />
     @ViewBag.secondSequenceName
     <br />
-    @ViewBag.characteristicName
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
-                    Distances
+                    First sequence gene piece type
+                </th>
+                <th>
+                    First sequence gene product
+                </th>
+                <th>
+                    First sequence gene position
+                </th>
+                <th>
+                    Second sequence gene piece type
+                </th>
+                <th>
+                    Second sequence gene product
+                </th>
+                <th>
+                    Second sequence gene position
                 </th>
             </tr>
         </thead>
         <tbody>
-        @foreach (var distance in ViewBag.distances)
-                {
-                    <tr>
-
-                        <td>
-                            @distance
-                        </td>
-
-                    </tr>
-                }
+            @for (var i = 0; i < ViewBag.similarGenes.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].PieceType.Name
+                    </td>
+                    <td>
+                        @ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Product.Name
+                    </td>
+                    <td>
+                        @ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Piece
+                    </td>
+                    <td>
+                        @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].PieceType.Name
+                    </td>
+                    <td>
+                        @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Product.Name
+                    </td>
+                    <td>
+                        @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Piece
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-        @Scripts.Render("~/bundles/highCharts")
-        @Styles.Render("~/Content/slider")
     }
 }
