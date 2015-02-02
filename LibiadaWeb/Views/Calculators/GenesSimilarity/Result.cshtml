@@ -8,9 +8,9 @@
 
 @if (ViewBag.Error == null)
 {
-    @ViewBag.firstSequenceName
-    <br />
-    @ViewBag.secondSequenceName
+    <h4>
+        @ViewBag.firstSequenceName and @ViewBag.secondSequenceName
+    </h4>
     <br />
     <table class="table table-bordered table-hover">
         <thead>
@@ -25,6 +25,9 @@
                     First sequence gene position
                 </th>
                 <th>
+                    First sequence gene length
+                </th>
+                <th>
                     Second sequence gene piece type
                 </th>
                 <th>
@@ -32,6 +35,9 @@
                 </th>
                 <th>
                     Second sequence gene position
+                </th>
+                <th>
+                    Second sequence gene length
                 </th>
             </tr>
         </thead>
@@ -46,7 +52,16 @@
                         @ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Product.Name
                     </td>
                     <td>
-                        @ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Piece
+                        @foreach (var piece in ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Piece)
+                        {
+                            @piece.Start
+                        }
+                    </td>
+                    <td>
+                        @foreach (var piece in ViewBag.firstSequenceGenes[ViewBag.similarGenes[i].First].Piece)
+                        {
+                            @piece.Length
+                        }
                     </td>
                     <td>
                         @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].PieceType.Name
@@ -55,7 +70,16 @@
                         @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Product.Name
                     </td>
                     <td>
-                        @ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Piece
+                        @foreach (var piece in ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Piece)
+                        {
+                            @piece.Start
+                        }
+                    </td>
+                    <td>
+                        @foreach (var piece in ViewBag.secondSequenceGenes[ViewBag.similarGenes[i].Second].Piece)
+                        {
+                            @piece.Length
+                        }
                     </td>
                 </tr>
             }
