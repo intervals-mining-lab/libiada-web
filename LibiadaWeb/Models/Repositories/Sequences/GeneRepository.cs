@@ -4,6 +4,9 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Core;
+    using LibiadaCore.Misc.Iterators;
+
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
@@ -31,6 +34,8 @@
         /// </summary>
         private readonly PieceTypeRepository pieceTypeRepository;
 
+        private readonly CommonSequenceRepository commonSequenceRepository;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GeneRepository"/> class.
         /// </summary>
@@ -43,6 +48,7 @@
             characteristicTypeRepository = new CharacteristicTypeRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
+            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -80,6 +86,40 @@
                     { "natureId", Aliases.Nature.Genetic },
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
                 };
-        } 
+        }
+
+        /// <summary>
+        /// The extract chains.
+        /// </summary>
+        /// <param name="pieces">
+        /// The pieces.
+        /// </param>
+        /// <param name="chainId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Chain}"/>.
+        /// </returns>
+        public List<Chain> ConvertToChains(List<Piece> pieces, long chainId)
+        {
+            var starts = pieces.Select(p => p.Start).ToList();
+
+            var stops = pieces.Select(p => p.Start + p.Length).ToList();
+
+            BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
+
+            var iterator = new DefaultCutRule(starts, stops);
+
+            var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
+
+            var chains = new List<Chain>();
+
+            for (int i = 0; i < stringChains.Count; i++)
+            {
+                chains.Add(new Chain(stringChains[i]));
+            }
+
+            return chains;
+        }
     }
 }

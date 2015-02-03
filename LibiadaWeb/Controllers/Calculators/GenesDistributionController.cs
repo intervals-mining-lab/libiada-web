@@ -163,7 +163,7 @@
 
                     var pieces = genes.Select(g => g.Piece.First()).ToList();
 
-                    var chains = ExtractChains(pieces, sequenceId);
+                    var chains = geneRepository.ConvertToChains(pieces, sequenceId);
 
                     genesCharacteristics.Add(new List<KeyValuePair<int, double>>());
 
@@ -234,40 +234,6 @@
                     { "matterIds", matterIds }
                 };
             });
-        }
-
-        /// <summary>
-        /// The extract chains.
-        /// </summary>
-        /// <param name="pieces">
-        /// The pieces.
-        /// </param>
-        /// <param name="chainId">
-        /// The chain id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Chain}"/>.
-        /// </returns>
-        private List<Chain> ExtractChains(List<Piece> pieces, long chainId)
-        {
-            var starts = pieces.Select(p => p.Start).ToList();
-
-            var stops = pieces.Select(p => p.Start + p.Length).ToList();
-
-            BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
-
-            var iterator = new DefaultCutRule(starts, stops);
-
-            var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
-
-            var chains = new List<Chain>();
-
-            for (int i = 0; i < stringChains.Count; i++)
-            {
-                chains.Add(new Chain(stringChains[i]));
-            }
-
-            return chains;
         }
 
         /// <summary>
