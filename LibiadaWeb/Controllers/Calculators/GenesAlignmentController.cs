@@ -2,14 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -29,18 +27,12 @@
         private readonly GeneRepository geneRepository;
 
         /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GenesAlignmentController"/> class.
         /// </summary>
         public GenesAlignmentController() : base("GenesAlignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
-            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -229,13 +221,9 @@
         {
             var characteristics = new List<double>();
 
-            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+            List<Gene> genes;
 
-            var genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
-
-            var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-            var sequences = geneRepository.ConvertToChains(pieces, sequenceId);
+            var sequences = geneRepository.ExtractSequences(matterId, notationId, pieceTypeIds, out genes);
 
             string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);

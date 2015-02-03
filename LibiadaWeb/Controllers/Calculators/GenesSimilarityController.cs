@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
@@ -10,7 +9,6 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -31,18 +29,13 @@
         private readonly GeneRepository geneRepository;
 
         /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GenesSimilarityController"/> class.
         /// </summary>
-        public GenesSimilarityController() : base("GenesSimilarity", "Genes similarity")
+        public GenesSimilarityController()
+            : base("GenesSimilarity", "Genes similarity")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
-            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -109,8 +102,8 @@
                 List<Gene> firstSequenceGenes;
                 List<Gene> secondSequenceGenes;
 
-                var firstSequences = ExtractSequences(firstMatterId, notationId, pieceTypeIds, out firstSequenceGenes);
-                var secondSequences = ExtractSequences(secondMatterId, notationId, pieceTypeIds, out secondSequenceGenes);
+                var firstSequences = geneRepository.ExtractSequences(firstMatterId, notationId, pieceTypeIds, out firstSequenceGenes);
+                var secondSequences = geneRepository.ExtractSequences(secondMatterId, notationId, pieceTypeIds, out secondSequenceGenes);
 
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicId, linkId, firstSequences, firstSequenceGenes);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicId, linkId, secondSequences, secondSequenceGenes);
@@ -207,36 +200,6 @@
             }
 
             return characteristics;
-        }
-
-        /// <summary>
-        /// The extract sequences.
-        /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <param name="pieceTypeIds">
-        /// The piece type ids.
-        /// </param>
-        /// <param name="genes">
-        /// The genes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Gene}"/>.
-        /// </returns>
-        private List<Chain> ExtractSequences(long matterId, int notationId, int[] pieceTypeIds, out List<Gene> genes)
-        {
-            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-
-            genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).Include(g => g.Product).ToList();
-
-            var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-            var sequences = geneRepository.ConvertToChains(pieces, sequenceId);
-            return sequences;
         }
     }
 }

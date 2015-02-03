@@ -1,14 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaCore.Misc.Iterators;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -22,11 +20,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// The gene repository.
         /// </summary>
         private readonly GeneRepository geneRepository;
@@ -37,7 +30,6 @@
         public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
             geneRepository = new GeneRepository(db);
         }
 
@@ -108,15 +100,8 @@
                     sequencePieceTypes.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    var notationId = notationIds[w];
-
-                    var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-
-                    var genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
-
-                    var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-                    var chains = geneRepository.ConvertToChains(pieces, sequenceId);
+                    List<Gene> genes;
+                    var chains = geneRepository.ExtractSequences(matterId, notationIds[w], pieceTypeIds, out genes);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicIds.Length; i++)
@@ -171,7 +156,7 @@
                                 sequenceProducts.Last().Add(productId == null
                                         ? string.Empty
                                         : db.Product.Single(p => productId == p.Id).Name);
-                                sequencesPositions.Last().Add(pieces[d].Start);
+                                sequencesPositions.Last().Add(genes[d].Piece.First().Start);
 
                                 sequencePieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
                             }

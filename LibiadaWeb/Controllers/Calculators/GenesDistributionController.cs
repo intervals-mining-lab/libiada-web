@@ -1,14 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -157,13 +155,8 @@
                     sequencesPositions.Add(new List<long>());
                     sequencePieceTypes.Add(new List<string>());
 
-                    var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == secondNotationId).Id;
-
-                    var genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).ToArray();
-
-                    var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-                    var chains = geneRepository.ConvertToChains(pieces, sequenceId);
+                    List<Gene> genes;
+                    var chains = geneRepository.ExtractSequences(matterId, secondNotationId, pieceTypeIds, out genes);
 
                     genesCharacteristics.Add(new List<KeyValuePair<int, double>>());
 
@@ -207,10 +200,8 @@
                         var productId = genes[d].ProductId;
                         var pieceTypeId = genes[d].PieceTypeId;
 
-                        sequenceProducts.Last().Add(productId == null
-                                ? string.Empty
-                                : db.Product.Single(p => productId == p.Id).Name);
-                        sequencesPositions.Last().Add(pieces[d].Start);
+                        sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
+                        sequencesPositions.Last().Add(genes[d].Piece.First().Start);
 
                         sequencePieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
                     }

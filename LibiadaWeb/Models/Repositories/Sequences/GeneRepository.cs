@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -34,6 +35,9 @@
         /// </summary>
         private readonly PieceTypeRepository pieceTypeRepository;
 
+        /// <summary>
+        /// The common sequence repository.
+        /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
@@ -120,6 +124,36 @@
             }
 
             return chains;
+        }
+
+        /// <summary>
+        /// The extract sequences.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="pieceTypeIds">
+        /// The piece type ids.
+        /// </param>
+        /// <param name="genes">
+        /// The genes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Gene}"/>.
+        /// </returns>
+        public List<Chain> ExtractSequences(long matterId, int notationId, int[] pieceTypeIds, out List<Gene> genes)
+        {
+            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+
+            genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).Include(g => g.Product).ToList();
+
+            var pieces = genes.Select(g => g.Piece.First()).ToList();
+
+            var sequences = ConvertToChains(pieces, sequenceId);
+            return sequences;
         }
     }
 }
