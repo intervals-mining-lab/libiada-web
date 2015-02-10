@@ -47,6 +47,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
         public LocalCalculationController() : base("LocalCalculation", "Local calculation")
@@ -56,6 +61,7 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -222,19 +228,14 @@
                     {
                         FastFourierTransform.FourierTransform(characteristics);
                     }
+
+                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]));
                 }
 
                 if (autocorrelation)
                 {
                     var autoCorrelation = new AutoCorrelation();
                     autoCorrelation.CalculateAutocorrelation(characteristics);
-                }
-
-                for (int i = 0; i < characteristicIds.Length; i++)
-                {
-                    int characteristicId = characteristicIds[i];
-                    int linkId = linkIds[i];
-                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " + db.Link.Single(l => l.Id == linkId).Name);
                 }
 
                 var characteristicsList = new List<SelectListItem>();

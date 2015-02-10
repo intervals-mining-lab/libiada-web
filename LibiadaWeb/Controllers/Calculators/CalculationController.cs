@@ -42,6 +42,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
         public CalculationController()
@@ -52,6 +57,7 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -190,12 +196,7 @@
 
                 for (int k = 0; k < characteristicIds.Length; k++)
                 {
-                    int characteristicId = characteristicIds[k];
-                    int? linkId = linkIds[k];
-                    int notationId = notationIds[k];
-                    string linkName = linkId.HasValue ? links.Single(l => l.Id == linkId).Name : string.Empty;
-
-                    characteristicNames.Add(string.Join("  ", db.CharacteristicType.Single(c => c.Id == characteristicId).Name, linkName, db.Notation.Single(n => n.Id == notationId).Name));
+                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]));
                 }
 
                 var characteristicsList = new List<SelectListItem>();

@@ -7,6 +7,8 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -25,12 +27,18 @@
         private readonly GeneRepository geneRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
         /// </summary>
         public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -169,8 +177,7 @@
                 {
                     int characteristicId = characteristicIds[k];
 
-                    string characteristicType = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
-                    characteristicNames.Add(characteristicType);
+                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]));
                 }
 
                 // ранговая сортировка

@@ -41,14 +41,14 @@
         private readonly CharacteristicTypeRepository characteristicRepository;
 
         /// <summary>
-        /// The link repository.
-        /// </summary>
-        private readonly LinkRepository linkRepository;
-
-        /// <summary>
         /// The notation repository.
         /// </summary>
         private readonly NotationRepository notationRepository;
+
+        /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
@@ -59,8 +59,8 @@
             matterRepository = new MatterRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicRepository = new CharacteristicTypeRepository(db);
-            linkRepository = new LinkRepository(db);
             notationRepository = new NotationRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -186,11 +186,8 @@
                     int? linkId = linkIds[k];
                     int notationId = notationIds[k];
 
-                    string linkName = linkId != null ? db.Link.Single(l => l.Id == linkId).Name : string.Empty;
 
-                    characteristicNames.Add(db.CharacteristicType.Single(c => c.Id == characteristicId).Name + " " +
-                                            linkName + " " +
-                                            db.Notation.Single(n => n.Id == notationId).Name);
+                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId));
                 }
 
                 DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);

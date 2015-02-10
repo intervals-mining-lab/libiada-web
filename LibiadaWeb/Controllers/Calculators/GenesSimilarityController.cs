@@ -11,6 +11,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -29,13 +30,18 @@
         private readonly GeneRepository geneRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenesSimilarityController"/> class.
         /// </summary>
-        public GenesSimilarityController()
-            : base("GenesSimilarity", "Genes similarity")
+        public GenesSimilarityController() : base("GenesSimilarity", "Genes similarity")
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -121,11 +127,13 @@
                     }
                 }
 
+                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
+
                 return new Dictionary<string, object>
                 {
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
-                    { "characteristicName", db.CharacteristicType.Single(c => c.Id == characteristicId).Name },
+                    { "characteristicName", characteristicName },
                     { "pieceTypes", db.PieceType.Where(p => pieceTypeIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "similarGenes", similarGenes },
                     { "firstSequenceGenes", firstSequenceGenes },

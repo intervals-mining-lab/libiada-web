@@ -53,6 +53,11 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
         public RelationCalculationController() : base("RelationCalculation", "Relation calculation")
@@ -63,6 +68,7 @@
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -219,6 +225,8 @@
                     }
                 }
 
+                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
+
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
@@ -228,7 +236,7 @@
                     { "secondElements", secondElements },
                     { "filterSize", filterSize },
                     { "elements", elements },
-                    { "characteristicName", db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name },
+                    { "characteristicName", characteristicName },
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
                     { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.Name }
                 };

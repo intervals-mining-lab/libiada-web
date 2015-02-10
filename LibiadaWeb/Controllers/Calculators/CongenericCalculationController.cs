@@ -48,6 +48,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
         public CongenericCalculationController() : base("CongenericCalculation", "Congeneric calculation")
@@ -57,6 +62,7 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -284,7 +290,7 @@
                 {
                     int characteristicId = characteristicIds[k];
 
-                    string characteristicType = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
+                    string characteristicType = characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]);
                     if (isLiteratureSequence)
                     {
                         int languageId = languageIds[k];

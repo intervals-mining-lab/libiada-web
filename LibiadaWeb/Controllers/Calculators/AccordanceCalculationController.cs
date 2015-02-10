@@ -46,6 +46,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
         public AccordanceCalculationController()
@@ -56,6 +61,7 @@
             characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -198,10 +204,7 @@
                         break;
                 }
 
-                var linkName = linkId.HasValue ? db.Link.Single(l => l.Id == linkId).Name : string.Empty;
-                var characteristicTypeName = db.CharacteristicType.Single(c => c.Id == characteristicId).Name;
-                var notationName = db.Notation.Single(n => n.Id == notationId).Name;
-                var characteristicName = string.Join("  ", characteristicTypeName, linkName, notationName);
+                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
 
                 return new Dictionary<string, object>
                                      {

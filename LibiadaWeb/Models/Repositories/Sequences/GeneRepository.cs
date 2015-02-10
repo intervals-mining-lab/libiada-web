@@ -129,6 +129,32 @@
         /// <summary>
         /// The extract sequences.
         /// </summary>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <param name="pieceTypeIds">
+        /// The piece type ids.
+        /// </param>
+        /// <param name="genes">
+        /// The genes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Gene}"/>.
+        /// </returns>
+        public List<Chain> ExtractSequences(long sequenceId, int[] pieceTypeIds, out List<Gene> genes)
+        {
+            genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).Include(g => g.Product).ToList();
+
+            var pieces = genes.Select(g => g.Piece.First()).ToList();
+
+            var sequences = ConvertToChains(pieces, sequenceId);
+
+            return sequences;
+        }
+
+        /// <summary>
+        /// The extract sequences.
+        /// </summary>
         /// <param name="matterId">
         /// The matter id.
         /// </param>
@@ -147,13 +173,7 @@
         public List<Chain> ExtractSequences(long matterId, int notationId, int[] pieceTypeIds, out List<Gene> genes)
         {
             var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-
-            genes = db.Gene.Where(g => g.SequenceId == sequenceId && pieceTypeIds.Contains(g.PieceTypeId)).Include(g => g.Piece).Include(g => g.Product).ToList();
-
-            var pieces = genes.Select(g => g.Piece.First()).ToList();
-
-            var sequences = ConvertToChains(pieces, sequenceId);
-            return sequences;
+            return ExtractSequences(sequenceId, pieceTypeIds, out genes);
         }
     }
 }

@@ -8,6 +8,8 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -31,13 +33,20 @@
         private readonly GeneRepository geneRepository;
 
         /// <summary>
+        /// The characteristic type repository.
+        /// </summary>
+        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenesDistributionController"/> class.
         /// </summary>
-        public GenesDistributionController() : base("GenesDistribution", "Genes distribution")
+        public GenesDistributionController()
+            : base("GenesDistribution", "Genes distribution")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
             geneRepository = new GeneRepository(db);
+            characteristicTypeRepository = new CharacteristicTypeRepository(db);
         }
 
         /// <summary>
@@ -98,73 +107,65 @@
         {
             return Action(() =>
             {
-                var matterNames = new List<string>();
+                var result = new List<SequenceCharacteristics>();
 
-                var fullCharacteristics = new List<double>();
+                var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
 
-                foreach (var matterId in matterIds)
+                double maxGenes = 0;
+
+                for (int w = 0; w < matterIds.Length; w++)
                 {
+                    long matterId = matterIds[w];
+                    var matterName = db.Matter.Single(m => m.Id == matterId).Name;
+
+
                     long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == firstNotationId).Id;
+
+                    double sequenceCharacteristic;
 
                     if (db.Characteristic.Any(c => ((firstLinkId == null && c.LinkId == null) || (firstLinkId == c.LinkId)) &&
                                               c.SequenceId == sequenceId &&
                                               c.CharacteristicTypeId == firstCharacteristicId))
                     {
-                        double dataBaseCharacteristic = db.Characteristic.Single(c => ((firstLinkId == null && c.LinkId == null) || firstLinkId == c.LinkId) &&
+                        sequenceCharacteristic = db.Characteristic.Single(c => ((firstLinkId == null && c.LinkId == null) || firstLinkId == c.LinkId) &&
                                                                                         c.SequenceId == sequenceId &&
                                                                                         c.CharacteristicTypeId == firstCharacteristicId).Value;
-                        fullCharacteristics.Add(dataBaseCharacteristic);
                     }
                     else
                     {
                         Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                         tempChain.FillIntervalManagers();
-                        string className =
-                            db.CharacteristicType.Single(ct => ct.Id == firstCharacteristicId).ClassName;
-                        IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = (Link)(firstLinkId ?? 0);
-                        var characteristicValue = calculator.Calculate(tempChain, link);
+                        string fullClassName = db.CharacteristicType.Single(ct => ct.Id == firstCharacteristicId).ClassName;
+                        IFullCalculator fullCalculator = CalculatorsFactory.CreateFullCalculator(fullClassName);
+                        var fullLink = (Link)(firstLinkId ?? 0);
+                        sequenceCharacteristic = fullCalculator.Calculate(tempChain, fullLink);
 
                         var dataBaseCharacteristic = new Characteristic
                         {
                             SequenceId = sequenceId,
                             CharacteristicTypeId = firstCharacteristicId,
                             LinkId = firstLinkId,
-                            Value = characteristicValue,
-                            ValueString = characteristicValue.ToString()
+                            Value = sequenceCharacteristic,
+                            ValueString = sequenceCharacteristic.ToString()
                         };
                         db.Characteristic.Add(dataBaseCharacteristic);
                         db.SaveChanges();
-                        fullCharacteristics.Add(characteristicValue);
                     }
-                }
-
-                string linkName = firstLinkId.HasValue ? db.Link.Single(l => l.Id == firstLinkId).Name : string.Empty;
-                var fullCharacteristicName = string.Join("  ", db.CharacteristicType.Single(c => c.Id == firstCharacteristicId).Name, linkName, db.Notation.Single(n => n.Id == firstNotationId).Name);
-
-                var sequenceProducts = new List<List<string>>();
-                var sequencesPositions = new List<List<long>>();
-                var sequencePieceTypes = new List<List<string>>();
-                var genesCharacteristics = new List<List<KeyValuePair<int, double>>>();
-
-                for (int w = 0; w < matterIds.Length; w++)
-                {
-                    long matterId = matterIds[w];
-                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    sequenceProducts.Add(new List<string>());
-                    sequencesPositions.Add(new List<long>());
-                    sequencePieceTypes.Add(new List<string>());
 
                     List<Gene> genes;
-                    var chains = geneRepository.ExtractSequences(matterId, secondNotationId, pieceTypeIds, out genes);
+                    var genesSequences = geneRepository.ExtractSequences(sequenceIds[w], pieceTypeIds, out genes);
 
-                    genesCharacteristics.Add(new List<KeyValuePair<int, double>>());
+                    if (maxGenes < genes.Count)
+                    {
+                        maxGenes = genes.Count;
+                    }
 
+                    var genesCharacteristics = new List<GeneCharacteristic>();
                     string className = db.CharacteristicType.Single(c => c.Id == secondCharacteristicId).ClassName;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     var link = (Link)(secondLinkId ?? 0);
 
-                    for (int j = 0; j < chains.Count; j++)
+                    for (int j = 0; j < genesSequences.Count; j++)
                     {
                         long geneId = genes[j].Id;
 
@@ -173,7 +174,7 @@
                                                         ((secondLinkId == null && c.LinkId == null) ||
                                                          (secondLinkId == c.LinkId))))
                         {
-                            double value = calculator.Calculate(chains[j], link);
+                            double value = calculator.Calculate(genesSequences[j], link);
                             var currentCharacteristic = new Characteristic
                             {
                                 SequenceId = geneId,
@@ -188,54 +189,33 @@
                         }
                     }
 
-                    for (int d = 0; d < chains.Count; d++)
+                    for (int d = 0; d < genesSequences.Count; d++)
                     {
                         long geneId = genes[d].Id;
-                        double? characteristic = db.Characteristic.Single(c =>
+                        double characteristic = db.Characteristic.Single(c =>
                             c.SequenceId == geneId &&
                             c.CharacteristicTypeId == secondCharacteristicId &&
                             ((secondLinkId == null && c.LinkId == null) || (secondLinkId == c.LinkId))).Value;
 
-                        genesCharacteristics.Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
-                        var productId = genes[d].ProductId;
-                        var pieceTypeId = genes[d].PieceTypeId;
-
-                        sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
-                        sequencesPositions.Last().Add(genes[d].Piece.First().Start);
-
-                        sequencePieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
+                        var geneCharacteristic = new GeneCharacteristic(genes[d], characteristic);
+                        genesCharacteristics.Add(geneCharacteristic);
                     }
+
+                    var sequenceCharacteristics = new SequenceCharacteristics(matterName, sequenceCharacteristic, genesCharacteristics);
+                    result.Add(sequenceCharacteristics);
                 }
 
-                for (int f = 0; f < matterIds.Length; f++)
-                {
-                    SortKeyValuePairList(genesCharacteristics[f]);
-                }
+                var fullCharacteristicName = characteristicTypeRepository.GetCharacteristicName(firstCharacteristicId, firstLinkId, firstNotationId);
+                var genesCharacteristicName = characteristicTypeRepository.GetCharacteristicName(secondCharacteristicId, secondLinkId, secondNotationId);
 
                 return new Dictionary<string, object>
                 {
-                    { "genesCharacteristics", genesCharacteristics },
-                    { "matterNames", matterNames },
-                    { "sequenceProducts", sequenceProducts },
-                    { "sequencesPositions", sequencesPositions },
-                    { "sequencePieceTypes", sequencePieceTypes },
-                    { "secondCharacteristicName", db.CharacteristicType.Single(c => c.Id == secondCharacteristicId).Name },
-                    { "fullCharacteristics", fullCharacteristics }, 
-                    { "fullCharacteristicName", fullCharacteristicName }, 
-                    { "matterIds", matterIds }
+                    { "result", result },
+                    { "maxGenes", maxGenes },
+                    { "genesCharacteristicName", genesCharacteristicName },
+                    { "fullCharacteristicName", fullCharacteristicName }
                 };
             });
-        }
-
-        /// <summary>
-        /// The sort key value pair list.
-        /// </summary>
-        /// <param name="arrayForSort">
-        /// The array for sort.
-        /// </param>
-        private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
-        {
-            arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
         }
     }
 }
