@@ -1,7 +1,7 @@
-﻿function BuildingComparisonController(data) {
+﻿function BuildingsSimilarityController(data) {
     "use strict";
 
-    function buildingComparison($scope, filterFilter) {
+    function buildingsSimilarity($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         $scope.natureId = $scope.natures[0].Value;
@@ -32,5 +32,5 @@
         $scope.$watch("natureId", filterByNature, true);
     }
 
-    angular.module("BuildingComparison", []).controller("BuildingComparisonCtrl", ["$scope", "filterFilter", buildingComparison]);
+    angular.module("BuildingsSimilarity", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
 }

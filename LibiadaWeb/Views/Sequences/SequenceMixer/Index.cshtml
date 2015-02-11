@@ -9,15 +9,15 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-    BuildingComparisonController(data);
+    BuildingsSimilarityController(data);
 </script>
 
 <h2>Generate sequence rearrangements</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="BuildingComparison">
-        <div class="form-horizontal" ng-controller="BuildingComparisonCtrl">
+    <div ng-app="BuildingsSimilarity">
+        <div class="form-horizontal" ng-controller="BuildingsSimilarityCtrl">
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -102,5 +102,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/procedures")
-    @Scripts.Render("~/bundles/controllers/buildingComparison")
+    @Scripts.Render("~/bundles/controllers/buildingsSimilarity")
 }

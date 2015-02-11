@@ -201,9 +201,12 @@
                         genesCharacteristics.Add(geneCharacteristic);
                     }
 
-                    var sequenceCharacteristics = new SequenceCharacteristics(matterName, sequenceCharacteristic, genesCharacteristics);
-                    result.Add(sequenceCharacteristics);
+                    genesCharacteristics = genesCharacteristics.OrderBy(g => g.Characteristic).ToList();
+
+                    result.Add(new SequenceCharacteristics(matterName, sequenceCharacteristic, genesCharacteristics));
                 }
+
+                result = result.OrderBy(r => r.Characteristic).ToList();
 
                 var fullCharacteristicName = characteristicTypeRepository.GetCharacteristicName(firstCharacteristicId, firstLinkId, firstNotationId);
                 var genesCharacteristicName = characteristicTypeRepository.GetCharacteristicName(secondCharacteristicId, secondLinkId, secondNotationId);

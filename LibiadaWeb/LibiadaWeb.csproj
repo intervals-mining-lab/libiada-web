@@ -236,7 +236,7 @@
     <Compile Include="Controllers\AbstractResultController.cs" />
     <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\GenesAlignmentController.cs" />
-    <Compile Include="Controllers\Calculators\BuildingComparisonController.cs" />
+    <Compile Include="Controllers\Calculators\BuildingSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
@@ -463,7 +463,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\genesAlignment.js" />
-    <Content Include="Scripts\Angular\Controllers\buildingComparison.js" />
+    <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\genesDistribution.js" />
     <Content Include="Scripts\Angular\Controllers\genesImport.js" />
@@ -548,8 +548,8 @@
     <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Result.cshtml" />
-    <Content Include="Views\Calculators\BuildingComparison\Index.cshtml" />
-    <Content Include="Views\Calculators\BuildingComparison\Result.cshtml" />
+    <Content Include="Views\Calculators\BuildingsSimilarity\Index.cshtml" />
+    <Content Include="Views\Calculators\BuildingsSimilarity\Result.cshtml" />
     <Content Include="Views\Calculators\Calculation\Index.cshtml" />
     <Content Include="Views\Calculators\Calculation\Result.cshtml" />
     <Content Include="Views\Calculators\Clusterization\Index.cshtml" />

@@ -13,9 +13,9 @@
     using Models;
 
     /// <summary>
-    /// The building comparison controller.
+    /// The buildings comparison controller.
     /// </summary>
-    public class BuildingComparisonController : AbstractResultController
+    public class BuildingsSimilarityController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -38,10 +38,9 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BuildingComparisonController"/> class.
+        /// Initializes a new instance of the <see cref="BuildingsSimilarityController"/> class.
         /// </summary>
-        public BuildingComparisonController()
-            : base("BuildingComparison", "Building comparison")
+        public BuildingsSimilarityController() : base("BuildingsSimilarity", "Buildings comparison")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);

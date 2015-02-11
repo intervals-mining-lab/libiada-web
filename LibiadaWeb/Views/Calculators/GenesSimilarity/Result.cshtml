@@ -11,7 +11,15 @@
     <h4>
         @ViewBag.firstSequenceName and @ViewBag.secondSequenceName
     </h4>
-    <br />
+    <br/>
+    <div>
+        Similarity = @(200 * (double)ViewBag.similarGenes.Count / (ViewBag.firstSequenceGenes.Count + ViewBag.secondSequenceGenes.Count)) %.
+        <br/>
+        @(100 * (double)ViewBag.similarGenes.Count / ViewBag.firstSequenceGenes.Count) % of first sequence.
+        <br/>
+        @(100 * (double)ViewBag.similarGenes.Count / ViewBag.secondSequenceGenes.Count) % of second sequence.
+    </div>
+    <br/>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>

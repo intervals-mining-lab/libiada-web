@@ -37,21 +37,31 @@
                 <tr>
                     @foreach (var res in ViewBag.result)
                     {
-                        <td>
-                            @res.GenesCharacteristics[i].Gene.PieceType.Name
-                        </td>
-                        <td>
-                            @res.GenesCharacteristics[i].Gene.Product.Name
-                        </td>
-                        <td>
-                            @foreach (var piece in res.GenesCharacteristics[i].Gene.Piece)
-                            {
-                                @piece.Start
-                            }
-                        </td>
-                        <td>
-                            @res.GenesCharacteristics[i].Characteristic
-                        </td>
+                        if (i < res.GenesCharacteristics.Count)
+                        {
+                            <td>
+                                @res.GenesCharacteristics[i].Gene.PieceType.Name
+                            </td>
+                            <td>
+                                @res.GenesCharacteristics[i].Gene.Product.Name
+                            </td>
+                            <td>
+                                @foreach (var piece in res.GenesCharacteristics[i].Gene.Piece)
+                                {
+                                    @piece.Start
+                                }
+                            </td>
+                            <td>
+                                @res.GenesCharacteristics[i].Characteristic
+                            </td>
+                        }
+                        else
+                        {
+                            <td />
+                            <td />
+                            <td />
+                            <td />
+                        }
                     }
                 </tr>
             }
