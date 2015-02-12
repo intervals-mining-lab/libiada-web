@@ -1,5 +1,5 @@
 /** 
-* @version 1.4.5
+* @version 1.4.8
 * @license MIT
 */
 (function (ng, undefined){
@@ -34,7 +34,7 @@ ng.module('smart-table')
         var lastSelected;
 
         function copyRefs(src) {
-            return [].concat(src);
+            return src ? [].concat(src) : [];
         }
 
         function updateSafeCopy() {
@@ -106,7 +106,7 @@ ng.module('smart-table')
             if (pagination.number !== undefined) {
                 pagination.numberOfPages = filtered.length > 0 ? Math.ceil(filtered.length / pagination.number) : 1;
                 pagination.start = pagination.start >= filtered.length ? (pagination.numberOfPages - 1) * pagination.number : pagination.start;
-                filtered = filtered.slice(pagination.start, pagination.start + pagination.number);
+                filtered = filtered.slice(pagination.start, pagination.start + parseInt(pagination.number));
             }
             displaySetter($scope, filtered);
         };
@@ -238,165 +238,167 @@ ng.module('smart-table')
     }]);
 
 ng.module('smart-table')
-    .directive('stSelectRow', function () {
-        return {
-            restrict: 'A',
-            require: '^stTable',
-            scope: {
-                row: '=stSelectRow'
-            },
-            link: function (scope, element, attr, ctrl) {
-                var mode = attr.stSelectMode || 'single';
-                element.bind('click', function () {
-                    scope.$apply(function () {
-                        ctrl.select(scope.row, mode);
-                    });
-                });
+  .directive('stSelectRow', function () {
+    return {
+      restrict: 'A',
+      require: '^stTable',
+      scope: {
+        row: '=stSelectRow'
+      },
+      link: function (scope, element, attr, ctrl) {
+        var mode = attr.stSelectMode || 'single';
+        element.bind('click', function () {
+          scope.$apply(function () {
+            ctrl.select(scope.row, mode);
+          });
+        });
 
-                scope.$watch('row.isSelected', function (newValue, oldValue) {
-                    if (newValue === true) {
-                        element.addClass('st-selected');
-                    } else {
-                        element.removeClass('st-selected');
-                    }
-                });
-            }
-        };
-    });
-
-ng.module('smart-table')
-    .directive('stSort', ['$parse', function ($parse) {
-        return {
-            restrict: 'A',
-            require: '^stTable',
-            link: function (scope, element, attr, ctrl) {
-
-                var predicate = attr.stSort;
-                var getter = $parse(predicate);
-                var index = 0;
-                var classAscent = attr.stClassAscent || 'st-sort-ascent';
-                var classDescent = attr.stClassDescent || 'st-sort-descent';
-                var stateClasses = [classAscent, classDescent];
-
-                //view --> table state
-                function sort() {
-                    index++;
-                    if (index % 3 === 0 && attr.stSkipNatural === undefined) {
-                        //manual reset
-                        index = 0;
-                        ctrl.tableState().sort = {};
-                        ctrl.tableState().pagination.start = 0;
-                        ctrl.pipe();
-                    } else {
-                        ctrl.sortBy(predicate, index % 2 === 0);
-                    }
-                }
-
-                if (ng.isFunction(getter(scope))) {
-                    predicate = getter(scope);
-                }
-
-                element.bind('click', function sortClick() {
-                    if (predicate) {
-                        scope.$apply(sort);
-                    }
-                });
-
-                if (attr.stSortDefault !== undefined) {
-                    index = attr.stSortDefault === 'reverse' ? 1 : 0;
-                    sort();
-                }
-
-                //table state --> view
-                scope.$watch(function () {
-                    return ctrl.tableState().sort;
-                }, function (newValue) {
-                    if (newValue.predicate !== predicate) {
-                        index = 0;
-                        element
-                            .removeClass(classAscent)
-                            .removeClass(classDescent);
-                    } else {
-                        index = newValue.reverse === true ? 2 : 1;
-                        element
-                            .removeClass(stateClasses[index % 2])
-                            .addClass(stateClasses[index - 1]);
-                    }
-                }, true);
-            }
-        };
-    }]);
+        scope.$watch('row.isSelected', function (newValue) {
+          if (newValue === true) {
+            element.addClass('st-selected');
+          } else {
+            element.removeClass('st-selected');
+          }
+        });
+      }
+    };
+  });
 
 ng.module('smart-table')
-    .directive('stPagination', function () {
-        return {
-            restrict: 'EA',
-            require: '^stTable',
-            scope: {
-                stItemsByPage: '=?',
-                stDisplayedPages: '=?'
-            },
-            templateUrl: function(element, attrs) {
-              if (attrs.stTemplate) {
-                return attrs.stTemplate;
-              }
-              return 'template/smart-table/pagination.html';
-            },
-            link: function (scope, element, attrs, ctrl) {
+  .directive('stSort', ['$parse', function ($parse) {
+    return {
+      restrict: 'A',
+      require: '^stTable',
+      link: function (scope, element, attr, ctrl) {
 
-                scope.stItemsByPage = scope.stItemsByPage ? +(scope.stItemsByPage) : 10;
-                scope.stDisplayedPages = scope.stDisplayedPages ? +(scope.stDisplayedPages) : 5;
+        var predicate = attr.stSort;
+        var getter = $parse(predicate);
+        var index = 0;
+        var classAscent = attr.stClassAscent || 'st-sort-ascent';
+        var classDescent = attr.stClassDescent || 'st-sort-descent';
+        var stateClasses = [classAscent, classDescent];
+        var sortDefault;
 
-                scope.currentPage = 1;
-                scope.pages = [];
+        if (attr.stSortDefault) {
+          sortDefault = scope.$eval(attr.stSortDefault) !== undefined ?  scope.$eval(attr.stSortDefault) : attr.stSortDefault;
+        }
 
-                function redraw() {
-                    var paginationState = ctrl.tableState().pagination;
-                    var start = 1;
-                    var end;
-                    var i;
-                    scope.currentPage = Math.floor(paginationState.start / paginationState.number) + 1;
+        //view --> table state
+        function sort() {
+          index++;
+          predicate = ng.isFunction(getter(scope)) ? getter(scope) : attr.stSort;
+          if (index % 3 === 0 && attr.stSkipNatural === undefined) {
+            //manual reset
+            index = 0;
+            ctrl.tableState().sort = {};
+            ctrl.tableState().pagination.start = 0;
+            ctrl.pipe();
+          } else {
+            ctrl.sortBy(predicate, index % 2 === 0);
+          }
+        }
 
-                    start = Math.max(start, scope.currentPage - Math.abs(Math.floor(scope.stDisplayedPages / 2)));
-                    end = start + scope.stDisplayedPages;
+        element.bind('click', function sortClick() {
+          if (predicate) {
+            scope.$apply(sort);
+          }
+        });
 
-                    if (end > paginationState.numberOfPages) {
-                        end = paginationState.numberOfPages + 1;
-                        start = Math.max(1, end - scope.stDisplayedPages);
-                    }
+        if (sortDefault) {
+          index = attr.stSortDefault === 'reverse' ? 1 : 0;
+          sort();
+        }
 
-                    scope.pages = [];
-                    scope.numPages = paginationState.numberOfPages;
+        //table state --> view
+        scope.$watch(function () {
+          return ctrl.tableState().sort;
+        }, function (newValue) {
+          if (newValue.predicate !== predicate) {
+            index = 0;
+            element
+              .removeClass(classAscent)
+              .removeClass(classDescent);
+          } else {
+            index = newValue.reverse === true ? 2 : 1;
+            element
+              .removeClass(stateClasses[index % 2])
+              .addClass(stateClasses[index - 1]);
+          }
+        }, true);
+      }
+    };
+  }]);
 
-                    for (i = start; i < end; i++) {
-                        scope.pages.push(i);
-                    }
-                }
+ng.module('smart-table')
+  .directive('stPagination', function () {
+    return {
+      restrict: 'EA',
+      require: '^stTable',
+      scope: {
+        stItemsByPage: '=?',
+        stDisplayedPages: '=?'
+      },
+      templateUrl: function (element, attrs) {
+        if (attrs.stTemplate) {
+          return attrs.stTemplate;
+        }
+        return 'template/smart-table/pagination.html';
+      },
+      link: function (scope, element, attrs, ctrl) {
 
-                //table state --> view
-                scope.$watch(function () {
-                    return ctrl.tableState().pagination;
-                }, redraw, true);
+        scope.stItemsByPage = scope.stItemsByPage ? +(scope.stItemsByPage) : 10;
+        scope.stDisplayedPages = scope.stDisplayedPages ? +(scope.stDisplayedPages) : 5;
 
-                //scope --> table state  (--> view)
-                scope.$watch('stItemsByPage', function () {
-                    scope.selectPage(1);
-                });
+        scope.currentPage = 1;
+        scope.pages = [];
 
-                scope.$watch('stDisplayedPages', redraw);
+        function redraw() {
+          var paginationState = ctrl.tableState().pagination;
+          var start = 1;
+          var end;
+          var i;
+          scope.currentPage = Math.floor(paginationState.start / paginationState.number) + 1;
 
-                //view -> table state
-                scope.selectPage = function (page) {
-                    if (page > 0 && page <= scope.numPages) {
-                        ctrl.slice((page - 1) * scope.stItemsByPage, scope.stItemsByPage);
-                    }
-                };
+          start = Math.max(start, scope.currentPage - Math.abs(Math.floor(scope.stDisplayedPages / 2)));
+          end = start + scope.stDisplayedPages;
 
-                //select the first page
-                ctrl.slice(0, scope.stItemsByPage);
-            }
+          if (end > paginationState.numberOfPages) {
+            end = paginationState.numberOfPages + 1;
+            start = Math.max(1, end - scope.stDisplayedPages);
+          }
+
+          scope.pages = [];
+          scope.numPages = paginationState.numberOfPages;
+
+          for (i = start; i < end; i++) {
+            scope.pages.push(i);
+          }
+        }
+
+        //table state --> view
+        scope.$watch(function () {
+          return ctrl.tableState().pagination;
+        }, redraw, true);
+
+        //scope --> table state  (--> view)
+        scope.$watch('stItemsByPage', function () {
+          scope.selectPage(1);
+        });
+
+        scope.$watch('stDisplayedPages', redraw);
+
+        //view -> table state
+        scope.selectPage = function (page) {
+          if (page > 0 && page <= scope.numPages) {
+            ctrl.slice((page - 1) * scope.stItemsByPage, scope.stItemsByPage);
+          }
         };
-    });
+
+        //select the first page
+        ctrl.slice(0, scope.stItemsByPage);
+      }
+    };
+  });
 
 ng.module('smart-table')
     .directive('stPipe', function () {
