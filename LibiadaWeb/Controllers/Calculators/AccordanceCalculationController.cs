@@ -190,13 +190,13 @@
                         }
 
                         string className = db.CharacteristicType.Single(ct => ct.Id == characteristicId).ClassName;
-                        IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
+                        IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
                         var link = (Link)(linkId ?? 0);
                         
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
                             var element = firstChain.Alphabet[i];
-                            var intervalManager = new BinaryIntervalsManager(firstChain.CongenericChain(element), secondChain.CongenericChain(element));
+                            var intervalManager = new AccordanceIntervalsManager(firstChain.CongenericChain(element), secondChain.CongenericChain(element));
                             var characteristicValue = calculator.Calculate(intervalManager, link);
                             characteristics.Add(characteristicValue);
                         }
