@@ -416,4 +416,30 @@ UPDATE characteristic_type SET name = 'Geometric mean',  binary_chain_applicable
 UPDATE characteristic_type SET name = 'Phantom messages count',  congeneric_chain_applicable = true WHERE id = 15 AND class_name = 'PhantomMessagesCount';
 UPDATE characteristic_type SET name = 'Probability', description = 'Or frequency',  full_chain_applicable = true WHERE id = 15 AND class_name = 'Probability';
 
+-- 23.02.2015
+-- Refactoring of links.
+-- Added new table containing characteristics types and links.
+
+UPDATE link SET id = 5 WHERE id = 4;
+UPDATE link SET id = 4 WHERE id = 3;
+UPDATE link SET id = 3 WHERE id = 2;
+UPDATE link SET id = 2 WHERE id = 1;
+UPDATE link SET id = 1 WHERE id = 0;
+INSERT INTO link (id, name, description) VALUES (0, 'Not applied', 'Link is not applied');
+
+CREATE TABLE characteristic_type_link
+(
+   id serial NOT NULL, 
+   characteristic_type_id integer NOT NULL, 
+   link_id integer NOT NULL, 
+   CONSTRAINT pk_characteristic_type_link PRIMARY KEY (id), 
+   CONSTRAINT uk_characteristic_type_link UNIQUE (characteristic_type_id, link_id), 
+   CONSTRAINT fk_characteristic_type_link_link FOREIGN KEY (link_id) REFERENCES link (id) ON UPDATE CASCADE ON DELETE CASCADE, 
+   CONSTRAINT fk_characteristic_type_link_characteristic_type FOREIGN KEY (characteristic_type_id) REFERENCES characteristic_type (id) ON UPDATE CASCADE ON DELETE CASCADE
+);
+COMMENT ON TABLE characteristic_type_link IS 'Intermediate table of chracteristics types and their possible links.';
+
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT c.id, l.id FROM characteristic_type c INNER JOIN link l ON (c.linkable AND l.id != 0) OR (NOT c.linkable AND l.id = 0));
+
+
 COMMIT;
