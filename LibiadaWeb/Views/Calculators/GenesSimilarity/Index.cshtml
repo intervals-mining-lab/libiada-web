@@ -24,13 +24,32 @@
             @Html.Partial("_PieceTypesSelect")
             @Html.Partial("_Characteristic")
             <div class="form-group">
-                @Html.Label("maxDifference", "Maximum difference", new { @class = "control-label col-md-2" })
+                @Html.Label("maxDifference", "Maximum difference", new {@class = "control-label col-md-2"})
                 <div class="col-md-10">
-                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" />
-                    @Html.ValidationMessage("maxDifference", "", new { @class = "text-danger" })
+                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0"/>
+                    @Html.ValidationMessage("maxDifference", "", new {@class = "text-danger"})
                 </div>
             </div>
-            <hr />
+
+            <hr/>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="excludeType" value="Exclude" checked />
+                        Exclude similar genes
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="excludeType" value="NotExclude"/>
+                        Don't exclude similar genes
+                    </label>
+                </div>
+            </div>
+
             @Html.Partial("_MattersSubmit")
         </div>
     </div>

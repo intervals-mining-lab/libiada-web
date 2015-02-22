@@ -80,6 +80,9 @@
         /// <param name="maxDifference">
         /// The precision.
         /// </param>
+        /// <param name="excludeType">
+        /// The exclude type
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -93,7 +96,8 @@
             int? linkId,
             int notationId,
             int[] pieceTypeIds,
-            string maxDifference)
+            string maxDifference,
+            string excludeType)
         {
             return Action(() =>
             {
@@ -120,9 +124,15 @@
                 {
                     for (int j = 0; j < secondSequenceCharacteristics.Count; j++)
                     {
-                        if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) < double.Parse(maxDifference, CultureInfo.InvariantCulture))
+                        if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= double.Parse(maxDifference, CultureInfo.InvariantCulture))
                         {
                             similarGenes.Add(new IntPair(i, j));
+
+                            if (excludeType == "Exclude")
+                            {
+                                firstSequenceCharacteristics.RemoveAt(i);
+                                secondSequenceCharacteristics.RemoveAt(j);
+                            }
                         }
                     }
                 }

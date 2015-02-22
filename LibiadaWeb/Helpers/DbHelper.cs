@@ -29,7 +29,7 @@
                     {
                         using (var db = new LibiadaWebEntities())
                         {
-                            databaseName = db.Database.SqlQuery<string>("SELECT current_database()").First();
+                            databaseName = string.Join("@", db.Database.Connection.DataSource, db.Database.Connection.Database);
                         }
                     }
                     catch (Exception e)
