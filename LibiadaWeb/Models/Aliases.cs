@@ -65,29 +65,34 @@
         public static class Link
         {
             /// <summary>
-            /// The link none.
+            /// Link not applied.
             /// </summary>
-            public const int None = 0;
+            public const int NotApplied = 0;
 
             /// <summary>
-            /// The link start.
+            /// No link.
             /// </summary>
-            public const int Start = 1;
+            public const int None = 1;
 
             /// <summary>
-            /// End link.
+            /// The link to start.
             /// </summary>
-            public const int End = 2;
+            public const int Start = 2;
 
             /// <summary>
-            /// Start and end link .
+            /// The link to end.
             /// </summary>
-            public const int StartEnd = 3;
+            public const int End = 3;
 
             /// <summary>
-            /// Cycle link .
+            /// Start and end link.
             /// </summary>
-            public const int Cycle = 4;
+            public const int StartEnd = 4;
+
+            /// <summary>
+            /// Cycle link.
+            /// </summary>
+            public const int Cycle = 5;
         }
 
         /// <summary>
