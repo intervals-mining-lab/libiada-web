@@ -16,10 +16,7 @@ namespace LibiadaWeb
     {
         public CharacteristicType()
         {
-            this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.AccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
-            this.Characteristic = new HashSet<Characteristic>();
-            this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
+            this.CharacteristicTypeLink = new HashSet<CharacteristicTypeLink>();
         }
     
         public int Id { get; set; }
@@ -27,16 +24,12 @@ namespace LibiadaWeb
         public string Description { get; set; }
         public Nullable<int> CharacteristicGroupId { get; set; }
         public string ClassName { get; set; }
-        public bool Linkable { get; set; }
         public bool FullSequenceApplicable { get; set; }
         public bool AccordanceApplicable { get; set; }
         public bool CongenericSequenceApplicable { get; set; }
         public bool BinarySequenceApplicable { get; set; }
     
-        public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
-        public virtual ICollection<AccordanceCharacteristic> AccordanceCharacteristic { get; set; }
-        public virtual ICollection<Characteristic> Characteristic { get; set; }
+        public virtual ICollection<CharacteristicTypeLink> CharacteristicTypeLink { get; set; }
         public virtual CharacteristicGroup CharacteristicGroup { get; set; }
-        public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
     }
 }

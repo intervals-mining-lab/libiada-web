@@ -227,6 +227,9 @@
     <Compile Include="CharacteristicType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="CharacteristicTypeLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="CommonSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

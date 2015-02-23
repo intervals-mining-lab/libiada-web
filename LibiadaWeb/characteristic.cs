@@ -16,15 +16,13 @@ namespace LibiadaWeb
     {
         public long Id { get; set; }
         public long SequenceId { get; set; }
-        public int CharacteristicTypeId { get; set; }
+        public int CharacteristicTypeLinkId { get; set; }
         public double Value { get; set; }
         public string ValueString { get; set; }
-        public Nullable<int> LinkId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     
-        public virtual Link Link { get; set; }
         public virtual CommonSequence Sequence { get; set; }
-        public virtual CharacteristicType CharacteristicType { get; set; }
+        public virtual CharacteristicTypeLink CharacteristicTypeLink { get; set; }
     }
 }

@@ -122,8 +122,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             {
                 Value = c.Id, 
                 Text = c.Name, 
-                Selected = false, 
-                Linkable = c.Linkable
+                Selected = false
             });
         }
 

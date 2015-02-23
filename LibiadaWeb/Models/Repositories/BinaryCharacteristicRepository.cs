@@ -1,7 +1,5 @@
 namespace LibiadaWeb.Models.Repositories
 {
-    using System;
-
     /// <summary>
     /// The binary characteristic repository.
     /// </summary>
@@ -47,13 +45,12 @@ namespace LibiadaWeb.Models.Repositories
         /// <returns>
         /// The <see cref="long"/>.
         /// </returns>
-        public long CreateBinaryCharacteristic(long sequenceId, int characteristicId, int? linkId, long firstElementId, long secondElementId, double value)
+        public long CreateBinaryCharacteristic(long sequenceId, int characteristicTypeLinkId, int? linkId, long firstElementId, long secondElementId, double value)
         {
             var characteristic = new BinaryCharacteristic
             {
-                SequenceId = sequenceId, 
-                CharacteristicTypeId = characteristicId, 
-                LinkId = linkId, 
+                SequenceId = sequenceId,
+                CharacteristicTypeLinkId = characteristicTypeLinkId, 
                 FirstElementId = firstElementId, 
                 SecondElementId = secondElementId, 
                 Value = value, 
