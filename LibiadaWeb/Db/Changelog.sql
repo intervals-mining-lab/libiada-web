@@ -441,5 +441,88 @@ COMMENT ON TABLE characteristic_type_link IS 'Intermediate table of chracteristi
 
 INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT c.id, l.id FROM characteristic_type c INNER JOIN link l ON (c.linkable AND l.id != 0) OR (NOT c.linkable AND l.id = 0));
 
+DELETE FROM characteristic;
+DELETE FROM binary_characteristic;
+DELETE FROM congeneric_characteristic;
+DELETE FROM accordance_characteristic;
+
+DROP TRIGGER tgiu_accordance_characteristic_applicability ON accordance_characteristic;
+DROP TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic;
+DROP TRIGGER tgiu_characteristic_applicability ON characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic;
+
+DROP TRIGGER tgiu_accordance_characteristic_link ON accordance_characteristic;
+DROP TRIGGER tgiu_binary_characteristic_link ON binary_characteristic;
+DROP TRIGGER tgiu_characteristic_link ON characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_link ON congeneric_characteristic;
+
+ALTER TABLE characteristic ADD COLUMN characteristic_type_link_id integer NOT NULL;
+ALTER TABLE characteristic ADD CONSTRAINT fk_characteristic_type_link FOREIGN KEY (characteristic_type_link_id) REFERENCES characteristic_type_link (id) ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE characteristic DROP CONSTRAINT fk_characteristic_link;
+ALTER TABLE characteristic DROP CONSTRAINT fk_characteristic_type;
+ALTER TABLE characteristic DROP COLUMN characteristic_type_id;
+ALTER TABLE characteristic DROP COLUMN link_id;
+
+ALTER TABLE binary_characteristic ADD COLUMN characteristic_type_link_id integer NOT NULL;
+ALTER TABLE binary_characteristic ADD CONSTRAINT fk_characteristic_type_link FOREIGN KEY (characteristic_type_link_id) REFERENCES characteristic_type_link (id) ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE binary_characteristic DROP CONSTRAINT fk_binary_characteristic_link;
+ALTER TABLE binary_characteristic DROP CONSTRAINT fk_binary_characteristic_characteristic_type;
+ALTER TABLE binary_characteristic DROP COLUMN characteristic_type_id;
+ALTER TABLE binary_characteristic DROP COLUMN link_id;
+
+ALTER TABLE congeneric_characteristic ADD COLUMN characteristic_type_link_id integer NOT NULL;
+ALTER TABLE congeneric_characteristic ADD CONSTRAINT fk_characteristic_type_link FOREIGN KEY (characteristic_type_link_id) REFERENCES characteristic_type_link (id) ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE congeneric_characteristic DROP CONSTRAINT fk_congeneric_characteristic_link;
+ALTER TABLE congeneric_characteristic DROP CONSTRAINT fk_congeneric_characteristic_type;
+ALTER TABLE congeneric_characteristic DROP COLUMN characteristic_type_id;
+ALTER TABLE congeneric_characteristic DROP COLUMN link_id;
+
+ALTER TABLE accordance_characteristic ADD COLUMN characteristic_type_link_id integer NOT NULL;
+ALTER TABLE accordance_characteristic ADD CONSTRAINT fk_characteristic_type_link FOREIGN KEY (characteristic_type_link_id) REFERENCES characteristic_type_link (id) ON UPDATE CASCADE ON DELETE NO ACTION;
+ALTER TABLE accordance_characteristic DROP CONSTRAINT fk_accordance_characteristic_link;
+ALTER TABLE accordance_characteristic DROP CONSTRAINT fk_accordance_characteristic_characteristic_type;
+ALTER TABLE accordance_characteristic DROP COLUMN characteristic_type_id;
+ALTER TABLE accordance_characteristic DROP COLUMN link_id;
+
+DROP FUNCTION trigger_check_applicability();
+
+CREATE OR REPLACE FUNCTION trigger_check_applicability()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	var applicabilityOk = plv8.execute('SELECT c.' + TG_ARGV[0] + ' AS result FROM characteristic_type_link cl INNER JOIN characteristic_type c ON c.id = cl.characteristic_type_id WHERE cl.id = $1;', [NEW.characteristic_type_link_id])[0].result;
+	if(applicabilityOk){
+		return NEW;
+	}
+	else{
+		plv8.elog(ERROR, 'Добавлемая характеристика неприменима к данному типу цепочки.');
+	}
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей в таблице с полями characteristic_type_id.');
+}
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+COMMENT ON FUNCTION trigger_check_applicability() IS 'Триггерная функция, проверяющая, что характеристика может быть вычислена для такого типа цепочки';
+
+CREATE TRIGGER tgiu_congeneric_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_link_id ON congeneric_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('congeneric_chain_applicable');
+COMMENT ON TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к однородным цепочкам.';
+
+CREATE TRIGGER tgiu_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_link_id ON characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('full_chain_applicable');
+COMMENT ON TRIGGER tgiu_characteristic_applicability ON characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к полным цепочкам.';
+
+CREATE TRIGGER tgiu_binary_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_link_id ON binary_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('binary_chain_applicable');
+COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+CREATE TRIGGER tgiu_accordance_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_link_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('accordance_applicable');
+COMMENT ON TRIGGER tgiu_accordance_characteristic_applicability ON accordance_characteristic IS 'Триггер, проверяющий применима ли указанная характеристика к бинарным цепочкам.';
+
+
 
 COMMIT;
