@@ -23,7 +23,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// The matter repository.
@@ -49,7 +49,7 @@
         public GeneRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             matterRepository = new MatterRepository(db);
             pieceTypeRepository = new PieceTypeRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -64,28 +64,20 @@
         public Dictionary<string, object> GetGenesCalculationData()
         {
             var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
-            var sequences = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id));
-            var matterIds = sequences.Select(c => c.MatterId);
-
+            var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId);
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
 
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-
-            var characteristicTypes = characteristicTypeRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
 
             var pieceTypeIds = db.PieceType.Where(p => p.NatureId == Aliases.Nature.Genetic
                                          && p.Id != Aliases.PieceType.FullGenome
                                          && p.Id != Aliases.PieceType.ChloroplastGenome
                                          && p.Id != Aliases.PieceType.MitochondrionGenome).Select(p => p.Id);
 
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
             return new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetMatterSelectList(matters) }, 
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "links", links }, 
+                    { "characteristicTypes", characteristicTypes },  
                     { "notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") },
                     { "natureId", Aliases.Nature.Genetic },
                     { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }

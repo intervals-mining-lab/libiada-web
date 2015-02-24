@@ -33,13 +33,13 @@
         };
 
         $scope.characteristic = {
-            characteristicType: $scope.characteristicTypes[0],
-            link: $scope.links[0],
+            characteristicType: $scope.characteristicTypes[0].CharacteristicType,
+            link: $scope.characteristicTypes[0].Link,
             notation: $scope.notationsFiltered[0]
         };
 
         $scope.isLinkable = function (characteristic) {
-            return characteristic.characteristicType.Linkable;
+            return characteristic.characteristicType.Link.Id !== 0;
         };
 
         $scope.$watch("natureId", filterByNature, true);

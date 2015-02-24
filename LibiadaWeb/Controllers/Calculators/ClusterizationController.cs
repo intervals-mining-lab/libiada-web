@@ -65,12 +65,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable).Select(c => c.Id);
-
-            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
 
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -83,7 +78,6 @@
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "links", links }, 
                     { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };

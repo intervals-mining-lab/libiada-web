@@ -21,12 +21,7 @@
         /// <summary>
         /// The characteristic repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
-        /// The link repository.
-        /// </summary>
-        private readonly LinkRepository linkRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuickCalculationController"/> class.
@@ -34,8 +29,7 @@
         public QuickCalculationController() : base("QuickCalculation", "Quick calculation")
         {
             db = new LibiadaWebEntities();
-            characteristicRepository = new CharacteristicTypeRepository(db);
-            linkRepository = new LinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -46,17 +40,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "links", links }
+                    { "characteristicTypes", characteristicTypes }
                 };
             return View();
         }
@@ -101,8 +89,7 @@
                 var characteristicsList = new List<SelectListItem>();
                 for (int i = 0; i < characteristicNames.Count; i++)
                 {
-                    characteristicsList.Add(
-                        new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
+                    characteristicsList.Add(new SelectListItem { Value = i.ToString(), Text = characteristicNames[i], Selected = false });
                 }
 
                 return new Dictionary<string, object>

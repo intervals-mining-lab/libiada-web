@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -67,16 +66,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matters = db.Matter.Include(m => m.Nature);
-            ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
-            ViewBag.matters = matters;
-
-            var characteristicsList = db.CharacteristicType.Where(c => c.CongenericSequenceApplicable).Select(c => c.Id);
-
-            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.CongenericSequenceApplicable);
 
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -89,7 +79,6 @@
                     { "characteristicTypes", characteristicTypes }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "links", links }, 
                     { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };

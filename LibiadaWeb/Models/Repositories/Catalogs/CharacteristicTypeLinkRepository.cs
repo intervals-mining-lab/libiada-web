@@ -1,5 +1,8 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using Link = LibiadaCore.Core.Link;
 
@@ -39,20 +42,6 @@
         }
 
         /// <summary>
-        /// The get link.
-        /// </summary>
-        /// <param name="characteristicTypeLinkId">
-        /// The characteristic type link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Link"/>.
-        /// </returns>
-        public LibiadaWeb.Link GetLink(int characteristicTypeLinkId)
-        {
-            return db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).Link;
-        }
-
-        /// <summary>
         /// The get characteristic type.
         /// </summary>
         /// <param name="characteristicTypeLinkId">
@@ -65,6 +54,28 @@
         {
             var characteristicTypeId = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).CharacteristicTypeId;
             return db.CharacteristicType.Single(c => c.Id == characteristicTypeId);
+        }
+
+        /// <summary>
+        /// Extracts characteristics types list with links.
+        /// </summary>
+        /// <param name="filter">
+        /// The filter of characteristics.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetCharacteristics(Func<CharacteristicType, bool> filter)
+        {
+            var characteristicsList = db.CharacteristicType.Where(filter).Select(c => c.Id);
+            var characteristicTypeLinks = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).Include(c => c.Link).Include(c => c.CharacteristicType);
+
+            return characteristicTypeLinks.Select(c => new
+                        {
+                            Value = c.Id,
+                            CharacteristicType = new { Value = c.CharacteristicType.Id, Text = c.CharacteristicType.Name },
+                            Link = new { Value = c.Link.Id, Text = c.Link.Name }
+                        }).ToList();
         }
 
         /// <summary>
@@ -83,7 +94,7 @@
         {
             var characteristicType = GetCharacteristicType(characteristicTypeLinkId).Name;
 
-            var databaseLink = GetLink(characteristicTypeLinkId);
+            var databaseLink = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).Link;
             var link = databaseLink.Id != Aliases.Link.NotApplied ? databaseLink.Name : string.Empty;
 
             var notation = db.Notation.Single(n => n.Id == notationId).Name;

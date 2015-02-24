@@ -3,7 +3,7 @@
 <br />
 <div class="form-group">
     <div class="col-md-10">
-        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.CharacteristocType.Text for c in characteristicTypes"></select>
         <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value" />
         @Html.ValidationMessage("characteristicId", "", new { @class = "text-danger" })
     </div>

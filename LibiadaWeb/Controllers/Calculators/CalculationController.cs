@@ -44,8 +44,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController()
-            : base("Calculation", "Characteristics calculation")
+        public CalculationController() : base("Calculation", "Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
@@ -62,12 +61,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable).Select(c => c.Id);
-
-            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
-
-            var links = new SelectList(db.Link, "id", "name").ToList();
-            links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
 
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -76,11 +70,10 @@
                 {
                     { "minimumSelectedMatters", 1 },
                     { "maximumSelectedMatters", int.MaxValue },
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "matters", matterRepository.GetMatterSelectList() }, 
                     { "characteristicTypes", characteristicTypes }, 
-                    { "links", links }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
+                    { "notations", notationRepository.GetSelectListWithNature() },
+                    { "natures", new SelectList(db.Nature, "id", "name") }, 
                     { "languages", new SelectList(db.Language, "id", "name") }, 
                     { "translators", translators }
                 };
