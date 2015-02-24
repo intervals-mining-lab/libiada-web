@@ -10,6 +10,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -52,7 +53,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var data = geneRepository.GetGenesCalculationData();
+            var calculatorsHelper = new CalculatorsHelper(db);
+            var data = calculatorsHelper.GetGenesCalculationData(2, 2);
             data.Add("minimumSelectedMatters", 2);
             data.Add("maximumSelectedMatters", 2);
             ViewBag.data = data;

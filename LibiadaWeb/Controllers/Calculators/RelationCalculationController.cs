@@ -38,16 +38,6 @@
         private readonly BinaryCharacteristicRepository binaryCharacteristicRepository;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
         /// The characteristic type repository.
         /// </summary>
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
@@ -60,8 +50,6 @@
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
-            matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -73,22 +61,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.BinarySequenceApplicable);
-
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 1 },
-                    { "maximumSelectedMatters", 1 },
-                    { "natures", new SelectList(db.Nature, "id", "name") },
-                    { "matters", matterRepository.GetMatterSelectList() },
-                    { "characteristicTypes", characteristicTypes },
-                    { "notations", notationRepository.GetSelectListWithNature() },
-                    { "languages", new SelectList(db.Language, "id", "name") },
-                    { "translators", translators }
-                };
+            var calculatorsHelper = new CalculatorsHelper(db);
+            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.BinarySequenceApplicable, 1, 1);
             return View();
         }
 

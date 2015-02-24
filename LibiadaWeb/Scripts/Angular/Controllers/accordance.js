@@ -32,14 +32,28 @@
             $scope.characteristic.notation = notation;
         };
 
-        $scope.characteristic = {
-            characteristicType: $scope.characteristicTypes[0].CharacteristicType,
-            link: $scope.characteristicTypes[0].Link,
-            notation: $scope.notationsFiltered[0]
+        $scope.isLinkable = function (characteristic) {
+            return characteristic.characteristicType.CharacteristicTypeLink.length > 1;
         };
 
-        $scope.isLinkable = function (characteristic) {
-            return characteristic.characteristicType.Link.Id !== 0;
+        $scope.getLinks = function (characteristicType) {
+            var characteristicTypeLinks = characteristicType.CharacteristicTypeLink;
+            var links = [];
+            for (var i = 0; i < characteristicTypeLinks.length; i++) {
+                for (var j = 0; j < $scope.links.length; j++) {
+                    if ($scope.links[j].CharacteristicTypeLink.indexOf(characteristicTypeLinks[i]) !== -1) {
+                        links.push($scope.links[j]);
+                    }
+                }
+            }
+
+            return links;
+        };
+
+        $scope.characteristic = {
+            characteristicType: $scope.characteristicTypes[0],
+            link: $scope.getLinks($scope.characteristicTypes[0])[0],
+            notation: $scope.notationsFiltered[0]
         };
 
         $scope.$watch("natureId", filterByNature, true);

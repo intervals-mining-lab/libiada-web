@@ -282,6 +282,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CalculatorsHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />

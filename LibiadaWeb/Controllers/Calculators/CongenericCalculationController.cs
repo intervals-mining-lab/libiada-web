@@ -27,16 +27,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
@@ -52,8 +42,6 @@
         public CongenericCalculationController() : base("CongenericCalculation", "Congeneric calculation")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
@@ -66,22 +54,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.CongenericSequenceApplicable);
-
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 1 },
-                    { "maximumSelectedMatters", int.MaxValue },
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "languages", new SelectList(db.Language, "id", "name") }, 
-                    { "translators", translators }
-                };
+            var calculatorsHelper = new CalculatorsHelper(db);
+            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.CongenericSequenceApplicable, 1, int.MaxValue);
             return View();
         }
 

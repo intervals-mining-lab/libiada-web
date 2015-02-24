@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
@@ -40,7 +41,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
+            var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(c => c.FullSequenceApplicable)
+                .Select(c => new { Value = c.Id, Text = c.Name, CharacteristicTypeLink = c.CharacteristicTypeLink }).ToList();
+           // var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
 
             ViewBag.data = new Dictionary<string, object>
                 {

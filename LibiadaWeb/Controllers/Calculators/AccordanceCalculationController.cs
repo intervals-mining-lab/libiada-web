@@ -10,6 +10,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Core.IntervalsManagers;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -24,16 +25,6 @@
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
 
         /// <summary>
         /// The common sequence repository.
@@ -51,8 +42,6 @@
         public AccordanceCalculationController() : base("AccordanceCalculation", "Accordance calculation")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
@@ -65,22 +54,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.AccordanceApplicable);
-
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 2 },
-                    { "maximumSelectedMatters", 2 },
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "characteristicTypes", characteristicTypes }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(db.Language, "id", "name") }, 
-                    { "translators", translators }
-                };
+            var calculatorsHelper = new CalculatorsHelper(db);
+            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.AccordanceApplicable, 2, 2);
             return View();
         }
 
