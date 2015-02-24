@@ -33,11 +33,6 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The notation repository.
         /// </summary>
         private readonly NotationRepository notationRepository;
@@ -50,7 +45,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
@@ -59,10 +54,9 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -77,9 +71,9 @@
             ViewBag.matterCheckBoxes = matterRepository.GetSelectListItems(matters, null);
             ViewBag.matters = matters;
 
-            var characteristicsList = db.CharacteristicType.Where(c => c.CongenericSequenceApplicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.CongenericSequenceApplicable).Select(c => c.Id);
 
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
 
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -108,11 +102,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type and link ids.
         /// </param>
         /// <param name="notationIds">
         /// The notation ids.
@@ -135,8 +126,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds, 
-            int[] characteristicIds, 
-            int?[] linkIds, 
+            int[] characteristicTypeLinkIds, 
             int[] notationIds, 
             int[] languageIds, 
             int?[] translatorIds, 
@@ -163,7 +153,7 @@
                     theoreticalRanks.Add(new List<List<double>>());
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
-                    for (int i = 0; i < characteristicIds.Length; i++)
+                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         int notationId = notationIds[i];
 
@@ -189,17 +179,13 @@
                         Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                         chain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
-                        int characteristicId = characteristicIds[i];
-                        int? linkId = linkIds[i];
+                        int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
-                        var link = (Link)(linkId ?? 0);
+                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId 
-                                                                                && c.CharacteristicTypeId == characteristicId 
-                                                                                && ((linkId == null && c.LinkId == null) 
-                                                                                || (linkId == c.LinkId)));
+                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
                         if (calculated < chain.Alphabet.Cardinality)
                         {
                             for (int j = 0; j < chain.Alphabet.Cardinality; j++)
@@ -208,17 +194,13 @@
 
                                 CongenericChain tempChain = chain.CongenericChain(j);
 
-                                if (!db.CongenericCharacteristic.Any(b =>
-                                    b.SequenceId == sequenceId &&
-                                    b.CharacteristicTypeId == characteristicId &&
-                                    b.ElementId == elementId && b.LinkId == linkId))
+                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
                                     var currentCharacteristic = new CongenericCharacteristic
                                     {
                                         SequenceId = sequenceId,
-                                        CharacteristicTypeId = characteristicId,
-                                        LinkId = linkId,
+                                        CharacteristicTypeLinkId = characteristicTypeLinkId,
                                         ElementId = elementId,
                                         Value = value,
                                         ValueString = value.ToString(),
@@ -235,11 +217,7 @@
                         {
                             long elementId = sequenceElements[d];
 
-                            double? characteristic = db.CongenericCharacteristic.Single(c =>
-                                c.SequenceId == sequenceId &&
-                                c.CharacteristicTypeId == characteristicId &&
-                                c.ElementId == elementId &&
-                                ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
+                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId && c.ElementId == elementId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
@@ -286,11 +264,11 @@
                 }
 
                 // подписи для характеристик
-                for (int k = 0; k < characteristicIds.Length; k++)
+                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    int characteristicId = characteristicIds[k];
+                    int characteristicTypeLinkId = characteristicTypeLinkIds[k];
 
-                    string characteristicType = characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]);
+                    string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
                     if (isLiteratureSequence)
                     {
                         int languageId = languageIds[k];

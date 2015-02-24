@@ -31,11 +31,6 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The notation repository.
         /// </summary>
         private readonly NotationRepository notationRepository;
@@ -46,9 +41,9 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The characteristic type repository.
+        /// The characteristic type link repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
@@ -58,10 +53,9 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -72,9 +66,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.AccordanceApplicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.AccordanceApplicable).Select(c => c.Id);
 
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
 
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -103,11 +97,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
         /// </param>
         /// <param name="notationId">
         /// The notation id.
@@ -133,8 +124,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds,
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             int notationId,
             int? languageId,
             int? translatorId,
@@ -189,9 +179,9 @@
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
 
-                        string className = db.CharacteristicType.Single(ct => ct.Id == characteristicId).ClassName;
+                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
-                        var link = (Link)(linkId ?? 0);
+                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
@@ -204,7 +194,7 @@
                         break;
                 }
 
-                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
                 return new Dictionary<string, object>
                                      {

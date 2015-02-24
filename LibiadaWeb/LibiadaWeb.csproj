@@ -335,6 +335,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ILinkRepository.cs" />

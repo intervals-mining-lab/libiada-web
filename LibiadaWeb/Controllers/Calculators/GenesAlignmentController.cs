@@ -30,7 +30,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesAlignmentController"/> class.
@@ -39,7 +39,7 @@
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -63,11 +63,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicId">
+        /// <param name="characteristicTypeLinkId">
         /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
         /// </param>
         /// <param name="notationId">
         /// The notation id.
@@ -94,8 +91,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds,
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             int notationId,
             int[] pieceTypeIds,
             string validationType,
@@ -112,8 +108,8 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicId, linkId, notationId, pieceTypeIds);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicId, linkId, notationId, pieceTypeIds);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notationId, pieceTypeIds);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notationId, pieceTypeIds);
 
                 if (sort)
                 {
@@ -147,7 +143,7 @@
                 List<double> distances = new List<double>();
                 var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
-                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
                 return new Dictionary<string, object>
                 {
@@ -206,11 +202,8 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="characteristicId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
         /// </param>
         /// <param name="notationId">
         /// The notation id.
@@ -223,8 +216,7 @@
         /// </returns>
         private List<double> CalculateCharacteristic(
             long matterId,
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             int notationId,
             int[] pieceTypeIds)
         {
@@ -234,24 +226,21 @@
 
             var sequences = geneRepository.ExtractSequences(matterId, notationId, pieceTypeIds, out genes);
 
-            string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-            var link = (Link)(linkId ?? 0);
+            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
             for (int j = 0; j < sequences.Count; j++)
             {
                 long geneId = genes[j].Id;
 
-                if (!db.Characteristic.Any(c => c.SequenceId == geneId &&
-                                                c.CharacteristicTypeId == characteristicId &&
-                                                ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))))
+                if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
                     double value = calculator.Calculate(sequences[j], link);
                     var currentCharacteristic = new Characteristic
                     {
                         SequenceId = geneId,
-                        CharacteristicTypeId = characteristicId,
-                        LinkId = linkId,
+                        CharacteristicTypeLinkId = characteristicTypeLinkId,
                         Value = value,
                         ValueString = value.ToString()
                     };
@@ -265,10 +254,7 @@
             for (int d = 0; d < sequences.Count; d++)
             {
                 long geneId = genes[d].Id;
-                double characteristic = db.Characteristic.Single(c =>
-                    c.SequenceId == geneId &&
-                    c.CharacteristicTypeId == characteristicId &&
-                    ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
+                double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);
             }

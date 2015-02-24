@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
@@ -29,7 +28,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
@@ -38,7 +37,7 @@
         {
             db = new LibiadaWebEntities();
             geneRepository = new GeneRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -62,11 +61,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type and link ids.
         /// </param>
         /// <param name="notationIds">
         /// The notation ids.
@@ -83,8 +79,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicIds,
-            int?[] linkIds,
+            int[] characteristicTypeLinkIds,
             int[] notationIds,
             int[] pieceTypeIds,
             bool sort)
@@ -112,31 +107,26 @@
                     var chains = geneRepository.ExtractSequences(matterId, notationIds[w], pieceTypeIds, out genes);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
-                    for (int i = 0; i < characteristicIds.Length; i++)
+                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
-                        int characteristicId = characteristicIds[i];
-                        int? linkId = linkIds[i];
+                        int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                        var link = (Link)(linkId ?? 0);
+                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
                         for (int j = 0; j < chains.Count; j++)
                         {
                             long geneId = genes[j].Id;
 
-                            if (!db.Characteristic.Any(c => c.SequenceId == geneId &&
-                                                            c.CharacteristicTypeId == characteristicId &&
-                                                            ((linkId == null && c.LinkId == null) ||
-                                                             (linkId == c.LinkId))))
+                            if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                             {
                                 double value = calculator.Calculate(chains[j], link);
                                 var currentCharacteristic = new Characteristic
                                 {
                                     SequenceId = geneId,
-                                    CharacteristicTypeId = characteristicId,
-                                    LinkId = linkId,
+                                    CharacteristicTypeLinkId = characteristicTypeLinkId,
                                     Value = value,
                                     ValueString = value.ToString()
                                 };
@@ -149,10 +139,7 @@
                         for (int d = 0; d < chains.Count; d++)
                         {
                             long geneId = genes[d].Id;
-                            double? characteristic = db.Characteristic.Single(c =>
-                                c.SequenceId == geneId &&
-                                c.CharacteristicTypeId == characteristicId &&
-                                ((linkId == null && c.LinkId == null) || (linkId == c.LinkId))).Value;
+                            double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
@@ -173,11 +160,9 @@
                 }
 
                 // подписи для характеристик
-                for (int k = 0; k < characteristicIds.Length; k++)
+                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    int characteristicId = characteristicIds[k];
-
-                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
                 // ранговая сортировка

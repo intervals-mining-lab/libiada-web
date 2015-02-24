@@ -28,11 +28,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
@@ -55,7 +50,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
@@ -63,12 +58,11 @@
         public RelationCalculationController() : base("RelationCalculation", "Relation calculation")
         {
             db = new LibiadaWebEntities();
-            characteristicRepository = new CharacteristicTypeRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -79,9 +73,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.BinarySequenceApplicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.BinarySequenceApplicable).Select(c => c.Id);
 
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
 
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -110,11 +104,8 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="characteristicId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
         /// </param>
         /// <param name="notationId">
         /// The notation id.
@@ -143,8 +134,7 @@
         [HttpPost]
         public ActionResult Index(
             long matterId,
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             int notationId,
             int? languageId,
             int? translatorId,
@@ -176,25 +166,23 @@
                 }
 
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
 
                 IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
-                var link = (Link)(linkId ?? 0);
+                var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
                 if (frequencyFilter)
                 {
-                    FrequencyCharacteristic(characteristicId, linkId, frequencyCount, currentChain, sequenceId, calculator, link);
+                    FrequencyCharacteristic(characteristicTypeLinkId, frequencyCount, currentChain, sequenceId, calculator, link);
                 }
                 else
                 {
-                    NotFrequencyCharacteristic(characteristicId, linkId, sequenceId, currentChain, calculator, link);
+                    NotFrequencyCharacteristic(characteristicTypeLinkId, sequenceId, currentChain, calculator, link);
                 }
 
                 if (filter)
                 {
-                    filteredResult = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId &&
-                                                                         b.CharacteristicTypeId == characteristicId &&
-                                                                         b.LinkId == linkId)
+                    filteredResult = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                         .OrderByDescending(b => b.Value)
                         .Take(filterSize).ToList();
 
@@ -212,9 +200,7 @@
                 }
                 else
                 {
-                    characteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId &&
-                                                                          b.CharacteristicTypeId == characteristicId &&
-                                                                          b.LinkId == linkId)
+                    characteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                         .OrderBy(b => b.SecondElementId)
                         .ThenBy(b => b.FirstElementId)
                         .ToList();
@@ -225,7 +211,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
                 return new Dictionary<string, object>
                 {
@@ -246,11 +232,8 @@
         /// <summary>
         /// The not frequency characteristic.
         /// </summary>
-        /// <param name="characteristicId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
@@ -265,16 +248,13 @@
         /// The link.
         /// </param>
         private void NotFrequencyCharacteristic(
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             long sequenceId,
             Chain chain,
             IBinaryCalculator calculator,
             Link link)
         {
-            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequenceId &&
-                                                                 b.CharacteristicTypeId == characteristicId &&
-                                                                 b.LinkId == linkId);
+            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId);
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
                 List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
@@ -286,20 +266,13 @@
                         long secondElementId = sequenceElements[i];
                         if (!db.BinaryCharacteristic.Any(b =>
                                                           b.SequenceId == sequenceId &&
-                                                          b.CharacteristicTypeId == characteristicId &&
+                                                          b.CharacteristicTypeLinkId == characteristicTypeLinkId &&
                                                           b.FirstElementId == firstElementId &&
-                                                          b.SecondElementId == secondElementId &&
-                                                          b.LinkId == linkId))
+                                                          b.SecondElementId == secondElementId))
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                            binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                                sequenceId,
-                                characteristicId,
-                                linkId,
-                                firstElementId,
-                                secondElementId,
-                                result);
+                            binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result);
                         }
                     }
                 }
@@ -309,11 +282,8 @@
         /// <summary>
         /// The frequency characteristic.
         /// </summary>
-        /// <param name="characteristicId">
-        /// The characteristic id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
         /// </param>
         /// <param name="frequencyCount">
         /// The frequency count.
@@ -331,8 +301,7 @@
         /// The link.
         /// </param>
         private void FrequencyCharacteristic(
-            int characteristicId,
-            int? linkId,
+            int characteristicTypeLinkId,
             int frequencyCount,
             Chain chain,
             long sequenceId,
@@ -346,7 +315,7 @@
             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
-                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.Both);
+                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.None);
                 frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
             }
 
@@ -366,20 +335,13 @@
                     // проверяем не посчитана ли уже эта характеристика
                     if (!db.BinaryCharacteristic.Any(b =>
                                                       b.SequenceId == sequenceId &&
-                                                      b.CharacteristicTypeId == characteristicId &&
+                                                      b.CharacteristicTypeLinkId == characteristicTypeLinkId &&
                                                       b.FirstElementId == firstElementId &&
-                                                      b.SecondElementId == secondElementId &&
-                                                      b.LinkId == linkId))
+                                                      b.SecondElementId == secondElementId))
                     {
                         double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(
-                            sequenceId,
-                            characteristicId,
-                            linkId,
-                            firstElementId,
-                            secondElementId,
-                            result);
+                        binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result);
                     }
                 }
             }

@@ -32,11 +32,6 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The notation repository.
         /// </summary>
         private readonly NotationRepository notationRepository;
@@ -49,7 +44,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
@@ -58,10 +53,9 @@
         {
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -72,8 +66,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable).Select(c => c.Id);
+            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
 
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -102,11 +96,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic typw and link ids.
         /// </param>
         /// <param name="languageIds">
         /// The language id.
@@ -141,8 +132,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds, 
-            int[] characteristicIds, 
-            int[] linkIds, 
+            int[] characteristicTypeLinkIds,  
             int?[] languageIds, 
             int?[] translatorIds,
             int[] notationIds, 
@@ -162,8 +152,7 @@
                     languageIds,
                     translatorIds,
                     length,
-                    characteristicIds,
-                    linkIds,
+                    characteristicTypeLinkIds,
                     step);
 
                 var matterNames = new List<string>();
@@ -229,7 +218,7 @@
                         FastFourierTransform.FourierTransform(characteristics);
                     }
 
-                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicIds[k], linkIds[k], notationIds[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
                 if (autocorrelation)
@@ -239,7 +228,7 @@
                 }
 
                 var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicIds.Length; i++)
+                for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                 {
                     characteristicsList.Add(new SelectListItem
                     {
@@ -255,7 +244,7 @@
                     { "matterNames", matterNames },
                     { "starts", starts },
                     { "lengthes", lengthes },
-                    { "characteristicIds", new List<int>(characteristicIds) },
+                    { "characteristicIds", new List<int>(characteristicTypeLinkIds) },
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },
                     { "characteristicsList", characteristicsList }
@@ -305,11 +294,8 @@
         /// <param name="length">
         /// The length.
         /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type and link ids.
         /// </param>
         /// <param name="step">
         /// The step.
@@ -324,16 +310,14 @@
             int?[] languageIds,
             int?[] translatorIds,
             int length,
-            int[] characteristicIds,
-            int[] linkIds,
+            int[] characteristicTypeLinkIds,
             int step)
         {
             var calculators = new List<IFullCalculator>();
 
-            for (int i = 0; i < characteristicIds.Length; i++)
+            for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
             {
-                int characteristicId = characteristicIds[i];
-                string className = db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[i]).ClassName;
                 calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
             }
 
@@ -379,9 +363,10 @@
                         tempChain.Set(chain[iter.GetStartPosition() + i], i);
                     }
 
-                    for (int i = 0; i < characteristicIds.Length; i++)
+                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        characteristics.Last().Last().Add(calculators[i].Calculate(tempChain, (Link)linkIds[i]));
+                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]);
+                        characteristics.Last().Last().Add(calculators[i].Calculate(tempChain, link));
                     }
                 }
             }

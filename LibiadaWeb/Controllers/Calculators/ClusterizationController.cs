@@ -36,11 +36,6 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeRepository characteristicRepository;
-
-        /// <summary>
         /// The notation repository.
         /// </summary>
         private readonly NotationRepository notationRepository;
@@ -48,7 +43,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeRepository characteristicTypeRepository;
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
@@ -58,9 +53,8 @@
             db = new LibiadaWebEntities();
             matterRepository = new MatterRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicRepository = new CharacteristicTypeRepository(db);
             notationRepository = new NotationRepository(db);
-            characteristicTypeRepository = new CharacteristicTypeRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -71,9 +65,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable);
+            var characteristicsList = db.CharacteristicType.Where(c => c.FullSequenceApplicable).Select(c => c.Id);
 
-            var characteristicTypes = characteristicRepository.GetSelectListWithLinkable(characteristicsList);
+            var characteristicTypes = db.CharacteristicTypeLink.Where(c => characteristicsList.Contains(c.CharacteristicTypeId)).ToList();
 
             var links = new SelectList(db.Link, "id", "name").ToList();
             links.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
@@ -102,11 +96,8 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type and link ids.
         /// </param>
         /// <param name="notationIds">
         /// The notation ids.
@@ -132,8 +123,7 @@
         [HttpPost]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicIds,
-            int?[] linkIds,
+            int[] characteristicTypeLinkIds,
             int[] notationIds,
             int[] languageIds,
             int clustersCount,
@@ -154,40 +144,27 @@
                     {
                         long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.NotationId == notationIds[i]).Id;
 
-                        int characteristicId = characteristicIds[i];
-                        int? linkId = linkIds[i];
-                        if (db.Characteristic.Any(c =>
-                            ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
-                            c.SequenceId == sequenceId &&
-                            c.CharacteristicTypeId == characteristicId))
+                        int characteristicTypeLinkId = characteristicTypeLinkIds[i];
+                        if (db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
                             characteristics.Last()
-                                .Add(db.Characteristic.Single(c =>
-                                    ((linkId == null && c.LinkId == null) || (linkId == c.LinkId)) &&
-                                    c.SequenceId == sequenceId &&
-                                    c.CharacteristicTypeId == characteristicId).Value);
+                                .Add(db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value);
                         }
                         else
                         {
                             Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                            string className =
-                                db.CharacteristicType.Single(c => c.Id == characteristicId).ClassName;
+                            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                            var link = (Link)(linkId ?? 0);
                             characteristics.Last().Add(calculator.Calculate(tempChain, link));
                         }
                     }
                 }
 
-                for (int k = 0; k < characteristicIds.Length; k++)
+                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    int characteristicId = characteristicIds[k];
-                    int? linkId = linkIds[k];
-                    int notationId = notationIds[k];
-
-
-                    characteristicNames.Add(characteristicTypeRepository.GetCharacteristicName(characteristicId, linkId, notationId));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
                 DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
@@ -228,7 +205,7 @@
                 {
                     { "clusters", clusters },
                     { "characteristicNames", characteristicNames },
-                    { "characteristicIds", new List<int>(characteristicIds) },
+                    { "characteristicIds", new List<int>(characteristicTypeLinkIds) },
                     { "characteristics", characteristics },
                     { "sequenceNames", sequenceNames },
                     { "matterIds", new List<long>(matterIds) },

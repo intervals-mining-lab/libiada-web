@@ -450,19 +450,6 @@
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_binary_characteristic_link">
-          <End Role="link" Type="Self.link" Multiplicity="0..1" />
-          <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="link">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="binary_characteristic">
-              <PropertyRef Name="link_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        
         <Association Name="fk_binary_characteristic_second_element">
           <End Role="element" Type="Self.element" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -485,19 +472,6 @@
             </Principal>
             <Dependent Role="accordance_characteristic">
               <PropertyRef Name="first_element_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_accordance_characteristic_link">
-          <End Role="link" Type="Self.link" Multiplicity="0..1" />
-          <End Role="accordance_characteristic" Type="Self.accordance_characteristic" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="link">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="accordance_characteristic">
-              <PropertyRef Name="link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -568,7 +542,7 @@
         </Association>
         
         <Association Name="fk_characteristic_type_link_link">
-          <End Role="link" Type="Self.link" Multiplicity="0..1" />
+          <End Role="link" Type="Self.link" Multiplicity="1" />
           <End Role="characteristic_type_link" Type="Self.characteristic_type_link" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="link">
@@ -1591,17 +1565,17 @@
             <End Role="characteristic_type_link" EntitySet="characteristic_type_link" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_characteristic_characteristic_type_link" Association="Self.fk_characteristic_characteristic_type_link">
+          <AssociationSet Name="fk_characteristic_type_link" Association="Self.fk_characteristic_type_link">
             <End Role="characteristic_type_link" EntitySet="characteristic_type_link" />
             <End Role="characteristic" EntitySet="characteristic" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_binary_characteristic_characteristic_type_link" Association="Self.fk_binary_characteristic_characteristic_type_link">
+          <AssociationSet Name="fk_binary_characteristic_type_link" Association="Self.fk_binary_characteristic_type_link">
             <End Role="characteristic_type_link" EntitySet="characteristic_type_link" />
             <End Role="binary_characteristic" EntitySet="binary_characteristic" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_accordance_characteristic_characteristic_type_link" Association="Self.fk_accordance_characteristic_characteristic_type_link">
+          <AssociationSet Name="fk_accordance_characteristic_type_link" Association="Self.fk_accordance_characteristic_type_link">
             <End Role="characteristic_type_link" EntitySet="characteristic_type_link" />
             <End Role="accordance_characteristic" EntitySet="accordance_characteristic" />
           </AssociationSet>
@@ -4257,7 +4231,6 @@
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="ValueString" ColumnName="value_string" />
-                <ScalarProperty Name="LinkId" ColumnName="link_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="ElementId" ColumnName="element_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

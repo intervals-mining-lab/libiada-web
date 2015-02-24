@@ -125,28 +125,5 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Selected = false
             });
         }
-
-        /// <summary>
-        /// The get characteristic name.
-        /// </summary>
-        /// <param name="characteristicTypeId">
-        /// The characteristic type id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetCharacteristicName(int characteristicTypeId, int? linkId, int notationId)
-        {
-            var characteristicType = db.CharacteristicType.Single(c => c.Id == characteristicTypeId).Name;
-            var link = linkId.HasValue ? db.Link.Single(l => l.Id == linkId).Name : string.Empty;
-            var notation = db.Notation.Single(n => n.Id == notationId).Name;
-            return string.Join("  ", characteristicType, link, notation);
-        }
     }
 }
