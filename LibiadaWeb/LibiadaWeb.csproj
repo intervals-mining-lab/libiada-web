@@ -331,6 +331,8 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Aliases.cs" />
+    <Compile Include="Models\Calculators\CharacteristicData.cs" />
+    <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
     <Compile Include="Models\Calculators\GeneCharacteristic.cs" />
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -519,7 +521,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\npm.js" />
-    <Content Include="Scripts\procedures.js" />
+    <Content Include="Scripts\Angular\procedures.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
@@ -608,9 +610,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Characteristics\" />
-    <Folder Include="Views\Characteristics\" />
-    <Folder Include="Views\GenesSimilarity\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

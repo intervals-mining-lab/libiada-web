@@ -36,28 +36,14 @@
             });
         };
 
-        $scope.isLinkable = function (characteristic) {
-            return characteristic.characteristicType.CharacteristicTypeLink.length > 1;
-        };
+        $scope.isLinkable = IsLinkable;
 
-        $scope.getLinks = function (characteristicType) {
-            var characteristicTypeLinks = characteristicType.CharacteristicTypeLink;
-            var links = [];
-            for (var i = 0; i < characteristicTypeLinks.length; i++) {
-                for (var j = 0; j < $scope.links.length; j++) {
-                    if ($scope.links[j].CharacteristicTypeLink.indexOf(characteristicTypeLinks[i]) !== -1) {
-                        links.push($scope.links[j]);
-                    }
-                }
-            }
-
-            return links;
-        };
+        $scope.selectLink = SelectLink;
 
         $scope.addCharacteristic = function () {
             $scope.characteristics.push({
-                characteristicType: $scope.characteristicTypes[0], 
-                link: $scope.getLinks($scope.characteristicTypes[0])[0],
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.characteristicTypes[0].CharacteristicLinks[0],
                 notation: $scope.notationsFiltered[0],
                 language: $scope.languages[0],
                 translator: $scope.translators[0]

@@ -22,20 +22,20 @@
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
+        $scope.isLinkable = IsLinkable;
+
+        $scope.selectLink = SelectLink;
+
         $scope.firstCharacteristic = {
             characteristicType: $scope.characteristicTypes[0],
-            link: $scope.links[0],
+            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notationsFiltered[0]
         };
 
         $scope.secondCharacteristic = {
             characteristicType: $scope.characteristicTypes[0],
-            link: $scope.links[0],
+            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notationsFiltered[0]
-        };
-
-        $scope.isLinkable = function (characteristic) {
-            return characteristic.characteristicType.Linkable;
         };
     }
 

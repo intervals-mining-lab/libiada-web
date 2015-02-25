@@ -16,3 +16,11 @@ function MapModelFromJson($scope, data) {
         }
     }
 }
+
+function SelectLink (characteristic) {
+    characteristic.link = characteristic.characteristicType.CharacteristicLinks[0];
+}
+
+function IsLinkable (characteristic) {
+    return characteristic.characteristicType.CharacteristicLinks.length > 1;
+}

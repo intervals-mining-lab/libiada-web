@@ -25,14 +25,14 @@
             <br />
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Characteristic of full sequence" ng-model="firstCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+                    <select class="form-control" title="Characteristic of full sequence" ng-model="firstCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(firstCharacteristic)"></select>
                     <input type="hidden" name="firstCharacteristicId" ng-value="firstCharacteristic.characteristicType.Value" />
                     @Html.ValidationMessage("firstCharacteristicId", "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group" ng-show="isLinkable(firstCharacteristic)">
                 <div class="col-md-10">
-                    <select class="form-control" title="Link" ng-model="firstCharacteristic.link" ng-options="l.Text for l in links"></select>
+                    <select class="form-control" title="Link" ng-model="firstCharacteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
                     <input type="hidden" name="firstLinkId" ng-value="firstCharacteristic.link.Value" />
                     @Html.ValidationMessage("firstLinkId", "", new { @class = "text-danger" })
                 </div>
@@ -49,14 +49,14 @@
             <br />
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Characteristic of genes" ng-model="secondCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes"></select>
+                    <select class="form-control" title="Characteristic of genes" ng-model="secondCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(secondCharacteristic)"></select>
                     <input type="hidden" name="secondCharacteristicId" ng-value="secondCharacteristic.characteristicType.Value" />
                     @Html.ValidationMessage("secondCharacteristicId", "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group" ng-show="isLinkable(secondCharacteristic)">
                 <div class="col-md-10">
-                    <select class="form-control" title="Link" ng-model="secondCharacteristic.link" ng-options="l.Text for l in links"></select>
+                    <select class="form-control" title="Link" ng-model="secondCharacteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
                     <input type="hidden" name="secondLinkId" ng-value="secondCharacteristic.link.Value" />
                     @Html.ValidationMessage("secondLinkId", "", new { @class = "text-danger" })
                 </div>

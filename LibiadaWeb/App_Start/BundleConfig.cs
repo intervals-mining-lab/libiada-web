@@ -38,7 +38,7 @@
                      "~/Scripts/smart-table.debug.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/procedures").Include(
-                        "~/Scripts/procedures.js"));
+                        "~/Scripts/Angular/procedures.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));

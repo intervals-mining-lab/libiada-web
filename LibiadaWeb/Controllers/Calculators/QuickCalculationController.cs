@@ -1,13 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
 
-    using Models.Repositories.Catalogs;
+    using LibiadaWeb.Helpers;
 
     /// <summary>
     /// The quick calculation controller.
@@ -20,17 +19,11 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="QuickCalculationController"/> class.
         /// </summary>
         public QuickCalculationController() : base("QuickCalculation", "Quick calculation")
         {
             db = new LibiadaWebEntities();
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -41,13 +34,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(c => c.FullSequenceApplicable)
-                .Select(c => new { Value = c.Id, Text = c.Name, CharacteristicTypeLink = c.CharacteristicTypeLink }).ToList();
-           // var characteristicTypes = characteristicTypeLinkRepository.GetCharacteristics(c => c.FullSequenceApplicable);
+            var calculatorsHelper = new CalculatorsHelper(db);
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", characteristicTypes }
+                    { "characteristicTypes", calculatorsHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable) }
                 };
             return View();
         }

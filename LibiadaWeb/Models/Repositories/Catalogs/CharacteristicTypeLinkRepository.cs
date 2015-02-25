@@ -1,8 +1,5 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
     using Link = LibiadaCore.Core.Link;
