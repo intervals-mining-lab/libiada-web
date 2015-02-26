@@ -144,12 +144,6 @@
         public long SequenceId { get; set; }
 
         /// <summary>
-        /// Gets or sets the characteristic type id.
-        /// </summary>
-        [Display(Name = "Characteristic name")]
-        public int CharacteristicTypeId { get; set; }
-
-        /// <summary>
         /// Gets or sets the value.
         /// </summary>
         [Display(Name = "Value")]
@@ -160,12 +154,6 @@
         /// </summary>
         [Display(Name = "Value as string")]
         public string ValueString { get; set; }
-
-        /// <summary>
-        /// Gets or sets the link id.
-        /// </summary>
-        [Display(Name = "Link of characteristic")]
-        public int LinkId { get; set; }
 
         /// <summary>
         /// Gets or sets the created.

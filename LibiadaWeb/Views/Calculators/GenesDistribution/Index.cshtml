@@ -33,7 +33,8 @@
             <div class="form-group" ng-show="isLinkable(firstCharacteristic)">
                 <div class="col-md-10">
                     <select class="form-control" title="Link" ng-model="firstCharacteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
-                    <input type="hidden" name="firstLinkId" ng-value="firstCharacteristic.link.Value" />
+                    <input type="hidden" name="firstLinkId" ng-value="firstCharacteristic.link.Value"/>
+                    <input type="hidden" name="firstCharacteristicTypeLinkId" ng-value="firstCharacteristic.link.CharacteristicTypeLinkId" />
                     @Html.ValidationMessage("firstLinkId", "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -57,7 +58,8 @@
             <div class="form-group" ng-show="isLinkable(secondCharacteristic)">
                 <div class="col-md-10">
                     <select class="form-control" title="Link" ng-model="secondCharacteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
-                    <input type="hidden" name="secondLinkId" ng-value="secondCharacteristic.link.Value" />
+                    <input type="hidden" name="secondLinkId" ng-value="secondCharacteristic.link.Value"/>
+                    <input type="hidden" name="secondCharacteristicTypeLinkId" ng-value="secondCharacteristic.link.CharacteristicTypeLinkId" />
                     @Html.ValidationMessage("secondLinkId", "", new { @class = "text-danger" })
                 </div>
             </div>

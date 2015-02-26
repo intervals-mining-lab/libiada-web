@@ -62,7 +62,6 @@
           <Property Name="characteristic_type_link_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="value_string" Type="text" />
-          <Property Name="link_id" Type="int4" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
