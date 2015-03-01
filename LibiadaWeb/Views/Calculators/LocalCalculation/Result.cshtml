@@ -9,270 +9,216 @@
 @if (ViewBag.Error == null)
 {
     <script type='text/javascript'>
-        var characteristics = new Array();
-        var partNames = new Array();
-        var matterNames = new Array();
-        var points = new Array();
-        var slider;
+        var graph_data  = @Html.Raw(Json.Encode(ViewBag));
 
-        $(document).ready(function() {
-
-            for (var l = 0; l < $("table").length; l++) {
-                partNames.push(new Array());
-
-                var rows = $("table")[l].tBodies[0].rows;
-                for (var i = 0; i < rows.length; i++) {
-                    partNames[l].push(rows[i].cells[0].textContent);
-                }
-            }
-
-            @{
-                for (int j = 0; j < ViewBag.characteristics.Count; j++)
-                {
-                    @: points.push(new Array());
-                    @: characteristics.push(new Array());
-
-                    var characteristicList = ViewBag.characteristics[j];
-                    for (int i = 0; i < characteristicList.Count; i++)
-                    {
-                        @: points[@j].push(new Array());
-                        @: characteristics[@j].push(new Array());
-
-                        var characteristic = characteristicList[i];
-                        for (int k = 0; k < characteristic.Count; k++)
-                        {
-                            string[] tempValue = characteristic[k].ToString().Split(',');
-                            string value = tempValue.Length == 2 ? tempValue[0] + "." + tempValue[1] : tempValue[0];
-                            @: characteristics[@j][@i][@k] = @value;
-                            @: points[@j][@i][@k] = {x: @i, y: @value};
-                        }
-                    }
-                }
-
-                for (int k = 0; k < ViewBag.matterNames.Count; k++)
-                {
-                    @:matterNames.push("@ViewBag.matterNames[k]");
-                }
-
-            }
-
-            // make the container smaller and add a second container for the master chart
-            var container = $("#visualization_container")
-                .css("position", "relative");
-
-            var detailContainer = $("<div id=\"detail-container\">")
-                .css({ position: "absolute", top: 0, height: 600, width: "100%" })
-                .appendTo(container);
+        // Load the Visualization API and the controls package.
+        google.load('visualization', '1.0', {
+            'packages': ['controls']
         });
 
-        var detailChart;
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.setOnLoadCallback(drawDashboard);
 
-        function setScale() {
-            var min = $("#slider_container").rangeSlider("min");
-            var max = $("#slider_container").rangeSlider("max");
+        // Callback that creates and populates a data table,
+        // instantiates a dashboard, a range slider and a pie chart,
+        // passes in the data and draws it.
+        function max_value(arrays) {
+            return Math.max.apply(Math, arrays);
+        }
 
+        function formCharateristics(data, numberCharacterisctic) {
+            var points = [];
+            for (i = 0; i < data['characteristics'].length; i++) {
+                var current_object = data['characteristics'][i];
 
-            min = +min;
-            max = +max;
+                points.push([]);
+                for (j = 0; j < current_object.length; j++) {
+                    points[i].push(current_object[j][numberCharacterisctic]);
+                }
+            }
+            return points;
+        }
+
+        function formSortedByRank(points) {
+            var sorted = [];
+            for (i = 0; i < points.length; i++) {
+                var cur_array =  points[i].slice(0);
+                if (i ==0) {
+                    sorted.push(cur_array.sort());
+                }
+                else {
+                    sorted.push(cur_array.sort(function(a,b) { return b-a;}));
+                }
+            }
+            return sorted;
+        }
+
+        function getArrayLength(array) {
+            var arrays_lengths = [];
+            for (i = 0; i < array.length; i++) {
+                arrays_lengths.push(array[i].length);
+            }
+
+            return arrays_lengths;
+        }
+
+        function formChartsData(graph_data, arrays_lengths, points) {
+            var charts_data = [];
+            charts_data.push(['fragment']);
+
+            for (var i = 0; i < graph_data['matterNames'].length; i++) {
+                charts_data[0].push(graph_data['matterNames'][i]);
+            }
 
             for (var i = 0; i < points.length; i++) {
-                var detailData = [];
-                for (var k = 0; k < points[i].length; k++) {
-                    jQuery.each(points[i][k], function(zero, point) {
-                        if (point.x > min && point.x < max) {
-                            detailData.push({
-                                x: point.x,
-                                y: point.y
-                            });
-                        }
-                    });
+                var cur = points[i];
 
-                }
-                detailChart.series[i].setData(detailData);
-            }
-        }
-
-        // create the detail chart
-
-        function createDetail(dataSeries, yMin, yMax) {
-
-            // prepare the detail chart
-            var detailData = [],
-                detailStart = 0;
-
-            jQuery.each(dataSeries[0].data, function(i, point) {
-                if (point.x >= detailStart) {
-                    detailData.push(point.y);
-                }
-            });
-
-            // create a detail chart referenced by a global variable
-            detailChart = new Highcharts.Chart({
-                chart: { marginBottom: 120, renderTo: "detail-container", reflow: false, marginLeft: 50, marginRight: 20, style: { position: "absolute" } },
-                credits: { enabled: false },
-                title: { text: "Local characteristics" },
-                xAxis: {
-                    title: { text: "Sequence parts" },
-                    type: "number"
-                },
-                yAxis: {
-                    title: { text: $("#yaxis option:selected")[0].text },
-                    maxZoom: 0.1,
-                    max: yMax,
-                    min: yMin
-                },
-                tooltip: {
-                    formatter: function() {
-                        var point = this.points[0];
-                        return point.series.name + "<br/>" + this.y;
-                    },
-                    shared: true
-                },
-                legend: { align: "left", backgroundColor: "#FFFFFF", borderWidth: 1, floating: true, layout: "vertical", verticalAlign: "top", x: 100, y: 50 },
-                plotOptions: {
-                    area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } },
-
-                    series: { marker: { enabled: false, states: { hover: { enabled: true, radius: 3 } } } }
-                },
-                series: dataSeries,
-                exporting: { enabled: false }
-            });
-        }
-
-        function shift(left, right) {
-            $("#slider_container").rangeSlider("values", left, right);
-            setScale();
-        }
-
-        function stepSlider(step) {
-            var min = $("#slider_container").rangeSlider("min");
-            var max = $("#slider_container").rangeSlider("max");
-            min = +min;
-            max = +max;
-            step = +step;
-            $("#slider_container").rangeSlider("values", min + step, max + step);
-        }
-
-        function GetMaxArrayLength(arrayOfArrays) {
-            var maxLength = 0;
-            for (var i = 0; i < arrayOfArrays.length; i++) {
-                if (arrayOfArrays[i].length > maxLength) {
-                    maxLength = arrayOfArrays[i].length;
-                }
-            }
-            return maxLength;
-        }
-
-        var yVals;
-
-        function FillSeries(characteristicId, dataSeries) {
-
-            for (var i = 0; i < partNames.length; i++) {
-                var series = new Object();
-                series.data = new Array();
-                series.type = "area";
-                series.name = matterNames[i];
-                for (var j = 0; j < partNames[i].length; j++) {
-                    var y = characteristics[i][j][characteristicId];
-                    var pointName = partNames[i][j];
-                    series.data[j] = new Object();
-                    series.data[j].x = j + 1;
-                    series.data[j].y = y;
-                    series.data[j].name = pointName;
-                    // массив для определения минимального значения для границ графика
-                    yVals.push(y);
-                }
-                dataSeries.push(series);
-            }
-        }
-
-        function CreateChart(dataSeries, minY) {
-            chart = new Highcharts.Chart({
-                chart: { renderTo: "visualization_container", defaultSeriesType: "scatter", zoomType: "x" },
-
-                legend: { align: "left", backgroundColor: "#FFFFFF", borderWidth: 1, floating: true, layout: "vertical", verticalAlign: "top", x: 100, y: 50 },
-
-                plotOptions: { area: { fillColor: { linearGradient: [0, 0, 0, 300], stops: [] }, lineWidth: 1, marker: { enabled: false, states: { hover: { enabled: true, radius: 5 } } }, pointStart: 0, pointInterval: 1, shadow: false, states: { hover: { lineWidth: 1 } } } },
-
-                title: { text: "Local characteristics" },
-
-                tooltip: {
-                    formatter: function() {
-                        return this.point.name + "<br/>" + this.y;
+                for (var j = 1; j <= max_value(arrays_lengths); j++) {
+                    if (i == 0) {
+                        charts_data.push([]);
+                        charts_data[j].push(j);
                     }
-                },
-
-                xAxis: { min: 0, maxZoom: 3, title: { text: "Sequence parts" } },
-
-                yAxis: { endOnTick: false, startOnTick: false, min: minY, title: { text: $("#yaxis option:selected")[0].text } },
-
-                series: dataSeries
-
-            });
-
-        }
-
-        function getBorderOfArrows() {
-            var min = $("#slider_container").rangeSlider("min");
-            var max = $("#slider_container").rangeSlider("max");
-            $.ajax({
-                type: "GET",
-                data: { "min": min, "max": max },
-                success: result
-            });
-
-            function result(data) {
-                alert(data);
-                return false;
-            }
-        }
-
-        function DrawChart() {
-            yVals = new Array();
-            var dataSeries = new Array();
-            slider = $("#slider_container").rangeSlider({
-                bounds: { min: 0, max: GetMaxArrayLength(partNames) },
-                defaultValues: { min: 0, max: GetMaxArrayLength(partNames) },
-                wheelMode: "zoom",
-                valueLabels: "show",
-                step: false,
-                scales: [
-                    // Primary scale
-                    {
-                        first: function(val) { return val; },
-                        next: function(val) { return val + 10; },
-                        stop: function(val) { return false; },
-                        label: function(val) { return val; }
-                    },
-                    // Secondary scale
-                    {
-                        first: function(val) { return val; },
-                        next: function(val) {
-                            if (val % 10 === 9) {
-                                return val + 2;
-                            }
-                            return val + 1;
-                        },
-                        stop: function() { return false; },
-                        label: function() { return null; }
-                    }
-                ]
-            });
-            $("#slider_container").bind("valuesChanging", function(e, data) {
-                setScale();
-
-            });
-            if ($("#allGraphics")[0].checked) {
-                for (var j = 0; j < $("#yaxis option").length; j++) {
-                    FillSeries($("#yaxis option")[j].value, dataSeries);
+                    charts_data[j].push(points[i][j - 1]);
                 }
-            } else {
-                FillSeries($("#yaxis option:selected")[0].value, dataSeries);
             }
-            createDetail(dataSeries, Math.min.apply(null, yVals), Math.max.apply(null, yVals));
+            return charts_data;
+        }
+
+        function isNumber(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        }
+
+        function lineChart(yName) {
+            return new google.visualization.ChartWrapper({
+                chartType: 'LineChart',
+                containerId: 'chart_div',
+                options: {
+                    hAxis: { title: 'Fragments'},
+                    vAxis: {title: yName},
+                    width: 1200,
+                    height: 600,
+                    pieSliceText: 'value',
+                    legend: 'top',
+                    explorer: {
+                        maxZoomOut: 12,
+                        keepInBounds: true
+                    }
+                }
+            });
+        }
+
+        function areaChart(yName) {
+            return new google.visualization.ChartWrapper({
+                chartType: 'AreaChart',
+                containerId: 'chart_div',
+                options: {
+                    hAxis: { title: 'Fragments'},
+                    vAxis: {title: yName},
+                    width: 1200,
+                    height: 600,
+                    pieSliceText: 'value',
+                    legend: 'top',
+                    explorer: {
+                        maxZoomOut: 12,
+                        keepInBounds: true
+                    }
+                }
+            });
+        }
+
+        function scatterChart(yName) {
+            return new google.visualization.ChartWrapper({
+                chartType: 'ScatterChart',
+                containerId: 'chart_div',
+                options: {
+                    hAxis: { title: 'Fragments'},
+                    vAxis: {title: yName},
+                    width: 1200,
+                    height: 600,
+                    pieSliceText: 'value',
+                    legend: 'top',
+                    explorer: {
+                        maxZoomOut: 12,
+                        keepInBounds: true
+                    }
+                }
+            });
         }
 
 
+        function drawDashboard(numberCurrentCharacterictic, typeGraph, distribution) {
+            var numberCharacterisctic;
+            if (isNumber(numberCurrentCharacterictic)) {
+                numberCharacterisctic = numberCurrentCharacterictic;
+            }
+            else {
+                numberCharacterisctic = 0;
+            }
+
+            var points = formCharateristics(graph_data, numberCharacterisctic);
+            var arrays_lengths = getArrayLength(points);
+
+            if (distribution == 1) {
+                points = formSortedByRank(points);
+            } else if (distribution == 0 || !isNumber(distribution) ){
+                points = formCharateristics(graph_data, numberCharacterisctic)
+            }
+
+            var charts_data = formChartsData(graph_data, arrays_lengths, points);
+
+            var data = google.visualization.arrayToDataTable(charts_data);
+
+            // Create a dashboard.
+            var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+
+            // Create a range slider, passing some options
+            var numberRangeFilter = new google.visualization.ControlWrapper({
+                controlType: 'NumberRangeFilter',
+                containerId: 'filter_div',
+                options: {
+                    filterColumnLabel: 'fragment'
+                }
+            });
+
+
+            var typeChart;
+            var yName = graph_data['characteristicNames'][0];
+            if (isNumber(typeGraph) && typeGraph == 1) {
+                typeChart = areaChart(yName);
+            }
+            else if(isNumber(typeGraph) && typeGraph == 2) {
+                typeChart = scatterChart(yName);
+            }
+            else if (typeGraph == 0 || !isNumber(typeGraph)) {
+                typeChart = lineChart(yName);
+            }
+
+            // Establish dependencies, declaring that 'filter' drives 'lineChart',
+            // so that the pie chart will only display entries that are let through
+            // given the chosen slider range.
+            dashboard.bind(numberRangeFilter, typeChart);
+
+            dashboard.draw(data);
+        }
+
+        $(function(){
+            $.each(graph_data['characteristicNames'], function(key, value) {
+                $('.characteristic').append($('<option></option>').attr('value', key).text(value));
+            });
+
+            $('.characteristic').on('change', function() {
+                drawDashboard(parseInt($(this).val()), parseInt($('.typeChart').val()), parseInt($('.distribution').val()));
+            });
+
+            $('.distribution').on('change', function () {
+                drawDashboard(parseInt($('.characteristic').val()), parseInt($('.typeChart').val()), parseInt($(this).val()));
+            });
+
+            $('.typeChart').on('change', function () {
+                drawDashboard(parseInt($('.characteristic').val()), parseInt($(this).val()), parseInt($('.distribution').val()));
+            });
+        });
+        
     </script>
 
     for (int k = 0; k < ViewBag.matterNames.Count; k++)
@@ -280,95 +226,66 @@
         <div>@ViewBag.matterNames[k]</div>
         <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>
-                    Start
-                </th>
-                <th>
-                    Length
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @characteristicName
-                    </th>
-                }
-            </tr>
-            </thead>
-            <tbody>
-            @for (int i = 0; i < ViewBag.characteristics[k].Count; i++)
-            {
                 <tr>
-                    <td>
-                        @ViewBag.starts[k][i]
-                    </td>
-                    <td>
-                        @ViewBag.lengthes[k][i]
-                    </td>
-                    @foreach (var characteristic in ViewBag.characteristics[k][i])
+                    <th>
+                        Start
+                    </th>
+                    <th>
+                        Length
+                    </th>
+                    @foreach (var characteristicName in ViewBag.characteristicNames)
                     {
-                        <td>
-                            @characteristic
-                        </td>
+                        <th>
+                            @characteristicName
+                        </th>
                     }
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.characteristics[k].Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.starts[k][i]
+                        </td>
+                        <td>
+                            @ViewBag.lengthes[k][i]
+                        </td>
+                        @foreach (var characteristic in ViewBag.characteristics[k][i])
+                        {
+                            <td>
+                                @characteristic
+                            </td>
+                        }
+                    </tr>
+                }
             </tbody>
         </table>
     }
-
-    <br/>
-    <div id="visualization_container" style="width: 800px; height: 520px; margin-bottom: 15px;"></div>
-    <br/>
-    <div style="width: 755px; height: 30px; margin-left: 35px; margin-top: 5px;">
-        <div id="slider_container">
+    <div id="google_chart" style="margin-bottom: 20px">
+        <div style='height:600px;'>
+            <!--Div that will hold the dashboard-->
+            <div id="dashboard_div">
+                <!--Divs that will hold each control and chart-->
+                <div id="chart_div"></div>
+                <div id="filter_div"></div>
+            </div>
+            <select class="characteristic"></select>
+            <select class="distribution">
+                <option value="0">Common</option>
+                <option value="1">Rank</option>
+            </select>
+            <select class="typeChart">
+                <option value="0">Line</option>
+                <option value="1">Area</option>
+                <option value="2">Scatter</option>
+            </select>
         </div>
     </div>
-    <br/>
-    <div style="width: 800px; height: 300px;">
-        <div id="control-form" style="clear: both">
-            <label>
-                Left border
-                <input type="number" id="leftArrow" name="leftArrow" value="5"/>
-            </label>
-            <label>
-                Right border
-                <input type="number" id="rightArrow" name="rightArrow" value="10"/>
-            </label>
-            <input type="button" value="shift" onclick=" stepSlider(stepOfWindow.value); "/>
-            <input type="button" value="value" onclick=" shift(leftArrow.value, rightArrow.value); "/>
-        </div>
-        <div id="new-params" style="clear: both; border: 2px solid #aaa; width: 430px; border-radius: 10px; padding: 5px;">
-            <label>Change division parameters</label>
-            <label>
-                Window step
-                <input type="number" id="stepOfWindow" name="stepOfWindow" value="2">
-            </label>
-            <label>
-                Window size
-                <input type="number" id="widthOfWindow" name="" value="10">
-            </label>
-            <input type="button" value="value" onclick=" shift(stepOfWindow.value, widthOfWindow.value); "/>
-        </div>
-    </div>
-    <br/>
-    @Html.Label("Y axis")
-    <select name="yaxis" id="yaxis">
-        @foreach (var option in ViewBag.characteristicsList)
-        {
-            <option value="@option.Value">@option.Text</option>
-        }
-    </select>
-    <br/>
-    <input type="checkbox" name="allGraphics" id="allGraphics" value="true"/>
-    <label for="allGraphics">Show all charts</label>
-    <br/>
-    <button onclick="DrawChart()">Show</button>
+    <br />
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryui")
-        @Scripts.Render("~/bundles/slider")
-        @Scripts.Render("~/bundles/highCharts")
-        @Styles.Render("~/Content/slider")
+        @Scripts.Render("~/bundles/googlechart")
     }
 }
