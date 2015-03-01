@@ -59,8 +59,6 @@
         {
             var calculatorsHelper = new CalculatorsHelper(db);
             var data = calculatorsHelper.GetGenesCalculationData(1, int.MaxValue);
-            data.Add("minimumSelectedMatters", 1);
-            data.Add("maximumSelectedMatters", int.MaxValue);
             ViewBag.data = data;
             return View();
         }
