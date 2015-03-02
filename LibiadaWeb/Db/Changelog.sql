@@ -523,6 +523,7 @@ COMMENT ON TRIGGER tgiu_binary_characteristic_applicability ON binary_characteri
 CREATE TRIGGER tgiu_accordance_characteristic_applicability BEFORE INSERT OR UPDATE OF characteristic_type_link_id ON accordance_characteristic FOR EACH ROW EXECUTE PROCEDURE trigger_check_applicability('accordance_applicable');
 COMMENT ON TRIGGER tgiu_accordance_characteristic_applicability ON accordance_characteristic IS '“риггер, провер€ющий применима ли указанна€ характеристика к бинарным цепочкам.';
 
-
+ALTER TABLE characteristic_type DROP COLUMN linkable;
+DROP FUNCTION trigger_characteristics_link();
 
 COMMIT;
