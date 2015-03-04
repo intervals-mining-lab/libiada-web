@@ -129,8 +129,8 @@
         /// </returns>
         public List<CharacteristicData> GetCharacteristicTypes(Func<CharacteristicType, bool> filter)
         {
-            var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter)
-                .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
+            var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
+                .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
             var links = db.Link.Include(l => l.CharacteristicTypeLink)
                 .Select(l => new { Value = l.Id, Text = l.Name, CharacteristicTypeLink = l.CharacteristicTypeLink.Select(ctl => ctl.Id) }).ToList();
