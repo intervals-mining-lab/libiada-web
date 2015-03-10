@@ -526,4 +526,70 @@ COMMENT ON TRIGGER tgiu_accordance_characteristic_applicability ON accordance_ch
 ALTER TABLE characteristic_type DROP COLUMN linkable;
 DROP FUNCTION trigger_characteristics_link();
 
+-- 10.03.2015
+-- New tables for genes and other fragments of sequences.
+
+ALTER TABLE piece_type RENAME TO feature;
+ALTER TABLE chain RENAME COLUMN piece_type_id TO feature_id;
+ALTER TABLE piece RENAME TO position;
+ALTER TABLE position RENAME COLUMN gene_id TO fragment_id;
+
+CREATE TABLE fragment
+(
+   id bigint NOT NULL DEFAULT nextval('elements_id_seq'::regclass), 
+   created timestamp with time zone NOT NULL DEFAULT now(), 
+   modified timestamp with time zone NOT NULL DEFAULT now(), 
+   chain_id bigint NOT NULL, 
+   start integer NOT NULL,
+   length integer NOT NULL,
+   feature_id integer NOT NULL, 
+   web_api_id integer NOT NULL, 
+   complementary boolean NOT NULL DEFAULT false, 
+   partial boolean NOT NULL DEFAULT false, 
+   CONSTRAINT pk_fragment PRIMARY KEY (id), 
+   CONSTRAINT fk_fragment_chain_key FOREIGN KEY (id) REFERENCES chain_key (id) ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED, 
+   CONSTRAINT fk_fragment_chain_chain_key FOREIGN KEY (chain_id) REFERENCES chain_key (id) ON UPDATE CASCADE ON DELETE CASCADE, 
+   CONSTRAINT fk_fragment_feature FOREIGN KEY (feature_id) REFERENCES feature (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TRIGGER tgiu_fragment_modified BEFORE INSERT OR UPDATE ON fragment FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_fragment_modified ON fragment IS 'Trigger adding creation and modification dates.';
+
+CREATE TRIGGER tgiud_fragment_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON fragment FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+COMMENT ON TRIGGER tgiud_fragment_chain_key_bound ON fragment IS 'Creates two way bound with chain_key table.';
+
+CREATE TRIGGER tgu_fragment_characteristics AFTER UPDATE ON fragment FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_fragment_characteristics ON fragment IS 'Deletes all calculated characteristics is sequence changes.';
+
+ALTER TABLE position DROP CONSTRAINT fk_piece_gene;
+
+ALTER TABLE position ADD CONSTRAINT fk_position_fragment FOREIGN KEY (fragment_id) REFERENCES fragment (id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+CREATE INDEX ix_fragment_chain_id ON fragment USING btree (chain_id);
+CREATE INDEX ix_fragment_chain_feature ON fragment (chain_id, feature_id);
+
+CREATE TABLE attribute
+(
+   id serial NOT NULL, 
+   name text NOT NULL, 
+   CONSTRAINT pk_attribute PRIMARY KEY (id), 
+   CONSTRAINT uk_attribute UNIQUE (name)
+);
+
+CREATE TABLE chain_attribute
+(
+	id bigserial NOT NULL, 
+   chain_id bigint NOT NULL, 
+   attribute_id integer NOT NULL, 
+   value text NOT NULL, 
+   CONSTRAINT pk_chain_attribute PRIMARY KEY (id), 
+   CONSTRAINT fk_chain_attribute_chain FOREIGN KEY (chain_id) REFERENCES chain_key (id) ON UPDATE CASCADE ON DELETE CASCADE, 
+   CONSTRAINT fk_chain_attribute_attribute FOREIGN KEY (attribute_id) REFERENCES attribute (id) ON UPDATE CASCADE ON DELETE NO ACTION, 
+   CONSTRAINT uk_chain_attribute UNIQUE (chain_id, attribute_id)
+);
+
+DROP TABLE gene;
+ALTER TABLE dna_chain DROP COLUMN product_id;
+DROP TABLE product;
+
 COMMIT;
