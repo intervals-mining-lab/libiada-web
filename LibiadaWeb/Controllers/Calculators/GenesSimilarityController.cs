@@ -71,7 +71,7 @@
         /// <param name="notationId">
         /// The notation id.
         /// </param>
-        /// <param name="pieceTypeIds">
+        /// <param name="featureIds">
         /// The piece type ids.
         /// </param>
         /// <param name="maxDifference">
@@ -91,7 +91,7 @@
             long[] matterIds,
             int characteristicTypeLinkId,
             int notationId,
-            int[] pieceTypeIds,
+            int[] featureIds,
             string maxDifference,
             string excludeType)
         {
@@ -105,14 +105,14 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                List<Gene> firstSequenceGenes;
-                List<Gene> secondSequenceGenes;
+                List<Fragment> firstSequenceFragments;
+                List<Fragment> secondSequenceFragments;
 
-                var firstSequences = geneRepository.ExtractSequences(firstMatterId, notationId, pieceTypeIds, out firstSequenceGenes);
-                var secondSequences = geneRepository.ExtractSequences(secondMatterId, notationId, pieceTypeIds, out secondSequenceGenes);
+                var firstSequences = geneRepository.ExtractSequences(firstMatterId, notationId, featureIds, out firstSequenceFragments);
+                var secondSequences = geneRepository.ExtractSequences(secondMatterId, notationId, featureIds, out secondSequenceFragments);
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceGenes);
-                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceGenes);
+                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceFragments);
+                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceFragments);
 
                 var similarGenes = new List<IntPair>();
 
@@ -140,10 +140,10 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "pieceTypes", db.PieceType.Where(p => pieceTypeIds.Contains(p.Id)).Select(p => p.Name).ToList() },
+                    { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "similarGenes", similarGenes },
-                    { "firstSequenceGenes", firstSequenceGenes },
-                    { "secondSequenceGenes", secondSequenceGenes }
+                    { "firstSequenceGenes", firstSequenceFragments },
+                    { "secondSequenceGenes", secondSequenceFragments }
                 };
             });
         }
@@ -157,16 +157,16 @@
         /// <param name="sequences">
         /// The sequences.
         /// </param>
-        /// <param name="genes">
+        /// <param name="fragments">
         /// The genes.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Gene}"/>.
+        /// The <see cref="List{Fragment}"/>.
         /// </returns>
         private List<double> CalculateCharacteristic(
             int characteristicTypeLinkId,
             List<Chain> sequences,
-            List<Gene> genes)
+            List<Fragment> fragments)
         {
             var characteristics = new List<double>();
 
@@ -176,7 +176,7 @@
 
             for (int j = 0; j < sequences.Count; j++)
             {
-                long geneId = genes[j].Id;
+                long geneId = fragments[j].Id;
 
                 if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
@@ -197,7 +197,7 @@
 
             for (int d = 0; d < sequences.Count; d++)
             {
-                long geneId = genes[d].Id;
+                long geneId = fragments[d].Id;
                 double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);

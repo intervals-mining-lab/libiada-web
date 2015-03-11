@@ -12,27 +12,28 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Gene
+    public partial class Fragment
     {
-        public Gene()
+        public Fragment()
         {
-            this.Piece = new HashSet<Piece>();
+            this.SequenceAttribute = new HashSet<SequenceAttribute>();
+            this.Position = new HashSet<Position>();
         }
     
         public long Id { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public long SequenceId { get; set; }
-        public int PieceTypeId { get; set; }
-        public string Description { get; set; }
+        public int Start { get; set; }
+        public int Length { get; set; }
+        public int FeatureId { get; set; }
         public Nullable<int> WebApiId { get; set; }
         public bool Complementary { get; set; }
         public bool Partial { get; set; }
-        public Nullable<int> ProductId { get; set; }
     
         public virtual DnaSequence DnaSequence { get; set; }
-        public virtual PieceType PieceType { get; set; }
-        public virtual Product Product { get; set; }
-        public virtual ICollection<Piece> Piece { get; set; }
+        public virtual Feature Feature { get; set; }
+        public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; }
+        public virtual ICollection<Position> Position { get; set; }
     }
 }

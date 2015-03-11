@@ -18,7 +18,7 @@ namespace LibiadaWeb
         {
             this.Matter = new HashSet<Matter>();
             this.Notation = new HashSet<Notation>();
-            this.PieceType = new HashSet<PieceType>();
+            this.Feature = new HashSet<Feature>();
             this.RemoteDb = new HashSet<RemoteDb>();
         }
     
@@ -28,7 +28,7 @@ namespace LibiadaWeb
     
         public virtual ICollection<Matter> Matter { get; set; }
         public virtual ICollection<Notation> Notation { get; set; }
-        public virtual ICollection<PieceType> PieceType { get; set; }
+        public virtual ICollection<Feature> Feature { get; set; }
         public virtual ICollection<RemoteDb> RemoteDb { get; set; }
     }
 }

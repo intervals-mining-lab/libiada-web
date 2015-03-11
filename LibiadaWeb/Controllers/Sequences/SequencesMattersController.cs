@@ -45,7 +45,7 @@
         /// <summary>
         /// The piece type repository.
         /// </summary>
-        private readonly PieceTypeRepository pieceTypeRepository;
+        private readonly FeatureRepository featureRepository;
 
         /// <summary>
         /// The notation repository.
@@ -72,7 +72,7 @@
             literatureSequenceRepository = new LiteratureSequenceRepository(Db);
             musicSequenceRepository = new MusicSequenceRepository(Db);
             dataSequenceRepository = new DataSequenceRepository(Db);
-            pieceTypeRepository = new PieceTypeRepository(Db);
+            featureRepository = new FeatureRepository(Db);
             notationRepository = new NotationRepository(Db);
             remoteDbRepository = new RemoteDbRepository(Db);
             matterRepository = new MatterRepository(Db);
@@ -93,7 +93,7 @@
                 {
                     { "matters", matterRepository.GetMatterSelectList() }, 
                     { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature() }, 
+                    { "features", featureRepository.GetSelectListWithNature() }, 
                     { "languages", new SelectList(Db.Language, "id", "name") }, 
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
                     { "natures", new SelectList(Db.Nature, "id", "name") }, 
@@ -142,7 +142,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(
-            [Bind(Include = "Id,NotationId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
+            [Bind(Include = "Id,NotationId,FeatureId,PiecePosition,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
             int? languageId,
             bool? original,
@@ -176,7 +176,7 @@
                     switch (natureId)
                     {
                         case Aliases.Nature.Genetic:
-                            dnaSequenceRepository.Create(commonSequence, productId, partial ?? false, complementary ?? false, stringSequence, webApiId);
+                            dnaSequenceRepository.Create(commonSequence, partial ?? false, complementary ?? false, stringSequence, webApiId);
                             break;
                         case Aliases.Nature.Music:
                             musicSequenceRepository.Create(commonSequence, stringSequence);
@@ -214,7 +214,7 @@
                 { "ErrorMessage", errorMessage },
                 { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
                 { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
-                { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(commonSequence.PieceTypeId) }, 
+                { "features", featureRepository.GetSelectListWithNature(commonSequence.FeatureId) }, 
                 { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
                 { "remoteDbs", remoteDbs }, 
                 { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 

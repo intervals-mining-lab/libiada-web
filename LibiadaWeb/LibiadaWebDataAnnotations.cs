@@ -100,10 +100,10 @@
         public long MatterId { get; set; }
 
         /// <summary>
-        /// Gets or sets the piece type id.
+        /// Gets or sets the feature id.
         /// </summary>
         [Display(Name = "Type of fragment")]
-        public int PieceTypeId { get; set; }
+        public int FeatureId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece position.
@@ -257,12 +257,6 @@
         /// </summary>
         [Display(Name = "Sequence is complementary to source sequence")]
         public bool Complementary { get; set; }
-
-        /// <summary>
-        /// Gets or sets the product id.
-        /// </summary>
-        [Display(Name = "Sequence product")]
-        public int ProductId { get; set; }
     }
 
     /// <summary>
@@ -283,27 +277,21 @@
     /// <summary>
     /// The gene.
     /// </summary>
-    [MetadataType(typeof(GeneDataAnnotations))]
-    public partial class Gene
+    [MetadataType(typeof(FragmentDataAnnotations))]
+    public partial class Fragment
     {
     }
 
     /// <summary>
     /// The gene data annotations.
     /// </summary>
-    public class GeneDataAnnotations
+    public class FragmentDataAnnotations
     {
         /// <summary>
         /// Gets or sets a value indicating whether sequence complementary.
         /// </summary>
         [Display(Name = "Sequence is complementary to source sequence")]
         public bool Complementary { get; set; }
-
-        /// <summary>
-        /// Gets or sets the product id.
-        /// </summary>
-        [Display(Name = "Sequence product")]
-        public int ProductId { get; set; }
     }
 
     /// <summary>
@@ -694,15 +682,15 @@
     /// <summary>
     /// The piece type.
     /// </summary>
-    [MetadataType(typeof(PieceTypeDataAnnotations))]
-    public partial class PieceType
+    [MetadataType(typeof(FeatureDataAnnotations))]
+    public partial class Feature
     {
     }
 
     /// <summary>
     /// The piece type data annotations.
     /// </summary>
-    public class PieceTypeDataAnnotations : NotationDataAnnotations
+    public class FeatureDataAnnotations : NotationDataAnnotations
     {
     }
 
@@ -794,21 +782,21 @@
     /// <summary>
     /// The product.
     /// </summary>
-    [MetadataType(typeof(ProductDataAnnotations))]
-    public partial class Product
+    [MetadataType(typeof(SequenceAttributeDataAnnotations))]
+    public partial class SequenceAttribute
     {
     }
 
     /// <summary>
     /// The product data annotations.
     /// </summary>
-    public class ProductDataAnnotations : CommonDataAnnotations
+    public class SequenceAttributeDataAnnotations : CommonDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the piece type id.
+        /// Gets or sets the feature id.
         /// </summary>
         [Display(Name = "Type of product")]
-        public int PieceTypeId { get; set; }
+        public int FeatureId { get; set; }
     }
 
     /// <summary>

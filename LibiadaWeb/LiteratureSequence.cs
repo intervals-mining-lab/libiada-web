@@ -25,7 +25,7 @@ namespace LibiadaWeb
         public int NotationId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
-        public int PieceTypeId { get; set; }
+        public int FeatureId { get; set; }
         public Nullable<int> TranslatorId { get; set; }
         public long PiecePosition { get; set; }
         public bool Original { get; set; }
@@ -41,7 +41,7 @@ namespace LibiadaWeb
         public virtual Language Language { get; set; }
         public virtual Matter Matter { get; set; }
         public virtual Notation Notation { get; set; }
-        public virtual PieceType PieceType { get; set; }
+        public virtual Feature Feature { get; set; }
         public virtual Translator Translator { get; set; }
         public virtual RemoteDb RemoteDb { get; set; }
     }

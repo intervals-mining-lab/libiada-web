@@ -226,7 +226,7 @@
         /// <summary>
         /// The piece type.
         /// </summary>
-        public static class PieceType
+        public static class Feature
         {
             /// <summary>
             /// The piece type full genome.

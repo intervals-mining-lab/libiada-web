@@ -85,9 +85,9 @@
                 }, 
                 new NpgsqlParameter
                 {
-                    ParameterName = "piece_type_id", 
+                    ParameterName = "feature_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = commonSequence.PieceTypeId
+                    Value = commonSequence.FeatureId
                 }, 
                 new NpgsqlParameter
                 {

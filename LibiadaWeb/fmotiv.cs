@@ -25,7 +25,7 @@ namespace LibiadaWeb
         public int NotationId { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
-        public int PieceTypeId { get; set; }
+        public int FeatureId { get; set; }
         public long PiecePosition { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }
@@ -37,7 +37,7 @@ namespace LibiadaWeb
     
         public virtual Matter Matter { get; set; }
         public virtual Notation Notation { get; set; }
-        public virtual PieceType PieceType { get; set; }
+        public virtual Feature Feature { get; set; }
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }

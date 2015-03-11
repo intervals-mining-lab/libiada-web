@@ -6,7 +6,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     /// <summary>
     /// The piece type repository.
     /// </summary>
-    public class PieceTypeRepository : IPieceTypeRepository
+    public class FeatureRepository : IFeatureRepository
     {
         /// <summary>
         /// The db.
@@ -14,12 +14,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PieceTypeRepository"/> class.
+        /// Initializes a new instance of the <see cref="FeatureRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public PieceTypeRepository(LibiadaWebEntities db)
+        public FeatureRepository(LibiadaWebEntities db)
         {
             this.db = db;
         }
@@ -40,7 +40,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.PieceType.Select(p => new
+            return db.Feature.Select(p => new
             {
                 Value = p.Id, 
                 Text = p.Name, 
@@ -52,19 +52,19 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The get select list with nature.
         /// </summary>
-        /// <param name="selectedPieceType">
+        /// <param name="selectedFeature">
         /// The selected piece type.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(int selectedPieceType)
+        public IEnumerable<object> GetSelectListWithNature(int selectedFeature)
         {
-            return db.PieceType.Select(p => new
+            return db.Feature.Select(p => new
             {
                 Value = p.Id, 
                 Text = p.Name, 
-                Selected = p.Id == selectedPieceType, 
+                Selected = p.Id == selectedFeature, 
                 Nature = p.NatureId
             });
         }
@@ -72,19 +72,19 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The get select list with nature.
         /// </summary>
-        /// <param name="selectedPieceTypes">
+        /// <param name="selectedFeatures">
         /// The selected piece types.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes)
+        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
-            return db.PieceType.Select(p => new
+            return db.Feature.Select(p => new
             {
                 Value = p.Id, 
                 Text = p.Name, 
-                Selected = selectedPieceTypes.Contains(p.Id), 
+                Selected = selectedFeatures.Contains(p.Id), 
                 Nature = p.NatureId
             });
         }
@@ -92,7 +92,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The get select list with nature.
         /// </summary>
-        /// <param name="selectedPieceTypes">
+        /// <param name="selectedFeatures">
         /// The selected piece types.
         /// </param>
         /// <param name="filter">
@@ -101,13 +101,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedPieceTypes, IEnumerable<int> filter)
+        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures, IEnumerable<int> filter)
         {
-            return db.PieceType.Where(p => filter.Contains(p.Id)).Select(p => new
+            return db.Feature.Where(p => filter.Contains(p.Id)).Select(p => new
             {
                 Value = p.Id, 
                 Text = p.Name, 
-                Selected = selectedPieceTypes.Contains(p.Id), 
+                Selected = selectedFeatures.Contains(p.Id), 
                 Nature = p.NatureId
             });
         }

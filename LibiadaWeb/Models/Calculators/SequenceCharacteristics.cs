@@ -20,7 +20,7 @@
         /// <summary>
         /// The genes characteristics.
         /// </summary>
-        public readonly List<GeneCharacteristic> GenesCharacteristics;
+        public readonly List<FragmentCharacteristic> FragmentsCharacteristics;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCharacteristics"/> class.
@@ -31,14 +31,14 @@
         /// <param name="characteristic">
         /// The characteristic.
         /// </param>
-        /// <param name="genesCharacteristics">
+        /// <param name="fragmentsCharacteristics">
         /// The genes characteristics.
         /// </param>
-        public SequenceCharacteristics(string matterName, double characteristic, List<GeneCharacteristic> genesCharacteristics)
+        public SequenceCharacteristics(string matterName, double characteristic, List<FragmentCharacteristic> fragmentsCharacteristics)
         {
             this.MatterName = matterName;
             this.Characteristic = characteristic;
-            this.GenesCharacteristics = genesCharacteristics;
+            this.FragmentsCharacteristics = fragmentsCharacteristics;
         }
     }
 }

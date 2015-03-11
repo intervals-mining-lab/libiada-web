@@ -215,6 +215,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attribute.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="BinaryCharacteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -270,13 +273,16 @@
     <Compile Include="Element.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Feature.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Fmotiv.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="FmotivType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Gene.cs">
+    <Compile Include="Fragment.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -380,20 +386,17 @@
     <Compile Include="NoteSymbol.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Piece.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PieceType.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Pitch.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Product.cs">
+    <Compile Include="Position.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteDb.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SequenceAttribute.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />

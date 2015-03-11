@@ -12,13 +12,13 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Piece
+    public partial class Position
     {
         public long Id { get; set; }
-        public long GeneId { get; set; }
+        public long FragmentId { get; set; }
         public int Start { get; set; }
         public int Length { get; set; }
     
-        public virtual Gene Gene { get; set; }
+        public virtual Fragment Fragment { get; set; }
     }
 }

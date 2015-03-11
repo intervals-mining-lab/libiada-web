@@ -67,7 +67,7 @@
         /// <param name="notationIds">
         /// The notation ids.
         /// </param>
-        /// <param name="pieceTypeIds">
+        /// <param name="featureIds">
         /// The piece type ids.
         /// </param>
         /// <param name="sort">
@@ -81,7 +81,7 @@
             long[] matterIds,
             int[] characteristicTypeLinkIds,
             int[] notationIds,
-            int[] pieceTypeIds,
+            int[] featureIds,
             bool sort)
         {
             return Action(() =>
@@ -90,7 +90,7 @@
                 var matterNames = new List<string>();
                 var sequenceProducts = new List<List<string>>();
                 var sequencesPositions = new List<List<long>>();
-                var sequencePieceTypes = new List<List<string>>();
+                var sequenceFeatures = new List<List<string>>();
                 var characteristicNames = new List<string>();
 
                 // Перебор всех цепочек; первый уровень массива характеристик
@@ -100,11 +100,11 @@
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     sequenceProducts.Add(new List<string>());
                     sequencesPositions.Add(new List<long>());
-                    sequencePieceTypes.Add(new List<string>());
+                    sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    List<Gene> genes;
-                    var chains = geneRepository.ExtractSequences(matterId, notationIds[w], pieceTypeIds, out genes);
+                    List<Fragment> fragments;
+                    var chains = geneRepository.ExtractSequences(matterId, notationIds[w], featureIds, out fragments);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
@@ -118,7 +118,7 @@
 
                         for (int j = 0; j < chains.Count; j++)
                         {
-                            long geneId = genes[j].Id;
+                            long geneId = fragments[j].Id;
 
                             if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                             {
@@ -138,22 +138,19 @@
 
                         for (int d = 0; d < chains.Count; d++)
                         {
-                            long geneId = genes[d].Id;
+                            long geneId = fragments[d].Id;
                             double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
 
                             if (i == 0)
                             {
-                                var productId = genes[d].ProductId;
-                                var pieceTypeId = genes[d].PieceTypeId;
+                                var featureId = fragments[d].FeatureId;
 
-                                sequenceProducts.Last().Add(productId == null
-                                        ? string.Empty
-                                        : db.Product.Single(p => productId == p.Id).Name);
-                                sequencesPositions.Last().Add(genes[d].Piece.First().Start);
+                                //sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
+                                sequencesPositions.Last().Add(fragments[d].Position.First().Start);
 
-                                sequencePieceTypes.Last().Add(db.PieceType.Single(p => pieceTypeId == p.Id).Name);
+                                sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
                             }
                         }
                     }
@@ -194,7 +191,7 @@
                     { "matterNames", matterNames },
                     { "sequenceProducts", sequenceProducts },
                     { "sequencesPositions", sequencesPositions },
-                    { "sequencePieceTypes", sequencePieceTypes },
+                    { "sequenceFeatures", sequenceFeatures },
                     { "characteristicNames", characteristicNames },
                     { "matterIds", matterIds },
                     { "characteristicsList", characteristicsList }

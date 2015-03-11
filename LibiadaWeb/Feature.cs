@@ -12,9 +12,9 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class PieceType
+    public partial class Feature
     {
-        public PieceType()
+        public Feature()
         {
             this.Sequence = new HashSet<CommonSequence>();
             this.DnaSequence = new HashSet<DnaSequence>();
@@ -23,7 +23,7 @@ namespace LibiadaWeb
             this.Measure = new HashSet<Measure>();
             this.MusicSequence = new HashSet<MusicSequence>();
             this.DataSequence = new HashSet<DataSequence>();
-            this.Gene = new HashSet<Gene>();
+            this.Fragment = new HashSet<Fragment>();
         }
     
         public int Id { get; set; }
@@ -39,6 +39,6 @@ namespace LibiadaWeb
         public virtual ICollection<Measure> Measure { get; set; }
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }
         public virtual ICollection<DataSequence> DataSequence { get; set; }
-        public virtual ICollection<Gene> Gene { get; set; }
+        public virtual ICollection<Fragment> Fragment { get; set; }
     }
 }

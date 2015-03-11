@@ -81,7 +81,7 @@
         /// <param name="secondNotationId">
         /// The second notation id.
         /// </param>
-        /// <param name="pieceTypeIds">
+        /// <param name="featureIds">
         /// The piece type ids.
         /// </param>
         /// <returns>
@@ -94,7 +94,7 @@
             int firstNotationId,
             int secondCharacteristicTypeLinkId,
             int secondNotationId,
-            int[] pieceTypeIds)
+            int[] featureIds)
         {
             return Action(() =>
             {
@@ -138,22 +138,22 @@
                         db.SaveChanges();
                     }
 
-                    List<Gene> genes;
-                    var genesSequences = geneRepository.ExtractSequences(sequenceIds[w], pieceTypeIds, out genes);
+                    List<Fragment> fragments;
+                    var genesSequences = geneRepository.ExtractSequences(sequenceIds[w], featureIds, out fragments);
 
-                    if (maxGenes < genes.Count)
+                    if (maxGenes < fragments.Count)
                     {
-                        maxGenes = genes.Count;
+                        maxGenes = fragments.Count;
                     }
 
-                    var genesCharacteristics = new List<GeneCharacteristic>();
+                    var genesCharacteristics = new List<FragmentCharacteristic>();
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(secondCharacteristicTypeLinkId).ClassName;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     var link = characteristicTypeLinkRepository.GetLibiadaLink(secondCharacteristicTypeLinkId);
 
                     for (int j = 0; j < genesSequences.Count; j++)
                     {
-                        long geneId = genes[j].Id;
+                        long geneId = fragments[j].Id;
 
                         if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId))
                         {
@@ -173,10 +173,10 @@
 
                     for (int d = 0; d < genesSequences.Count; d++)
                     {
-                        long geneId = genes[d].Id;
+                        long geneId = fragments[d].Id;
                         double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId ).Value;
 
-                        var geneCharacteristic = new GeneCharacteristic(genes[d], characteristic);
+                        var geneCharacteristic = new FragmentCharacteristic(fragments[d], characteristic);
                         genesCharacteristics.Add(geneCharacteristic);
                     }
 

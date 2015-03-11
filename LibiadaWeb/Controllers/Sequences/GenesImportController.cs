@@ -50,7 +50,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var genesSequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var genesSequenceIds = db.Fragment.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId);
 
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
@@ -122,11 +122,10 @@
 
                 string stringParentChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId).ToString();
 
-                var existingGenes = db.Gene.Where(g => g.SequenceId == parentSequence.Id).Select(g => g.Id);
+                var existingGenes = db.Fragment.Where(g => g.SequenceId == parentSequence.Id).Select(g => g.Id);
 
-                var existingSequencesPositions =
-                    db.Piece.Where(p => existingGenes.Contains(p.GeneId)).Select(p => p.Start);
-                var products = db.Product.ToList();
+                var existingSequencesPositions = db.Position.Where(p => existingGenes.Contains(p.FragmentId)).Select(p => p.Start);
+                var products = db.SequenceAttribute.ToList();
 
                 for (int i = 1; i < genes.Length; i++)
                 {
@@ -169,67 +168,67 @@
                             sequenceType = temp2[temp2.Length - 1].Trim();
                         }
 
-                        int pieceTypeId;
+                        int featureId;
                         string product = string.Empty;
                         string geneType = string.Empty;
                         string description = string.Empty;
 
                         if (sequenceType.StartsWith("CDS"))
                         {
-                            pieceTypeId = Aliases.PieceType.CodingSequence;
+                            featureId = Aliases.Feature.CodingSequence;
                             product = GetValue(temp2, "/product=\"", "\"");
                             geneType = GetValue(temp2, "/gene=\"");
                             description = geneType;
                         }
                         else if (sequenceType.StartsWith("tRNA"))
                         {
-                            pieceTypeId = Aliases.PieceType.TRNA;
+                            featureId = Aliases.Feature.TRNA;
                             product = GetValue(temp2, "/product=\"", "\"");
                             description = product;
                         }
                         else if (sequenceType.StartsWith("ncRNA"))
                         {
-                            pieceTypeId = Aliases.PieceType.NCRNA;
+                            featureId = Aliases.Feature.NCRNA;
                             description = GetValue(temp2, "/note=\"");
                             geneType = GetValue(temp2, "/gene=\"");
                         }
                         else if (sequenceType.StartsWith("rRNA"))
                         {
-                            pieceTypeId = Aliases.PieceType.RRNA;
+                            featureId = Aliases.Feature.RRNA;
                             product = GetValue(temp2, "/product=\"", "\"");
                             geneType = GetValue(temp2, "/gene=\"");
                             description = geneType;
                         }
                         else if (sequenceType.StartsWith("tmRNA"))
                         {
-                            pieceTypeId = Aliases.PieceType.TMRNA;
+                            featureId = Aliases.Feature.TMRNA;
                             geneType = GetValue(temp2, "/gene=\"");
                             description = geneType;
                         }
                         else if (sequenceType.StartsWith("/rpt_type=tandem"))
                         {
-                            pieceTypeId = Aliases.PieceType.RepeatRegion;
+                            featureId = Aliases.Feature.RepeatRegion;
                             description = GetValue(temp2, "/inference=\"", "\"");
                         }
                         else if (sequenceType.StartsWith("/rpt_family="))
                         {
-                            pieceTypeId = Aliases.PieceType.RepeatRegion;
+                            featureId = Aliases.Feature.RepeatRegion;
                             description = GetValue(temp2, "/rpt_family=\"", "\"");
                         }
                         else if (sequenceType.StartsWith("/note=\"REP"))
                         {
-                            pieceTypeId = Aliases.PieceType.RepeatRegion;
+                            featureId = Aliases.Feature.RepeatRegion;
                             description = GetValue(temp2, "/note=\"", "\"");
                         }
                         else if (sequenceType.StartsWith("/pseudo")
                                  || (string.IsNullOrEmpty(sequenceType) && temp2.Last().Trim().Equals("/pseudo")))
                         {
-                            pieceTypeId = Aliases.PieceType.PseudoGen;
+                            featureId = Aliases.Feature.PseudoGen;
                             description = GetValue(temp2, "/note=\"");
                         }
                         else if (sequenceType.StartsWith("misc_RNA"))
                         {
-                            pieceTypeId = Aliases.PieceType.MiscRNA;
+                            featureId = Aliases.Feature.MiscRNA;
                             product = GetValue(temp2, "/product=\"", "\"");
                             description = GetValue(temp2, "/note=\"");
                         }
@@ -238,40 +237,38 @@
                             throw new Exception("Ни один из типов не найден. Тип:" + sequenceType);
                         }
 
-                        Product dataBaseProduct;
+                        SequenceAttribute dataBaseProduct;
 
-                        if (products.Any(p => p.Name.Equals(product)))
-                        {
-                            dataBaseProduct = products.Single(p => p.Name.Equals(product));
-                        }
-                        else
-                        {
-                            dataBaseProduct = new Product { Name = product, PieceTypeId = pieceTypeId };
-                            db.Product.Add(dataBaseProduct);
-                            products.Add(dataBaseProduct);
-                        }
+                        //if (products.Any(p => p.Name.Equals(product)))
+                        //{
+                        //    dataBaseProduct = products.Single(p => p.Name.Equals(product));
+                        //}
+                        //else
+                        //{
+                        //    dataBaseProduct = new SequenceAttribute { Name = product, FeatureId = featureId };
+                        //    db.SequenceAttribute.Add(dataBaseProduct);
+                        //    products.Add(dataBaseProduct);
+                        //}
 
-                        var gene = new Gene
+                        var gene = new Fragment
                                        {
                                            Id = DbHelper.GetNewElementId(db),
                                            SequenceId = parentSequence.Id,
-                                           Description = description,
-                                           PieceTypeId = pieceTypeId,
+                                           FeatureId = featureId,
                                            Complementary = complement,
-                                           Partial = false,
-                                           Product = dataBaseProduct
+                                           Partial = false
                                        };
 
-                        db.Gene.Add(gene);
+                        db.Fragment.Add(gene);
 
-                        var piece = new Piece
+                        var piece = new Position
                                         {
-                                            Gene = gene,
+                                            Fragment = gene,
                                             Start = starts.Last(),
                                             Length = stops.Last() - starts.Last()
                                         };
 
-                        db.Piece.Add(piece);
+                        db.Position.Add(piece);
                     }
                 }
 
@@ -284,21 +281,20 @@
                     int stop = stops[j];
                     if (starts[j] > stops[j] && !existingSequencesPositions.Contains(stop))
                     {
-                        var gene = new Gene
+                        var gene = new Fragment
                                        {
                                            Id = DbHelper.GetNewElementId(db),
                                            SequenceId = parentSequence.Id,
-                                           Description = string.Empty,
-                                           PieceTypeId = Aliases.PieceType.NonCodingSequence,
+                                           FeatureId = Aliases.Feature.NonCodingSequence,
                                            Complementary = false,
                                            Partial = false
                                        };
 
-                        db.Gene.Add(gene);
+                        db.Fragment.Add(gene);
 
-                        var piece = new Piece { Gene = gene, Start = stops[j], Length = starts[j] - stops[j] };
+                        var piece = new Position { Fragment = gene, Start = stops[j], Length = starts[j] - stops[j] };
 
-                        db.Piece.Add(piece);
+                        db.Position.Add(piece);
                     }
                 }
 
@@ -306,7 +302,7 @@
 
                 var matterName = db.Matter.Single(m => m.Id == matterId).Name;
 
-                var sequenceGenes = db.Gene.Where(g => g.SequenceId == sequenceId).Include(g => g.Piece).Include(g => g.PieceType).Include(g => g.Product);
+                var sequenceGenes = db.Fragment.Where(g => g.SequenceId == sequenceId).Include(g => g.Position).Include(g => g.Feature).Include(g => g.SequenceAttribute);
 
                 return new Dictionary<string, object>
                                      {

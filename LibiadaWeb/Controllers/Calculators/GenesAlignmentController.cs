@@ -68,7 +68,7 @@
         /// <param name="notationId">
         /// The notation id.
         /// </param>
-        /// <param name="pieceTypeIds">
+        /// <param name="featureIds">
         /// The piece type ids.
         /// </param>
         /// <param name="validationType">
@@ -92,7 +92,7 @@
             long[] matterIds,
             int characteristicTypeLinkId,
             int notationId,
-            int[] pieceTypeIds,
+            int[] featureIds,
             string validationType,
             bool cyclicShift,
             bool sort)
@@ -107,8 +107,8 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notationId, pieceTypeIds);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notationId, pieceTypeIds);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notationId, featureIds);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notationId, featureIds);
 
                 if (sort)
                 {
@@ -149,7 +149,7 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "pieceTypes", db.PieceType.Where(p => pieceTypeIds.Contains(p.Id)).Select(p => p.Name).ToList() },
+                    { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "optimalRotation", optimalRotation },
                     { "distances", distances },
                     { "validationType", validationType },
@@ -207,7 +207,7 @@
         /// <param name="notationId">
         /// The notation id.
         /// </param>
-        /// <param name="pieceTypeIds">
+        /// <param name="featureIds">
         /// The piece type ids.
         /// </param>
         /// <returns>
@@ -217,13 +217,13 @@
             long matterId,
             int characteristicTypeLinkId,
             int notationId,
-            int[] pieceTypeIds)
+            int[] featureIds)
         {
             var characteristics = new List<double>();
 
-            List<Gene> genes;
+            List<Fragment> fragments;
 
-            var sequences = geneRepository.ExtractSequences(matterId, notationId, pieceTypeIds, out genes);
+            var sequences = geneRepository.ExtractSequences(matterId, notationId, featureIds, out fragments);
 
             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
@@ -231,7 +231,7 @@
 
             for (int j = 0; j < sequences.Count; j++)
             {
-                long geneId = genes[j].Id;
+                long geneId = fragments[j].Id;
 
                 if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
@@ -252,7 +252,7 @@
 
             for (int d = 0; d < sequences.Count; d++)
             {
-                long geneId = genes[d].Id;
+                long geneId = fragments[d].Id;
                 double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);

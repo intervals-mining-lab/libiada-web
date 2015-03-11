@@ -3,12 +3,12 @@
     /// <summary>
     /// The genes characteristics.
     /// </summary>
-    public class GeneCharacteristic
+    public class FragmentCharacteristic
     {
         /// <summary>
         /// The gene.
         /// </summary>
-        public readonly Gene Gene;
+        public readonly Fragment Fragment;
 
         /// <summary>
         /// The characteristic.
@@ -18,15 +18,15 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GeneCharacteristic"/> class.
         /// </summary>
-        /// <param name="gene">
+        /// <param name="fragment">
         /// The gene.
         /// </param>
         /// <param name="characteristic">
         /// The characteristic.
         /// </param>
-        public GeneCharacteristic(Gene gene, double characteristic)
+        public FragmentCharacteristic(Fragment fragment, double characteristic)
         {
-            this.Gene = gene;
+            this.Fragment = fragment;
             this.Characteristic = characteristic;
         }
     }

@@ -12,21 +12,16 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Product
+    public partial class Attribute
     {
-        public Product()
+        public Attribute()
         {
-            this.DnaSequence = new HashSet<DnaSequence>();
-            this.Gene = new HashSet<Gene>();
+            this.SequenceAttribute = new HashSet<SequenceAttribute>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public int PieceTypeId { get; set; }
     
-        public virtual ICollection<DnaSequence> DnaSequence { get; set; }
-        public virtual PieceType PieceType { get; set; }
-        public virtual ICollection<Gene> Gene { get; set; }
+        public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; }
     }
 }

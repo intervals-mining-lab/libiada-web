@@ -103,7 +103,7 @@
                     {
                         MatterId = matterId,
                         NotationId = notationId,
-                        PieceTypeId = Aliases.PieceType.FullGenome,
+                        FeatureId = Aliases.Feature.FullGenome,
                         PiecePosition = 0
                     };
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);

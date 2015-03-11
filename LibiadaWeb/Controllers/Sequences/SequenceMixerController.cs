@@ -164,7 +164,7 @@
             var resultsequence = new CommonSequence
                 {
                     NotationId = notationId,
-                    PieceTypeId = dataBaseSequence.PieceTypeId,
+                    FeatureId = dataBaseSequence.FeatureId,
                     PiecePosition = dataBaseSequence.PiecePosition,
                     MatterId = resultMatter.Id
                 };
@@ -180,7 +180,6 @@
                         resultsequence,
                         dnaSequence.FastaHeader,
                         null,
-                        dnaSequence.ProductId,
                         dnaSequence.Complementary,
                         dnaSequence.Partial,
                         alphabet,

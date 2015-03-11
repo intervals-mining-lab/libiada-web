@@ -55,7 +55,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <exception cref="Exception">
         /// Thrown if at least one element of new sequence is missing in db.
         /// </exception>
-        public void Create(CommonSequence sequence, int? productId, bool partial, bool complementary, string stringSequence, int? webApiId)
+        public void Create(CommonSequence sequence, bool partial, bool complementary, string stringSequence, int? webApiId)
         {
             // отделяем заголовок fasta файла от цепочки
             string[] splittedFasta = stringSequence.Split('\n', '\r');
@@ -78,7 +78,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             MatterRepository.CreateMatterFromSequence(sequence);
 
             var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
-            Create(sequence, fastaHeader, webApiId, productId, complementary, partial, alphabet, chain.Building);
+            Create(sequence, fastaHeader, webApiId, complementary, partial, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, int? productId, bool complementary, bool partial, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, bool complementary, bool partial, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
             parameters.Add(new NpgsqlParameter
@@ -122,12 +122,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 ParameterName = "web_api_id", 
                 NpgsqlDbType = NpgsqlDbType.Integer, 
                 Value = webApiId
-            });
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "product_id", 
-                NpgsqlDbType = NpgsqlDbType.Integer, 
-                Value = productId
             });
             parameters.Add(new NpgsqlParameter
             {
@@ -146,7 +140,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         id, 
                                         notation_id,
                                         matter_id, 
-                                        piece_type_id, 
+                                        feature_id, 
                                         piece_position, 
                                         fasta_header, 
                                         alphabet, 
@@ -154,14 +148,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         remote_id, 
                                         remote_db_id, 
                                         web_api_id,
-                                        product_id,
                                         partial,
                                         complementary
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
                                         @matter_id,
-                                        @piece_type_id, 
+                                        @feature_id, 
                                         @piece_position, 
                                         @fasta_header, 
                                         @alphabet, 
@@ -169,7 +162,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id, 
                                         @web_api_id,
-                                        @product_id,
                                         @partial,
                                         @complementary
                                     );";
@@ -191,7 +183,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, null, false, false, alphabet, building);
+            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, false, false, alphabet, building);
         }
 
         /// <summary>
@@ -210,7 +202,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Id = source.Id,
                 NotationId = source.NotationId, 
                 MatterId = source.MatterId, 
-                PieceTypeId = source.PieceTypeId, 
+                FeatureId = source.FeatureId, 
                 PiecePosition = source.PiecePosition
             };
         }

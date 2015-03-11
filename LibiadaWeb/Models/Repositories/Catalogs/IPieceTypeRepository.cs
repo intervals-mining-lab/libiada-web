@@ -3,9 +3,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     using System;
 
     /// <summary>
-    /// The PieceTypeRepository interface.
+    /// The FeatureRepository interface.
     /// </summary>
-    public interface IPieceTypeRepository : IDisposable
+    public interface IFeatureRepository : IDisposable
     {
     }
 }

@@ -33,8 +33,8 @@ namespace LibiadaWeb
         public virtual DbSet<CharacteristicType> CharacteristicType { get; set; }
         public virtual DbSet<CharacteristicTypeLink> CharacteristicTypeLink { get; set; }
         public virtual DbSet<DnaSequence> DnaSequence { get; set; }
-        public virtual DbSet<Gene> Gene { get; set; }
-        public virtual DbSet<Piece> Piece { get; set; }
+        public virtual DbSet<Fragment> Fragment { get; set; }
+        public virtual DbSet<Position> Position { get; set; }
         public virtual DbSet<Element> Element { get; set; }
         public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<Link> Link { get; set; }
@@ -42,8 +42,9 @@ namespace LibiadaWeb
         public virtual DbSet<Matter> Matter { get; set; }
         public virtual DbSet<Nature> Nature { get; set; }
         public virtual DbSet<Notation> Notation { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<PieceType> PieceType { get; set; }
+        public virtual DbSet<SequenceAttribute> SequenceAttribute { get; set; }
+        public virtual DbSet<Attribute> Attribute { get; set; }
+        public virtual DbSet<Feature> Feature { get; set; }
         public virtual DbSet<Translator> Translator { get; set; }
         public virtual DbSet<RemoteDb> RemoteDb { get; set; }
         public virtual DbSet<Fmotiv> Fmotiv { get; set; }

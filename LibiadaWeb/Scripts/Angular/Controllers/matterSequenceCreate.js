@@ -11,14 +11,14 @@
         $scope.natureId = $scope.natures[0].Value;
 
         var filterByNature = function () {
-            var arraysForFiltration = ["notations", "pieceTypes", "remoteDbs", "matters"];
+            var arraysForFiltration = ["notations", "features", "remoteDbs", "matters"];
 
             arraysForFiltration.forEach(function (array) {
                 FilterOptionsByNature($scope, filterFilter, array);
             });
 
             $scope.notationId = $scope.notationsFiltered[0].Value;
-            $scope.pieceTypeId = $scope.pieceTypesFiltered[0].Value;
+            $scope.featureId = $scope.featuresFiltered[0].Value;
             if (angular.isDefined($scope.mattersFiltered)) {
                 $scope.matterId = $scope.mattersFiltered[0].Value;
             }

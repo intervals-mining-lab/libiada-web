@@ -20,7 +20,7 @@
         {
             var commonSequence = Db.CommonSequence.Include(c => c.Matter)
                                 .Include(c => c.Notation)
-                                .Include(c => c.PieceType)
+                                .Include(c => c.Feature)
                                 .Include(c => c.RemoteDb);
             return View(await commonSequence.ToListAsync());
         }
@@ -74,7 +74,7 @@
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
             ViewBag.NotationId = new SelectList(Db.Notation, "Id", "Name", commonSequence.NotationId);
-            ViewBag.PieceTypeId = new SelectList(Db.PieceType, "Id", "Name", commonSequence.PieceTypeId);
+            ViewBag.FeatureId = new SelectList(Db.Feature, "Id", "Name", commonSequence.FeatureId);
             ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
             return View(commonSequence);
         }
@@ -90,7 +90,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,PieceTypeId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,FeatureId,PiecePosition,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
         {
             if (ModelState.IsValid)
             {
@@ -101,7 +101,7 @@
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
             ViewBag.NotationId = new SelectList(Db.Notation, "Id", "Name", commonSequence.NotationId);
-            ViewBag.PieceTypeId = new SelectList(Db.PieceType, "Id", "Name", commonSequence.PieceTypeId);
+            ViewBag.FeatureId = new SelectList(Db.Feature, "Id", "Name", commonSequence.FeatureId);
             ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
             return View(commonSequence);
         }

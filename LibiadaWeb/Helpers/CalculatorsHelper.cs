@@ -34,7 +34,7 @@
         /// <summary>
         /// The piece type repository.
         /// </summary>
-        private readonly PieceTypeRepository pieceTypeRepository;
+        private readonly FeatureRepository featureRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculatorsHelper"/> class.
@@ -47,7 +47,7 @@
             this.db = db;
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
-            pieceTypeRepository = new PieceTypeRepository(db);
+            featureRepository = new FeatureRepository(db);
         }
 
         /// <summary>
@@ -97,14 +97,14 @@
         /// </returns>
         public Dictionary<string, object> GetGenesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters)
         {
-            var sequenceIds = db.Gene.Select(g => g.SequenceId).Distinct();
+            var sequenceIds = db.Fragment.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId);
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
 
-            var pieceTypeIds = db.PieceType.Where(p => p.NatureId == Aliases.Nature.Genetic
-                                         && p.Id != Aliases.PieceType.FullGenome
-                                         && p.Id != Aliases.PieceType.ChloroplastGenome
-                                         && p.Id != Aliases.PieceType.MitochondrionGenome).Select(p => p.Id);
+            var featureIds = db.Feature.Where(p => p.NatureId == Aliases.Nature.Genetic
+                                         && p.Id != Aliases.Feature.FullGenome
+                                         && p.Id != Aliases.Feature.ChloroplastGenome
+                                         && p.Id != Aliases.Feature.MitochondrionGenome).Select(p => p.Id);
 
             return new Dictionary<string, object>
                 {
@@ -114,7 +114,7 @@
                     { "characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable) },  
                     { "notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") },
                     { "natureId", Aliases.Nature.Genetic },
-                    { "pieceTypes", pieceTypeRepository.GetSelectListWithNature(pieceTypeIds, pieceTypeIds) }
+                    { "features", featureRepository.GetSelectListWithNature(featureIds, featureIds) }
                 };
         }
 
