@@ -252,6 +252,8 @@
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="description" Type="text" />
           <Property Name="nature_id" Type="int4" Nullable="false" />
+          <Property Name="complete" Type="bool" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="255" />
         </EntityType>
         
         <EntityType Name="translator">
@@ -1971,6 +1973,7 @@
           <Property Name="WebApiId" Type="Int32" />
           <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
+          
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_fragment_dna_chain" FromRole="Fragment" ToRole="DnaSequence" />
           <NavigationProperty Name="Feature" Relationship="Self.fk_fragment_feature" FromRole="Fragment" ToRole="Feature" />
           <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_fragment" FromRole="Fragment" ToRole="SequenceAttribute" />
@@ -1985,6 +1988,7 @@
           <Property Name="FragmentId" Type="Int64" Nullable="false" />
           <Property Name="Start" Type="Int32" Nullable="false" />
           <Property Name="Length" Type="Int32" Nullable="false" />
+          
           <NavigationProperty Name="Fragment" Relationship="Self.fk_position_fragment" FromRole="Position" ToRole="Fragment" />
         </EntityType>
 
@@ -1999,6 +2003,7 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          
           <NavigationProperty Name="FirstElementBinaryCharacteristic" Relationship="Self.fk_binary_characteristic_first_element" FromRole="Element" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="SecondElementBinaryCharacteristic" Relationship="Self.fk_binary_characteristic_second_element" FromRole="Element" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="FirstElementAccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_first_element" FromRole="Element" ToRole="AccordanceCharacteristic" />
@@ -2014,6 +2019,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
+          
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_language" FromRole="Language" ToRole="LiteratureSequence" />
         </EntityType>
         
@@ -2024,6 +2030,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
+          
           <NavigationProperty Name="CharacteristicTypeLink" Relationship="Self.fk_characteristic_type_link_link" FromRole="Link" ToRole="CharacteristicTypeLink" />
         </EntityType>
         
@@ -2044,6 +2051,7 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
+          
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="Characteristic" />
@@ -2065,6 +2073,7 @@
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
@@ -2082,6 +2091,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
+          
           <NavigationProperty Name="Matter" Relationship="Self.fk_matter_nature" FromRole="Nature" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_notation_nature" FromRole="Nature" ToRole="Notation" />
           <NavigationProperty Name="Feature" Relationship="Self.fk_feature_nature" FromRole="Nature" ToRole="Feature" />
@@ -2096,6 +2106,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="NatureId" Type="Int32" Nullable="false" />
+          
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_notation" FromRole="Notation" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_notation" FromRole="Notation" ToRole="DnaSequence" />
           <NavigationProperty Name="Element" Relationship="Self.fk_element_notation" FromRole="Notation" ToRole="Element" />
@@ -2140,6 +2151,9 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="NatureId" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Complete" Type="Boolean" Nullable="false" />
+          
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_feature" FromRole="Feature" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_feature" FromRole="Feature" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_feature" FromRole="Feature" ToRole="LiteratureSequence" />
@@ -4203,6 +4217,8 @@
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Type" ColumnName="type" />
+                <ScalarProperty Name="Complete" ColumnName="complete" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

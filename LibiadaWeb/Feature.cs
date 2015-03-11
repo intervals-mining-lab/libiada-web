@@ -30,6 +30,8 @@ namespace LibiadaWeb
         public string Name { get; set; }
         public string Description { get; set; }
         public int NatureId { get; set; }
+        public string Type { get; set; }
+        public bool Complete { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }

@@ -592,4 +592,14 @@ DROP TABLE gene;
 ALTER TABLE dna_chain DROP COLUMN product_id;
 DROP TABLE product;
 
+-- 11.03.2015
+-- Some fixes in fragments storage structure.
+
+ALTER TABLE fragment ALTER COLUMN web_api_id DROP NOT NULL;
+ALTER TABLE attribute ALTER COLUMN name SET DATA TYPE character varying(255);
+ALTER TABLE feature ADD COLUMN complete boolean NOT NULL DEFAULT false;
+ALTER TABLE feature ADD COLUMN type character varying(255);
+
+CREATE INDEX ix_feature_type ON feature (type ASC NULLS LAST);
+
 COMMIT;
