@@ -602,4 +602,31 @@ ALTER TABLE feature ADD COLUMN type character varying(255);
 
 CREATE INDEX ix_feature_type ON feature (type ASC NULLS LAST);
 
+-- 12.03.2015
+-- Adding dictionary data for fragments.
+
+SELECT nextval('piece_type_id_seq');
+
+UPDATE feature SET name = 'Complete gemone', complete = true WHERE id = 1;
+UPDATE feature SET name = 'Complete text', complete = true WHERE id = 2;
+UPDATE feature SET name = 'Complete piece of music', complete = true WHERE id = 3;
+UPDATE feature SET name = 'Coding DNA sequence', type = 'CDS', description = 'Coding sequence; sequence of nucleotides that corresponds with the sequence of amino acids in a protein (location includes stop codon); feature includes amino acid conceptual translation.' WHERE id = 4;
+UPDATE feature SET name = 'Ribosomal RNA', type = 'rRNA', description = 'RNA component of the ribonucleoprotein particle (ribosome) which assembles amino acids into proteins.' WHERE id = 5;
+UPDATE feature SET name = 'Transfer RNA', type = 'tRNA', description = 'A small RNA molecule (75-85 bases long) that mediates the translation of a nucleic acid sequence into an amino acid sequence.' WHERE id = 6;
+UPDATE feature SET name = 'Non-coding RNA', type = 'ncRNA', description = 'A non-protein-coding gene, other than ribosomal RNA and transfer RNA, the functional molecule of which is the RNA transcript' WHERE id = 7;
+UPDATE feature SET name = 'Transfer-messenger RNA', type = 'tmRNA', description = 'tmRNA acts as a tRNA first, and then as an mRNA that encodes a peptide tag; the ribosome translates this mRNA region of tmRNA and attaches the encoded peptide tag to the C-terminus of the unfinished protein; this attached tag targets the protein for destruction or proteolysis' WHERE id = 8;
+UPDATE feature SET name = 'Pseudo gene', type = 'pseudo' WHERE id = 9;
+UPDATE feature SET name = 'Plasmid', complete = true WHERE id = 10;
+UPDATE feature SET name = 'Mitochondrion genome', complete = true WHERE id = 11;
+UPDATE feature SET name = 'Mitochondrion ribosomal RNA' WHERE id = 12;
+UPDATE feature SET name = 'Repeat region', type = 'repeat_region', description = 'Region of genome containing repeating units.' WHERE id = 13;
+UPDATE feature SET name = 'Non-coding sequence' WHERE id = 14;
+UPDATE feature SET name = 'Chloroplast genome', complete = true WHERE id = 15;
+UPDATE feature SET name = 'Miscellaneous other RNA', type = 'misc_RNA', description = 'Any transcript or RNA product that cannot be defined by other RNA keys (prim_transcript, precursor_RNA, mRNA, 5UTR, 3UTR, exon, CDS, sig_peptide, transit_peptide, mat_peptide, intron, polyA_site, ncRNA, rRNA and tRNA)' WHERE id = 16;
+UPDATE feature SET complete = true WHERE id = 17;
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous feature', 'Region of biological interest which cannot be described by any other feature key; a new or rare feature.', 1, 'misc_feature');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Messenger RNA', 'Includes 5untranslated region (5UTR), coding sequences (CDS, exon) and 3untranslated region (3UTR).', 1, 'mRNA');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Regulatory', 'Any region of sequence that functions in the regulation of transcription or translation.', 1, 'regulatory');
+
 COMMIT;
