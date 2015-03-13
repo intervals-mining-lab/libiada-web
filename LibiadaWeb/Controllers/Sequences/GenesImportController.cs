@@ -131,8 +131,6 @@
                 {
                     throw new Exception("GenBank file metadata is empty.");
                 }
-                
-                 var existingFragments = db.Fragment.Where(f => f.SequenceId == sequenceId).Select(f => f.Start);
 
                  var starts = new List<int>();
                  var stops = new List<int>();

@@ -363,10 +363,12 @@
     <Compile Include="Models\Repositories\Catalogs\INotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IFeatureRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IRemoteDbRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ISequenceAttribute.cs" />
     <Compile Include="Models\Repositories\Catalogs\LinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
