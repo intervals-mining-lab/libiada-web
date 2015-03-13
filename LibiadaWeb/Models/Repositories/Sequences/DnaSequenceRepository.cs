@@ -37,9 +37,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequence">
         /// The common sequence.
         /// </param>
-        /// <param name="productId">
-        /// The product id.
-        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>
@@ -92,9 +89,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         /// <param name="webApiId">
         /// The web api id.
-        /// </param>
-        /// <param name="productId">
-        /// The product id.
         /// </param>
         /// <param name="complementary">
         /// The complementary.

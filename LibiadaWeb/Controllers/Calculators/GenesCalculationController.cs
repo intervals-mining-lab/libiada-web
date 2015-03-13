@@ -68,7 +68,7 @@
         /// The notation ids.
         /// </param>
         /// <param name="featureIds">
-        /// The piece type ids.
+        /// The feature ids.
         /// </param>
         /// <param name="sort">
         /// The is sort.

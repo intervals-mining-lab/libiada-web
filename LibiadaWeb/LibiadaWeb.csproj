@@ -44,6 +44,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Bio.Core">
+      <HintPath>..\packages\NetBioCore.PCL.2.0.141118\lib\net45\Bio.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Bio.Desktop">
+      <HintPath>..\packages\NetBioCore.PCL.2.0.141118\lib\net45\Bio.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Bio.Platform.Helpers">
+      <HintPath>..\packages\NetBioCore.PCL.2.0.141118\lib\net45\Bio.Platform.Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="Clusterizator">
       <HintPath>..\..\libiada-core\Clusterizator\bin\Debug\Clusterizator.dll</HintPath>
     </Reference>
@@ -344,16 +353,19 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\IAttributeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ILinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\INotationRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\IPieceTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\IFeatureRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IRemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\LinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\PieceTypeRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />

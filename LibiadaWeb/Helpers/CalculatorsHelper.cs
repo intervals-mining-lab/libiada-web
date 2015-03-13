@@ -32,7 +32,7 @@
         private readonly NotationRepository notationRepository;
 
         /// <summary>
-        /// The piece type repository.
+        /// The feature repository.
         /// </summary>
         private readonly FeatureRepository featureRepository;
 

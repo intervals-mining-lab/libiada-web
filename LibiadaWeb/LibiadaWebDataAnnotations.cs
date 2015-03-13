@@ -680,7 +680,7 @@
     }
 
     /// <summary>
-    /// The piece type.
+    /// The feature.
     /// </summary>
     [MetadataType(typeof(FeatureDataAnnotations))]
     public partial class Feature
@@ -688,7 +688,7 @@
     }
 
     /// <summary>
-    /// The piece type data annotations.
+    /// The feature data annotations.
     /// </summary>
     public class FeatureDataAnnotations : NotationDataAnnotations
     {
@@ -780,7 +780,7 @@
     }
 
     /// <summary>
-    /// The product.
+    /// The sequence attribute.
     /// </summary>
     [MetadataType(typeof(SequenceAttributeDataAnnotations))]
     public partial class SequenceAttribute

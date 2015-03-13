@@ -72,7 +72,7 @@
         /// The notation id.
         /// </param>
         /// <param name="featureIds">
-        /// The piece type ids.
+        /// The feature ids.
         /// </param>
         /// <param name="maxDifference">
         /// The precision.

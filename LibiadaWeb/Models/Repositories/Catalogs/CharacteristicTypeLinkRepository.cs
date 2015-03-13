@@ -7,7 +7,7 @@
     /// <summary>
     /// The characteristic type link repository.
     /// </summary>
-    public class CharacteristicTypeLinkRepository
+    public class CharacteristicTypeLinkRepository : ICharacteristicTypeLinkRepository
     {
         /// <summary>
         /// The db.
@@ -77,6 +77,14 @@
             var notation = db.Notation.Single(n => n.Id == notationId).Name;
 
             return string.Join("  ", characteristicType, link, notation);
+        }
+
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }

@@ -629,4 +629,9 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous 
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Messenger RNA', 'Includes 5untranslated region (5UTR), coding sequences (CDS, exon) and 3untranslated region (3UTR).', 1, 'mRNA');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Regulatory', 'Any region of sequence that functions in the regulation of transcription or translation.', 1, 'regulatory');
 
+-- 13.05.2015
+-- New fragment unique key
+
+ALTER TABLE fragment ADD CONSTRAINT uk_fragment UNIQUE (chain_id, start);
+
 COMMIT;

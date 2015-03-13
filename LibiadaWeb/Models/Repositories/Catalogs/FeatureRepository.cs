@@ -1,10 +1,12 @@
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
+    using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
 
     /// <summary>
-    /// The piece type repository.
+    /// The feature repository.
     /// </summary>
     public class FeatureRepository : IFeatureRepository
     {
@@ -12,6 +14,11 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
+
+        /// <summary>
+        /// The features.
+        /// </summary>
+        private readonly DbSet<Feature> features;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureRepository"/> class.
@@ -22,6 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public FeatureRepository(LibiadaWebEntities db)
         {
             this.db = db;
+            features = db.Feature;
         }
 
         /// <summary>
@@ -33,6 +41,28 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
+        /// Gets feature id by name.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if feature type is unknown.
+        /// </exception>
+        public int GetFeatureIdByName(string name)
+        {
+            if (!features.Any(f => f.Type == name))
+            {
+                throw new Exception("Unknown feature. name=" + name);
+            }
+
+            return features.Single(f => f.Type == name).Id;
+        }
+
+        /// <summary>
         /// The get select list with nature.
         /// </summary>
         /// <returns>
@@ -40,60 +70,42 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.Feature.Select(p => new
-            {
-                Value = p.Id, 
-                Text = p.Name, 
-                Selected = false, 
-                Nature = p.NatureId
-            });
+            return this.GetSelectListWithNature(new int[0]);
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
         /// <param name="selectedFeature">
-        /// The selected piece type.
+        /// The selected feature.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedFeature)
         {
-            return db.Feature.Select(p => new
-            {
-                Value = p.Id, 
-                Text = p.Name, 
-                Selected = p.Id == selectedFeature, 
-                Nature = p.NatureId
-            });
+            return GetSelectListWithNature(new[] { selectedFeature });
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
         /// <param name="selectedFeatures">
-        /// The selected piece types.
+        /// The selected features.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
-            return db.Feature.Select(p => new
-            {
-                Value = p.Id, 
-                Text = p.Name, 
-                Selected = selectedFeatures.Contains(p.Id), 
-                Nature = p.NatureId
-            });
+            return this.GetSelectListWithNature(db.Feature.Select(f => f.Id), selectedFeatures);
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
         /// <param name="selectedFeatures">
-        /// The selected piece types.
+        /// The selected features.
         /// </param>
         /// <param name="filter">
         /// The filter.

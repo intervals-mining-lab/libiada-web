@@ -75,7 +75,7 @@
         /// The sequence id.
         /// </param>
         /// <param name="featureIds">
-        /// The piece type ids.
+        /// The feature ids.
         /// </param>
         /// <param name="fragments">
         /// The genes.
@@ -104,7 +104,7 @@
         /// The notation id.
         /// </param>
         /// <param name="featureIds">
-        /// The piece type ids.
+        /// The feature ids.
         /// </param>
         /// <param name="fragments">
         /// The genes.

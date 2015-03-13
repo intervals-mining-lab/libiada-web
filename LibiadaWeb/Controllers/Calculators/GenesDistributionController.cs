@@ -82,7 +82,7 @@
         /// The second notation id.
         /// </param>
         /// <param name="featureIds">
-        /// The piece type ids.
+        /// The feature ids.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.

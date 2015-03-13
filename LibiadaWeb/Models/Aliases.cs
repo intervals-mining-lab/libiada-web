@@ -224,94 +224,110 @@
         }
 
         /// <summary>
-        /// The piece type.
+        /// The feature.
         /// </summary>
         public static class Feature
         {
             /// <summary>
-            /// The piece type full genome.
+            /// The feature full genome.
             /// </summary>
             public const int FullGenome = 1;
 
             /// <summary>
-            /// The piece type full text.
+            /// The feature full text.
             /// </summary>
             public const int FullText = 2;
 
             /// <summary>
-            /// The piece type full song.
+            /// The feature full song.
             /// </summary>
             public const int FullSong = 3;
 
             /// <summary>
-            /// The piece type coding sequence.
+            /// The feature coding sequence.
             /// </summary>
             public const int CodingSequence = 4;
 
             /// <summary>
-            /// The piece type rrna.
+            /// The feature Ribosomal RNA.
             /// </summary>
             public const int RRNA = 5;
 
             /// <summary>
-            /// The piece type trna.
+            /// The feature Transfer RNA.
             /// </summary>
             public const int TRNA = 6;
 
             /// <summary>
-            /// The piece type ncrna.
+            /// The feature Non-coding RNA.
             /// </summary>
             public const int NCRNA = 7;
 
             /// <summary>
-            /// The piece type tmrna.
+            /// The feature Transfer-messenger RNA.
             /// </summary>
             public const int TMRNA = 8;
 
             /// <summary>
-            /// The piece type pseudo gen.
+            /// The feature pseudo gen.
             /// </summary>
             public const int PseudoGen = 9;
 
             /// <summary>
-            /// The piece type plasmid.
+            /// The feature plasmid.
             /// </summary>
             public const int Plasmid = 10;
 
             /// <summary>
-            /// The piece type mitochondrion genome.
+            /// The feature mitochondrion genome.
             /// </summary>
             public const int MitochondrionGenome = 11;
 
             /// <summary>
-            /// The piece type mitochondrion rrna.
+            /// The feature mitochondrion rrna.
             /// </summary>
             public const int MitochondrionRRNA = 12;
 
             /// <summary>
-            /// The piece type repeat region.
+            /// The feature repeat region.
             /// </summary>
             public const int RepeatRegion = 13;
 
             /// <summary>
-            /// The piece type non coding sequence.
+            /// The feature non coding sequence.
             /// </summary>
             public const int NonCodingSequence = 14;
 
             /// <summary>
-            /// The piece type chloroplast genome.
+            /// The feature chloroplast genome.
             /// </summary>
             public const int ChloroplastGenome = 15;
 
             /// <summary>
-            /// The piece type misc rna.
+            /// The feature Miscellaneous other RNA.
             /// </summary>
             public const int MiscRNA = 16;
 
             /// <summary>
-            /// The complete numeric sequence.
+            /// The complete numeric sequence feature.
             /// </summary>
             public const int CompleteNumericSequence = 17;
+
+            /// <summary>
+            /// The misc feature.
+            /// </summary>
+            public const int MiscFeature = 18;
+
+            /// <summary>
+            /// The Messenger RNA feature.
+            /// </summary>
+            public const int MRNA = 19;
+
+            /// <summary>
+            /// The regulatory feature.
+            /// </summary>
+            public const int Regulatory = 20;
+
         }
 
         /// <summary>

@@ -43,7 +43,7 @@
         private readonly DataSequenceRepository dataSequenceRepository;
 
         /// <summary>
-        /// The piece type repository.
+        /// The feature repository.
         /// </summary>
         private readonly FeatureRepository featureRepository;
 
@@ -121,9 +121,6 @@
         /// <param name="translatorId">
         /// The translator id.
         /// </param>
-        /// <param name="productId">
-        /// The product id.
-        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>
@@ -147,7 +144,6 @@
             int? languageId,
             bool? original,
             int? translatorId,
-            int? productId,
             bool? partial,
             bool? complementary,
             int? precision)
