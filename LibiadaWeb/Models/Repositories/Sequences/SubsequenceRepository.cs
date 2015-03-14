@@ -10,7 +10,7 @@
     /// <summary>
     /// The gene repository.
     /// </summary>
-    public class GeneRepository
+    public class SubsequenceRepository : ISubsequenceRepository
     {
         /// <summary>
         /// The db.
@@ -23,12 +23,12 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneRepository"/> class.
+        /// Initializes a new instance of the <see cref="SubsequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public GeneRepository(LibiadaWebEntities db)
+        public SubsequenceRepository(LibiadaWebEntities db)
         {
             this.db = db;
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -77,17 +77,17 @@
         /// <param name="featureIds">
         /// The feature ids.
         /// </param>
-        /// <param name="fragments">
+        /// <param name="subsequences">
         /// The genes.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Gene}"/>.
+        /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public List<Chain> ExtractSequences(long sequenceId, int[] featureIds, out List<Fragment> fragments)
+        public List<Chain> ExtractSequences(long sequenceId, int[] featureIds, out List<Subsequence> subsequences)
         {
-            fragments = db.Fragment.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId)).Include(g => g.Position).Include(g => g.SequenceAttribute).ToList();
+            subsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId)).Include(g => g.Position).Include(g => g.SequenceAttribute).ToList();
 
-            var pieces = fragments.Select(g => g.Position.First()).ToList();
+            var pieces = subsequences.Select(g => g.Position.First()).ToList();
 
             var sequences = ConvertToChains(pieces, sequenceId);
 
@@ -106,16 +106,24 @@
         /// <param name="featureIds">
         /// The feature ids.
         /// </param>
-        /// <param name="fragments">
+        /// <param name="subsequences">
         /// The genes.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Gene}"/>.
+        /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public List<Chain> ExtractSequences(long matterId, int notationId, int[] featureIds, out List<Fragment> fragments)
+        public List<Chain> ExtractSequences(long matterId, int notationId, int[] featureIds, out List<Subsequence> subsequences)
         {
             var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-            return ExtractSequences(sequenceId, featureIds, out fragments);
+            return ExtractSequences(sequenceId, featureIds, out subsequences);
+        }
+
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            db.Dispose();
         }
     }
 }

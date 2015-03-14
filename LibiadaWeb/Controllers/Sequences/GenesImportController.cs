@@ -62,7 +62,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var genesSequenceIds = db.Fragment.Select(g => g.SequenceId).Distinct();
+            var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId);
 
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
@@ -158,8 +158,8 @@
                     {
                         featureId = featureRepository.GetFeatureIdByName(feature.Key);
                     }
-                    
-                    var fragment = new Fragment
+
+                    var subsequence = new Subsequence
                     {
                         Id = DbHelper.GetNewElementId(db),
                         FeatureId = featureId,
@@ -172,7 +172,7 @@
 
                     foreach (var qualifier in feature.Qualifiers)
                     {
-                        sequenceAttributeRepository.CreateSequenceAttribute(qualifier, fragment);
+                        sequenceAttributeRepository.CreateSequenceAttribute(qualifier, subsequence);
                     }
                 }
 
@@ -180,12 +180,12 @@
 
                 var matterName = db.Matter.Single(m => m.Id == matterId).Name;
 
-                var sequenceFragments = db.Fragment.Where(g => g.SequenceId == sequenceId).Include(g => g.Position).Include(g => g.Feature).Include(g => g.SequenceAttribute);
+                var sequenceSubsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId).Include(g => g.Position).Include(g => g.Feature).Include(g => g.SequenceAttribute);
 
                 return new Dictionary<string, object>
                                      {
                                          { "matterName", matterName }, 
-                                         { "genes", sequenceFragments }
+                                         { "genes", sequenceSubsequences }
                                      };
             });
         }

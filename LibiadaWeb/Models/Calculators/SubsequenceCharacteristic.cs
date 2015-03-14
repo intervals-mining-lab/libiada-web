@@ -3,12 +3,12 @@
     /// <summary>
     /// The genes characteristics.
     /// </summary>
-    public class FragmentCharacteristic
+    public class SubsequenceCharacteristic
     {
         /// <summary>
-        /// The gene.
+        /// The subsequence.
         /// </summary>
-        public readonly Fragment Fragment;
+        public readonly Subsequence Subsequence;
 
         /// <summary>
         /// The characteristic.
@@ -16,17 +16,17 @@
         public readonly double Characteristic;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneCharacteristic"/> class.
+        /// Initializes a new instance of the <see cref="SubsequenceCharacteristic"/> class.
         /// </summary>
-        /// <param name="fragment">
+        /// <param name="subsequence">
         /// The gene.
         /// </param>
         /// <param name="characteristic">
         /// The characteristic.
         /// </param>
-        public FragmentCharacteristic(Fragment fragment, double characteristic)
+        public SubsequenceCharacteristic(Subsequence subsequence, double characteristic)
         {
-            this.Fragment = fragment;
+            this.Subsequence = subsequence;
             this.Characteristic = characteristic;
         }
     }

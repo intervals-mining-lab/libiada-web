@@ -24,7 +24,7 @@
         /// <summary>
         /// The gene repository.
         /// </summary>
-        private readonly GeneRepository geneRepository;
+        private readonly SubsequenceRepository subsequenceRepository;
 
         /// <summary>
         /// The characteristic type repository.
@@ -37,7 +37,7 @@
         public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
-            geneRepository = new GeneRepository(db);
+            subsequenceRepository = new SubsequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -103,8 +103,8 @@
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    List<Fragment> fragments;
-                    var chains = geneRepository.ExtractSequences(matterId, notationIds[w], featureIds, out fragments);
+                    List<Subsequence> subsequences;
+                    var chains = subsequenceRepository.ExtractSequences(matterId, notationIds[w], featureIds, out subsequences);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
@@ -118,14 +118,14 @@
 
                         for (int j = 0; j < chains.Count; j++)
                         {
-                            long geneId = fragments[j].Id;
+                            long subsequenceId = subsequences[j].Id;
 
-                            if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                            if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                             {
                                 double value = calculator.Calculate(chains[j], link);
                                 var currentCharacteristic = new Characteristic
                                 {
-                                    SequenceId = geneId,
+                                    SequenceId = subsequenceId,
                                     CharacteristicTypeLinkId = characteristicTypeLinkId,
                                     Value = value,
                                     ValueString = value.ToString()
@@ -138,17 +138,17 @@
 
                         for (int d = 0; d < chains.Count; d++)
                         {
-                            long geneId = fragments[d].Id;
-                            double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                            long subsequenceId = subsequences[d].Id;
+                            double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));
 
                             if (i == 0)
                             {
-                                var featureId = fragments[d].FeatureId;
+                                var featureId = subsequences[d].FeatureId;
 
                                 //sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
-                                sequencesPositions.Last().Add(fragments[d].Position.First().Start);
+                                sequencesPositions.Last().Add(subsequences[d].Position.First().Start);
 
                                 sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
                             }

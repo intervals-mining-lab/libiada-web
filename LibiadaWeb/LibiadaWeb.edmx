@@ -119,7 +119,7 @@
           <Property Name="description" Type="text" />
         </EntityType>
 
-        <EntityType Name="fragment">
+        <EntityType Name="subsequence">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -140,7 +140,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="fragment_id" Type="int8" Nullable="false" />
+          <Property Name="subsequence_id" Type="int8" Nullable="false" />
           <Property Name="start" Type="int4" Nullable="false" />
           <Property Name="length" Type="int4" Nullable="false" />
         </EntityType>
@@ -653,11 +653,11 @@
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_chain_attribute_fragment">
-          <End Role="fragment" Type="Self.fragment" Multiplicity="1" />
+        <Association Name="fk_chain_attribute_subsequence">
+          <End Role="subsequence" Type="Self.subsequence" Multiplicity="1" />
           <End Role="chain_attribute" Type="Self.chain_attribute" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="fragment">
+            <Principal Role="subsequence">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="chain_attribute">
@@ -692,41 +692,41 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fragment_dna_chain">
+        <Association Name="fk_subsequence_dna_chain">
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
-          <End Role="fragment" Type="Self.fragment" Multiplicity="*" />
+          <End Role="subsequence" Type="Self.subsequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="dna_chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="fragment">
+            <Dependent Role="subsequence">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fragment_feature">
+        <Association Name="fk_subsequence_feature">
           <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="fragment" Type="Self.fragment" Multiplicity="*" />
+          <End Role="subsequence" Type="Self.subsequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="feature">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="fragment">
+            <Dependent Role="subsequence">
               <PropertyRef Name="feature_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_position_fragment">
-          <End Role="fragment" Type="Self.fragment" Multiplicity="1" />
+        <Association Name="fk_position_subsequence">
+          <End Role="subsequence" Type="Self.subsequence" Multiplicity="1" />
           <End Role="position" Type="Self.position" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="fragment">
+            <Principal Role="subsequence">
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="position">
-              <PropertyRef Name="fragment_id" />
+              <PropertyRef Name="subsequence_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1496,7 +1496,7 @@
           <EntitySet Name="characteristic_type" EntityType="Self.characteristic_type" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic_type_link" EntityType="Self.characteristic_type_link" store:Type="Tables" Schema="public"/>
           <EntitySet Name="dna_chain" EntityType="Self.dna_chain" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="fragment" EntityType="Self.fragment" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="subsequence" EntityType="Self.subsequence" store:Type="Tables" Schema="public"/>
           <EntitySet Name="position" EntityType="Self.position" store:Type="Tables" Schema="public"/>
           <EntitySet Name="element" EntityType="Self.element" store:Type="Tables" Schema="public"/>
           <EntitySet Name="language" EntityType="Self.language" store:Type="Tables" Schema="public"/>
@@ -1604,8 +1604,8 @@
             <End Role="chain_attribute" EntitySet="chain_attribute" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_chain_attribute_fragment" Association="Self.fk_chain_attribute_fragment">
-            <End Role="fragment" EntitySet="fragment" />
+          <AssociationSet Name="fk_chain_attribute_subsequence" Association="Self.fk_chain_attribute_subsequence">
+            <End Role="subsequence" EntitySet="subsequence" />
             <End Role="chain_attribute" EntitySet="chain_attribute" />
           </AssociationSet>
           
@@ -1619,18 +1619,18 @@
             <End Role="dna_chain" EntitySet="dna_chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fragment_dna_chain" Association="Self.fk_fragment_dna_chain">
+          <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="dna_chain" EntitySet="dna_chain" />
-            <End Role="fragment" EntitySet="fragment" />
+            <End Role="subsequence" EntitySet="subsequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fragment_feature" Association="Self.fk_fragment_feature">
+          <AssociationSet Name="fk_subsequence_feature" Association="Self.fk_subsequence_feature">
             <End Role="feature" EntitySet="feature" />
-            <End Role="fragment" EntitySet="fragment" />
+            <End Role="subsequence" EntitySet="subsequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_position_fragment" Association="Self.fk_position_fragment">
-            <End Role="fragment" EntitySet="fragment" />
+          <AssociationSet Name="fk_position_subsequence" Association="Self.fk_position_subsequence">
+            <End Role="subsequence" EntitySet="subsequence" />
             <End Role="position" EntitySet="position" />
           </AssociationSet>
 
@@ -1955,11 +1955,11 @@
           <NavigationProperty Name="Notation" Relationship="Self.fk_dna_chain_notation" FromRole="DnaSequence" ToRole="Notation" />
           <NavigationProperty Name="Feature" Relationship="Self.fk_dna_chain_feature" FromRole="DnaSequence" ToRole="Feature" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_dna_chain_remote_db" FromRole="DnaSequence" ToRole="RemoteDb" />
-        <NavigationProperty Name="Fragment" Relationship="Self.fk_fragment_dna_chain" FromRole="DnaSequence" ToRole="Fragment" />
+        <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="DnaSequence" ToRole="Subsequence" />
         <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="DnaSequence" ToRole="SequenceAttribute" />
         </EntityType>
 
-        <EntityType Name="Fragment">
+        <EntityType Name="Subsequence">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1974,10 +1974,10 @@
           <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
           
-          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_fragment_dna_chain" FromRole="Fragment" ToRole="DnaSequence" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_fragment_feature" FromRole="Fragment" ToRole="Feature" />
-          <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_fragment" FromRole="Fragment" ToRole="SequenceAttribute" />
-        <NavigationProperty Name="Position" Relationship="Self.fk_position_fragment" FromRole="Fragment" ToRole="Position" />
+          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="Subsequence" ToRole="DnaSequence" />
+          <NavigationProperty Name="Feature" Relationship="Self.fk_subsequence_feature" FromRole="Subsequence" ToRole="Feature" />
+          <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_subsequence" FromRole="Subsequence" ToRole="SequenceAttribute" />
+        <NavigationProperty Name="Position" Relationship="Self.fk_position_subsequence" FromRole="Subsequence" ToRole="Position" />
         </EntityType>
 
         <EntityType Name="Position">
@@ -1985,11 +1985,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="FragmentId" Type="Int64" Nullable="false" />
+          <Property Name="SubsequenceId" Type="Int64" Nullable="false" />
           <Property Name="Start" Type="Int32" Nullable="false" />
           <Property Name="Length" Type="Int32" Nullable="false" />
           
-          <NavigationProperty Name="Fragment" Relationship="Self.fk_position_fragment" FromRole="Position" ToRole="Fragment" />
+          <NavigationProperty Name="Subsequence" Relationship="Self.fk_position_subsequence" FromRole="Position" ToRole="Subsequence" />
         </EntityType>
 
         <EntityType Name="Element">
@@ -2130,7 +2130,7 @@
           
           <NavigationProperty Name="Attribute" Relationship="Self.fk_chain_attribute_attribute" FromRole="SequenceAttribute" ToRole="Attribute" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="SequenceAttribute" ToRole="DnaSequence" />
-          <NavigationProperty Name="Fragment" Relationship="Self.fk_chain_attribute_fragment" FromRole="SequenceAttribute" ToRole="Fragment" />
+          <NavigationProperty Name="Subsequence" Relationship="Self.fk_chain_attribute_subsequence" FromRole="SequenceAttribute" ToRole="Subsequence" />
         </EntityType>
         
         <EntityType Name="Attribute">
@@ -2162,7 +2162,7 @@
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_feature" FromRole="Feature" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_feature" FromRole="Feature" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_feature" FromRole="Feature" ToRole="DataSequence" />
-          <NavigationProperty Name="Fragment" Relationship="Self.fk_fragment_feature" FromRole="Feature" ToRole="Fragment" />
+          <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_feature" FromRole="Feature" ToRole="Subsequence" />
         </EntityType>
         
         <EntityType Name="Translator">
@@ -2748,11 +2748,11 @@
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_chain_attribute_fragment">
-          <End Role="Fragment" Type="Self.Fragment" Multiplicity="1" />
+        <Association Name="fk_chain_attribute_subsequence">
+          <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="1" />
           <End Role="SequenceAttribute" Type="Self.SequenceAttribute" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Fragment">
+            <Principal Role="Subsequence">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="SequenceAttribute">
@@ -2787,41 +2787,41 @@
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_fragment_dna_chain">
+        <Association Name="fk_subsequence_dna_chain">
           <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="1" />
-          <End Role="Fragment" Type="Self.Fragment" Multiplicity="*" />
+          <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="DnaSequence">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Fragment">
+            <Dependent Role="Subsequence">
               <PropertyRef Name="SequenceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_fragment_feature">
+        <Association Name="fk_subsequence_feature">
           <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="Fragment" Type="Self.Fragment" Multiplicity="*" />
+          <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Feature">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Fragment">
+            <Dependent Role="Subsequence">
               <PropertyRef Name="FeatureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         
-        <Association Name="fk_position_fragment">
-          <End Role="Fragment" Type="Self.Fragment" Multiplicity="1" />
+        <Association Name="fk_position_subsequence">
+          <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="1" />
           <End Role="Position" Type="Self.Position" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Fragment">
+            <Principal Role="Subsequence">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Position">
-              <PropertyRef Name="FragmentId" />
+              <PropertyRef Name="SubsequenceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3512,7 +3512,7 @@
           <EntitySet Name="CharacteristicType" EntityType="Self.CharacteristicType" />
           <EntitySet Name="CharacteristicTypeLink" EntityType="Self.CharacteristicTypeLink" />
           <EntitySet Name="DnaSequence" EntityType="Self.DnaSequence" />
-          <EntitySet Name="Fragment" EntityType="Self.Fragment" />
+          <EntitySet Name="Subsequence" EntityType="Self.Subsequence" />
           <EntitySet Name="Position" EntityType="Self.Position" />
           <EntitySet Name="Element" EntityType="Self.Element" />
           <EntitySet Name="Language" EntityType="Self.Language" />
@@ -3619,8 +3619,8 @@
             <End Role="SequenceAttribute" EntitySet="SequenceAttribute" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_chain_attribute_fragment" Association="Self.fk_chain_attribute_fragment">
-            <End Role="Fragment" EntitySet="Fragment" />
+          <AssociationSet Name="fk_chain_attribute_subsequence" Association="Self.fk_chain_attribute_subsequence">
+            <End Role="Subsequence" EntitySet="Subsequence" />
             <End Role="SequenceAttribute" EntitySet="SequenceAttribute" />
           </AssociationSet>
           
@@ -3634,18 +3634,18 @@
             <End Role="DnaSequence" EntitySet="DnaSequence" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_fragment_dna_chain" Association="Self.fk_fragment_dna_chain">
+          <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="DnaSequence" EntitySet="DnaSequence" />
-            <End Role="Fragment" EntitySet="Fragment" />
+            <End Role="Subsequence" EntitySet="Subsequence" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_fragment_feature" Association="Self.fk_fragment_feature">
+          <AssociationSet Name="fk_subsequence_feature" Association="Self.fk_subsequence_feature">
             <End Role="Feature" EntitySet="Feature" />
-            <End Role="Fragment" EntitySet="Fragment" />
+            <End Role="Subsequence" EntitySet="Subsequence" />
           </AssociationSet>
           
-          <AssociationSet Name="fk_position_fragment" Association="Self.fk_position_fragment">
-            <End Role="Fragment" EntitySet="Fragment" />
+          <AssociationSet Name="fk_position_subsequence" Association="Self.fk_position_subsequence">
+            <End Role="Subsequence" EntitySet="Subsequence" />
             <End Role="Position" EntitySet="Position" />
           </AssociationSet>
             
@@ -4074,9 +4074,9 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           
-          <EntitySetMapping Name="Fragment">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Fragment">
-              <MappingFragment StoreEntitySet="fragment">
+          <EntitySetMapping Name="Subsequence">
+            <EntityTypeMapping TypeName="LibiadaWebModel.Subsequence">
+              <MappingFragment StoreEntitySet="subsequence">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -4095,7 +4095,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.Position">
               <MappingFragment StoreEntitySet="position">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="FragmentId" ColumnName="fragment_id" />
+                <ScalarProperty Name="SubsequenceId" ColumnName="subsequence_id" />
                 <ScalarProperty Name="Start" ColumnName="start" />
                 <ScalarProperty Name="Length" ColumnName="length" />
               </MappingFragment>

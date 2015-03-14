@@ -36,13 +36,13 @@
         /// <param name="qualifier">
         /// The qualifier.
         /// </param>
-        /// <param name="fragment">
-        /// The fragment.
+        /// <param name="subsequence">
+        /// The subsequence.
         /// </param>
         /// <exception cref="Exception">
         /// Thrown if qualifier has more than one value.
         /// </exception>
-        public void CreateSequenceAttribute(KeyValuePair<string,List<string>> qualifier, Fragment fragment)
+        public void CreateSequenceAttribute(KeyValuePair<string,List<string>> qualifier, Subsequence subsequence)
         {
             if (qualifier.Value.Count > 1)
             {
@@ -56,7 +56,7 @@
                     case "translation":
                         return;
                     case "db_xref":
-                        fragment.WebApiId = int.Parse(qualifier.Value[0].Substring(3));
+                        subsequence.WebApiId = int.Parse(qualifier.Value[0].Substring(3));
                         break;
                     case "codon_start":
                         if (qualifier.Value[0] != "1")
@@ -69,14 +69,14 @@
 
                 var attribute = attributeRepository.GetOrCreateAttributeByName(qualifier.Key);
 
-                var fragmentAttribute = new SequenceAttribute
+                var subsequenceAttribute = new SequenceAttribute
                 {
                     Attribute = attribute,
-                    Fragment = fragment,
+                    Subsequence = subsequence,
                     Value = qualifier.Value[0]
                 };
 
-                db.SequenceAttribute.Add(fragmentAttribute);
+                db.SequenceAttribute.Add(subsequenceAttribute);
             }
         }
 

@@ -21,6 +21,6 @@ namespace LibiadaWeb
     
         public virtual Attribute Attribute { get; set; }
         public virtual DnaSequence DnaSequence { get; set; }
-        public virtual Fragment Fragment { get; set; }
+        public virtual Subsequence Subsequence { get; set; }
     }
 }

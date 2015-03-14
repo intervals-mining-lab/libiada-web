@@ -15,10 +15,10 @@ namespace LibiadaWeb
     public partial class Position
     {
         public long Id { get; set; }
-        public long FragmentId { get; set; }
+        public long SubsequenceId { get; set; }
         public int Start { get; set; }
         public int Length { get; set; }
     
-        public virtual Fragment Fragment { get; set; }
+        public virtual Subsequence Subsequence { get; set; }
     }
 }

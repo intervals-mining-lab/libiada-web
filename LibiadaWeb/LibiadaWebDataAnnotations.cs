@@ -102,13 +102,13 @@
         /// <summary>
         /// Gets or sets the feature id.
         /// </summary>
-        [Display(Name = "Type of fragment")]
+        [Display(Name = "Feature")]
         public int FeatureId { get; set; }
 
         /// <summary>
         /// Gets or sets the piece position.
         /// </summary>
-        [Display(Name = "Position of fragment")]
+        [Display(Name = "Position of subsequence")]
         public long PiecePosition { get; set; }
 
         /// <summary>
@@ -277,15 +277,15 @@
     /// <summary>
     /// The gene.
     /// </summary>
-    [MetadataType(typeof(FragmentDataAnnotations))]
-    public partial class Fragment
+    [MetadataType(typeof(SubsequenceDataAnnotations))]
+    public partial class Subsequence
     {
     }
 
     /// <summary>
     /// The gene data annotations.
     /// </summary>
-    public class FragmentDataAnnotations
+    public class SubsequenceDataAnnotations
     {
         /// <summary>
         /// Gets or sets a value indicating whether sequence complementary.

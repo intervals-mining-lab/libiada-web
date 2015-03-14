@@ -25,7 +25,7 @@
         /// <summary>
         /// The gene repository.
         /// </summary>
-        private readonly GeneRepository geneRepository;
+        private readonly SubsequenceRepository subsequenceRepository;
 
         /// <summary>
         /// The characteristic type repository.
@@ -38,7 +38,7 @@
         public GenesAlignmentController() : base("GenesAlignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
-            geneRepository = new GeneRepository(db);
+            subsequenceRepository = new SubsequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -221,9 +221,9 @@
         {
             var characteristics = new List<double>();
 
-            List<Fragment> fragments;
+            List<Subsequence> subsequences;
 
-            var sequences = geneRepository.ExtractSequences(matterId, notationId, featureIds, out fragments);
+            var sequences = subsequenceRepository.ExtractSequences(matterId, notationId, featureIds, out subsequences);
 
             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
@@ -231,14 +231,14 @@
 
             for (int j = 0; j < sequences.Count; j++)
             {
-                long geneId = fragments[j].Id;
+                long subsequenceId = subsequences[j].Id;
 
-                if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
                     double value = calculator.Calculate(sequences[j], link);
                     var currentCharacteristic = new Characteristic
                     {
-                        SequenceId = geneId,
+                        SequenceId = subsequenceId,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
                         Value = value,
                         ValueString = value.ToString()
@@ -252,8 +252,8 @@
 
             for (int d = 0; d < sequences.Count; d++)
             {
-                long geneId = fragments[d].Id;
-                double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                long subsequenceId = subsequences[d].Id;
+                double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);
             }

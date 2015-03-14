@@ -634,4 +634,148 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Regulatory', '
 
 ALTER TABLE fragment ADD CONSTRAINT uk_fragment UNIQUE (chain_id, start);
 
+-- 14.05.2015
+--Updating trigger functions and renaming tables.
+
+ALTER TABLE fragment RENAME TO subsequence;
+ALTER TABLE position RENAME COLUMN fragment_id TO subsequence_id;
+ALTER TABLE subsequence RENAME CONSTRAINT pk_fragment TO pk_subsequence;
+ALTER TABLE subsequence RENAME CONSTRAINT fk_fragment_chain_chain_key TO fk_subsequence_chain_chain_key;
+ALTER TABLE subsequence RENAME CONSTRAINT fk_fragment_chain_key TO fk_subsequence_chain_key;
+ALTER TABLE subsequence RENAME CONSTRAINT fk_fragment_feature TO fk_subsequence_feature;
+ALTER TABLE subsequence RENAME CONSTRAINT uk_fragment TO uk_subsequence;
+ALTER TABLE position RENAME CONSTRAINT fk_position_fragment TO fk_position_subsequence;
+ALTER INDEX ix_fragment_chain_feature RENAME TO ix_subsequence_chain_feature;
+ALTER INDEX ix_fragment_chain_id RENAME TO ix_subsequence_chain_id;
+ALTER INDEX ix_piece_gene_id RENAME TO ix_position_subsequence_id;
+ALTER INDEX ix_piece_id RENAME TO ix_position_id;
+
+DROP TRIGGER tgiu_fragment_modified ON subsequence;
+CREATE TRIGGER tgiu_subsequence_modified BEFORE INSERT OR UPDATE ON subsequence FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+COMMENT ON TRIGGER tgiu_subsequence_modified ON subsequence IS 'Trigger adding creation and modification dates.';
+
+DROP TRIGGER tgiud_fragment_chain_key_bound ON subsequence;
+CREATE TRIGGER tgiud_subsequence_chain_key_bound AFTER INSERT OR UPDATE OF id OR DELETE ON subsequence FOR EACH ROW EXECUTE PROCEDURE trigger_chain_key_bound();
+COMMENT ON TRIGGER tgiud_subsequence_chain_key_bound ON subsequence IS 'Creates two way bound with chain_key table.';
+
+DROP TRIGGER tgu_fragment_characteristics ON subsequence;
+CREATE TRIGGER tgu_subsequence_characteristics AFTER UPDATE ON subsequence FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_subsequence_characteristics ON subsequence IS 'Deletes all calculated characteristics is sequence changes.';
+
+DROP FUNCTION check_genes_import_positions(bigint);
+
+CREATE OR REPLACE FUNCTION trigger_chain_key_insert()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "NEW = ", JSON.stringify(NEW));
+//plv8.elog(NOTICE, "OLD = ", JSON.stringify(OLD));
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT"){
+ var result = plv8.execute('SELECT count(*) = 1 result FROM chain WHERE id = $1', [NEW.id])[0].result;
+ if (result){
+  return NEW;
+ }else{
+  var subsequence = plv8.execute('SELECT count(*) = 1 result FROM subsequence WHERE id = $1', [NEW.id])[0].result;
+  if (subsequence){
+   return NEW;
+  }else{
+   plv8.elog(ERROR, 'New record in table ', TG_TABLE_NAME, ' cannot be addded witout adding record with id=', NEW.id, ' in table sequence or its child.');
+  }
+ }
+} else{
+	plv8.elog(ERROR, 'Unknown db operation. This trigger only operates on INSET and UPDARE operations on tables with id column.');
+}
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+
+CREATE OR REPLACE FUNCTION db_integrity_test()
+  RETURNS void AS
+$BODY$
+function CheckChain() {
+    plv8.elog(INFO, "Checking table sequence and its children.");
+
+    var chain = plv8.execute('SELECT id FROM chain');
+    var chainDistinct = plv8.execute('SELECT DISTINCT id FROM chain');
+    if (chain.length != chainDistinct.length) {
+        plv8.elog(ERROR, 'ids in table sequence and/or its cildren are not unique.');
+    }else{
+		plv8.elog(INFO, "All sequence ids are unique.");
+    }
+	
+    plv8.elog(INFO, "Checking accordance of records in table sequence (and its children) to records in sequence_key table.");
+    
+    var chainDisproportion = plv8.execute('SELECT c.id, ck.id FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
+    
+    if (chainDisproportion.length > 0) {
+		var debugQuery = 'SELECT c.id chain_id, ck.id chain_key_id FROM (SELECT id FROM chain UNION SELECT id FROM subsequence) c FULL OUTER JOIN chain_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        plv8.elog(ERROR, 'Number of records in sequence_key is not equal to number of records in sequence and its children. For detail see "', debugQuery, '".');
+    }else{
+		plv8.elog(INFO, "sequence_key is in sync with sequence and its children.");
+    }
+	
+	plv8.elog(INFO, 'Sequences tables are all checked.');
+}
+
+function CheckElement() {
+    plv8.elog(INFO, "Checking table element and its children.");
+
+    var element = plv8.execute('SELECT id FROM element');
+    var elementDistinct = plv8.execute('SELECT DISTINCT id FROM element');
+    if (element.length != elementDistinct.length) {
+        plv8.elog(ERROR, 'ids in table element and/or its cildren are not unique.');
+    }else{
+		plv8.elog(INFO, "All element ids are unique.");
+    }
+
+    plv8.elog(INFO, "Checking accordance of records in table element (and its children) to records in element_key table.");
+    
+    var elementDisproportion = plv8.execute('SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL');
+    
+    if (elementDisproportion.length > 0) {
+		var debugQuery = 'SELECT c.id, ck.id FROM element c FULL OUTER JOIN element_key ck ON ck.id = c.id WHERE c.id IS NULL OR ck.id IS NULL';
+        plv8.elog(ERROR, 'Number of records in element_key is not equal to number of records in element and its children. For detail see "', debugQuery,'"');
+    }else{
+		plv8.elog(INFO, "element_key is in sync with element and its children.");
+    }
+	
+	plv8.elog(INFO, 'Elements tables are all checked.');
+}
+
+function CheckAlphabet() {
+	plv8.elog(INFO, 'Checking alphabets of all sequences.');
+	
+	var orphanedElements = plv8.execute('SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL');
+	if (orphanedElements.length > 0) { 
+		var debugQuery = 'SELECT c.a FROM (SELECT DISTINCT unnest(alphabet) a FROM chain) c LEFT OUTER JOIN element_key e ON e.id = c.a WHERE e.id IS NULL';
+		plv8.elog(ERROR, 'There are ', orphanedElements.length,' missing elements of alphabet. For details see "', debugQuery,'".');
+	}
+	else {
+		plv8.elog(INFO, 'All alphabets elements are present in element_key table.');
+	}
+	
+	//TODO: ѕроверить что все бинарные и однородные характеристики вычислены дл€ элементов присутствующих в алфавите.
+	plv8.elog(INFO, 'All alphabets are checked.');
+}
+
+function db_integrity_test() {
+    plv8.elog(INFO, "Checking referential integrity of database.");
+    CheckChain();
+    CheckElement();
+    CheckAlphabet();
+    plv8.elog(INFO, "Referential integrity of database is successfully checked.");
+}
+
+db_integrity_test();
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+ALTER FUNCTION db_integrity_test()
+  OWNER TO postgres;
+COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential integrity of db.';
+  
+
 COMMIT;

@@ -23,7 +23,7 @@ namespace LibiadaWeb
             this.Measure = new HashSet<Measure>();
             this.MusicSequence = new HashSet<MusicSequence>();
             this.DataSequence = new HashSet<DataSequence>();
-            this.Fragment = new HashSet<Fragment>();
+            this.Subsequence = new HashSet<Subsequence>();
         }
     
         public int Id { get; set; }
@@ -41,6 +41,6 @@ namespace LibiadaWeb
         public virtual ICollection<Measure> Measure { get; set; }
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }
         public virtual ICollection<DataSequence> DataSequence { get; set; }
-        public virtual ICollection<Fragment> Fragment { get; set; }
+        public virtual ICollection<Subsequence> Subsequence { get; set; }
     }
 }

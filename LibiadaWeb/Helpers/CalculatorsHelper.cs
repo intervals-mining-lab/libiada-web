@@ -97,7 +97,7 @@
         /// </returns>
         public Dictionary<string, object> GetGenesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters)
         {
-            var sequenceIds = db.Fragment.Select(g => g.SequenceId).Distinct();
+            var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId);
             var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
 

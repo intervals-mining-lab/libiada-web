@@ -18,7 +18,7 @@ namespace LibiadaWeb
         {
             this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
             this.Characteristic = new HashSet<Characteristic>();
-            this.Fragment = new HashSet<Fragment>();
+            this.Subsequence = new HashSet<Subsequence>();
             this.SequenceAttribute = new HashSet<SequenceAttribute>();
         }
     
@@ -43,7 +43,7 @@ namespace LibiadaWeb
         public virtual Notation Notation { get; set; }
         public virtual Feature Feature { get; set; }
         public virtual RemoteDb RemoteDb { get; set; }
-        public virtual ICollection<Fragment> Fragment { get; set; }
+        public virtual ICollection<Subsequence> Subsequence { get; set; }
         public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; }
     }
 }

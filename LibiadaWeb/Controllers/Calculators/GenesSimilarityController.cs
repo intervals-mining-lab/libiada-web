@@ -28,7 +28,7 @@
         /// <summary>
         /// The gene repository.
         /// </summary>
-        private readonly GeneRepository geneRepository;
+        private readonly SubsequenceRepository subsequenceRepository;
 
         /// <summary>
         /// The characteristic type repository.
@@ -41,7 +41,7 @@
         public GenesSimilarityController() : base("GenesSimilarity", "Genes similarity")
         {
             db = new LibiadaWebEntities();
-            geneRepository = new GeneRepository(db);
+            subsequenceRepository = new SubsequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -105,14 +105,14 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                List<Fragment> firstSequenceFragments;
-                List<Fragment> secondSequenceFragments;
+                List<Subsequence> firstSequenceSubsequences;
+                List<Subsequence> secondSequenceSubsequences;
 
-                var firstSequences = geneRepository.ExtractSequences(firstMatterId, notationId, featureIds, out firstSequenceFragments);
-                var secondSequences = geneRepository.ExtractSequences(secondMatterId, notationId, featureIds, out secondSequenceFragments);
+                var firstSequences = subsequenceRepository.ExtractSequences(firstMatterId, notationId, featureIds, out firstSequenceSubsequences);
+                var secondSequences = subsequenceRepository.ExtractSequences(secondMatterId, notationId, featureIds, out secondSequenceSubsequences);
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceFragments);
-                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceFragments);
+                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
+                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
 
                 var similarGenes = new List<IntPair>();
 
@@ -142,8 +142,8 @@
                     { "characteristicName", characteristicName },
                     { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "similarGenes", similarGenes },
-                    { "firstSequenceGenes", firstSequenceFragments },
-                    { "secondSequenceGenes", secondSequenceFragments }
+                    { "firstSequenceGenes", firstSequenceSubsequences },
+                    { "secondSequenceGenes", secondSequenceSubsequences }
                 };
             });
         }
@@ -157,16 +157,16 @@
         /// <param name="sequences">
         /// The sequences.
         /// </param>
-        /// <param name="fragments">
+        /// <param name="subsequences">
         /// The genes.
         /// </param>
         /// <returns>
-        /// The <see cref="List{Fragment}"/>.
+        /// The <see cref="List{Subsequence}"/>.
         /// </returns>
         private List<double> CalculateCharacteristic(
             int characteristicTypeLinkId,
             List<Chain> sequences,
-            List<Fragment> fragments)
+            List<Subsequence> subsequences)
         {
             var characteristics = new List<double>();
 
@@ -176,14 +176,14 @@
 
             for (int j = 0; j < sequences.Count; j++)
             {
-                long geneId = fragments[j].Id;
+                long subsequenceId = subsequences[j].Id;
 
-                if (!db.Characteristic.Any(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
                     double value = calculator.Calculate(sequences[j], link);
                     var currentCharacteristic = new Characteristic
                     {
-                        SequenceId = geneId,
+                        SequenceId = subsequenceId,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
                         Value = value,
                         ValueString = value.ToString()
@@ -197,8 +197,8 @@
 
             for (int d = 0; d < sequences.Count; d++)
             {
-                long geneId = fragments[d].Id;
-                double characteristic = db.Characteristic.Single(c => c.SequenceId == geneId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                long subsequenceId = subsequences[d].Id;
+                double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);
             }

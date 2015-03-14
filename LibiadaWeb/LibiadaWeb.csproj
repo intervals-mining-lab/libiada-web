@@ -291,9 +291,6 @@
     <Compile Include="FmotivType.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Fragment.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -348,7 +345,7 @@
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\Calculators\CharacteristicData.cs" />
     <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
-    <Compile Include="Models\Calculators\GeneCharacteristic.cs" />
+    <Compile Include="Models\Calculators\SubsequenceCharacteristic.cs" />
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IntPair.cs" />
@@ -370,10 +367,11 @@
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\ISubsequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DnaSequenceRepository.cs" />
-    <Compile Include="Models\Repositories\Sequences\GeneRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\SubsequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ICommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IDnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ILiteratureSequenceRepository.cs" />
@@ -414,6 +412,9 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Subsequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Tie.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

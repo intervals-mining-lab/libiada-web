@@ -12,9 +12,9 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Fragment
+    public partial class Subsequence
     {
-        public Fragment()
+        public Subsequence()
         {
             this.SequenceAttribute = new HashSet<SequenceAttribute>();
             this.Position = new HashSet<Position>();
