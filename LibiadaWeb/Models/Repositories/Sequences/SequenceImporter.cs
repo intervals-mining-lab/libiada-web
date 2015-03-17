@@ -37,8 +37,8 @@
         protected SequenceImporter(LibiadaWebEntities db)
         {
             Db = db;
-            this.MatterRepository = new MatterRepository(db);
-            this.ElementRepository = new ElementRepository(db);
+            MatterRepository = new MatterRepository(db);
+            ElementRepository = new ElementRepository(db);
         }
 
         /// <summary>

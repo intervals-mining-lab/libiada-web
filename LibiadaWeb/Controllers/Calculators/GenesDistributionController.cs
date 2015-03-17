@@ -109,7 +109,6 @@
                     long matterId = matterIds[w];
                     var matterName = db.Matter.Single(m => m.Id == matterId).Name;
 
-
                     long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == firstNotationId).Id;
 
                     double sequenceCharacteristic;
@@ -174,7 +173,7 @@
                     for (int d = 0; d < genesSequences.Count; d++)
                     {
                         long subsequenceId = subsequences[d].Id;
-                        double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId ).Value;
+                        double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId).Value;
 
                         var geneCharacteristic = new SubsequenceCharacteristic(subsequences[d], characteristic);
                         genesCharacteristics.Add(geneCharacteristic);

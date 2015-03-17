@@ -213,7 +213,7 @@
                     { "characteristics", characteristics },
                     { "matterNames", matterNames },
                     { "starts", starts },
-                    { "partNames", partNames},
+                    { "partNames", partNames },
                     { "lengthes", lengthes },
                     { "characteristicIds", new List<int>(characteristicTypeLinkIds) },
                     { "characteristicNames", characteristicNames },

@@ -42,7 +42,7 @@
         /// <exception cref="Exception">
         /// Thrown if qualifier has more than one value.
         /// </exception>
-        public void CreateSequenceAttribute(KeyValuePair<string,List<string>> qualifier, Subsequence subsequence)
+        public void CreateSequenceAttribute(KeyValuePair<string, List<string>> qualifier, Subsequence subsequence)
         {
             if (qualifier.Value.Count > 1)
             {

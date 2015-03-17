@@ -147,7 +147,7 @@
                             {
                                 var featureId = subsequences[d].FeatureId;
 
-                                //sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
+                                // sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
                                 sequencesPositions.Last().Add(subsequences[d].Position.First().Start);
 
                                 sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);

@@ -128,7 +128,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public List<Element> GetElements(long sequenceId)
         {
             List<long> elementIds = DbHelper.GetElementIds(Db, sequenceId);
-            return this.ElementRepository.GetElements(elementIds);
+            return ElementRepository.GetElements(elementIds);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Alphabet GetAlphabet(long sequenceId)
         {
             List<long> elements = DbHelper.GetElementIds(Db, sequenceId);
-            return this.ElementRepository.ToLibiadaAlphabet(elements);
+            return ElementRepository.ToLibiadaAlphabet(elements);
         }
 
         /// <summary>

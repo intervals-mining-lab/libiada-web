@@ -68,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The selected dbs.
         /// </param>
         /// <returns>
-        /// The <see cref="IEnumerable"/>.
+        /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> selectedDbs)
         {

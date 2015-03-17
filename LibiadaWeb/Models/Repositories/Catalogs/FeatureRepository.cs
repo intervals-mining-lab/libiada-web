@@ -70,7 +70,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return this.GetSelectListWithNature(new int[0]);
+            return GetSelectListWithNature(new int[0]);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
-            return this.GetSelectListWithNature(db.Feature.Select(f => f.Id), selectedFeatures);
+            return GetSelectListWithNature(selectedFeatures, db.Feature.Select(f => f.Id));
         }
 
         /// <summary>

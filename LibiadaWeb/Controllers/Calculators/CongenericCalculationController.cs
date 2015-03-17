@@ -182,7 +182,7 @@
 
                             double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId && c.ElementId == elementId).Value;
 
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, (double)characteristic));
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));
 
                             if (i == 0)
                             {

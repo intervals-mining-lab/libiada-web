@@ -54,7 +54,6 @@
             return db.CharacteristicType.Single(c => c.Id == characteristicTypeId);
         }
 
-
         /// <summary>
         /// The get characteristic name.
         /// </summary>

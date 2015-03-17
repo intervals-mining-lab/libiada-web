@@ -327,7 +327,6 @@
             /// The regulatory feature.
             /// </summary>
             public const int Regulatory = 20;
-
         }
 
         /// <summary>

@@ -36,9 +36,9 @@
         /// </param>
         public SequenceCharacteristics(string matterName, double characteristic, List<SubsequenceCharacteristic> subsequencesCharacteristics)
         {
-            this.MatterName = matterName;
-            this.Characteristic = characteristic;
-            this.SubsequencesCharacteristics = subsequencesCharacteristics;
+            MatterName = matterName;
+            Characteristic = characteristic;
+            SubsequencesCharacteristics = subsequencesCharacteristics;
         }
     }
 }

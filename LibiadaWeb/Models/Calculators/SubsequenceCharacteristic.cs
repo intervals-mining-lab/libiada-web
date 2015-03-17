@@ -26,8 +26,8 @@
         /// </param>
         public SubsequenceCharacteristic(Subsequence subsequence, double characteristic)
         {
-            this.Subsequence = subsequence;
-            this.Characteristic = characteristic;
+            Subsequence = subsequence;
+            Characteristic = characteristic;
         }
     }
 }
