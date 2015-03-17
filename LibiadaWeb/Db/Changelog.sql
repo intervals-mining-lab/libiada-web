@@ -22,7 +22,7 @@ CREATE INDEX ix_piece_gene_id ON piece (gene_id ASC NULLS LAST);
 -- 05.10.2014
 -- Добавлен новый тип РНК.
 
-INSERT INTO piece_type (name, description, nature_id) VALUES ('Различная РНК', 'misc_RNA - miscellaneous other RNA', 1)
+INSERT INTO piece_type (name, description, nature_id) VALUES ('Различная РНК', 'misc_RNA - miscellaneous other RNA', 1);
 
 -- 24.12.2014
 -- Updating db_integrity_test function.
