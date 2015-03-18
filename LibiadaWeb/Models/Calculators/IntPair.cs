@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models.Calculators
 {
     /// <summary>
     /// The int pair.
@@ -26,8 +26,8 @@
         /// </param>
         public IntPair(int first, int second)
         {
-            First = first;
-            Second = second;
+            this.First = first;
+            this.Second = second;
         }
     }
 }

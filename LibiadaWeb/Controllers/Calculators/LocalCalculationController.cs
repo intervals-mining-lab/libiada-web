@@ -117,6 +117,7 @@
             return Action(() =>
             {
                 var matterNames = new List<string>();
+                var notationNames = new List<string>();
                 var characteristicNames = new List<string>();
                 var partNames = new List<List<List<string>>>();
                 var starts = new List<List<List<int>>>();
@@ -128,12 +129,12 @@
                     long matterId = matterIds[k];
                     int natureId = db.Matter.Single(m => m.Id == matterId).NatureId;
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                    chains.Add(new List<Chain>());
 
                     for (int n = 0; n < notationIds.Length; n++)
                     {
                         var notationId = notationIds[n];
                         long sequenceId;
-                        chains.Add(new List<Chain>());
 
                         switch (natureId)
                         {
@@ -155,12 +156,7 @@
                     }
                 }
 
-                List<List<List<List<double>>>> characteristics = CalculateCharacteristics(
-                    chains,
-                    characteristicTypeLinkIds,
-                    length,
-                    step,
-                    growingWindow);
+                List<List<List<double>>> characteristics = CalculateCharacteristics(chains, characteristicTypeLinkIds, length, step, growingWindow);
 
                 for (int i = 0; i < chains.Count; i++)
                 {
@@ -198,50 +194,42 @@
 
                         if (delta)
                         {
-                            CalculateDelta(characteristics[i][j]);
+                            CalculateDelta(characteristics[i]);
                         }
 
                         if (fourier)
                         {
-                            FastFourierTransform.FourierTransform(characteristics[i][j]);
+                            FastFourierTransform.FourierTransform(characteristics[i]);
                         }
 
                         if (autocorrelation)
                         {
-                            AutoCorrelation.CalculateAutocorrelation(characteristics[i][j]);
+                            AutoCorrelation.CalculateAutocorrelation(characteristics[i]);
                         }
                     }
                 }
 
-                var characteristicsList = new List<SelectListItem>();
                 for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
                 {
-                    characteristicsList.Add(new SelectListItem
-                    {
-                        Value = l.ToString(),
-                        Text = characteristicNames[l],
-                        Selected = false
-                    });
-
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name);
                 }
 
                 for (int w = 0; w < notationIds.Length; w++)
                 {
-                    
+                    var notationId = notationIds[w];
+                    notationNames.Add(db.Notation.Single(n => n.Id == notationId).Name);
                 }
 
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
                     { "matterNames", matterNames },
+                    { "notationNames", notationNames },
                     { "starts", starts },
                     { "partNames", partNames },
                     { "lengthes", lengthes },
-                    { "characteristicIds", new List<int>(characteristicTypeLinkIds) },
                     { "characteristicNames", characteristicNames },
-                    { "matterIds", matterIds },
-                    { "characteristicsList", characteristicsList }
+                    { "matterIds", matterIds }
                 };
             });
         }
@@ -255,16 +243,16 @@
         private static void CalculateDelta(List<List<double>> characteristics)
         {
             // Перебираем характеристики 
-            for (int i = 0; i < characteristics.Last().Count; i++)
+            for (int i = 0; i < characteristics.Count; i++)
             {
                 // перебираем фрагменты цепочек
-                for (int j = characteristics.Count - 1; j > 0; j--)
+                for (int j = characteristics[i].Count - 1; j > 0; j--)
                 {
-                    characteristics[j][i] -= characteristics[j - 1][i];
+                    characteristics[i][j] -= characteristics[i - 1][j];
                 }
-            }
 
-            characteristics.Last().RemoveAt(0);
+                characteristics[i].RemoveAt(0);
+            }
         }
 
         /// <summary>
@@ -286,9 +274,9 @@
         /// The gowing window.
         /// </param>
         /// <returns>
-        /// The <see cref="List{List{List{List{Double}}}}"/>.
+        /// The <see cref="List{List{List{Double}}}"/>.
         /// </returns>
-        private List<List<List<List<double>>>> CalculateCharacteristics(
+        private List<List<List<double>>> CalculateCharacteristics(
             List<List<Chain>> chains,
             int[] characteristicTypeLinkIds,
             int length,
@@ -296,20 +284,22 @@
             bool gowingWindow)
         {
             var calculators = new List<IFullCalculator>();
+            var links = new List<Link>();
 
             for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
             {
                 string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[i]).ClassName;
                 calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
+                links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]));
             }
 
-            var characteristics = new List<List<List<List<double>>>>();
+            var characteristics = new List<List<List<double>>>();
             for (int i = 0; i < chains.Count; i++)
             {
-                characteristics.Add(new List<List<List<double>>>());
+                characteristics.Add(new List<List<double>>());
                 for (int j = 0; j < chains[i].Count; j++)
                 {
-                    characteristics[i].Add(new List<List<double>>());
+                    characteristics[i].Add(new List<double>());
                     Chain chain = chains[i][j];
 
                     CutRule cutRule = gowingWindow
@@ -320,7 +310,6 @@
 
                     while (iter.Next())
                     {
-                        characteristics[i][j].Add(new List<double>());
                         var tempChain = new Chain();
                         tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
 
@@ -329,11 +318,7 @@
                             tempChain.Set(chain[iter.GetStartPosition() + k], k);
                         }
 
-                        for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
-                        {
-                            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[l]);
-                            characteristics[i][j].Last().Add(calculators[l].Calculate(tempChain, link));
-                        }
+                        characteristics[i][j].Add(calculators[j].Calculate(tempChain, links[j]));
                     }
                 }
             }

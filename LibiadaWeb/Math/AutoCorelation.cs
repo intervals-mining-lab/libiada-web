@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// The auto correlation.
@@ -17,23 +16,23 @@
         /// </param>
         public static void CalculateAutocorrelation(List<List<double>> characteristics)
         {
-            for (int i = 0; i < characteristics.Last().Count; i++)
+            for (int i = 0; i < characteristics.Count; i++)
             {
-                var temp = new double[characteristics.Last().Count];
+                var temp = new double[characteristics.Count];
 
                 // Для всех фрагментов цепочек
-                for (int j = 0; j < characteristics.Count; j++)
+                for (int j = 0; j < characteristics[i].Count; j++)
                 {
-                    temp[j] = characteristics[j][i];
+                    temp[j] = characteristics[i][j];
                 }
 
                 double[] res = Execute(temp);
                 for (int j = 0; j < res.Length; j++)
                 {
-                    characteristics[j][i] = res[j];
+                    characteristics[i][j] = res[j];
                 }
 
-                characteristics.RemoveRange(res.Length, characteristics.Last().Count - res.Length);
+                characteristics.RemoveRange(res.Length, characteristics.Count - res.Length);
             }
         }
 

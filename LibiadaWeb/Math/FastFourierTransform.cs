@@ -1,7 +1,6 @@
 ﻿namespace LibiadaWeb.Math
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Numerics;
 
     /// <summary>
@@ -19,15 +18,15 @@
         {
             // переводим в комлексный вид
             // Для всех характеристик
-            for (int i = 0; i < characteristics.Last().Count; i++)
+            for (int i = 0; i < characteristics.Count; i++)
             {
                 var complex = new List<Complex>();
                 int j;
 
                 // Для всех фрагментов цепочек
-                for (j = 0; j < characteristics.Count; j++)
+                for (j = 0; j < characteristics[i].Count; j++)
                 {
-                    complex.Add(new Complex(characteristics[j][i], 0));
+                    complex.Add(new Complex(characteristics[i][j], 0));
                 }
 
                 int m = 1;
@@ -46,9 +45,9 @@
                 Complex[] data = FourierTransform(complex.ToArray()); 
 
                 // переводим в массив double
-                for (int g = 0; g < characteristics.Count; g++)
+                for (int g = 0; g < characteristics[i].Count; g++)
                 {
-                    characteristics[g][i] = data[g].Real;
+                    characteristics[i][g] = data[g].Real;
                 }
             }
         }

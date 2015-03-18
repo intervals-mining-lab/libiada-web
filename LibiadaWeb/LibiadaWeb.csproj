@@ -348,7 +348,7 @@
     <Compile Include="Models\Calculators\SubsequenceCharacteristic.cs" />
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\IntPair.cs" />
+    <Compile Include="Models\Calculators\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />
