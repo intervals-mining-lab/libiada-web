@@ -40,7 +40,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController() : base("LocalCalculation", "Local calculation")
+        public LocalCalculationController()
+            : base("LocalCalculation", "Local calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -101,111 +102,133 @@
         /// </returns>
         [HttpPost]
         public ActionResult Index(
-            long[] matterIds, 
-            int[] characteristicTypeLinkIds,  
-            int?[] languageIds, 
+            long[] matterIds,
+            int[] characteristicTypeLinkIds,
+            int?[] languageIds,
             int?[] translatorIds,
-            int[] notationIds, 
-            int length, 
+            int[] notationIds,
+            int length,
             int step,
             bool delta,
-            bool fourier, 
+            bool fourier,
             bool growingWindow,
             bool autocorrelation)
         {
             return Action(() =>
             {
-                List<List<List<double>>> characteristics = CalculateCharacteristics(
-                    matterIds,
-                    growingWindow,
-                    notationIds,
-                    languageIds,
-                    translatorIds,
-                    length,
-                    characteristicTypeLinkIds,
-                    step);
-
                 var matterNames = new List<string>();
                 var characteristicNames = new List<string>();
-                var partNames = new List<List<string>>();
-                var starts = new List<List<int>>();
-                var lengthes = new List<List<int>>();
+                var partNames = new List<List<List<string>>>();
+                var starts = new List<List<List<int>>>();
+                var lengthes = new List<List<List<int>>>();
+                var chains = new List<List<Chain>>();
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
+                    int natureId = db.Matter.Single(m => m.Id == matterId).NatureId;
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    partNames.Add(new List<string>());
-                    starts.Add(new List<int>());
-                    lengthes.Add(new List<int>());
 
-                    long sequenceId;
-                    var notationId = notationIds[k];
-                    if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
+                    for (int n = 0; n < notationIds.Length; n++)
                     {
-                        var languageId = languageIds[k];
-                        var translatorId = translatorIds[k];
+                        var notationId = notationIds[n];
+                        long sequenceId;
+                        chains.Add(new List<Chain>());
 
-                        sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                  l.NotationId == notationId &&
-                                                                  l.LanguageId == languageId &&
-                                                                  l.TranslatorId == translatorId).Id;
+                        switch (natureId)
+                        {
+                            case Aliases.Nature.Literature:
+                                var languageId = languageIds[k];
+                                var translatorId = translatorIds[k];
+                                sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                                && l.NotationId == notationId
+                                                                                && l.LanguageId == languageId
+                                                                                && l.TranslatorId == translatorId).Id;
+                                break;
+                            default:
+                                sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
+                                                                            && c.NotationId == notationId).Id;
+                                break;
+                        }
+
+                        chains[k].Add(commonSequenceRepository.ToLibiadaChain(sequenceId));
                     }
-                    else
+                }
+
+                List<List<List<List<double>>>> characteristics = CalculateCharacteristics(
+                    chains,
+                    characteristicTypeLinkIds,
+                    length,
+                    step,
+                    growingWindow);
+
+                for (int i = 0; i < chains.Count; i++)
+                {
+                    partNames.Add(new List<List<string>>());
+                    starts.Add(new List<List<int>>());
+                    lengthes.Add(new List<List<int>>());
+
+                    for (int j = 0; j < chains[i].Count; j++)
                     {
-                        sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-                    }
+                        partNames[i].Add(new List<string>());
+                        starts[i].Add(new List<int>());
+                        lengthes[i].Add(new List<int>());
 
-                    Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                        var chain = chains[i][j];
 
-                    CutRule cutRule = growingWindow
+                        CutRule cutRule = growingWindow
                         ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
                         : new SimpleCutRule(chain.GetLength(), step, length);
 
-                    CutRuleIterator iter = cutRule.GetIterator();
+                        CutRuleIterator iter = cutRule.GetIterator();
 
-                    while (iter.Next())
-                    {
-                        var tempChain = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
-
-                        for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
+                        while (iter.Next())
                         {
-                            tempChain.Set(chain[iter.GetStartPosition() + i], i);
+                            var tempChain = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
+
+                            for (int m = 0; iter.GetStartPosition() + m < iter.GetEndPosition(); m++)
+                            {
+                                tempChain.Set(chain[iter.GetStartPosition() + m], m);
+                            }
+
+                            partNames[i][j].Add(tempChain.ToString());
+                            starts[i][j].Add(iter.GetStartPosition());
+                            lengthes[i][j].Add(tempChain.GetLength());
                         }
 
-                        partNames.Last().Add(tempChain.ToString());
-                        starts.Last().Add(iter.GetStartPosition());
-                        lengthes.Last().Add(tempChain.GetLength());
+                        if (delta)
+                        {
+                            CalculateDelta(characteristics[i][j]);
+                        }
+
+                        if (fourier)
+                        {
+                            FastFourierTransform.FourierTransform(characteristics[i][j]);
+                        }
+
+                        if (autocorrelation)
+                        {
+                            AutoCorrelation.CalculateAutocorrelation(characteristics[i][j]);
+                        }
                     }
-
-                    if (delta)
-                    {
-                        CalculateDelta(characteristics);
-                    }
-
-                    if (fourier)
-                    {
-                        FastFourierTransform.FourierTransform(characteristics);
-                    }
-
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
-                }
-
-                if (autocorrelation)
-                {
-                    var autoCorrelation = new AutoCorrelation();
-                    autoCorrelation.CalculateAutocorrelation(characteristics);
                 }
 
                 var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
+                for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
                 {
                     characteristicsList.Add(new SelectListItem
                     {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
+                        Value = l.ToString(),
+                        Text = characteristicNames[l],
                         Selected = false
                     });
+
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name);
+                }
+
+                for (int w = 0; w < notationIds.Length; w++)
+                {
+                    
                 }
 
                 return new Dictionary<string, object>
@@ -229,15 +252,15 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        private static void CalculateDelta(List<List<List<double>>> characteristics)
+        private static void CalculateDelta(List<List<double>> characteristics)
         {
             // Перебираем характеристики 
-            for (int i = 0; i < characteristics.Last().Last().Count; i++)
+            for (int i = 0; i < characteristics.Last().Count; i++)
             {
                 // перебираем фрагменты цепочек
-                for (int j = characteristics.Last().Count - 1; j > 0; j--)
+                for (int j = characteristics.Count - 1; j > 0; j--)
                 {
-                    characteristics.Last()[j][i] -= characteristics.Last()[j - 1][i];
+                    characteristics[j][i] -= characteristics[j - 1][i];
                 }
             }
 
@@ -247,42 +270,30 @@
         /// <summary>
         /// The calculate characteristics.
         /// </summary>
-        /// <param name="matterIds">
-        /// The matter ids.
+        /// <param name="chains">
+        /// The chains.
         /// </param>
-        /// <param name="gowingWindow">
-        /// The is growing window.
-        /// </param>
-        /// <param name="notationIds">
-        /// The notations ids.
-        /// </param>
-        /// <param name="languageIds">
-        /// The languages ids.
-        /// </param>
-        /// <param name="translatorIds">
-        /// The translators ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type link ids.
         /// </param>
         /// <param name="length">
         /// The length.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
-        /// The characteristic type and link ids.
-        /// </param>
         /// <param name="step">
         /// The step.
         /// </param>
+        /// <param name="gowingWindow">
+        /// The gowing window.
+        /// </param>
         /// <returns>
-        /// The <see cref="List{List{List{Double}}}"/>.
+        /// The <see cref="List{List{List{List{Double}}}}"/>.
         /// </returns>
-        private List<List<List<double>>> CalculateCharacteristics(
-            long[] matterIds,
-            bool gowingWindow,
-            int[] notationIds,
-            int?[] languageIds,
-            int?[] translatorIds,
-            int length,
+        private List<List<List<List<double>>>> CalculateCharacteristics(
+            List<List<Chain>> chains,
             int[] characteristicTypeLinkIds,
-            int step)
+            int length,
+            int step,
+            bool gowingWindow)
         {
             var calculators = new List<IFullCalculator>();
 
@@ -292,52 +303,37 @@
                 calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
             }
 
-            var characteristics = new List<List<List<double>>>();
-            for (int k = 0; k < matterIds.Length; k++)
+            var characteristics = new List<List<List<List<double>>>>();
+            for (int i = 0; i < chains.Count; i++)
             {
-                long matterId = matterIds[k];
-                characteristics.Add(new List<List<double>>());
-
-                long sequenceId;
-                var notationId = notationIds[k];
-                if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
+                characteristics.Add(new List<List<List<double>>>());
+                for (int j = 0; j < chains[i].Count; j++)
                 {
-                    var languageId = languageIds[k];
-                    var translatorId = translatorIds[k];
+                    characteristics[i].Add(new List<List<double>>());
+                    Chain chain = chains[i][j];
 
-                    sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                              l.NotationId == notationId &&
-                                                              l.LanguageId == languageId &&
-                                                              l.TranslatorId == translatorId).Id;
-                }
-                else
-                {
-                    sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-                }
+                    CutRule cutRule = gowingWindow
+                        ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
+                        : new SimpleCutRule(chain.GetLength(), step, length);
 
-                Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                
-                CutRule cutRule = gowingWindow
-                    ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
-                    : new SimpleCutRule(chain.GetLength(), step, length);
+                    CutRuleIterator iter = cutRule.GetIterator();
 
-                CutRuleIterator iter = cutRule.GetIterator();
-
-                while (iter.Next())
-                {
-                    characteristics.Last().Add(new List<double>());
-                    var tempChain = new Chain();
-                    tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
-
-                    for (int i = 0; iter.GetStartPosition() + i < iter.GetEndPosition(); i++)
+                    while (iter.Next())
                     {
-                        tempChain.Set(chain[iter.GetStartPosition() + i], i);
-                    }
+                        characteristics[i][j].Add(new List<double>());
+                        var tempChain = new Chain();
+                        tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
 
-                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
-                    {
-                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]);
-                        characteristics.Last().Last().Add(calculators[i].Calculate(tempChain, link));
+                        for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
+                        {
+                            tempChain.Set(chain[iter.GetStartPosition() + k], k);
+                        }
+
+                        for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
+                        {
+                            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[l]);
+                            characteristics[i][j].Last().Add(calculators[l].Calculate(tempChain, link));
+                        }
                     }
                 }
             }

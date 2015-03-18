@@ -7,7 +7,7 @@
     /// <summary>
     /// The auto correlation.
     /// </summary>
-    public class AutoCorrelation
+    public static class AutoCorrelation
     {
         /// <summary>
         /// The calculate autocorrelation.
@@ -15,25 +15,25 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public void CalculateAutocorrelation(List<List<List<double>>> characteristics)
+        public static void CalculateAutocorrelation(List<List<double>> characteristics)
         {
-            for (int i = 0; i < characteristics.Last().Last().Count; i++)
+            for (int i = 0; i < characteristics.Last().Count; i++)
             {
                 var temp = new double[characteristics.Last().Count];
 
                 // Для всех фрагментов цепочек
-                for (int j = 0; j < characteristics.Last().Count; j++)
+                for (int j = 0; j < characteristics.Count; j++)
                 {
-                    temp[j] = characteristics.Last()[j][i];
+                    temp[j] = characteristics[j][i];
                 }
 
                 double[] res = Execute(temp);
                 for (int j = 0; j < res.Length; j++)
                 {
-                    characteristics.Last()[j][i] = res[j];
+                    characteristics[j][i] = res[j];
                 }
 
-                characteristics.Last().RemoveRange(res.Length, characteristics.Last().Count - res.Length);
+                characteristics.RemoveRange(res.Length, characteristics.Last().Count - res.Length);
             }
         }
 
@@ -46,7 +46,7 @@
         /// <returns>
         /// The <see cref="double[]"/>.
         /// </returns>
-        public double[] Execute(double[] x)
+        public static double[] Execute(double[] x)
         {
             double[] result = GetAutoCorrelationOfSeries(x);
             return result;
@@ -64,7 +64,7 @@
         /// <exception cref="Exception">
         /// Thrown if array is empty.
         /// </exception>
-        public double GetAverage(double[] data)
+        public static double GetAverage(double[] data)
         {
             int length = data.Length;
 
@@ -92,7 +92,7 @@
         /// <returns>
         /// The <see cref="double"/>.
         /// </returns>
-        public double GetVariance(double[] data)
+        public static double GetVariance(double[] data)
         {
             int len = data.Length;
 
@@ -118,7 +118,7 @@
         /// <returns>
         /// The <see cref="double"/>.
         /// </returns>
-        public double GetStdev(double[] data)
+        public static double GetStdev(double[] data)
         {
             return Math.Sqrt(GetVariance(data));
         }
@@ -138,7 +138,7 @@
         /// <exception cref="Exception">
         /// Thrown if input arrays has different length. 
         /// </exception>
-        public double GetCorrelation(double[] x, double[] y)
+        public static double GetCorrelation(double[] x, double[] y)
         {
             if (x.Length != y.Length)
             {
@@ -171,7 +171,7 @@
         /// <returns>
         /// The <see cref="double[]"/>.
         /// </returns>
-        public double[] GetAutoCorrelationOfSeries(double[] x)
+        public static double[] GetAutoCorrelationOfSeries(double[] x)
         {
             int half = x.Length / 2;
             var autoCorrelation = new double[half];

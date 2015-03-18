@@ -15,19 +15,19 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public static void FourierTransform(List<List<List<double>>> characteristics)
+        public static void FourierTransform(List<List<double>> characteristics)
         {
             // переводим в комлексный вид
             // Для всех характеристик
-            for (int i = 0; i < characteristics.Last().Last().Count; i++)
+            for (int i = 0; i < characteristics.Last().Count; i++)
             {
                 var complex = new List<Complex>();
                 int j;
 
                 // Для всех фрагментов цепочек
-                for (j = 0; j < characteristics.Last().Count; j++)
+                for (j = 0; j < characteristics.Count; j++)
                 {
-                    complex.Add(new Complex(characteristics.Last()[j][i], 0));
+                    complex.Add(new Complex(characteristics[j][i], 0));
                 }
 
                 int m = 1;
@@ -46,9 +46,9 @@
                 Complex[] data = FourierTransform(complex.ToArray()); 
 
                 // переводим в массив double
-                for (int g = 0; g < characteristics.Last().Count; g++)
+                for (int g = 0; g < characteristics.Count; g++)
                 {
-                    characteristics.Last()[g][i] = data[g].Real;
+                    characteristics[g][i] = data[g].Real;
                 }
             }
         }
