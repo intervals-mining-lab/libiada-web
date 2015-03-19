@@ -773,9 +773,27 @@ db_integrity_test();
 $BODY$
   LANGUAGE plv8 VOLATILE
   COST 100;
-ALTER FUNCTION db_integrity_test()
-  OWNER TO postgres;
 COMMENT ON FUNCTION db_integrity_test() IS 'Procedure for cheking referential integrity of db.';
-  
+
+-- 19.03.2015
+-- New function for adding characteristic_type.
+
+CREATE FUNCTION create_chatacteristic_type(IN name character varying, IN description text, IN characteristic_group_id integer, IN class_name character varying, IN full_sequence_applicable boolean, IN congeneric_sequence_applicable boolean, IN binary_sequence_applicable boolean, IN accordance_applicable boolean, IN linkable boolean) RETURNS integer AS
+$BODY$
+DECLARE
+	id integer;
+BEGIN
+	SELECT nextval('characteristic_type_id_seq') INTO id;
+	INSERT INTO characteristic_type (id, name, description, characteristic_group_id, class_name, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) VALUES (id, name, description, characteristic_group_id, class_name, full_sequence_applicable, congeneric_sequence_applicable, binary_sequence_applicable, accordance_applicable);
+	IF linkable THEN
+		INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT id, c.linkid FROM (SELECT link.id linkid FROM link WHERE link.id !=0) c);
+	ELSE
+		INSERT INTO characteristic_type_link (characteristic_type_id, link_id) VALUES (id, 0);
+	END IF;
+	RETURN id;
+END;$BODY$
+LANGUAGE plpgsql VOLATILE NOT LEAKPROOF;
+
+COMMENT ON FUNCTION public.create_chatacteristic_type(IN character varying, IN text, IN integer, IN character varying, IN boolean, IN boolean, IN boolean, IN boolean, IN boolean) IS 'Function for adding characteristic_type and connected records to characteristic_type_link';
 
 COMMIT;
