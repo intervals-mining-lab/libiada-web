@@ -20,7 +20,7 @@
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_MattersCheckboxTable")
+            @Html.Partial("_MattersTable")
             @Html.Partial("_FeaturesSelect")
             @Html.Partial("_Characteristic")
             @Html.Label("validationType", "Alignment validation type", new { @class = "control-label" })
@@ -80,5 +80,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/ganasAlignment")
+    @Scripts.Render("~/bundles/controllers/genesAlignment")
 }

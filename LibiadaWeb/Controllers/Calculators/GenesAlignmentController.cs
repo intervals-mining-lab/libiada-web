@@ -50,8 +50,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new CalculatorsHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(2, 2);
+            var calculatorsHelper = new ViewDataHelper(db);
+            var data = calculatorsHelper.GetGenesCalculationData(2, 2, true);
             ViewBag.data = data;
             return View();
         }

@@ -1,5 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -116,16 +117,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList()
         {
-            return db.Matter.OrderBy(m => m.Name).Select(m => new
-            {
-                Value = m.Id, 
-                Text = m.Name, 
-                Selected = false, 
-                Nature = m.NatureId, 
-                Description = m.Description,
-                Created = m.Created.ToString(),
-                Modified = m.Modified.ToString()
-            });
+            return GetMatterSelectList(new List<long>());
         }
 
         /// <summary>
@@ -139,16 +131,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList(long selectedMatter)
         {
-            return db.Matter.OrderBy(m => m.Name).Select(m => new
-            {
-                Value = m.Id, 
-                Text = m.Name, 
-                Selected = m.Id == selectedMatter, 
-                Nature = m.NatureId, 
-                Description = m.Description,
-                Created = m.Created.ToString(),
-                Modified = m.Modified.ToString()
-            });
+            return GetMatterSelectList(new List<long> { selectedMatter });
         }
 
         /// <summary>
@@ -195,6 +178,20 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Created = m.Created.ToString(),
                 Modified = m.Modified.ToString()
             });
+        }
+
+        /// <summary>
+        /// The get matter select list.
+        /// </summary>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetMatterSelectList(Func<Matter, bool> filter)
+        {
+            return GetMatterSelectList(db.Matter.Where(filter));
         }
 
         /// <summary>

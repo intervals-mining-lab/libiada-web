@@ -34,7 +34,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new CalculatorsHelper(db);
+            var calculatorsHelper = new ViewDataHelper(db);
 
             ViewBag.data = new Dictionary<string, object>
                 {

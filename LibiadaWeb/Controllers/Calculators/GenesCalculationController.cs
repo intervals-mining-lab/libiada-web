@@ -49,8 +49,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new CalculatorsHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(1, int.MaxValue);
+            var calculatorsHelper = new ViewDataHelper(db);
+            var data = calculatorsHelper.GetGenesCalculationData(1, int.MaxValue, true);
             ViewBag.data = data;
             return View();
         }

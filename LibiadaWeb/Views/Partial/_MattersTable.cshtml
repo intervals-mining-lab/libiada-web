@@ -23,7 +23,15 @@
         <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
             <td>
                 <label>
-                    <input type="checkbox" name="matterIds" ng-value="matter.Value" ng-model="matter.Selected" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
+                    @if (ViewBag.data["mattersCheckboxes"])
+                    {
+                        <input type="checkbox" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
+                    }
+                    else
+                    {
+                        <input type="radio" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
+                    }
+
                     {{matter.Text}}
                 </label>
             </td>

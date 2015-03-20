@@ -61,8 +61,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new CalculatorsHelper(db);
-            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.BinarySequenceApplicable, 1, 1);
+            var calculatorsHelper = new ViewDataHelper(db);
+            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.BinarySequenceApplicable, 1, 1, false);
             return View();
         }
 

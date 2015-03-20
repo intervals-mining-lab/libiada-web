@@ -12,9 +12,9 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The calculators helper.
+    /// Class filling data for ViewBag.
     /// </summary>
-    public class CalculatorsHelper
+    public class ViewDataHelper
     {
         /// <summary>
         /// The db.
@@ -37,12 +37,12 @@
         private readonly FeatureRepository featureRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CalculatorsHelper"/> class.
+        /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public CalculatorsHelper(LibiadaWebEntities db)
+        public ViewDataHelper(LibiadaWebEntities db)
         {
             this.db = db;
             matterRepository = new MatterRepository(db);
@@ -62,25 +62,26 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
+        /// <param name="mattersCheckboxes">
+        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
+        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillCalculationData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters)
+        public Dictionary<string, object> FillCalculationData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            return new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", minimumSelectedMatters },
-                    { "maximumSelectedMatters", maximumSelectedMatters },
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "characteristicTypes", GetCharacteristicTypes(filter) },
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(db.Language, "id", "name") }, 
-                    { "translators", translators }
-                };
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true);
+
+            data.Add("characteristicTypes", GetCharacteristicTypes(filter));
+            data.Add("natures", new SelectList(db.Nature, "id", "name"));
+            data.Add("notations", notationRepository.GetSelectListWithNature());
+            data.Add("languages", new SelectList(db.Language, "id", "name"));
+            data.Add("translators", translators);
+
+            return data;
         }
 
         /// <summary>
@@ -92,30 +93,30 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
+        /// <param name="mattersCheckboxes">
+        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
+        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetGenesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters)
+        public Dictionary<string, object> GetGenesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
         {
-            var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId);
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
-
             var featureIds = db.Feature.Where(p => p.NatureId == Aliases.Nature.Genetic
                                          && p.Id != Aliases.Feature.FullGenome
                                          && p.Id != Aliases.Feature.ChloroplastGenome
                                          && p.Id != Aliases.Feature.MitochondrionGenome).Select(p => p.Id);
 
-            return new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", minimumSelectedMatters },
-                    { "maximumSelectedMatters", maximumSelectedMatters },
-                    { "matters", matterRepository.GetMatterSelectList(matters) }, 
-                    { "characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable) },  
-                    { "notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name") },
-                    { "natureId", Aliases.Nature.Genetic },
-                    { "features", featureRepository.GetSelectListWithNature(featureIds, featureIds) }
-                };
+            var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id));
+
+            data.Add("characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable));
+            data.Add("notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name"));
+            data.Add("natureId", Aliases.Nature.Genetic);
+            data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
+
+            return data;
         }
 
         /// <summary>
@@ -152,6 +153,35 @@
             }
 
             return characteristicTypes;
+        }
+
+        /// <summary>
+        /// The fill matters data.
+        /// </summary>
+        /// <param name="minimumSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maximumSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <param name="mattersCheckboxes">
+        /// The matters checkboxes.
+        /// </param>
+        /// <param name="filter">
+        /// Filter for matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, Func<Matter, bool> filter)
+        {
+            return new Dictionary<string, object>
+                {
+                    { "minimumSelectedMatters", minimumSelectedMatters },
+                    { "maximumSelectedMatters", maximumSelectedMatters },
+                    { "matters", matterRepository.GetMatterSelectList(filter) },
+                    { "mattersCheckboxes", mattersCheckboxes }
+                };
         }
     }
 }

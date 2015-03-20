@@ -62,17 +62,16 @@
         public ActionResult Index()
         {
             var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId);
+            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
+            var calculatorsHelper = new ViewDataHelper(db);
 
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 1 },
-                    { "maximumSelectedMatters", 1 },
-                    { "natureId", Aliases.Nature.Genetic }, 
-                    { "matters", matterRepository.GetMatterSelectList(matters) }
-                };
+            var data = calculatorsHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id));
+
+            data.Add("natureId", Aliases.Nature.Genetic);
+
+            ViewBag.data = data;
+            
             return View();
         }
 

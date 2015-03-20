@@ -294,7 +294,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\CalculatorsHelper.cs" />
+    <Compile Include="Helpers\ViewDataHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
@@ -613,18 +613,17 @@
     <None Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
     <Content Include="Views\Partial\_Characteristic.cshtml" />
     <Content Include="Views\Partial\_Characteristics.cshtml" />
-    <Content Include="Views\Partial\_MattersCheckboxTable.cshtml" />
     <Content Include="Views\Partial\_NatureSelect.cshtml" />
-    <Content Include="Views\Partial\_PieceTypesSelect.cshtml" />
+    <Content Include="Views\Partial\_FeaturesSelect.cshtml" />
     <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
     <None Include="Views\Calculators\GenesDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\GenesDistribution\Result.cshtml" />
-    <Content Include="Views\Partial\_MattersRadioTable.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />
     <Content Include="Views\Sequences\GenesImport\Result.cshtml" />
     <Content Include="Views\Calculators\GenesSimilarity\Result.cshtml" />
     <Content Include="Views\Calculators\GenesSimilarity\Index.cshtml" />
+    <Content Include="Views\Partial\_MattersTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
