@@ -7,6 +7,8 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.SimpleTypes;
+    using LibiadaCore.Misc;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -61,19 +63,25 @@
         /// The index.
         /// </summary>
         /// <param name="matterIds">
-        /// The matter ids.
+        /// The matters ids.
         /// </param>
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="notationIds">
-        /// The notation ids.
+        /// The notations ids.
         /// </param>
         /// <param name="languageIds">
-        /// The language ids.
+        /// The languages ids.
         /// </param>
         /// <param name="translatorIds">
-        /// The translator ids.
+        /// The translators ids.
+        /// </param>
+        /// <param name="rotate">
+        /// Rotation flag.
+        /// </param>
+        /// <param name="rotationLength">
+        /// The rotation length.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -84,7 +92,9 @@
             int[] characteristicTypeLinkIds,
             int[] notationIds,
             int[] languageIds,
-            int?[] translatorIds)
+            int?[] translatorIds,
+            bool rotate,
+            uint? rotationLength)
         {
             return Action(() =>
             {
@@ -118,7 +128,7 @@
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
                        
-                        if (db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                        if (!rotate && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
                             double dataBaseCharacteristic = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
                             characteristics.Last().Add(dataBaseCharacteristic);
@@ -126,6 +136,13 @@
                         else
                         {
                             Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+
+                            if (rotate)
+                            {
+                                var building = ArrayManipulator.RotateArray(tempChain.Building, rotationLength ?? 0);
+                                tempChain = new Chain(building.Select(t => new ValueInt(t)).Cast<IBaseObject>().ToList());
+                            }
+
                             tempChain.FillIntervalManagers();
 
                             var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
@@ -133,16 +150,19 @@
 
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                             var characteristicValue = calculator.Calculate(tempChain, link);
-
-                            var dataBaseCharacteristic = new Characteristic
+                            if (!rotate)
                             {
-                                SequenceId = sequenceId,
-                                CharacteristicTypeLinkId = characteristicTypeLinkIds[i],
-                                Value = characteristicValue,
-                                ValueString = characteristicValue.ToString()
-                            };
-                            db.Characteristic.Add(dataBaseCharacteristic);
-                            db.SaveChanges();
+                                var dataBaseCharacteristic = new Characteristic
+                                {
+                                    SequenceId = sequenceId,
+                                    CharacteristicTypeLinkId = characteristicTypeLinkIds[i],
+                                    Value = characteristicValue,
+                                    ValueString = characteristicValue.ToString()
+                                };
+                                db.Characteristic.Add(dataBaseCharacteristic);
+                                db.SaveChanges();
+                            }
+                            
                             characteristics.Last().Add(characteristicValue);
                         }
                     }
