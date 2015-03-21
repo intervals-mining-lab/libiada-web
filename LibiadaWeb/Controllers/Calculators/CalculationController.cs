@@ -140,7 +140,8 @@
                             if (rotate)
                             {
                                 var building = ArrayManipulator.RotateArray(tempChain.Building, rotationLength ?? 0);
-                                tempChain = new Chain(building.Select(t => new ValueInt(t)).Cast<IBaseObject>().ToList());
+                                var newSequence = building.Select(t => new ValueInt(t)).Cast<IBaseObject>().ToList();
+                                tempChain = new Chain(newSequence);
                             }
 
                             tempChain.FillIntervalManagers();
