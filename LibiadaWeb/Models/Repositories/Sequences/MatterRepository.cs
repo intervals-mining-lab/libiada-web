@@ -168,7 +168,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
         {
-            return matters.OrderBy(m => m.Name).Select(m => new
+            return matters.OrderBy(m => m.Created).Select(m => new
             {
                 Value = m.Id,
                 Text = m.Name,

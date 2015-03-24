@@ -15,7 +15,6 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The genes import controller.
@@ -26,11 +25,6 @@
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
 
         /// <summary>
         /// The feature repository.
@@ -45,10 +39,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController() : base("GenesImport", "Genes Import")
+        public GenesImportController()
+            : base("GenesImport", "Genes Import")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
             featureRepository = new FeatureRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
@@ -71,7 +65,7 @@
             data.Add("natureId", Aliases.Nature.Genetic);
 
             ViewBag.data = data;
-            
+
             return View();
         }
 
@@ -130,16 +124,14 @@
                     throw new Exception("GenBank file metadata is empty.");
                 }
 
-                 var starts = new List<int>();
-                 var stops = new List<int>();
-
                 List<FeatureItem> features = metadata.Features.All;
+
+                var starts = new List<int>();
+                var ends = new List<int>() { 0 };
 
                 for (int i = 1; i < features.Count; i++)
                 {
                     var feature = features[i];
-                    var location = feature.Location;
-
                     int featureId;
 
                     if (feature.Key == "gene")
@@ -157,20 +149,107 @@
                         featureId = featureRepository.GetFeatureIdByName(feature.Key);
                     }
 
+                    var location = feature.Location;
+                    var leafLocations = feature.Location.GetLeafLocations();
+
+                    if (leafLocations.Count == 0)
+                    {
+                        throw new Exception("No leaf locations");
+                    }
+
+                    bool complement = location.Operator == LocationOperator.Complement;
+                    bool join = leafLocations.Count > 1;
+                    bool complementJoin = join && complement;
+
+                    complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
+
+                    int start = leafLocations[0].LocationStart - 1;
+                    int end = leafLocations[0].LocationEnd - 1;
+                    int length = end - start + 1;
+
+                    if (length < 1)
+                    {
+                        throw new Exception("Length of subsequence cant be less than 1.");
+                    }
+
+                    if (ends[i] < ends[i - 1])
+                    {
+                        throw new Exception("Wrong subsequences order.");
+                    }
+
                     var subsequence = new Subsequence
                     {
                         Id = DbHelper.GetNewElementId(db),
                         FeatureId = featureId,
                         Partial = false,
-                        Complementary = location.Operator == LocationOperator.Complement,
+                        Complementary = complement,
                         SequenceId = sequenceId,
-                        Start = location.LocationStart - 1,
-                        Length = location.LocationEnd - location.LocationStart
+                        Start = start,
+                        Length = end - start + 1
                     };
+
+                    starts.Add(start - 1);
+                    ends.Add(end + 1);
+
+                    for (int k = 1; k > leafLocations.Count; k++)
+                    {
+                        var leafLocation = leafLocations[k];
+
+                        start = leafLocation.LocationStart - 1;
+                        end = leafLocation.LocationEnd - 1;
+
+                        var position = new Position
+                        {
+                            Subsequence = subsequence,
+                            Start = start,
+                            Length = end - start + 1
+                        };
+
+                        db.Position.Add(position);
+
+                        starts.Add(start - 1);
+                        ends.Add(end + 1);
+                    }
 
                     foreach (var qualifier in feature.Qualifiers)
                     {
                         sequenceAttributeRepository.CreateSequenceAttribute(qualifier, subsequence);
+                    }
+
+                    if (complement)
+                    {
+                        sequenceAttributeRepository.CreateSequenceAttribute("complement", subsequence);
+
+                        if (complementJoin)
+                        {
+                            sequenceAttributeRepository.CreateSequenceAttribute("complementJoin", subsequence);
+                        }
+                    }
+
+                    db.Subsequence.Add(subsequence);
+                }
+
+                starts.Add(features[0].Location.LocationEnd - 1);
+
+                for (int i = 0; i < ends.Count; i++)
+                {
+                    int start = ends[i];
+                    int length = starts[i] - ends[i] + 1;
+
+                    if (length > 0)
+                    {
+                        var subsequence = new Subsequence
+                        {
+                            Id = DbHelper.GetNewElementId(db),
+                            FeatureId = Aliases.Feature.NonCodingSequence,
+                            Partial = false,
+                            Complementary = false,
+                            SequenceId = sequenceId,
+                            Start = start,
+                            Length = length
+                        };
+
+                        db.Subsequence.Add(subsequence);
                     }
                 }
 

@@ -49,7 +49,7 @@
                 throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
             }
 
-            if (qualifier.Value.Count != 0)
+            if (qualifier.Value.Count == 1)
             {
                 switch (qualifier.Key)
                 {
@@ -81,9 +81,49 @@
         }
 
         /// <summary>
+        /// The create sequence attribute.
+        /// </summary>
+        /// <param name="attributeName">
+        /// The attribute name.
+        /// </param>
+        /// <param name="attributeValue">
+        /// The attribute value.
+        /// </param>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        public void CreateSequenceAttribute(string attributeName, string attributeValue, Subsequence subsequence)
+        {
+            var attribute = attributeRepository.GetOrCreateAttributeByName(attributeName);
+
+            var subsequenceAttribute = new SequenceAttribute
+            {
+                Attribute = attribute,
+                Subsequence = subsequence,
+                Value = attributeValue
+            };
+
+            db.SequenceAttribute.Add(subsequenceAttribute);
+        }
+
+        /// <summary>
+        /// The create sequence attribute.
+        /// </summary>
+        /// <param name="attributeName">
+        /// The attribute name.
+        /// </param>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        public void CreateSequenceAttribute(string attributeName, Subsequence subsequence)
+        {
+            CreateSequenceAttribute(attributeName, string.Empty, subsequence);
+        }
+
+        /// <summary>
         /// The dispose.
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
             db.Dispose();
         }
