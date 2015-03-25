@@ -33,8 +33,14 @@
         /// <summary>
         /// Creates and adds to db sequence attribute and attribute.
         /// </summary>
-        /// <param name="qualifier">
-        /// The qualifier.
+        /// <param name="qualifiers">
+        /// The attributes to add.
+        /// </param>
+        /// <param name="complement">
+        /// Complement flag.
+        /// </param>
+        /// <param name="complementJoin">
+        /// Complement join flag.
         /// </param>
         /// <param name="subsequence">
         /// The subsequence.
@@ -42,42 +48,38 @@
         /// <exception cref="Exception">
         /// Thrown if qualifier has more than one value.
         /// </exception>
-        public void CreateSequenceAttribute(KeyValuePair<string, List<string>> qualifier, Subsequence subsequence)
+        public void CreateSequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
         {
-            if (qualifier.Value.Count > 1)
+            foreach (var qualifier in qualifiers)
             {
-                throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
-            }
-
-            if (qualifier.Value.Count == 1)
-            {
-                switch (qualifier.Key)
+                if (qualifier.Value.Count > 1)
                 {
-                    case "translation":
-                        return;
-                    case "db_xref":
-                        subsequence.WebApiId = int.Parse(qualifier.Value[0].Substring(3));
-                        break;
-                    case "codon_start":
-                        if (qualifier.Value[0] != "1")
-                        {
-                            throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
-                        }
-
-                        break;
+                    throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
                 }
 
-                var attribute = attributeRepository.GetOrCreateAttributeByName(qualifier.Key);
-
-                var subsequenceAttribute = new SequenceAttribute
+                if (qualifier.Value.Count == 1)
                 {
-                    Attribute = attribute,
-                    Subsequence = subsequence,
-                    Value = qualifier.Value[0]
-                };
+                    switch (qualifier.Key)
+                    {
+                        case "translation":
+                            continue;
+                        case "db_xref":
+                            subsequence.WebApiId = int.Parse(qualifier.Value[0].Substring(3));
+                            break;
+                        case "codon_start":
+                            if (qualifier.Value[0] != "1")
+                            {
+                                throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
+                            }
 
-                db.SequenceAttribute.Add(subsequenceAttribute);
+                            break;
+                    }
+
+                    CreateSequenceAttribute(qualifier.Key, qualifier.Value[0], subsequence);
+                }
             }
+
+            CreateComplementJoinAttribute(complement, complementJoin, subsequence);
         }
 
         /// <summary>
@@ -118,6 +120,31 @@
         public void CreateSequenceAttribute(string attributeName, Subsequence subsequence)
         {
             CreateSequenceAttribute(attributeName, string.Empty, subsequence);
+        }
+
+        /// <summary>
+        /// The create complement join attribute.
+        /// </summary>
+        /// <param name="complement">
+        /// The complement.
+        /// </param>
+        /// <param name="complementJoin">
+        /// The complement join.
+        /// </param>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        public void CreateComplementJoinAttribute(bool complement, bool complementJoin, Subsequence subsequence)
+        {
+            if (complement)
+            {
+                CreateSequenceAttribute("complement", subsequence);
+
+                if (complementJoin)
+                {
+                    CreateSequenceAttribute("complementJoin", subsequence);
+                }
+            }
         }
 
         /// <summary>

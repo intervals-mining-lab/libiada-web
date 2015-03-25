@@ -1,10 +1,15 @@
 ﻿namespace LibiadaWeb.Helpers
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Net;
     using System.Text;
     using System.Xml;
+
+    using Bio;
+    using Bio.IO;
+    using Bio.IO.GenBank;
 
     /// <summary>
     /// The ncbi helper.
@@ -15,6 +20,33 @@
         /// The base url.
         /// </summary>
         private const string BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+
+        /// <summary>
+        /// Gets features from GenBank file stream.
+        /// </summary>
+        /// <param name="genBankFile">
+        /// The stream.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GenBankMetadata"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if metadata is empty.
+        /// </exception>
+        public static List<FeatureItem> GetFeatures(Stream genBankFile)
+        {
+            ISequenceParser parser = new GenBankParser();
+            ISequence sequence = parser.ParseOne(genBankFile);
+
+            GenBankMetadata metadata = sequence.Metadata["GenBank"] as GenBankMetadata;
+
+            if (metadata == null)
+            {
+                throw new Exception("GenBank file metadata is empty.");
+            }
+
+            return metadata.Features.All;
+        }
 
         /// <summary>
         /// The get id.
