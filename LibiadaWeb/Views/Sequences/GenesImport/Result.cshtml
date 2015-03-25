@@ -1,7 +1,7 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Genes characteristics";
+    ViewBag.Title = "Senes import results";
 }
 
 <h2>@ViewBag.matterName</h2>
@@ -13,10 +13,7 @@
             <thead>
                 <tr>
                     <th>
-                        feature
-                    </th>
-                    <th>
-                        Gene product
+                        Feature
                     </th>
                     <th>
                         Gene position
@@ -30,29 +27,32 @@
                     <th>
                         Partial
                     </th>
+                    <th>
+                        Additional positions count
+                    </th>
                 </tr>
             </thead>
             <tbody>
-                for (int d = 0; d < ViewBag.genes.Count; d++)
+                @for (int d = 0; d < ViewBag.genes.Count; d++)
                 {
                     <tr>
                         <td>
-                            @ViewBag.genes.Feature.Name
+                            @ViewBag.genes[d].Feature.Name
                         </td>
                         <td>
-                            @ViewBag.genes.Product.Name
+                            @ViewBag.genes[d].Start
                         </td>
                         <td>
-                            @ViewBag.genes.Piece.Start
+                            @ViewBag.genes[d].Length
                         </td>
                         <td>
-                            @ViewBag.genes.Piece.Length
+                            @ViewBag.genes[d].Complementary
                         </td>
                         <td>
-                            @ViewBag.genes.Complementary
+                            @ViewBag.genes[d].Partial
                         </td>
                         <td>
-                            @ViewBag.genes.Partial
+                            @ViewBag.genes[d].Position.Count
                         </td>
                     </tr>
                 }

@@ -8,11 +8,8 @@
     using System.Web;
     using System.Web.Mvc;
 
-    using Bio.IO.GenBank;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -26,16 +23,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The feature repository.
-        /// </summary>
-        private readonly FeatureRepository featureRepository;
-
-        /// <summary>
-        /// The attribute repository.
-        /// </summary>
-        private readonly SequenceAttributeRepository sequenceAttributeRepository;
-
-        /// <summary>
         /// The subsequence repository.
         /// </summary>
         private readonly SubsequenceRepository subsequenceRepository;
@@ -43,12 +30,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController()
-            : base("GenesImport", "Genes Import")
+        public GenesImportController() : base("GenesImport", "Genes Import")
         {
             db = new LibiadaWebEntities();
-            featureRepository = new FeatureRepository(db);
-            sequenceAttributeRepository = new SequenceAttributeRepository(db);
             subsequenceRepository = new SubsequenceRepository(db);
         }
 
@@ -117,19 +101,11 @@
                     stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
                 }
 
-                List<FeatureItem> features = NcbiHelper.GetFeatures(stream);
+                var features = NcbiHelper.GetFeatures(stream);
 
-                List<int> starts;
-                List<int> ends;
-
-                subsequenceRepository.CreateFeatureSubsequences(features, sequenceId, out starts, out ends);
-
-                subsequenceRepository.CreateNonCodingSubsequences(starts, ends, sequenceId);
-
-                db.SaveChanges();
+                subsequenceRepository.CreateSubsequences(features, sequenceId);
 
                 var matterName = db.Matter.Single(m => m.Id == matterId).Name;
-
                 var sequenceSubsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId).Include(g => g.Position).Include(g => g.Feature).Include(g => g.SequenceAttribute);
 
                 return new Dictionary<string, object>

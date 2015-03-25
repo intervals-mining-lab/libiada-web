@@ -31,6 +31,14 @@
         }
 
         /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            db.Dispose();
+        }
+
+        /// <summary>
         /// Creates and adds to db sequence attribute and attribute.
         /// </summary>
         /// <param name="qualifiers">
@@ -134,7 +142,7 @@
         /// <param name="subsequence">
         /// The subsequence.
         /// </param>
-        public void CreateComplementJoinAttribute(bool complement, bool complementJoin, Subsequence subsequence)
+        private void CreateComplementJoinAttribute(bool complement, bool complementJoin, Subsequence subsequence)
         {
             if (complement)
             {
@@ -145,14 +153,6 @@
                     CreateSequenceAttribute("complementJoin", subsequence);
                 }
             }
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
-            db.Dispose();
         }
     }
 }

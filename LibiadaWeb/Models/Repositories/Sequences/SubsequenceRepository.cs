@@ -205,6 +205,26 @@
         }
 
         /// <summary>
+        /// Adds all subsequences of given sequence to database.
+        /// </summary>
+        /// <param name="features">
+        /// The subsequences.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The source sequence id.
+        /// </param>
+        public void CreateSubsequences(List<FeatureItem> features, long sequenceId)
+        {
+            List<int> starts;
+            List<int> ends;
+
+            CreateFeatureSubsequences(features, sequenceId, out starts, out ends);
+            CreateNonCodingSubsequences(starts, ends, sequenceId);
+
+            db.SaveChanges();
+        }
+
+        /// <summary>
         /// The extract chains.
         /// </summary>
         /// <param name="pieces">

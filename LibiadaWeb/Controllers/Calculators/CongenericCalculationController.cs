@@ -229,8 +229,6 @@
                 // подписи для характеристик
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    int characteristicTypeLinkId = characteristicTypeLinkIds[k];
-
                     string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
                     if (isLiteratureSequence)
                     {
