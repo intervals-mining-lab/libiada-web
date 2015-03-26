@@ -5,6 +5,7 @@
     using System.Data.Entity;
     using System.Linq;
 
+    using Bio;
     using Bio.IO.GenBank;
 
     using LibiadaCore.Core;
@@ -74,6 +75,8 @@
         /// </exception>
         public void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId, out List<int> starts, out List<int> ends)
         {
+            // var temp = new Sequence(Alphabets.DNA, "actgactagctagctag").GetComplementedSequence().ToString();
+
             starts = new List<int>();
             ends = new List<int> { 0 };
 
@@ -108,8 +111,20 @@
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
+                if (location.SubLocations.Count > 0)
+                {
+                    complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
 
-                complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
+                    var subLocationOperator = location.SubLocations[0].Operator;
+
+                    foreach (var subLocation in location.SubLocations)
+                    {
+                        if (subLocation.Operator != subLocationOperator)
+                        {
+                            throw new Exception("SubLocation operators does not match: " + subLocationOperator + " and " + subLocation.Operator);
+                        }
+                    }
+                }
 
                 int start = leafLocations[0].LocationStart - 1;
                 int end = leafLocations[0].LocationEnd - 1;
@@ -118,11 +133,6 @@
                 if (length < 1)
                 {
                     throw new Exception("Length of subsequence cant be less than 1.");
-                }
-
-                if (ends[i] < ends[i - 1])
-                {
-                    throw new Exception("Wrong subsequences order.");
                 }
 
                 var subsequence = new Subsequence
@@ -138,27 +148,26 @@
 
                 db.Subsequence.Add(subsequence);
 
-                starts.Add(start - 1);
-                ends.Add(end + 1);
+                AddStartAndEnd(starts, ends, start, end);
 
                 for (int k = 1; k > leafLocations.Count; k++)
                 {
                     var leafLocation = leafLocations[k];
 
-                    start = leafLocation.LocationStart - 1;
-                    end = leafLocation.LocationEnd - 1;
+                    var leafStart = leafLocation.LocationStart - 1;
+                    var leafEnd = leafLocation.LocationEnd - 1;
+                    var leafLength = leafEnd - leafStart + 1;
 
                     var position = new Position
                     {
-                        Subsequence = subsequence,
-                        Start = start,
-                        Length = end - start + 1
+                        SubsequenceId = subsequence.Id,
+                        Start = leafStart,
+                        Length = leafLength
                     };
 
                     db.Position.Add(position);
 
-                    starts.Add(start - 1);
-                    ends.Add(end + 1);
+                    AddStartAndEnd(starts, ends, leafStart, leafEnd);
                 }
 
                 sequenceAttributeRepository.CreateSequenceAttributes(feature.Qualifiers, complement, complementJoin,  subsequence);
@@ -219,6 +228,9 @@
             List<int> ends;
 
             CreateFeatureSubsequences(features, sequenceId, out starts, out ends);
+
+            db.SaveChanges();
+
             CreateNonCodingSubsequences(starts, ends, sequenceId);
 
             db.SaveChanges();
@@ -227,8 +239,8 @@
         /// <summary>
         /// The extract chains.
         /// </summary>
-        /// <param name="pieces">
-        /// The pieces.
+        /// <param name="subsequences">
+        /// The subsequences.
         /// </param>
         /// <param name="chainId">
         /// The sequence id.
@@ -236,15 +248,15 @@
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public List<Chain> ConvertToChains(List<Position> pieces, long chainId)
+        public List<Chain> ConvertToChains(List<Subsequence> subsequences, long chainId)
         {
-            var starts = pieces.Select(p => p.Start).ToList();
+            var starts = subsequences.Select(p => p.Start).ToList();
 
-            var stops = pieces.Select(p => p.Start + p.Length).ToList();
+            var ends = subsequences.Select(p => p.Start + p.Length).ToList();
 
             BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
 
-            var iterator = new DefaultCutRule(starts, stops);
+            var iterator = new DefaultCutRule(starts, ends);
 
             var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
 
@@ -277,9 +289,7 @@
         {
             subsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId)).Include(g => g.Position).Include(g => g.SequenceAttribute).ToList();
 
-            var pieces = subsequences.Select(g => g.Position.First()).ToList();
-
-            var sequences = ConvertToChains(pieces, sequenceId);
+            var sequences = ConvertToChains(subsequences, sequenceId);
 
             return sequences;
         }
@@ -314,6 +324,35 @@
         public void Dispose()
         {
             db.Dispose();
+        }
+
+        /// <summary>
+        /// The add start and end.
+        /// </summary>
+        /// <param name="starts">
+        /// The starts.
+        /// </param>
+        /// <param name="ends">
+        /// The ends.
+        /// </param>
+        /// <param name="start">
+        /// The start.
+        /// </param>
+        /// <param name="end">
+        /// The end.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if current end is less then previous.
+        /// </exception>
+        private void AddStartAndEnd(List<int> starts, List<int> ends, int start, int end) 
+        {
+            starts.Add(start - 1);
+            ends.Add(end + 1);
+
+            if (ends[ends.Count - 1] < ends[ends.Count - 2])
+            {
+                throw new Exception("Wrong subsequences order.");
+            }
         }
     }
 }

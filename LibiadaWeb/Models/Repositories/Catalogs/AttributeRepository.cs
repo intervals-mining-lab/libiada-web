@@ -34,6 +34,20 @@
         /// <returns>
         /// The <see cref="Attribute"/>.
         /// </returns>
+        public Attribute GetAttributeByName(string name)
+        {
+            return db.Attribute.Single(a => a.Name == name);
+        }
+
+        /// <summary>
+        /// Gets or creates attribute by name.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Attribute"/>.
+        /// </returns>
         public Attribute GetOrCreateAttributeByName(string name)
         {
             var allAttributes = db.Attribute;

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// The sequence attribute.
@@ -72,7 +73,7 @@
                         case "translation":
                             continue;
                         case "db_xref":
-                            subsequence.WebApiId = int.Parse(qualifier.Value[0].Substring(3));
+                            subsequence.WebApiId = int.Parse(Regex.Replace(qualifier.Value[0], @"[^\d]", string.Empty));
                             break;
                         case "codon_start":
                             if (qualifier.Value[0] != "1")
@@ -104,12 +105,12 @@
         /// </param>
         public void CreateSequenceAttribute(string attributeName, string attributeValue, Subsequence subsequence)
         {
-            var attribute = attributeRepository.GetOrCreateAttributeByName(attributeName);
+            var attribute = attributeRepository.GetAttributeByName(attributeName);
 
             var subsequenceAttribute = new SequenceAttribute
             {
-                Attribute = attribute,
-                Subsequence = subsequence,
+                AttributeId = attribute.Id,
+                SequenceId = subsequence.Id,
                 Value = attributeValue
             };
 
@@ -150,7 +151,7 @@
 
                 if (complementJoin)
                 {
-                    CreateSequenceAttribute("complementJoin", subsequence);
+                    CreateSequenceAttribute("complement_join", subsequence);
                 }
             }
         }

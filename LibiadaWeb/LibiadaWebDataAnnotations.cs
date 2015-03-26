@@ -790,13 +790,8 @@
     /// <summary>
     /// The product data annotations.
     /// </summary>
-    public class SequenceAttributeDataAnnotations : CommonDataAnnotations
+    public class SequenceAttributeDataAnnotations
     {
-        /// <summary>
-        /// Gets or sets the feature id.
-        /// </summary>
-        [Display(Name = "Type of product")]
-        public int FeatureId { get; set; }
     }
 
     /// <summary>
