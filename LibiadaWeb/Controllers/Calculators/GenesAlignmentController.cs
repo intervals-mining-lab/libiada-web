@@ -171,7 +171,7 @@
         /// <exception cref="ArgumentException">
         /// Thrown if validation type is unknown.
         /// </exception>
-        private static Func<double, double, double> GetDistanceCalculator(string validationType)
+        private Func<double, double, double> GetDistanceCalculator(string validationType)
         {
             Func<double, double, double> distanceCalculator;
             switch (validationType)

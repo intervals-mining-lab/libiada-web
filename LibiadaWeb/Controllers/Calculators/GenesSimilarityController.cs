@@ -114,13 +114,15 @@
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
 
+                double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
+
                 var similarGenes = new List<IntPair>();
 
                 for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
                 {
                     for (int j = 0; j < secondSequenceCharacteristics.Count; j++)
                     {
-                        if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= double.Parse(maxDifference, CultureInfo.InvariantCulture))
+                        if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= difference)
                         {
                             similarGenes.Add(new IntPair(i, j));
 
@@ -163,10 +165,7 @@
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(
-            int characteristicTypeLinkId,
-            List<Chain> sequences,
-            List<Subsequence> subsequences)
+        private List<double> CalculateCharacteristic(int characteristicTypeLinkId, List<Chain> sequences, List<Subsequence> subsequences)
         {
             var characteristics = new List<double>();
 

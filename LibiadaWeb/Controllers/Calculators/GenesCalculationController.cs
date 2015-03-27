@@ -8,6 +8,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -146,9 +147,11 @@
                             if (i == 0)
                             {
                                 var featureId = subsequences[d].FeatureId;
+                                var sequenceId = subsequences[d].Id;
 
-                                // sequenceProducts.Last().Add(productId == null ? string.Empty : db.Product.Single(p => productId == p.Id).Name);
-                                sequencesPositions.Last().Add(subsequences[d].Position.First().Start);
+                                sequenceProducts.Last().Add(db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product) ? 
+                                    db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product).Value : string.Empty);
+                                sequencesPositions.Last().Add(subsequences[d].Start);
 
                                 sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
                             }
