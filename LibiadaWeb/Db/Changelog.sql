@@ -798,18 +798,18 @@ COMMENT ON FUNCTION public.create_chatacteristic_type(IN character varying, IN t
 
 -- 27.03.2015
 -- Added remoteness characteristics.
-SELECT create_chatacteristic_type('Average remoteness AT skew', '(A - T) / (A + T)', NULL, 'AverageRemotenessATSkew', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness AT skew', '(A - T) / (A + T)', NULL, 'AverageRemotenessATSkew', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness GC ratio', '(G + C) / All * 100%', NULL, 'AverageRemotenessGCRatio', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness GC ratio', '(G + C) / All * 100%', NULL, 'AverageRemotenessGCRatio', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness GC skew', '(G - C) / (G + C)', NULL, 'AverageRemotenessGCSkew', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness GC skew', '(G - C) / (G + C)', NULL, 'AverageRemotenessGCSkew', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness GC/AT ratio', '(G + C) / (A + T)', NULL, 'AverageRemotenessGCToATRatio', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness GC/AT ratio', '(G + C) / (A + T)', NULL, 'AverageRemotenessGCToATRatio', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness MK skew', '((C + A) - (G + T)) / All', NULL, 'AverageRemotenessMKSkew', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness MK skew', '((C + A) - (G + T)) / All', NULL, 'AverageRemotenessMKSkew', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness RY skew', '((G + A) - (C + T)) / All', NULL, 'AverageRemotenessRYSkew', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness RY skew', '((G + A) - (C + T)) / All', NULL, 'AverageRemotenessRYSkew', true, false, false, false, true);
 
-SELECT create_chatacteristic_type('Average remoteness SW skew', '((G + C) - (A + T)) / All', NULL, 'AverageRemotenessSWSkew', true, true, false, false, true)
+SELECT create_chatacteristic_type('Average remoteness SW skew', '((G + C) - (A + T)) / All', NULL, 'AverageRemotenessSWSkew', true, false, false, false, true);
 
 COMMIT;
