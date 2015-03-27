@@ -111,7 +111,7 @@
             {
                 AttributeId = attributeId,
                 SequenceId = subsequence.Id,
-                Value = attributeValue
+                Value = attributeValue.Replace("\"", string.Empty).Replace("\n", " ")
             };
 
             db.SequenceAttribute.Add(subsequenceAttribute);
