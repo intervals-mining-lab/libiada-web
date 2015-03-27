@@ -812,4 +812,19 @@ SELECT create_chatacteristic_type('Average remoteness RY skew', '((G + A) - (C +
 
 SELECT create_chatacteristic_type('Average remoteness SW skew', '((G + C) - (A + T)) / All', NULL, 'AverageRemotenessSWSkew', true, false, false, false, true);
 
+-- 27.03.2015
+-- Added attributes.
+
+INSERT INTO attribute(name) VALUES ('db_xref');
+INSERT INTO attribute(name) VALUES ('protein_id');
+INSERT INTO attribute(name) VALUES ('complement');
+INSERT INTO attribute(name) VALUES ('complement_join');
+INSERT INTO attribute(name) VALUES ('product');
+INSERT INTO attribute(name) VALUES ('note');
+INSERT INTO attribute(name) VALUES ('codon_start');
+INSERT INTO attribute(name) VALUES ('transl_table');
+INSERT INTO attribute(name) VALUES ('inference');
+INSERT INTO attribute(name) VALUES ('rpt_type');
+INSERT INTO attribute(name) VALUES ('locus_tag');
+
 COMMIT;

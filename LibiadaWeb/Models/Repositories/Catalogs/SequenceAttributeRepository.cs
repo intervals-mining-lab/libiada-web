@@ -105,11 +105,11 @@
         /// </param>
         public void CreateSequenceAttribute(string attributeName, string attributeValue, Subsequence subsequence)
         {
-            var attribute = attributeRepository.GetAttributeByName(attributeName);
+            var attributeId = attributeRepository.GetAttributeByName(attributeName).Id;
 
             var subsequenceAttribute = new SequenceAttribute
             {
-                AttributeId = attribute.Id,
+                AttributeId = attributeId,
                 SequenceId = subsequence.Id,
                 Value = attributeValue
             };
@@ -132,6 +132,44 @@
         }
 
         /// <summary>
+        /// The create sequence attribute.
+        /// </summary>
+        /// <param name="attributeId">
+        /// The attribute id.
+        /// </param>
+        /// <param name="attributeValue">
+        /// The attribute value.
+        /// </param>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        public void CreateSequenceAttribute(int attributeId, string attributeValue, Subsequence subsequence)
+        {
+            var subsequenceAttribute = new SequenceAttribute
+            {
+                AttributeId = attributeId,
+                SequenceId = subsequence.Id,
+                Value = attributeValue
+            };
+
+            db.SequenceAttribute.Add(subsequenceAttribute);
+        }
+
+        /// <summary>
+        /// The create sequence attribute.
+        /// </summary>
+        /// <param name="attributeId">
+        /// The attribute id.
+        /// </param>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        public void CreateSequenceAttribute(int attributeId, Subsequence subsequence)
+        {
+            CreateSequenceAttribute(attributeId, string.Empty, subsequence);
+        }
+
+        /// <summary>
         /// The create complement join attribute.
         /// </summary>
         /// <param name="complement">
@@ -147,11 +185,11 @@
         {
             if (complement)
             {
-                CreateSequenceAttribute("complement", subsequence);
+                CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence);
 
                 if (complementJoin)
                 {
-                    CreateSequenceAttribute("complement_join", subsequence);
+                    CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence);
                 }
             }
         }

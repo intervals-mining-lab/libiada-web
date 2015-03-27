@@ -9,7 +9,6 @@
     using Bio.IO.GenBank;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -75,8 +74,6 @@
         /// </exception>
         public void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId, out List<int> starts, out List<int> ends)
         {
-            // var temp = new Sequence(Alphabets.DNA, "actgactagctagctag").GetComplementedSequence().ToString();
-
             starts = new List<int>();
             ends = new List<int> { 0 };
 
@@ -228,9 +225,6 @@
             List<int> ends;
 
             CreateFeatureSubsequences(features, sequenceId, out starts, out ends);
-
-            db.SaveChanges();
-
             CreateNonCodingSubsequences(starts, ends, sequenceId);
 
             db.SaveChanges();
@@ -250,24 +244,53 @@
         /// </returns>
         public List<Chain> ConvertToChains(List<Subsequence> subsequences, long chainId)
         {
-            var starts = subsequences.Select(p => p.Start).ToList();
+            var parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
+            ISequence completeSequence = new Sequence(Alphabets.DNA, parentChain);
+            var result = new List<Chain>();
 
-            var ends = subsequences.Select(p => p.Start + p.Length).ToList();
-
-            BaseChain parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId);
-
-            var iterator = new DefaultCutRule(starts, ends);
-
-            var stringChains = DiffCutter.Cut(parentChain.ToString(), iterator);
-
-            var chains = new List<Chain>();
-
-            for (int i = 0; i < stringChains.Count; i++)
+            foreach (Subsequence subsequence in subsequences)
             {
-                chains.Add(new Chain(stringChains[i]));
+                if (subsequence.Position.Count == 0)
+                {
+                    ISequence bioSequence = completeSequence.GetSubSequence(subsequence.Start, subsequence.Length);
+
+                    if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
+                    {
+                        bioSequence = bioSequence.GetComplementedSequence();
+                    }
+
+                    result.Add(new Chain(bioSequence.ToString()));
+                }
+                else
+                {
+                    if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
+                    {
+                        if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
+                        {
+                        }
+                        else
+                        {
+                        }
+
+                        throw new NotImplementedException();
+                    }
+                    else
+                    {
+                        var joinedSequence = completeSequence.GetSubSequence(subsequence.Start, subsequence.Length).ToString();
+
+                        for (int j = 0; j < subsequence.Position.Count; j++)
+                        {
+                            var position = subsequence.Position.ToArray();
+
+                            joinedSequence += completeSequence.GetSubSequence(position[j].Start, position[j].Length).ToString();
+                        }
+
+                        result.Add(new Chain(joinedSequence));
+                    }
+                }
             }
 
-            return chains;
+            return result;
         }
 
         /// <summary>

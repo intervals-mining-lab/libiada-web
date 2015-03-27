@@ -39,6 +39,68 @@
         }
 
         /// <summary>
+        /// Sequence attributes.
+        /// </summary>
+        public static class Attribute
+        {
+            /// <summary>
+            /// GenBank id.
+            /// </summary>
+            public const int DbXref = 1;
+
+            /// <summary>
+            /// The protein id.
+            /// </summary>
+            public const int ProteinId = 2;
+
+            /// <summary>
+            /// The complement flag.
+            /// </summary>
+            public const int Complement = 3;
+
+            /// <summary>
+            /// The complement join flag.
+            /// </summary>
+            public const int ComplementJoin = 4;
+
+            /// <summary>
+            /// The product name.
+            /// </summary>
+            public const int Product = 5;
+
+            /// <summary>
+            /// The note.
+            /// </summary>
+            public const int Note = 6;
+
+            /// <summary>
+            /// The codon start position (1, 2 or 3).
+            /// </summary>
+            public const int CodonStart = 7;
+
+            /// <summary>
+            /// The translation table for gene.
+            /// </summary>
+            public const int TranslationTable = 8;
+
+            /// <summary>
+            /// The inference.
+            /// </summary>
+            public const int Inference = 9;
+
+            /// <summary>
+            /// The repeat type.
+            /// </summary>
+            public const int RepeatType = 10;
+
+            /// <summary>
+            /// The locus tag.
+            /// </summary>
+            public const int LocusTag = 11;
+
+        }
+
+        /// <summary>
         /// The language.
         /// </summary>
         public static class Language

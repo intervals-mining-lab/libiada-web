@@ -1,8 +1,11 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
+    using System;
     using System.Linq;
 
     using LibiadaWeb;
+
+    using Attribute = LibiadaWeb.Attribute;
 
     /// <summary>
     /// The attribute repository.
@@ -26,7 +29,7 @@
         }
 
         /// <summary>
-        /// Gets or creates attribute by name.
+        /// Gets attribute by name.
         /// </summary>
         /// <param name="name">
         /// The name.
@@ -34,37 +37,17 @@
         /// <returns>
         /// The <see cref="Attribute"/>.
         /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if attribute with given name is not found in db.
+        /// </exception>
         public Attribute GetAttributeByName(string name)
         {
+            if (!db.Attribute.Any(a => a.Name == name))
+            {
+                throw new Exception("Unknown attribute: " + name);
+            }
+
             return db.Attribute.Single(a => a.Name == name);
-        }
-
-        /// <summary>
-        /// Gets or creates attribute by name.
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Attribute"/>.
-        /// </returns>
-        public Attribute GetOrCreateAttributeByName(string name)
-        {
-            var allAttributes = db.Attribute;
-
-           Attribute attribute;
-
-           if (allAttributes.Any(a => a.Name == name))
-            {
-                attribute = allAttributes.Single(a => a.Name == name);
-            }
-            else
-            {
-                attribute = new Attribute { Name = name };
-                db.Attribute.Add(attribute);
-            }
-
-            return attribute;
         }
 
         /// <summary>
