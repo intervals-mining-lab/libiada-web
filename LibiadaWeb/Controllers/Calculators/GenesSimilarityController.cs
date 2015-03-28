@@ -11,9 +11,9 @@
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The genes similarity controller.
@@ -26,9 +26,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The gene repository.
+        /// The subsequence extracter.
         /// </summary>
-        private readonly SubsequenceRepository subsequenceRepository;
+        private readonly SubsequenceExtracter subsequenceExtracter;
 
         /// <summary>
         /// The characteristic type repository.
@@ -41,7 +41,7 @@
         public GenesSimilarityController() : base("GenesSimilarity", "Genes similarity")
         {
             db = new LibiadaWebEntities();
-            subsequenceRepository = new SubsequenceRepository(db);
+            subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -103,15 +103,15 @@
                 }
 
                 var firstMatterId = matterIds[0];
-                var secondMatterId = matterIds[1];
-
-                List<Subsequence> firstSequenceSubsequences;
-                List<Subsequence> secondSequenceSubsequences;
-
-                var firstSequences = subsequenceRepository.ExtractSequences(firstMatterId, notationId, featureIds, out firstSequenceSubsequences);
-                var secondSequences = subsequenceRepository.ExtractSequences(secondMatterId, notationId, featureIds, out secondSequenceSubsequences);
-
+                var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                List<Subsequence> firstSequenceSubsequences = subsequenceExtracter.GetSubsequences(firstParentSequenceId, featureIds);
+                var firstSequences = subsequenceExtracter.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
+
+                var secondMatterId = matterIds[1];
+                var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
+                List<Subsequence> secondSequenceSubsequences = subsequenceExtracter.GetSubsequences(secondParentSequenceId, featureIds);
+                var secondSequences = subsequenceExtracter.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
@@ -128,8 +128,8 @@
 
                             if (excludeType == "Exclude")
                             {
-                                firstSequenceCharacteristics.RemoveAt(i);
-                                secondSequenceCharacteristics.RemoveAt(j);
+                                firstSequenceCharacteristics[i] = double.NaN;
+                                secondSequenceCharacteristics[j] = double.NaN;
                             }
                         }
                     }

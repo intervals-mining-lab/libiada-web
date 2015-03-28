@@ -9,6 +9,7 @@
     using Bio.IO.GenBank;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Misc;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -187,6 +188,11 @@
         /// </param>
         public void CreateNonCodingSubsequences(List<int> starts, List<int> ends, long sequenceId)
         {
+            if (!ArrayManipulator.IsSorted(starts) || !ArrayManipulator.IsSorted(ends))
+            {
+                throw new Exception("Wrong subsequences order.");
+            }
+
             for (int i = 0; i < ends.Count; i++)
             {
                 int start = ends[i];
@@ -231,117 +237,6 @@
         }
 
         /// <summary>
-        /// The extract chains.
-        /// </summary>
-        /// <param name="subsequences">
-        /// The subsequences.
-        /// </param>
-        /// <param name="chainId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Chain}"/>.
-        /// </returns>
-        public List<Chain> ConvertToChains(List<Subsequence> subsequences, long chainId)
-        {
-            var parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
-            ISequence completeSequence = new Sequence(Alphabets.DNA, parentChain);
-            var result = new List<Chain>();
-
-            foreach (Subsequence subsequence in subsequences)
-            {
-                if (subsequence.Position.Count == 0)
-                {
-                    ISequence bioSequence = completeSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-
-                    if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
-                    {
-                        bioSequence = bioSequence.GetComplementedSequence();
-                    }
-
-                    result.Add(new Chain(bioSequence.ToString()));
-                }
-                else
-                {
-                    if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
-                    {
-                        if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
-                        {
-                        }
-                        else
-                        {
-                        }
-
-                        throw new NotImplementedException();
-                    }
-                    else
-                    {
-                        var joinedSequence = completeSequence.GetSubSequence(subsequence.Start, subsequence.Length).ToString();
-
-                        for (int j = 0; j < subsequence.Position.Count; j++)
-                        {
-                            var position = subsequence.Position.ToArray();
-
-                            joinedSequence += completeSequence.GetSubSequence(position[j].Start, position[j].Length).ToString();
-                        }
-
-                        result.Add(new Chain(joinedSequence));
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The extract sequences.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <param name="featureIds">
-        /// The feature ids.
-        /// </param>
-        /// <param name="subsequences">
-        /// The genes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Chain}"/>.
-        /// </returns>
-        public List<Chain> ExtractSequences(long sequenceId, int[] featureIds, out List<Subsequence> subsequences)
-        {
-            subsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId)).Include(g => g.Position).Include(g => g.SequenceAttribute).ToList();
-
-            var sequences = ConvertToChains(subsequences, sequenceId);
-
-            return sequences;
-        }
-
-        /// <summary>
-        /// The extract sequences.
-        /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
-        /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
-        /// <param name="featureIds">
-        /// The feature ids.
-        /// </param>
-        /// <param name="subsequences">
-        /// The genes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Chain}"/>.
-        /// </returns>
-        public List<Chain> ExtractSequences(long matterId, int notationId, int[] featureIds, out List<Subsequence> subsequences)
-        {
-            var sequenceId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-            return ExtractSequences(sequenceId, featureIds, out subsequences);
-        }
-
-        /// <summary>
         /// The dispose.
         /// </summary>
         public void Dispose()
@@ -371,11 +266,6 @@
         {
             starts.Add(start - 1);
             ends.Add(end + 1);
-
-            if (ends[ends.Count - 1] < ends[ends.Count - 2])
-            {
-                throw new Exception("Wrong subsequences order.");
-            }
         }
     }
 }

@@ -385,6 +385,7 @@
     <Compile Include="Models\Repositories\Sequences\ElementRepository.cs" />
     <Compile Include="Models\Repositories\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IElementRepository.cs" />
+    <Compile Include="Models\SubsequenceExtracter.cs" />
     <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

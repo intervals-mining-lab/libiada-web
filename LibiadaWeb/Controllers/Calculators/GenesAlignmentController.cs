@@ -9,8 +9,8 @@
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The alignment controller.
@@ -23,9 +23,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The gene repository.
+        /// The subsequence extracter.
         /// </summary>
-        private readonly SubsequenceRepository subsequenceRepository;
+        private readonly SubsequenceExtracter subsequenceExtracter;
 
         /// <summary>
         /// The characteristic type repository.
@@ -38,7 +38,7 @@
         public GenesAlignmentController() : base("GenesAlignment", "Genes alignment")
         {
             db = new LibiadaWebEntities();
-            subsequenceRepository = new SubsequenceRepository(db);
+            subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -213,17 +213,15 @@
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(
-            long matterId,
-            int characteristicTypeLinkId,
-            int notationId,
-            int[] featureIds)
+        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, int notationId, int[] featureIds)
         {
             var characteristics = new List<double>();
 
-            List<Subsequence> subsequences;
+            var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
-            var sequences = subsequenceRepository.ExtractSequences(matterId, notationId, featureIds, out subsequences);
+            List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
+
+            var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
 
             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);

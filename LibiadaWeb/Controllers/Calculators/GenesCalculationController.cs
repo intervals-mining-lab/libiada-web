@@ -10,7 +10,6 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The genes calculation controller.
@@ -23,9 +22,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The gene repository.
+        /// The subsequence extracter.
         /// </summary>
-        private readonly SubsequenceRepository subsequenceRepository;
+        private readonly SubsequenceExtracter subsequenceExtracter;
 
         /// <summary>
         /// The characteristic type repository.
@@ -38,7 +37,7 @@
         public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
         {
             db = new LibiadaWebEntities();
-            subsequenceRepository = new SubsequenceRepository(db);
+            subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -104,8 +103,10 @@
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    List<Subsequence> subsequences;
-                    var chains = subsequenceRepository.ExtractSequences(matterId, notationIds[w], featureIds, out subsequences);
+                    var notationId = notationIds[w];
+                    var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                    List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
+                    var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
 
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
@@ -117,13 +118,13 @@
                         IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                         var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
-                        for (int j = 0; j < chains.Count; j++)
+                        for (int j = 0; j < sequences.Count; j++)
                         {
                             long subsequenceId = subsequences[j].Id;
 
                             if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                             {
-                                double value = calculator.Calculate(chains[j], link);
+                                double value = calculator.Calculate(sequences[j], link);
                                 var currentCharacteristic = new Characteristic
                                 {
                                     SequenceId = subsequenceId,
@@ -137,7 +138,7 @@
                             }
                         }
 
-                        for (int d = 0; d < chains.Count; d++)
+                        for (int d = 0; d < sequences.Count; d++)
                         {
                             long subsequenceId = subsequences[d].Id;
                             double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
@@ -149,8 +150,20 @@
                                 var featureId = subsequences[d].FeatureId;
                                 var sequenceId = subsequences[d].Id;
 
-                                sequenceProducts.Last().Add(db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product) ? 
-                                    db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product).Value : string.Empty);
+                                string product = string.Empty;
+                                if (db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product))
+                                {
+                                    product = db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product).Value;
+                                }
+                                else
+                                {
+                                    if (db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Note))
+                                    {
+                                        product = db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Note).Value;
+                                    }
+                                }
+
+                                sequenceProducts.Last().Add(product);
                                 sequencesPositions.Last().Add(subsequences[d].Start);
 
                                 sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
