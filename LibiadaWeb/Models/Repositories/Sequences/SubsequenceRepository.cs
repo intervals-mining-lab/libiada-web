@@ -124,6 +124,14 @@
                     }
                 }
 
+                if (leafLocations[0].LocationStart.ToString() != leafLocations[0].StartData || leafLocations[0].LocationEnd.ToString() != leafLocations[0].EndData)
+                {
+                    throw new Exception("Location and location data are not equal: location start = " + leafLocations[0].LocationStart
+                                                                               + " start data = " + leafLocations[0].StartData
+                                                                               + " location end = " + leafLocations[0].LocationEnd
+                                                                               + " end data = " + leafLocations[0].EndData);
+                }
+
                 int start = leafLocations[0].LocationStart - 1;
                 int end = leafLocations[0].LocationEnd - 1;
                 int length = end - start + 1;
@@ -151,6 +159,14 @@
                 for (int k = 1; k > leafLocations.Count; k++)
                 {
                     var leafLocation = leafLocations[k];
+
+                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
+                    {
+                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart 
+                                                                                   + " start data = " + leafLocation.StartData
+                                                                                   + " location end = " + leafLocation.LocationEnd
+                                                                                   + " end data = " + leafLocation.EndData);
+                    }
 
                     var leafStart = leafLocation.LocationStart - 1;
                     var leafEnd = leafLocation.LocationEnd - 1;

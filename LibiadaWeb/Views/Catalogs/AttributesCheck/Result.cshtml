@@ -1,0 +1,35 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Senes import results";
+}
+
+<h2>@ViewBag.matterName</h2>
+
+
+@if (ViewBag.Error == null)
+{
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Attribute name
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int d = 0; d < ViewBag.attributes.Count; d++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.attributes[d]
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+    }
+}

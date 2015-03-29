@@ -1,7 +1,7 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Genes import";
+    ViewBag.Title = "Attributes check";
 }
 
 <script>
@@ -13,7 +13,7 @@
 
 <h2>Genes import</h2>
 
-@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "AttributesCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div ng-app="GenesImport">

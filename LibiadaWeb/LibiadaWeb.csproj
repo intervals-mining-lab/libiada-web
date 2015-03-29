@@ -263,6 +263,7 @@
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
+    <Compile Include="Controllers\Catalogs\AttributesCheckController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
@@ -627,6 +628,8 @@
     <Content Include="Views\Calculators\GenesSimilarity\Result.cshtml" />
     <Content Include="Views\Calculators\GenesSimilarity\Index.cshtml" />
     <Content Include="Views\Partial\_MattersTable.cshtml" />
+    <Content Include="Views\Catalogs\AttributesCheck\Index.cshtml" />
+    <Content Include="Views\Catalogs\AttributesCheck\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

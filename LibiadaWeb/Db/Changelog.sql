@@ -827,4 +827,16 @@ INSERT INTO attribute(name) VALUES ('inference');
 INSERT INTO attribute(name) VALUES ('rpt_type');
 INSERT INTO attribute(name) VALUES ('locus_tag');
 
+-- 29.03.2015
+-- Added more attributes.
+
+INSERT INTO attribute(name) VALUES ('old_locus_tag');
+INSERT INTO attribute(name) VALUES ('gene');
+INSERT INTO attribute(name) VALUES ('anticodon');
+INSERT INTO attribute(name) VALUES ('EC_number');
+INSERT INTO attribute(name) VALUES ('exception');
+INSERT INTO attribute(name) VALUES ('gene_synonym');
+INSERT INTO attribute(name) VALUES ('pseudo');
+INSERT INTO attribute(name) VALUES ('ncRNA_class');
+
 COMMIT;

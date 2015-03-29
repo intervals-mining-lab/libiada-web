@@ -98,6 +98,46 @@
             /// </summary>
             public const int LocusTag = 11;
 
+            /// <summary>
+            /// The old locus tag.
+            /// </summary>
+            public const int OldLocusTag = 12;
+
+            /// <summary>
+            /// The gene.
+            /// </summary>
+            public const int Gene = 13;
+
+            /// <summary>
+            /// The anticodon.
+            /// </summary>
+            public const int Anticodon = 14;
+
+            /// <summary>
+            /// The enzyme commission number.
+            /// </summary>
+            public const int EnzymeCommissionNumber = 15;
+
+            /// <summary>
+            /// The exception.
+            /// </summary>
+            public const int Exception = 16;
+
+            /// <summary>
+            /// The gene synonym.
+            /// </summary>
+            public const int GeneSynonym = 17;
+
+            /// <summary>
+            /// The pseudo.
+            /// </summary>
+            public const int Pseudo = 18;
+
+            /// <summary>
+            /// The ncRNA class.
+            /// </summary>
+            public const int NcRnaClass = 19;
+
         }
 
         /// <summary>
