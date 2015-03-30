@@ -1,7 +1,7 @@
-﻿function GenesCalculationController(data) {
+﻿function SubsequencesCalculationController(data) {
     "use strict";
 
-    function genesCalculation($scope) {
+    function subsequencesCalculation($scope) {
         MapModelFromJson($scope, data);
 
         $scope.selectedMatters = 0;
@@ -41,5 +41,5 @@
         };
     }
 
-    angular.module("GenesCalculation", []).controller("GenesCalculationCtrl", ["$scope", genesCalculation]);
+    angular.module("SubsequencesCalculation", []).controller("SubsequencesCalculationCtrl", ["$scope", subsequencesCalculation]);
 }

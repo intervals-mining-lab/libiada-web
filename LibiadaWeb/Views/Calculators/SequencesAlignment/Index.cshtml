@@ -1,22 +1,22 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Genes alignment";
+    ViewBag.Title = "Sequences alignment";
 }
 
 <script type="text/javascript">
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-    GenesAlignmentController(data);
+    SequencesAlignmentController(data);
 </script>
 
-<h2>Genes alignment</h2>
+<h2>Sequences alignment</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="GenesAlignment">
-        <div class="form-horizontal" ng-controller="GenesAlignmentCtrl">
+    <div ng-app="SequencesAlignment">
+        <div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -80,5 +80,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/genesAlignment")
+    @Scripts.Render("~/bundles/controllers/sequencesAlignment")
 }

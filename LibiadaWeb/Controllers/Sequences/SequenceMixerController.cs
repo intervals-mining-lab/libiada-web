@@ -55,9 +55,9 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The rnd generator.
+        /// The random generator.
         /// </summary>
-        private readonly Random rndGenerator = new Random();
+        private readonly Random randomGenerator = new Random();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceMixerController"/> class.
@@ -144,8 +144,8 @@
             BaseChain chain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
             for (int i = 0; i < scrambling; i++)
             {
-                int firstIndex = rndGenerator.Next(chain.GetLength());
-                int secondIndex = rndGenerator.Next(chain.GetLength());
+                int firstIndex = randomGenerator.Next(chain.GetLength());
+                int secondIndex = randomGenerator.Next(chain.GetLength());
 
                 IBaseObject firstElement = chain[firstIndex];
                 IBaseObject secondElement = chain[secondIndex];

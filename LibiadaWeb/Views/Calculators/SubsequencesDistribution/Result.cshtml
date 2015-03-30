@@ -1,10 +1,10 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Genes distributions";
+    ViewBag.Title = "Subsequences characteristics distributions";
 }
 
-<h2>Genes distributions</h2>
+<h2>Subsequences characteristics distributions</h2>
 
 @if (ViewBag.Error == null)
 {
@@ -32,27 +32,31 @@
                     </td>
                 }
             </tr>
-            @for (var i = 0; i < ViewBag.maxGenes; i++)
+            @for (var i = 0; i < ViewBag.maxSubsequences; i++)
             {
                 <tr>
                     @foreach (var res in ViewBag.result)
                     {
-                        if (i < res.GenesCharacteristics.Count)
+                        if (i < res.SubsequencesCharacteristics.Count)
                         {
                             <td>
-                                @res.GenesCharacteristics[i].Gene.Feature.Name
+                                @res.SubsequencesCharacteristics[i].Subsequence.Feature.Name
                             </td>
                             <td>
-                                @res.GenesCharacteristics[i].Gene.Product.Name
+                                attributes
                             </td>
                             <td>
-                                @foreach (var piece in res.GenesCharacteristics[i].Gene.Piece)
+                                @res.SubsequencesCharacteristics[i].Subsequence.Start
+                                <br />
+
+                                @foreach (var position in res.SubsequencesCharacteristics[i].Subsequence.Position)
                                 {
-                                    @piece.Start
+                                    @position.Start
+                                    <br />
                                 }
                             </td>
                             <td>
-                                @res.GenesCharacteristics[i].Characteristic
+                                @res.SubsequencesCharacteristics[i].Characteristic
                             </td>
                         }
                         else

@@ -16,9 +16,9 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
-    /// The genes similarity controller.
+    /// The subsequences similarity controller.
     /// </summary>
-    public class GenesSimilarityController : AbstractResultController
+    public class SubsequencesSimilarityController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -36,9 +36,9 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenesSimilarityController"/> class.
+        /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public GenesSimilarityController() : base("GenesSimilarity", "Genes similarity")
+        public SubsequencesSimilarityController() : base("SubsequencesSimilarity", "Subsequences similarity")
         {
             db = new LibiadaWebEntities();
             subsequenceExtracter = new SubsequenceExtracter(db);
@@ -54,7 +54,7 @@
         public ActionResult Index()
         {
             var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(2, 2, true);
+            var data = calculatorsHelper.GetSubsequencesCalculationData(2, 2, true);
             ViewBag.data = data;
             return View();
         }
@@ -116,7 +116,7 @@
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
-                var similarGenes = new List<IntPair>();
+                var similarSubsequences = new List<IntPair>();
 
                 for (int i = 0; i < firstSequenceCharacteristics.Count; i++)
                 {
@@ -124,7 +124,7 @@
                     {
                         if (Math.Abs(firstSequenceCharacteristics[i] - secondSequenceCharacteristics[j]) <= difference)
                         {
-                            similarGenes.Add(new IntPair(i, j));
+                            similarSubsequences.Add(new IntPair(i, j));
 
                             if (excludeType == "Exclude")
                             {
@@ -137,15 +137,24 @@
 
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
+                var similarity = similarSubsequences.Count * 200.0 / (firstSequenceSubsequences.Count + secondSequenceSubsequences.Count);
+
+                var firstSequenceSimilarity = similarSubsequences.Count * 100.0 / firstSequenceSubsequences.Count;
+
+                var secondSequenceSimilarity = similarSubsequences.Count * 100.0 / secondSequenceSubsequences.Count;
+
                 return new Dictionary<string, object>
                 {
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
                     { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
-                    { "similarGenes", similarGenes },
-                    { "firstSequenceGenes", firstSequenceSubsequences },
-                    { "secondSequenceGenes", secondSequenceSubsequences }
+                    { "similarSubsequences", similarSubsequences },
+                    { "similarity", similarity },
+                    { "firstSequenceSimilarity", firstSequenceSimilarity },
+                    { "secondSequenceSimilarity", secondSequenceSimilarity },
+                    { "firstSequenceSubsequences", firstSequenceSubsequences },
+                    { "secondSequenceSubsequences", secondSequenceSubsequences }
                 };
             });
         }
@@ -160,7 +169,7 @@
         /// The sequences.
         /// </param>
         /// <param name="subsequences">
-        /// The genes.
+        /// The subsequences.
         /// </param>
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.

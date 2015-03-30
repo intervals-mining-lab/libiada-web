@@ -8,15 +8,15 @@
     "use strict";
 
     var data = @Html.Raw(Json.Encode(ViewBag.data));
-    GenesCalculationController(data);
+    SubsequencesCalculationController(data);
 </script>
 
 <h2>Transformation of genetic sequences</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="GenesCalculation">
-        <div class="form-horizontal" ng-controller="GenesCalculationCtrl">
+    <div ng-app="SubsequencesCalculation">
+        <div class="form-horizontal" ng-controller="SubsequencesCalculationCtrl">
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -46,5 +46,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/genesCalculation")
+    @Scripts.Render("~/bundles/controllers/subsequencesCalculation")
 }

@@ -119,7 +119,7 @@
             public const int EnzymeCommissionNumber = 15;
 
             /// <summary>
-            /// The exception.
+            /// The exception in annotation or translation.
             /// </summary>
             public const int Exception = 16;
 

@@ -85,7 +85,7 @@
         }
 
         /// <summary>
-        /// The get genes calculation data.
+        /// The get subsequences calculation data.
         /// </summary>
         /// <param name="minimumSelectedMatters">
         /// The minimum Selected Matters.
@@ -99,7 +99,7 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetGenesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
+        public Dictionary<string, object> GetSubsequencesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
         {
             var featureIds = db.Feature.Where(p => p.NatureId == Aliases.Nature.Genetic
                                          && p.Id != Aliases.Feature.FullGenome

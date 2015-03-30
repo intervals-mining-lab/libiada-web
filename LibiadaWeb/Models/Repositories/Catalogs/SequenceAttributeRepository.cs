@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Linq;
     using System.Text.RegularExpressions;
 
     /// <summary>
@@ -38,6 +40,22 @@
         {
             db.Dispose();
         }
+
+        /// <summary>
+        /// The get attributes.
+        /// </summary>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public List<string> GetAttributes(long sequenceId)
+        {
+            var sequenceAttributes = db.SequenceAttribute.Where(sa => sa.SequenceId == sequenceId).Include(sa => sa.Attribute);
+
+            return sequenceAttributes.Select(sa => sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)).ToList();
+        }  
 
         /// <summary>
         /// Creates and adds to db sequence attribute and attribute.

@@ -2,20 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
-    using Bio;
     using Bio.IO.GenBank;
 
-    using LibiadaCore.Core;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
-    /// The gene repository.
+    /// The subsequence repository.
     /// </summary>
     public class SubsequenceRepository : ISubsequenceRepository
     {
@@ -23,11 +20,6 @@
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
         /// The feature repository.
@@ -48,7 +40,6 @@
         public SubsequenceRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            commonSequenceRepository = new CommonSequenceRepository(db);
             featureRepository = new FeatureRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }

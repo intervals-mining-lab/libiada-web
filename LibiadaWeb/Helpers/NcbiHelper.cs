@@ -99,7 +99,7 @@
         }
 
         /// <summary>
-        /// The get genes.
+        /// Returns genbank file FileStream.
         /// </summary>
         /// <param name="id">
         /// The id.

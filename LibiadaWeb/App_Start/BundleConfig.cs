@@ -43,8 +43,8 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/genesAlignment").Include(
-                        "~/Scripts/Angular/Controllers/genesAlignment.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/sequencesAlignment").Include(
+                        "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/buildingsSimilarity").Include(
                         "~/Scripts/Angular/Controllers/buildingsSimilarity.js"));
@@ -55,11 +55,11 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/customCalculation").Include(
                         "~/Scripts/Angular/Controllers/customCalculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/genesCalculation").Include(
-                        "~/Scripts/Angular/Controllers/genesCalculation.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesCalculation").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesCalculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/genesDistribution").Include(
-                        "~/Scripts/Angular/Controllers/genesDistribution.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesDistribution").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesDistribution.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/genesImport").Include(
                         "~/Scripts/Angular/Controllers/genesImport.js"));

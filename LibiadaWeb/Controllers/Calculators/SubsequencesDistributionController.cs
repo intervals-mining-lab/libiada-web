@@ -15,9 +15,9 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The genes distribution controller.
+    /// The subsequences distribution controller.
     /// </summary>
-    public class GenesDistributionController : AbstractResultController
+    public class SubsequencesDistributionController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -40,9 +40,9 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenesDistributionController"/> class.
+        /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public GenesDistributionController() : base("GenesDistribution", "Genes distribution")
+        public SubsequencesDistributionController() : base("SubsequencesDistribution", "Subsequences distribution")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -59,7 +59,7 @@
         public ActionResult Index()
         {
             var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(1, int.MaxValue, true);
+            var data = calculatorsHelper.GetSubsequencesCalculationData(1, int.MaxValue, true);
             ViewBag.data = data;
             return View();
         }
@@ -103,7 +103,7 @@
 
                 var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
 
-                double maxGenes = 0;
+                double maxSubsequences = 0;
 
                 for (int w = 0; w < matterIds.Length; w++)
                 {
@@ -141,12 +141,12 @@
                     List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(sequenceIds[w], featureIds);
                     var sequences = subsequenceExtracter.ExtractChains(subsequences, sequenceIds[w]);
 
-                    if (maxGenes < subsequences.Count)
+                    if (maxSubsequences < subsequences.Count)
                     {
-                        maxGenes = subsequences.Count;
+                        maxSubsequences = subsequences.Count;
                     }
 
-                    var genesCharacteristics = new List<SubsequenceCharacteristic>();
+                    var subsequencesCharacteristics = new List<SubsequenceCharacteristic>();
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(secondCharacteristicTypeLinkId).ClassName;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     var link = characteristicTypeLinkRepository.GetLibiadaLink(secondCharacteristicTypeLinkId);
@@ -177,24 +177,24 @@
                         double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId).Value;
 
                         var geneCharacteristic = new SubsequenceCharacteristic(subsequences[d], characteristic);
-                        genesCharacteristics.Add(geneCharacteristic);
+                        subsequencesCharacteristics.Add(geneCharacteristic);
                     }
 
-                    genesCharacteristics = genesCharacteristics.OrderBy(g => g.Characteristic).ToList();
+                    subsequencesCharacteristics = subsequencesCharacteristics.OrderBy(g => g.Characteristic).ToList();
 
-                    result.Add(new SequenceCharacteristics(matterName, sequenceCharacteristic, genesCharacteristics));
+                    result.Add(new SequenceCharacteristics(matterName, sequenceCharacteristic, subsequencesCharacteristics));
                 }
 
                 result = result.OrderBy(r => r.Characteristic).ToList();
 
                 var fullCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
-                var genesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
+                var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
 
                 return new Dictionary<string, object>
                 {
                     { "result", result },
-                    { "maxGenes", maxGenes },
-                    { "genesCharacteristicName", genesCharacteristicName },
+                    { "maxSubsequences", maxSubsequences },
+                    { "subsequencesCharacteristicName", subsequencesCharacteristicName },
                     { "fullCharacteristicName", fullCharacteristicName }
                 };
             });

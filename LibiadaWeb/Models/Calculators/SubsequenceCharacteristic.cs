@@ -19,7 +19,7 @@
         /// Initializes a new instance of the <see cref="SubsequenceCharacteristic"/> class.
         /// </summary>
         /// <param name="subsequence">
-        /// The gene.
+        /// The subsequence.
         /// </param>
         /// <param name="characteristic">
         /// The characteristic.

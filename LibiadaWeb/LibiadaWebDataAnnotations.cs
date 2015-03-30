@@ -275,7 +275,7 @@
     }
 
     /// <summary>
-    /// The gene.
+    /// The subsequence.
     /// </summary>
     [MetadataType(typeof(SubsequenceDataAnnotations))]
     public partial class Subsequence
@@ -283,7 +283,7 @@
     }
 
     /// <summary>
-    /// The gene data annotations.
+    /// The subsequence data annotations.
     /// </summary>
     public class SubsequenceDataAnnotations
     {

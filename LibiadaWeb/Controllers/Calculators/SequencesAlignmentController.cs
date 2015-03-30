@@ -15,7 +15,7 @@
     /// <summary>
     /// The alignment controller.
     /// </summary>
-    public class GenesAlignmentController : AbstractResultController
+    public class SequencesAlignmentController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -33,9 +33,9 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenesAlignmentController"/> class.
+        /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public GenesAlignmentController() : base("GenesAlignment", "Genes alignment")
+        public SequencesAlignmentController() : base("SequencesAlignment", "Sequences alignment")
         {
             db = new LibiadaWebEntities();
             subsequenceExtracter = new SubsequenceExtracter(db);
@@ -51,7 +51,7 @@
         public ActionResult Index()
         {
             var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(2, 2, true);
+            var data = calculatorsHelper.GetSubsequencesCalculationData(2, 2, true);
             ViewBag.data = data;
             return View();
         }

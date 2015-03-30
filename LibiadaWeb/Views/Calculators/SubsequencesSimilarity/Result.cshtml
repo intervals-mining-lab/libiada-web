@@ -1,0 +1,117 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Subsequences similarity";
+}
+
+<h2>Subsequences similarity</h2>
+
+@if (ViewBag.Error == null)
+{
+    <h3>
+        @ViewBag.firstSequenceName and @ViewBag.secondSequenceName
+    </h3>
+    <br />
+    <div>
+        @ViewBag.similarity % of subsequences are similar:
+        <br />
+        @ViewBag.firstSequenceSimilarity % of first sequence.
+        <br />
+        @ViewBag.secondSequenceSimilarity % of second sequence.
+    </div>
+    <br />
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    First sequence subsequence feature
+                </th>
+                <th>
+                    First sequence subsequence attributes
+                </th>
+                <th>
+                    First sequence subsequence position
+                </th>
+                <th>
+                    First sequence subsequence length
+                </th>
+                <th>
+                    Second sequence subsequence feature
+                </th>
+                <th>
+                    Second sequence subsequence attributes
+                </th>
+                <th>
+                    Second sequence subsequence position
+                </th>
+                <th>
+                    Second sequence subsequence length
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var similarSubsequence in ViewBag.similarSubsequences)
+            {
+                var first = ViewBag.firstSequenceSubsequences[similarSubsequence.First];
+                var second = ViewBag.secondSequenceSubsequences[similarSubsequence.Second];
+                <tr>
+                    <td>
+                        @first.Feature.Name
+                    </td>
+                    <td>
+                        attributes
+                    </td>
+                    <td>
+                        @first.Start
+                        <br />
+
+                        @foreach (var position in ViewBag.firstSequenceSubsequences[similarSubsequence.First].Position)
+                        {
+                            @position.Start
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        @first.Length
+                        <br />
+
+                        @foreach (var position in first.Position)
+                        {
+                            @position.Length
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        @second.Feature.Name
+                    </td>
+                    <td>
+                        attributes
+                    </td>
+                    <td>
+                        @second.Start
+                        <br />
+
+                        @foreach (var position in second.Position)
+                        {
+                            @position.Start
+                        }
+                    </td>
+                    <td>
+                        @second.Length
+                        <br />
+
+                        @foreach (var position in second.Position)
+                        {
+                            @position.Length
+                            <br />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryui")
+    }
+}

@@ -1,7 +1,7 @@
-﻿function GenesDistributionController(data) {
+﻿function SubsequencesDistributionController(data) {
     "use strict";
 
-    function genesDistribution($scope) {
+    function subsequencesDistribution($scope) {
         MapModelFromJson($scope, data);
 
         $scope.selectedMatters = 0;
@@ -39,5 +39,5 @@
         };
     }
 
-    angular.module("GenesDistribution", []).controller("GenesDistributionCtrl", ["$scope", genesDistribution]);
+    angular.module("SubsequencesDistribution", []).controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
 }

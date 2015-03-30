@@ -12,9 +12,9 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
-    /// The genes calculation controller.
+    /// The subsequences calculation controller.
     /// </summary>
-    public class GenesCalculationController : AbstractResultController
+    public class SubsequencesCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -32,13 +32,19 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GenesCalculationController"/> class.
+        /// The sequence attribute repository.
         /// </summary>
-        public GenesCalculationController() : base("GenesCalculation", "Genes calculation")
+        private readonly SequenceAttributeRepository sequenceAttributeRepository; 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
+        /// </summary>
+        public SubsequencesCalculationController() : base("SubsequencesCalculation", "Subsequences characteristics calculation")
         {
             db = new LibiadaWebEntities();
             subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 
         /// <summary>
@@ -50,7 +56,7 @@
         public ActionResult Index()
         {
             var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetGenesCalculationData(1, int.MaxValue, true);
+            var data = calculatorsHelper.GetSubsequencesCalculationData(1, int.MaxValue, true);
             ViewBag.data = data;
             return View();
         }
@@ -88,7 +94,7 @@
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
                 var matterNames = new List<string>();
-                var sequenceProducts = new List<List<string>>();
+                var sequenceAttributes = new List<List<List<string>>>();
                 var sequencesPositions = new List<List<long>>();
                 var sequenceFeatures = new List<List<string>>();
                 var characteristicNames = new List<string>();
@@ -98,19 +104,19 @@
                 {
                     long matterId = matterIds[w];
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    sequenceProducts.Add(new List<string>());
+                    sequenceAttributes.Add(new List<List<string>>());
                     sequencesPositions.Add(new List<long>());
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    var notationId = notationIds[w];
-                    var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-                    List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
-                    var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
-
                     // Перебор всех характеристик и форм записи; второй уровень массива характеристик
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
+                        var notationId = notationIds[i];
+                        var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                        List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
+                        var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
+
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
@@ -147,24 +153,10 @@
 
                             if (i == 0)
                             {
-                                var featureId = subsequences[d].FeatureId;
-                                var sequenceId = subsequences[d].Id;
-
-                                string product = string.Empty;
-                                if (db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product))
-                                {
-                                    product = db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Product).Value;
-                                }
-                                else
-                                {
-                                    if (db.SequenceAttribute.Any(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Note))
-                                    {
-                                        product = db.SequenceAttribute.Single(sa => sa.SequenceId == sequenceId && sa.AttributeId == Aliases.Attribute.Note).Value;
-                                    }
-                                }
-
-                                sequenceProducts.Last().Add(product);
+                                sequenceAttributes.Last().Add(sequenceAttributeRepository.GetAttributes(subsequences[d].Id));
                                 sequencesPositions.Last().Add(subsequences[d].Start);
+
+                                var featureId = subsequences[d].FeatureId;
 
                                 sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
                             }
@@ -205,7 +197,7 @@
                 {
                     { "characteristics", characteristics },
                     { "matterNames", matterNames },
-                    { "sequenceProducts", sequenceProducts },
+                    { "sequenceAttributes", sequenceAttributes },
                     { "sequencesPositions", sequencesPositions },
                     { "sequenceFeatures", sequenceFeatures },
                     { "characteristicNames", characteristicNames },

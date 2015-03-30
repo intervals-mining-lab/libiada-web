@@ -96,7 +96,6 @@
         <AssociationConnector Association="LibiadaWebModel.fk_note_tie" />
         <EntityTypeShape EntityType="LibiadaWebModel.translator" Width="1.5" PointX="9.25" PointY="15" />
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_translator" />
-        <EntityTypeShape EntityType="LibiadaWebModel.gene" Width="1.5" PointX="26.375" PointY="2.625" />
         <AssociationConnector Association="LibiadaWebModel.fk_gene_dna_chain" />
         <AssociationConnector Association="LibiadaWebModel.fk_gene_feature" />
         <EntityTypeShape EntityType="LibiadaWebModel.piece" Width="1.5" PointX="28.75" PointY="8" />

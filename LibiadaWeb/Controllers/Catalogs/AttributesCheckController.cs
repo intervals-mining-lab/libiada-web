@@ -36,8 +36,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+            var subsequencesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !subsequencesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
             var calculatorsHelper = new ViewDataHelper(db);
 
