@@ -18,7 +18,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The features.
         /// </summary>
-        private readonly DbSet<Feature> features;
+        private readonly List<Feature> features;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureRepository"/> class.
@@ -29,7 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public FeatureRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            features = db.Feature;
+            features = db.Feature.ToList();
         }
 
         /// <summary>
@@ -54,12 +54,21 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </exception>
         public int GetFeatureIdByName(string name)
         {
-            if (!features.Any(f => f.Type == name))
-            {
-                throw new Exception("Unknown feature. name=" + name);
-            }
-
             return features.Single(f => f.Type == name).Id;
+        }
+
+        /// <summary>
+        /// Checks if feature exists.
+        /// </summary>
+        /// <param name="name">
+        /// The name of feature.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool FeatureExists(string name)
+        {
+            return features.Any(f => f.Type == name);
         }
 
         /// <summary>

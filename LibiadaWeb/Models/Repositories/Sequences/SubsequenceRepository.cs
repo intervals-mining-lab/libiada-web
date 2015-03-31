@@ -70,6 +70,13 @@
                         continue;
                     }
                 }
+                else
+                {
+                    if (!featureRepository.FeatureExists(feature.Key))
+                    {
+                        throw new Exception("Unknown feature. Feature name = " + feature.Key);
+                    }
+                }
 
                 var location = feature.Location;
 
