@@ -52,6 +52,9 @@
         /// </param>
         /// <exception cref="Exception">
         /// Thrown if subsequences are not importable.
+        /// Thrown if feature contains no leaf location or  
+        /// if features positions order is not ascending or 
+        /// if feature length is less than 1.
         /// </exception>
         public void CheckImportability(List<FeatureItem> features)
         {
@@ -130,7 +133,7 @@
         }
 
         /// <summary>
-        /// The create feature subsequences.
+        /// Create subsequences from features.
         /// </summary>
         /// <param name="features">
         /// The features.
@@ -138,21 +141,15 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        /// <param name="starts">
-        /// The starts.
-        /// </param>
-        /// <param name="ends">
-        /// The ends.
-        /// </param>
-        /// <exception cref="Exception">
-        /// Thrown if feature contains no leaf location or  
-        /// if features positions order is not ascending or 
-        /// if feature length is less than 1.
-        /// </exception>
-        public void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId, out List<int> starts, out List<int> ends)
+        /// <returns>
+        /// The <see cref="List{Int32}"/>.
+        /// </returns>
+        public List<int>[] CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
         {
-            starts = new List<int>();
-            ends = new List<int>();
+            var positions = new[] { new List<int>(), new List<int>() };
+            var starts = positions[0];
+            var ends = positions[1];
+            
 
             for (int i = 1; i < features.Count; i++)
             {
@@ -227,6 +224,8 @@
 
             starts.Add(features[0].Location.LocationEnd - 1);
             ends.Insert(0, 0);
+
+            return positions;
         }
 
         /// <summary>
@@ -284,11 +283,8 @@
         {
             CheckImportability(features);
 
-            List<int> starts;
-            List<int> ends;
-
-            CreateFeatureSubsequences(features, sequenceId, out starts, out ends);
-            CreateNonCodingSubsequences(starts, ends, sequenceId);
+            var positions = CreateFeatureSubsequences(features, sequenceId);
+            CreateNonCodingSubsequences(positions[0], positions[1], sequenceId);
 
             db.SaveChanges();
         }
