@@ -839,4 +839,25 @@ INSERT INTO attribute(name) VALUES ('gene_synonym');
 INSERT INTO attribute(name) VALUES ('pseudo');
 INSERT INTO attribute(name) VALUES ('ncRNA_class');
 
+-- 31.03.2015
+-- Updated updated and created function;
+
+CREATE OR REPLACE FUNCTION trigger_set_modified() RETURNS trigger AS
+$BODY$
+    BEGIN
+	NEW.modified := now();
+	IF (TG_OP = 'INSERT') THEN
+            NEW.created := now();
+	    RETURN NEW;
+        END IF;
+        IF (TG_OP = 'UPDATE') THEN
+	    NEW.created = OLD.created;
+            RETURN NEW;
+        END IF;
+        RAISE EXCEPTION 'Ќеизвестна€ операци€. ƒанный тригер предназначен только дл€ операций добавлени€ и изменени€ записей в таблицах с пол€ми modified и created.';
+    END;
+$BODY$
+LANGUAGE plpgsql VOLATILE NOT LEAKPROOF
+COST 100;
+
 COMMIT;
