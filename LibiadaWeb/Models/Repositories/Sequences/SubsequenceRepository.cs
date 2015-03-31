@@ -45,6 +45,91 @@
         }
 
         /// <summary>
+        /// Checks importability of subsequences.
+        /// </summary>
+        /// <param name="features">
+        /// The features.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if subsequences are not importable.
+        /// </exception>
+        public void CheckImportability(List<FeatureItem> features)
+        {
+            for (int i = 1; i < features.Count; i++)
+            {
+                var feature = features[i];
+
+                if (feature.Key == "gene")
+                {
+                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == "pseudo");
+                    if (!pseudo)
+                    {
+                        continue;
+                    }
+                }
+
+                var location = feature.Location;
+
+                if (location.SubLocations.Count > 0)
+                {
+                    var subLocationOperator = location.SubLocations[0].Operator;
+
+                    foreach (var subLocation in location.SubLocations)
+                    {
+                        if (subLocation.Operator != subLocationOperator)
+                        {
+                            throw new Exception("SubLocation operators does not match: " + subLocationOperator + " and " + subLocation.Operator);
+                        }
+                    }
+                }
+
+                var leafLocations = feature.Location.GetLeafLocations();
+
+                if (leafLocations.Count == 0)
+                {
+                    throw new Exception("No leaf locations");
+                }
+
+                foreach (var leafLocation in leafLocations)
+                {
+                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData)
+                    {
+                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart 
+                                                                                   + " start data = " + leafLocation.StartData);
+                    }
+
+                    if (leafLocation.LocationEnd.ToString() != leafLocation.EndData)
+                    {
+                        throw new Exception("Location and location data are not equal: location end = " + leafLocation.LocationEnd
+                                                                                   + " end data = " + leafLocation.EndData);
+                    }
+
+                    int start = leafLocation.LocationStart - 1;
+                    int end = leafLocation.LocationEnd - 1;
+                    int length = end - start + 1;
+
+                    if (length < 1)
+                    {
+                        throw new Exception("Length of subsequence cant be less than 1.");
+                    }
+                }
+
+                foreach (var qualifier in feature.Qualifiers)
+                {
+                    if (qualifier.Value.Count > 1)
+                    {
+                        throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
+                    }
+
+                    if (qualifier.Key == "codon_start" && qualifier.Value[0] != "1")
+                    {
+                        throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// The create feature subsequences.
         /// </summary>
         /// <param name="features">
@@ -67,7 +152,7 @@
         public void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId, out List<int> starts, out List<int> ends)
         {
             starts = new List<int>();
-            ends = new List<int> { 0 };
+            ends = new List<int>();
 
             for (int i = 1; i < features.Count; i++)
             {
@@ -91,46 +176,17 @@
 
                 var location = feature.Location;
                 var leafLocations = feature.Location.GetLeafLocations();
-
-                if (leafLocations.Count == 0)
-                {
-                    throw new Exception("No leaf locations");
-                }
-
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
                 if (location.SubLocations.Count > 0)
                 {
                     complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
-
-                    var subLocationOperator = location.SubLocations[0].Operator;
-
-                    foreach (var subLocation in location.SubLocations)
-                    {
-                        if (subLocation.Operator != subLocationOperator)
-                        {
-                            throw new Exception("SubLocation operators does not match: " + subLocationOperator + " and " + subLocation.Operator);
-                        }
-                    }
-                }
-
-                if (leafLocations[0].LocationStart.ToString() != leafLocations[0].StartData || leafLocations[0].LocationEnd.ToString() != leafLocations[0].EndData)
-                {
-                    throw new Exception("Location and location data are not equal: location start = " + leafLocations[0].LocationStart
-                                                                               + " start data = " + leafLocations[0].StartData
-                                                                               + " location end = " + leafLocations[0].LocationEnd
-                                                                               + " end data = " + leafLocations[0].EndData);
                 }
 
                 int start = leafLocations[0].LocationStart - 1;
                 int end = leafLocations[0].LocationEnd - 1;
                 int length = end - start + 1;
-
-                if (length < 1)
-                {
-                    throw new Exception("Length of subsequence cant be less than 1.");
-                }
 
                 var subsequence = new Subsequence
                 {
@@ -140,7 +196,7 @@
                     Complementary = complement,
                     SequenceId = sequenceId,
                     Start = start,
-                    Length = end - start + 1
+                    Length = length
                 };
 
                 db.Subsequence.Add(subsequence);
@@ -150,15 +206,6 @@
                 for (int k = 1; k > leafLocations.Count; k++)
                 {
                     var leafLocation = leafLocations[k];
-
-                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
-                    {
-                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart 
-                                                                                   + " start data = " + leafLocation.StartData
-                                                                                   + " location end = " + leafLocation.LocationEnd
-                                                                                   + " end data = " + leafLocation.EndData);
-                    }
-
                     var leafStart = leafLocation.LocationStart - 1;
                     var leafEnd = leafLocation.LocationEnd - 1;
                     var leafLength = leafEnd - leafStart + 1;
@@ -175,10 +222,11 @@
                     AddStartAndEnd(starts, ends, leafStart, leafEnd);
                 }
 
-                sequenceAttributeRepository.CreateSequenceAttributes(feature.Qualifiers, complement, complementJoin,  subsequence);
+                sequenceAttributeRepository.CreateSequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence);
             }
 
             starts.Add(features[0].Location.LocationEnd - 1);
+            ends.Insert(0, 0);
         }
 
         /// <summary>
@@ -234,6 +282,8 @@
         /// </param>
         public void CreateSubsequences(List<FeatureItem> features, long sequenceId)
         {
+            CheckImportability(features);
+
             List<int> starts;
             List<int> ends;
 
@@ -269,7 +319,7 @@
         /// <exception cref="Exception">
         /// Thrown if current end is less then previous.
         /// </exception>
-        private void AddStartAndEnd(List<int> starts, List<int> ends, int start, int end) 
+        private void AddStartAndEnd(List<int> starts, List<int> ends, int start, int end)
         {
             starts.Add(start - 1);
             ends.Add(end + 1);

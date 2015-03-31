@@ -79,11 +79,6 @@
         {
             foreach (var qualifier in qualifiers)
             {
-                if (qualifier.Value.Count > 1)
-                {
-                    throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
-                }
-
                 if (qualifier.Value.Count == 1)
                 {
                     switch (qualifier.Key)
@@ -92,13 +87,6 @@
                             continue;
                         case "db_xref":
                             subsequence.WebApiId = int.Parse(Regex.Replace(qualifier.Value[0], @"[^\d]", string.Empty));
-                            break;
-                        case "codon_start":
-                            if (qualifier.Value[0] != "1")
-                            {
-                                throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
-                            }
-
                             break;
                     }
 
@@ -129,7 +117,7 @@
             {
                 AttributeId = attributeId,
                 SequenceId = subsequence.Id,
-                Value = attributeValue.Replace("\"", string.Empty).Replace("\n", " ")
+                Value = attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ")
             };
 
             db.SequenceAttribute.Add(subsequenceAttribute);
