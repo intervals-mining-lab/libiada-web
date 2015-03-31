@@ -31,6 +31,11 @@
         private readonly SubsequenceExtracter subsequenceExtracter;
 
         /// <summary>
+        /// The sequence attribute repository.
+        /// </summary>
+        private readonly SequenceAttributeRepository sequenceAttributeRepository;
+
+        /// <summary>
         /// The characteristic type repository.
         /// </summary>
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
@@ -43,6 +48,7 @@
             db = new LibiadaWebEntities();
             subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 
         /// <summary>
@@ -107,12 +113,14 @@
                 List<Subsequence> firstSequenceSubsequences = subsequenceExtracter.GetSubsequences(firstParentSequenceId, featureIds);
                 var firstSequences = subsequenceExtracter.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
+                var firstSequenceAttributes = firstSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
 
                 var secondMatterId = matterIds[1];
                 var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
                 List<Subsequence> secondSequenceSubsequences = subsequenceExtracter.GetSubsequences(secondParentSequenceId, featureIds);
                 var secondSequences = subsequenceExtracter.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
+                var secondSequenceAttributes = secondSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
@@ -148,13 +156,14 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
                     { "similarSubsequences", similarSubsequences },
                     { "similarity", similarity },
                     { "firstSequenceSimilarity", firstSequenceSimilarity },
                     { "secondSequenceSimilarity", secondSequenceSimilarity },
                     { "firstSequenceSubsequences", firstSequenceSubsequences },
-                    { "secondSequenceSubsequences", secondSequenceSubsequences }
+                    { "secondSequenceSubsequences", secondSequenceSubsequences },
+                    { "firstSequenceAttributes", firstSequenceAttributes },
+                    { "secondSequenceAttributes", secondSequenceAttributes }
                 };
             });
         }

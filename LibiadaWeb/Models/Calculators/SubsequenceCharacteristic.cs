@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The genes characteristics.
     /// </summary>
@@ -16,6 +18,11 @@
         public readonly double Characteristic;
 
         /// <summary>
+        /// The attributes.
+        /// </summary>
+        public readonly List<string> Attributes;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceCharacteristic"/> class.
         /// </summary>
         /// <param name="subsequence">
@@ -24,10 +31,14 @@
         /// <param name="characteristic">
         /// The characteristic.
         /// </param>
-        public SubsequenceCharacteristic(Subsequence subsequence, double characteristic)
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
+        public SubsequenceCharacteristic(Subsequence subsequence, double characteristic, List<string> attributes)
         {
             Subsequence = subsequence;
             Characteristic = characteristic;
+            Attributes = attributes;
         }
     }
 }

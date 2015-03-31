@@ -9,7 +9,7 @@
 @if (ViewBag.Error == null)
 {
     <h3>
-        @ViewBag.firstSequenceName and @ViewBag.secondSequenceName
+        @ViewBag.firstSequenceName and @ViewBag.secondSequenceName using @ViewBag.characteristicName
     </h3>
     <br />
     <div>
@@ -59,13 +59,17 @@
                         @first.Feature.Name
                     </td>
                     <td>
-                        attributes
+                        @foreach (var attribute in ViewBag.firstSequenceAttributes[similarSubsequence.First])
+                        {
+                            @attribute
+                            <br />
+                        } 
                     </td>
                     <td>
                         @first.Start
                         <br />
 
-                        @foreach (var position in ViewBag.firstSequenceSubsequences[similarSubsequence.First].Position)
+                        @foreach (var position in first.Position)
                         {
                             @position.Start
                             <br />
@@ -85,7 +89,11 @@
                         @second.Feature.Name
                     </td>
                     <td>
-                        attributes
+                        @foreach (var attribute in ViewBag.secondSequenceAttributes[similarSubsequence.Second])
+                        {
+                            @attribute
+                            <br />
+                        } 
                     </td>
                     <td>
                         @second.Start

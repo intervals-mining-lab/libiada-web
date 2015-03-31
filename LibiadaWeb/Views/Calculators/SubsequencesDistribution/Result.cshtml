@@ -43,7 +43,11 @@
                                 @res.SubsequencesCharacteristics[i].Subsequence.Feature.Name
                             </td>
                             <td>
-                                attributes
+                                @foreach (var attribute in res.SubsequencesCharacteristics[i].Subsequence.Attribute)
+                                {
+                                    @attribute
+                                    <br/>
+                                }
                             </td>
                             <td>
                                 @res.SubsequencesCharacteristics[i].Subsequence.Start

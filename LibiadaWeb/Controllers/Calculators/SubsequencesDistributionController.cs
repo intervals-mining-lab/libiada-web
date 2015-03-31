@@ -40,6 +40,11 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
+        /// The sequence attribute repository.
+        /// </summary>
+        private readonly SequenceAttributeRepository sequenceAttributeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
         public SubsequencesDistributionController() : base("SubsequencesDistribution", "Subsequences distribution")
@@ -48,6 +53,7 @@
             commonSequenceRepository = new CommonSequenceRepository(db);
             subsequenceExtracter = new SubsequenceExtracter(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 
         /// <summary>
@@ -176,7 +182,7 @@
                         long subsequenceId = subsequences[d].Id;
                         double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId).Value;
 
-                        var geneCharacteristic = new SubsequenceCharacteristic(subsequences[d], characteristic);
+                        var geneCharacteristic = new SubsequenceCharacteristic(subsequences[d], characteristic, sequenceAttributeRepository.GetAttributes(subsequences[d].Id));
                         subsequencesCharacteristics.Add(geneCharacteristic);
                     }
 
