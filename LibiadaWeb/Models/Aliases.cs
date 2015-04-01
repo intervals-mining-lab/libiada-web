@@ -138,6 +138,26 @@
             /// </summary>
             public const int NcRnaClass = 19;
 
+            /// <summary>
+            /// The standart name.
+            /// </summary>
+            public const int StandartName = 20;
+
+            /// <summary>
+            /// The repeat family.
+            /// </summary>
+            public const int RepeatFamily = 21;
+
+            /// <summary>
+            /// The direction.
+            /// </summary>
+            public const int Direction = 22;
+
+            /// <summary>
+            /// The ribosomal slippage.
+            /// </summary>
+            public const int RibosomalSlippage = 23;
+
         }
 
         /// <summary>

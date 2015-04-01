@@ -860,4 +860,13 @@ $BODY$
 LANGUAGE plpgsql VOLATILE NOT LEAKPROOF
 COST 100;
 
+-- 01.04.2015
+-- Added new attributes.
+
+INSERT INTO attribute(name) VALUES ('standard_name');
+INSERT INTO attribute(name) VALUES ('rpt_family');
+INSERT INTO attribute(name) VALUES ('direction');
+INSERT INTO attribute(name) VALUES ('ribosomal_slippage');
+
+
 COMMIT;

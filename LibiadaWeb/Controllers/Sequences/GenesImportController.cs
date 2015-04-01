@@ -45,7 +45,7 @@
         public ActionResult Index()
         {
             var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id) && c.FeatureId == Aliases.Feature.FullGenome).Select(c => c.MatterId).ToList();
 
             var calculatorsHelper = new ViewDataHelper(db);
 
