@@ -86,11 +86,28 @@
                         case "translation":
                             continue;
                         case "db_xref":
-                            subsequence.WebApiId = int.Parse(Regex.Replace(qualifier.Value[0], @"[^\d]", string.Empty));
+                            foreach (var value in qualifier.Value)
+                            {
+                                if (Regex.IsMatch(value, "^\"GI:\\d+\"$"))
+                                {
+                                    if (subsequence.WebApiId != null)
+                                    {
+                                        throw new Exception("Several web api ids in one subsequence. First " + subsequence.Id + "Second " + value);
+                                    }
+
+                                    subsequence.WebApiId = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty));
+                                }
+                            }
+
+                            if (subsequence.WebApiId == null)
+                            {
+                                throw new Exception("Genbank web api id not found in db_xref.");
+                            }
+                            
                             break;
                     }
 
-                    CreateSequenceAttribute(qualifier.Key, qualifier.Value[0], subsequence);
+                    CreateSequenceAttribute(qualifier.Key, string.Join("    ", qualifier.Value), subsequence);
                 }
             }
 

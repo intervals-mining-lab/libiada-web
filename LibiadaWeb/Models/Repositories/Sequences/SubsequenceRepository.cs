@@ -126,11 +126,6 @@
 
                 foreach (var qualifier in feature.Qualifiers)
                 {
-                    if (qualifier.Value.Count > 1)
-                    {
-                        throw new Exception("Qualifier contains more than 1 value. Qualifier=" + qualifier.Key);
-                    }
-
                     if (qualifier.Key == "codon_start" && qualifier.Value[0] != "1")
                     {
                         throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
