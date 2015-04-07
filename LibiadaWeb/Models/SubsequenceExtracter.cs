@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Bio;
+    using Bio.Extensions;
 
     using LibiadaCore.Core;
 
@@ -106,7 +107,7 @@
                 bioSequence = bioSequence.GetComplementedSequence();
             }
 
-            return new Chain(bioSequence.ToString());
+            return new Chain(bioSequence.ConvertToString());
         }
 
         /// <summary>
@@ -153,7 +154,7 @@
             {
                 var position = subsequence.Position.ToArray();
 
-                joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ToString();
+                joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
             }
 
             return new Chain(joinedSequence);

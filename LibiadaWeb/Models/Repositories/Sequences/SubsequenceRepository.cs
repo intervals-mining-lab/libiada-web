@@ -6,10 +6,7 @@
 
     using Bio.IO.GenBank;
 
-    using LibiadaCore.Misc;
-
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
@@ -32,6 +29,9 @@
         /// </summary>
         private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
+        /// <summary>
+        /// The common sequence repository.
+        /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
@@ -49,6 +49,44 @@
         }
 
         /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            db.Dispose();
+        }
+
+        /// <summary>
+        /// Adds all subsequences of given sequence to database.
+        /// </summary>
+        /// <param name="features">
+        /// The subsequences.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The source sequence id.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if error occurs during importability check.
+        /// </exception>
+        public void CreateSubsequences(List<FeatureItem> features, long sequenceId)
+        {
+            try
+            {
+                CheckImportability(features, sequenceId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error occured during importability check.", e);
+            }
+
+
+            var positionsMap = CreateFeatureSubsequences(features, sequenceId);
+            CreateNonCodingSubsequences(positionsMap, sequenceId);
+
+            db.SaveChanges();
+        }
+
+        /// <summary>
         /// Checks importability of subsequences.
         /// </summary>
         /// <param name="features">
@@ -60,10 +98,10 @@
         /// <exception cref="Exception">
         /// Thrown if subsequences are not importable.
         /// Thrown if feature contains no leaf location or  
-        /// if features positions order is not ascending or 
+        /// if source length not equals to parent sequence length or 
         /// if feature length is less than 1.
         /// </exception>
-        public void CheckImportability(List<FeatureItem> features, long sequenceId)
+        private void CheckImportability(List<FeatureItem> features, long sequenceId)
         {
             var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 
@@ -72,7 +110,7 @@
 
             if (parentLength != sourceLength)
             {
-                throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength 
+                throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength
                                                                            + " source length = " + sourceLength);
             }
 
@@ -106,7 +144,7 @@
                     {
                         if (subLocation.Operator != subLocationOperator)
                         {
-                            throw new Exception("SubLocation operators does not match: " + subLocationOperator 
+                            throw new Exception("SubLocation operators does not match: " + subLocationOperator
                                                                                + " and " + subLocation.Operator);
                         }
                     }
@@ -123,7 +161,7 @@
                 {
                     if (leafLocation.LocationStart.ToString() != leafLocation.StartData)
                     {
-                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart 
+                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart
                                                                                    + " start data = " + leafLocation.StartData);
                     }
 
@@ -139,7 +177,7 @@
 
                     if (length < 1)
                     {
-                        throw new Exception("Length of subsequence cant be less than 1.");
+                        throw new Exception("Subsequence length cant be less than 1.");
                     }
                 }
 
@@ -163,11 +201,11 @@
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="T:List{Int32}[]"/>.
+        /// The <see cref="T:bool[]"/>.
         /// </returns>
-        public List<int>[] CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
+        private bool[] CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
         {
-            var positions = new List<IntPair>();
+            var positionsMap = new bool[features[0].Location.LocationEnd];
 
             for (int i = 1; i < features.Count; i++)
             {
@@ -216,7 +254,7 @@
 
                 db.Subsequence.Add(subsequence);
 
-                positions.Add(new IntPair(start - 1, end + 1));
+                AddPositionToMap(positionsMap, start, end);
 
                 for (int k = 1; k > leafLocations.Count; k++)
                 {
@@ -234,120 +272,109 @@
 
                     db.Position.Add(position);
 
-                    positions.Add(new IntPair(leafStart - 1, leafEnd + 1));
+                    AddPositionToMap(positionsMap, leafStart, leafEnd);
                 }
 
                 sequenceAttributeRepository.CreateSequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence);
             }
 
-            var parentSequenceEnd = features[0].Location.LocationEnd - 1;
-
-            return ProcessPositions(positions, parentSequenceEnd);
+            return positionsMap;
         }
 
         /// <summary>
-        /// Creates non coding subsequences.
+        /// Creates non coding subsequences..
         /// </summary>
-        /// <param name="starts">
-        /// The subsequences starts.
-        /// </param>
-        /// <param name="ends">
-        /// The subsequences ends.
+        /// <param name="positionsMap">
+        /// The positions map.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        public void CreateNonCodingSubsequences(List<int> starts, List<int> ends, long sequenceId)
+        private void CreateNonCodingSubsequences(bool[] positionsMap, long sequenceId)
         {
-            for (int i = 0; i < ends.Count; i++)
-            {
-                int start = ends[i];
-                int length = starts[i] - ends[i] + 1;
+            var positions = ExtractNonCodingSubsequences(positionsMap);
+            var starts = positions[0];
+            var lengths = positions[1];
 
-                if (length > 0)
+            for (int i = 0; i < lengths.Count; i++)
+            {
+                var subsequence = new Subsequence
                 {
-                    var subsequence = new Subsequence
-                    {
-                        Id = DbHelper.GetNewElementId(db),
-                        FeatureId = Aliases.Feature.NonCodingSequence,
-                        Partial = false,
-                        Complementary = false,
-                        SequenceId = sequenceId,
-                        Start = start,
-                        Length = length
-                    };
+                    Id = DbHelper.GetNewElementId(db),
+                    FeatureId = Aliases.Feature.NonCodingSequence,
+                    Partial = false,
+                    Complementary = false,
+                    SequenceId = sequenceId,
+                    Start = starts[i],
+                    Length = lengths[i]
+                };
 
-                    db.Subsequence.Add(subsequence);
-                }
+                db.Subsequence.Add(subsequence);
             }
         }
 
         /// <summary>
-        /// Adds all subsequences of given sequence to database.
+        /// The add position to map.
         /// </summary>
-        /// <param name="features">
-        /// The subsequences.
+        /// <param name="positionsMap">
+        /// The positions map.
         /// </param>
-        /// <param name="sequenceId">
-        /// The source sequence id.
+        /// <param name="start">
+        /// The start.
         /// </param>
-        public void CreateSubsequences(List<FeatureItem> features, long sequenceId)
+        /// <param name="end">
+        /// The end.
+        /// </param>
+        private void AddPositionToMap(bool[] positionsMap, int start, int end)
         {
-            try
+            for (int j = start; j <= end; j++)
             {
-                CheckImportability(features, sequenceId);
+                positionsMap[j] = true;
             }
-            catch (Exception e)
-            {
-                throw new Exception("Error occured during importability check.", e);
-            }
-            
-
-            var positions = CreateFeatureSubsequences(features, sequenceId);
-            CreateNonCodingSubsequences(positions[0], positions[1], sequenceId);
-
-            db.SaveChanges();
         }
 
         /// <summary>
-        /// The dispose.
+        /// The extract non coding subsequences.
         /// </summary>
-        public void Dispose()
-        {
-            db.Dispose();
-        }
-
-        /// <summary>
-        /// The process positions.
-        /// </summary>
-        /// <param name="positions">
-        /// The positions.
-        /// </param>
-        /// <param name="parentSequenceEnd">
-        /// The parent sequence length.
+        /// <param name="positionsMap">
+        /// The positions map.
         /// </param>
         /// <returns>
         /// The <see cref="T:List{Int32}[]"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if starts or ends are not sorted.
-        /// </exception>
-        private List<int>[] ProcessPositions(List<IntPair> positions, int parentSequenceEnd)
+        private List<int>[] ExtractNonCodingSubsequences(bool[] positionsMap)
         {
-            positions = positions.OrderBy(p => p.First).ToList();
+            var starts = new List<int>();
+            var lengths = new List<int>();
+            var currentStart = 0;
+            var currentLength = 0;
 
-            var starts = positions.Select(p => p.First).ToList();
-            var ends = positions.Select(p => p.Second).ToList();
-
-            starts.Add(parentSequenceEnd);
-            ends.Insert(0, 0);
-
-            if (!ArrayManipulator.IsSorted(starts) || !ArrayManipulator.IsSorted(ends))
+            for (int i = 0; i < positionsMap.Length; i++)
             {
-                throw new Exception("Wrong subsequences order.");
+                if (positionsMap[i])
+                {
+                    if (currentLength > 0)
+                    {
+                        starts.Add(currentStart);
+                        lengths.Add(currentLength);
+                    }
+
+                    currentStart = i + 1;
+                    currentLength = 0;
+                }
+                else
+                {
+                    currentLength++;
+                }
             }
 
-            return new[] { starts, ends };
-        }
+            if (currentLength > 0)
+            {
+                starts.Add(currentStart);
+                lengths.Add(currentLength);
+            }
+
+            return new[] { starts, lengths };
+        } 
     }
 }
