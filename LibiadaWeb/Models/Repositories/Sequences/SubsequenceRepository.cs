@@ -159,18 +159,6 @@
 
                 foreach (var leafLocation in leafLocations)
                 {
-                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData)
-                    {
-                        throw new Exception("Location and location data are not equal: location start = " + leafLocation.LocationStart
-                                                                                   + " start data = " + leafLocation.StartData);
-                    }
-
-                    if (leafLocation.LocationEnd.ToString() != leafLocation.EndData)
-                    {
-                        throw new Exception("Location and location data are not equal: location end = " + leafLocation.LocationEnd
-                                                                                   + " end data = " + leafLocation.EndData);
-                    }
-
                     int start = leafLocation.LocationStart - 1;
                     int end = leafLocation.LocationEnd - 1;
                     int length = end - start + 1;
@@ -178,14 +166,6 @@
                     if (length < 1)
                     {
                         throw new Exception("Subsequence length cant be less than 1.");
-                    }
-                }
-
-                foreach (var qualifier in feature.Qualifiers)
-                {
-                    if (qualifier.Key == "codon_start" && qualifier.Value[0] != "1")
-                    {
-                        throw new Exception("Codon start is not 1. value = " + qualifier.Value[0]);
                     }
                 }
             }
@@ -229,6 +209,7 @@
 
                 var location = feature.Location;
                 var leafLocations = feature.Location.GetLeafLocations();
+                bool partial = false;
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
@@ -237,6 +218,14 @@
                     complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
                 }
 
+                foreach (var leafLocation in leafLocations)
+                {
+                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
+                    {
+                        partial = true;
+                    }
+                }
+                
                 int start = leafLocations[0].LocationStart - 1;
                 int end = leafLocations[0].LocationEnd - 1;
                 int length = end - start + 1;
@@ -245,7 +234,7 @@
                 {
                     Id = DbHelper.GetNewElementId(db),
                     FeatureId = featureId,
-                    Partial = false,
+                    Partial = partial,
                     Complementary = complement,
                     SequenceId = sequenceId,
                     Start = start,
@@ -275,7 +264,7 @@
                     AddPositionToMap(positionsMap, leafStart, leafEnd);
                 }
 
-                sequenceAttributeRepository.CreateSequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence);
+                sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence);
             }
 
             return positionsMap;

@@ -58,7 +58,7 @@
         }  
 
         /// <summary>
-        /// Creates and adds to db sequence attribute and attribute.
+        /// Creates and adds to db subsequence attributes.
         /// </summary>
         /// <param name="qualifiers">
         /// The attributes to add.
@@ -75,7 +75,7 @@
         /// <exception cref="Exception">
         /// Thrown if qualifier has more than one value.
         /// </exception>
-        public void CreateSequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
+        public void CreateSubsequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
         {
             foreach (var qualifier in qualifiers)
             {
@@ -98,20 +98,15 @@
                                     subsequence.WebApiId = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty));
                                 }
                             }
-
-                            if (subsequence.WebApiId == null)
-                            {
-                                throw new Exception("Genbank web api id not found in db_xref.");
-                            }
                             
                             break;
                     }
 
-                    CreateSequenceAttribute(qualifier.Key, string.Join("    ", qualifier.Value), subsequence);
+                    CreateSequenceAttribute(qualifier.Key, string.Join("    ", qualifier.Value), subsequence.Id);
                 }
             }
 
-            CreateComplementJoinAttribute(complement, complementJoin, subsequence);
+            CreateComplementJoinPartialAttributes(complement, complementJoin, subsequence);
         }
 
         /// <summary>
@@ -123,17 +118,17 @@
         /// <param name="attributeValue">
         /// The attribute value.
         /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(string attributeName, string attributeValue, Subsequence subsequence)
+        public void CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
         {
             var attributeId = attributeRepository.GetAttributeByName(attributeName).Id;
 
             var subsequenceAttribute = new SequenceAttribute
             {
                 AttributeId = attributeId,
-                SequenceId = subsequence.Id,
+                SequenceId = sequenceId,
                 Value = attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ")
             };
 
@@ -146,12 +141,12 @@
         /// <param name="attributeName">
         /// The attribute name.
         /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(string attributeName, Subsequence subsequence)
+        public void CreateSequenceAttribute(string attributeName, long sequenceId)
         {
-            CreateSequenceAttribute(attributeName, string.Empty, subsequence);
+            CreateSequenceAttribute(attributeName, string.Empty, sequenceId);
         }
 
         /// <summary>
@@ -163,15 +158,15 @@
         /// <param name="attributeValue">
         /// The attribute value.
         /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(int attributeId, string attributeValue, Subsequence subsequence)
+        public void CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
         {
             var subsequenceAttribute = new SequenceAttribute
             {
                 AttributeId = attributeId,
-                SequenceId = subsequence.Id,
+                SequenceId = sequenceId,
                 Value = attributeValue
             };
 
@@ -184,16 +179,16 @@
         /// <param name="attributeId">
         /// The attribute id.
         /// </param>
-        /// <param name="subsequence">
-        /// The subsequence.
+        /// <param name="sequenceId">
+        /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(int attributeId, Subsequence subsequence)
+        public void CreateSequenceAttribute(int attributeId, long sequenceId)
         {
-            CreateSequenceAttribute(attributeId, string.Empty, subsequence);
+            CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
         }
 
         /// <summary>
-        /// The create complement join attribute.
+        /// Creates complement, join and partial attributes.
         /// </summary>
         /// <param name="complement">
         /// The complement.
@@ -204,16 +199,21 @@
         /// <param name="subsequence">
         /// The subsequence.
         /// </param>
-        private void CreateComplementJoinAttribute(bool complement, bool complementJoin, Subsequence subsequence)
+        private void CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
         {
             if (complement)
             {
-                CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence);
+                CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence.Id);
 
                 if (complementJoin)
                 {
-                    CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence);
+                    CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence.Id);
                 }
+            }
+
+            if (subsequence.Partial)
+            {
+                CreateSequenceAttribute(Aliases.Attribute.Partial, subsequence.Id);
             }
         }
     }

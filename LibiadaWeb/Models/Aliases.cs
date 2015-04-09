@@ -158,6 +158,11 @@
             /// </summary>
             public const int RibosomalSlippage = 23;
 
+            /// <summary>
+            /// The partial.
+            /// </summary>
+            public const int Partial = 24;
+
         }
 
         /// <summary>
@@ -449,6 +454,11 @@
             /// The regulatory feature.
             /// </summary>
             public const int Regulatory = 20;
+
+            /// <summary>
+            /// The sequence tagged site.
+            /// </summary>
+            public const int SequenceTaggedSite = 21;
         }
 
         /// <summary>

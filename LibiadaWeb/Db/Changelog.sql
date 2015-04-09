@@ -868,5 +868,10 @@ INSERT INTO attribute(name) VALUES ('rpt_family');
 INSERT INTO attribute(name) VALUES ('direction');
 INSERT INTO attribute(name) VALUES ('ribosomal_slippage');
 
+-- 09.04.2015
+-- Added one more attribute.
+
+INSERT INTO attribute(name) VALUES ('partial');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Sequence tagged site', 'Short, single-copy DNA sequence that characterizes a mapping landmark on the genome and can be detected by PCR; a region of the genome can be mapped by determining the order of a series of STSs.', 1, 'STS');
 
 COMMIT;
