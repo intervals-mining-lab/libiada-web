@@ -213,6 +213,7 @@
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
+                
                 if (location.SubLocations.Count > 0)
                 {
                     complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;

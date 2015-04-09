@@ -868,10 +868,17 @@ INSERT INTO attribute(name) VALUES ('rpt_family');
 INSERT INTO attribute(name) VALUES ('direction');
 INSERT INTO attribute(name) VALUES ('ribosomal_slippage');
 
--- 09.04.2015
+-- 08.04.2015
 -- Added one more attribute.
 
 INSERT INTO attribute(name) VALUES ('partial');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Sequence tagged site', 'Short, single-copy DNA sequence that characterizes a mapping landmark on the genome and can be detected by PCR; a region of the genome can be mapped by determining the order of a series of STSs.', 1, 'STS');
+
+-- 09.04.2015
+-- Deleted unique constraint on subsequence table.
+
+ALTER TABLE subsequence DROP CONSTRAINT uk_subsequence;
+
+ALTER TABLE subsequence DROP CONSTRAINT uk_subsequence;
 
 COMMIT;
