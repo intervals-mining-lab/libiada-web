@@ -35,6 +35,11 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
+        /// The attribute repository.
+        /// </summary>
+        private readonly AttributeRepository attributeRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
@@ -46,6 +51,7 @@
             featureRepository = new FeatureRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
+            attributeRepository = new AttributeRepository(db);
         }
 
         /// <summary>
@@ -120,7 +126,7 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == "pseudo");
+                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                     if (!pseudo)
                     {
                         continue;
@@ -194,7 +200,7 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == "pseudo");
+                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                     if (!pseudo)
                     {
                         continue;
@@ -246,7 +252,7 @@
 
                 AddPositionToMap(positionsMap, start, end);
 
-                for (int k = 1; k > leafLocations.Count; k++)
+                for (int k = 1; k < leafLocations.Count; k++)
                 {
                     var leafLocation = leafLocations[k];
                     var leafStart = leafLocation.LocationStart - 1;
@@ -272,7 +278,7 @@
         }
 
         /// <summary>
-        /// Creates non coding subsequences..
+        /// Creates non coding subsequences.
         /// </summary>
         /// <param name="positionsMap">
         /// The positions map.

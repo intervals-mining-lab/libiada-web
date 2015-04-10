@@ -2,7 +2,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
     /// <summary>
@@ -56,6 +55,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return features.Single(f => f.Type == name).Id;
         }
+
+        /// <summary>
+        /// Gets feature name by id.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string GetFeatureNameById(int id)
+        {
+            return features.Single(f => f.Id == id).Name;
+        } 
 
         /// <summary>
         /// Checks if feature exists.
