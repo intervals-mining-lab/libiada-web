@@ -794,7 +794,7 @@ BEGIN
 END;$BODY$
 LANGUAGE plpgsql VOLATILE NOT LEAKPROOF;
 
-COMMENT ON FUNCTION public.create_chatacteristic_type(IN character varying, IN text, IN integer, IN character varying, IN boolean, IN boolean, IN boolean, IN boolean, IN boolean) IS 'Function for adding characteristic_type and connected records to characteristic_type_link';
+COMMENT ON FUNCTION create_chatacteristic_type(IN character varying, IN text, IN integer, IN character varying, IN boolean, IN boolean, IN boolean, IN boolean, IN boolean) IS 'Function for adding characteristic_type and connected records to characteristic_type_link';
 
 -- 27.03.2015
 -- Added remoteness characteristics.
@@ -879,6 +879,9 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Sequence tagge
 
 ALTER TABLE subsequence DROP CONSTRAINT uk_subsequence;
 
-ALTER TABLE subsequence DROP CONSTRAINT uk_subsequence;
+-- 13.04.2015
+-- And added new feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Origin of replication', 'Starting site for duplication of nucleic acid to give two identical copies.', 1, 'rep_origin');
 
 COMMIT;
