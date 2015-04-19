@@ -68,14 +68,29 @@
         /// </returns>
         public string GetCharacteristicName(int characteristicTypeLinkId, int notationId)
         {
+            var notation = db.Notation.Single(n => n.Id == notationId).Name;
+
+            return string.Join("  ", GetCharacteristicName(characteristicTypeLinkId), notation);
+        }
+
+        /// <summary>
+        /// The get characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type and link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string GetCharacteristicName(int characteristicTypeLinkId)
+        {
             var characteristicType = GetCharacteristicType(characteristicTypeLinkId).Name;
 
             var databaseLink = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).Link;
             var link = databaseLink.Id != Aliases.Link.NotApplied ? databaseLink.Name : string.Empty;
 
-            var notation = db.Notation.Single(n => n.Id == notationId).Name;
 
-            return string.Join("  ", characteristicType, link, notation);
+            return string.Join("  ", characteristicType, link);
         }
 
         /// <summary>

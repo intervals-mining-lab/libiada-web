@@ -1,13 +1,13 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Характеристики произвольной цепочки";
+    ViewBag.Title = "Characteristics of custom sequence";
 }
 
-<h2>Характеристики произвольной цепочки</h2>
+<h2>Characteristics of custom sequence</h2>
 @if (ViewBag.Error == null)
 {
-    <table class="table table-bordered table-hover" id="resultTable">
+    <table class="table table-bordered table-hover">
         @for (int i = 0; i < ViewBag.characteristics.Count; i++)
         {
             <tr>

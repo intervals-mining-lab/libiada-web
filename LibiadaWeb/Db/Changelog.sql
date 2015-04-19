@@ -884,4 +884,13 @@ ALTER TABLE subsequence DROP CONSTRAINT uk_subsequence;
 
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Origin of replication', 'Starting site for duplication of nucleic acid to give two identical copies.', 1, 'rep_origin');
 
+-- 19.04.2015
+-- Added unique keys for characteristics.
+
+ALTER TABLE accordance_characteristic ADD CONSTRAINT uk_accordance_characteristic UNIQUE (first_chain_id, second_chain_id, first_element_id, second_element_id, characteristic_type_link_id);
+ALTER TABLE binary_characteristic ADD CONSTRAINT uk_binary_characteristic UNIQUE (chain_id, first_element_id, second_element_id, characteristic_type_link_id);
+ALTER TABLE characteristic ADD CONSTRAINT uk_characteristic UNIQUE (chain_id, characteristic_type_link_id);
+ALTER TABLE congeneric_characteristic ADD CONSTRAINT uk_congeneric_characteristic UNIQUE (chain_id, element_id, characteristic_type_link_id);
+
+
 COMMIT;

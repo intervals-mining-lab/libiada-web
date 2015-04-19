@@ -1,17 +1,17 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The quick calculation controller.
     /// </summary>
-    public class QuickCalculationController : AbstractResultController
+    public class CustomSequenceCalculationController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -19,11 +19,17 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="QuickCalculationController"/> class.
+        /// The characteristic type link repository.
         /// </summary>
-        public QuickCalculationController() : base("QuickCalculation", "Quick calculation")
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
+        /// </summary>
+        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -46,11 +52,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="characteristicIds">
-        /// The characteristic ids.
-        /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type link ids.
         /// </param>
         /// <param name="sequence">
         /// The sequence.
@@ -59,25 +62,25 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int[] characteristicIds, int[] linkIds, string sequence)
+        public ActionResult Index(int[] characteristicTypeLinkIds, string sequence)
         {
             return Action(() =>
             {
                 var characteristics = new List<double>();
                 var characteristicNames = new List<string>();
 
-                for (int i = 0; i < characteristicIds.Length; i++)
+                for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                 {
-                    var characteristicId = characteristicIds[i];
-                    var linkId = linkIds[i];
-
                     var chain = new Chain(sequence);
 
-                    characteristicNames.Add(db.CharacteristicType.Single(charact => charact.Id == characteristicId).Name);
-                    var className = db.CharacteristicType.Single(charact => charact.Id == characteristicId).ClassName;
+                    var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]);
+                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[i]).ClassName;
+
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[i]));
+                    
                     var calculator = CalculatorsFactory.CreateFullCalculator(className);
 
-                    characteristics.Add(calculator.Calculate(chain, (Link)linkId));
+                    characteristics.Add(calculator.Calculate(chain, link));
                 }
 
                 var characteristicsList = new List<SelectListItem>();
@@ -89,7 +92,6 @@
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
-                    { "characteristicIds", new List<int>(characteristicIds) },
                     { "characteristicNames", characteristicNames },
                     { "characteristicsList", characteristicsList }
                 };

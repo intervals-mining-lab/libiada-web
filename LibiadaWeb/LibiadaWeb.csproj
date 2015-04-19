@@ -259,7 +259,7 @@
     <Compile Include="Controllers\Calculators\SubsequencesDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationController.cs" />
-    <Compile Include="Controllers\Calculators\QuickCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\CustomSequenceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
@@ -601,8 +601,8 @@
     <Content Include="Views\Calculators\SubsequencesCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\LocalCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\LocalCalculation\Result.cshtml" />
-    <Content Include="Views\Calculators\QuickCalculation\Index.cshtml" />
-    <Content Include="Views\Calculators\QuickCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceCalculation\Result.cshtml" />
     <Content Include="Views\Sequences\SequenceTransformer\Index.cshtml" />
     <Content Include="Views\Calculators\SubsequencesCalculation\Result.cshtml" />
     <Content Include="Views\Sequences\SequenceCheck\Index.cshtml" />
