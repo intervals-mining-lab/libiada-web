@@ -163,6 +163,31 @@
             /// </summary>
             public const int Partial = 24;
 
+            /// <summary>
+            /// The codon recognized.
+            /// </summary>
+            public const int CodonRecognized = 25;
+
+            /// <summary>
+            /// The bound moiety.
+            /// </summary>
+            public const int BoundMoiety = 26;
+
+            /// <summary>
+            /// The repeat unit range.
+            /// </summary>
+            public const int RepeatUnitRange = 27;
+
+            /// <summary>
+            /// The repeat unit sequence.
+            /// </summary>
+            public const int RepeatUnitSequence = 28;
+
+            /// <summary>
+            /// The function.
+            /// </summary>
+            public const int Function = 29;
+
         }
 
         /// <summary>

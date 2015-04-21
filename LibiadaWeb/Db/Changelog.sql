@@ -892,5 +892,13 @@ ALTER TABLE binary_characteristic ADD CONSTRAINT uk_binary_characteristic UNIQUE
 ALTER TABLE characteristic ADD CONSTRAINT uk_characteristic UNIQUE (chain_id, characteristic_type_link_id);
 ALTER TABLE congeneric_characteristic ADD CONSTRAINT uk_congeneric_characteristic UNIQUE (chain_id, element_id, characteristic_type_link_id);
 
+-- 21.04.2015
+-- Added new attributes.
+
+INSERT INTO attribute(name) VALUES ('codon_recognized');
+INSERT INTO attribute(name) VALUES ('bound_moiety');
+INSERT INTO attribute(name) VALUES ('rpt_unit_range');
+INSERT INTO attribute(name) VALUES ('rpt_unit_seq');
+INSERT INTO attribute(name) VALUES ('function');
 
 COMMIT;
