@@ -901,4 +901,9 @@ INSERT INTO attribute(name) VALUES ('rpt_unit_range');
 INSERT INTO attribute(name) VALUES ('rpt_unit_seq');
 INSERT INTO attribute(name) VALUES ('function');
 
+-- 22.04.2015
+-- Added new feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Signal peptide coding sequence', 'Coding sequence for an N-terminal domain of a secreted protein; this domain is involved in attaching nascent polypeptide to the membrane leader sequence.', 1, 'sig_peptide');
+
 COMMIT;

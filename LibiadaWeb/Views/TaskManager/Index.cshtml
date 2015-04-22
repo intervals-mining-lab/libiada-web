@@ -3,6 +3,15 @@
     ViewBag.Title = "Libiada task manager";
 }
 
+<script>
+
+    var autoRefresh = function() {
+        window.location.reload();
+    }
+
+    setInterval(autoRefresh, 5 * 60 * 1000);
+</script>
+
 <h2>Task manager</h2>
 
 @if (ViewBag.ErrorMessage != null)

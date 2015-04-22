@@ -13,7 +13,7 @@
         public static class Accidental
         {
             /// <summary>
-            /// Double flat accidental .
+            /// Double flat accidental.
             /// </summary>
             public const int DoubleFlat = 1;
 
@@ -401,24 +401,24 @@
             public const int CodingSequence = 4;
 
             /// <summary>
-            /// The feature Ribosomal RNA.
+            /// The Ribosomal RNA feature.
             /// </summary>
-            public const int RRNA = 5;
+            public const int RibosomalRNA = 5;
 
             /// <summary>
-            /// The feature Transfer RNA.
+            /// The Transfer RNA feature.
             /// </summary>
-            public const int TRNA = 6;
+            public const int TransferRNA = 6;
 
             /// <summary>
             /// The feature Non-coding RNA.
             /// </summary>
-            public const int NCRNA = 7;
+            public const int NoncodingRNA = 7;
 
             /// <summary>
             /// The feature Transfer-messenger RNA.
             /// </summary>
-            public const int TMRNA = 8;
+            public const int TransferMessengerRNA = 8;
 
             /// <summary>
             /// The feature pseudo gen.
@@ -458,7 +458,7 @@
             /// <summary>
             /// The feature Miscellaneous other RNA.
             /// </summary>
-            public const int MiscRNA = 16;
+            public const int MiscellaneousOtherRNA = 16;
 
             /// <summary>
             /// The complete numeric sequence feature.
@@ -473,7 +473,7 @@
             /// <summary>
             /// The Messenger RNA feature.
             /// </summary>
-            public const int MRNA = 19;
+            public const int MessengerRNA = 19;
 
             /// <summary>
             /// The regulatory feature.
@@ -484,6 +484,16 @@
             /// The sequence tagged site.
             /// </summary>
             public const int SequenceTaggedSite = 21;
+
+            /// <summary>
+            /// The origin of replication.
+            /// </summary>
+            public const int OriginOfReplication = 22;
+
+            /// <summary>
+            /// The signal peptide coding sequence.
+            /// </summary>
+            public const int SignalPeptideCodingSequence = 23;
         }
 
         /// <summary>
