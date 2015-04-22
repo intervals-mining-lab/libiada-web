@@ -54,8 +54,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
-            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.AccordanceApplicable, 2, 2, true);
+            var viewDataHelper = new ViewDataHelper(db);
+            ViewBag.data = viewDataHelper.FillViewData(c => c.AccordanceApplicable, 2, 2, true, "Calculate");
             return View();
         }
 

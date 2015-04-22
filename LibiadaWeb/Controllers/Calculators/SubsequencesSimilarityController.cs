@@ -59,8 +59,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetSubsequencesCalculationData(2, 2, true);
+            var viewDataHelper = new ViewDataHelper(db);
+            var data = viewDataHelper.GetSubsequencesViewData(2, 2, true, "Compare");
             ViewBag.data = data;
             return View();
         }

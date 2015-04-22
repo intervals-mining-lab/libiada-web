@@ -8,6 +8,7 @@
     using LibiadaCore.Core;
     using LibiadaCore.Misc.Iterators;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
@@ -56,22 +57,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 2 },
-                    { "maximumSelectedMatters", 2 },
-                    { "mattersCheckboxes", true },
-                    { "natures", new SelectList(db.Nature, "id", "name") }, 
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "languages", new SelectList(db.Language, "id", "name") }, 
-                    { "translators", translators }
-                };
-
-            ViewBag.mattersList = matterRepository.GetSelectListItems(null);
+            var viewDataHelper = new ViewDataHelper(db);
+            ViewBag.data = viewDataHelper.FillViewData(2, 2, true, "Compare");
 
             return View();
         }

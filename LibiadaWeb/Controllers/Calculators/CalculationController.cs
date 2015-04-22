@@ -53,9 +53,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
+            var viewDataHelper = new ViewDataHelper(db);
             ViewBag.MattersCheckboxes = true;
-            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.FullSequenceApplicable, 1, int.MaxValue, true);
+            ViewBag.data = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 1, int.MaxValue, true, "Calculate");
             return View();
         }
 

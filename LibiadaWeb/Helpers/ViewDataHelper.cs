@@ -53,6 +53,39 @@
         /// <summary>
         /// The fill calculation data.
         /// </summary>
+        /// <param name="minimumSelectedMatters">
+        /// The minimum Selected Matters.
+        /// </param>
+        /// <param name="maximumSelectedMatters">
+        /// The maximum Selected Matters.
+        /// </param>
+        /// <param name="mattersCheckboxes">
+        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
+        /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
+        {
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
+
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true, submitName);
+
+            data.Add("natures", new SelectList(db.Nature, "id", "name"));
+            data.Add("notations", notationRepository.GetSelectListWithNature());
+            data.Add("languages", new SelectList(db.Language, "id", "name"));
+            data.Add("translators", translators);
+
+            return data;
+        }
+
+        /// <summary>
+        /// The fill calculation data.
+        /// </summary>
         /// <param name="filter">
         /// The filter.
         /// </param>
@@ -65,21 +98,16 @@
         /// <param name="mattersCheckboxes">
         /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
         /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillCalculationData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
+        public Dictionary<string, object> FillViewData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
         {
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
-
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true);
-
+            var data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, submitName);
             data.Add("characteristicTypes", GetCharacteristicTypes(filter));
-            data.Add("natures", new SelectList(db.Nature, "id", "name"));
-            data.Add("notations", notationRepository.GetSelectListWithNature());
-            data.Add("languages", new SelectList(db.Language, "id", "name"));
-            data.Add("translators", translators);
 
             return data;
         }
@@ -96,10 +124,13 @@
         /// <param name="mattersCheckboxes">
         /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
         /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetSubsequencesCalculationData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes)
+        public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
         {
             var featureIds = db.Feature.Where(p => p.NatureId == Aliases.Nature.Genetic
                                          && p.Id != Aliases.Feature.FullGenome
@@ -109,7 +140,7 @@
             var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id));
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id), submitName);
 
             data.Add("characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable));
             data.Add("notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name"));
@@ -155,6 +186,7 @@
             return characteristicTypes;
         }
 
+
         /// <summary>
         /// The fill matters data.
         /// </summary>
@@ -170,17 +202,21 @@
         /// <param name="filter">
         /// Filter for matters.
         /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, Func<Matter, bool> filter)
+        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, Func<Matter, bool> filter, string submitName)
         {
             return new Dictionary<string, object>
                 {
                     { "minimumSelectedMatters", minimumSelectedMatters },
                     { "maximumSelectedMatters", maximumSelectedMatters },
                     { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "mattersCheckboxes", mattersCheckboxes }
+                    { "mattersCheckboxes", mattersCheckboxes },
+                    { "submitName", submitName }
                 };
         }
     }

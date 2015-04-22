@@ -6,6 +6,8 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Misc.DataTransformers;
+
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -61,15 +63,14 @@
         {
             var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId);
 
-            var matters = db.Matter.Where(m => matterIds.Contains(m.Id));
+            var viewDataHelper = new ViewDataHelper(db);
 
-            ViewBag.data = new Dictionary<string, object>
-                {
-                    { "minimumSelectedMatters", 1 },
-                    { "maximumSelectedMatters", int.MaxValue },
-                    { "natureId", Aliases.Nature.Genetic }, 
-                    { "matters", matterRepository.GetMatterSelectList(matters) }
-                };
+            var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Transform");
+            
+            data.Add("natureId", Aliases.Nature.Genetic);
+
+            ViewBag.data = data;
+
             return View();
         }
 

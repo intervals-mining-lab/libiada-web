@@ -40,11 +40,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
+            var viewDataHelper = new ViewDataHelper(db);
 
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", calculatorsHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable) }
+                    { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable) }
                 };
             return View();
         }

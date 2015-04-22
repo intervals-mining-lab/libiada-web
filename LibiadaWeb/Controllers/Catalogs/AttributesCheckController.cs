@@ -39,9 +39,9 @@
             var subsequencesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !subsequencesSequenceIds.Contains(c.Id) && c.FeatureId == Aliases.Feature.FullGenome).Select(c => c.MatterId).ToList();
 
-            var calculatorsHelper = new ViewDataHelper(db);
+            var viewDataHelper = new ViewDataHelper(db);
 
-            var data = calculatorsHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id));
+            var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Check");
 
             data.Add("natureId", Aliases.Nature.Genetic);
 

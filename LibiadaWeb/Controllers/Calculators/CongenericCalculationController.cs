@@ -54,8 +54,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
-            ViewBag.data = calculatorsHelper.FillCalculationData(c => c.CongenericSequenceApplicable, 1, int.MaxValue, true);
+            var viewDataHelper = new ViewDataHelper(db);
+            ViewBag.data = viewDataHelper.FillViewData(c => c.CongenericSequenceApplicable, 1, int.MaxValue, true, "Calculate");
             return View();
         }
 

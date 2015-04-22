@@ -117,7 +117,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public IEnumerable<object> GetMatterSelectList()
         {
-            return GetMatterSelectList(new List<long>());
+            return GetMatterSelectList(m => true);
         }
 
         /// <summary>

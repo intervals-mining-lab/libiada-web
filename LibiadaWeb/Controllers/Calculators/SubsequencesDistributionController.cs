@@ -64,8 +64,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var calculatorsHelper = new ViewDataHelper(db);
-            var data = calculatorsHelper.GetSubsequencesCalculationData(1, int.MaxValue, true);
+            var viewDataHelper = new ViewDataHelper(db);
+            var data = viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate");
             ViewBag.data = data;
             return View();
         }

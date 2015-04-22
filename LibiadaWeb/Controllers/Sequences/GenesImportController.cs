@@ -47,9 +47,9 @@
             var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !genesSequenceIds.Contains(c.Id) && c.FeatureId == Aliases.Feature.FullGenome).Select(c => c.MatterId).ToList();
 
-            var calculatorsHelper = new ViewDataHelper(db);
+            var viewDataHelper = new ViewDataHelper(db);
 
-            var data = calculatorsHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id));
+            var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Import");
 
             data.Add("natureId", Aliases.Nature.Genetic);
 
