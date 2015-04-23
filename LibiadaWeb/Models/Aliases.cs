@@ -466,9 +466,9 @@
             public const int CompleteNumericSequence = 17;
 
             /// <summary>
-            /// The misc feature.
+            /// The miscellaneous feature.
             /// </summary>
-            public const int MiscFeature = 18;
+            public const int MiscellaneousFeature = 18;
 
             /// <summary>
             /// The Messenger RNA feature.
@@ -494,6 +494,11 @@
             /// The signal peptide coding sequence.
             /// </summary>
             public const int SignalPeptideCodingSequence = 23;
+
+            /// <summary>
+            /// The miscellaneous binding.
+            /// </summary>
+            public const int MiscellaneousBinding = 24;
         }
 
         /// <summary>

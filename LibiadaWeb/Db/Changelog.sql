@@ -906,4 +906,9 @@ INSERT INTO attribute(name) VALUES ('function');
 
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Signal peptide coding sequence', 'Coding sequence for an N-terminal domain of a secreted protein; this domain is involved in attaching nascent polypeptide to the membrane leader sequence.', 1, 'sig_peptide');
 
+-- 23.04.2015
+-- Added another feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous binding', 'Site in nucleic acid which covalently or non-covalently binds another moiety that cannot be described by any other binding key (primer_bind or protein_bind).', 1, 'misc_binding');
+
 COMMIT;
