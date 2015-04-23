@@ -17,10 +17,22 @@ function MapModelFromJson($scope, data) {
     }
 }
 
-function SelectLink (characteristic) {
+function SelectLink(characteristic) {
+    "use strict";
+
     characteristic.link = characteristic.characteristicType.CharacteristicLinks[0];
 }
 
-function IsLinkable (characteristic) {
+function IsLinkable(characteristic) {
+    "use strict";
+
     return characteristic.characteristicType.CharacteristicLinks.length > 1;
+}
+
+function SetCheckBoxesState(checkboxes, state) {
+    "use strict";
+
+    angular.forEach(checkboxes, function (item) {
+        item.Selected = state;
+    });
 }

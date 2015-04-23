@@ -26,6 +26,8 @@
 
         $scope.selectLink = SelectLink;
 
+        $scope.setCheckBoxesState = SetCheckBoxesState;
+
         $scope.firstCharacteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],

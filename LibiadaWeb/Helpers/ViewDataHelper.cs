@@ -132,10 +132,7 @@
         /// </returns>
         public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
         {
-            var featureIds = db.Feature.Where(p => p.NatureId == Aliases.Nature.Genetic
-                                         && p.Id != Aliases.Feature.FullGenome
-                                         && p.Id != Aliases.Feature.ChloroplastGenome
-                                         && p.Id != Aliases.Feature.MitochondrionGenome).Select(p => p.Id);
+            var featureIds = db.Feature.Where(f => f.NatureId == Aliases.Nature.Genetic && !f.Complete).Select(f => f.Id);
 
             var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
