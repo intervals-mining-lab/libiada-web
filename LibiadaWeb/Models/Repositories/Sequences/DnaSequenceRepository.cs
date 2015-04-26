@@ -50,7 +50,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The web api id.
         /// </param>
         /// <exception cref="Exception">
-        /// Thrown if at least one element of new sequence is missing in db.
+        /// Thrown if at least one element of new sequence is missing in db
+        /// or if sequence is empty or invalid.
         /// </exception>
         public void Create(CommonSequence sequence, bool partial, bool complementary, string stringSequence, int? webApiId)
         {
@@ -58,6 +59,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             string[] splittedFasta = stringSequence.Split('\n', '\r');
             var sequenceStringBuilder = new StringBuilder();
             string fastaHeader = splittedFasta[0];
+
+            if (fastaHeader.Contains("Resource temporarily unavailable") || splittedFasta.Length < 2)
+            {
+                throw new Exception("Sequence is empty or invalid (probably ncbi is not responding).");
+            }
+
             for (int j = 1; j < splittedFasta.Length; j++)
             {
                 sequenceStringBuilder.Append(splittedFasta[j]);
