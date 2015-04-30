@@ -911,4 +911,10 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Signal peptide
 
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous binding', 'Site in nucleic acid which covalently or non-covalently binds another moiety that cannot be described by any other binding key (primer_bind or protein_bind).', 1, 'misc_binding');
 
+-- 30.04.2015
+-- Added new feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Translational exception', 'single codon the translation of which does not conform to genetic code defined by organism or translation table.', 1, 'transl_except');
+
+
 COMMIT;

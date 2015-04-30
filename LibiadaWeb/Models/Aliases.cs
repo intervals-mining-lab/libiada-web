@@ -188,6 +188,20 @@
             /// </summary>
             public const int Function = 29;
 
+            /// <summary>
+            /// The translational exception.
+            /// </summary>
+            public const int TranslationalException = 30;
+
+            /// <summary>
+            /// The pseudogene.
+            /// </summary>
+            public const int Pseudogene = 31;
+
+            /// <summary>
+            /// The mobile element type.
+            /// </summary>
+            public const int MobileElementType = 32;
         }
 
         /// <summary>
