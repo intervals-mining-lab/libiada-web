@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
 
     using Bio.IO.GenBank;
@@ -107,7 +108,7 @@
         /// if source length not equals to parent sequence length or 
         /// if feature length is less than 1.
         /// </exception>
-        private void CheckImportability(List<FeatureItem> features, long sequenceId)
+        public void CheckImportability(List<FeatureItem> features, long sequenceId)
         {
             var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 
@@ -178,6 +179,126 @@
         }
 
         /// <summary>
+        /// The check annotations.
+        /// </summary>
+        /// <param name="features">
+        /// The features.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if error occurs during importability check.
+        /// </exception>
+        public Dictionary<string, object> CheckAnnotations(List<FeatureItem> features, long sequenceId)
+        {
+            try
+            {
+                CheckImportability(features, sequenceId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error occured during importability check.", e);
+            }
+
+            var localSubsequences = db.Subsequence.Include(s => s.Feature)
+                    .Include(s => s.Position)
+                    .Include(s => s.SequenceAttribute)
+                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
+
+            var missingRemoteFeatures = new List<FeatureItem>();
+
+            for (int i = 1; i < features.Count; i++)
+            {
+                var feature = features[i];
+                int featureId;
+
+                if (feature.Key == "gene")
+                {
+                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                    if (!pseudo)
+                    {
+                        continue;
+                    }
+
+                    featureId = Aliases.Feature.PseudoGen;
+                }
+                else
+                {
+                    featureId = featureRepository.GetFeatureIdByName(feature.Key);
+                }
+
+                var location = feature.Location;
+                var leafLocations = feature.Location.GetLeafLocations();
+                bool partial = false;
+                bool complement = location.Operator == LocationOperator.Complement;
+                bool join = leafLocations.Count > 1;
+                bool complementJoin = join && complement;
+
+                if (location.SubLocations.Count > 0)
+                {
+                    complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
+                }
+
+                foreach (var leafLocation in leafLocations)
+                {
+                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData
+                       || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
+                    {
+                        partial = true;
+                    }
+                }
+
+                int start = leafLocations[0].LocationStart - 1;
+                int end = leafLocations[0].LocationEnd - 1;
+                int length = end - start + 1;
+
+                var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start
+                                                                 && s.Length == length
+                                                                 && s.FeatureId == featureId
+                                                                 && s.Partial == partial
+                                                                 && s.Complementary == complement).ToList();
+
+                if (equalLocalSubsequences.Any())
+                {
+                    var localSubsequence = equalLocalSubsequences.First();
+                    var localPositions = localSubsequence.Position.ToList();
+                    var localAttributes = localSubsequence.SequenceAttribute.ToList();
+
+                    // TODO: attributes check
+
+                    for (int k = 1; k < leafLocations.Count; k++)
+                    {
+                        var leafLocation = leafLocations[k];
+                        var leafStart = leafLocation.LocationStart - 1;
+                        var leafEnd = leafLocation.LocationEnd - 1;
+                        var leafLength = leafEnd - leafStart + 1;
+
+                        if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
+                        {
+                            missingRemoteFeatures.Add(feature);
+                        }
+                    }
+
+                    localSubsequences.Remove(localSubsequence);
+                }
+                else
+                {
+                    missingRemoteFeatures.Add(feature);
+                }
+            }
+
+            return new Dictionary<string, object>
+                       {
+                           { "localSubsequences", localSubsequences },
+                           { "missingRemoteFeatures", missingRemoteFeatures }
+                       };
+        }
+
+        /// <summary>
         /// Create subsequences from features.
         /// </summary>
         /// <param name="features">
@@ -219,7 +340,7 @@
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
-                
+
                 if (location.SubLocations.Count > 0)
                 {
                     complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
@@ -232,7 +353,7 @@
                         partial = true;
                     }
                 }
-                
+
                 int start = leafLocations[0].LocationStart - 1;
                 int end = leafLocations[0].LocationEnd - 1;
                 int length = end - start + 1;
@@ -371,6 +492,6 @@
             }
 
             return new[] { starts, lengths };
-        } 
+        }
     }
 }

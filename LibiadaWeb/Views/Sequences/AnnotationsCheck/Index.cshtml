@@ -1,7 +1,7 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Attributes check";
+    ViewBag.Title = "Annotations check";
 }
 
 <script>
@@ -11,9 +11,9 @@
     GenesImportController(data);
 </script>
 
-<h2>Attributes check</h2>
+<h2>Annotations check</h2>
 
-@using (Html.BeginForm("Index", "AttributesCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "AnnotationsCheck", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div ng-app="GenesImport">

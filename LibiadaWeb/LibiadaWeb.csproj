@@ -264,6 +264,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Catalogs\AttributesCheckController.cs" />
+    <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
@@ -642,6 +643,8 @@
     <Content Include="Views\Partial\_MattersTable.cshtml" />
     <Content Include="Views\Catalogs\AttributesCheck\Index.cshtml" />
     <Content Include="Views\Catalogs\AttributesCheck\Result.cshtml" />
+    <Content Include="Views\Sequences\AnnotationsCheck\Index.cshtml" />
+    <Content Include="Views\Sequences\AnnotationsCheck\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

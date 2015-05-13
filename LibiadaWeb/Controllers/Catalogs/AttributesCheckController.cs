@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaWeb.Helpers;
@@ -23,7 +22,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
-        public AttributesCheckController() : base("AttributesCheck", "Attributes check")
+        public AttributesCheckController()
+            : base("AttributesCheck", "Attributes check")
         {
             db = new LibiadaWebEntities();
         }
@@ -75,8 +75,8 @@
 
                     foreach (var matterId in matterIds)
                     {
-                        long sequenceId = this.db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                        DnaSequence parentSequence = this.db.DnaSequence.Single(c => c.Id == sequenceId);
+                        long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
+                        DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
 
                         Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
                         var features = NcbiHelper.GetFeatures(stream);
