@@ -1,11 +1,15 @@
+using LibiadaMusic.ScoreModel;
+
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
+    using LibiadaPitch = LibiadaMusic.ScoreModel.Pitch;
 
     /// <summary>
     /// The element repository.
@@ -78,6 +82,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return alphabet.Cardinality == existingElementsCount;
         }
 
+        public bool PitchEqual(Pitch pitch, LibiadaPitch libiadaPitch)
+        {
+            return pitch.Octave == libiadaPitch.Octave && pitch.Accidental.Name == libiadaPitch.Alter.ToString();
+        }
+    /*
+
+        public bool NotesInDb(Alphabet alphabet)
+        {
+            int existingNotesCount = 0;
+            foreach (var note in alphabet)
+            {
+                var temp = (ValueNote)note;
+                if(db.Note.Include(n => n.Pitch).Any(n => n.Pitch.All(p => temp.Pitch.Contains(p )))
+            }
+        }
+        */
+
         /// <summary>
         /// The to db elements.
         /// </summary>
@@ -123,6 +144,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                          on stringElement equals element.Value 
                     select element.Id).ToArray();
         }
+
+        /*
+        public long[] ToDbNotes(Alphabet alphabet, int notationId)
+        {
+
+        }
+        */
 
         /// <summary>
         /// The to libiada alphabet.

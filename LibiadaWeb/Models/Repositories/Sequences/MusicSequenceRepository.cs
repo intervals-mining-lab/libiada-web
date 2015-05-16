@@ -1,3 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using Antlr.Runtime.Tree;
+using LibiadaCore.Core;
+using LibiadaMusic.MusicXml;
+using LibiadaMusic.ScoreModel;
+
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Xml;
@@ -28,14 +37,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="stringSequence">
         /// The string sequence.
         /// </param>
-        public void Create(CommonSequence commonSequence, string stringSequence)
+        public void Create(CommonSequence sequence, string stringSequence)
         {
             var doc = new XmlDocument();
             doc.LoadXml(stringSequence);
 
-            // MusicXmlParser parser = new MusicXmlParser();
-            // parser.Execute(doc, "test");
-            // ScoreTrack tempTrack = parser.ScoreModel;
+            MusicXmlParser parser = new MusicXmlParser();
+            parser.Execute(doc, "test");
+            ScoreTrack tempTrack = parser.ScoreModel;
+
+            if (tempTrack.CongenericScoreTracks.Count != 1)
+            {
+                throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
+            }
+            
+            var chain = ConvertCongenericScroreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
+
+            MatterRepository.CreateMatterFromSequence(sequence);
+
+            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, true);
+            Create(sequence, alphabet, chain.Building);
+        }
+
+        public BaseChain ConvertCongenericScroreTrackToBaseChain(CongenericScoreTrack scoreTrack)
+        {
+            var notes = scoreTrack.NoteOrder();
+            return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
         }
 
         /// <summary>
