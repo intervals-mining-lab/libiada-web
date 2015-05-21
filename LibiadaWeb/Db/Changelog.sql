@@ -918,4 +918,28 @@ INSERT INTO attribute(name) VALUES ('transl_except');
 INSERT INTO attribute(name) VALUES ('pseudogene');
 INSERT INTO attribute(name) VALUES ('mobile_element_type');
 
+-- 21.05.2015
+-- Changing music tables structure.
+
+DROP TRIGGER tgiu_pitch_modified ON pitch;
+ALTER TABLE pitch DROP CONSTRAINT fk_pitch_note;
+ALTER TABLE pitch DROP COLUMN note_id;
+ALTER TABLE pitch DROP COLUMN created;
+ALTER TABLE pitch DROP COLUMN modified;
+
+
+CREATE TABLE note_pitch
+(
+   note_id bigint NOT NULL, 
+   pitch_id integer NOT NULL, 
+   CONSTRAINT fk_note_pitch_note FOREIGN KEY (note_id) REFERENCES note (id) ON UPDATE CASCADE ON DELETE CASCADE, 
+   CONSTRAINT fk_note_pitch_pitch FOREIGN KEY (pitch_id) REFERENCES pitch (id) ON UPDATE RESTRICT ON DELETE RESTRICT
+);
+
+COMMENT ON TABLE note_pitch IS 'M:M note with pitch.';
+
+ALTER TABLE note_pitch ADD CONSTRAINT pk_note_pitch PRIMARY KEY (note_id, pitch_id);
+ALTER TABLE pitch ADD CONSTRAINT uk_pitch UNIQUE (octave, instrument_id, accidental_id, note_symbol_id);
+
+
 COMMIT;

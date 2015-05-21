@@ -1,5 +1,3 @@
-using LibiadaMusic.ScoreModel;
-
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
