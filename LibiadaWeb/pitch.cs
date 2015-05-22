@@ -14,19 +14,21 @@ namespace LibiadaWeb
     
     public partial class Pitch
     {
+        public Pitch()
+        {
+            this.Note = new HashSet<Note>();
+        }
+    
         public int Id { get; set; }
         public int Octave { get; set; }
         public int Midinumber { get; set; }
         public int InstrumentId { get; set; }
-        public long NoteId { get; set; }
         public int AccidentalId { get; set; }
         public int NoteSymbolId { get; set; }
-        public System.DateTimeOffset Created { get; set; }
-        public System.DateTimeOffset Modified { get; set; }
     
-        public virtual Note Note { get; set; }
         public virtual Instrument Instrument { get; set; }
         public virtual Accidental Accidental { get; set; }
         public virtual NoteSymbol NoteSymbol { get; set; }
+        public virtual ICollection<Note> Note { get; set; }
     }
 }

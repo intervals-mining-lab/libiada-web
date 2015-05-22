@@ -36,7 +36,7 @@ namespace LibiadaWeb
         public System.DateTimeOffset Modified { get; set; }
     
         public virtual Notation Notation { get; set; }
-        public virtual ICollection<Pitch> Pitch { get; set; }
         public virtual Tie Tie { get; set; }
+        public virtual ICollection<Pitch> Pitch { get; set; }
     }
 }

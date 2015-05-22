@@ -405,6 +405,15 @@
           <Property Name="note_symbol_id" Type="int4" Nullable="false" />
         </EntityType>
 
+        <EntityType Name="note_pitch">
+          <Key>
+            <PropertyRef Name="note_id" />
+            <PropertyRef Name="pitch_id" />
+          </Key>
+          <Property Name="note_id" Type="int8" Nullable="false" />
+          <Property Name="pitch_id" Type="int4" Nullable="false" />
+        </EntityType>
+
         <EntityType Name="accidental">
           <Key>
             <PropertyRef Name="id" />
@@ -1417,6 +1426,34 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_note_pitch_note">
+          <End Role="note" Type="Self.note" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="note_pitch" Type="Self.note_pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="note">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note_pitch">
+              <PropertyRef Name="note_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        
+        <Association Name="fk_note_pitch_pitch">
+          <End Role="pitch" Type="Self.pitch" Multiplicity="1" />
+          <End Role="note_pitch" Type="Self.note_pitch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pitch">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="note_pitch">
+              <PropertyRef Name="pitch_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+
         <Association Name="fk_fmotiv_fmotiv_type">
           <End Role="fmotiv_type" Type="Self.fmotiv_type" Multiplicity="1" />
           <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
@@ -1499,6 +1536,7 @@
           <EntitySet Name="data_chain" EntityType="Self.data_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note" EntityType="Self.note" store:Type="Tables" Schema="public"/>
           <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
           <EntitySet Name="accidental" EntityType="Self.accidental" store:Type="Tables" Schema="public"/>
           <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_symbol" EntityType="Self.note_symbol" store:Type="Tables" Schema="public"/>
@@ -1759,6 +1797,16 @@
           <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
             <End Role="accidental" EntitySet="accidental" />
             <End Role="pitch" EntitySet="pitch" />
+          </AssociationSet>
+
+          <AssociationSet Name="fk_note_pitch_note" Association="Self.fk_note_pitch_note">
+            <End Role="note" EntitySet="note" />
+            <End Role="note_pitch" EntitySet="note_pitch" />
+          </AssociationSet>
+          
+          <AssociationSet Name="fk_note_pitch_pitch" Association="Self.fk_note_pitch_pitch">
+            <End Role="pitch" EntitySet="pitch" />
+            <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
 
           <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
@@ -2320,6 +2368,7 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_note_notation" FromRole="Note" ToRole="Notation" />
           <NavigationProperty Name="Tie" Relationship="Self.fk_note_tie" FromRole="Note" ToRole="Tie" />
+          <NavigationProperty Name="Pitch" Relationship="Self.note_pitch" FromRole="Note" ToRole="Pitch" />
         </EntityType>
 
         <EntityType Name="Pitch">
@@ -2335,6 +2384,7 @@
           <NavigationProperty Name="Instrument" Relationship="Self.fk_pitch_instrument" FromRole="Pitch" ToRole="Instrument" />
           <NavigationProperty Name="Accidental" Relationship="Self.fk_pitch_accidental" FromRole="Pitch" ToRole="Accidental" />
           <NavigationProperty Name="NoteSymbol" Relationship="Self.fk_pitch_note_symbol" FromRole="Pitch" ToRole="NoteSymbol" />
+          <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />
         </EntityType>
 
         <EntityType Name="Accidental">
@@ -3459,6 +3509,11 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="note_pitch">
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
+        </Association>
+
         <EntityContainer Name="LibiadaWebEntities" annotation:LazyLoadingEnabled="true">
 
           <EntitySet Name="AccordanceCharacteristic" EntityType="Self.AccordanceCharacteristic" />
@@ -3894,6 +3949,11 @@
           <AssociationSet Name="fk_remote_db_nature" Association="Self.fk_remote_db_nature">
             <End Role="Nature" EntitySet="Nature" />
             <End Role="RemoteDb" EntitySet="RemoteDb" />
+          </AssociationSet>
+
+          <AssociationSet Name="note_pitch" Association="Self.note_pitch">
+            <End Role="Note" EntitySet="Note" />
+            <End Role="Pitch" EntitySet="Pitch" />
           </AssociationSet>
 
         </EntityContainer>
@@ -4373,6 +4433,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+
+          <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
+            <EndProperty Name="Note">
+              <ScalarProperty Name="Id" ColumnName="note_id" />
+            </EndProperty>
+            <EndProperty Name="Pitch">
+              <ScalarProperty Name="Id" ColumnName="pitch_id" />
+            </EndProperty>
+          </AssociationSetMapping>
 
         </EntityContainerMapping>
       </Mapping>
