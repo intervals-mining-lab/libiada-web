@@ -1,3 +1,5 @@
+using LibiadaMusic.ScoreModel;
+
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
@@ -80,22 +82,99 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return alphabet.Cardinality == existingElementsCount;
         }
 
-        public bool PitchEqual(Pitch pitch, LibiadaPitch libiadaPitch)
+        public int[] GetOrCreatePitchesInDb(List<LibiadaPitch> pitches)
         {
-            return pitch.Octave == libiadaPitch.Octave && pitch.Accidental.Name == libiadaPitch.Alter.ToString();
-        }
-    /*
+            var result = new int[pitches.Count];
 
-        public bool NotesInDb(Alphabet alphabet)
-        {
-            int existingNotesCount = 0;
-            foreach (var note in alphabet)
+            for (int i = 0; i < pitches.Count; i++)
             {
-                var temp = (ValueNote)note;
-                if(db.Note.Include(n => n.Pitch).Any(n => n.Pitch.All(p => temp.Pitch.Contains(p )))
+                var pitch = pitches[i];
+                var noteSymbol = pitch.Step.ToString();
+                var accidental = pitch.Alter.ToString();
+
+                if (db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).
+                    Any(p => p.NoteSymbol.Name == noteSymbol &&
+                             p.Octave == pitch.Octave &&
+                             p.Accidental.Name == accidental))
+                {
+                    result[i] = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).
+                        Single(p => p.NoteSymbol.Name == noteSymbol &&
+                                    p.Octave == pitch.Octave &&
+                                    p.Accidental.Name == accidental).Id;
+                }
+                else
+                {
+                    var newPitch = new Pitch
+                    {
+                        AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
+                        NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
+                        Octave = pitch.Octave
+                    };
+
+                    db.Pitch.Add(newPitch);
+                    db.SaveChanges();
+                    result[i] = newPitch.Id;
+                }
             }
+
+            return result;
         }
-        */
+
+
+        public long[] GetOrCreateNotesInDb(Alphabet alphabet)
+        {
+            var result = new long[alphabet.Cardinality];
+            for (int i=0; i < alphabet.Cardinality; i++)
+            {
+                var note = (ValueNote)alphabet[i];
+                var pitches = GetOrCreatePitchesInDb(note.Pitch);
+
+                if (db.Note.Include(n => n.Pitch).Any(n => n.Triplet == note.Triplet &&
+                                                           n.Denominator == note.Duration.Denominator &&
+                                                           n.Numerator == note.Duration.Numerator &&
+                                                           n.Odenominator == note.Duration.Odenominator &&
+                                                           n.Onumerator == note.Duration.Onumerator &&
+                                                           n.Ticks == note.Duration.Ticks &&
+                                                           //n.Tie == temp.Tie &&
+                                                           n.Priority == note.Priority &&
+                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
+                                                           pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))))
+                {
+                    result[i] = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
+                                                                          n.Denominator == note.Duration.Denominator &&
+                                                                          n.Numerator == note.Duration.Numerator &&
+                                                                          n.Odenominator == note.Duration.Odenominator &&
+                                                                          n.Onumerator == note.Duration.Onumerator &&
+                                                                          n.Ticks == note.Duration.Ticks &&
+                                                                          //n.Tie == temp.Tie &&
+                                                                          n.Priority == note.Priority &&
+                                                                          n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
+                                                                          pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))).Id;
+                }
+                else
+                {
+                    var newNote = new Note
+                    {
+                        Triplet = note.Triplet,
+                        Denominator = note.Duration.Denominator,
+                        Numerator = note.Duration.Numerator,
+                        Onumerator = note.Duration.Onumerator,
+                        Odenominator = note.Duration.Odenominator,
+                        Ticks = note.Duration.Ticks,
+                        TieId = (int) note.Tie,
+                        Priority = note.Priority,
+                        Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
+                        NotationId = Aliases.Notation.Notes
+                    };
+                    db.Note.Add(newNote);
+                    db.SaveChanges();
+                    result[i] = newNote.Id;
+                }
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// The to db elements.
@@ -132,23 +211,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var staticNotation = Aliases.Notation.StaticNotations.Contains(notationId);
 
             var stringElements = alphabet.Select(element => element.ToString()).ToList();
-            
+
             var elements = staticNotation ?
                             CachedElements.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList() :
                             db.Element.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList();
 
-            return (from stringElement in stringElements 
-                         join element in elements 
-                         on stringElement equals element.Value 
+            return (from stringElement in stringElements
+                    join element in elements
+                    on stringElement equals element.Value
                     select element.Id).ToArray();
         }
-
-        /*
-        public long[] ToDbNotes(Alphabet alphabet, int notationId)
-        {
-
-        }
-        */
 
         /// <summary>
         /// The to libiada alphabet.

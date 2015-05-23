@@ -55,7 +55,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, true);
+            var alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
             Create(sequence, alphabet, chain.Building);
         }
 
