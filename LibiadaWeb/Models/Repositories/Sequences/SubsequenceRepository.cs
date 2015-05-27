@@ -268,7 +268,41 @@
                     var localPositions = localSubsequence.Position.ToList();
                     var localAttributes = localSubsequence.SequenceAttribute.ToList();
 
-                    // TODO: attributes check
+                    foreach (var qualifier in feature.Qualifiers)
+                    {
+                            switch (qualifier.Key)
+                            {
+                                case "translation":
+                                    continue;
+                            }
+
+                        var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
+
+                        var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
+
+                        foreach (var value in qualifier.Value)
+                        {
+                            if (equalAttributes.Any(a => a.Value == value))
+                            {
+                                localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == value));
+                            }
+                        }
+                            
+                    }
+
+                    if (complement && localAttributes.Any(a => a.AttributeId == Aliases.Attribute.Complement))
+                    {
+                        var complementAttribute = localAttributes.Single(a => a.AttributeId == Aliases.Attribute.Complement);
+                        localAttributes.Remove(complementAttribute);
+                        complement = false;
+                    }
+
+                    if (complementJoin && localAttributes.Any(a => a.AttributeId == Aliases.Attribute.ComplementJoin))
+                    {
+                        var complementAttribute = localAttributes.Single(a => a.AttributeId == Aliases.Attribute.ComplementJoin);
+                        localAttributes.Remove(complementAttribute);
+                        complementJoin = false;
+                    }
 
                     for (int k = 1; k < leafLocations.Count; k++)
                     {
