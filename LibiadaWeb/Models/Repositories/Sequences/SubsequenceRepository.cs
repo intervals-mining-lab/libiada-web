@@ -287,7 +287,6 @@
                                 localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == value));
                             }
                         }
-                            
                     }
 
                     if (complement && localAttributes.Any(a => a.AttributeId == Aliases.Attribute.Complement))
@@ -317,7 +316,10 @@
                         }
                     }
 
-                    localSubsequences.Remove(localSubsequence);
+                    if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin)
+                    {
+                        localSubsequences.Remove(localSubsequence);
+                    }
                 }
                 else
                 {
