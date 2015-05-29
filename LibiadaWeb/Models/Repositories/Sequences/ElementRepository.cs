@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using LibiadaMusic.ScoreModel;
 
 namespace LibiadaWeb.Models.Repositories.Sequences
@@ -134,25 +135,33 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                            n.Numerator == note.Duration.Numerator &&
                                                            n.Odenominator == note.Duration.Odenominator &&
                                                            n.Onumerator == note.Duration.Onumerator &&
-                                                           //n.Tie == temp.Tie &&
+                                                           n.TieId == (byte)(note.Tie + 1) &&
                                                            n.Priority == note.Priority &&
                                                            n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
                                                            pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))))
                 {
-                    result[i] = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
+                    var dbNote = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
                                                                           n.Denominator == note.Duration.Denominator &&
                                                                           n.Numerator == note.Duration.Numerator &&
                                                                           n.Odenominator == note.Duration.Odenominator &&
                                                                           n.Onumerator == note.Duration.Onumerator &&
-                                                                          //n.Tie == temp.Tie &&
+                                                                          n.TieId == (byte)(note.Tie + 1) &&
                                                                           n.Priority == note.Priority &&
                                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
-                                                                          pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))).Id;
+                                                                          pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p)));
+
+                    if (dbNote.Value != BitConverter.ToString(note.GetHashCode()).Replace("-",""))
+                    {
+                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + dbNote.Value + " second hash: " + BitConverter.ToString(note.GetHashCode()).Replace("-", ""));
+                    }
+
+                    result[i] = dbNote.Id;
                 }
                 else
                 {
                     var newNote = new Note
                     {
+                        Value = BitConverter.ToString(note.GetHashCode()).Replace("-", ""),
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
