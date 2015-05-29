@@ -941,5 +941,13 @@ COMMENT ON TABLE note_pitch IS 'M:M note with pitch.';
 ALTER TABLE note_pitch ADD CONSTRAINT pk_note_pitch PRIMARY KEY (note_id, pitch_id);
 ALTER TABLE pitch ADD CONSTRAINT uk_pitch UNIQUE (octave, instrument_id, accidental_id, note_symbol_id);
 
+-- 29.05.2015
+-- Changing music tables structure.
+
+ALTER TABLE pitch ALTER COLUMN instrument_id DROP NOT NULL;
+COMMENT ON COLUMN pitch.instrument_id IS 'Номер музыкального инструмента.';
+
+ALTER TABLE note  DROP COLUMN ticks;
+ALTER TABLE note ADD CONSTRAINT uk_note UNIQUE (value);
 
 COMMIT;

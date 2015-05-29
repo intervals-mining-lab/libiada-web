@@ -384,7 +384,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="numerator" Type="int4" Nullable="false" />
           <Property Name="denominator" Type="int4" Nullable="false" />
-          <Property Name="ticks" Type="int4" />
           <Property Name="onumerator" Type="int4" Nullable="false" />
           <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
@@ -400,7 +399,7 @@
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="octave" Type="int4" Nullable="false" />
           <Property Name="midinumber" Type="int4" Nullable="false" />
-          <Property Name="instrument_id" Type="int4" Nullable="false" />
+          <Property Name="instrument_id" Type="int4" Nullable="true" />
           <Property Name="accidental_id" Type="int4" Nullable="false" />
           <Property Name="note_symbol_id" Type="int4" Nullable="false" />
         </EntityType>
@@ -1494,7 +1493,7 @@
         </Association>
 
         <Association Name="fk_pitch_instrument">
-          <End Role="instrument" Type="Self.instrument" Multiplicity="1" />
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
           <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="instrument">
@@ -2359,7 +2358,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Numerator" Type="Int32" Nullable="false" />
           <Property Name="Denominator" Type="Int32" Nullable="false" />
-          <Property Name="Ticks" Type="Int32" />
           <Property Name="Onumerator" Type="Int32" Nullable="false" />
           <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
@@ -2378,7 +2376,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Octave" Type="Int32" Nullable="false" />
           <Property Name="Midinumber" Type="Int32" Nullable="false" />
-          <Property Name="InstrumentId" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentId" Type="Int32" Nullable="true" />
           <Property Name="AccidentalId" Type="Int32" Nullable="false" />
           <Property Name="NoteSymbolId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="Self.fk_pitch_instrument" FromRole="Pitch" ToRole="Instrument" />
@@ -3497,7 +3495,7 @@
         </Association>
 
         <Association Name="fk_pitch_instrument">
-          <End Role="Instrument" Type="Self.Instrument" Multiplicity="1" />
+          <End Role="Instrument" Type="Self.Instrument" Multiplicity="0..1" />
           <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Instrument">
@@ -4370,7 +4368,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Numerator" ColumnName="numerator" />
                 <ScalarProperty Name="Denominator" ColumnName="denominator" />
-                <ScalarProperty Name="Ticks" ColumnName="ticks" />
                 <ScalarProperty Name="Onumerator" ColumnName="onumerator" />
                 <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />

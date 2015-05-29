@@ -134,7 +134,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                            n.Numerator == note.Duration.Numerator &&
                                                            n.Odenominator == note.Duration.Odenominator &&
                                                            n.Onumerator == note.Duration.Onumerator &&
-                                                           n.Ticks == note.Duration.Ticks &&
                                                            //n.Tie == temp.Tie &&
                                                            n.Priority == note.Priority &&
                                                            n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
@@ -145,7 +144,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                                           n.Numerator == note.Duration.Numerator &&
                                                                           n.Odenominator == note.Duration.Odenominator &&
                                                                           n.Onumerator == note.Duration.Onumerator &&
-                                                                          n.Ticks == note.Duration.Ticks &&
                                                                           //n.Tie == temp.Tie &&
                                                                           n.Priority == note.Priority &&
                                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
@@ -160,7 +158,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Numerator = note.Duration.Numerator,
                         Onumerator = note.Duration.Onumerator,
                         Odenominator = note.Duration.Odenominator,
-                        Ticks = note.Duration.Ticks,
                         TieId = (int) note.Tie,
                         Priority = note.Priority,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
