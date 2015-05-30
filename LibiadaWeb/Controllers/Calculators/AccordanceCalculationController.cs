@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using Bio.Extensions;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -39,7 +41,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController() : base("AccordanceCalculation", "Accordance calculation")
+        public AccordanceCalculationController()
+            : base("AccordanceCalculation", "Accordance calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -105,7 +108,8 @@
                     throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
                 }
 
-                var characteristics = new List<double>();
+                var characteristics = new List<List<double>>();
+                var alphabet = new List<string>();
 
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
@@ -147,16 +151,24 @@
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
 
+                        characteristics.Add(new List<double>());
+                        characteristics.Add(new List<double>());
+
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
                         var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
-                        
+
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
                             var element = firstChain.Alphabet[i];
+                            alphabet.Add(element.ToString());
                             var intervalManager = new AccordanceIntervalsManager(firstChain.CongenericChain(element), secondChain.CongenericChain(element));
                             var characteristicValue = calculator.Calculate(intervalManager, link);
-                            characteristics.Add(characteristicValue);
+                            characteristics[0].Add(characteristicValue);
+
+                            intervalManager = new AccordanceIntervalsManager(secondChain.CongenericChain(element), firstChain.CongenericChain(element));
+                            characteristicValue = calculator.Calculate(intervalManager, link);
+                            characteristics[1].Add(characteristicValue);
                         }
 
                         break;
@@ -169,7 +181,8 @@
                                          { "characteristics", characteristics }, 
                                          { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
                                          { "characteristicName", characteristicName },
-                                         { "calculationType", calculationType }
+                                         { "calculationType", calculationType },
+                                         { "alphabet", alphabet }
                                      };
             });
         }
