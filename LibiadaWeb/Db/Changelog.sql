@@ -950,4 +950,11 @@ COMMENT ON COLUMN pitch.instrument_id IS 'Номер музыкального инструмента.';
 ALTER TABLE note  DROP COLUMN ticks;
 ALTER TABLE note ADD CONSTRAINT uk_note UNIQUE (value);
 
+-- 30.05.2015
+-- Added uk for characteristic_type class name.
+ 
+ALTER TABLE characteristic_type ADD CONSTRAINT uk_characteristic_type_class_name UNIQUE (class_name);
+
+
+
 COMMIT;

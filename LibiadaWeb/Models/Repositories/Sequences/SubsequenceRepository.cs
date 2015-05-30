@@ -213,118 +213,7 @@
 
             for (int i = 1; i < features.Count; i++)
             {
-                var feature = features[i];
-                int featureId;
-
-                if (feature.Key == "gene")
-                {
-                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
-                    if (!pseudo)
-                    {
-                        continue;
-                    }
-
-                    featureId = Aliases.Feature.PseudoGen;
-                }
-                else
-                {
-                    featureId = featureRepository.GetFeatureIdByName(feature.Key);
-                }
-
-                var location = feature.Location;
-                var leafLocations = feature.Location.GetLeafLocations();
-                bool partial = false;
-                bool complement = location.Operator == LocationOperator.Complement;
-                bool join = leafLocations.Count > 1;
-                bool complementJoin = join && complement;
-
-                if (location.SubLocations.Count > 0)
-                {
-                    complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
-                }
-
-                foreach (var leafLocation in leafLocations)
-                {
-                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData
-                       || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
-                    {
-                        partial = true;
-                    }
-                }
-
-                int start = leafLocations[0].LocationStart - 1;
-                int end = leafLocations[0].LocationEnd - 1;
-                int length = end - start + 1;
-
-                var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start
-                                                                 && s.Length == length
-                                                                 && s.FeatureId == featureId
-                                                                 && s.Partial == partial
-                                                                 && s.Complementary == complement).ToList();
-
-                if (equalLocalSubsequences.Any())
-                {
-                    var localSubsequence = equalLocalSubsequences.First();
-                    var localPositions = localSubsequence.Position.ToList();
-                    var localAttributes = localSubsequence.SequenceAttribute.ToList();
-
-                    foreach (var qualifier in feature.Qualifiers)
-                    {
-                            switch (qualifier.Key)
-                            {
-                                case "translation":
-                                    continue;
-                            }
-
-                        var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
-
-                        var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
-
-                        foreach (var value in qualifier.Value)
-                        {
-                            if (equalAttributes.Any(a => a.Value == value))
-                            {
-                                localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == value));
-                            }
-                        }
-                    }
-
-                    if (complement && localAttributes.Any(a => a.AttributeId == Aliases.Attribute.Complement))
-                    {
-                        var complementAttribute = localAttributes.Single(a => a.AttributeId == Aliases.Attribute.Complement);
-                        localAttributes.Remove(complementAttribute);
-                        complement = false;
-                    }
-
-                    if (complementJoin && localAttributes.Any(a => a.AttributeId == Aliases.Attribute.ComplementJoin))
-                    {
-                        var complementAttribute = localAttributes.Single(a => a.AttributeId == Aliases.Attribute.ComplementJoin);
-                        localAttributes.Remove(complementAttribute);
-                        complementJoin = false;
-                    }
-
-                    for (int k = 1; k < leafLocations.Count; k++)
-                    {
-                        var leafLocation = leafLocations[k];
-                        var leafStart = leafLocation.LocationStart - 1;
-                        var leafEnd = leafLocation.LocationEnd - 1;
-                        var leafLength = leafEnd - leafStart + 1;
-
-                        if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
-                        {
-                            missingRemoteFeatures.Add(feature);
-                        }
-                    }
-
-                    if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin)
-                    {
-                        localSubsequences.Remove(localSubsequence);
-                    }
-                }
-                else
-                {
-                    missingRemoteFeatures.Add(feature);
-                }
+                CheckFeature(features[i], localSubsequences, missingRemoteFeatures);
             }
 
             return new Dictionary<string, object>
@@ -332,6 +221,159 @@
                            { "localSubsequences", localSubsequences },
                            { "missingRemoteFeatures", missingRemoteFeatures }
                        };
+        }
+
+        /// <summary>
+        /// The check feature.
+        /// </summary>
+        /// <param name="feature">
+        /// The feature.
+        /// </param>
+        /// <param name="localSubsequences">
+        /// The local subsequences.
+        /// </param>
+        /// <param name="missingRemoteFeatures">
+        /// The missing remote features.
+        /// </param>
+        private void CheckFeature(FeatureItem feature, List<Subsequence> localSubsequences, List<FeatureItem> missingRemoteFeatures)
+        {
+            int featureId;
+
+            if (feature.Key == "gene")
+            {
+                bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                if (!pseudo)
+                {
+                    return;
+                }
+
+                featureId = Aliases.Feature.PseudoGen;
+            }
+            else
+            {
+                featureId = featureRepository.GetFeatureIdByName(feature.Key);
+            }
+
+            var location = feature.Location;
+            var leafLocations = feature.Location.GetLeafLocations();
+            var partial = CheckPartial(leafLocations);
+            bool complement = location.Operator == LocationOperator.Complement;
+            bool join = leafLocations.Count > 1;
+            bool complementJoin = join && complement;
+
+            if (location.SubLocations.Count > 0)
+            {
+                complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
+            }
+
+            int start = leafLocations[0].LocationStart - 1;
+            int end = leafLocations[0].LocationEnd - 1;
+            int length = end - start + 1;
+
+            var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start 
+                                                                   && s.Length == length 
+                                                                   && s.FeatureId == featureId 
+                                                                   && s.Partial == partial 
+                                                                   && s.Complementary == complement).ToList();
+
+            if (equalLocalSubsequences.Any())
+            {
+                var localSubsequence = equalLocalSubsequences.First();
+                var localPositions = localSubsequence.Position.ToList();
+                
+                CheckSequenceAttributes(feature, localSubsequence, ref complement, ref complementJoin);
+
+                for (int k = 1; k < leafLocations.Count; k++)
+                {
+                    var leafLocation = leafLocations[k];
+                    var leafStart = leafLocation.LocationStart - 1;
+                    var leafEnd = leafLocation.LocationEnd - 1;
+                    var leafLength = leafEnd - leafStart + 1;
+
+                    if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
+                    {
+                        missingRemoteFeatures.Add(feature);
+                        return;
+                    }
+                }
+
+                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin)
+                {
+                    localSubsequences.Remove(localSubsequence);
+                }
+            }
+            else
+            {
+                missingRemoteFeatures.Add(feature);
+            }
+        }
+
+        /// <summary>
+        /// The check sequence attributes.
+        /// </summary>
+        /// <param name="feature">
+        /// The feature.
+        /// </param>
+        /// <param name="localSubsequence">
+        /// The local subsequence.
+        /// </param>
+        /// <param name="complement">
+        /// The complement.
+        /// </param>
+        /// <param name="complementJoin">
+        /// The complement join.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin)
+        {
+            var localAttributes = localSubsequence.SequenceAttribute.ToList();
+
+            foreach (var qualifier in feature.Qualifiers)
+            {
+                switch (qualifier.Key)
+                {
+                    case "translation":
+                        continue;
+                }
+
+                var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
+
+                var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
+
+                foreach (var value in qualifier.Value)
+                {
+                    if (equalAttributes.Any(a => a.Value == value))
+                    {
+                        localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == value));
+                    }
+                }
+            }
+
+            CheckBoolAttribute(ref complement, Aliases.Attribute.Complement, localAttributes);
+            CheckBoolAttribute(ref complementJoin, Aliases.Attribute.ComplementJoin, localAttributes);
+        }
+
+        /// <summary>
+        /// The check bool attribute.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <param name="attributeId">
+        /// The attribute id.
+        /// </param>
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
+        private void CheckBoolAttribute(ref bool value, int attributeId, List<SequenceAttribute> attributes)
+        {
+            if (value && attributes.Any(a => a.AttributeId == attributeId))
+            {
+                attributes.Remove(attributes.Single(a => a.AttributeId == attributeId));
+                value = false;
+            }
         }
 
         /// <summary>
@@ -357,7 +399,7 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                    bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                     if (!pseudo)
                     {
                         continue;
@@ -372,7 +414,7 @@
 
                 var location = feature.Location;
                 var leafLocations = feature.Location.GetLeafLocations();
-                bool partial = false;
+                bool partial = CheckPartial(leafLocations);
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
                 bool complementJoin = join && complement;
@@ -380,14 +422,6 @@
                 if (location.SubLocations.Count > 0)
                 {
                     complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
-                }
-
-                foreach (var leafLocation in leafLocations)
-                {
-                    if (leafLocation.LocationStart.ToString() != leafLocation.StartData || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
-                    {
-                        partial = true;
-                    }
                 }
 
                 int start = leafLocations[0].LocationStart - 1;
@@ -528,6 +562,29 @@
             }
 
             return new[] { starts, lengths };
+        }
+
+        /// <summary>
+        /// The check partial.
+        /// </summary>
+        /// <param name="leafLocations">
+        /// The leaf locations.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool CheckPartial(List<ILocation> leafLocations)
+        {
+            var partial = false;
+            foreach (var leafLocation in leafLocations)
+            {
+                if (leafLocation.LocationStart.ToString() != leafLocation.StartData
+                    || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
+                {
+                    partial = true;
+                }
+            }
+            return partial;
         }
     }
 }
