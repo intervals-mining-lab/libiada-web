@@ -204,7 +204,8 @@
                 throw new Exception("Error occured during importability check.", e);
             }
 
-            var localSubsequences = db.Subsequence.Include(s => s.Feature)
+            var localSubsequences = db.Subsequence
+                    .Include(s => s.Feature)
                     .Include(s => s.Position)
                     .Include(s => s.SequenceAttribute)
                     .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
@@ -213,11 +214,16 @@
 
             for (int i = 1; i < features.Count; i++)
             {
-                CheckFeature(features[i], localSubsequences, missingRemoteFeatures);
+                var missingFeature = CheckFeature(features[i], localSubsequences);
+                if (missingFeature != null)
+                {
+                    missingRemoteFeatures.Add(missingFeature);
+                }
             }
 
             return new Dictionary<string, object>
                        {
+                           { "attributes", db.Attribute.ToList() },
                            { "localSubsequences", localSubsequences },
                            { "missingRemoteFeatures", missingRemoteFeatures }
                        };
@@ -232,10 +238,10 @@
         /// <param name="localSubsequences">
         /// The local subsequences.
         /// </param>
-        /// <param name="missingRemoteFeatures">
-        /// The missing remote features.
-        /// </param>
-        private void CheckFeature(FeatureItem feature, List<Subsequence> localSubsequences, List<FeatureItem> missingRemoteFeatures)
+        /// <returns>
+        /// The <see cref="FeatureItem"/>.
+        /// </returns>
+        private FeatureItem CheckFeature(FeatureItem feature, List<Subsequence> localSubsequences)
         {
             int featureId;
 
@@ -244,7 +250,7 @@
                 bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                 if (!pseudo)
                 {
-                    return;
+                    return null;
                 }
 
                 featureId = Aliases.Feature.PseudoGen;
@@ -255,7 +261,7 @@
             }
 
             var location = feature.Location;
-            var leafLocations = feature.Location.GetLeafLocations();
+            var leafLocations = location.GetLeafLocations();
             var partial = CheckPartial(leafLocations);
             bool complement = location.Operator == LocationOperator.Complement;
             bool join = leafLocations.Count > 1;
@@ -292,8 +298,7 @@
 
                     if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
                     {
-                        missingRemoteFeatures.Add(feature);
-                        return;
+                        return feature;
                     }
                 }
 
@@ -301,10 +306,12 @@
                 {
                     localSubsequences.Remove(localSubsequence);
                 }
+
+                return null;
             }
             else
             {
-                missingRemoteFeatures.Add(feature);
+                return feature;
             }
         }
 
@@ -323,9 +330,6 @@
         /// <param name="complementJoin">
         /// The complement join.
         /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
         private void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin)
         {
             var localAttributes = localSubsequence.SequenceAttribute.ToList();

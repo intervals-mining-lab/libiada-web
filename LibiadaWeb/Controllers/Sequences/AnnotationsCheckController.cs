@@ -47,7 +47,7 @@
 
             var viewDataHelper = new ViewDataHelper(db);
 
-            var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Import");
+            var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");
 
             data.Add("natureId", Aliases.Nature.Genetic);
 
@@ -59,8 +59,8 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="matterIds">
-        /// The matters ids.
+        /// <param name="matterId">
+        /// The matters id.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -72,15 +72,9 @@
         /// Thrown if unknown part is found.
         /// </exception>
         [HttpPost]
-        public ActionResult Index(long[] matterIds)
+        public ActionResult Index(long matterId)
         {
             return Action(() =>
-            {
-                var matterNames = new List<string>();
-                var missingFeatures = new List<object>();
-                var excessSubsequences = new List<object>();
-
-                foreach (var matterId in matterIds)
                 {
                     long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                     DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
@@ -88,21 +82,13 @@
                     Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
                     var features = NcbiHelper.GetFeatures(stream);
 
-                    var currentResult = subsequenceRepository.CheckAnnotations(features, sequenceId);
+                    var result = subsequenceRepository.CheckAnnotations(features, sequenceId);
 
-                    missingFeatures.Add(currentResult["missingRemoteFeatures"]);
-                    excessSubsequences.Add(currentResult["localSubsequences"]);
+                    var matterName = this.db.Matter.Single(m => m.Id == matterId).Name;
 
+                    result.Add("matterName", matterName);
 
-                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                }
-
-                return new Dictionary<string, object>
-                                     {
-                                         { "matterNames", matterNames },
-                                         { "missingFeatures", missingFeatures },
-                                         { "excessSubsequences", excessSubsequences }
-                                     };
+                return result;
             });
         }
     }
