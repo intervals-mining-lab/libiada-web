@@ -61,7 +61,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
         public BaseChain ConvertCongenericScroreTrackToBaseChain(CongenericScoreTrack scoreTrack)
         {
-            var notes = scoreTrack.NoteOrder();
+            var notes = scoreTrack.GetNotes();
             return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
         }
 
