@@ -34,11 +34,13 @@
                     <td>
                         @foreach (var attribute in ViewBag.localSubsequences[i].SequenceAttribute)
                         {
-                            {
-                                var attributeName = ((List<LibiadaWeb.Attribute>)ViewBag.attributes).Single(a => a.Id == attribute.AttributeId).Name;
 
-                                @attributeName
-                            }
+                            var attributeName = ((List<LibiadaWeb.Attribute>)ViewBag.attributes).Single(a => a.Id == attribute.AttributeId).Name;
+
+                            <b>
+                                @attributeName 
+                            </b>  
+
                             @attribute.Value
                             <br />
                         }
