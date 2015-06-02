@@ -58,11 +58,11 @@
         /// The <see cref="int"/>.
         /// </returns>
         /// <exception cref="Exception">
-        /// Thrown if recivied not one sequence.
+        /// Thrown if received not one sequence.
         /// </exception>
         public static int GetId(string id)
         {
-            var memoryStream = GetResponceStream(@"esearch.fcgi?db=nucleotide&term=" + id);
+            var memoryStream = GetResponseStream(@"esearch.fcgi?db=nucleotide&term=" + id);
             var doc = new XmlDocument();
 
             try
@@ -95,7 +95,7 @@
         /// </returns>
         public static Stream GetFileStream(string id)
         {
-            return GetResponceStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
+            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@
         /// </returns>
         public static Stream GetGenesFileStream(string id)
         {
-            return GetResponceStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + id);
+            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + id);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@
         }
 
         /// <summary>
-        /// The get responce.
+        /// The get response.
         /// </summary>
         /// <param name="url">
         /// The url.
@@ -142,7 +142,7 @@
         /// <exception cref="Exception">
         /// Thrown if response stream is null.
         /// </exception>
-        private static Stream GetResponceStream(string url)
+        private static Stream GetResponseStream(string url)
         {
             var resultUrl = BaseUrl + url;
             var request = WebRequest.Create(resultUrl);

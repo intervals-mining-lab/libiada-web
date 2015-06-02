@@ -89,7 +89,6 @@
             var databaseLink = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).Link;
             var link = databaseLink.Id != Aliases.Link.NotApplied ? databaseLink.Name : string.Empty;
 
-
             return string.Join("  ", characteristicType, link);
         }
 

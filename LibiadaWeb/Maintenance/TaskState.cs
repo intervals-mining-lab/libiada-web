@@ -21,7 +21,7 @@
         Completed,
 
         /// <summary>
-        /// Error occured.
+        /// Error occurred.
         /// </summary>
         Error
     }

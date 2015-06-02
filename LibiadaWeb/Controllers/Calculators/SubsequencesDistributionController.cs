@@ -30,9 +30,9 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The subsequence extracter.
+        /// The subsequence extractor.
         /// </summary>
-        private readonly SubsequenceExtracter subsequenceExtracter;
+        private readonly SubsequenceExtractor subsequenceExtractor;
 
         /// <summary>
         /// The characteristic type repository.
@@ -51,7 +51,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            subsequenceExtracter = new SubsequenceExtracter(db);
+            subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
@@ -144,8 +144,8 @@
                         db.SaveChanges();
                     }
 
-                    List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(sequenceIds[w], featureIds);
-                    var sequences = subsequenceExtracter.ExtractChains(subsequences, sequenceIds[w]);
+                    List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(sequenceIds[w], featureIds);
+                    var sequences = subsequenceExtractor.ExtractChains(subsequences, sequenceIds[w]);
 
                     if (maxSubsequences < subsequences.Count)
                     {

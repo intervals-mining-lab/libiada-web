@@ -26,9 +26,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The subsequence extracter.
+        /// The subsequence extractor.
         /// </summary>
-        private readonly SubsequenceExtracter subsequenceExtracter;
+        private readonly SubsequenceExtractor subsequenceExtractor;
 
         /// <summary>
         /// The sequence attribute repository.
@@ -46,7 +46,7 @@
         public SubsequencesSimilarityController() : base("SubsequencesSimilarity", "Subsequences similarity")
         {
             db = new LibiadaWebEntities();
-            subsequenceExtracter = new SubsequenceExtracter(db);
+            subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
@@ -110,15 +110,15 @@
 
                 var firstMatterId = matterIds[0];
                 var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
-                List<Subsequence> firstSequenceSubsequences = subsequenceExtracter.GetSubsequences(firstParentSequenceId, featureIds);
-                var firstSequences = subsequenceExtracter.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
+                List<Subsequence> firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, featureIds);
+                var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
                 var firstSequenceAttributes = firstSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
 
                 var secondMatterId = matterIds[1];
                 var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
-                List<Subsequence> secondSequenceSubsequences = subsequenceExtracter.GetSubsequences(secondParentSequenceId, featureIds);
-                var secondSequences = subsequenceExtracter.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
+                List<Subsequence> secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, featureIds);
+                var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
                 var secondSequenceAttributes = secondSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
 

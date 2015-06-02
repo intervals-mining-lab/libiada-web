@@ -25,7 +25,7 @@
         /// <summary>
         /// The subsequence extracter.
         /// </summary>
-        private readonly SubsequenceExtracter subsequenceExtracter;
+        private readonly SubsequenceExtractor subsequenceExtracter;
 
         /// <summary>
         /// The characteristic type repository.
@@ -38,7 +38,7 @@
         public SequencesAlignmentController() : base("SequencesAlignment", "Sequences alignment")
         {
             db = new LibiadaWebEntities();
-            subsequenceExtracter = new SubsequenceExtracter(db);
+            subsequenceExtracter = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 

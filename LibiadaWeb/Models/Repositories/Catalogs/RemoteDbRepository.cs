@@ -65,7 +65,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get select list with nature.
         /// </summary>
         /// <param name="selectedDbs">
-        /// The selected dbs.
+        /// The selected databases.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.

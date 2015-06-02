@@ -86,7 +86,6 @@
                 throw new Exception("Error occured during importability check.", e);
             }
 
-
             var positionsMap = CreateFeatureSubsequences(features, sequenceId);
             CreateNonCodingSubsequences(positionsMap, sequenceId);
 
@@ -588,6 +587,7 @@
                     partial = true;
                 }
             }
+
             return partial;
         }
     }

@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using Antlr.Runtime.Tree;
-using LibiadaCore.Core;
-using LibiadaMusic.MusicXml;
-using LibiadaMusic.ScoreModel;
-
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Xml;
+
+    using LibiadaCore.Core;
+
+    using LibiadaMusic.MusicXml;
+    using LibiadaMusic.ScoreModel;
 
     using LibiadaWeb.Helpers;
 
@@ -31,12 +30,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="commonSequence">
-        /// The common sequence.
+        /// <param name="sequence">
+        /// The sequence.
         /// </param>
         /// <param name="stringSequence">
         /// The string sequence.
         /// </param>
+        /// <exception cref="Exception">
+        /// Thrown if congeneric tracks count not equals 1 (track is not monophonic).
+        /// </exception>
         public void Create(CommonSequence sequence, string stringSequence)
         {
             var doc = new XmlDocument();
@@ -59,6 +61,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             Create(sequence, alphabet, chain.Building);
         }
 
+        /// <summary>
+        /// The convert congeneric scrore track to base chain.
+        /// </summary>
+        /// <param name="scoreTrack">
+        /// The score track.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BaseChain"/>.
+        /// </returns>
         public BaseChain ConvertCongenericScroreTrackToBaseChain(CongenericScoreTrack scoreTrack)
         {
             var notes = scoreTrack.GetNotes();

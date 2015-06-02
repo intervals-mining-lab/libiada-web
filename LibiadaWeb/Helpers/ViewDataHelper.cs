@@ -183,7 +183,6 @@
             return characteristicTypes;
         }
 
-
         /// <summary>
         /// The fill matters data.
         /// </summary>

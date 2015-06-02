@@ -202,22 +202,22 @@
         /// <param name="firstBuilding">
         /// The first building.
         /// </param>
-        /// <param name="secondbuilding">
-        /// The secondbuilding.
+        /// <param name="secondBuilding">
+        /// The second building.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool CompareBuildings(int[] firstBuilding, int[] secondbuilding)
+        private bool CompareBuildings(int[] firstBuilding, int[] secondBuilding)
         {
-            if (firstBuilding.Length != secondbuilding.Length)
+            if (firstBuilding.Length != secondBuilding.Length)
             {
                 return false;
             }
 
             for (int i = 0; i < firstBuilding.Length; i++)
             {
-                if (firstBuilding[i] != secondbuilding[i])
+                if (firstBuilding[i] != secondBuilding[i])
                 {
                     return false;
                 }

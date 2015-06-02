@@ -94,7 +94,7 @@
         /// The is growing window.
         /// </param>
         /// <param name="autocorrelation">
-        /// The is auto corelation.
+        /// The is auto correlation.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -269,8 +269,8 @@
         /// <param name="step">
         /// The step.
         /// </param>
-        /// <param name="gowingWindow">
-        /// The gowing window.
+        /// <param name="growingWindow">
+        /// The growing window.
         /// </param>
         /// <returns>
         /// The <see cref="List{List{List{Double}}}"/>.
@@ -280,7 +280,7 @@
             int[] characteristicTypeLinkIds,
             int length,
             int step,
-            bool gowingWindow)
+            bool growingWindow)
         {
             var calculators = new List<IFullCalculator>();
             var links = new List<Link>();
@@ -301,7 +301,7 @@
                     characteristics[i].Add(new List<double>());
                     Chain chain = chains[i][j];
 
-                    CutRule cutRule = gowingWindow
+                    CutRule cutRule = growingWindow
                         ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
                         : new SimpleCutRule(chain.GetLength(), step, length);
 

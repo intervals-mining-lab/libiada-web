@@ -1,7 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
     /// <summary>
-    /// The int pair.
+    /// The integer pair.
     /// </summary>
     public struct IntPair
     {

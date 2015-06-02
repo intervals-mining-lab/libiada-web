@@ -13,9 +13,9 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The subsequence extracter.
+    /// The subsequence extractor.
     /// </summary>
-    public class SubsequenceExtracter
+    public class SubsequenceExtractor
     {
         /// <summary>
         /// The db.
@@ -28,12 +28,12 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceExtracter"/> class.
+        /// Initializes a new instance of the <see cref="SubsequenceExtractor"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public SubsequenceExtracter(LibiadaWebEntities db)
+        public SubsequenceExtractor(LibiadaWebEntities db)
         {
             this.db = db;
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -77,7 +77,7 @@
         /// The feature ids.
         /// </param>
         /// <returns>
-        /// The <see cref="List{T}"/>.
+        /// The <see cref="List{Subsequence}"/>.
         /// </returns>
         public List<Subsequence> GetSubsequences(long sequenceId, int[] featureIds)
         {

@@ -22,9 +22,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The subsequence extracter.
+        /// The subsequence extractor.
         /// </summary>
-        private readonly SubsequenceExtracter subsequenceExtracter;
+        private readonly SubsequenceExtractor subsequenceExtractor;
 
         /// <summary>
         /// The characteristic type repository.
@@ -42,7 +42,7 @@
         public SubsequencesCalculationController() : base("SubsequencesCalculation", "Subsequences characteristics calculation")
         {
             db = new LibiadaWebEntities();
-            subsequenceExtracter = new SubsequenceExtracter(db);
+            subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
@@ -114,8 +114,8 @@
                     {
                         var notationId = notationIds[i];
                         var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-                        List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
-                        var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
+                        List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+                        var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];

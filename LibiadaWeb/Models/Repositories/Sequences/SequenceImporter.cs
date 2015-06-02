@@ -42,7 +42,7 @@
         }
 
         /// <summary>
-        /// The fill params.
+        /// The fill parameters.
         /// </summary>
         /// <param name="commonSequence">
         /// The sequence.

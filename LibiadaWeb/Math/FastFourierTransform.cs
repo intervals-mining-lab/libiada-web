@@ -4,7 +4,7 @@
     using System.Numerics;
 
     /// <summary>
-    /// The fft.
+    /// The fast fourier transform.
     /// </summary>
     public static class FastFourierTransform
     {

@@ -1,6 +1,3 @@
-using System.Security.Cryptography;
-using LibiadaMusic.ScoreModel;
-
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
@@ -8,9 +5,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
-    using LibiadaPitch = LibiadaMusic.ScoreModel.Pitch;
+
+    using LibiadaMusic.ScoreModel;
 
     /// <summary>
     /// The element repository.
@@ -83,7 +82,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return alphabet.Cardinality == existingElementsCount;
         }
 
-        public int[] GetOrCreatePitchesInDb(List<LibiadaPitch> pitches)
+        /// <summary>
+        /// The get or create pitches in db.
+        /// </summary>
+        /// <param name="pitches">
+        /// The pitches.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int[]"/>.
+        /// </returns>
+        public int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
         {
             var result = new int[pitches.Count];
 
@@ -93,19 +101,19 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var noteSymbol = pitch.Step.ToString();
                 var accidental = pitch.Alter.ToString();
 
-                if (db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).
-                    Any(p => p.NoteSymbol.Name == noteSymbol &&
+                if (db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental)
+                    .Any(p => p.NoteSymbol.Name == noteSymbol &&
                              p.Octave == pitch.Octave &&
                              p.Accidental.Name == accidental))
                 {
-                    result[i] = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).
-                        Single(p => p.NoteSymbol.Name == noteSymbol &&
+                    result[i] = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental)
+                        .Single(p => p.NoteSymbol.Name == noteSymbol &&
                                     p.Octave == pitch.Octave &&
                                     p.Accidental.Name == accidental).Id;
                 }
                 else
                 {
-                    var newPitch = new Pitch
+                    var newPitch = new LibiadaWeb.Pitch
                     {
                         AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
                         NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
@@ -121,11 +129,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return result;
         }
 
-
+        /// <summary>
+        /// The get or create notes in db.
+        /// </summary>
+        /// <param name="alphabet">
+        /// The alphabet.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long[]"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if hash of local note not equals hash of note in db.
+        /// </exception>
         public long[] GetOrCreateNotesInDb(Alphabet alphabet)
         {
             var result = new long[alphabet.Cardinality];
-            for (int i=0; i < alphabet.Cardinality; i++)
+            for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 var note = (ValueNote)alphabet[i];
                 var pitches = GetOrCreatePitchesInDb(note.Pitch);
@@ -150,9 +169,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
                                                                           pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p)));
 
-                    if (dbNote.Value != BitConverter.ToString(note.GetHashCode()).Replace("-",""))
+                    if (dbNote.Value != BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty))
                     {
-                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + dbNote.Value + " second hash: " + BitConverter.ToString(note.GetHashCode()).Replace("-", ""));
+                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + dbNote.Value + " second hash: " + BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty));
                     }
 
                     result[i] = dbNote.Id;
@@ -161,13 +180,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     var newNote = new Note
                     {
-                        Value = BitConverter.ToString(note.GetHashCode()).Replace("-", ""),
+                        Value = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty),
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
                         Onumerator = note.Duration.Onumerator,
                         Odenominator = note.Duration.Odenominator,
-                        TieId = (int) note.Tie,
+                        TieId = (int)note.Tie,
                         Priority = note.Priority,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
                         NotationId = Aliases.Notation.Notes
@@ -180,7 +199,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             return result;
         }
-
 
         /// <summary>
         /// The to db elements.
