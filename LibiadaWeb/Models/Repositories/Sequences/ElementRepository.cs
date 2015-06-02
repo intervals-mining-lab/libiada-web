@@ -159,7 +159,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                            n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
                                                            pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))))
                 {
-                    var dbNote = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
+                    var databaseNote = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
                                                                           n.Denominator == note.Duration.Denominator &&
                                                                           n.Numerator == note.Duration.Numerator &&
                                                                           n.Odenominator == note.Duration.Odenominator &&
@@ -168,13 +168,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                                           n.Priority == note.Priority &&
                                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
                                                                           pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p)));
-
-                    if (dbNote.Value != BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty))
+                    
+                    var localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
+                    if (databaseNote.Value != localNoteHash)
                     {
-                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + dbNote.Value + " second hash: " + BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty));
+                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + databaseNote.Value + " second hash: " + localNoteHash);
                     }
 
-                    result[i] = dbNote.Id;
+                    result[i] = databaseNote.Id;
                 }
                 else
                 {

@@ -157,7 +157,9 @@
 
                                 CongenericChain tempChain = chain.CongenericChain(j);
 
-                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId && b.ElementId == elementId))
+                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId 
+                                                                       && b.CharacteristicTypeLinkId == characteristicTypeLinkId 
+                                                                       && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
                                     var currentCharacteristic = new CongenericCharacteristic
@@ -180,7 +182,9 @@
                         {
                             long elementId = sequenceElements[d];
 
-                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId && c.ElementId == elementId).Value;
+                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId 
+                                                                                         && c.CharacteristicTypeLinkId == characteristicTypeLinkId 
+                                                                                         && c.ElementId == elementId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));
 
