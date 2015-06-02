@@ -286,7 +286,7 @@
                 var localSubsequence = equalLocalSubsequences.First();
                 var localPositions = localSubsequence.Position.ToList();
                 
-                CheckSequenceAttributes(feature, localSubsequence, ref complement, ref complementJoin);
+                sequenceAttributeRepository.CheckSequenceAttributes(feature, localSubsequence, ref complement, ref complementJoin, ref partial);
 
                 for (int k = 1; k < leafLocations.Count; k++)
                 {
@@ -301,7 +301,7 @@
                     }
                 }
 
-                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin)
+                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin && !partial)
                 {
                     localSubsequences.Remove(localSubsequence);
                 }
@@ -311,71 +311,6 @@
             else
             {
                 return feature;
-            }
-        }
-
-        /// <summary>
-        /// The check sequence attributes.
-        /// </summary>
-        /// <param name="feature">
-        /// The feature.
-        /// </param>
-        /// <param name="localSubsequence">
-        /// The local subsequence.
-        /// </param>
-        /// <param name="complement">
-        /// The complement.
-        /// </param>
-        /// <param name="complementJoin">
-        /// The complement join.
-        /// </param>
-        private void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin)
-        {
-            var localAttributes = localSubsequence.SequenceAttribute.ToList();
-
-            foreach (var qualifier in feature.Qualifiers)
-            {
-                switch (qualifier.Key)
-                {
-                    case "translation":
-                        continue;
-                }
-
-                var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
-
-                var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
-
-                foreach (var value in qualifier.Value)
-                {
-                    if (equalAttributes.Any(a => a.Value == value))
-                    {
-                        localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == value));
-                    }
-                }
-            }
-
-            CheckBoolAttribute(ref complement, Aliases.Attribute.Complement, localAttributes);
-            CheckBoolAttribute(ref complementJoin, Aliases.Attribute.ComplementJoin, localAttributes);
-        }
-
-        /// <summary>
-        /// The check bool attribute.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="attributeId">
-        /// The attribute id.
-        /// </param>
-        /// <param name="attributes">
-        /// The attributes.
-        /// </param>
-        private void CheckBoolAttribute(ref bool value, int attributeId, List<SequenceAttribute> attributes)
-        {
-            if (value && attributes.Any(a => a.AttributeId == attributeId))
-            {
-                attributes.Remove(attributes.Single(a => a.AttributeId == attributeId));
-                value = false;
             }
         }
 
