@@ -4,23 +4,27 @@
 @(Html.Label("matterIds", "Sequences", new { @class = "control-label" }))
 <table class="table table-bordered table-hover">
     <thead>
-        <tr>
-            <th>
-                @(Html.DisplayNameFor(model => model.Name))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Description))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Created))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Modified))
-            </th>
-        </tr>
+    <tr>
+        <th>
+            #
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Name))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Description))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Created))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Modified))
+        </th>
+    </tr>
     </thead>
     <tbody>
         <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+            <td ng-bind="$index + 1" />
             <td>
                 <label>
                     @if (ViewBag.data["mattersCheckboxes"])

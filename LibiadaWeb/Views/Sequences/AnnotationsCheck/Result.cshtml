@@ -9,6 +9,57 @@
 
 @if (ViewBag.Error == null)
 {
+    <h3>Orphaned features</h3>
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Feature type
+                </th>
+                <th>
+                    Feature positions
+                </th>
+                <th>
+                    Feature attributes
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int j = 0; j < ViewBag.missingRemoteFeatures.Count; j++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.missingRemoteFeatures[j].Key
+                    </td>
+                    <td>
+                        @{
+                var leafLocations = ViewBag.missingRemoteFeatures[j].Location.GetLeafLocations();
+                foreach (var location in leafLocations)
+                {
+                    @location.LocationStart
+                            @location.LocationEnd
+                }
+                        }
+                    </td>
+                    <td>
+                        @{
+                var attributes = ViewBag.missingRemoteFeatures[j].Qualifiers;
+                foreach (var attribute in attributes)
+                {
+                    @attribute.Key
+                    foreach (var value in attribute.Value)
+                    {
+                        @value
+                    }
+                }
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br/>
+
     <h3>Local orphaned subsequences</h3>
     <table class="table table-bordered table-hover">
         <thead>
@@ -55,56 +106,6 @@
                             @position.Start
                             @position.Length
                             <br />
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <h3>Orphaned features</h3>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Feature type
-                </th>
-                <th>
-                    Feature positions
-                </th>
-                <th>
-                    Feature attributes
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int j = 0; j < ViewBag.missingRemoteFeatures.Count; j++)
-            {
-                <tr>
-                    <td>
-                        @ViewBag.missingRemoteFeatures[j].Key
-                    </td>
-                    <td>
-                        @{
-                var leafLocations = ViewBag.missingRemoteFeatures[j].Location.GetLeafLocations();
-                foreach (var location in leafLocations)
-                {
-                    @location.LocationStart
-                            @location.LocationEnd
-                }
-                        }
-                    </td>
-                    <td>
-                        @{
-                var attributes = ViewBag.missingRemoteFeatures[j].Qualifiers;
-                foreach (var attribute in attributes)
-                {
-                    @attribute.Key
-                    foreach (var value in attribute.Value)
-                    {
-                        @value
-                    }
-                }
                         }
                     </td>
                 </tr>
