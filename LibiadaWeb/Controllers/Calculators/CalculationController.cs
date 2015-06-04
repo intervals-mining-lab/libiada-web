@@ -4,6 +4,9 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Bio;
+    using Bio.Extensions;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
@@ -80,6 +83,9 @@
         /// <param name="rotate">
         /// Rotation flag.
         /// </param>
+        /// <param name="complementary">
+        /// Complement flag.
+        /// </param>
         /// <param name="rotationLength">
         /// The rotation length.
         /// </param>
@@ -94,6 +100,7 @@
             int[] languageIds,
             int?[] translatorIds,
             bool rotate,
+            bool complementary,
             uint? rotationLength)
         {
             return Action(() =>
@@ -128,7 +135,7 @@
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
                        
-                        if (!rotate && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                        if (!rotate && !complementary && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
                             double dataBaseCharacteristic = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
                             characteristics.Last().Add(dataBaseCharacteristic);
@@ -136,6 +143,13 @@
                         else
                         {
                             Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+
+                            if (complementary)
+                            {
+                                var sourceSequence = new Sequence(Alphabets.DNA, tempChain.ToString());
+                                var complementarySequence = sourceSequence.GetComplementedSequence();
+                                tempChain = new Chain(complementarySequence.ConvertToString());
+                            }
 
                             if (rotate)
                             {
@@ -151,7 +165,7 @@
 
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                             var characteristicValue = calculator.Calculate(tempChain, link);
-                            if (!rotate)
+                            if (!rotate && !complementary)
                             {
                                 var dataBaseCharacteristic = new Characteristic
                                 {
