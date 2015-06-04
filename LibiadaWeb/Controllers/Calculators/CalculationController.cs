@@ -147,7 +147,7 @@
                             if (complementary)
                             {
                                 var sourceSequence = new Sequence(Alphabets.DNA, tempChain.ToString());
-                                var complementarySequence = sourceSequence.GetComplementedSequence();
+                                var complementarySequence = sourceSequence.GetReverseComplementedSequence();
                                 tempChain = new Chain(complementarySequence.ConvertToString());
                             }
 

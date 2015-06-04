@@ -104,7 +104,7 @@
 
             if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
             {
-                bioSequence = bioSequence.GetComplementedSequence();
+                bioSequence = bioSequence.GetReverseComplementedSequence();
             }
 
             return new Chain(bioSequence.ConvertToString());
