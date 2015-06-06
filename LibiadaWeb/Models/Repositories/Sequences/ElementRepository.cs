@@ -138,9 +138,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="long[]"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if hash of local note not equals hash of note in db.
-        /// </exception>
         public long[] GetOrCreateNotesInDb(Alphabet alphabet)
         {
             var result = new long[alphabet.Cardinality];
@@ -149,32 +146,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var note = (ValueNote)alphabet[i];
                 var pitches = GetOrCreatePitchesInDb(note.Pitch);
 
-                if (db.Note.Include(n => n.Pitch).Any(n => n.Triplet == note.Triplet &&
-                                                           n.Denominator == note.Duration.Denominator &&
-                                                           n.Numerator == note.Duration.Numerator &&
-                                                           n.Odenominator == note.Duration.Odenominator &&
-                                                           n.Onumerator == note.Duration.Onumerator &&
-                                                           n.TieId == (byte)(note.Tie + 1) &&
-                                                           n.Priority == note.Priority &&
-                                                           n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
-                                                           pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p))))
+                var localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
+                if (db.Note.Any(n => n.Value == localNoteHash))
                 {
-                    var databaseNote = db.Note.Include(n => n.Pitch).Single(n => n.Triplet == note.Triplet &&
-                                                                          n.Denominator == note.Duration.Denominator &&
-                                                                          n.Numerator == note.Duration.Numerator &&
-                                                                          n.Odenominator == note.Duration.Odenominator &&
-                                                                          n.Onumerator == note.Duration.Onumerator &&
-                                                                          n.TieId == (byte)(note.Tie + 1) &&
-                                                                          n.Priority == note.Priority &&
-                                                                          n.Pitch.Select(p => p.Id).All(p => pitches.Contains(p)) &&
-                                                                          pitches.All(p => n.Pitch.Select(p2 => p2.Id).Contains(p)));
-                    
-                    var localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
-                    if (databaseNote.Value != localNoteHash)
-                    {
-                        throw new Exception("Hash of note from DB not equals hash from local note. First hash: " + databaseNote.Value + " second hash: " + localNoteHash);
-                    }
-
+                    var databaseNote = db.Note.Single(n => n.Value == localNoteHash);
                     result[i] = databaseNote.Id;
                 }
                 else

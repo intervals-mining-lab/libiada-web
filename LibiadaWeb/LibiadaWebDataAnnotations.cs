@@ -628,12 +628,6 @@
         public int Denominator { get; set; }
 
         /// <summary>
-        /// Gets or sets the ticks.
-        /// </summary>
-        [Display(Name = "Количество МИДИ тиков в доле")]
-        public int Ticks { get; set; }
-
-        /// <summary>
         /// Gets or sets the onumerator.
         /// </summary>
         [Display(Name = "Оригинальный числитель в дроби доли")]
@@ -724,12 +718,6 @@
         /// </summary>
         [Display(Name = "Instrument")]
         public int InstrumentId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the note_id.
-        /// </summary>
-        [Display(Name = "Принадлежит ноте")]
-        public long NoteId { get; set; }
 
         /// <summary>
         /// Gets or sets the accidental id.

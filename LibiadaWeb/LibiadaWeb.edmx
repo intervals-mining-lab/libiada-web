@@ -376,7 +376,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
@@ -2350,7 +2350,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />

@@ -955,6 +955,13 @@ ALTER TABLE note ADD CONSTRAINT uk_note UNIQUE (value);
  
 ALTER TABLE characteristic_type ADD CONSTRAINT uk_characteristic_type_class_name UNIQUE (class_name);
 
+-- 06.06.2015
+-- Added tie records.
+
+INSERT INTO tie(id, name, description) VALUES(0, 'None', 'No tie on note');
+INSERT INTO tie(id, name, description) VALUES(1, 'Start', 'On note tie starts');
+INSERT INTO tie(id, name, description) VALUES(2, 'Stop', 'On note tie ends');
+INSERT INTO tie(id, name, description) VALUES(3, 'StartStop', 'Note inside tie');
 
 
 COMMIT;
