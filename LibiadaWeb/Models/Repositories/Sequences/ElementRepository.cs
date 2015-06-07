@@ -101,15 +101,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var noteSymbol = pitch.Step.ToString();
                 var accidental = pitch.Alter.ToString();
 
-                if (db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental)
-                    .Any(p => p.NoteSymbol.Name == noteSymbol &&
-                             p.Octave == pitch.Octave &&
-                             p.Accidental.Name == accidental))
+                if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
                 {
-                    result[i] = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental)
-                        .Single(p => p.NoteSymbol.Name == noteSymbol &&
-                                    p.Octave == pitch.Octave &&
-                                    p.Accidental.Name == accidental).Id;
+                    var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
+                    result[i] = databasePitch.Id;
+
+                    if (pitch.Alter.ToString() != databasePitch.Accidental.Name
+                        || pitch.Step.ToString() != databasePitch.NoteSymbol.Name 
+                        || pitch.Octave != databasePitch.Octave)
+                    {
+                        throw new Exception("Found in db pitch not equals to local pitch.");
+                    }
                 }
                 else
                 {
@@ -117,7 +119,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     {
                         AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
                         NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
-                        Octave = pitch.Octave
+                        Octave = pitch.Octave,
+                        Midinumber = pitch.MidiNumber
                     };
 
                     db.Pitch.Add(newPitch);
@@ -151,6 +154,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     var databaseNote = db.Note.Single(n => n.Value == localNoteHash);
                     result[i] = databaseNote.Id;
+                    if (note.Triplet != databaseNote.Triplet || note.Duration.Denominator != databaseNote.Denominator
+                        || note.Duration.Numerator != databaseNote.Numerator
+                        || note.Duration.Odenominator != databaseNote.Odenominator
+                        || note.Duration.Onumerator != databaseNote.Onumerator || (int)note.Tie != databaseNote.TieId)
+                    {
+                        throw new Exception("Found in db note not equals to local note.");
+                    }
+
                 }
                 else
                 {
@@ -255,7 +266,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public List<Element> GetElements(List<long> elementIds)
         {
             var elements = new List<Element>();
-            for (int i = 0; i < elementIds.Count(); i++)
+            for (int i = 0; i < elementIds.Count; i++)
             {
                 long elementId = elementIds[i];
                 elements.Add(db.Element.Single(e => e.Id == elementId));
