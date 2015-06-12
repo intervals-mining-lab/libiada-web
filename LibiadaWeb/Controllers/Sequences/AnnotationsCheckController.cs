@@ -1,7 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Web.Mvc;
@@ -28,8 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AnnotationsCheckController"/> class.
         /// </summary>
-        public AnnotationsCheckController()
-            : base("AnnotationsCheck", "Subsequences annotations check")
+        public AnnotationsCheckController() : base("AnnotationsCheck", "Subsequences annotations check")
         {
             db = new LibiadaWebEntities();
             subsequenceRepository = new SubsequenceRepository(db);
@@ -88,6 +86,8 @@
                     var matterName = db.Matter.Single(m => m.Id == matterId).Name;
 
                     result.Add("matterName", matterName);
+                    result.Add("features", features);
+                    result.Add("sequenceId", sequenceId);
 
                     return result;
                 });

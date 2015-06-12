@@ -1,40 +1,6 @@
 ﻿namespace LibiadaWeb
 {
-    using System;
     using System.ComponentModel.DataAnnotations;
-
-    /// <summary>
-    /// The common data annotations.
-    /// </summary>
-    public class CommonDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-    }
-
-    /// <summary>
-    /// The accidental.
-    /// </summary>
-    [MetadataType(typeof(AccidentalDataAnnotations))]
-    public partial class Accidental 
-    {
-    }
-
-    /// <summary>
-    /// The accidental data annotations.
-    /// </summary>
-    public class AccidentalDataAnnotations : CommonDataAnnotations
-    {
-    }
 
     /// <summary>
     /// The binary characteristic.
@@ -80,18 +46,6 @@
         /// </summary>
         [Display(Name = "Notation of elements in sequence")]
         public long NotationId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created.
-        /// </summary>
-        [Display(Name = "Created")]
-        public DateTimeOffset Created { get; set; }
-
-        /// <summary>
-        /// Gets or sets the modified.
-        /// </summary>
-        [Display(Name = "Last modification date")]
-        public DateTimeOffset Modified { get; set; }
 
         /// <summary>
         /// Gets or sets the matter id.
@@ -144,37 +98,10 @@
         public long SequenceId { get; set; }
 
         /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        [Display(Name = "Value")]
-        public double Value { get; set; }
-
-        /// <summary>
         /// Gets or sets the value string.
         /// </summary>
         [Display(Name = "Value as string")]
         public string ValueString { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created.
-        /// </summary>
-        [Display(Name = "Created")]
-        public DateTimeOffset Created { get; set; }
-    }
-
-    /// <summary>
-    /// The characteristic group.
-    /// </summary>
-    [MetadataType(typeof(CharacteristicGroupDataAnnotations))]
-    public partial class CharacteristicGroup
-    {
-    }
-
-    /// <summary>
-    /// The characteristic group data annotations.
-    /// </summary>
-    public class CharacteristicGroupDataAnnotations : CommonDataAnnotations
-    {
     }
 
     /// <summary>
@@ -188,7 +115,7 @@
     /// <summary>
     /// The characteristic type data annotations.
     /// </summary>
-    public class CharacteristicTypeDataAnnotations : CommonDataAnnotations
+    public class CharacteristicTypeDataAnnotations
     {
         /// <summary>
         /// Gets or sets the characteristic group id.
@@ -305,25 +232,13 @@
     /// <summary>
     /// The element data annotations.
     /// </summary>
-    public class ElementDataAnnotations : CommonDataAnnotations
+    public class ElementDataAnnotations 
     {
         /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        [Display(Name = "Value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the notation_id.
+        /// Gets or sets the notationId.
         /// </summary>
         [Display(Name = "Notation")]
         public long NotationId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the created.
-        /// </summary>
-        [Display(Name = "Created")]
-        public DateTimeOffset Created { get; set; }
     }
 
     /// <summary>
@@ -340,43 +255,10 @@
     public class FmotivDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        [Display(Name = "Value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-
-        /// <summary>
         /// Gets or sets the fmotiv_type_id.
         /// </summary>
         [Display(Name = "Fmotif type")]
         public int FmotivTypeId { get; set; }
-    }
-
-    /// <summary>
-    /// The fmotiv type.
-    /// </summary>
-    [MetadataType(typeof(FmotivTypeDataAnnotations))]
-    public partial class FmotivType
-    {
-    }
-
-    /// <summary>
-    /// The fmotiv type data annotations.
-    /// </summary>
-    public class FmotivTypeDataAnnotations : CommonDataAnnotations
-    {
     }
 
     /// <summary>
@@ -397,51 +279,6 @@
         /// </summary>
         [Display(Name = "Element")]
         public int ElementId { get; set; }
-    }
-
-    /// <summary>
-    /// The instrument.
-    /// </summary>
-    [MetadataType(typeof(InstrumentDataAnnotations))]
-    public partial class Instrument
-    {
-    }
-
-    /// <summary>
-    /// The instrument data annotations.
-    /// </summary>
-    public class InstrumentDataAnnotations : CommonDataAnnotations
-    {
-    }
-
-    /// <summary>
-    /// The language.
-    /// </summary>
-    [MetadataType(typeof(LanguageDataAnnotations))]
-    public partial class Language
-    {
-    }
-
-    /// <summary>
-    /// The language data annotations.
-    /// </summary>
-    public class LanguageDataAnnotations : CommonDataAnnotations
-    {
-    }
-
-    /// <summary>
-    /// The link.
-    /// </summary>
-    [MetadataType(typeof(LinkDataAnnotations))]
-    public partial class Link
-    {
-    }
-
-    /// <summary>
-    /// The link data annotations.
-    /// </summary>
-    public class LinkDataAnnotations : CommonDataAnnotations
-    {
     }
 
     /// <summary>
@@ -487,7 +324,7 @@
     /// <summary>
     /// The matter data annotations.
     /// </summary>
-    public class MatterDataAnnotations : CommonDataAnnotations
+    public class MatterDataAnnotations
     {
         /// <summary>
         /// Gets or sets the nature id.
@@ -509,24 +346,6 @@
     /// </summary>
     public class MeasureDataAnnotations : CommonSequenceDataAnnotations
     {
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        [Display(Name = "Value")]
-        public string Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        [Display(Name = "Name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        [Display(Name = "Description")]
-        public string Description { get; set; }
-
         /// <summary>
         /// Gets or sets the beats.
         /// </summary>
@@ -568,21 +387,6 @@
     }
 
     /// <summary>
-    /// The nature.
-    /// </summary>
-    [MetadataType(typeof(NatureDataAnnotations))]
-    public partial class Nature
-    {
-    }
-
-    /// <summary>
-    /// The nature data annotations.
-    /// </summary>
-    public class NatureDataAnnotations : CommonDataAnnotations
-    {
-    }
-
-    /// <summary>
     /// The notation.
     /// </summary>
     [MetadataType(typeof(NotationDataAnnotations))]
@@ -593,7 +397,7 @@
     /// <summary>
     /// The notation data annotations.
     /// </summary>
-    public class NotationDataAnnotations : CommonDataAnnotations
+    public class NotationDataAnnotations
     {
         /// <summary>
         /// Gets or sets the nature id.
@@ -646,31 +450,10 @@
         public bool Triplet { get; set; }
 
         /// <summary>
-        /// Gets or sets the priority.
-        /// </summary>
-        [Display(Name = "Приоритет")]
-        public int Priority { get; set; }
-
-        /// <summary>
         /// Gets or sets the tie id.
         /// </summary>
         [Display(Name = "Лига")]
         public int TieId { get; set; }
-    }
-
-    /// <summary>
-    /// The note_symbol.
-    /// </summary>
-    [MetadataType(typeof(NoteSymbolDataAnnotations))]
-    public partial class NoteSymbol
-    {
-    }
-
-    /// <summary>
-    /// The note symbol data annotations.
-    /// </summary>
-    public class NoteSymbolDataAnnotations : CommonDataAnnotations
-    {
     }
 
     /// <summary>
@@ -743,57 +526,12 @@
     /// <summary>
     /// The remote db data annotations.
     /// </summary>
-    public class RemoteDbDataAnnotations : CommonDataAnnotations
+    public class RemoteDbDataAnnotations
     {
         /// <summary>
         /// Gets or sets the url.
         /// </summary>
         [Display(Name = "url address")]
         public string Url { get; set; }
-    }
-
-    /// <summary>
-    /// The tie.
-    /// </summary>
-    [MetadataType(typeof(TieDataAnnotations))]
-    public partial class Tie
-    {
-    }
-
-    /// <summary>
-    /// The tie data annotations.
-    /// </summary>
-    public class TieDataAnnotations : CommonDataAnnotations
-    {
-    }
-
-    /// <summary>
-    /// The sequence attribute.
-    /// </summary>
-    [MetadataType(typeof(SequenceAttributeDataAnnotations))]
-    public partial class SequenceAttribute
-    {
-    }
-
-    /// <summary>
-    /// The product data annotations.
-    /// </summary>
-    public class SequenceAttributeDataAnnotations
-    {
-    }
-
-    /// <summary>
-    /// The translator.
-    /// </summary>
-    [MetadataType(typeof(TranslatorDataAnnotations))]
-    public partial class Translator
-    {
-    }
-
-    /// <summary>
-    /// The translator data annotations.
-    /// </summary>
-    public class TranslatorDataAnnotations : CommonDataAnnotations
-    {
     }
 }

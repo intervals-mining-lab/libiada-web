@@ -93,6 +93,74 @@
         }
 
         /// <summary>
+        /// The update annotations.
+        /// </summary>
+        /// <param name="features">
+        /// The features.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        public void UpdateAnnotations(List<FeatureItem> features, long sequenceId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The check annotations.
+        /// </summary>
+        /// <param name="features">
+        /// The features.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if error occurs during importability check.
+        /// </exception>
+        public Dictionary<string, object> CheckAnnotations(List<FeatureItem> features, long sequenceId)
+        {
+            try
+            {
+                CheckImportability(features, sequenceId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error occured during importability check.", e);
+            }
+
+            var localSubsequences = db.Subsequence
+                    .Include(s => s.Feature)
+                    .Include(s => s.Position)
+                    .Include(s => s.SequenceAttribute)
+                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
+            
+            var missingRemoteFeatures = new List<FeatureItem>();
+
+            for (int i = 1; i < features.Count; i++)
+            {
+                var missingFeature = CheckFeature(features[i], localSubsequences);
+                if (missingFeature != null)
+                {
+                    missingRemoteFeatures.Add(missingFeature);
+                }
+            }
+
+            var annotationsUpdatable = missingRemoteFeatures.Count == 0 && localSubsequences.Count > 0;
+
+            return new Dictionary<string, object>
+                       {
+                           { "attributes", db.Attribute.ToList() },
+                           { "localSubsequences", localSubsequences },
+                           { "missingRemoteFeatures", missingRemoteFeatures },
+                           { "annotationsUpdatable", annotationsUpdatable }
+                       };
+        }
+
+        /// <summary>
         /// Checks importability of subsequences.
         /// </summary>
         /// <param name="features">
@@ -107,7 +175,7 @@
         /// if source length not equals to parent sequence length or 
         /// if feature length is less than 1.
         /// </exception>
-        public void CheckImportability(List<FeatureItem> features, long sequenceId)
+        private void CheckImportability(List<FeatureItem> features, long sequenceId)
         {
             var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 
@@ -163,69 +231,11 @@
                     throw new Exception("No leaf locations");
                 }
 
-                foreach (var leafLocation in leafLocations)
+                if (leafLocations.Any(leafLocation => leafLocation.LocationEnd < leafLocation.LocationStart))
                 {
-                    int start = leafLocation.LocationStart - 1;
-                    int end = leafLocation.LocationEnd - 1;
-                    int length = end - start + 1;
-
-                    if (length < 1)
-                    {
-                        throw new Exception("Subsequence length cant be less than 1.");
-                    }
+                    throw new Exception("Subsequence length cant be less than 1.");
                 }
             }
-        }
-
-        /// <summary>
-        /// The check annotations.
-        /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Dictionary{String, Object}"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if error occurs during importability check.
-        /// </exception>
-        public Dictionary<string, object> CheckAnnotations(List<FeatureItem> features, long sequenceId)
-        {
-            try
-            {
-                CheckImportability(features, sequenceId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error occured during importability check.", e);
-            }
-
-            var localSubsequences = db.Subsequence
-                    .Include(s => s.Feature)
-                    .Include(s => s.Position)
-                    .Include(s => s.SequenceAttribute)
-                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
-
-            var missingRemoteFeatures = new List<FeatureItem>();
-
-            for (int i = 1; i < features.Count; i++)
-            {
-                var missingFeature = CheckFeature(features[i], localSubsequences);
-                if (missingFeature != null)
-                {
-                    missingRemoteFeatures.Add(missingFeature);
-                }
-            }
-
-            return new Dictionary<string, object>
-                       {
-                           { "attributes", db.Attribute.ToList() },
-                           { "localSubsequences", localSubsequences },
-                           { "missingRemoteFeatures", missingRemoteFeatures }
-                       };
         }
 
         /// <summary>

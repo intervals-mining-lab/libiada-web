@@ -1,14 +1,9 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
     using System.Text;
-    using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.SimpleTypes;
 
     using LibiadaWeb.Helpers;
 
@@ -55,7 +50,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </exception>
         public void Create(CommonSequence sequence, bool partial, bool complementary, string stringSequence, int? webApiId)
         {
-            // отделяем заголовок fasta файла от цепочки
+            // separating fasta header from sequence.
             string[] splittedFasta = stringSequence.Split('\n', '\r');
             var sequenceStringBuilder = new StringBuilder();
             string fastaHeader = splittedFasta[0];
@@ -188,6 +183,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Db.Dispose();
+        }
+
+        /// <summary>
         /// The to sequence.
         /// </summary>
         /// <param name="source">
@@ -196,7 +199,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="CommonSequence"/>.
         /// </returns>
-        public CommonSequence ToCommonSequence(DnaSequence source)
+        private CommonSequence ToCommonSequence(DnaSequence source)
         {
             return new CommonSequence
             {
@@ -206,120 +209,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 FeatureId = source.FeatureId, 
                 PiecePosition = source.PiecePosition
             };
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="sequences">
-        /// The sequences.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<DnaSequence> sequences)
-        {
-            return GetSelectListItems(Db.DnaSequence.ToList(), sequences);
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="allSequences">
-        /// The all sequences.
-        /// </param>
-        /// <param name="selectedSequences">
-        /// The selected sequence.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{Object}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(
-            IEnumerable<DnaSequence> allSequences,
-            IEnumerable<DnaSequence> selectedSequences)
-        {
-            HashSet<long> sequenceIds = selectedSequences != null
-                ? new HashSet<long>(selectedSequences.Select(c => c.Id))
-                : new HashSet<long>();
-            if (allSequences == null)
-            {
-                allSequences = Db.DnaSequence.Include(s => s.Matter);
-            }
-
-            var sequencesList = new List<SelectListItem>();
-            foreach (var sequence in allSequences)
-            {
-                sequencesList.Add(new SelectListItem
-                {
-                    Value = sequence.Id.ToString(), 
-                    Text = sequence.Matter.Name, 
-                    Selected = sequenceIds.Contains(sequence.Id)
-                });
-            }
-
-            return sequencesList;
-        }
-
-        /// <summary>
-        /// The create complementary alphabet.
-        /// </summary>
-        /// <param name="alphabet">
-        /// The alphabet.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Alphabet"/>.
-        /// </returns>
-        public Alphabet CreateComplementaryAlphabet(Alphabet alphabet)
-        {
-            var newAlphabet = new Alphabet { NullValue.Instance() };
-
-            for (int i = 0; i < alphabet.Cardinality; i++)
-            {
-                newAlphabet.Add(GetComplementaryElement(alphabet[i]));
-            }
-
-            return newAlphabet;
-        }
-
-        /// <summary>
-        /// The get complementary element.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ValueString"/>.
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// Thrown if any element in sequence is not recognized as nucleotide.
-        /// </exception>
-        public ValueString GetComplementaryElement(IBaseObject source)
-        {
-            switch (source.ToString())
-            {
-                case "A":
-                case "a":
-                    return new ValueString('T');
-                case "C":
-                case "c":
-                    return new ValueString('G');
-                case "G":
-                case "g":
-                    return new ValueString('C');
-                case "T":
-                case "t":
-                    return new ValueString('A');
-                default:
-                    throw new ArgumentException("Unknown nucleotide.", "source");
-            }
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
-            Db.Dispose();
         }
     }
 }

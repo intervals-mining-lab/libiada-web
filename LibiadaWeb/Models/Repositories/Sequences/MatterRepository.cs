@@ -4,7 +4,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using System.Web.Mvc;
 
     /// <summary>
     /// The matter repository.
@@ -41,72 +40,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 matter.Sequence = new Collection<CommonSequence>();
                 commonSequence.MatterId = CreateMatter(matter);
             }
-        }
-
-        /// <summary>
-        /// The create matter.
-        /// </summary>
-        /// <param name="matter">
-        /// The matter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="long"/>.
-        /// </returns>
-        public long CreateMatter(Matter matter)
-        {
-            db.Matter.Add(matter);
-            db.SaveChanges();
-            return matter.Id;
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="selectedMatters">
-        /// The selected matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> selectedMatters)
-        {
-            return GetSelectListItems(db.Matter, selectedMatters);
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="allMatters">
-        /// The all matters.
-        /// </param>
-        /// <param name="selectedMatters">
-        /// The selected matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<Matter> allMatters, IEnumerable<Matter> selectedMatters)
-        {
-            HashSet<long> matterIds = selectedMatters != null
-                                          ? new HashSet<long>(selectedMatters.Select(c => c.Id))
-                                          : new HashSet<long>();
-            var mattersList = new List<SelectListItem>();
-            if (allMatters == null)
-            {
-                allMatters = db.Matter;
-            }
-
-            foreach (var matter in allMatters)
-            {
-                mattersList.Add(new SelectListItem
-                    {
-                        Value = matter.Id.ToString(), 
-                        Text = matter.Name, 
-                        Selected = matterIds.Contains(matter.Id)
-                    });
-            }
-
-            return mattersList;
         }
 
         /// <summary>
@@ -200,6 +133,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public void Dispose()
         {
             db.Dispose();
+        }
+
+        /// <summary>
+        /// The create matter.
+        /// </summary>
+        /// <param name="matter">
+        /// The matter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="long"/>.
+        /// </returns>
+        private long CreateMatter(Matter matter)
+        {
+            db.Matter.Add(matter);
+            db.SaveChanges();
+            return matter.Id;
         }
     }
 }

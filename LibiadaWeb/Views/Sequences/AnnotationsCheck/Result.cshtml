@@ -1,117 +1,139 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Attributes check results";
+    ViewBag.Title = "Annotations check results";
 }
 
-<h2>Attributes of @ViewBag.matterName check results</h2>
+<h2>Annotations of @ViewBag.matterName check results</h2>
 
 
 @if (ViewBag.Error == null)
 {
-    <h3>Orphaned features</h3>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Feature type
-                </th>
-                <th>
-                    Feature positions
-                </th>
-                <th>
-                    Feature attributes
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int j = 0; j < ViewBag.missingRemoteFeatures.Count; j++)
-            {
+    if (ViewBag.missingRemoteFeatures.Count == 0 && ViewBag.localSubsequences.Count == 0)
+    {
+        <h3>Annotations are equal</h3>
+    }
+    else
+    {
+        <h3>Orphaned features</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        @ViewBag.missingRemoteFeatures[j].Key
-                    </td>
-                    <td>
-                        @{
-                var leafLocations = ViewBag.missingRemoteFeatures[j].Location.GetLeafLocations();
-                foreach (var location in leafLocations)
-                {
-                    @location.LocationStart
-                            @location.LocationEnd
-                }
-                        }
-                    </td>
-                    <td>
-                        @{
-                var attributes = ViewBag.missingRemoteFeatures[j].Qualifiers;
-                foreach (var attribute in attributes)
-                {
-                    @attribute.Key
-                    foreach (var value in attribute.Value)
-                    {
-                        @value
-                    }
-                }
-                        }
-                    </td>
+                    <th>
+                        Feature type
+                    </th>
+                    <th>
+                        Feature positions
+                    </th>
+                    <th>
+                        Feature attributes
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <br/>
+            </thead>
+            <tbody>
+                @for (int j = 0; j < ViewBag.missingRemoteFeatures.Count; j++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.missingRemoteFeatures[j].Key
+                        </td>
+                        <td>
+                            @{
+                                var leafLocations = ViewBag.missingRemoteFeatures[j].Location.GetLeafLocations();
+                                foreach (var location in leafLocations)
+                                {
+                                    @location.LocationStart
+                                    @location.LocationEnd
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var attributes = ViewBag.missingRemoteFeatures[j].Qualifiers;
+                                foreach (var attribute in attributes)
+                                {
+                                    @attribute.Key
+                                    foreach (var value in attribute.Value)
+                                    {
+                                        @value
+                                    }
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
 
-    <h3>Local orphaned subsequences</h3>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Feature
-                </th>
-                <th>
-                    Subsequence attributes
-                </th>
-                <th>
-                    Subsequence position
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.localSubsequences.Count; i++)
-            {
+        <h3>Local orphaned subsequences</h3>
+        <table class="table table-bordered table-hover">
+            <thead>
                 <tr>
-                    <td>
-                        @ViewBag.localSubsequences[i].Feature.Name
-                    </td>
-                    <td>
-                        @foreach (var attribute in ViewBag.localSubsequences[i].SequenceAttribute)
-                        {
-
-                            var attributeName = ((List<LibiadaWeb.Attribute>)ViewBag.attributes).Single(a => a.Id == attribute.AttributeId).Name;
-
-                            <b>
-                                @attributeName 
-                            </b>  
-
-                            @attribute.Value
-                            <br />
-                        }
-                    </td>
-
-                    <td>
-                        @ViewBag.localSubsequences[i].Start
-                        @ViewBag.localSubsequences[i].Length
-                        <br />
-                        @foreach (var position in ViewBag.localSubsequences[i].Position)
-                        {
-                            @position.Start
-                            @position.Length
-                            <br />
-                        }
-                    </td>
+                    <th>
+                        Feature
+                    </th>
+                    <th>
+                        Subsequence attributes
+                    </th>
+                    <th>
+                        Subsequence position
+                    </th>
                 </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < ViewBag.localSubsequences.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            @ViewBag.localSubsequences[i].Feature.Name
+                        </td>
+                        <td>
+                            @foreach (var attribute in ViewBag.localSubsequences[i].SequenceAttribute)
+                            {
+
+                                var attributeName = ((List<LibiadaWeb.Attribute>)ViewBag.attributes).Single(a => a.Id == attribute.AttributeId).Name;
+
+                                <b>
+                                    @attributeName
+                                </b>
+
+                                @attribute.Value
+                                <br />
+                            }
+                        </td>
+
+                        <td>
+                            @ViewBag.localSubsequences[i].Start
+                            @ViewBag.localSubsequences[i].Length
+                            <br />
+                            @foreach (var position in ViewBag.localSubsequences[i].Position)
+                            {
+                                @position.Start
+                                @position.Length
+                                <br />
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        if (ViewBag.annotationsUpdatable)
+        {
+            using (Html.BeginForm("Index", "AnnotationUpdate", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-10">
+                            <input type="submit" value="Update local annotations" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        }
+    }
 
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryui")

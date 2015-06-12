@@ -133,9 +133,6 @@
         /// <returns>
         /// The <see cref="Task"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if nature id of notation of sequence is unknown. 
-        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(

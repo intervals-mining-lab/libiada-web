@@ -1,0 +1,13 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Annotations update results";
+}
+
+<h2>Annotations of @ViewBag.matterName update results</h2>
+
+
+@if (ViewBag.Error == null)
+{
+    <h3>Annotations updated successfully</h3>
+}

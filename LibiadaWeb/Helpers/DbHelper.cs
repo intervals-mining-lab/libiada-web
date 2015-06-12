@@ -84,7 +84,7 @@
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="int[]"/>.
+        /// The <see cref="T:int[]"/>.
         /// </returns>
         public static int[] GetBuilding(LibiadaWebEntities db, long sequenceId)
         {

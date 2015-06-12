@@ -57,20 +57,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
-        /// Gets feature name by id.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetFeatureNameById(int id)
-        {
-            return features.Single(f => f.Id == id).Name;
-        } 
-
-        /// <summary>
         /// Checks if feature exists.
         /// </summary>
         /// <param name="name">

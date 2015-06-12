@@ -1,9 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Web.Mvc;
 
     using LibiadaCore.Core;
 
@@ -63,57 +60,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                     );";
 
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="selectedSequences">
-        /// The selected sequences.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> selectedSequences)
-        {
-            return GetSelectListItems(null, selectedSequences);
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="allSequences">
-        /// The all sequences.
-        /// </param>
-        /// <param name="selectedSequences">
-        /// The selected sequences.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<CommonSequence> allSequences, IEnumerable<CommonSequence> selectedSequences)
-        {
-            if (allSequences == null)
-            {
-                allSequences = Db.CommonSequence.Include(s => s.Matter);
-            }
-
-            HashSet<long> sequenceIds = selectedSequences != null
-                                          ? new HashSet<long>(selectedSequences.Select(c => c.Id))
-                                          : new HashSet<long>();
-            var sequencesList = new List<SelectListItem>();
-            
-            foreach (var sequence in allSequences)
-            {
-                sequencesList.Add(new SelectListItem
-                {
-                    Value = sequence.Id.ToString(), 
-                    Text = sequence.Matter.Name, 
-                    Selected = sequenceIds.Contains(sequence.Id)
-                });
-            }
-
-            return sequencesList;
         }
 
         /// <summary>

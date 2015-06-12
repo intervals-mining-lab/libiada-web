@@ -85,20 +85,6 @@
         }
 
         /// <summary>
-        /// The get file.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
-        public static Stream GetFileStream(string id)
-        {
-            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
-        }
-
-        /// <summary>
         /// Returns genbank file FileStream.
         /// </summary>
         /// <param name="id">
@@ -128,6 +114,20 @@
 
             fileStream.Read(input, 0, (int)fileStream.Length);
             return Encoding.ASCII.GetString(input);
+        }
+
+        /// <summary>
+        /// The get file.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        private static Stream GetFileStream(string id)
+        {
+            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
         }
 
         /// <summary>

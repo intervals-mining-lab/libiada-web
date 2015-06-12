@@ -9,7 +9,6 @@
     using LibiadaCore.Misc.Iterators;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
 
@@ -24,19 +23,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository sequenceRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingsSimilarityController"/> class.
@@ -44,9 +33,7 @@
         public BuildingsSimilarityController() : base("BuildingsSimilarity", "Buildings comparison")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
-            notationRepository = new NotationRepository(db);
         }
 
         /// <summary>
@@ -215,15 +202,7 @@
                 return false;
             }
 
-            for (int i = 0; i < firstBuilding.Length; i++)
-            {
-                if (firstBuilding[i] != secondBuilding[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return firstBuilding.SequenceEqual(secondBuilding);
         }
     }
 }

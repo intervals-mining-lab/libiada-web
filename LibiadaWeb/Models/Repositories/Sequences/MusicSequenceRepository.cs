@@ -53,27 +53,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
             
-            var chain = ConvertCongenericScroreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
+            var chain = ConvertCongenericScoreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
             var alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
             Create(sequence, alphabet, chain.Building);
-        }
-
-        /// <summary>
-        /// The convert congeneric scrore track to base chain.
-        /// </summary>
-        /// <param name="scoreTrack">
-        /// The score track.
-        /// </param>
-        /// <returns>
-        /// The <see cref="BaseChain"/>.
-        /// </returns>
-        public BaseChain ConvertCongenericScroreTrackToBaseChain(CongenericScoreTrack scoreTrack)
-        {
-            var notes = scoreTrack.GetNotes();
-            return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
         }
 
         /// <summary>
@@ -117,32 +102,26 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to sequence.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommonSequence"/>.
-        /// </returns>
-        public CommonSequence ToCommonSequence(MusicSequence source)
-        {
-            return new CommonSequence
-            {
-                Id = source.Id,
-                NotationId = source.NotationId, 
-                MatterId = source.MatterId, 
-                FeatureId = source.FeatureId, 
-                PiecePosition = source.PiecePosition
-            };
-        }
-
-        /// <summary>
         /// The dispose.
         /// </summary>
         public void Dispose() 
         {
             Db.Dispose();
+        }
+
+        /// <summary>
+        /// The convert congeneric score track to base chain.
+        /// </summary>
+        /// <param name="scoreTrack">
+        /// The score track.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BaseChain"/>.
+        /// </returns>
+        private BaseChain ConvertCongenericScoreTrackToBaseChain(CongenericScoreTrack scoreTrack)
+        {
+            var notes = scoreTrack.GetNotes();
+            return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
         }
     }
 }

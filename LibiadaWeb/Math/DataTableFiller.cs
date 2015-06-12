@@ -5,62 +5,60 @@
     using Clusterizator;
 
     /// <summary>
-    /// Класс заполняющий таблицу данных для кластеризации
+    /// Class filling results table of clusterization
     /// </summary>
     public static class DataTableFiller
     {
         /// <summary>
-        /// Метод, формирующий таблицу
+        /// Fills data table.
         /// </summary>
         /// <param name="id">
-        /// Массив номеров цепочек
+        /// Array of sequences ids.
         /// </param>
         /// <param name="characteristicsNames">
-        /// Массив названий характеристик
+        /// Array of characteristics names.
         /// </param>
         /// <param name="characteristics">
-        /// Двумерный массив характеристик
+        /// Two-dimensional array of characteristics values.
         /// </param>
         /// <returns>
-        /// Таблица днных
+        /// The <see cref="DataTable"/>.
         /// </returns>
         public static DataTable FillDataTable(long[] id, string[] characteristicsNames, List<List<double>> characteristics)
         {
-            var tempTable = new DataTable();
+            var result = new DataTable();
             for (int j = 0; j < id.Length; j++)
             {
-                // формируются строки и добавляются в таблицу
-                tempTable.Add(FormDataObject(characteristics[j], characteristicsNames, id[j]));
+                result.Add(FormDataObject(characteristics[j], characteristicsNames, id[j]));
             }
 
-            return tempTable;
+            return result;
         }
 
         /// <summary>
-        /// Метод ,формирующий строку таблицы
+        /// Fills row of data table.
         /// </summary>
         /// <param name="characteristics">
-        /// Строка таблицы характеристик
+        /// Row of characteristics table.
         /// </param>
         /// <param name="characteristicsNames">
-        /// Массив названий характеристик
+        /// Characteristics names array.
         /// </param>
         /// <param name="id">
-        /// Номер цепочки
+        /// Sequence id.
         /// </param>
         /// <returns>
-        /// Строка таблицы
+        /// The <see cref="DataObject"/>.
         /// </returns>
         private static DataObject FormDataObject(List<double> characteristics, string[] characteristicsNames, long id)
         {
-            var tempObject = new DataObject { Id = id };
+            var result = new DataObject { Id = id };
             for (int i = 0; i < characteristicsNames.Length; i++)
             {
-                // добавляется очередное значение характеристики
-                tempObject.Add(characteristicsNames[i], characteristics[i]);
+                result.Add(characteristicsNames[i], characteristics[i]);
             }
 
-            return tempObject;
+            return result;
         }
     }
 }

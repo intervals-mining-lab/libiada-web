@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="c4b0e02522424fdaa36b3bd5e9b375a7" Name="Diagram1" ZoomLevel="85" >
+      <Diagram DiagramId="c4b0e02522424fdaa36b3bd5e9b375a7" Name="Diagram1" ZoomLevel="100" >
         <EntityTypeShape EntityType="LibiadaWebModel.matter" Width="1.5" PointX="11.125" PointY="1.625" />
         <EntityTypeShape EntityType="LibiadaWebModel.nature" Width="1.5" PointX="7.75" PointY="1.625" />
         <AssociationConnector Association="LibiadaWebModel.fk_matter_nature" />
@@ -29,11 +29,9 @@
         <EntityTypeShape EntityType="LibiadaWebModel.element" Width="1.5" PointX="2.5" PointY="7.75" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_first_element" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_second_element" />
-        <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_element" />
         <EntityTypeShape EntityType="LibiadaWebModel.fmotiv" Width="1.5" PointX="5" PointY="9.875" />
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_matter" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_fmotiv" />
-        <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_fmotiv" />
         <AssociationConnector Association="LibiadaWebModel.fk_characteristic_fmotiv" />
         <EntityTypeShape EntityType="LibiadaWebModel.fmotiv_type" Width="1.5" PointX="7.625" PointY="10" />
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_fmotiv_type" />
@@ -45,19 +43,16 @@
         <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_link" />
         <EntityTypeShape EntityType="LibiadaWebModel.literature_chain" Width="1.5" PointX="15.75" PointY="9.375" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_literature_chain" />
-        <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_literature_chain" />
         <AssociationConnector Association="LibiadaWebModel.fk_characteristic_literature_chain" />
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_language" />
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_matter" />
         <EntityTypeShape EntityType="LibiadaWebModel.measure" Width="1.5" PointX="18.875" PointY="6.875" />
         <AssociationConnector Association="LibiadaWebModel.fk_measure_matter" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_measure" />
-        <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_measure" />
         <AssociationConnector Association="LibiadaWebModel.fk_characteristic_measure" />
         <EntityTypeShape EntityType="LibiadaWebModel.music_chain" Width="1.5" PointX="20.125" PointY="1.625" />
         <AssociationConnector Association="LibiadaWebModel.fk_music_chain_matter" />
         <AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_music_chain" />
-        <AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_music_chain" />
         <AssociationConnector Association="LibiadaWebModel.fk_characteristic_music_chain" />
         <EntityTypeShape EntityType="LibiadaWebModel.notation" Width="1.5" PointX="22.25" PointY="1.75" />
         <AssociationConnector Association="LibiadaWebModel.fk_chain_notation" />
@@ -69,7 +64,6 @@
         <AssociationConnector Association="LibiadaWebModel.fk_measure_notation" />
         <AssociationConnector Association="LibiadaWebModel.fk_music_chain_notation" />
         <EntityTypeShape EntityType="LibiadaWebModel.note" Width="1.5" PointX="24.125" PointY="5.625" />
-        <AssociationConnector Association="LibiadaWebModel.fk_note_notation" />
         <EntityTypeShape EntityType="LibiadaWebModel.note_symbol" Width="1.5" PointX="21.5" PointY="10.375" />
         <EntityTypeShape EntityType="LibiadaWebModel.feature" Width="1.5" PointX="24.125" PointY="10.5" />
         <AssociationConnector Association="LibiadaWebModel.fk_chain_feature" />
@@ -81,7 +75,6 @@
         <AssociationConnector Association="LibiadaWebModel.fk_music_chain_feature" />
         <EntityTypeShape EntityType="LibiadaWebModel.pitch" Width="1.5" PointX="25.125" PointY="14.875" />
         <AssociationConnector Association="LibiadaWebModel.fk_pitch_note" />
-        <AssociationConnector Association="LibiadaWebModel.fk_pitch_accidental" />
         <AssociationConnector Association="LibiadaWebModel.fk_pitch_note_symbol" />
         <AssociationConnector Association="LibiadaWebModel.fk_pitch_instrument" />
         <EntityTypeShape EntityType="LibiadaWebModel.remote_db" Width="1.5" PointX="17.125" PointY="15.5" />
@@ -93,13 +86,25 @@
         <AssociationConnector Association="LibiadaWebModel.fk_fmotiv_remote_db" />
         <AssociationConnector Association="LibiadaWebModel.fk_measure_remote_db" />
         <EntityTypeShape EntityType="LibiadaWebModel.tie" Width="1.5" PointX="13.125" PointY="15.375" />
-        <AssociationConnector Association="LibiadaWebModel.fk_note_tie" />
         <EntityTypeShape EntityType="LibiadaWebModel.translator" Width="1.5" PointX="9.25" PointY="15" />
         <AssociationConnector Association="LibiadaWebModel.fk_literature_chain_translator" />
         <AssociationConnector Association="LibiadaWebModel.fk_gene_dna_chain" />
         <AssociationConnector Association="LibiadaWebModel.fk_gene_feature" />
         <EntityTypeShape EntityType="LibiadaWebModel.piece" Width="1.5" PointX="28.75" PointY="8" />
         <AssociationConnector Association="LibiadaWebModel.fk_piece_gene" />
+        <EntityTypeShape EntityType="LibiadaWebModel.CharacteristicTypeLink" Width="3.375" PointX="7.875" PointY="4.25" />
+        <EntityTypeShape EntityType="LibiadaWebModel.AccordanceCharacteristic" Width="2" PointX="4.75" PointY="4.25" />
+        <AssociationConnector Association="LibiadaWebModel.fk_accordance_characteristic_characteristic_type_link" />
+        <EntityTypeShape EntityType="LibiadaWebModel.CharacteristicType" Width="2.375" PointX="9.25" PointY="6.875" />
+        <AssociationConnector Association="LibiadaWebModel.fk_characteristic_type_link_characteristic_type" />
+        <EntityTypeShape EntityType="LibiadaWebModel.Element" Width="2.875" PointX="4.125" PointY="8.75" />
+        <AssociationConnector Association="LibiadaWebModel.fk_accordance_characteristic_first_element" />
+        <AssociationConnector Association="LibiadaWebModel.fk_accordance_characteristic_second_element" />
+        <EntityTypeShape EntityType="LibiadaWebModel.Link" Width="1.75" PointX="7.25" PointY="6.875" />
+        <AssociationConnector Association="LibiadaWebModel.fk_characteristic_type_link_link" />
+        <EntityTypeShape EntityType="LibiadaWebModel.CommonSequence" Width="1.75" PointX="2.5" PointY="4.25" />
+        <AssociationConnector Association="LibiadaWebModel.fk_accordance_characteristic_first_chain" />
+        <AssociationConnector Association="LibiadaWebModel.fk_accordance_characteristic_second_chain" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

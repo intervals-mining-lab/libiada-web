@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The auto correlation.
@@ -20,7 +21,7 @@
             {
                 var temp = new double[characteristics.Count];
 
-                // Для всех фрагментов цепочек
+                // cycle through all sequence fragments
                 for (int j = 0; j < characteristics[i].Count; j++)
                 {
                     temp[j] = characteristics[i][j];
@@ -43,7 +44,7 @@
         /// The x.
         /// </param>
         /// <returns>
-        /// The <see cref="double[]"/>.
+        /// The <see cref="T:double[]"/>.
         /// </returns>
         public static double[] Execute(double[] x)
         {
@@ -98,12 +99,7 @@
             // Get average
             double avg = GetAverage(data);
 
-            double sum = 0;
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sum += Math.Pow(data[i] - avg, 2);
-            }
+            double sum = data.Sum(t => Math.Pow(t - avg, 2));
 
             return sum / len;
         }
@@ -168,7 +164,7 @@
         /// The x.
         /// </param>
         /// <returns>
-        /// The <see cref="double[]"/>.
+        /// The <see cref="T:double[]"/>.
         /// </returns>
         public static double[] GetAutoCorrelationOfSeries(double[] x)
         {

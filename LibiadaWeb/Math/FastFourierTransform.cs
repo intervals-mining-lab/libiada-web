@@ -17,13 +17,13 @@
         public static void FourierTransform(List<List<double>> characteristics)
         {
             // переводим в комлексный вид
-            // Для всех характеристик
+            // cycle through all characteristics
             for (int i = 0; i < characteristics.Count; i++)
             {
                 var complex = new List<Complex>();
                 int j;
 
-                // Для всех фрагментов цепочек
+                // cycle through all sequence fragments
                 for (j = 0; j < characteristics[i].Count; j++)
                 {
                     complex.Add(new Complex(characteristics[i][j], 0));
@@ -41,7 +41,6 @@
                     complex.Add(new Complex(0, 0));
                 }
 
-                // вернёт массив
                 Complex[] data = FourierTransform(complex.ToArray()); 
 
                 // переводим в массив double

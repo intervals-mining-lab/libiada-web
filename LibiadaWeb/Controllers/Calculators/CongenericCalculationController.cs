@@ -106,7 +106,7 @@
 
                 bool isLiteratureSequence = false;
 
-                // Перебор всех цепочек; первый уровень массива характеристик
+                // cycle through matters; first level of characteristics array
                 for (int w = 0; w < matterIds.Length; w++)
                 {
                     long matterId = matterIds[w];
@@ -115,7 +115,7 @@
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
                     theoreticalRanks.Add(new List<List<double>>());
 
-                    // Перебор всех характеристик и форм записи; второй уровень массива характеристик
+                    // cycle through characteristics and notations; second level of characteristics array
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         int notationId = notationIds[i];
@@ -177,7 +177,7 @@
                             }
                         }
 
-                        // Перебор всех элементов алфавита; третий уровень массива характеристик
+                        // cycle through all alphabet elements; third level of characteristics array
                         for (int d = 0; d < chain.Alphabet.Cardinality; d++)
                         {
                             long elementId = sequenceElements[d];
@@ -194,7 +194,7 @@
                             }
                         }
 
-                        // теоретические частоты по критерию Орлова
+                        // theoretical frequencies of orlov criterion
                         if (theoretical)
                         {
                             theoreticalRanks[w].Add(new List<double>());
@@ -230,7 +230,7 @@
                     }
                 }
 
-                // подписи для характеристик
+                // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
@@ -246,7 +246,7 @@
                     }
                 }
 
-                // ранговая сортировка
+                // rank sorting
                 if (sort)
                 {
                     for (int f = 0; f < matterIds.Length; f++)

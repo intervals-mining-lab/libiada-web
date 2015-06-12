@@ -44,6 +44,53 @@
         }
 
         /// <summary>
+        /// The check sequence attributes.
+        /// </summary>
+        /// <param name="feature">
+        /// The feature.
+        /// </param>
+        /// <param name="localSubsequence">
+        /// The local subsequence.
+        /// </param>
+        /// <param name="complement">
+        /// The complement.
+        /// </param>
+        /// <param name="complementJoin">
+        /// The complement join.
+        /// </param>
+        /// <param name="partial">
+        /// The partial.
+        /// </param>
+        public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
+        {
+            var localAttributes = localSubsequence.SequenceAttribute.ToList();
+
+            foreach (var qualifier in feature.Qualifiers)
+            {
+                switch (qualifier.Key)
+                {
+                    case "translation":
+                        continue;
+                }
+
+                var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
+
+                var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
+
+                var cleanedValue = CleanAndJoinAttributeValues(qualifier.Value);
+
+                if (equalAttributes.Any(a => a.Value == cleanedValue))
+                {
+                    localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == cleanedValue));
+                }
+            }
+
+            CheckBoolAttribute(ref complement, Aliases.Attribute.Complement, localSubsequence);
+            CheckBoolAttribute(ref complementJoin, Aliases.Attribute.ComplementJoin, localSubsequence);
+            CheckBoolAttribute(ref partial, Aliases.Attribute.Partial, localSubsequence);
+        }
+
+        /// <summary>
         /// The get attributes.
         /// </summary>
         /// <param name="sequenceId">
@@ -123,7 +170,7 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
+        private void CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
         {
             var attributeId = attributeRepository.GetAttributeByName(attributeName).Id;
 
@@ -140,20 +187,6 @@
         /// <summary>
         /// The create sequence attribute.
         /// </summary>
-        /// <param name="attributeName">
-        /// The attribute name.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        public void CreateSequenceAttribute(string attributeName, long sequenceId)
-        {
-            CreateSequenceAttribute(attributeName, string.Empty, sequenceId);
-        }
-
-        /// <summary>
-        /// The create sequence attribute.
-        /// </summary>
         /// <param name="attributeId">
         /// The attribute id.
         /// </param>
@@ -163,7 +196,7 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
+        private void CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
         {
             var subsequenceAttribute = new SequenceAttribute
             {
@@ -184,56 +217,9 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        public void CreateSequenceAttribute(int attributeId, long sequenceId)
+        private void CreateSequenceAttribute(int attributeId, long sequenceId)
         {
             CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
-        }
-
-        /// <summary>
-        /// The check sequence attributes.
-        /// </summary>
-        /// <param name="feature">
-        /// The feature.
-        /// </param>
-        /// <param name="localSubsequence">
-        /// The local subsequence.
-        /// </param>
-        /// <param name="complement">
-        /// The complement.
-        /// </param>
-        /// <param name="complementJoin">
-        /// The complement join.
-        /// </param>
-        /// <param name="partial">
-        /// The partial.
-        /// </param>
-        public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
-        {
-            var localAttributes = localSubsequence.SequenceAttribute.ToList();
-
-            foreach (var qualifier in feature.Qualifiers)
-            {
-                switch (qualifier.Key)
-                {
-                    case "translation":
-                        continue;
-                }
-
-                var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
-
-                var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
-
-                var cleanedValue = CleanAndJoinAttributeValues(qualifier.Value);
-
-                if (equalAttributes.Any(a => a.Value == cleanedValue))
-                {
-                    localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == cleanedValue));
-                }
-            }
-
-            CheckBoolAttribute(ref complement, Aliases.Attribute.Complement, localSubsequence);
-            CheckBoolAttribute(ref complementJoin, Aliases.Attribute.ComplementJoin, localSubsequence);
-            CheckBoolAttribute(ref partial, Aliases.Attribute.Partial, localSubsequence);
         }
 
         /// <summary>

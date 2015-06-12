@@ -16,7 +16,7 @@
         public readonly int Second;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="IntPair"/> struct.
+        /// Initializes a new instance of the <see cref="IntPair"/> structure.
         /// </summary>
         /// <param name="first">
         /// The first.

@@ -37,11 +37,6 @@
         private readonly ElementRepository elementRepository;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
         /// </summary>
         public SequenceTransformerController()
@@ -50,7 +45,6 @@
             dnaSequenceRepository = new DnaSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
-            matterRepository = new MatterRepository(db);
         }
 
         /// <summary>
@@ -107,6 +101,7 @@
                         FeatureId = Aliases.Feature.FullGenome,
                         PiecePosition = 0
                     };
+
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
                 dnaSequenceRepository.Insert(result, alphabet, transformedChain.Building);
             }

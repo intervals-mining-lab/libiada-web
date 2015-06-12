@@ -99,21 +99,21 @@
                 var sequenceFeatures = new List<List<string>>();
                 var characteristicNames = new List<string>();
 
-                // Перебор всех цепочек; первый уровень массива характеристик
-                for (int w = 0; w < matterIds.Length; w++)
+                // cycle through matters; first level of characteristics array
+                foreach (long matterId in matterIds)
                 {
-                    long matterId = matterIds[w];
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     sequenceAttributes.Add(new List<List<string>>());
                     sequencesPositions.Add(new List<long>());
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    // Перебор всех характеристик и форм записи; второй уровень массива характеристик
+                    // cycle through characteristics and notations; second level of characteristics array
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         var notationId = notationIds[i];
-                        var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                        var id = matterId;
+                        var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == id && c.NotationId == notationId).Id;
                         List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
                         var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
@@ -132,12 +132,12 @@
                             {
                                 double value = calculator.Calculate(sequences[j], link);
                                 var currentCharacteristic = new Characteristic
-                                {
-                                    SequenceId = subsequenceId,
-                                    CharacteristicTypeLinkId = characteristicTypeLinkId,
-                                    Value = value,
-                                    ValueString = value.ToString()
-                                };
+                                                                {
+                                                                    SequenceId = subsequenceId,
+                                                                    CharacteristicTypeLinkId = characteristicTypeLinkId,
+                                                                    Value = value,
+                                                                    ValueString = value.ToString()
+                                                                };
 
                                 db.Characteristic.Add(currentCharacteristic);
                                 db.SaveChanges();
@@ -164,13 +164,13 @@
                     }
                 }
 
-                // подписи для характеристик
+                // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
-                // ранговая сортировка
+                // rank sorting
                 if (sort)
                 {
                     for (int f = 0; f < matterIds.Length; f++)

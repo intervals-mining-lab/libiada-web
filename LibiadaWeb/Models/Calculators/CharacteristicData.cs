@@ -11,7 +11,7 @@
         /// <summary>
         /// The characteristic links.
         /// </summary>
-        public List<CharacteristicLinkData> CharacteristicLinks;
+        public readonly List<CharacteristicLinkData> CharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicData"/> class.

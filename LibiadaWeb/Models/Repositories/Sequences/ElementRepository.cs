@@ -44,12 +44,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             get
             {
-                if (lazyCache == null)
-                {
-                    lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray();
-                }
-
-                return lazyCache;
+                return lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray());
             }
         }
 
@@ -83,63 +78,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The get or create pitches in db.
-        /// </summary>
-        /// <param name="pitches">
-        /// The pitches.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int[]"/>.
-        /// </returns>
-        public int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
-        {
-            var result = new int[pitches.Count];
-
-            for (int i = 0; i < pitches.Count; i++)
-            {
-                var pitch = pitches[i];
-                var noteSymbol = pitch.Step.ToString();
-                var accidental = pitch.Alter.ToString();
-
-                if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
-                {
-                    var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
-                    result[i] = databasePitch.Id;
-
-                    if (pitch.Alter.ToString() != databasePitch.Accidental.Name
-                        || pitch.Step.ToString() != databasePitch.NoteSymbol.Name 
-                        || pitch.Octave != databasePitch.Octave)
-                    {
-                        throw new Exception("Found in db pitch not equals to local pitch.");
-                    }
-                }
-                else
-                {
-                    var newPitch = new LibiadaWeb.Pitch
-                    {
-                        AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
-                        NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
-                        Octave = pitch.Octave,
-                        Midinumber = pitch.MidiNumber
-                    };
-
-                    db.Pitch.Add(newPitch);
-                    db.SaveChanges();
-                    result[i] = newPitch.Id;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// The get or create notes in db.
         /// </summary>
         /// <param name="alphabet">
         /// The alphabet.
         /// </param>
         /// <returns>
-        /// The <see cref="long[]"/>.
+        /// The <see cref="T:long[]"/>.
         /// </returns>
         public long[] GetOrCreateNotesInDb(Alphabet alphabet)
         {
@@ -161,7 +106,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     {
                         throw new Exception("Found in db note not equals to local note.");
                     }
-
                 }
                 else
                 {
@@ -200,7 +144,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The create elements.
         /// </param>
         /// <returns>
-        /// The <see cref="long[]"/>.
+        /// The <see cref="T:long[]"/>.
         /// </returns>
         /// <exception cref="Exception">
         /// Thrown if alphabet element is not found in db. 
@@ -265,14 +209,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public List<Element> GetElements(List<long> elementIds)
         {
-            var elements = new List<Element>();
-            for (int i = 0; i < elementIds.Count; i++)
-            {
-                long elementId = elementIds[i];
-                elements.Add(db.Element.Single(e => e.Id == elementId));
-            }
-
-            return elements;
+            return db.Element.Where(e => elementIds.Contains(e.Id)).ToList();
         }
 
         /// <summary>
@@ -314,32 +251,53 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The get select list items.
+        /// The get or create pitches in db.
         /// </summary>
-        /// <param name="elements">
-        /// The elements.
+        /// <param name="pitches">
+        /// The pitches.
         /// </param>
         /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
+        /// The <see cref="T:int[]"/>.
         /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<Element> elements)
+        private int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
         {
-            HashSet<long> elementIds = elements != null
-                                           ? new HashSet<long>(elements.Select(c => c.Id))
-                                           : new HashSet<long>();
-            var allElements = db.Element;
-            var elementsList = new List<SelectListItem>();
-            foreach (var element in allElements)
+            var result = new int[pitches.Count];
+
+            for (int i = 0; i < pitches.Count; i++)
             {
-                elementsList.Add(new SelectListItem
+                var pitch = pitches[i];
+                var noteSymbol = pitch.Step.ToString();
+                var accidental = pitch.Alter.ToString();
+
+                if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
+                {
+                    var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
+                    result[i] = databasePitch.Id;
+
+                    if (pitch.Alter.ToString() != databasePitch.Accidental.Name
+                        || pitch.Step.ToString() != databasePitch.NoteSymbol.Name
+                        || pitch.Octave != databasePitch.Octave)
                     {
-                        Value = element.Id.ToString(),
-                        Text = element.Name,
-                        Selected = elementIds.Contains(element.Id)
-                    });
+                        throw new Exception("Found in db pitch not equals to local pitch.");
+                    }
+                }
+                else
+                {
+                    var newPitch = new LibiadaWeb.Pitch
+                    {
+                        AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
+                        NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
+                        Octave = pitch.Octave,
+                        Midinumber = pitch.MidiNumber
+                    };
+
+                    db.Pitch.Add(newPitch);
+                    db.SaveChanges();
+                    result[i] = newPitch.Id;
+                }
             }
 
-            return elementsList;
+            return result;
         }
 
         /// <summary>

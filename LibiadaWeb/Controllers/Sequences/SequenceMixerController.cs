@@ -1,14 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
     using LibiadaCore.Core;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
@@ -22,16 +20,6 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository sequenceRepository;
@@ -40,6 +28,11 @@
         /// The dna sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
+
+        /// <summary>
+        /// The music sequence repository.
+        /// </summary>
+        private readonly MusicSequenceRepository musicSequenceRepository;
 
         /// <summary>
         /// The literature sequence repository.
@@ -67,10 +60,9 @@
         public SequenceMixerController()
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository(db);
             sequenceRepository = new CommonSequenceRepository(db);
             dnaSequenceRepository = new DnaSequenceRepository(db);
+            musicSequenceRepository = new MusicSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
             dataSequenceRepository = new DataSequenceRepository(db);
             elementRepository = new ElementRepository(db);
@@ -178,6 +170,7 @@
                         chain.Building);
                     break;
                 case Aliases.Nature.Music:
+                    musicSequenceRepository.Create(resultsequence, alphabet, chain.Building);
                     break;
                 case Aliases.Nature.Literature:
 

@@ -1,10 +1,11 @@
 ﻿@model dynamic
 
 @{
-    ViewBag.Title = "Результаты вычисления бинарной характеристики";
+    ViewBag.Title = "Relation characteristic calculation results";
 }
 @if (ViewBag.Error == null)
 {
+    <h2>Relation characteristic calculation results</h2>
     <h2>@ViewBag.matterName</h2>
     <h2>@ViewBag.characteristicName</h2>
     <h2>@ViewBag.notationName</h2>
@@ -38,12 +39,12 @@
             </tbody>
         </table>
 
-        <h2>Зависимости слова @ViewBag.word от других слов</h2>
+        <h2>@ViewBag.word element dependence from other words</h2>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
                     <th>
-                        Элемент
+                        element
                     </th>
                     <th>
                         @ViewBag.characteristicName
@@ -73,7 +74,7 @@
                 <thead>
                     <tr>
                         <th>
-                            Первый элемент\Второй элемент
+                            First element\Second element
                         </th>
                         @for (int k = 0; k < ViewBag.elements.Count; k++)
                         {
@@ -107,10 +108,10 @@
                 <thead>
                     <tr>
                         <th>
-                            Первый элемент
+                            First element
                         </th>
                         <th>
-                            Второй элемент
+                            Second element
                         </th>
                         <th>
                             @ViewBag.characteristicName

@@ -69,14 +69,14 @@
                 var characteristics = new List<double>();
                 var characteristicNames = new List<string>();
 
-                for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
+                foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
                 {
                     var chain = new Chain(sequence);
 
-                    var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]);
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[i]).ClassName;
+                    var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
 
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[i]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId));
                     
                     var calculator = CalculatorsFactory.CreateFullCalculator(className);
 

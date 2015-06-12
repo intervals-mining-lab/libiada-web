@@ -268,6 +268,7 @@
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Catalogs\AttributesCheckController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
+    <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
@@ -357,20 +358,14 @@
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\ILinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\INotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IFeatureRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\IPositionRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IRemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttribute.cs" />
-    <Compile Include="Models\Repositories\Catalogs\LinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\PositionRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
@@ -648,9 +643,11 @@
     <Content Include="Views\Catalogs\AttributesCheck\Result.cshtml" />
     <Content Include="Views\Sequences\AnnotationsCheck\Index.cshtml" />
     <Content Include="Views\Sequences\AnnotationsCheck\Result.cshtml" />
+    <Content Include="Views\Sequences\AnnotationUpdate\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AnnotationUpdate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

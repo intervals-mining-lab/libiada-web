@@ -28,19 +28,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
 
         /// <summary>
         /// The characteristic type repository.
@@ -53,9 +43,7 @@
         public ClusterizationController() : base("Clusterization", "Clusterization")
         {
             db = new LibiadaWebEntities();
-            matterRepository = new MatterRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            notationRepository = new NotationRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 

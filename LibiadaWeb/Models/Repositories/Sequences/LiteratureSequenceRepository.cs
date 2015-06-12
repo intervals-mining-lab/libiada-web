@@ -1,10 +1,5 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Linq;
-    using System.Web.Mvc;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
@@ -52,13 +47,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             string[] text = stringSequence.Split('\n');
             for (int l = 0; l < text.Length - 1; l++)
             {
-                // убираем \r
+                // removing "\r"
                 text[l] = text[l].Substring(0, text[l].Length - 1);
             }
 
             var chain = new BaseChain(text.Length - 1);
 
-            // в конце файла всегда пустая строка поэтому последний элемент не считаем
+            // file always contains empty string at the end
             // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце, а лучше сделать нормальный trim
             for (int i = 0; i < text.Length - 1; i++)
             {
@@ -145,56 +140,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                     );";
 
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
-        }
-
-        /// <summary>
-        /// The to sequence.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommonSequence"/>.
-        /// </returns>
-        public CommonSequence ToCommonSequence(LiteratureSequence source)
-        {
-            return new CommonSequence
-            {
-                Id = source.Id,
-                NotationId = source.NotationId, 
-                MatterId = source.MatterId, 
-                FeatureId = source.FeatureId, 
-                PiecePosition = source.PiecePosition
-            };
-        }
-
-        /// <summary>
-        /// The get select list items.
-        /// </summary>
-        /// <param name="sequences">
-        /// The sequences.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{SelectListItem}"/>.
-        /// </returns>
-        public List<SelectListItem> GetSelectListItems(IEnumerable<LiteratureSequence> sequences)
-        {
-            HashSet<long> sequenceIds = sequences != null
-                                         ? new HashSet<long>(sequences.Select(c => c.Id))
-                                         : new HashSet<long>();
-            var allSequences = Db.LiteratureSequence.Include(s => s.Matter);
-            var sequencesList = new List<SelectListItem>();
-            foreach (var sequence in allSequences)
-            {
-                sequencesList.Add(new SelectListItem
-                    {
-                        Value = sequence.Id.ToString(), 
-                        Text = sequence.Matter.Name, 
-                        Selected = sequenceIds.Contains(sequence.Id)
-                    });
-            }
-
-            return sequencesList;
         }
 
         /// <summary>

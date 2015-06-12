@@ -42,9 +42,6 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if there is no data.
-        /// </exception>
         public ActionResult Result()
         {
             try

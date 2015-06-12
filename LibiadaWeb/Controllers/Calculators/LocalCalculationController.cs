@@ -130,9 +130,8 @@
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     chains.Add(new List<Chain>());
 
-                    for (int n = 0; n < notationIds.Length; n++)
+                    foreach (var notationId in notationIds)
                     {
-                        var notationId = notationIds[n];
                         long sequenceId;
 
                         switch (natureId)
@@ -141,13 +140,14 @@
                                 var languageId = languageIds[k];
                                 var translatorId = translatorIds[k];
                                 sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                                && l.NotationId == notationId
-                                                                                && l.LanguageId == languageId
-                                                                                && l.TranslatorId == translatorId).Id;
+                                                                               && l.NotationId == notationId
+                                                                               && l.LanguageId == languageId
+                                                                               && l.TranslatorId == translatorId).Id;
                                 break;
                             default:
+                                var id = notationId;
                                 sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
-                                                                            && c.NotationId == notationId).Id;
+                                                                           && c.NotationId == id).Id;
                                 break;
                         }
 
@@ -213,9 +213,8 @@
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name);
                 }
 
-                for (int w = 0; w < notationIds.Length; w++)
+                foreach (var notationId in notationIds)
                 {
-                    var notationId = notationIds[w];
                     notationNames.Add(db.Notation.Single(n => n.Id == notationId).Name);
                 }
 
@@ -241,10 +240,10 @@
         /// </param>
         private static void CalculateDelta(List<List<double>> characteristics)
         {
-            // Перебираем характеристики 
+            // cycle through characteristics 
             for (int i = 0; i < characteristics.Count; i++)
             {
-                // перебираем фрагменты цепочек
+                // cycle through fragments
                 for (int j = characteristics[i].Count - 1; j > 0; j--)
                 {
                     characteristics[i][j] -= characteristics[i - 1][j];
@@ -273,7 +272,7 @@
         /// The growing window.
         /// </param>
         /// <returns>
-        /// The <see cref="List{List{List{Double}}}"/>.
+        /// The <see cref="T:List{List{List{Double}}}"/>.
         /// </returns>
         private List<List<List<double>>> CalculateCharacteristics(
             List<List<Chain>> chains,
@@ -285,11 +284,11 @@
             var calculators = new List<IFullCalculator>();
             var links = new List<Link>();
 
-            for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
+            foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
             {
-                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[i]).ClassName;
+                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                 calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
-                links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[i]));
+                links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
             }
 
             var characteristics = new List<List<List<double>>>();

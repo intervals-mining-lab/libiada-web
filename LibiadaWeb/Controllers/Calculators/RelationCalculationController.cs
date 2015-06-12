@@ -278,7 +278,7 @@
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
 
-            // считаем частоты слов
+            // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();
             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
             {
@@ -287,10 +287,10 @@
                 frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
             }
 
-            // сортируем алфавит по частоте
+            // ordering alphabet by frequencies
             SortKeyValuePairList(frequencies);
 
-            // для заданного числа слов с наибольшей частотой считаем зависимости
+            // calculating relation characteristic only for elements with maximum frequency
             for (int i = 0; i < frequencyCount; i++)
             {
                 for (int j = 0; j < frequencyCount; j++)
@@ -300,7 +300,7 @@
                     long firstElementId = sequenceElements[firstElementNumber];
                     long secondElementId = sequenceElements[secondElementNumber];
 
-                    // проверяем не посчитана ли уже эта характеристика
+                    // searching characteristic in database
                     if (!db.BinaryCharacteristic.Any(b =>
                                                       b.SequenceId == sequenceId &&
                                                       b.CharacteristicTypeLinkId == characteristicTypeLinkId &&

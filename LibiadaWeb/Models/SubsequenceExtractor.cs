@@ -98,7 +98,7 @@
         /// <returns>
         /// The <see cref="Chain"/>.
         /// </returns>
-        public Chain ExtractSimpleSubsequence(Sequence sourceSequence, Subsequence subsequence)
+        private Chain ExtractSimpleSubsequence(Sequence sourceSequence, Subsequence subsequence)
         {
             ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
@@ -122,7 +122,7 @@
         /// <returns>
         /// The <see cref="Chain"/>.
         /// </returns>
-        public Chain ExtractJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
+        private Chain ExtractJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
         {
             if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
             {
@@ -146,7 +146,7 @@
         /// <returns>
         /// The <see cref="Chain"/>.
         /// </returns>
-        public Chain ExtractJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
+        private Chain ExtractJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
         {
             var joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ToString();
 
@@ -172,7 +172,7 @@
         /// <returns>
         /// The <see cref="Chain"/>.
         /// </returns>
-        public Chain ExtractJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
+        private Chain ExtractJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
         {
             if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
             {

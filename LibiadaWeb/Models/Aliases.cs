@@ -450,7 +450,7 @@
             public const int MitochondrionGenome = 11;
 
             /// <summary>
-            /// The feature mitochondrion rrna.
+            /// The feature mitochondrion ribosomal rna.
             /// </summary>
             public const int MitochondrionRRNA = 12;
 

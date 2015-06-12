@@ -105,7 +105,6 @@
         var xVals;
         var yVals;
 
-        // заполнение данных для двумерного распределения
         function FillSeries(characteristicId, characteristic2Id, dataSeries) {
             for (var k = 0; k < characteristics.length; k++) {
                 var series = new Object();
@@ -125,15 +124,12 @@
                     series.data[i].x = x;
                     series.data[i].y = y;
                     series.data[i].name = pointName;
-                    // массив для определения минимального значения для границ графика
                     xVals.push(x);
                     yVals.push(y);
                 }
                 dataSeries.push(series);
             }
         }
-
-        // заполнение данных для рангового распределения
 
         function FillRankSeries(characteristicId, logarithmic, dataSeries) {
             for (var j = 0; j < characteristics.length; j++) {
@@ -149,7 +145,7 @@
 
                     series.data[i].y = y;
                     series.data[i].name = pointName;
-                    // массив для определения минимального значения для границ графика
+                    
                     xVals.push(i);
                     yVals.push(y);
                 }
@@ -171,7 +167,6 @@
 
                     series.data[i].y = y;
                     series.data[i].name = pointName;
-                    // массив для определения минимального значения для границ графика
                     xVals.push(i);
                     yVals.push(y);
                 }
@@ -210,7 +205,6 @@
             var logarithmic = $("#logarithmicScale")[0].checked;
             var characteristicId;
             if ($("#allGraphics")[0].checked) {
-                //если нужно вывести распределения для всех характеристик
                 for (var j = 0; j < $("#yaxis option").length; j++) {
                     characteristicId = $("#yaxis option")[j].value;
 
@@ -222,7 +216,6 @@
                 }
             } else {
                 if ($("#Rank")[0].checked) {
-                    // если нужно вывести графики для одной характерстики (ранговое распрделение)
                     characteristicId = $("#yaxis option:selected")[0].value;
 
                     FillRankSeries(characteristicId, logarithmic, dataSeries);
@@ -231,7 +224,6 @@
                         FillTheoreticalRanks(characteristicId, logarithmic, dataSeries);
                     }
                 } else {
-                    //если нужно вывести графики для двух характеристик
                     FillSeries($("#xaxis option:selected")[0].value, $("#yaxis option:selected")[0].value, dataSeries);
                 }
             }
