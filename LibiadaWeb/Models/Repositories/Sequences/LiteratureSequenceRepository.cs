@@ -1,5 +1,8 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System.IO;
+    using System.Text;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
@@ -25,10 +28,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create literature sequence.
+        /// Creates literature sequence in database.
         /// </summary>
         /// <param name="commonSequence">
         /// The common sequence.
+        /// </param>
+        /// <param name="sequenceStream">
+        /// The sequence stream.
         /// </param>
         /// <param name="languageId">
         /// The language id.
@@ -39,11 +45,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translatorId">
         /// The translator id.
         /// </param>
-        /// <param name="stringSequence">
-        /// The string sequence.
-        /// </param>
-        public void Create(CommonSequence commonSequence, int languageId, bool original, int? translatorId, string stringSequence)
+        public void Create(CommonSequence commonSequence, Stream sequenceStream, int languageId, bool original, int? translatorId)
         {
+            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             string[] text = stringSequence.Split('\n');
             for (int l = 0; l < text.Length - 1; l++)
             {

@@ -4,11 +4,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Net;
-    using System.Text;
     using System.Xml;
 
     using Bio;
     using Bio.IO;
+    using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
     /// <summary>
@@ -24,8 +24,8 @@
         /// <summary>
         /// Gets features from GenBank file stream.
         /// </summary>
-        /// <param name="genBankFile">
-        /// The stream.
+        /// <param name="genBankFileStream">
+        /// The genBank file stream.
         /// </param>
         /// <returns>
         /// The <see cref="GenBankMetadata"/>.
@@ -33,10 +33,10 @@
         /// <exception cref="Exception">
         /// Thrown if metadata is empty.
         /// </exception>
-        public static List<FeatureItem> GetFeatures(Stream genBankFile)
+        public static List<FeatureItem> GetFeatures(Stream genBankFileStream)
         {
             ISequenceParser parser = new GenBankParser();
-            ISequence sequence = parser.ParseOne(genBankFile);
+            ISequence sequence = parser.ParseOne(genBankFileStream);
 
             GenBankMetadata metadata = sequence.Metadata["GenBank"] as GenBankMetadata;
 
@@ -46,6 +46,21 @@
             }
 
             return metadata.Features.All;
+        }
+
+        /// <summary>
+        /// The get sequence string.
+        /// </summary>
+        /// <param name="fastaFileStream">
+        /// The fasta file stream.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ISequence"/>.
+        /// </returns>
+        public static ISequence GetFastaSequence(Stream fastaFileStream)
+        {
+            var fastaParser = new FastAParser();
+            return fastaParser.ParseOne(fastaFileStream);
         }
 
         /// <summary>
@@ -99,33 +114,15 @@
         }
 
         /// <summary>
-        /// The get sequence string.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static string GetSequenceString(string id)
-        {
-            Stream fileStream = GetFileStream(id);
-            var input = new byte[fileStream.Length];
-
-            fileStream.Read(input, 0, (int)fileStream.Length);
-            return Encoding.ASCII.GetString(input);
-        }
-
-        /// <summary>
         /// The get file.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        /// The ncbi id.
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        private static Stream GetFileStream(string id)
+        public static Stream GetFileStream(string id)
         {
             return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
         }

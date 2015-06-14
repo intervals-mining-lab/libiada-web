@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Text;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
@@ -30,14 +32,16 @@
         /// <param name="sequence">
         /// The common sequence.
         /// </param>
-        /// <param name="stringSequence">
-        /// The string sequence.
+        /// <param name="sequenceStream">
+        /// The sequence stream.
         /// </param>
         /// <param name="precision">
         /// Precision of data sequence.
         /// </param>
-        public void Create(CommonSequence sequence, string stringSequence, int precision)
+        public void Create(CommonSequence sequence, Stream sequenceStream, int precision)
         {
+            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
+
             string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
             var cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToList();

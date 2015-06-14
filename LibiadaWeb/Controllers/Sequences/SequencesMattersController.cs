@@ -2,10 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+
+    using Bio;
+    using Bio.IO.FastA;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
@@ -150,35 +154,32 @@
             {
                 try
                 {
-                    int natureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
                     int? webApiId = null;
-
-                    string stringSequence;
+                    Stream sequenceStream;
 
                     if (localFile)
                     {
-                        var encoding = natureId == Aliases.Nature.Genetic ? Encoding.ASCII : Encoding.UTF8;
-                        stringSequence = FileHelper.ReadFileStream(Request.Files[0], encoding);
+                        sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
                     else
                     {
                         webApiId = NcbiHelper.GetId(commonSequence.RemoteId);
-                        stringSequence = NcbiHelper.GetSequenceString(webApiId.ToString());
+                        sequenceStream = NcbiHelper.GetFileStream(webApiId.ToString());
                     }
 
-                    switch (natureId)
+                    switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId)
                     {
                         case Aliases.Nature.Genetic:
-                            dnaSequenceRepository.Create(commonSequence, partial ?? false, complementary ?? false, stringSequence, webApiId);
+                            dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false, complementary ?? false, webApiId);
                             break;
                         case Aliases.Nature.Music:
-                            musicSequenceRepository.Create(commonSequence, stringSequence);
+                            musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Aliases.Nature.Literature:
-                            literatureSequenceRepository.Create(commonSequence, languageId ?? 0, original ?? false, translatorId, stringSequence);
+                            literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
                             break;
                         case Aliases.Nature.Data:
-                            dataSequenceRepository.Create(commonSequence, stringSequence, precision ?? 0);
+                            dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                             break;
                         default:
                             throw new Exception("Unknown nature.");

@@ -1,7 +1,11 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
+    using System.IO;
     using System.Text;
+
+    using Bio.Extensions;
+    using Bio.IO.FastA;
 
     using LibiadaCore.Core;
 
@@ -32,14 +36,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequence">
         /// The common sequence.
         /// </param>
+        /// <param name="sequenceStream">
+        /// The string sequence.
+        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>
         /// <param name="complementary">
         /// The complementary.
-        /// </param>
-        /// <param name="stringSequence">
-        /// The string sequence.
         /// </param>
         /// <param name="webApiId">
         /// The web api id.
@@ -48,26 +52,19 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// Thrown if at least one element of new sequence is missing in db
         /// or if sequence is empty or invalid.
         /// </exception>
-        public void Create(CommonSequence sequence, bool partial, bool complementary, string stringSequence, int? webApiId)
+        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial, bool complementary, int? webApiId)
         {
-            // separating fasta header from sequence.
-            string[] splittedFasta = stringSequence.Split('\n', '\r');
-            var sequenceStringBuilder = new StringBuilder();
-            string fastaHeader = splittedFasta[0];
+            var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+            string fastaHeader = fastaSequence.ID;
 
-            if (fastaHeader.Contains("Resource temporarily unavailable") || splittedFasta.Length < 2)
+            if (fastaHeader.Contains("Resource temporarily unavailable"))
             {
                 throw new Exception("Sequence is empty or invalid (probably ncbi is not responding).");
             }
 
-            for (int j = 1; j < splittedFasta.Length; j++)
-            {
-                sequenceStringBuilder.Append(splittedFasta[j]);
-            }
+            string stringSequence = fastaSequence.ConvertToString();
 
-            string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
-
-            var chain = new BaseChain(resultStringSequence);
+            var chain = new BaseChain(stringSequence);
 
             if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
             {

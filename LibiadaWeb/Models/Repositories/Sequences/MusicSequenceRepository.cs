@@ -2,6 +2,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Xml;
 
@@ -33,14 +34,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequence">
         /// The sequence.
         /// </param>
-        /// <param name="stringSequence">
-        /// The string sequence.
+        /// <param name="sequenceStream">
+        /// The sequence stream.
         /// </param>
         /// <exception cref="Exception">
         /// Thrown if congeneric tracks count not equals 1 (track is not monophonic).
         /// </exception>
-        public void Create(CommonSequence sequence, string stringSequence)
+        public void Create(CommonSequence sequence, Stream sequenceStream)
         {
+            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             var doc = new XmlDocument();
             doc.LoadXml(stringSequence);
 
