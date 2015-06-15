@@ -60,7 +60,11 @@
         public static ISequence GetFastaSequence(Stream fastaFileStream)
         {
             var fastaParser = new FastAParser();
-            return fastaParser.ParseOne(fastaFileStream);
+            var result = fastaParser.ParseOne(fastaFileStream);
+            fastaFileStream.Close();
+            fastaFileStream.Dispose();
+            return result;
+
         }
 
         /// <summary>

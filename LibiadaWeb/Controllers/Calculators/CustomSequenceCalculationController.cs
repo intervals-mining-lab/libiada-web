@@ -63,16 +63,19 @@
         /// The characteristic type link ids.
         /// </param>
         /// <param name="customSequence">
-        /// The sequence.
+        /// The custom sequence.
         /// </param>
         /// <param name="localFile">
         /// The local file.
+        /// </param>
+        /// <param name="file">
+        /// The files.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int[] characteristicTypeLinkIds, string customSequence, bool localFile)
+        public ActionResult Index(int[] characteristicTypeLinkIds, string customSequence, bool localFile, HttpPostedFileBase[] file)
         {
             return Action(() =>
                 {
@@ -83,7 +86,7 @@
                     {
                         for (int i = 0; i < Request.Files.Count; i++)
                         {
-                            var sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
+                            var sequenceStream = FileHelper.GetFileStream(file[i]);
                             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                             sequences.Add(fastaSequence.ConvertToString());
                             names.Add(fastaSequence.ID);
