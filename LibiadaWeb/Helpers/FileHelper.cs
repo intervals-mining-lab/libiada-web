@@ -29,27 +29,7 @@
                 throw new ArgumentNullException("file", "File is null or empty.");
             }
 
-
-            var fileStream = file.InputStream;
-            var input = new byte[fileStream.Length];
-
-            fileStream.Read(input, 0, (int)fileStream.Length);
-
-            fileStream.Close();
-            fileStream.Dispose();
-
-            var memoryStream = new MemoryStream(input);
-
-            if (fileStream == null)
-            {
-                throw new Exception("Response stream was null.");
-            }
-
-            fileStream.CopyTo(memoryStream);
-
-
-            memoryStream.Position = 0;
-            return memoryStream;
+            return file.InputStream;
         }
 
         /// <summary>
