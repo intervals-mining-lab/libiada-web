@@ -13,56 +13,66 @@
     CustomCalculationController(data);
 </script>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "CustomSequenceCalculation", FormMethod.Post, new { enctype = "multipart/form-data", ng_app = "CustomCalculation" }))
 {
-    <div ng-app="CustomCalculation">
-        <div class="form-horizontal" ng-controller="CustomCalculationCtrl">
-            <h4>Sequence and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal" ng-controller="CustomCalculationCtrl">
+        <h4>Sequence and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.CheckBox("localFile", new { ng_model = "localFile" })
+                @Html.Label("localFile", "Load sequence from fasta file")
+            </div>
+        </div>
+        <div class="form-group" ng-hide="localFile">
+            @Html.Label("Sequence", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.Editor("customSequence", new { @class = "form-control" })
+                @Html.ValidationMessage("customSequence", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group" ng-show="localFile">
+            @Html.Label("file", "Sequence file", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" multiple />
+                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div ng-repeat="characteristic in characteristics">
             <div class="form-group">
-                @Html.Label("Sequence", new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.Editor("sequence", new { @class = "form-control" })
-                    @Html.ValidationMessage("sequence", "", new { @class = "text-danger" })
+                    <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)"></select>
+                    <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
+                    @Html.ValidationMessage("characteristicIds", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" ng-show="isLinkable(characteristic)">
+                <div class="col-md-10">
+                    <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
+                    <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
+                    <input type="hidden" name="characteristicTypeLinkIds" ng-value="characteristic.link.CharacteristicTypeLinkId" />
+                    @Html.ValidationMessage("linkIds", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-danger" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
                 </div>
             </div>
             <br />
-            <div ng-repeat="characteristic in characteristics">
-                <div class="form-group">
-                    <div class="col-md-10">
-                        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)"></select>
-                        <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
-                        @Html.ValidationMessage("characteristicIds", "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group" ng-show="isLinkable(characteristic)">
-                    <div class="col-md-10">
-                        <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
-                        <input type="hidden" name="linkIds" ng-value="characteristic.link.Value"/>
-                        <input type="hidden" name="characteristicTypeLinkIds" ng-value="characteristic.link.CharacteristicTypeLinkId" />
-                        @Html.ValidationMessage("linkIds", "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-10">
-                        <button type="button" class="btn btn-default" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
-                    </div>
-                </div>
-                <hr />
-                <br />
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="button" class="btn btn-success" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
             </div>
-            <div class="form-group">
-                <div class="col-md-10">
-                    <button type="button" class="btn btn-default" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
-                </div>
-            </div>
-            <hr />
-            <br />
-            <div class="form-group">
-                <div class="col-md-10">
-                    <input type="submit" value="Calculate" class="btn btn-default" />
-                </div>
+        </div>
+        <hr />
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Calculate" class="btn btn-default" />
             </div>
         </div>
     </div>

@@ -142,23 +142,16 @@
         private static Stream GetResponseStream(string url)
         {
             var resultUrl = BaseUrl + url;
-            var request = WebRequest.Create(resultUrl);
-            var response = request.GetResponse();
-            var stream = response.GetResponseStream();
+            var downloader = new WebClient();
             var memoryStream = new MemoryStream();
-
-            if (stream == null)
+            using (var stream = downloader.OpenRead(resultUrl))
             {
-                throw new Exception("Response stream was null.");
-            }
+                if (stream == null)
+                {
+                    throw new Exception("Response stream was null.");
+                }
 
-            try
-            {
                 stream.CopyTo(memoryStream);
-            }
-            finally
-            {
-                stream.Close();
             }
 
             memoryStream.Position = 0;

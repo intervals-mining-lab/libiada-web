@@ -55,7 +55,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public void Create(CommonSequence sequence, Stream sequenceStream, bool partial, bool complementary, int? webApiId)
         {
             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-            string fastaHeader = fastaSequence.ID;
+            string fastaHeader = ">" + fastaSequence.ID;
 
             if (fastaHeader.Contains("Resource temporarily unavailable"))
             {

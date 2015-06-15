@@ -8,17 +8,35 @@
 @if (ViewBag.Error == null)
 {
     <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sequence / characteristic name
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
+                {
+                    <th>
+                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
         @for (int i = 0; i < ViewBag.characteristics.Count; i++)
         {
             <tr>
                 <td>
-                    @ViewBag.characteristicNames[i]
+                    @ViewBag.names[i]
                 </td>
-                <td>
-                    @ViewBag.characteristics[i]
-                </td>
+                @foreach (var characteristic in ViewBag.characteristics[i])
+                {
+                    <td>
+                        @characteristic
+                    </td>
+                }
             </tr>
         }
+        </tbody>
     </table>
 }
 
