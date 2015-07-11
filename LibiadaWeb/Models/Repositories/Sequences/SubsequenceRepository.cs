@@ -103,7 +103,16 @@
         /// </param>
         public void UpdateAnnotations(List<FeatureItem> features, long sequenceId)
         {
-            throw new NotImplementedException();
+            var localSubsequences = db.Subsequence
+                    .Include(s => s.Feature)
+                    .Include(s => s.Position)
+                    .Include(s => s.SequenceAttribute)
+                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
+
+            for (int i = 1; i < features.Count; i++)
+            {
+                UpdateAnnotation(features[i], localSubsequences);
+            }
         }
 
         /// <summary>
@@ -293,7 +302,7 @@
 
             if (equalLocalSubsequences.Any())
             {
-                var localSubsequence = equalLocalSubsequences.First();
+                var localSubsequence = equalLocalSubsequences.Single();
                 var localPositions = localSubsequence.Position.ToList();
                 
                 sequenceAttributeRepository.CheckSequenceAttributes(feature, localSubsequence, ref complement, ref complementJoin, ref partial);
@@ -321,6 +330,80 @@
             else
             {
                 return feature;
+            }
+        }
+
+        /// <summary>
+        /// The update annotation.
+        /// </summary>
+        /// <param name="feature">
+        /// The feature.
+        /// </param>
+        /// <param name="localSubsequences">
+        /// The local subsequences.
+        /// </param>
+        private void UpdateAnnotation(FeatureItem feature, List<Subsequence> localSubsequences)
+        {
+            int featureId;
+
+            if (feature.Key == "gene")
+            {
+                bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                if (!pseudo)
+                {
+                    throw new ArgumentException("No genes allowed here", "feature");
+                }
+
+                featureId = Aliases.Feature.PseudoGen;
+            }
+            else
+            {
+                featureId = featureRepository.GetFeatureIdByName(feature.Key);
+            }
+
+            var location = feature.Location;
+            var leafLocations = location.GetLeafLocations();
+            var partial = CheckPartial(leafLocations);
+            bool complement = location.Operator == LocationOperator.Complement;
+            bool join = leafLocations.Count > 1;
+            bool complementJoin = join && complement;
+
+            if (location.SubLocations.Count > 0)
+            {
+                complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
+            }
+
+            int start = leafLocations[0].LocationStart - 1;
+            int end = leafLocations[0].LocationEnd - 1;
+            int length = end - start + 1;
+
+            var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start
+                                                                   && s.Length == length
+                                                                   && s.FeatureId == featureId
+                                                                   && s.Partial == partial
+                                                                   && s.Complementary == complement).ToList();
+
+            if (equalLocalSubsequences.Any())
+            {
+                var localSubsequence = equalLocalSubsequences.Single();
+                var localPositions = localSubsequence.Position.ToList();
+
+                for (int k = 1; k < leafLocations.Count; k++)
+                {
+                    var leafLocation = leafLocations[k];
+                    var leafStart = leafLocation.LocationStart - 1;
+                    var leafEnd = leafLocation.LocationEnd - 1;
+                    var leafLength = leafEnd - leafStart + 1;
+
+                    if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
+                    {
+                    }
+                }
+
+                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin && !partial)
+                {
+                    localSubsequences.Remove(localSubsequence);
+                }
             }
         }
 

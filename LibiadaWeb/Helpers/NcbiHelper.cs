@@ -64,7 +64,6 @@
             fastaFileStream.Close();
             fastaFileStream.Dispose();
             return result;
-
         }
 
         /// <summary>
