@@ -474,7 +474,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>LibiadaWeb.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Icon.png" />
     <Content Include="LibiadaWeb.edmx.diagram">
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Content>
@@ -488,7 +487,6 @@
       <LastGenOutput>LibiadaWeb.cs</LastGenOutput>
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Content>
-    <Content Include="LICENSE.txt" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -647,7 +645,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\AnnotationUpdate\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
