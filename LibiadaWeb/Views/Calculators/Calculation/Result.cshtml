@@ -7,6 +7,15 @@
 @if (ViewBag.Error == null)
 {
     <h2>Characteristics</h2>
+
+
+    <script type="text/javascript">
+        "use strict";
+
+        var data = @Html.Raw(Json.Encode(ViewBag.data));
+        CalculationResultController(data);
+    </script>
+
     <script type='text/javascript'>
         var characteristics = new Array();
         var matterIds = new Array();
@@ -117,7 +126,15 @@
             }
         </tbody>
     </table>
-    <br />
+    <br/>
+    <div ng-app="CalculationResult">
+        <div ng-controller="CalculationResultCtrl">
+
+        </div>
+    </div>
+
+
+
     <div id="visualization_container" style="width: 800px; height: 800px"></div>
     <br />
     @Html.Label("Ось х")
@@ -137,4 +154,11 @@
     </select>
     <br />
     <button onclick=" DrawChart() ">Show</button>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/functions")
+    @Scripts.Render("~/bundles/controllers/calculationResult")
+@Scripts.Render("~/bundles/highCharts")
 }

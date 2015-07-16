@@ -491,6 +491,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
