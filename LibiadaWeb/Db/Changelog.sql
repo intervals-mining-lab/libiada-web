@@ -963,5 +963,10 @@ INSERT INTO tie(id, name, description) VALUES(1, 'Start', 'On note tie starts');
 INSERT INTO tie(id, name, description) VALUES(2, 'Stop', 'On note tie ends');
 INSERT INTO tie(id, name, description) VALUES(3, 'StartStop', 'Note inside tie');
 
+-- 20.07.2015
+-- Added compliance charactrictic.
+
+SELECT create_chatacteristic_type('Mutual compliance degree', 'Geometric mean of two partial compliances degrees', NULL, 'MutualComplianceDegree', false, false, false, true, true);
+UPDATE characteristic_type SET name = 'Partial compliance degree' class_name = 'PartialComplianceDegree' WHERE id = 48;
 
 COMMIT;
