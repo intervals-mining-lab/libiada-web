@@ -189,11 +189,14 @@
                 lock (task)
                 {
                     method = task.Action;
+                    task.TaskData.Started = DateTime.Now;
                 }
-
+                
                 var result = method();
                 lock (task)
                 {
+                    task.TaskData.Completed = DateTime.Now;
+                    task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
                     task.Result = result;
                     task.TaskData.TaskState = TaskState.Completed;
                 }

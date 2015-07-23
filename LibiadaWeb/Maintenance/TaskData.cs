@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Maintenance
 {
     using System;
+    using AutoMapper;
 
     /// <summary>
     /// The task data.
@@ -25,7 +26,22 @@
         /// <summary>
         /// The created.
         /// </summary>
-        public DateTime Created;
+        public DateTimeOffset? Created;
+
+        /// <summary>
+        /// The started.
+        /// </summary>
+        public DateTimeOffset? Started;
+
+        /// <summary>
+        /// The completed.
+        /// </summary>
+        public DateTimeOffset? Completed;
+
+        /// <summary>
+        /// The completed.
+        /// </summary>
+        public TimeSpan? ExecutionTime;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TaskData"/> class.
@@ -44,29 +60,6 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TaskData"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="displayName">
-        /// The display name.
-        /// </param>
-        /// <param name="taskState">
-        /// The task state.
-        /// </param>
-        /// <param name="created">
-        /// The created.
-        /// </param>
-        private TaskData(int id, string displayName, TaskState taskState, DateTime created)
-        {
-            Id = id;
-            Created = created;
-            TaskState = taskState;
-            DisplayName = displayName;
-        }
-
-        /// <summary>
         /// The clone.
         /// </summary>
         /// <returns>
@@ -74,7 +67,7 @@
         /// </returns>
         public TaskData Clone()
         {
-            return new TaskData(Id, DisplayName, TaskState, Created);
+            return Mapper.Map<TaskData, TaskData>(this);
         }
     }
 }

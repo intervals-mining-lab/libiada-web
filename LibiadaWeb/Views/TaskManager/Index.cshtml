@@ -1,11 +1,12 @@
 ﻿@using LibiadaWeb.Maintenance
 @{
     ViewBag.Title = "Libiada task manager";
+    const string timeFormat = "dd MMMM yyyy HH':'mm':'ss";
 }
 
 <script>
 
-    var autoRefresh = function() {
+    var autoRefresh = function () {
         window.location.reload();
     }
 
@@ -35,6 +36,15 @@
                 Created
             </th>
             <th>
+                Started
+            </th>
+            <th>
+                Completed
+            </th>
+            <th>
+                Execution time
+            </th>
+            <th>
                 Status
             </th>
             <th>
@@ -55,7 +65,31 @@
                     @item.DisplayName
                 </td>
                 <td>
-                    @item.Created
+                    @item.Created.ToString(timeFormat)
+                </td>
+                <td>
+                    @{
+                        if (item.Started != null)
+                        {
+                            @item.Started.ToString(timeFormat)
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.Completed != null)
+                        {
+                            @item.Completed.ToString(timeFormat)
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (item.ExecutionTime != null)
+                        {
+                            @item.ExecutionTime.ToString(@"hh\:mm\:ss\.FF")
+                        }
+                    }
                 </td>
                 <td>
                     @item.TaskState
