@@ -160,12 +160,14 @@
                         {
                             var element = firstChain.Alphabet[i];
                             alphabet.Add(element.ToString());
-                            var intervalManager = new AccordanceIntervalsManager(firstChain.CongenericChain(element), secondChain.CongenericChain(element));
-                            var characteristicValue = calculator.Calculate(intervalManager, link);
+
+                            var firestCongenericChain = firstChain.CongenericChain(element);
+                            var secondCongenericChain = secondChain.CongenericChain(element);
+
+                            var characteristicValue = calculator.Calculate(firestCongenericChain, secondCongenericChain, link);
                             characteristics[0].Add(characteristicValue);
 
-                            intervalManager = new AccordanceIntervalsManager(secondChain.CongenericChain(element), firstChain.CongenericChain(element));
-                            characteristicValue = calculator.Calculate(intervalManager, link);
+                            characteristicValue = calculator.Calculate(secondCongenericChain, firestCongenericChain, link);
                             characteristics[1].Add(characteristicValue);
                         }
 

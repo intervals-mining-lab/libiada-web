@@ -1,7 +1,7 @@
 ﻿@using LibiadaWeb.Maintenance
+@using LibiadaWeb.Models
 @{
     ViewBag.Title = "Libiada task manager";
-    const string timeFormat = "dd MMMM yyyy HH':'mm':'ss";
 }
 
 <script>
@@ -65,13 +65,13 @@
                     @item.DisplayName
                 </td>
                 <td>
-                    @item.Created.ToString(timeFormat)
+                    @item.Created.ToString(Aliases.OutputFormats.DateTimeFormat)
                 </td>
                 <td>
                     @{
                         if (item.Started != null)
                         {
-                            @item.Started.ToString(timeFormat)
+                            @item.Started.ToString(Aliases.OutputFormats.DateTimeFormat)
                         }
                     }
                 </td>
@@ -79,7 +79,7 @@
                     @{
                         if (item.Completed != null)
                         {
-                            @item.Completed.ToString(timeFormat)
+                            @item.Completed.ToString(Aliases.OutputFormats.DateTimeFormat)
                         }
                     }
                 </td>
@@ -87,7 +87,7 @@
                     @{
                         if (item.ExecutionTime != null)
                         {
-                            @item.ExecutionTime.ToString(@"hh\:mm\:ss\.FF")
+                            @item.ExecutionTime.ToString(Aliases.OutputFormats.TimeFormat)
                         }
                     }
                 </td>
