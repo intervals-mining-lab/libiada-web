@@ -42,6 +42,17 @@
             }
         }
 
+        public static bool ConnectionStatus
+        {
+            get
+            {
+                using (var db = new LibiadaWebEntities())
+                {
+                    return db.Database.Exists();
+                }
+            }
+        }
+
         /// <summary>
         /// Gets new element id from database.
         /// </summary>

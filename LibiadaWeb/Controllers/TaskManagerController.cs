@@ -1,6 +1,9 @@
 ﻿namespace LibiadaWeb.Controllers
 {
     using System;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading;
     using System.Web.Mvc;
 
     using LibiadaWeb.Maintenance;
@@ -19,6 +22,15 @@
         public ActionResult Index()
         {
             ViewBag.Tasks = TaskManager.GetTasksData();
+            
+            if (Request.UserLanguages != null && Request.UserLanguages.Any())
+            {
+                var culture = new CultureInfo(Request.UserLanguages[0]);
+
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+            }
+
             ViewBag.ErrorMessage = TempData["ErrorMessage"];
 
             return View();

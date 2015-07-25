@@ -52,7 +52,12 @@
         }
         <hr />
         <footer>
-            <h2>Current database: @DbHelper.DbName</h2>
+            <h2 class='@{
+                          var result = DbHelper.ConnectionStatus ? "text-success" : "text-danger";
+                          @result
+                      }'>
+                Current database: @DbHelper.DbName
+            </h2>
             <p>&copy; @DateTime.Now.Year - LibiadaWeb</p>
         </footer>
     </div>

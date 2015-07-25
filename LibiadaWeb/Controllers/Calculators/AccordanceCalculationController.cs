@@ -161,13 +161,13 @@
                             var element = firstChain.Alphabet[i];
                             alphabet.Add(element.ToString());
 
-                            var firestCongenericChain = firstChain.CongenericChain(element);
+                            var firstCongenericChain = firstChain.CongenericChain(element);
                             var secondCongenericChain = secondChain.CongenericChain(element);
 
-                            var characteristicValue = calculator.Calculate(firestCongenericChain, secondCongenericChain, link);
+                            var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
                             characteristics[0].Add(characteristicValue);
 
-                            characteristicValue = calculator.Calculate(secondCongenericChain, firestCongenericChain, link);
+                            characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
                             characteristics[1].Add(characteristicValue);
                         }
 
