@@ -8,7 +8,6 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
-    using LibiadaCore.Core.IntervalsManagers;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
