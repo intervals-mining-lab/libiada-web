@@ -358,13 +358,17 @@
     <Compile Include="Measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Account\AccountViewModels.cs" />
+    <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\Account\ManageUserViewModel.cs" />
+    <Compile Include="Models\Account\RegisterViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
+    <Compile Include="Models\Account\ApplicationUser.cs" />
     <Compile Include="Models\Calculators\CharacteristicData.cs" />
     <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
     <Compile Include="Models\Calculators\SubsequenceCharacteristic.cs" />
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Account\ApplicationDbContext.cs" />
     <Compile Include="Models\Calculators\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
