@@ -969,4 +969,99 @@ INSERT INTO tie(id, name, description) VALUES(3, 'StartStop', 'Note inside tie')
 SELECT create_chatacteristic_type('Mutual compliance degree', 'Geometric mean of two partial compliances degrees', NULL, 'MutualComplianceDegree', false, false, false, true, true);
 UPDATE characteristic_type SET name = 'Partial compliance degree' class_name = 'PartialComplianceDegree' WHERE id = 48;
 
+-- 30.07.2015
+-- Translating all db records.
+
+UPDATE characteristic_type SET name = 'Alphabet cardinality', description = 'Count of elements in alphabet of sequence' WHERE id = 1;
+UPDATE characteristic_type SET name = 'Intervals arithmetic mean', description = 'Average arithmetical value of intervals lengthes' WHERE id = 2;
+UPDATE characteristic_type SET name = 'Average remoteness', description = 'Remoteness mean of congeneric sequences' WHERE id = 3;
+UPDATE characteristic_type SET description = 'Count of elements in sequence (equals to length if sequence is full)' WHERE id = 4;
+UPDATE characteristic_type SET description = 'Sadovsky cutting length of l-gramms for unambiguous recovery of source sequence' WHERE id = 5;
+UPDATE characteristic_type SET description = 'Vocabulary entropy for sadovsky cutting length' WHERE id = 6;
+UPDATE characteristic_type SET name = 'Descriptive information', description = 'Mazurs descriptive informations count' WHERE id = 7;
+UPDATE characteristic_type SET name = 'Depth', description = 'Base 2 logarithm of volume characteristic' WHERE id = 8;
+UPDATE characteristic_type SET description = 'Average geometric value of intervals lengthes' WHERE id = 9;
+UPDATE characteristic_type SET name = 'Entropy', description = 'Shannon information or amount of information or count of identification informations' WHERE id = 10;
+UPDATE characteristic_type SET name = 'Intervals count', description = 'Count of intervals in sequence' WHERE id = 11;
+UPDATE characteristic_type SET name = 'Sequence length', description = 'Length of sequence measured in elements' WHERE id = 12;
+DELETE FROM characteristic_type WHERE id = 13;
+UPDATE characteristic_type SET name = 'Periodicity', description = 'Calculated as geometric mean divided by arithmetic mean' WHERE id = 14;
+UPDATE characteristic_type SET name = 'Variations count', description = 'Number of probable sequences that can be generated from given ambiguous sequence', class_name = 'VariationsCount' WHERE id = 15;
+UPDATE characteristic_type SET name = 'Frequency', description = 'Or probability' WHERE id = 16;
+UPDATE characteristic_type SET name = 'Regularity', description = 'Calculated as geometric mean divided by descriptive informations count' WHERE id = 17;
+UPDATE characteristic_type SET name = 'Volume', description = 'Calculated as product of all intervals in sequence' WHERE id = 18;
+UPDATE characteristic_type SET name = 'Redundancy', description = 'Redundancy of coding second element with intervals between itself compared to coding with intervals from first element occurrences' WHERE id = 20;
+UPDATE characteristic_type SET name = 'Partial dependence coefficient', description = 'Asymmetric measure of dependence in binary-congeneric sequence' WHERE id = 21;
+UPDATE characteristic_type SET name = 'Involved partial dependence coefficient', description = 'Partial dependence coefficient weighted with frequency of elements and their pairs' WHERE id = 22;
+UPDATE characteristic_type SET name = 'Mutual dependence coefficient', description = 'Geometric mean of involved partial dependence coefficients' WHERE id = 23;
+UPDATE characteristic_type SET name = 'Normalized partial dependence coefficient', description = 'Partial dependence coefficient weighted with sequence length' WHERE id = 24;
+UPDATE characteristic_type SET name = 'Intervals sum', description = 'Sum of intervals lengthes' WHERE id = 25;
+UPDATE characteristic_type SET name = 'Alphabetic average remoteness', description = 'Average remoteness calculated with logarithm base equals to alphabet cardinality' WHERE id = 26;
+UPDATE characteristic_type SET name = 'Alphabetic depth', description = 'Depth calculated with logarithm base equals to alphabet cardinality' WHERE id = 27;
+UPDATE characteristic_type SET name = 'Average remoteness dispersion', description = 'Dispersion of remotenesses of congeneric sequences around average remoteness' WHERE id = 28;
+UPDATE characteristic_type SET name = 'Average remoteness standard deviation', description = 'Scatter of remotenesses of congeneric sequences around average remoteness' WHERE id = 29;
+UPDATE characteristic_type SET name = 'Average remoteness skewness', description = 'Asymmetry of remotenesses of congeneric sequences compared to average remoteness' WHERE id = 30;
+
+ALTER SEQUENCE link_id_seq RESTART WITH 6;
+
+UPDATE feature SET description = 'Complete genetic sequence' WHERE id = 1;
+UPDATE feature SET description = 'Complete literary work' WHERE id = 2;
+UPDATE feature SET name = 'Complete musical composition', description = 'Complete piece of music' WHERE id = 3;
+
+UPDATE language SET name = 'Russian', description = 'Set if literary work completely or mostly written in russian language' WHERE id = 1;
+UPDATE language SET name = 'English', description = 'Set if literary work completely or mostly written in english language' WHERE id = 2;
+UPDATE language SET name = 'German', description = 'Set if literary work completely or mostly written in german language' WHERE id = 3;
+
+UPDATE link SET name = 'None', description = 'First and last intervals to boundaries of sequence are not taken into account' WHERE id = 1;
+UPDATE link SET name = 'To beginning', description = 'Interval from start of sequence to first occurrence of element is taken into account' WHERE id = 2;
+UPDATE link SET name = 'To end', description = 'Interval from last occurrence of element to end of sequence is taken into account' WHERE id = 3;
+UPDATE link SET name = 'To beginning and to end', description = 'Both intervals from start of sequence to first occurrence of element and from last occurrence of element to end of sequence are taken into account' WHERE id = 4;
+UPDATE link SET name = 'Cyclic', description = 'Interval from last occurrence of element to from start of sequence to first occurrence of element (as if sequence was cyclic) is taken into account' WHERE id = 5;
+INSERT INTO link(name, description) VALUES('Cyclic to beginning', 'Cyclic reading from left to right (intergals are bound to the right position (element occurrence))');
+INSERT INTO link(name, description) VALUES('Cyclic to end', 'Cyclic reading from right to left (intergals are bound to the left position (element occurrence))');
+
+UPDATE nature SET name = 'Genetic', description = 'Genetic texts, nucleotides, codons, aminoacids, segmented genetic words, etc.' WHERE id = 1;
+UPDATE nature SET name = 'Music', description = 'Musical compositions, note, measures, formal motives, etc.' WHERE id = 2;
+UPDATE nature SET name = 'Lirerature', description = 'Literary works, letters, words, etc.' WHERE id = 3;
+
+UPDATE notation SET name = 'Nucleotides', description = 'Basic blocks of nucleic acids' WHERE id = 1;
+UPDATE notation SET name = 'Triplets', description = 'Codons, groups of 3 nucleotides' WHERE id = 2;
+UPDATE notation SET name = 'Amino acids', description = 'Basic components of peptides' WHERE id = 3;
+UPDATE notation SET name = 'Genetic words', description = 'Joined sequence of nucleotides - result of segmentation of genetic sequence' WHERE id = 4;
+UPDATE notation SET name = 'Normalized words', description = 'Words in normalized notation' WHERE id = 5;
+UPDATE notation SET name = 'Formal motives', description = 'Joined sequence of notes - result of segmentation of musical composition' WHERE id = 6;
+UPDATE notation SET name = 'Measures', description = 'Sequences of notes' WHERE id = 7;
+UPDATE notation SET name = 'Notes', description = 'Basic elements of musical composition' WHERE id = 8;
+UPDATE notation SET name = 'Letters', description = 'Basic elements of literary work' WHERE id = 9;
+
+UPDATE remote_db SET name = 'GenBank / NCBI', description = 'National center for biotechnological information' WHERE id = 1;
+
+UPDATE element SET name = 'Adenin' WHERE id = 1;
+UPDATE element SET name = 'Guanine' WHERE id = 2;
+UPDATE element SET name = 'Cytosine' WHERE id = 3;
+UPDATE element SET name = 'Thymine' WHERE id = 4;
+UPDATE element SET name = 'Uracil ' WHERE id = 5;
+UPDATE element SET name = 'Glycine' WHERE id = 6;
+UPDATE element SET name = 'Alanine' WHERE id = 7;
+UPDATE element SET name = 'Valine' WHERE id = 8;
+UPDATE element SET name = 'Isoleucine' WHERE id = 9;
+UPDATE element SET name = 'Leucine' WHERE id = 10;
+UPDATE element SET name = 'Proline' WHERE id = 11;
+UPDATE element SET name = 'Serine' WHERE id = 12;
+UPDATE element SET name = 'Threonine' WHERE id = 13;
+UPDATE element SET name = 'Cysteine' WHERE id = 14;
+UPDATE element SET name = 'Methionine' WHERE id = 15;
+UPDATE element SET name = 'Aspartic acid' WHERE id = 16;
+UPDATE element SET name = 'Asparagine' WHERE id = 17;
+UPDATE element SET name = 'Glutamic acid' WHERE id = 18;
+UPDATE element SET name = 'Glutamine' WHERE id = 19;
+UPDATE element SET name = 'Lysine' WHERE id = 20;
+UPDATE element SET name = 'Arginine' WHERE id = 21;
+UPDATE element SET name = 'Histidine' WHERE id = 22;
+UPDATE element SET name = 'Phenylalanine' WHERE id = 23;
+UPDATE element SET name = 'Tyrosine' WHERE id = 24;
+UPDATE element SET name = 'Tryptophan' WHERE id = 25;
+UPDATE element SET name = 'Stop codon' WHERE id = 26;
+
+
 COMMIT;
