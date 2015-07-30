@@ -10,7 +10,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.
         /// </summary>
-        public ApplicationDbContext() : base("DefaultConnection")
+        public ApplicationDbContext() : base("Account")
         {
         }
     }
