@@ -234,6 +234,7 @@
     </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\LibiadaRazorViewEngine.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Catalogs\AttributesCheckController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
@@ -360,16 +362,13 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account\AccountViewModels.cs" />
-    <Compile Include="Models\Account\LoginViewModel.cs" />
-    <Compile Include="Models\Account\ManageUserViewModel.cs" />
-    <Compile Include="Models\Account\RegisterViewModel.cs" />
+    <Compile Include="Models\Account\IdentityModels.cs" />
+    <Compile Include="Models\Account\ManageViewModels.cs" />
     <Compile Include="Models\Aliases.cs" />
-    <Compile Include="Models\Account\ApplicationUser.cs" />
     <Compile Include="Models\Calculators\CharacteristicData.cs" />
     <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
     <Compile Include="Models\Calculators\SubsequenceCharacteristic.cs" />
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
-    <Compile Include="Models\Account\ApplicationDbContext.cs" />
     <Compile Include="Models\Calculators\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
@@ -591,15 +590,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />
     <Content Include="Views\Calculators\RelationCalculation\Index.cshtml" />
@@ -640,6 +630,18 @@
     <Content Include="Views\Sequences\Matters\Details.cshtml" />
     <Content Include="Views\Sequences\Matters\Edit.cshtml" />
     <Content Include="Views\Sequences\Matters\Index.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <None Include="Views\Calculators\AccordanceCalculation\Index.cshtml" />
     <Content Include="Views\Partial\_Characteristic.cshtml" />
     <Content Include="Views\Partial\_Characteristics.cshtml" />
@@ -659,6 +661,13 @@
     <Content Include="Views\Sequences\AnnotationsCheck\Index.cshtml" />
     <Content Include="Views\Sequences\AnnotationsCheck\Result.cshtml" />
     <Content Include="Views\Sequences\AnnotationUpdate\Result.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
