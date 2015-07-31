@@ -16,11 +16,11 @@ namespace LibiadaWeb
     {
         public Element()
         {
-            this.FirstElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.SecondElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.FirstElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
-            this.SecondElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
-            this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
+            FirstElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            SecondElementBinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            FirstElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
+            SecondElementAccordanceCharacteristic = new HashSet<AccordanceCharacteristic>();
+            CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
         }
     
         public long Id { get; set; }

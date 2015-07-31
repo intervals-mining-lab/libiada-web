@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Attribute()
         {
-            this.SequenceAttribute = new HashSet<SequenceAttribute>();
+            SequenceAttribute = new HashSet<SequenceAttribute>();
         }
     
         public int Id { get; set; }

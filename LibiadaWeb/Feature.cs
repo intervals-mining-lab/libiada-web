@@ -16,14 +16,14 @@ namespace LibiadaWeb
     {
         public Feature()
         {
-            this.Sequence = new HashSet<CommonSequence>();
-            this.DnaSequence = new HashSet<DnaSequence>();
-            this.LiteratureSequence = new HashSet<LiteratureSequence>();
-            this.Fmotiv = new HashSet<Fmotiv>();
-            this.Measure = new HashSet<Measure>();
-            this.MusicSequence = new HashSet<MusicSequence>();
-            this.DataSequence = new HashSet<DataSequence>();
-            this.Subsequence = new HashSet<Subsequence>();
+            Sequence = new HashSet<CommonSequence>();
+            DnaSequence = new HashSet<DnaSequence>();
+            LiteratureSequence = new HashSet<LiteratureSequence>();
+            Fmotiv = new HashSet<Fmotiv>();
+            Measure = new HashSet<Measure>();
+            MusicSequence = new HashSet<MusicSequence>();
+            DataSequence = new HashSet<DataSequence>();
+            Subsequence = new HashSet<Subsequence>();
         }
     
         public int Id { get; set; }

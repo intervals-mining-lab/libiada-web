@@ -16,10 +16,10 @@ namespace LibiadaWeb
     {
         public Nature()
         {
-            this.Matter = new HashSet<Matter>();
-            this.Notation = new HashSet<Notation>();
-            this.Feature = new HashSet<Feature>();
-            this.RemoteDb = new HashSet<RemoteDb>();
+            Matter = new HashSet<Matter>();
+            Notation = new HashSet<Notation>();
+            Feature = new HashSet<Feature>();
+            RemoteDb = new HashSet<RemoteDb>();
         }
     
         public int Id { get; set; }

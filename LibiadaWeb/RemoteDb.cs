@@ -16,13 +16,13 @@ namespace LibiadaWeb
     {
         public RemoteDb()
         {
-            this.Sequence = new HashSet<CommonSequence>();
-            this.DnaSequence = new HashSet<DnaSequence>();
-            this.LiteratureSequence = new HashSet<LiteratureSequence>();
-            this.MusicSequence = new HashSet<MusicSequence>();
-            this.DataSequence = new HashSet<DataSequence>();
-            this.Fmotiv = new HashSet<Fmotiv>();
-            this.Measure = new HashSet<Measure>();
+            Sequence = new HashSet<CommonSequence>();
+            DnaSequence = new HashSet<DnaSequence>();
+            LiteratureSequence = new HashSet<LiteratureSequence>();
+            MusicSequence = new HashSet<MusicSequence>();
+            DataSequence = new HashSet<DataSequence>();
+            Fmotiv = new HashSet<Fmotiv>();
+            Measure = new HashSet<Measure>();
         }
     
         public int Id { get; set; }

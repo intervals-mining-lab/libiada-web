@@ -16,8 +16,8 @@ namespace LibiadaWeb
     {
         public CommonSequence()
         {
-            this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.Characteristic = new HashSet<Characteristic>();
+            BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            Characteristic = new HashSet<Characteristic>();
         }
     
         public long Id { get; set; }

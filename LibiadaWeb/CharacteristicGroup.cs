@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public CharacteristicGroup()
         {
-            this.CharacteristicType = new HashSet<CharacteristicType>();
+            CharacteristicType = new HashSet<CharacteristicType>();
         }
     
         public int Id { get; set; }

@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Pitch()
         {
-            this.Note = new HashSet<Note>();
+            Note = new HashSet<Note>();
         }
     
         public int Id { get; set; }

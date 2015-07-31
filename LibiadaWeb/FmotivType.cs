@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public FmotivType()
         {
-            this.Fmotiv = new HashSet<Fmotiv>();
+            Fmotiv = new HashSet<Fmotiv>();
         }
     
         public int Id { get; set; }

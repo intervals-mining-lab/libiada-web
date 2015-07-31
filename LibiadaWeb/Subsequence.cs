@@ -16,8 +16,8 @@ namespace LibiadaWeb
     {
         public Subsequence()
         {
-            this.SequenceAttribute = new HashSet<SequenceAttribute>();
-            this.Position = new HashSet<Position>();
+            SequenceAttribute = new HashSet<SequenceAttribute>();
+            Position = new HashSet<Position>();
         }
     
         public long Id { get; set; }

@@ -16,9 +16,9 @@ namespace LibiadaWeb
     {
         public LiteratureSequence()
         {
-            this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
-            this.Characteristic = new HashSet<Characteristic>();
+            BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            CongenericCharacteristic = new HashSet<CongenericCharacteristic>();
+            Characteristic = new HashSet<Characteristic>();
         }
     
         public long Id { get; set; }

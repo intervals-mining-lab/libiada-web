@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Tie()
         {
-            this.Note = new HashSet<Note>();
+            Note = new HashSet<Note>();
         }
     
         public int Id { get; set; }

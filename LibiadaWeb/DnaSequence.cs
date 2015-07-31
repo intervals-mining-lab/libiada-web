@@ -16,10 +16,10 @@ namespace LibiadaWeb
     {
         public DnaSequence()
         {
-            this.BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
-            this.Characteristic = new HashSet<Characteristic>();
-            this.Subsequence = new HashSet<Subsequence>();
-            this.SequenceAttribute = new HashSet<SequenceAttribute>();
+            BinaryCharacteristic = new HashSet<BinaryCharacteristic>();
+            Characteristic = new HashSet<Characteristic>();
+            Subsequence = new HashSet<Subsequence>();
+            SequenceAttribute = new HashSet<SequenceAttribute>();
         }
     
         public long Id { get; set; }

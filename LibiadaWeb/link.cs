@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Link()
         {
-            this.CharacteristicTypeLink = new HashSet<CharacteristicTypeLink>();
+            CharacteristicTypeLink = new HashSet<CharacteristicTypeLink>();
         }
     
         public int Id { get; set; }

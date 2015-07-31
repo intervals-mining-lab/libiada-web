@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Translator()
         {
-            this.LiteratureSequence = new HashSet<LiteratureSequence>();
+            LiteratureSequence = new HashSet<LiteratureSequence>();
         }
     
         public int Id { get; set; }

@@ -16,7 +16,7 @@ namespace LibiadaWeb
     {
         public Accidental()
         {
-            this.Pitch = new HashSet<Pitch>();
+            Pitch = new HashSet<Pitch>();
         }
     
         public int Id { get; set; }

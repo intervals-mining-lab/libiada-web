@@ -16,15 +16,15 @@ namespace LibiadaWeb
     {
         public Notation()
         {
-            this.Sequence = new HashSet<CommonSequence>();
-            this.DnaSequence = new HashSet<DnaSequence>();
-            this.Element = new HashSet<Element>();
-            this.LiteratureSequence = new HashSet<LiteratureSequence>();
-            this.Fmotiv = new HashSet<Fmotiv>();
-            this.Measure = new HashSet<Measure>();
-            this.MusicSequence = new HashSet<MusicSequence>();
-            this.DataSequence = new HashSet<DataSequence>();
-            this.Note = new HashSet<Note>();
+            Sequence = new HashSet<CommonSequence>();
+            DnaSequence = new HashSet<DnaSequence>();
+            Element = new HashSet<Element>();
+            LiteratureSequence = new HashSet<LiteratureSequence>();
+            Fmotiv = new HashSet<Fmotiv>();
+            Measure = new HashSet<Measure>();
+            MusicSequence = new HashSet<MusicSequence>();
+            DataSequence = new HashSet<DataSequence>();
+            Note = new HashSet<Note>();
         }
     
         public int Id { get; set; }
