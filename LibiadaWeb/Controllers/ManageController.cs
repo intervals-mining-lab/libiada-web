@@ -11,58 +11,96 @@
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
 
+    /// <summary>
+    /// The manage controller.
+    /// </summary>
     [Authorize]
     public class ManageController : Controller
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        /// <summary>
+        /// The sign in manager.
+        /// </summary>
+        private ApplicationSignInManager signInManager;
 
+        /// <summary>
+        /// The user manager.
+        /// </summary>
+        private ApplicationUserManager userManager;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageController"/> class.
+        /// </summary>
         public ManageController()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManageController"/> class.
+        /// </summary>
+        /// <param name="userManager">
+        /// The user manager.
+        /// </param>
+        /// <param name="signInManager">
+        /// The sign in manager.
+        /// </param>
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             this.UserManager = userManager;
             this.SignInManager = signInManager;
         }
 
+        /// <summary>
+        /// Gets the sign in manager.
+        /// </summary>
         public ApplicationSignInManager SignInManager
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
+
             private set 
             { 
-                _signInManager = value; 
+                signInManager = value; 
             }
         }
 
+        /// <summary>
+        /// Gets the user manager.
+        /// </summary>
         public ApplicationUserManager UserManager
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return this.userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
+
             private set
             {
-                _userManager = value;
+                this.userManager = value;
             }
         }
 
-        //
-        // GET: /Manage/Index
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/Index
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                  message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+                : string.Empty;
 
             var userId = User.Identity.GetUserId<int>();
             var model = new IndexViewModel
@@ -76,8 +114,19 @@
             return View(model);
         }
 
-        //
-        // POST: /Manage/RemoveLogin
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/RemoveLogin
+        /// </summary>
+        /// <param name="loginProvider">
+        /// The login provider.
+        /// </param>
+        /// <param name="providerKey">
+        /// The provider key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
@@ -102,15 +151,28 @@
             return RedirectToAction("ManageLogins", new { Message = message });
         }
 
-        //
-        // GET: /Manage/AddPhoneNumber
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/AddPhoneNumber
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult AddPhoneNumber()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/AddPhoneNumber
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/AddPhoneNumber
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
@@ -135,8 +197,13 @@
             return RedirectToAction("VerifyPhoneNumber", new { PhoneNumber = model.Number });
         }
 
-        //
-        // POST: /Manage/EnableTwoFactorAuthentication
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/EnableTwoFactorAuthentication
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
@@ -151,8 +218,13 @@
             return RedirectToAction("Index", "Manage");
         }
 
-        //
-        // POST: /Manage/DisableTwoFactorAuthentication
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/DisableTwoFactorAuthentication
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
@@ -167,17 +239,34 @@
             return RedirectToAction("Index", "Manage");
         }
 
-        //
-        // GET: /Manage/VerifyPhoneNumber
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/VerifyPhoneNumber
+        /// </summary>
+        /// <param name="phoneNumber">
+        /// The phone number.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId<int>(), phoneNumber);
+            
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
 
-        //
-        // POST: /Manage/VerifyPhoneNumber
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/VerifyPhoneNumber
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
@@ -200,12 +289,17 @@
             }
 
             // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "Failed to verify phone");
+            ModelState.AddModelError(string.Empty, "Failed to verify phone");
             return View(model);
         }
 
-        //
-        // GET: /Manage/RemovePhoneNumber
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/RemovePhoneNumber
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> RemovePhoneNumber()
         {
             var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId<int>(), null);
@@ -223,15 +317,28 @@
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
         }
 
-        //
-        // GET: /Manage/ChangePassword
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/ChangePassword
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/ChangePassword
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/ChangePassword
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -257,15 +364,28 @@
             return View(model);
         }
 
-        //
-        // GET: /Manage/SetPassword
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/SetPassword
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult SetPassword()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/SetPassword
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/SetPassword
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> SetPassword(SetPasswordViewModel model)
@@ -291,13 +411,21 @@
             return View(model);
         }
 
-        //
-        // GET: /Manage/ManageLogins
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/ManageLogins
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> ManageLogins(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.Error ? "An error has occurred." : "";
+                : message == ManageMessageId.Error ? "An error has occurred." : string.Empty;
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
             if (user == null)
             {
@@ -314,8 +442,16 @@
             });
         }
 
-        //
-        // POST: /Manage/LinkLogin
+        /// <summary>
+        /// Action: POST
+        /// Route: /Manage/LinkLogin
+        /// </summary>
+        /// <param name="provider">
+        /// The provider.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
@@ -324,8 +460,13 @@
             return new AccountController.ChallengeResult(provider, Url.Action("LinkLoginCallback", "Manage"), User.Identity.GetUserId());
         }
 
-        //
-        // GET: /Manage/LinkLoginCallback
+        /// <summary>
+        /// Action: GET
+        /// Route: /Manage/LinkLoginCallback
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
         public async Task<ActionResult> LinkLoginCallback()
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
@@ -338,21 +479,34 @@
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        /// <param name="disposing">
+        /// The disposing.
+        /// </param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && _userManager != null)
+            if (disposing && this.userManager != null)
             {
-                _userManager.Dispose();
-                _userManager = null;
+                this.userManager.Dispose();
+                this.userManager = null;
             }
 
             base.Dispose(disposing);
         }
 
 #region Helpers
-        // Used for XSRF protection when adding external logins
+
+        /// <summary>
+        /// The xsrf key.
+        /// Used for XSRF protection when adding external logins.
+        /// </summary>
         private const string XsrfKey = "XsrfId";
 
+        /// <summary>
+        /// Gets the authentication manager.
+        /// </summary>
         private IAuthenticationManager AuthenticationManager
         {
             get
@@ -361,14 +515,26 @@
             }
         }
 
+        /// <summary>
+        /// The add errors.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError(string.Empty, error);
             }
         }
 
+        /// <summary>
+        /// The has password.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool HasPassword()
         {
             var user = UserManager.FindById(User.Identity.GetUserId<int>());
@@ -376,9 +542,16 @@
             {
                 return user.PasswordHash != null;
             }
+
             return false;
         }
 
+        /// <summary>
+        /// The has phone number.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private bool HasPhoneNumber()
         {
             var user = UserManager.FindById(User.Identity.GetUserId<int>());
@@ -386,17 +559,48 @@
             {
                 return user.PhoneNumber != null;
             }
+
             return false;
         }
 
+        /// <summary>
+        /// The manage message id.
+        /// </summary>
         public enum ManageMessageId
         {
+            /// <summary>
+            /// The add phone success.
+            /// </summary>
             AddPhoneSuccess,
+
+            /// <summary>
+            /// The change password success.
+            /// </summary>
             ChangePasswordSuccess,
+
+            /// <summary>
+            /// The set two factor success.
+            /// </summary>
             SetTwoFactorSuccess,
+
+            /// <summary>
+            /// The set password success.
+            /// </summary>
             SetPasswordSuccess,
+
+            /// <summary>
+            /// The remove login success.
+            /// </summary>
             RemoveLoginSuccess,
+
+            /// <summary>
+            /// The remove phone success.
+            /// </summary>
             RemovePhoneSuccess,
+
+            /// <summary>
+            /// The error.
+            /// </summary>
             Error
         }
 

@@ -18,14 +18,14 @@
     public class AccountController : Controller
     {
         /// <summary>
-        /// The _sign in manager.
+        /// The sign in manager.
         /// </summary>
-        private ApplicationSignInManager _signInManager;
+        private ApplicationSignInManager signInManager;
 
         /// <summary>
-        /// The _user manager.
+        /// The user manager.
         /// </summary>
-        private ApplicationUserManager _userManager;
+        private ApplicationUserManager userManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountController"/> class.
@@ -56,12 +56,12 @@
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return this.signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
 
             private set
             {
-                _signInManager = value;
+                this.signInManager = value;
             }
         }
 
@@ -72,18 +72,18 @@
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return this.userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
 
             private set
             {
-                _userManager = value;
+                this.userManager = value;
             }
         }
 
-        // GET: /Account/Login
         /// <summary>
-        /// The login.
+        /// Action: GET
+        /// Route: /Account/Login
         /// </summary>
         /// <param name="returnUrl">
         /// The return url.
@@ -98,9 +98,9 @@
             return View();
         }
 
-        // POST: /Account/Login
         /// <summary>
-        /// The login.
+        /// Action: POST
+        /// Route: /Account/Login
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -147,9 +147,9 @@
             }
         }
 
-        // GET: /Account/VerifyCode
         /// <summary>
-        /// The verify code.
+        /// Action: GET
+        /// Route: /Account/VerifyCode
         /// </summary>
         /// <param name="provider">
         /// The provider.
@@ -175,9 +175,9 @@
             return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        // POST: /Account/VerifyCode
         /// <summary>
-        /// The verify code.
+        /// Action: POST
+        /// Route: /Account/VerifyCode
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -219,9 +219,9 @@
             }
         }
 
-        // GET: /Account/Register
         /// <summary>
-        /// The register.
+        /// Action: GET
+        /// Route: /Account/Register
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -232,9 +232,9 @@
             return View();
         }
 
-        // POST: /Account/Register
         /// <summary>
-        /// The register.
+        /// Action: POST
+        /// Route: /Account/Register
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -270,9 +270,9 @@
             return View(model);
         }
 
-        // GET: /Account/ConfirmEmail
         /// <summary>
-        /// The confirm email.
+        /// Action: GET
+        /// Route: /Account/ConfirmEmail
         /// </summary>
         /// <param name="userId">
         /// The user id.
@@ -295,9 +295,9 @@
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        // GET: /Account/ForgotPassword
         /// <summary>
-        /// The forgot password.
+        /// Action: GET
+        /// Route: /Account/ForgotPassword
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -308,9 +308,9 @@
             return View();
         }
 
-        // POST: /Account/ForgotPassword
         /// <summary>
-        /// The forgot password.
+        /// Action: POST
+        /// Route: /Account/ForgotPassword
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -335,7 +335,7 @@
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
                 // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
+                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 // await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
@@ -344,9 +344,9 @@
             return View(model);
         }
 
-        // GET: /Account/ForgotPasswordConfirmation
         /// <summary>
-        /// The forgot password confirmation.
+        /// Action: GET
+        /// Route: /Account/ForgotPasswordConfirmation
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -357,9 +357,9 @@
             return View();
         }
 
-        // GET: /Account/ResetPassword
         /// <summary>
-        /// The reset password.
+        /// Action: GET
+        /// Route: /Account/ResetPassword
         /// </summary>
         /// <param name="code">
         /// The code.
@@ -373,9 +373,9 @@
             return code == null ? View("Error") : View();
         }
 
-        // POST: /Account/ResetPassword
         /// <summary>
-        /// The reset password.
+        /// Action: POST
+        /// Route: /Account/ResetPassword
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -410,9 +410,9 @@
             return View();
         }
 
-        // GET: /Account/ResetPasswordConfirmation
         /// <summary>
-        /// The reset password confirmation.
+        /// Action: GET
+        /// Route: /Account/ResetPasswordConfirmation
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -423,9 +423,9 @@
             return View();
         }
 
-        // POST: /Account/ExternalLogin
         /// <summary>
-        /// The external login.
+        /// Action: POST
+        /// Route: /Account/ExternalLogin
         /// </summary>
         /// <param name="provider">
         /// The provider.
@@ -445,9 +445,9 @@
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        // GET: /Account/SendCode
         /// <summary>
-        /// The send code.
+        /// Action: GET
+        /// Route: /Account/SendCode
         /// </summary>
         /// <param name="returnUrl">
         /// The return url.
@@ -473,9 +473,9 @@
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
         }
 
-        // POST: /Account/SendCode
         /// <summary>
-        /// The send code.
+        /// Action: POST
+        /// Route: /Account/SendCode
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -502,9 +502,9 @@
             return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
         }
 
-        // GET: /Account/ExternalLoginCallback
         /// <summary>
-        /// The external login callback.
+        /// Action: GET
+        /// Route: /Account/ExternalLoginCallback
         /// </summary>
         /// <param name="returnUrl">
         /// The return url.
@@ -541,9 +541,9 @@
             }
         }
 
-        // POST: /Account/ExternalLoginConfirmation
         /// <summary>
-        /// The external login confirmation.
+        /// Action: POST
+        /// Route: /Account/ExternalLoginConfirmation
         /// </summary>
         /// <param name="model">
         /// The model.
@@ -592,9 +592,9 @@
             return View(model);
         }
 
-        // POST: /Account/LogOff
         /// <summary>
-        /// The log off.
+        /// Action:POST
+        /// Route: /Account/LogOff
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -607,9 +607,9 @@
             return RedirectToAction("Index", "Home");
         }
 
-        // GET: /Account/ExternalLoginFailure
         /// <summary>
-        /// The external login failure.
+        /// Action: GET
+        /// Route: /Account/ExternalLoginFailure
         /// </summary>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -630,16 +630,16 @@
         {
             if (disposing)
             {
-                if (_userManager != null)
+                if (this.userManager != null)
                 {
-                    _userManager.Dispose();
-                    _userManager = null;
+                    this.userManager.Dispose();
+                    this.userManager = null;
                 }
 
-                if (_signInManager != null)
+                if (this.signInManager != null)
                 {
-                    _signInManager.Dispose();
-                    _signInManager = null;
+                    this.signInManager.Dispose();
+                    this.signInManager = null;
                 }
             }
 
@@ -648,9 +648,9 @@
 
         #region Helpers
 
-        // Used for XSRF protection when adding external logins
         /// <summary>
         /// The xsrf key.
+        /// Used for XSRF protection when adding external logins.
         /// </summary>
         private const string XsrfKey = "XsrfId";
 

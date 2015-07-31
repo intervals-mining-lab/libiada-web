@@ -42,6 +42,9 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether connection to db established or not.
+        /// </summary>
         public static bool ConnectionStatus
         {
             get
