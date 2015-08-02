@@ -64,5 +64,3 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 LibiadaWeb/JSLintNet.json
-LibiadaWeb/Web.Debug.config
-LibiadaWeb/Web.Release.config
