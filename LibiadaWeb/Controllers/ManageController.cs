@@ -45,8 +45,8 @@
         /// </param>
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
-            this.UserManager = userManager;
-            this.SignInManager = signInManager;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         /// <summary>
@@ -72,12 +72,12 @@
         {
             get
             {
-                return this.userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
 
             private set
             {
-                this.userManager = value;
+                userManager = value;
             }
         }
 
@@ -487,10 +487,10 @@
         /// </param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && this.userManager != null)
+            if (disposing && userManager != null)
             {
-                this.userManager.Dispose();
-                this.userManager = null;
+                userManager.Dispose();
+                userManager = null;
             }
 
             base.Dispose(disposing);

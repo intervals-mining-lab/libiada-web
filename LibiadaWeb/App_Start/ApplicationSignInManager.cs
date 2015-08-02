@@ -55,7 +55,7 @@ namespace LibiadaWeb
         /// </returns>
         public override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
-            return user.GenerateUserIdentityAsync((ApplicationUserManager)this.UserManager);
+            return user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
         }
     }
 }

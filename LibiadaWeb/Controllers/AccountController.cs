@@ -45,8 +45,8 @@
         /// </param>
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
-            this.UserManager = userManager;
-            this.SignInManager = signInManager;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         /// <summary>
@@ -56,12 +56,12 @@
         {
             get
             {
-                return this.signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
 
             private set
             {
-                this.signInManager = value;
+                signInManager = value;
             }
         }
 
@@ -72,12 +72,12 @@
         {
             get
             {
-                return this.userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
             }
 
             private set
             {
-                this.userManager = value;
+                userManager = value;
             }
         }
 
@@ -123,13 +123,8 @@
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result =
-                await
-                SignInManager.PasswordSignInAsync(
-                    model.Email, 
-                    model.Password, 
-                    model.RememberMe, 
-                    shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            
             switch (result)
             {
                 case SignInStatus.Success:
@@ -137,9 +132,7 @@
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction(
-                        "SendCode", 
-                        new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -199,13 +192,8 @@
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result =
-                await
-                SignInManager.TwoFactorSignInAsync(
-                    model.Provider, 
-                    model.Code, 
-                    isPersistent: model.RememberMe, 
-                    rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
+            
             switch (result)
             {
                 case SignInStatus.Success:
@@ -630,16 +618,16 @@
         {
             if (disposing)
             {
-                if (this.userManager != null)
+                if (userManager != null)
                 {
-                    this.userManager.Dispose();
-                    this.userManager = null;
+                    userManager.Dispose();
+                    userManager = null;
                 }
 
-                if (this.signInManager != null)
+                if (signInManager != null)
                 {
-                    this.signInManager.Dispose();
-                    this.signInManager = null;
+                    signInManager.Dispose();
+                    signInManager = null;
                 }
             }
 
