@@ -18,6 +18,7 @@
     /// <summary>
     /// The subsequences similarity controller.
     /// </summary>
+    [Authorize]
     public class SubsequencesSimilarityController : AbstractResultController
     {
         /// <summary>

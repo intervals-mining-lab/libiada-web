@@ -21,6 +21,7 @@
     /// <summary>
     /// The calculation controller.
     /// </summary>
+    [Authorize]
     public class CalculationController : AbstractResultController
     {
         /// <summary>

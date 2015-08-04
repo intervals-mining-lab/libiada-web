@@ -1,6 +1,7 @@
-﻿namespace LibiadaWeb.Maintenance
+﻿namespace LibiadaWeb.Tasks
 {
     using System;
+
     using AutoMapper;
 
     /// <summary>
@@ -54,9 +55,9 @@
         /// </param>
         public TaskData(int id, string displayName)
         {
-            Id = id;
-            DisplayName = displayName;
-            Created = DateTime.Now;
+            this.Id = id;
+            this.DisplayName = displayName;
+            this.Created = DateTime.Now;
         }
 
         /// <summary>

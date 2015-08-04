@@ -6,11 +6,12 @@
     using System.Threading;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Maintenance;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The calculation controller.
     /// </summary>
+    [Authorize]
     public class TaskManagerController : Controller
     {
         /// <summary>

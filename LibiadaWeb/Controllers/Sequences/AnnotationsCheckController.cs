@@ -12,6 +12,7 @@
     /// <summary>
     /// The annotations check controller.
     /// </summary>
+    [Authorize]
     public class AnnotationsCheckController : AbstractResultController
     {
         /// <summary>

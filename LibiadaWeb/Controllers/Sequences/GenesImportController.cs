@@ -15,6 +15,7 @@
     /// <summary>
     /// The genes import controller.
     /// </summary>
+    [Authorize]
     public class GenesImportController : AbstractResultController
     {
         /// <summary>

@@ -20,6 +20,7 @@
     /// <summary>
     /// The local calculation controller.
     /// </summary>
+    [Authorize]
     public class LocalCalculationController : AbstractResultController
     {
         /// <summary>

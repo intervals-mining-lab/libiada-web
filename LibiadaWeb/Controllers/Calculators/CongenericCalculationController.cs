@@ -19,6 +19,7 @@
     /// <summary>
     /// The congeneric calculation controller.
     /// </summary>
+    [Authorize]
     public class CongenericCalculationController : AbstractResultController
     {
         /// <summary>

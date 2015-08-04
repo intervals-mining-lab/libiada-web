@@ -20,6 +20,7 @@
     /// <summary>
     /// The relation calculation controller.
     /// </summary>
+    [Authorize]
     public class RelationCalculationController : AbstractResultController
     {
         /// <summary>

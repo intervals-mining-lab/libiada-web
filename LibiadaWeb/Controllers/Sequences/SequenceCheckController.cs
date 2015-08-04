@@ -12,6 +12,7 @@
     /// <summary>
     /// The sequence check controller.
     /// </summary>
+    [Authorize]
     public class SequenceCheckController : AbstractResultController
     {
         /// <summary>

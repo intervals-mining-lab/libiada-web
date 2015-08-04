@@ -11,6 +11,7 @@
     /// <summary>
     /// The annotation update controller.
     /// </summary>
+    [Authorize]
     public class AnnotationUpdateController : AbstractResultController
     {
         /// <summary>
@@ -26,8 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AnnotationUpdateController"/> class.
         /// </summary>
-        public AnnotationUpdateController()
-            : base("AnnotationUpdate", "Annotation update")
+        public AnnotationUpdateController() : base("AnnotationUpdate", "Annotation update")
         {
             db = new LibiadaWebEntities();
             subsequenceRepository = new SubsequenceRepository(db);

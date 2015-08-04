@@ -17,6 +17,7 @@
     /// <summary>
     /// The quick calculation controller.
     /// </summary>
+    [Authorize]
     public class CustomSequenceCalculationController : AbstractResultController
     {
         /// <summary>
@@ -32,8 +33,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController()
-            : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);

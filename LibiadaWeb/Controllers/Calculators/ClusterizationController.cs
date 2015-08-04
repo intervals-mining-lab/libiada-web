@@ -20,6 +20,7 @@
     /// <summary>
     /// The clusterization controller.
     /// </summary>
+    [Authorize]
     public class ClusterizationController : AbstractResultController
     {
         /// <summary>

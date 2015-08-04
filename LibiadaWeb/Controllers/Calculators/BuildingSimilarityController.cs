@@ -15,6 +15,7 @@
     /// <summary>
     /// The buildings comparison controller.
     /// </summary>
+    [Authorize]
     public class BuildingsSimilarityController : AbstractResultController
     {
         /// <summary>

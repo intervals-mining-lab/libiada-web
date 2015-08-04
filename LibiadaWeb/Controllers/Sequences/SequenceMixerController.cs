@@ -12,6 +12,7 @@
     /// <summary>
     /// The sequence mixer controller.
     /// </summary>
+    [Authorize]
     public class SequenceMixerController : Controller
     {
         /// <summary>

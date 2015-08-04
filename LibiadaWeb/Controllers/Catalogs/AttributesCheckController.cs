@@ -12,6 +12,7 @@
     /// <summary>
     /// The attribute check controller.
     /// </summary>
+    [Authorize]
     public class AttributesCheckController : AbstractResultController
     {
         /// <summary>
@@ -22,8 +23,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
-        public AttributesCheckController()
-            : base("AttributesCheck", "Attributes check")
+        public AttributesCheckController() : base("AttributesCheck", "Attributes check")
         {
             db = new LibiadaWebEntities();
         }

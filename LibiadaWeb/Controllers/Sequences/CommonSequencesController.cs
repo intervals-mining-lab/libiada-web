@@ -8,6 +8,7 @@
     /// <summary>
     /// The common sequences controller.
     /// </summary>
+    [Authorize]
     public class CommonSequencesController : SequencesMattersController
     {
         /// <summary>

@@ -8,6 +8,7 @@
     /// <summary>
     /// The matters controller.
     /// </summary>
+    [Authorize]
     public class MattersController : SequencesMattersController
     {
         /// <summary>

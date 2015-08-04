@@ -18,6 +18,7 @@
     /// <summary>
     /// The accordance calculation controller.
     /// </summary>
+    [Authorize]
     public class AccordanceCalculationController : AbstractResultController
     {
         /// <summary>
@@ -38,8 +39,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController()
-            : base("AccordanceCalculation", "Accordance calculation")
+        public AccordanceCalculationController() : base("AccordanceCalculation", "Accordance calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

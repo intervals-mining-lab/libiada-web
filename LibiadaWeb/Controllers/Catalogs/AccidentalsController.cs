@@ -8,6 +8,7 @@
     /// <summary>
     /// The accidentals controller.
     /// </summary>
+    [Authorize]
     public class AccidentalsController : Controller
     {
         /// <summary>

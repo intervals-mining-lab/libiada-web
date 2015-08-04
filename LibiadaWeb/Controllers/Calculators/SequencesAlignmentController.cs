@@ -15,6 +15,7 @@
     /// <summary>
     /// The alignment controller.
     /// </summary>
+    [Authorize]
     public class SequencesAlignmentController : AbstractResultController
     {
         /// <summary>

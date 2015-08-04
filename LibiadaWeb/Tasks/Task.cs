@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Maintenance
+﻿namespace LibiadaWeb.Tasks
 {
     using System;
     using System.Collections.Generic;
@@ -51,9 +51,9 @@
         /// </param>
         public Task(int id, Func<Dictionary<string, object>> action, string controllerName, string displayName)
         {
-            Action = action;
-            ControllerName = controllerName;
-            TaskData = new TaskData(id, displayName);
+            this.Action = action;
+            this.ControllerName = controllerName;
+            this.TaskData = new TaskData(id, displayName);
         }
 
         /// <summary>
@@ -76,11 +76,11 @@
         /// </param>
         private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, string controllerName, Thread thread)
         {
-            Action = action;
-            TaskData = taskData.Clone();
-            Result = result;
-            ControllerName = controllerName;
-            Thread = thread;
+            this.Action = action;
+            this.TaskData = taskData.Clone();
+            this.Result = result;
+            this.ControllerName = controllerName;
+            this.Thread = thread;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, Result, ControllerName, Thread);
+            return new Task(this.Action, this.TaskData, this.Result, this.ControllerName, this.Thread);
         }
     }
 }

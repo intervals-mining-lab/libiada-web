@@ -17,6 +17,7 @@
     /// <summary>
     /// The subsequences distribution controller.
     /// </summary>
+    [Authorize]
     public class SubsequencesDistributionController : AbstractResultController
     {
         /// <summary>

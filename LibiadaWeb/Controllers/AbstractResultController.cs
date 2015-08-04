@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Maintenance;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The abstract result controller.

@@ -14,6 +14,7 @@
     /// <summary>
     /// The dna transformation controller.
     /// </summary>
+    [Authorize]
     public class SequenceTransformerController : Controller
     {
         /// <summary>

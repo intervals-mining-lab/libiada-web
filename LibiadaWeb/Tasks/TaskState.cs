@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Maintenance
+﻿namespace LibiadaWeb.Tasks
 {
     /// <summary>
     /// The task state.
