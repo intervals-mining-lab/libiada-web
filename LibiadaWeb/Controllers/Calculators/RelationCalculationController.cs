@@ -20,7 +20,7 @@
     /// <summary>
     /// The relation calculation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class RelationCalculationController : AbstractResultController
     {
         /// <summary>

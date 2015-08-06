@@ -18,7 +18,7 @@
     /// <summary>
     /// The subsequences similarity controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SubsequencesSimilarityController : AbstractResultController
     {
         /// <summary>

@@ -12,7 +12,7 @@
     /// <summary>
     /// The annotations check controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AnnotationsCheckController : AbstractResultController
     {
         /// <summary>

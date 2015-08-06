@@ -14,7 +14,7 @@
     /// <summary>
     /// The subsequences calculation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SubsequencesCalculationController : AbstractResultController
     {
         /// <summary>

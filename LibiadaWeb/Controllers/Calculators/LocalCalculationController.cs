@@ -20,7 +20,7 @@
     /// <summary>
     /// The local calculation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class LocalCalculationController : AbstractResultController
     {
         /// <summary>

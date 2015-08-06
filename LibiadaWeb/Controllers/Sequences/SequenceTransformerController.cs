@@ -14,7 +14,7 @@
     /// <summary>
     /// The dna transformation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SequenceTransformerController : Controller
     {
         /// <summary>

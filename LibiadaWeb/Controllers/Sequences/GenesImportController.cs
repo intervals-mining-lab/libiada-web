@@ -15,7 +15,7 @@
     /// <summary>
     /// The genes import controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class GenesImportController : AbstractResultController
     {
         /// <summary>

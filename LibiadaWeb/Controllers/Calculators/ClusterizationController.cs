@@ -20,7 +20,7 @@
     /// <summary>
     /// The clusterization controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ClusterizationController : AbstractResultController
     {
         /// <summary>

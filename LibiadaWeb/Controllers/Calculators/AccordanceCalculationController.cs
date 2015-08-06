@@ -18,7 +18,7 @@
     /// <summary>
     /// The accordance calculation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AccordanceCalculationController : AbstractResultController
     {
         /// <summary>

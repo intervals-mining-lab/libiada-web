@@ -15,7 +15,7 @@
     /// <summary>
     /// The buildings comparison controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class BuildingsSimilarityController : AbstractResultController
     {
         /// <summary>

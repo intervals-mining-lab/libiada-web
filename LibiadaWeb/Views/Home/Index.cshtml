@@ -14,45 +14,52 @@
         <div class="col-md-4">
             <h2>Data</h2>
             @Html.ActionLink("Matters", "Index", "Matters")
-            <br/>
-            @Html.ActionLink("Sequences", "Index", "CommonSequences")
-            <br/>
-            @Html.ActionLink("Genes import", "Index", "GenesImport")
-            <br/>
-            @Html.ActionLink("Subsequences attributes check", "Index", "AttributesCheck")
-            <br/>
-            @Html.ActionLink("Imported subsequences annotations check", "Index", "AnnotationsCheck")
-            <br/>
-            @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
+            <br />
+            @if (HttpContext.Current.User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Sequences", "Index", "CommonSequences")
+                <br />
+                @Html.ActionLink("Genes import", "Index", "GenesImport")
+                <br />
+                @Html.ActionLink("Subsequences attributes check", "Index", "AttributesCheck")
+                <br />
+                @Html.ActionLink("Imported subsequences annotations check", "Index", "AnnotationsCheck")
+                <br />
+                @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
+            }
         </div>
         <div class="col-md-4">
             <h2>Calculators</h2>
             @Html.ActionLink("Calculation of integral characteristics", "Index", "Calculation")
-            <br/>
-            @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
-            <br/>
-            @Html.ActionLink("Calculation of relation characteristics of congeneric sequences", "Index", "RelationCalculation")
-            <br/>
-            @Html.ActionLink("Calculation of accordance characteristics of congeneric sequences", "Index", "AccordanceCalculation")
-            <br/>
-            @Html.ActionLink("Calculation of local characteristics (Functions of sequences)", "Index", "LocalCalculation")
-            <br/>
-            @Html.ActionLink("Clusterization by characteristics", "Index", "Clusterization")
-            <br/>
-            @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
-            <br/>
-            @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
-            <br/>
-            @Html.ActionLink("Subsequences distribution", "Index", "SubsequencesDistribution")
-            <br/>
-            @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
-            <br/>
+            <br />
             @Html.ActionLink("Calculation of integral characteristics of custom sequence", "Index", "CustomSequenceCalculation")
-            <br/>
-            @Html.ActionLink("Order comparison", "Index", "BuildingsSimilarity")
+            <br />
+            @if (HttpContext.Current.User.IsInRole("Admin"))
+            {
+                @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
+                <br />
+                @Html.ActionLink("Calculation of relation characteristics of congeneric sequences", "Index", "RelationCalculation")
+                <br />
+                @Html.ActionLink("Calculation of accordance characteristics of congeneric sequences", "Index", "AccordanceCalculation")
+                <br />
+                @Html.ActionLink("Calculation of local characteristics (Functions of sequences)", "Index", "LocalCalculation")
+                <br />
+                @Html.ActionLink("Clusterization by characteristics", "Index", "Clusterization")
+                <br />
+                @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
+                <br />
+                @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
+                <br />
+                @Html.ActionLink("Subsequences distribution", "Index", "SubsequencesDistribution")
+                <br />
+                @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
+                <br />
+
+                @Html.ActionLink("Order comparison", "Index", "BuildingsSimilarity")
+            }
         </div>
         <div class="col-md-4">
-            <h2>System</h2>
+            <h2>Tasks</h2>
             @Html.ActionLink("Task manager", "Index", "TaskManager")
         </div>
     </div>

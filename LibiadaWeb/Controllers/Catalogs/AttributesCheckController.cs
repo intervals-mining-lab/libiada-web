@@ -12,7 +12,7 @@
     /// <summary>
     /// The attribute check controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AttributesCheckController : AbstractResultController
     {
         /// <summary>

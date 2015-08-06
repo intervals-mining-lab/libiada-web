@@ -8,7 +8,7 @@
     /// <summary>
     /// The accidentals controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AccidentalsController : Controller
     {
         /// <summary>

@@ -15,7 +15,7 @@
     /// <summary>
     /// The alignment controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SequencesAlignmentController : AbstractResultController
     {
         /// <summary>

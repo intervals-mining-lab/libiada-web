@@ -5,10 +5,12 @@
 }
 
 <h2>Matters List</h2>
-
-<p>
-    @Html.ActionLink("Create New matter", "Create")
-</p>
+@if (HttpContext.Current.User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New matter", "Create")
+    </p>
+}
 <table class="table table-bordered table-hover">
     <tr>
         <th>
@@ -26,9 +28,11 @@
         <th>
             @Html.DisplayNameFor(model => model.Nature.Name)
         </th>
-        <th></th>
+        @if (HttpContext.Current.User.IsInRole("Admin"))
+        {
+            <th></th>
+        }
     </tr>
-
     @foreach (var item in Model)
     {
         <tr>
@@ -47,12 +51,14 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nature.Name)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+            @if (HttpContext.Current.User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            }
         </tr>
     }
-
 </table>

@@ -12,7 +12,7 @@
     /// <summary>
     /// The sequence check controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SequenceCheckController : AbstractResultController
     {
         /// <summary>

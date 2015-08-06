@@ -19,7 +19,7 @@
     /// <summary>
     /// The congeneric calculation controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CongenericCalculationController : AbstractResultController
     {
         /// <summary>

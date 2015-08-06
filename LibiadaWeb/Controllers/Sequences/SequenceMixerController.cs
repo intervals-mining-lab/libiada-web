@@ -12,7 +12,7 @@
     /// <summary>
     /// The sequence mixer controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SequenceMixerController : Controller
     {
         /// <summary>

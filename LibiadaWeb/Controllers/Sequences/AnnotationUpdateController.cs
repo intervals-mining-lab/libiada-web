@@ -11,7 +11,7 @@
     /// <summary>
     /// The annotation update controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AnnotationUpdateController : AbstractResultController
     {
         /// <summary>
