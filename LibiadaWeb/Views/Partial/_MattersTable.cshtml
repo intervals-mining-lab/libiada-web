@@ -23,7 +23,7 @@
     </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
+        <tr ng-repeat="matter in matters | filter:{Nature: natureId}" ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>

@@ -1,9 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System.Data.Entity;
+    using System.Linq;
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+
+    using LibiadaWeb.Models;
 
     /// <summary>
     /// The matters controller.
@@ -20,6 +23,12 @@
         public async Task<ActionResult> Index()
         {
             var matter = Db.Matter.Include(m => m.Nature);
+
+            if (!HttpContext.User.IsInRole("Admin"))
+            {
+                matter = matter.Where(m => m.NatureId == Aliases.Nature.Genetic);
+            }
+
             return View(await matter.ToListAsync());
         }
 

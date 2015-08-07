@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
+    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaWeb.Models;
@@ -75,8 +76,22 @@
 
             var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true, submitName);
 
-            data.Add("natures", new SelectList(db.Nature, "id", "name"));
-            data.Add("notations", notationRepository.GetSelectListWithNature());
+            IEnumerable<Nature> natures;
+            IEnumerable<object> notations;
+
+            if (HttpContext.Current.User.IsInRole("Admin"))
+            {
+                natures = db.Nature;
+                notations = notationRepository.GetSelectListWithNature();
+            }
+            else
+            {
+                natures = db.Nature.Where(n => n.Id == Aliases.Nature.Genetic);
+                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+            }
+
+            data.Add("natures", new SelectList(natures.OrderBy(n => n.Id), "id", "name"));
+            data.Add("notations", notations);
             data.Add("languages", new SelectList(db.Language, "id", "name"));
             data.Add("translators", translators);
 
