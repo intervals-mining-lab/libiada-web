@@ -5,7 +5,7 @@
     <div class="form-group">
         @Html.LabelFor(model => model.NatureId, new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures"></select>
+            <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
             @Html.ValidationMessageFor(model => model.NatureId, "", new { @class = "text-danger" })
         </div>
     </div>

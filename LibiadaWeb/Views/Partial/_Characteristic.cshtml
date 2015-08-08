@@ -21,7 +21,7 @@
 {
     <div class="form-group">
         <div class="col-md-10">
-            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
             @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
         </div>
     </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-10">
-                <select class="form-control" itle="Translator" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
+                <select class="form-control" title="Translator" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
                 <input type="hidden" name="translatorId" ng-value="characteristic.translator.Value"/>
                 @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
             </div>

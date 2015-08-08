@@ -40,7 +40,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="firstCharacteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <select class="form-control" title="Notation" ng-model="firstCharacteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
                     <input type="hidden" name="firstNotationId" ng-value="firstCharacteristic.notation.Value" />
                     @Html.ValidationMessage("firstNotationId", "", new { @class = "text-danger" })
                 </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="secondCharacteristic.notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <select class="form-control" title="Notation" ng-model="secondCharacteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
                     <input type="hidden" name="secondNotationId" ng-value="secondCharacteristic.notation.Value" />
                     @Html.ValidationMessage("secondNotationId", "", new { @class = "text-danger" })
                 </div>

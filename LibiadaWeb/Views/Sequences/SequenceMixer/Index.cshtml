@@ -24,41 +24,9 @@
             @Html.Partial("_NatureSelect")
             <br/>
             @Html.Partial("_MattersTable")
-            @(Html.Label("matterIds", "Sequences", new { @class = "control-label" }))
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Name))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Description))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Created))
-                        </th>
-                        <th>
-                            @(Html.DisplayNameFor(model => model.Modified))
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="matter in matters | filter:{Nature: natureId}">
-                        <td>
-                            <label>
-                                <input type="radio" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
-                                {{matter.Text}}
-                            </label>
-                        </td>
-                        <td ng-bind="matter.Description" />
-                        <td ng-bind="matter.Created" />
-                        <td ng-bind="matter.Modified" />
-                    </tr>
-                </tbody>
-            </table>
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
                     <input type="hidden" name="notationId" ng-value="notation.Value" />
                     @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
                 </div>
@@ -74,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <select class="form-control" itle="Переводчик" ng-model="translator" ng-options="t.Text for t in translators"></select>
+                            <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators"></select>
                             <input type="hidden" name="translatorIds" ng-value="translator.Value" />
                             @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
                         </div>

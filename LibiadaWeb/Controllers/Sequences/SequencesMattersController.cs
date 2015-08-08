@@ -96,7 +96,7 @@
                     { "features", featureRepository.GetSelectListWithNature() }, 
                     { "languages", new SelectList(Db.Language, "id", "name") }, 
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(Db.Nature, "id", "name") }, 
+                    { "natures", new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
                 };

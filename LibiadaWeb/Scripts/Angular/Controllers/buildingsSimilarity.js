@@ -6,9 +6,8 @@
 
         $scope.natureId = $scope.natures[0].Value;
 
-        var filterByNature = function () {
-            FilterOptionsByNature($scope, filterFilter, "notations");
-            $scope.notation = $scope.notationsFiltered[0];
+        $scope.filterByNature = function () {
+            $scope.notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
         };
 
         $scope.selectedMatters = 0;
@@ -28,8 +27,6 @@
         $scope.disableSubmit = function () {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
-
-        $scope.$watch("natureId", filterByNature, true);
     }
 
     angular.module("BuildingsSimilarity", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);

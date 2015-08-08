@@ -32,7 +32,7 @@
             <hr />
             <div class="form-group">
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notationsFiltered"></select>
+                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
                     <input type="hidden" name="notationId" ng-value="notation.Value" />
                     @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
                 </div>
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-10">
-                            <select class="form-control" itle="Переводчик" ng-model="translator" ng-options="t.Text for t in translators"></select>
+                            <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators"></select>
                             <input type="hidden" name="translatorIds" ng-value="translator.Value" />
                             @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
                         </div>

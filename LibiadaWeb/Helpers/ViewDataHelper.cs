@@ -154,8 +154,10 @@
 
             var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id), submitName);
 
+            var geneticNotations = db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic).Select(n => n.Id).ToList();
+
             data.Add("characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable));
-            data.Add("notationsFiltered", new SelectList(db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic), "id", "name"));
+            data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
             data.Add("natureId", Aliases.Nature.Genetic);
             data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
 

@@ -33,7 +33,7 @@
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                      "~/Scripts/angular.js",
-                     "~/Scripts/smart-table.debug.js"));
+                     "~/Scripts/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dc.js").Include(
                         "~/Scripts/d3.v3.js",
