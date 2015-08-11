@@ -26,8 +26,6 @@
         /// </returns>
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
-
             var configurationFile = WebConfigurationManager.OpenWebConfiguration("~/web.config");
             var mailSettings = configurationFile.GetSectionGroup("system.net/mailSettings") as MailSettingsSectionGroup;
             
@@ -41,7 +39,7 @@
             string password = ConfigurationManager.AppSettings["password"];
             string username = ConfigurationManager.AppSettings["userName"];
             string from = ConfigurationManager.AppSettings["userName"];
-            
+
             //using (var mailMessage = new MailMessage(from, message.Destination, message.Subject, message.Body))
             //{
             //    using (var smtp = new SmtpClient(host, port))
@@ -51,6 +49,7 @@
             //        smtp.ServicePoint.MaxIdleTime = 1;
             //        smtp.EnableSsl = true;
 
+            //        mailMessage.IsBodyHtml = true;
             //        smtp.Send(mailMessage);
             //    }
             //}
