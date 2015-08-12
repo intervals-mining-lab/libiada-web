@@ -12,40 +12,79 @@
     <br />
     @ViewBag.matterNames[1]
 
-    if (ViewBag.calculationType == "Equality")
+    string calculationType = ViewBag.calculationType;
+    switch (calculationType)
     {
+        case "Equality":
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            Element name
+                        </th>
+                        <th>
+                            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
+                        </th>
+                        <th>
+                            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
+                            <br />
+                            Reverse order
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < ViewBag.characteristics[0].Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @ViewBag.alphabet[i]
+                            </td>
+                            <td>
+                                @ViewBag.characteristics[0][i]
+                            </td>
+                            <td>
+                                @ViewBag.characteristics[1][i]
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+                    break;
+        case "All":
+        <div>
+            @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
+        </div>
         <table class="table table-bordered table-hover">
             <thead>
-            <tr>
-                <th>
-                    Element name
-                </th>
-                <th>
-                    @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
-                </th>
-                <th>
-                    @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
-                    <br/>
-                    Reverse order
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        Element name
+                    </th>
+                    @for (int j = 0; j < ViewBag.characteristics[0].Count; j++)
+                    {
+                        <th>
+                           @ViewBag.secondAlphabet[j]
+                        </th>
+                    }
+                </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < ViewBag.characteristics[0].Count; i++)
+                @for (int i = 0; i < ViewBag.characteristics.Count; i++)
                 {
                     <tr>
                         <td>
-                            @ViewBag.alphabet[i]
+                            @ViewBag.firstAlphabet[i]
                         </td>
-                        <td>
-                            @ViewBag.characteristics[0][i]
-                        </td>
-                        <td>
-                            @ViewBag.characteristics[1][i]
-                        </td>
+                        @for (int j = 0; j < ViewBag.characteristics[i].Count; j++)
+                        {
+                            <td>
+                                @ViewBag.characteristics[i][j]
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
         </table>
+                break;
     }
 }

@@ -106,7 +106,15 @@
                 }
 
                 var characteristics = new List<List<double>>();
-                var alphabet = new List<string>();
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
+                var result = new Dictionary<string, object> 
+                                     {
+                                         { "characteristics", characteristics }, 
+                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
+                                         { "characteristicName", characteristicName },
+                                         { "calculationType", calculationType }
+                                     };
+                
 
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
@@ -140,9 +148,14 @@
                 Chain secondChain = commonSequenceRepository.ToLibiadaChain(secondSequenceId);
                 secondChain.FillIntervalManagers();
 
+                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
+                var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+
                 switch (calculationType)
                 {
                     case "Equality":
+                    {
                         if (!firstChain.Alphabet.Equals(secondChain.Alphabet))
                         {
                             throw new Exception("Alphabets of sequences are not equal.");
@@ -150,10 +163,7 @@
 
                         characteristics.Add(new List<double>());
                         characteristics.Add(new List<double>());
-
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                        IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
-                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                        var alphabet = new List<string>();
 
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
@@ -170,19 +180,52 @@
                             characteristics[1].Add(characteristicValue);
                         }
 
+                        result.Add("alphabet", alphabet);
+                        break; 
+                    }
+                    case "All":
+                    {
+                        var firstAlphabet = new List<string>();
+                        for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
+                        {
+                            characteristics.Add(new List<double>());
+                            var firstElement = firstChain.Alphabet[i];
+                            firstAlphabet.Add(firstElement.ToString());
+                            for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
+                            {
+                                var secondElement = secondChain.Alphabet[j];
+
+                                var firstCongenericChain = firstChain.CongenericChain(firstElement);
+                                var secondCongenericChain = secondChain.CongenericChain(secondElement);
+
+                                var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
+                                characteristics[i].Add(characteristicValue);
+                            }
+                        }
+
+                        var secondAlphabet = new List<string>();
+                        for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
+                        {
+                            secondAlphabet.Add(secondChain.Alphabet[j].ToString());
+
+                        }
+
+                        result.Add("firstAlphabet", firstAlphabet);
+                        result.Add("secondAlphabet", secondAlphabet);
+
                         break;
+                    }
+                    case "Specified":
+                    {
+                        throw new NotImplementedException();
+                    }
+                    default:
+                    {
+                        throw new ArgumentException("Calculation type is not","calculationType");
+                    }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
-
-                return new Dictionary<string, object>
-                                     {
-                                         { "characteristics", characteristics }, 
-                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
-                                         { "characteristicName", characteristicName },
-                                         { "calculationType", calculationType },
-                                         { "alphabet", alphabet }
-                                     };
+                return result;
             });
         }
     }
