@@ -68,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
             {
-                throw new Exception("At least one element of new sequence is missing in db.");
+                throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
             }
 
             MatterRepository.CreateMatterFromSequence(sequence);

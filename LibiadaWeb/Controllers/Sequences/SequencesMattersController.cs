@@ -15,7 +15,7 @@
     /// <summary>
     /// The sequences matters controller.
     /// </summary>
-    public abstract class SequencesMattersController : Controller
+    public abstract class SequencesMattersController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -65,7 +65,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
-        protected SequencesMattersController()
+        protected SequencesMattersController() : base("SequencesMatters", "Sequence upload")
         {
             Db = new LibiadaWebEntities();
             dnaSequenceRepository = new DnaSequenceRepository(Db);
@@ -135,7 +135,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(
+        public ActionResult Create(
             [Bind(Include = "Id,NotationId,FeatureId,PiecePosition,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
             int? languageId,
@@ -145,10 +145,10 @@
             bool? complementary,
             int? precision)
         {
-            string errorMessage = string.Empty;
-            if (ModelState.IsValid)
+            return Action(() =>
             {
-                try
+                string errorMessage = string.Empty;
+                if (ModelState.IsValid)
                 {
                     int? webApiId = null;
                     Stream sequenceStream;
@@ -181,38 +181,78 @@
                             throw new Exception("Unknown nature.");
                     }
 
-                    return RedirectToAction("Index");
+                    return new Dictionary<string, object>
+                               {
+                                   { "matterName", commonSequence.Matter.Name }
+                               };
                 }
-                catch (Exception e)
-                {
-                    ModelState.AddModelError("Error", e.Message);
-                    errorMessage = e.Message;
-                }
-            }
 
-            var translators = new SelectList(Db.Translator, "id", "name").ToList();
-            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
+                var translators = new SelectList(Db.Translator, "id", "name").ToList();
+                translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
-            var remoteDbs = commonSequence.RemoteDbId.HasValue
-                                ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
-                                : remoteDbRepository.GetSelectListWithNature();
+                var remoteDbs = commonSequence.RemoteDbId.HasValue
+                                    ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
+                                    : remoteDbRepository.GetSelectListWithNature();
 
-            var sequenceNatureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
+                var sequenceNatureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
 
-            ViewBag.data = new Dictionary<string, object>
-            {
-                { "ErrorMessage", errorMessage },
-                { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
-                { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
-                { "features", featureRepository.GetSelectListWithNature(commonSequence.FeatureId) }, 
-                { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
-                { "remoteDbs", remoteDbs }, 
-                { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 
-                { "natureId", sequenceNatureId },
-                { "translators", translators }, 
-                { "natureLiterature", Aliases.Nature.Literature }
-            };
-            return View(commonSequence);
+                return new Dictionary<string, object>
+                    {
+                        { "ErrorMessage", errorMessage },
+                        { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) }, 
+                        { "notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId) }, 
+                        { "features", featureRepository.GetSelectListWithNature(commonSequence.FeatureId) }, 
+                        { "languages", new SelectList(Db.Language, "id", "name", languageId) }, 
+                        { "remoteDbs", remoteDbs }, 
+                        { "natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId) }, 
+                        { "natureId", sequenceNatureId },
+                        { "translators", translators }, 
+                        { "natureLiterature", Aliases.Nature.Literature },
+                        { "commonSequence", commonSequence }
+                    };
+            });
+
         }
+
+        /// <summary>
+        /// The result.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        //public  ActionResult Result()
+        //{
+        //    try
+        //    {
+        //        var result = TempData["result"] as Dictionary<string, object>;
+        //        if (result == null)
+        //        {
+        //            throw new Exception("No data.");
+        //        }
+
+        //        foreach (var key in result.Keys)
+        //        {
+        //            ViewData[key] = result[key];
+        //        }
+
+        //        TempData.Keep();
+
+        //        if (!string.IsNullOrEmpty(ViewData["ErrorMessage"].ToString()))
+        //        {
+        //            RedirectToAction("Index");
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        ModelState.AddModelError("Error", e.Message);
+
+        //        ViewBag.Error = true;
+
+        //        ViewBag.ErrorMessage = e.Message;
+        //    }
+
+
+        //    return View();
+        //}
     }
 }
