@@ -36,23 +36,23 @@
 
             int port = mailSettings.Smtp.Network.Port;
             string host = mailSettings.Smtp.Network.Host;
-            string password = ConfigurationManager.AppSettings["password"];
-            string username = ConfigurationManager.AppSettings["userName"];
-            string from = ConfigurationManager.AppSettings["userName"];
+            string password = mailSettings.Smtp.Network.Password;
+            string username = mailSettings.Smtp.Network.UserName;
+            string from = mailSettings.Smtp.Network.UserName;
 
-            //using (var mailMessage = new MailMessage(from, message.Destination, message.Subject, message.Body))
-            //{
-            //    using (var smtp = new SmtpClient(host, port))
-            //    {
-            //        smtp.Credentials = new NetworkCredential(username, password);
-            //        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            //        smtp.ServicePoint.MaxIdleTime = 1;
-            //        smtp.EnableSsl = true;
+            using (var mailMessage = new MailMessage(from, message.Destination, message.Subject, message.Body))
+            {
+                using (var smtp = new SmtpClient(host, port))
+                {
+                    smtp.Credentials = new NetworkCredential(username, password);
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.ServicePoint.MaxIdleTime = 1;
+                    smtp.EnableSsl = true;
 
-            //        mailMessage.IsBodyHtml = true;
-            //        smtp.Send(mailMessage);
-            //    }
-            //}
+                    mailMessage.IsBodyHtml = true;
+                    smtp.Send(mailMessage);
+                }
+            }
 
             return Task.FromResult(0);
         }
