@@ -36,18 +36,33 @@
     <div class="container body-content">
         @RenderBody()
 
-        @if (ViewBag.Error != null && ViewBag.ErrorMessage != null)
+        @if (ViewBag.Error != null)
         {
-            <br />
-            <div class="error-message">
-                @Html.Raw(ViewBag.ErrorMessage)
-            </div>
-            <br />
-            if (ViewBag.StackTrace != null)
+            if (HttpContext.Current.User.IsInRole("Admin"))
             {
-                <div class="stack-trace">
-                    @Html.Raw(ViewBag.StackTrace)
+                <br />
+                <div class="error-message">
+                    @Html.Raw(ViewBag.ErrorMessage)
                 </div>
+                <br />
+                if (ViewBag.StackTrace != null)
+                {
+                    <div class="stack-trace">
+                        @Html.Raw(ViewBag.StackTrace)
+                    </div>
+                }
+            }
+            else
+            {
+                <h1 class="text-danger">Error.</h1>
+                <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+                if (ViewBag.UserError != null)
+                {
+                    <div>
+                        @ViewBag.UserError
+                    </div>
+                }
             }
         }
         <hr />

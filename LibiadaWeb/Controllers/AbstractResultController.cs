@@ -42,7 +42,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Result()
+        public virtual ActionResult Result()
         {
             try
             {

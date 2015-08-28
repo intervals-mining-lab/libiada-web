@@ -11,6 +11,10 @@
     [Authorize]
     public class CommonSequencesController : SequencesMattersController
     {
+        public CommonSequencesController() : base("CommonSequences", "Sequence upload")
+        {
+        }
+
         /// <summary>
         /// The index.
         /// </summary>
@@ -149,22 +153,6 @@
             Db.CommonSequence.Remove(commonSequence);
             await Db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <param name="disposing">
-        /// The disposing.
-        /// </param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Db.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

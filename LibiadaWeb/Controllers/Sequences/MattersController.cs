@@ -14,6 +14,10 @@
     [Authorize]
     public class MattersController : SequencesMattersController
     {
+        public MattersController() : base("Matters", "Sequence upload")
+        {
+        }
+
         /// <summary>
         /// The index.
         /// </summary>
@@ -149,22 +153,6 @@
             Db.Matter.Remove(matter);
             await Db.SaveChangesAsync();
             return RedirectToAction("Index");
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <param name="disposing">
-        /// The disposing.
-        /// </param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Db.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }
