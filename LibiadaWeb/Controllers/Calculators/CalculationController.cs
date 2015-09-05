@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -59,7 +60,32 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.MattersCheckboxes = true;
-            ViewBag.data = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 1, int.MaxValue, true, "Calculate");
+
+            Func<CharacteristicType, bool> filter;
+            if (HttpContext.User.IsInRole("Admin"))
+            {
+                filter = c => c.FullSequenceApplicable;
+            }
+            else
+            {
+                var characteristicIds = new List<int>
+                                            {
+                                                Aliases.CharacteristicType.ATSkew, 
+                                                Aliases.CharacteristicType.AlphabetCardinality, 
+                                                Aliases.CharacteristicType.AverageRemoteness, 
+                                                Aliases.CharacteristicType.GCRatio, 
+                                                Aliases.CharacteristicType.GCSkew, 
+                                                Aliases.CharacteristicType.GCToATRatio, 
+                                                Aliases.CharacteristicType.IdentificationInformation, 
+                                                Aliases.CharacteristicType.Length, 
+                                                Aliases.CharacteristicType.MKSkew, 
+                                                Aliases.CharacteristicType.RYSkew, 
+                                                Aliases.CharacteristicType.SWSkew
+                                            };
+                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+            }
+
+            ViewBag.data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate");
             return View();
         }
 

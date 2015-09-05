@@ -349,6 +349,7 @@
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OutputFormats.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Tasks\TaskData.cs" />
     <Compile Include="Tasks\TaskManager.cs" />

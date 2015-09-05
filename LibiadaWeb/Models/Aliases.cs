@@ -527,19 +527,64 @@
         }
 
         /// <summary>
-        /// The output formats.
+        /// The characteristic type.
         /// </summary>
-        public static class OutputFormats
+        public static class CharacteristicType
         {
             /// <summary>
-            /// The date time output format.
+            /// The alphabet cardinality.
             /// </summary>
-            public const string DateTimeFormat = "dd MMMM yyyy HH':'mm':'ss";
+            public const int AlphabetCardinality = 1;
 
             /// <summary>
-            /// The time output format.
+            /// The average remoteness.
             /// </summary>
-            public const string TimeFormat = @"hh\:mm\:ss\.FF";
+            public const int AverageRemoteness = 3;
+
+            /// <summary>
+            /// The identification information.
+            /// </summary>
+            public const int IdentificationInformation = 10;
+
+            /// <summary>
+            /// The length.
+            /// </summary>
+            public const int Length = 12;
+
+            /// <summary>
+            /// The gc ratio.
+            /// </summary>
+            public const int GCRatio = 33;
+
+            /// <summary>
+            /// The gc skew.
+            /// </summary>
+            public const int GCSkew = 34;
+
+            /// <summary>
+            /// The at skew.
+            /// </summary>
+            public const int ATSkew = 35;
+
+            /// <summary>
+            /// The gc to at ratio.
+            /// </summary>
+            public const int GCToATRatio = 36;
+
+            /// <summary>
+            /// The mk skew.
+            /// </summary>
+            public const int MKSkew = 37;
+
+            /// <summary>
+            /// The ry skew.
+            /// </summary>
+            public const int RYSkew = 38;
+
+            /// <summary>
+            /// The sw skew.
+            /// </summary>
+            public const int SWSkew = 39;
         }
     }
 }

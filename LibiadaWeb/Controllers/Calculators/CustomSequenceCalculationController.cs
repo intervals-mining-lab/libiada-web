@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
@@ -12,6 +13,7 @@
     using LibiadaCore.Core.Characteristics;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
@@ -33,7 +35,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController()
+            : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -49,9 +52,33 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
 
+            Func<CharacteristicType, bool> filter;
+            if (HttpContext.User.IsInRole("Admin"))
+            {
+                filter = c => c.FullSequenceApplicable;
+            }
+            else
+            {
+                var characteristicIds = new List<int>
+                                            {
+                                                Aliases.CharacteristicType.ATSkew, 
+                                                Aliases.CharacteristicType.AlphabetCardinality, 
+                                                Aliases.CharacteristicType.AverageRemoteness, 
+                                                Aliases.CharacteristicType.GCRatio, 
+                                                Aliases.CharacteristicType.GCSkew, 
+                                                Aliases.CharacteristicType.GCToATRatio, 
+                                                Aliases.CharacteristicType.IdentificationInformation, 
+                                                Aliases.CharacteristicType.Length, 
+                                                Aliases.CharacteristicType.MKSkew, 
+                                                Aliases.CharacteristicType.RYSkew, 
+                                                Aliases.CharacteristicType.SWSkew
+                                            };
+                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+            }
+
             ViewBag.data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable) }
+                    { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(filter) }
                 };
             return View();
         }

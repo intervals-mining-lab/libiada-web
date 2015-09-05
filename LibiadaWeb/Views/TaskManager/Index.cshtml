@@ -65,13 +65,13 @@
                     @item.DisplayName
                 </td>
                 <td>
-                    @item.Created.ToString(Aliases.OutputFormats.DateTimeFormat)
+                    @item.Created.ToString(OutputFormats.DateTimeFormat)
                 </td>
                 <td>
                     @{
                         if (item.Started != null)
                         {
-                            @item.Started.ToString(Aliases.OutputFormats.DateTimeFormat)
+                            @item.Started.ToString(OutputFormats.DateTimeFormat)
                         }
                     }
                 </td>
@@ -79,7 +79,7 @@
                     @{
                         if (item.Completed != null)
                         {
-                            @item.Completed.ToString(Aliases.OutputFormats.DateTimeFormat)
+                            @item.Completed.ToString(OutputFormats.DateTimeFormat)
                         }
                     }
                 </td>
@@ -87,7 +87,7 @@
                     @{
                         if (item.ExecutionTime != null)
                         {
-                            @item.ExecutionTime.ToString(Aliases.OutputFormats.TimeFormat)
+                            @item.ExecutionTime.ToString(OutputFormats.TimeFormat)
                         }
                     }
                 </td>
