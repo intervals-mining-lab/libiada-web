@@ -178,14 +178,22 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = db.Link.Include(l => l.CharacteristicTypeLink)
-                .Select(l => new { Value = l.Id, Text = l.Name, CharacteristicTypeLink = l.CharacteristicTypeLink.Select(ctl => ctl.Id) }).ToList();
+            var links = db.Link.Include(l => l.CharacteristicTypeLink).ToList();
+
+            if (!UserHelper.IsAdmin())
+            {
+                var linkIds = new List<int> { Aliases.Link.NotApplied, Aliases.Link.Start, Aliases.Link.Cycle };
+                links = links.Where(l => linkIds.Contains(l.Id)).ToList();
+            }
+            
+            var linksData = links.Select(l => new { Value = l.Id, Text = l.Name, CharacteristicTypeLink = l.CharacteristicTypeLink.Select(ctl => ctl.Id) }).ToList();
 
             foreach (var characteristicType in characteristicTypes)
             {
-                foreach (var characteristicLink in characteristicType.CharacteristicLinks)
+                for (int i = 0; i < characteristicType.CharacteristicLinks.Count; i++)
                 {
-                    foreach (var link in links)
+                    var characteristicLink = characteristicType.CharacteristicLinks[i];
+                    foreach (var link in linksData)
                     {
                         if (link.CharacteristicTypeLink.Contains(characteristicLink.CharacteristicTypeLinkId))
                         {
@@ -193,6 +201,12 @@
                             characteristicLink.Text = link.Text;
                             break;
                         }
+                    }
+
+                    if (string.IsNullOrEmpty(characteristicLink.Value))
+                    {
+                        characteristicType.CharacteristicLinks.Remove(characteristicLink);
+                        i--;
                     }
                 }
             }
