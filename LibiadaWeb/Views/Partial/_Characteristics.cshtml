@@ -1,4 +1,5 @@
 ﻿@using LibiadaWeb.Models
+@using LibiadaWeb.Models.Account
 @model dynamic
 
 <br />
@@ -18,7 +19,7 @@
             @Html.ValidationMessage("linkIds", "", new { @class = "text-danger" })
         </div>
     </div>
-    @if (HttpContext.Current.User.IsInRole("Admin"))
+    @if (UserHelper.IsAdmin())
     {
         <div class="form-group">
             <div class="col-md-10">

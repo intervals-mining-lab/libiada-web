@@ -98,7 +98,7 @@
         {
             try
             {
-                TaskManager.ClearTasks();
+                TaskManager.DeleteAllTasks();
             }
             catch (Exception e)
             {

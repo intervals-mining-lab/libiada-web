@@ -14,6 +14,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
@@ -35,8 +36,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController()
-            : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -53,7 +53,7 @@
             var viewDataHelper = new ViewDataHelper(db);
 
             Func<CharacteristicType, bool> filter;
-            if (HttpContext.User.IsInRole("Admin"))
+            if (UserHelper.IsAdmin())
             {
                 filter = c => c.FullSequenceApplicable;
             }

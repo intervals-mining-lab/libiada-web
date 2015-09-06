@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -79,7 +79,7 @@
             IEnumerable<Nature> natures;
             IEnumerable<object> notations;
 
-            if (HttpContext.Current.User.IsInRole("Admin"))
+            if (UserHelper.IsAdmin())
             {
                 natures = db.Nature;
                 notations = notationRepository.GetSelectListWithNature();

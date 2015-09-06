@@ -1,4 +1,5 @@
 ﻿@using LibiadaWeb.Models
+@using LibiadaWeb.Models.Account
 @using LibiadaWeb.Tasks
 @{
     ViewBag.Title = "Libiada task manager";
@@ -27,8 +28,14 @@
     <table class="table table-bordered table-hover">
         <tr>
             <th>
-                Id
+                #
             </th>
+            @if (UserHelper.IsAdmin())
+            {
+                <th>
+                    User id
+                </th>
+            }
             <th>
                 Name
             </th>
@@ -59,8 +66,14 @@
         {
             <tr>
                 <td>
-                    @item.Id
+                    @(item.Id + 1)
                 </td>
+                @if (UserHelper.IsAdmin())
+                {
+                    <td>
+                        @item.UserId
+                    </td>
+                }
                 <td>
                     @item.DisplayName
                 </td>
@@ -68,27 +81,21 @@
                     @item.Created.ToString(OutputFormats.DateTimeFormat)
                 </td>
                 <td>
-                    @{
-                        if (item.Started != null)
-                        {
-                            @item.Started.ToString(OutputFormats.DateTimeFormat)
-                        }
+                    @if (item.Started != null)
+                    {
+                        @item.Started.ToString(OutputFormats.DateTimeFormat)
                     }
                 </td>
                 <td>
-                    @{
-                        if (item.Completed != null)
-                        {
-                            @item.Completed.ToString(OutputFormats.DateTimeFormat)
-                        }
+                    @if (item.Completed != null)
+                    {
+                        @item.Completed.ToString(OutputFormats.DateTimeFormat)
                     }
                 </td>
                 <td>
-                    @{
-                        if (item.ExecutionTime != null)
-                        {
-                            @item.ExecutionTime.ToString(OutputFormats.TimeFormat)
-                        }
+                    @if (item.ExecutionTime != null)
+                    {
+                        @item.ExecutionTime.ToString(OutputFormats.TimeFormat)
                     }
                 </td>
                 <td>

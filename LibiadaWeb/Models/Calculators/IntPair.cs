@@ -26,8 +26,8 @@
         /// </param>
         public IntPair(int first, int second)
         {
-            this.First = first;
-            this.Second = second;
+            First = first;
+            Second = second;
         }
     }
 }

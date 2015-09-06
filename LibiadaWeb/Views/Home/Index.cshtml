@@ -1,4 +1,5 @@
-﻿@{
+﻿@using LibiadaWeb.Models.Account
+@{
     ViewBag.Title = "LibiadaWeb";
 }
 
@@ -15,7 +16,7 @@
             <h2>Data</h2>
             @Html.ActionLink("Matters", "Index", "Matters")
             <br />
-            @if (HttpContext.Current.User.IsInRole("Admin"))
+            @if (UserHelper.IsAdmin())
             {
                 @Html.ActionLink("Sequences", "Index", "CommonSequences")
                 <br />
@@ -34,7 +35,7 @@
             <br />
             @Html.ActionLink("Calculation of integral characteristics of custom sequence", "Index", "CustomSequenceCalculation")
             <br />
-            @if (HttpContext.Current.User.IsInRole("Admin"))
+            @if (UserHelper.IsAdmin())
             {
                 @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
                 <br />

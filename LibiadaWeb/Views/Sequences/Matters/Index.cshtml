@@ -1,11 +1,12 @@
-﻿@model IEnumerable<Matter>
+﻿@using LibiadaWeb.Models.Account
+@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Matters List";
 }
 
 <h2>Matters List</h2>
-@if (HttpContext.Current.User.IsInRole("Admin"))
+@if (UserHelper.IsAdmin())
 {
     <p>
         @Html.ActionLink("Create New matter", "Create")
@@ -28,7 +29,7 @@
         <th>
             @Html.DisplayNameFor(model => model.NatureId)
         </th>
-        @if (HttpContext.Current.User.IsInRole("Admin"))
+        @if (UserHelper.IsAdmin())
         {
             <th></th>
         }
@@ -51,7 +52,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Nature.Name)
             </td>
-            @if (HttpContext.Current.User.IsInRole("Admin"))
+            @if (UserHelper.IsAdmin())
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

@@ -49,11 +49,14 @@
         /// <param name="displayName">
         /// The display name.
         /// </param>
-        public Task(int id, Func<Dictionary<string, object>> action, string controllerName, string displayName)
+        /// <param name="userId">
+        /// Creator id.
+        /// </param>
+        public Task(int id, Func<Dictionary<string, object>> action, string controllerName, string displayName, string userId)
         {
-            this.Action = action;
-            this.ControllerName = controllerName;
-            this.TaskData = new TaskData(id, displayName);
+            Action = action;
+            ControllerName = controllerName;
+            TaskData = new TaskData(id, displayName, userId);
         }
 
         /// <summary>
@@ -76,11 +79,11 @@
         /// </param>
         private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, string controllerName, Thread thread)
         {
-            this.Action = action;
-            this.TaskData = taskData.Clone();
-            this.Result = result;
-            this.ControllerName = controllerName;
-            this.Thread = thread;
+            Action = action;
+            TaskData = taskData.Clone();
+            Result = result;
+            ControllerName = controllerName;
+            Thread = thread;
         }
 
         /// <summary>
@@ -91,7 +94,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(this.Action, this.TaskData, this.Result, this.ControllerName, this.Thread);
+            return new Task(Action, TaskData, Result, ControllerName, Thread);
         }
     }
 }

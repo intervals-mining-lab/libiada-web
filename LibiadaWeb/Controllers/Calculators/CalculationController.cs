@@ -15,6 +15,7 @@
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
     using Models.Repositories.Catalogs;
@@ -62,7 +63,7 @@
             ViewBag.MattersCheckboxes = true;
 
             Func<CharacteristicType, bool> filter;
-            if (HttpContext.User.IsInRole("Admin"))
+            if (UserHelper.IsAdmin())
             {
                 filter = c => c.FullSequenceApplicable;
             }

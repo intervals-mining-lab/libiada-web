@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Threading;
 
+    using LibiadaWeb.Models.Account;
+
     /// <summary>
     /// The task manager.
     /// </summary>
@@ -55,13 +57,20 @@
         /// <summary>
         /// The clear tasks.
         /// </summary>
-        public static void ClearTasks()
+        public static void DeleteAllTasks()
         {
             lock (Tasks)
             {
-                while (Tasks.Count > 0)
+                var tasks = Tasks;
+
+                if (!UserHelper.IsAdmin())
                 {
-                    var task = Tasks.Last();
+                    tasks = tasks.Where(t => t.TaskData.UserId == UserHelper.GetUserId()).ToList();
+                }
+
+                while (tasks.Count > 0)
+                {
+                    var task = tasks.Last();
                     lock (task)
                     {
                         if (task.Thread != null && task.Thread.IsAlive)
@@ -69,6 +78,7 @@
                             task.Thread.Abort();
                         }
 
+                        tasks.Remove(task);
                         Tasks.Remove(task);
                     }
                 }
@@ -86,14 +96,17 @@
             lock (Tasks)
             {
                 var task = Tasks.Single(t => t.TaskData.Id == id);
-                lock (task)
+                if (task.TaskData.UserId == UserHelper.GetUserId() || UserHelper.IsAdmin())
                 {
-                    if (task.Thread != null && task.Thread.IsAlive)
+                    lock (task)
                     {
-                        task.Thread.Abort();
-                    }
+                        if (task.Thread != null && task.Thread.IsAlive)
+                        {
+                            task.Thread.Abort();
+                        }
 
-                    Tasks.Remove(task);
+                        Tasks.Remove(task);
+                    }
                 }
             }
         }
@@ -108,7 +121,14 @@
         {
             lock (Tasks)
             {
-                return Tasks.Select(t => t.TaskData.Clone());
+                var tasks = Tasks;
+
+                if (!UserHelper.IsAdmin())
+                {
+                    tasks = tasks.Where(t => t.TaskData.UserId == UserHelper.GetUserId()).ToList();
+                }
+
+                return tasks.Select(t => t.TaskData.Clone());
             }
         }
 

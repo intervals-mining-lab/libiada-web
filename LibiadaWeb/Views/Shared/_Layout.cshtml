@@ -1,4 +1,5 @@
 ﻿@using LibiadaWeb.Helpers
+@using LibiadaWeb.Models.Account
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,7 +39,7 @@
 
         @if (ViewBag.Error != null)
         {
-            if (HttpContext.Current.User.IsInRole("Admin"))
+            if (UserHelper.IsAdmin())
             {
                 <br />
                 <div class="error-message">
@@ -67,7 +68,7 @@
         }
         <hr />
         <footer>
-            @if (HttpContext.Current.User.IsInRole("Admin"))
+            @if (UserHelper.IsAdmin())
             {
                 <h2 class='@{
                            var result = DbHelper.ConnectionStatus ? "text-success" : "text-danger";

@@ -20,6 +20,11 @@
         public readonly string DisplayName;
 
         /// <summary>
+        /// The user id.
+        /// </summary>
+        public readonly string UserId;
+
+        /// <summary>
         /// The task state.
         /// </summary>
         public TaskState TaskState;
@@ -53,11 +58,15 @@
         /// <param name="displayName">
         /// The display name.
         /// </param>
-        public TaskData(int id, string displayName)
+        /// <param name="userId">
+        /// Creator id.
+        /// </param>
+        public TaskData(int id, string displayName, string userId)
         {
-            this.Id = id;
-            this.DisplayName = displayName;
-            this.Created = DateTime.Now;
+            Id = id;
+            UserId = userId;
+            DisplayName = displayName;
+            Created = DateTime.Now;
         }
 
         /// <summary>

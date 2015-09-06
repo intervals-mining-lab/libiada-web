@@ -7,6 +7,7 @@
     using System.Web.Mvc;
 
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
 
     /// <summary>
     /// The matters controller.
@@ -28,7 +29,7 @@
         {
             var matter = Db.Matter.Include(m => m.Nature);
 
-            if (!HttpContext.User.IsInRole("Admin"))
+            if (!UserHelper.IsAdmin())
             {
                 matter = matter.Where(m => m.NatureId == Aliases.Nature.Genetic);
             }

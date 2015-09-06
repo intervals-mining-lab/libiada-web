@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Tasks;
 
     /// <summary>
@@ -83,7 +84,7 @@
         protected ActionResult Action(Func<Dictionary<string, object>> action)
         {
             int taskId = TaskManager.GetId();
-            var task = new Task(taskId, action, controllerName, displayName);
+            var task = new Task(taskId, action, controllerName, displayName, UserHelper.GetUserId());
 
             TaskManager.AddTask(task);
             return RedirectToAction("Index", "TaskManager", new { id = taskId });
