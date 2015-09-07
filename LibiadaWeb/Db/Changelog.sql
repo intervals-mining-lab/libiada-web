@@ -1063,5 +1063,10 @@ UPDATE element SET name = 'Tyrosine' WHERE id = 24;
 UPDATE element SET name = 'Tryptophan' WHERE id = 25;
 UPDATE element SET name = 'Stop codon' WHERE id = 26;
 
+-- 08.09.2015
+-- Fixing typo.
+
+UPDATE feature SET name = 'Complete genome' WHERE id = 1;
+
 
 COMMIT;
