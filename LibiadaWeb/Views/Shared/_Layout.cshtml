@@ -26,9 +26,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li><a href="http://foarLab.org/">Home</a></li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -77,7 +75,7 @@
                     Current database: @DbHelper.DbName
                 </h2>
             }
-            <p>&copy; @DateTime.Now.Year - LibiadaWeb</p>
+            <p>&copy; @DateTime.Now.Year - foarLab.org</p>
         </footer>
     </div>
 </body>

@@ -10,6 +10,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -18,12 +19,15 @@
     /// </summary>
     public abstract class SequencesMattersController : AbstractResultController
     {
-        protected bool ThreadDisposable = true;
-
         /// <summary>
         /// The db.
         /// </summary>
         protected readonly LibiadaWebEntities Db;
+
+        /// <summary>
+        /// The thread disposable.
+        /// </summary>
+        protected bool ThreadDisposable = true;
 
         /// <summary>
         /// The dna sequence repository.
@@ -68,6 +72,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
+        /// <param name="controllerName">
+        /// The controller name.
+        /// </param>
+        /// <param name="displayName">
+        /// The display name.
+        /// </param>
         protected SequencesMattersController(string controllerName, string displayName) : base(controllerName, displayName)
         {
             Db = new LibiadaWebEntities();
@@ -92,14 +102,31 @@
             var translators = new SelectList(Db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
+            SelectList natures;
+            IEnumerable<object> notations;
+            IEnumerable<object> features;
+
+            if (UserHelper.IsAdmin())
+            {
+                natures = new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name");
+                notations = notationRepository.GetSelectListWithNature();
+                features = featureRepository.GetSelectListWithNature();
+            }
+            else
+            {
+                natures = new SelectList(Db.Nature.Where(n => n.Id == Aliases.Nature.Genetic).OrderBy(n => n.Id), "id", "name");
+                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, new List<int>());
+            }
+
             ViewBag.data = new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "notations", notationRepository.GetSelectListWithNature() }, 
-                    { "features", featureRepository.GetSelectListWithNature() }, 
+                    { "natures", natures }, 
+                    { "notations", notations }, 
+                    { "features", features }, 
                     { "languages", new SelectList(Db.Language, "id", "name") }, 
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
-                    { "natures", new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name") }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
                 };
@@ -173,15 +200,13 @@
                         switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId)
                         {
                             case Aliases.Nature.Genetic:
-                                dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false,
-                                    complementary ?? false, webApiId);
+                                dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false, complementary ?? false, webApiId);
                                 break;
                             case Aliases.Nature.Music:
                                 musicSequenceRepository.Create(commonSequence, sequenceStream);
                                 break;
                             case Aliases.Nature.Literature:
-                                literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0,
-                                    original ?? false, translatorId);
+                                literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
                                 break;
                             case Aliases.Nature.Data:
                                 dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
@@ -192,12 +217,12 @@
 
                         return new Dictionary<string, object>
                         {
-                            {"matterName", commonSequence.Matter.Name}
+                            { "matterName", commonSequence.Matter.Name }
                         };
                     }
 
                     var translators = new SelectList(Db.Translator, "id", "name").ToList();
-                    translators.Add(new SelectListItem {Value = null, Text = "Нет"});
+                    translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
                     var remoteDbs = commonSequence.RemoteDbId.HasValue
                         ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
@@ -205,19 +230,36 @@
 
                     var sequenceNatureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
 
+                    SelectList natures;
+                    IEnumerable<object> notations;
+                    IEnumerable<object> features;
+
+                    if (UserHelper.IsAdmin())
+                    {
+                        natures = new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name", sequenceNatureId);
+                        notations = notationRepository.GetSelectListWithNature(commonSequence.NotationId);
+                        features = featureRepository.GetSelectListWithNature();
+                    }
+                    else
+                    {
+                        natures = new SelectList(Db.Nature.Where(n => n.Id == Aliases.Nature.Genetic).OrderBy(n => n.Id), "id", "name", sequenceNatureId);
+                        notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide }, commonSequence.NotationId);
+                        features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, commonSequence.FeatureId);
+                    }
+
                     var result = new Dictionary<string, object>
                     {
-                        {"ErrorMessage", errorMessage},
-                        {"matters", matterRepository.GetMatterSelectList(commonSequence.MatterId)},
-                        {"notations", notationRepository.GetSelectListWithNature(commonSequence.NotationId)},
-                        {"features", featureRepository.GetSelectListWithNature(commonSequence.FeatureId)},
-                        {"languages", new SelectList(Db.Language, "id", "name", languageId)},
-                        {"remoteDbs", remoteDbs},
-                        {"natures", new SelectList(Db.Nature, "id", "name", sequenceNatureId)},
-                        {"natureId", sequenceNatureId},
-                        {"translators", translators},
-                        {"natureLiterature", Aliases.Nature.Literature},
-                        {"commonSequence", commonSequence}
+                        { "ErrorMessage", errorMessage },
+                        { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) },
+                        { "natures", natures },
+                        { "notations", notations },
+                        { "features", features },
+                        { "languages", new SelectList(Db.Language, "id", "name", languageId) },
+                        { "remoteDbs", remoteDbs },
+                        { "natureId", sequenceNatureId },
+                        { "translators", translators },
+                        { "natureLiterature", Aliases.Nature.Literature },
+                        { "commonSequence", commonSequence }
                     };
 
                     return result;
@@ -278,7 +320,6 @@
 
                 ViewBag.ErrorMessage = e.Message;
             }
-
 
             return View();
         }

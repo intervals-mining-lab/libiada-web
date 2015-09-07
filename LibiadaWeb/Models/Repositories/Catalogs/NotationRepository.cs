@@ -82,6 +82,29 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
+        /// The get select list with nature.
+        /// </summary>
+        /// <param name="notationIds">
+        /// The notation ids.
+        /// </param>
+        /// <param name="selectedNotation">
+        /// The selected Notation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetSelectListWithNature(List<int> notationIds, int selectedNotation)
+        {
+            return db.Notation.Where(n => notationIds.Contains(n.Id)).Select(n => new
+            {
+                Value = n.Id,
+                Text = n.Name,
+                Selected = n.Id == selectedNotation,
+                Nature = n.NatureId
+            });
+        }
+
+        /// <summary>
         /// The dispose.
         /// </summary>
         public void Dispose()

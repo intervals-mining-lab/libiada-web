@@ -15,6 +15,9 @@
     [Authorize]
     public class MattersController : SequencesMattersController
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MattersController"/> class.
+        /// </summary>
         public MattersController() : base("Matters", "Sequence upload")
         {
         }

@@ -108,13 +108,12 @@
                 var characteristics = new List<List<double>>();
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
                 var result = new Dictionary<string, object> 
-                                     {
-                                         { "characteristics", characteristics }, 
-                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
-                                         { "characteristicName", characteristicName },
-                                         { "calculationType", calculationType }
-                                     };
-                
+                                 {
+                                     { "characteristics", characteristics }, 
+                                     { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
+                                     { "characteristicName", characteristicName },
+                                     { "calculationType", calculationType }
+                                 };
 
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
@@ -122,8 +121,8 @@
                 if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.NotationId == notationId && l.LanguageId == languageId
-                                && MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
+                                l.NotationId == notationId && l.LanguageId == languageId && 
+                                MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else
                 {
@@ -155,7 +154,6 @@
                 switch (calculationType)
                 {
                     case "Equality":
-                    {
                         if (!firstChain.Alphabet.Equals(secondChain.Alphabet))
                         {
                             throw new Exception("Alphabets of sequences are not equal.");
@@ -181,10 +179,9 @@
                         }
 
                         result.Add("alphabet", alphabet);
-                        break; 
-                    }
+                        break;
+
                     case "All":
-                    {
                         var firstAlphabet = new List<string>();
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
@@ -207,22 +204,17 @@
                         for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
                         {
                             secondAlphabet.Add(secondChain.Alphabet[j].ToString());
-
                         }
 
                         result.Add("firstAlphabet", firstAlphabet);
                         result.Add("secondAlphabet", secondAlphabet);
-
                         break;
-                    }
+
                     case "Specified":
-                    {
                         throw new NotImplementedException();
-                    }
+
                     default:
-                    {
-                        throw new ArgumentException("Calculation type is not","calculationType");
-                    }
+                        throw new ArgumentException("Calculation type is not", "calculationType");
                 }
 
                 return result;

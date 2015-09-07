@@ -28,7 +28,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public FeatureRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            features = db.Feature.ToList();
+            features = db.Feature.OrderBy(f => f.Id).ToList();
         }
 
         /// <summary>
@@ -106,30 +106,47 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
-            return GetSelectListWithNature(selectedFeatures, db.Feature.Select(f => f.Id));
+            return GetSelectListWithNature(db.Feature.Select(f => f.Id), selectedFeatures);
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
+        /// <param name="featureIds">
+        /// The features.
+        /// </param>
         /// <param name="selectedFeatures">
         /// The selected features.
-        /// </param>
-        /// <param name="filter">
-        /// The filter.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures, IEnumerable<int> filter)
+        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> featureIds, IEnumerable<int> selectedFeatures)
         {
-            return db.Feature.Where(p => filter.Contains(p.Id)).Select(p => new
+            return features.Where(p => featureIds.Contains(p.Id)).Select(p => new
             {
                 Value = p.Id, 
                 Text = p.Name, 
                 Selected = selectedFeatures.Contains(p.Id), 
                 Nature = p.NatureId
             });
+        }
+
+        /// <summary>
+        /// The get select list with nature.
+        /// </summary>
+        /// <param name="featureIds">
+        /// The features.
+        /// </param>
+        /// <param name="selectedFeature">
+        /// The selected Feature.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> featureIds, int selectedFeature)
+        {
+            return GetSelectListWithNature(featureIds, new List<int> { selectedFeature });
         }
     }
 }

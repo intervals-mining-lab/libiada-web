@@ -1,4 +1,5 @@
 ﻿@using LibiadaWeb.Models
+@using LibiadaWeb.Models.Account
 @model CommonSequence
 
 @{
@@ -22,20 +23,36 @@
 
     <div class="form-horizontal" ng-controller="MatterSequenceCreateCtrl">
         <h4>Matter and sequence parameters</h4>
-        <hr/>
+        <hr />
         @if (ViewBag.ErrorMessage != null)
         {
             @ViewBag.ErrorMessage
         }
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
-                <input type="hidden" name="Matter.NatureId" ng-value="natureId" />
-                @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
+        @if (UserHelper.IsAdmin())
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
+                    @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notations | filter:{Nature: natureId}"></select>
+                    <input type="hidden" name="NotationId" ng-value="notationId" />
+                    @Html.ValidationMessageFor(model => model.NotationId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        else
+        {
+            <div ng-hide="true" ng-init="filterByNature()"></div>
+            <input type="hidden" name="NotationId" ng-value="notationId" />
+        }
+
         <div class="form-group">
             @Html.LabelFor(model => model.Matter.Name, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -51,14 +68,6 @@
             </div>
         </div>
         @Html.Partial("_LocalFile")
-        <div class="form-group">
-            @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notations | filter:{Nature: natureId}"></select>
-                <input type="hidden" name="NotationId" ng-value="notationId" />
-                @Html.ValidationMessageFor(model => model.NotationId, "", new { @class = "text-danger" })
-            </div>
-        </div>
         <div class="form-group">
             @Html.LabelFor(model => model.FeatureId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">

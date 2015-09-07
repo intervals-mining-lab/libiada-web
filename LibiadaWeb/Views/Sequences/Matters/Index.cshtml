@@ -2,16 +2,14 @@
 @model IEnumerable<Matter>
 
 @{
-    ViewBag.Title = "Matters List";
+    ViewBag.Title = "Sequences List";
 }
 
-<h2>Matters List</h2>
-@if (UserHelper.IsAdmin())
-{
+<h2>Sequences List</h2>
+
     <p>
-        @Html.ActionLink("Create New matter", "Create")
+        @Html.ActionLink("Create New sequence", "Create")
     </p>
-}
 <table class="table table-bordered table-hover">
     <tr>
         <th>
