@@ -28,3 +28,11 @@ function SetCheckBoxesState(checkboxes, state) {
         item.Selected = state;
     });
 }
+
+function fakeDisableMattersSelect() {
+    return false;
+};
+
+function fakeDisableSubmit() {
+    return false;
+};

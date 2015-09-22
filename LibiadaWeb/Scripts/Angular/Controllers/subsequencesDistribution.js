@@ -4,9 +4,7 @@
     function subsequencesDistribution($scope) {
         MapModelFromJson($scope, data);
 
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -14,26 +12,24 @@
             }
         };
 
-        $scope.disableMattersSelect = function () {
-            return false;
-        };
-
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableSubmit = disableSubmit;
+
         $scope.isLinkable = IsLinkable;
-
         $scope.selectLink = SelectLink;
-
         $scope.setCheckBoxesState = SetCheckBoxesState;
+        $scope.disableMattersSelect = fakeDisableMattersSelect;
 
+        $scope.selectedMatters = 0;
         $scope.firstCharacteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notations[0]
         };
-
         $scope.secondCharacteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],

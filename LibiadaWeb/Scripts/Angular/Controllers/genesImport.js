@@ -4,11 +4,7 @@
     function genesImport($scope) {
         MapModelFromJson($scope, data);
 
-        $scope.localFile = false;
-
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -16,13 +12,17 @@
             }
         };
 
-        $scope.disableMattersSelect = function () {
-            return false;
-        };
-
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
+
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableSubmit = disableSubmit;
+
+        $scope.disableMattersSelect = fakeDisableMattersSelect;
+
+        $scope.localFile = false;
+        $scope.selectedMatters = 0;   
     }
 
     angular.module("GenesImport", []).controller("GenesImportCtrl", ["$scope", genesImport]);

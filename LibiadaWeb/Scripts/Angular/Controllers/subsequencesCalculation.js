@@ -4,9 +4,7 @@
     function subsequencesCalculation($scope) {
         MapModelFromJson($scope, data);
 
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -14,23 +12,11 @@
             }
         };
 
-        $scope.disableMattersSelect = function () {
-            return false;
-        };
-
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
-        $scope.characteristics = [];
-
-        $scope.isLinkable = IsLinkable;
-
-        $scope.selectLink = SelectLink;
-
-        $scope.setCheckBoxesState = SetCheckBoxesState;
-
-        $scope.addCharacteristic = function () {
+        function addCharacteristic() {
             $scope.characteristics.push({
                 characteristicType: $scope.characteristicTypes[0],
                 link: $scope.characteristicTypes[0].CharacteristicLinks[0],
@@ -38,9 +24,22 @@
             });
         };
 
-        $scope.deleteCharacteristic = function (characteristic) {
+        function deleteCharacteristic(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         };
+
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableSubmit = disableSubmit;
+        $scope.addCharacteristic = addCharacteristic;
+        $scope.deleteCharacteristic = deleteCharacteristic;
+
+        $scope.isLinkable = IsLinkable;
+        $scope.selectLink = SelectLink;
+        $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.setCheckBoxesState = SetCheckBoxesState;
+
+        $scope.selectedMatters = 0;
+        $scope.characteristics = [];
     }
 
     angular.module("SubsequencesCalculation", []).controller("SubsequencesCalculationCtrl", ["$scope", subsequencesCalculation]);

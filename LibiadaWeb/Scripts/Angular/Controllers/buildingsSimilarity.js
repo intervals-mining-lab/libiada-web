@@ -4,15 +4,11 @@
     function buildingsSimilarity($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        $scope.natureId = $scope.natures[0].Value;
-
-        $scope.filterByNature = function () {
+        function filterByNature() {
             $scope.notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
         };
 
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -20,13 +16,21 @@
             }
         };
 
-        $scope.disableMattersSelect = function (matter) {
+        function disableMattersSelect(matter) {
             return ($scope.selectedMatters === $scope.maximumSelectedMatters) && !matter.Selected;
         };
 
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
+
+        $scope.filterByNature = filterByNature;
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableMattersSelect = disableMattersSelect;
+        $scope.disableSubmit = disableSubmit;
+
+        $scope.natureId = $scope.natures[0].Value;
+        $scope.selectedMatters = 0;
     }
 
     angular.module("BuildingsSimilarity", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);

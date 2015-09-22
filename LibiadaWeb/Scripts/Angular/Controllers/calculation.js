@@ -4,9 +4,7 @@
     function calculation($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -14,19 +12,11 @@
             }
         };
 
-        $scope.disableMattersSelect = function () {
-            return false;
-        };
-
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
-        $scope.characteristics = [];
-
-        $scope.natureId = $scope.natures[0].Value;
-
-        $scope.filterByNature = function () {
+        function filterByNature() {
             var notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
 
             angular.forEach($scope.characteristics, function (characteristic) {
@@ -34,11 +24,7 @@
             });
         };
 
-        $scope.isLinkable = IsLinkable;
-
-        $scope.selectLink = SelectLink;
-
-        $scope.addCharacteristic = function () {
+        function addCharacteristic() {
             $scope.characteristics.push({
                 characteristicType: $scope.characteristicTypes[0],
                 link: $scope.characteristicTypes[0].CharacteristicLinks[0],
@@ -48,9 +34,24 @@
             });
         };
 
-        $scope.deleteCharacteristic = function (characteristic) {
+        function deleteCharacteristic(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         };
+
+
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableSubmit = disableSubmit;
+        $scope.filterByNature = filterByNature;
+        $scope.addCharacteristic = addCharacteristic;
+        $scope.deleteCharacteristic = deleteCharacteristic;
+
+        $scope.isLinkable = IsLinkable;
+        $scope.selectLink = SelectLink;
+        $scope.disableMattersSelect = fakeDisableMattersSelect;
+
+        $scope.selectedMatters = 0;
+        $scope.characteristics = [];
+        $scope.natureId = $scope.natures[0].Value;
     }
 
     angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);

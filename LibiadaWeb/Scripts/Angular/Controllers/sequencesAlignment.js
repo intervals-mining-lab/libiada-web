@@ -4,9 +4,7 @@
     function sequencesAlignment($scope) {
         MapModelFromJson($scope, data);
 
-        $scope.selectedMatters = 0;
-
-        $scope.matterCheckChanged = function (matter) {
+        function matterCheckChanged(matter) {
             if (matter.Selected) {
                 $scope.selectedMatters++;
             } else {
@@ -14,20 +12,23 @@
             }
         };
 
-        $scope.disableMattersSelect = function (matter) {
+        function disableMattersSelect(matter) {
             return ($scope.selectedMatters === $scope.maximumSelectedMatters) && !matter.Selected;
         };
 
-        $scope.disableSubmit = function () {
+        function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
+        $scope.matterCheckChanged = matterCheckChanged;
+        $scope.disableMattersSelect = disableMattersSelect;
+        $scope.disableSubmit = disableSubmit;
+
         $scope.isLinkable = IsLinkable;
-
         $scope.selectLink = SelectLink;
-
         $scope.setCheckBoxesState = SetCheckBoxesState;
 
+        $scope.selectedMatters = 0;
         $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
