@@ -35,6 +35,7 @@
                 @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
+                    <input type="hidden" name="Matter.NatureId" ng-value="natureId" />
                     @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -51,6 +52,7 @@
         {
             <div ng-hide="true" ng-init="filterByNature()"></div>
             <input type="hidden" name="NotationId" ng-value="notationId" />
+            <input type="hidden" name="Matter.NatureId" ng-value="natureId" />
         }
 
         <div class="form-group">
