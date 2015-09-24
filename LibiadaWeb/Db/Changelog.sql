@@ -1068,5 +1068,9 @@ UPDATE element SET name = 'Stop codon' WHERE id = 26;
 
 UPDATE feature SET name = 'Complete genome' WHERE id = 1;
 
+-- 24.09.2015
+-- Add new attribute.
+
+INSERT INTO attribute(name) VALUES ('experiment');
 
 COMMIT;
