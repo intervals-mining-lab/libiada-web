@@ -37,7 +37,9 @@
         public ActionResult Index()
         {
             var subsequencesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && !subsequencesSequenceIds.Contains(c.Id) && c.FeatureId == Aliases.Feature.FullGenome).Select(c => c.MatterId).ToList();
+            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
+                                                      !subsequencesSequenceIds.Contains(c.Id) &&
+                                                      (c.FeatureId == Aliases.Feature.FullGenome || c.FeatureId == Aliases.Feature.MitochondrionGenome)).Select(c => c.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
 

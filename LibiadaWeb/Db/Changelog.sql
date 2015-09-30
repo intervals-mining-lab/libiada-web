@@ -1073,4 +1073,12 @@ UPDATE feature SET name = 'Complete genome' WHERE id = 1;
 
 INSERT INTO attribute(name) VALUES ('experiment');
 
+-- 30.09.2015
+-- Add new attribute and features.
+
+INSERT INTO attribute(name) VALUES ('citation');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Stem loop', 'Hairpin; a double-helical region formed by base-pairing between adjacent (inverted) complementary sequences in a single strand of RNA or DNA.', 1, 'stem_loop');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Displacement loop', 'A region within mitochondrial DNA in which a short stretch of RNA is paired with one strand of DNA, displacing the original partner DNA strand in this region; also used to describe the displacement of a region of one strand of duplex DNA by a single stranded invader in the reaction catalyzed by RecA protein.', 1, 'D-loop');
+
+
 COMMIT;

@@ -513,6 +513,16 @@
             /// The miscellaneous binding.
             /// </summary>
             public const int MiscellaneousBinding = 24;
+
+            /// <summary>
+            /// The stem loop.
+            /// </summary>
+            public const int StemLoop = 25;
+
+            /// <summary>
+            /// The displacement loop.
+            /// </summary>
+            public const int DisplacementLoop = 26;
         }
 
         /// <summary>

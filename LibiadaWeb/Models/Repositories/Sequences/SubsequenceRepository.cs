@@ -344,6 +344,7 @@
         /// </param>
         private void UpdateAnnotation(FeatureItem feature, List<Subsequence> localSubsequences)
         {
+            throw new NotImplementedException();
             int featureId;
 
             if (feature.Key == "gene")
