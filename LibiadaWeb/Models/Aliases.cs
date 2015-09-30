@@ -523,6 +523,11 @@
             /// The displacement loop.
             /// </summary>
             public const int DisplacementLoop = 26;
+
+            /// <summary>
+            /// The diversity segment.
+            /// </summary>
+            public const int DiversitySegment = 27;
         }
 
         /// <summary>
