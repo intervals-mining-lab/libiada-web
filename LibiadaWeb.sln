@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb", "LibiadaWeb\LibiadaWeb.csproj", "{47FAD378-F2BC-4470-AE1A-F497D698600C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaCore", "..\libiada-core\LibiadaCore\LibiadaCore.csproj", "{AF8DF9BB-B796-457E-91AB-E41674BEB92B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaMusic", "..\libiada-core\LibiadaMusic\LibiadaMusic.csproj", "{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

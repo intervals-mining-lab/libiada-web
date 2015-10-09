@@ -71,13 +71,6 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="LibiadaCore, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\libiada-core\LibiadaCore\bin\Debug\LibiadaCore.dll</HintPath>
-    </Reference>
-    <Reference Include="LibiadaMusic">
-      <HintPath>..\..\libiada-core\LibiadaMusic\bin\Debug\LibiadaMusic.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -702,6 +695,16 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj">
+      <Project>{AF8DF9BB-B796-457E-91AB-E41674BEB92B}</Project>
+      <Name>LibiadaCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libiada-core\LibiadaMusic\LibiadaMusic.csproj">
+      <Project>{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}</Project>
+      <Name>LibiadaMusic</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
