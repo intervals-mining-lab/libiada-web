@@ -64,7 +64,13 @@
 
         @foreach (var item in ViewBag.Tasks)
         {
-            <tr>
+            string cssClass;
+            {
+                cssClass = item.TaskState == TaskState.InProgress ? "info" :
+                           item.TaskState == TaskState.Completed ? "success" :
+                           item.TaskState == TaskState.Error ? "danger" : "";
+            }
+            <tr class="@cssClass">
                 <td>
                     @(item.Id + 1)
                 </td>
@@ -99,7 +105,7 @@
                     }
                 </td>
                 <td>
-                    @item.TaskState
+                    <strong>@item.TaskState</strong> 
                 </td>
                 <td>
                     @if (item.TaskState == TaskState.Completed || item.TaskState == TaskState.Error)
@@ -119,6 +125,8 @@
             </tr>
         }
     </table>
+
+
 </div>
 
 <br />

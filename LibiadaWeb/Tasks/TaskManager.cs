@@ -234,14 +234,15 @@
 
                 lock (task)
                 {
+                    task.TaskData.Completed = DateTime.Now;
+                    task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
+                    task.TaskData.TaskState = TaskState.Error;
                     task.Result = new Dictionary<string, object>
                                       {
                                           { "Error", true },
                                           { "ErrorMessage", errorMessage },
                                           { "StackTrace", stackTrace }
                                       };
-
-                    task.TaskData.TaskState = TaskState.Error;
                 }
             }
 
