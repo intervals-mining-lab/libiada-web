@@ -87,7 +87,7 @@
             var task = new Task(taskId, action, controllerName, displayName, UserHelper.GetUserId());
 
             TaskManager.AddTask(task);
-            return RedirectToAction("Index", "TaskManager", new { id = taskId });
+            return RedirectToAction("Index", "TaskManager");
         }
     }
 }

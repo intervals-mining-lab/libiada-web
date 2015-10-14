@@ -32,7 +32,7 @@
         /// <summary>
         /// The created.
         /// </summary>
-        public DateTimeOffset? Created;
+        public DateTimeOffset Created;
 
         /// <summary>
         /// The started.

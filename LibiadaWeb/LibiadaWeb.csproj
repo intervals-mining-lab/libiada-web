@@ -528,6 +528,7 @@
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
+    <Content Include="Scripts\Angular\Controllers\taskManager.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\CrossFilter\crossfilter.js" />
@@ -601,8 +602,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Create.cshtml" />

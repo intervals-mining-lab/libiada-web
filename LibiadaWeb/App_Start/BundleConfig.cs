@@ -80,6 +80,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/taskManager").Include(
+                        "~/Scripts/Angular/Controllers/taskManager.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css", 
                       "~/Content/site.css"));

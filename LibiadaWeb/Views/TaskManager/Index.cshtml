@@ -1,132 +1,92 @@
-﻿@using LibiadaWeb.Models
-@using LibiadaWeb.Models.Account
-@using LibiadaWeb.Tasks
+﻿@using LibiadaWeb.Models.Account
 @{
     ViewBag.Title = "Libiada task manager";
 }
 
 <script>
+    "use strict";
 
     var autoRefresh = function () {
         window.location.reload();
     }
 
     setInterval(autoRefresh, 1 * 60 * 1000);
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    TaskManagerController(data);
 </script>
 
 <h2>Task manager</h2>
 
-@if (ViewBag.ErrorMessage != null)
-{
-    <div class="error-message">
-        @ViewBag.ErrorMessage
-    </div>
-    <br />
-}
-
-<div>
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-                #
-            </th>
-            @if (UserHelper.IsAdmin())
-            {
+<div ng-app="TaskManager" ng-controller="TaskManagerCtrl">
+    <table st-table="tasks" class="table table-bordered table-hover">
+        <thead>
+            <tr>
                 <th>
-                    User id
+                    #
                 </th>
-            }
-            <th>
-                Name
-            </th>
-            <th>
-                Created
-            </th>
-            <th>
-                Started
-            </th>
-            <th>
-                Completed
-            </th>
-            <th>
-                Execution time
-            </th>
-            <th>
-                Status
-            </th>
-            <th>
-                Results
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
-
-        @foreach (var item in ViewBag.Tasks)
-        {
-            string cssClass;
-            {
-                cssClass = item.TaskState == TaskState.InProgress ? "info" :
-                           item.TaskState == TaskState.Completed ? "success" :
-                           item.TaskState == TaskState.Error ? "danger" : "";
-            }
-            <tr class="@cssClass">
-                <td>
-                    @(item.Id + 1)
-                </td>
                 @if (UserHelper.IsAdmin())
                 {
-                    <td>
-                        @item.UserId
-                    </td>
+                    <th>
+                        User id
+                    </th>
                 }
+                <th>
+                    Name
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Started
+                </th>
+                <th>
+                    Completed
+                </th>
+                <th>
+                    Execution time
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>
+                    Results
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
+                <td ng-bind="$index + 1" />
+                @if (UserHelper.IsAdmin())
+                {
+                    <td ng-bind="task.UserId" />
+                }
+                <td ng-bind="task.DisplayName" />
+                <td ng-bind="task.Created" />
+                <td ng-bind="task.Started" />
+                <td ng-bind="task.Completed" />
+                <td ng-bind="task.ExecutionTime" />
+                <td ng-bind="task.TaskState" class="text-bold" />
                 <td>
-                    @item.DisplayName
-                </td>
-                <td>
-                    @item.Created.ToString(OutputFormats.DateTimeFormat)
-                </td>
-                <td>
-                    @if (item.Started != null)
-                    {
-                        @item.Started.ToString(OutputFormats.DateTimeFormat)
-                    }
-                </td>
-                <td>
-                    @if (item.Completed != null)
-                    {
-                        @item.Completed.ToString(OutputFormats.DateTimeFormat)
-                    }
-                </td>
-                <td>
-                    @if (item.ExecutionTime != null)
-                    {
-                        @item.ExecutionTime.ToString(OutputFormats.TimeFormat)
-                    }
-                </td>
-                <td>
-                    <strong>@item.TaskState</strong> 
-                </td>
-                <td>
-                    @if (item.TaskState == TaskState.Completed || item.TaskState == TaskState.Error)
-                    {
-                        @Html.ActionLink("View result", "RedirectToResult", new { id = item.Id })
-                    }
+                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}">View result</a>
                 </td>
                 <td>
                     @using (Html.BeginForm("Delete", "TaskManager", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
 
-                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="hidden" name="id" ng-value="task.Id" />
                         <input type="submit" value="Delete task" class="btn btn-default" />
                     }
                 </td>
             </tr>
-        }
+
+        </tbody>
     </table>
-
-
 </div>
 
 <br />
@@ -144,3 +104,9 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/functions")
+    @Scripts.Render("~/bundles/controllers/taskManager")
+}

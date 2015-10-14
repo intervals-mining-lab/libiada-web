@@ -147,8 +147,14 @@
             lock (Tasks)
             {
                 var task = Tasks.Single(t => t.TaskData.Id == id);
+
                 lock (task)
                 {
+                    if (!UserHelper.IsAdmin() && task.TaskData.UserId != UserHelper.GetUserId())
+                    {
+                        throw new AccessViolationException("You do not have access to current task");
+                    }
+
                     result = task.Clone();
                 }
             }

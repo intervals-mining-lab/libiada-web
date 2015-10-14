@@ -1,11 +1,13 @@
 ﻿namespace LibiadaWeb.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Threading;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 
     /// <summary>
@@ -22,8 +24,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.Tasks = TaskManager.GetTasksData();
-            
             if (Request.UserLanguages != null && Request.UserLanguages.Any())
             {
                 var culture = new CultureInfo(Request.UserLanguages[0]);
@@ -32,7 +32,28 @@
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
 
-            ViewBag.ErrorMessage = TempData["ErrorMessage"];
+            if (TempData["ErrorMessage"] != null)
+            {
+                ViewBag.Error = true;
+                ViewBag.ErrorMessage = ViewBag.UserError = TempData["ErrorMessage"];
+            }
+
+            var tasks = TaskManager.GetTasksData().Select(t => new
+                        {
+                            t.Id,
+                            t.DisplayName,
+                            Created = t.Created.ToString(OutputFormats.DateTimeFormat),
+                            Started = t.Started == null ? string.Empty : ((DateTimeOffset)t.Started).ToString(OutputFormats.DateTimeFormat),
+                            Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
+                            ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
+                            TaskState = t.TaskState.ToString(),
+                            t.UserId
+                        });
+
+            ViewBag.data = new Dictionary<string, object>
+                {
+                    { "tasks", tasks }
+                };
 
             return View();
         }
@@ -48,16 +69,25 @@
         /// </returns>
         public ActionResult RedirectToResult(int id)
         {
-            var task = TaskManager.GetTask(id);
-            switch (task.TaskData.TaskState)
+            try
             {
-                case TaskState.Completed:
-                case TaskState.Error:
-                    TempData["Result"] = task.Result;
-                    return RedirectToAction("Result", task.ControllerName);
-                default:
-                    TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
-                    return RedirectToAction("Index");
+                var task = TaskManager.GetTask(id);
+
+                switch (task.TaskData.TaskState)
+                {
+                    case TaskState.Completed:
+                    case TaskState.Error:
+                        TempData["Result"] = task.Result;
+                        return RedirectToAction("Result", task.ControllerName);
+                    default:
+                        TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
+                        return RedirectToAction("Index");
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = string.Format("Cannot redirect to result of task with id = {0}. {1}", id, e.Message);
+                return RedirectToAction("Index");
             }
         }
 
