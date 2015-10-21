@@ -273,6 +273,7 @@
     <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
+    <Compile Include="Controllers\Sequences\OrderTransformationController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
@@ -682,6 +683,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Sequences\Matters\Result.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformation\Index.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformation\Result.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

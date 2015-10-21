@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Matter>
+
+@{
+    ViewBag.Title = "Transformation of order of sequences";
+}
+
+<script language="javascript">
+    "use strict";
+
+    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    SubsequencesCalculationController(data);
+</script>
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <div ng-app="SubsequencesCalculation">
+        <div class="form-horizontal" ng-controller="SubsequencesCalculationCtrl">
+            <h4>Sequences and parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.Partial("_MattersTable")
+            <hr/>
+            <div class="form-group" ng-show="isLinkable(characteristic)">
+                <div class="col-md-10">
+                    <select class="form-control" title="Link" ng-model="link" ng-options="l.Text for l in links"></select>
+                    <input type="hidden" name="linkId" ng-value="link.Value"/>
+                    @Html.ValidationMessage("linkId", "", new {@class = "text-danger"})
+                </div>
+            </div>
+            <hr/>
+            @Html.Partial("_MattersSubmit")
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/functions")
+    @Scripts.Render("~/bundles/controllers/subsequencesCalculation")
+}
+
