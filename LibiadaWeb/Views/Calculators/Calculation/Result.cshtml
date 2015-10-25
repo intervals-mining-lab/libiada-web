@@ -8,49 +8,31 @@
 {
     <h2>Characteristics</h2>
 
-
     <script type="text/javascript">
         "use strict";
 
-        var data = @Html.Raw(Json.Encode(ViewBag.data));
+        var data = @Html.Raw(Json.Encode(ViewBag));
         CalculationResultController(data);
     </script>
-
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th>
-                    Sequence name
-                </th>
-                @foreach (var characteristicName in ViewBag.characteristicNames)
-                {
-                    <th>
-                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.characteristics.Count; i++)
-            {
+    
+    <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
+        <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+            <thead>
                 <tr>
-                    <td>
-                        @ViewBag.matterNames[i]
-                    </td>
-                    @foreach (var characteristic in ViewBag.characteristics[i])
-                    {
-                        <td>
-                            @characteristic
-                        </td>
-                    }
+                    <th>
+                        Sequence name
+                    </th>
+                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
                 </tr>
-            }
-        </tbody>
-    </table>
-    <br/>
-    <div ng-app="CalculationResult">
-        <div ng-controller="CalculationResultCtrl">
-        </div>
+            </thead>
+            <tbody>
+                <tr ng-repeat="characteristic in characteristics">
+                    <td ng-bind="matterNames[$index]" />
+                    <td ng-repeat="value in characteristic" ng-bind="value" />
+                </tr>
+            </tbody>
+        </table>
+        <br />
     </div>
 }
 
