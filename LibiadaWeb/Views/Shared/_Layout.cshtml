@@ -34,12 +34,11 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-
+        <br />
         @if (ViewBag.Error != null)
         {
             if (UserHelper.IsAdmin())
             {
-                <br />
                 <div class="error-message">
                     @Html.Raw(ViewBag.ErrorMessage)
                 </div>

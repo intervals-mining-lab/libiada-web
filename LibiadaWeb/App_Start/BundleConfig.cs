@@ -36,7 +36,7 @@
                      "~/Scripts/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dc.js").Include(
-                        "~/Scripts/d3.v3.js",
+                        "~/Scripts/d3/d3.js",
                         "~/Scripts/CrossFilter/crossfilter.js",
                         "~/Scripts/DC/dc.js"));
 
@@ -85,7 +85,8 @@
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css", 
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/dc.css"));
 
             bundles.Add(new StyleBundle("~/Content/slider").Include(
                 "~/Content/themes/JQAllRange/iThing.css"));

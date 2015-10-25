@@ -570,6 +570,8 @@
     <Content Include="Scripts\d3\LICENSE" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\DC\dc.js.map" />
+    <Content Include="Scripts\DC\README.md" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
     <Content Include="Scripts\jquery-2.1.4.min.js" />

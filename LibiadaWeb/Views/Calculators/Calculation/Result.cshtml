@@ -14,30 +14,46 @@
         var data = @Html.Raw(Json.Encode(ViewBag));
         CalculationResultController(data);
     </script>
-    
+
     <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
         <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
             <thead>
-                <tr>
-                    <th>
-                        Sequence name
-                    </th>
-                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
-                </tr>
+            <tr>
+                <th>
+                    Sequence name
+                </th>
+                <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName"/>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="characteristic in characteristics">
-                    <td ng-bind="matterNames[$index]" />
-                    <td ng-repeat="value in characteristic" ng-bind="value" />
-                </tr>
+            <tr ng-repeat="characteristic in characteristics">
+                <td ng-bind="matterNames[$index]"/>
+                <td ng-repeat="value in characteristic" ng-bind="value"/>
+            </tr>
             </tbody>
         </table>
-        <br />
+        <br/>
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="First characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList"></select>
+            </div>
+        </div>
+        <br/>
+        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw" />
+        <div id="chart">
+        </div>
     </div>
+    <br />
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
+    @Scripts.Render("~/bundles/dc.js")
     @Scripts.Render("~/bundles/controllers/calculationResult")
 }
