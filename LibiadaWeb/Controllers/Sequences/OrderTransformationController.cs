@@ -1,15 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using LibiadaCore.Core;
-using LibiadaCore.Misc;
-using LibiadaCore.Misc.DataTransformers;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories.Sequences;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Misc;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Sequences;
+
+    /// <summary>
+    /// The order transformation controller.
+    /// </summary>
     public class OrderTransformationController : AbstractResultController
     {
        /// <summary>
@@ -18,29 +21,17 @@ namespace LibiadaWeb.Controllers.Sequences
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The dna sequence repository.
-        /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
-
-        /// <summary>
         /// The sequence repository.
         /// </summary>
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// The element repository.
-        /// </summary>
-        private readonly ElementRepository elementRepository;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SequenceTransformerController"/> class.
+        /// Initializes a new instance of the <see cref="OrderTransformationController"/> class.
         /// </summary>
         public OrderTransformationController() : base("OrderTransformation", "Order transformation")
         {
             db = new LibiadaWebEntities();
-            dnaSequenceRepository = new DnaSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
-            elementRepository = new ElementRepository(db);
         }
 
         /// <summary>
@@ -64,7 +55,18 @@ namespace LibiadaWeb.Controllers.Sequences
             return View();
         }
 
-
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="linkId">
+        /// The link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult Index(long matterId, int linkId)
         {
@@ -73,14 +75,13 @@ namespace LibiadaWeb.Controllers.Sequences
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
                 Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                BaseChain transformedChain = HighOrderFactory.Create(sourceChain, (LibiadaCore.Core.Link) linkId);
+                BaseChain transformedChain = HighOrderFactory.Create(sourceChain, (Link)linkId);
                 var result = new Dictionary<string, object>
                 {
-                    {"Chain", transformedChain}
+                    { "Chain", transformedChain }
                 };
                 return result;
             });
         }
-
     }
 }
