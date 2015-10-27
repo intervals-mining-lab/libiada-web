@@ -27,8 +27,8 @@
             </thead>
             <tbody>
             <tr ng-repeat="characteristic in characteristics">
-                <td ng-bind="matterNames[$index]"/>
-                <td ng-repeat="value in characteristic" ng-bind="value"/>
+                <td ng-bind="characteristic.matterName" />
+                <td ng-repeat="value in characteristic.characteristics" ng-bind="value"/>
             </tr>
             </tbody>
         </table>

@@ -44,7 +44,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Calculation", "Characteristics calculation")
+        public CalculationController()
+            : base("Calculation", "Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -133,13 +134,15 @@
         {
             return Action(() =>
             {
+                var result = new List<object>();
+
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var characteristics = new List<List<double>>();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToList();
                 var characteristicNames = new List<string>();
 
                 foreach (var matterId in matterIds)
                 {
-                    characteristics.Add(new List<double>());
+                    var characteristics = new List<double>();
                     for (int i = 0; i < notationIds.Length; i++)
                     {
                         int notationId = notationIds[i];
@@ -162,11 +165,11 @@
                         }
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
-                       
+
                         if (!rotate && !complementary && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
                             double dataBaseCharacteristic = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
-                            characteristics.Last().Add(dataBaseCharacteristic);
+                            characteristics.Add(dataBaseCharacteristic);
                         }
                         else
                         {
@@ -205,10 +208,12 @@
                                 db.Characteristic.Add(dataBaseCharacteristic);
                                 db.SaveChanges();
                             }
-                            
-                            characteristics.Last().Add(characteristicValue);
+
+                            characteristics.Add(characteristicValue);
                         }
                     }
+
+                    result.Add(new { matterName = matters.Single(m => m.Id == matterId).Name, characteristics });
                 }
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -228,14 +233,11 @@
                 }
 
                 return new Dictionary<string, object>
-                                     {
-                                         { "characteristics", characteristics }, 
-                                         { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToList() }, 
-                                         { "characteristicNames", characteristicNames }, 
-                                         { "characteristicIds", characteristicTypeLinkIds }, 
-                                         { "matterIds", matterIds },
-                                         { "characteristicsList", characteristicsList }
-                                     };
+                                    {
+                                        { "characteristics", result },
+                                        { "characteristicNames", characteristicNames }, 
+                                        { "characteristicsList", characteristicsList }
+                                    };
             });
         }
     }

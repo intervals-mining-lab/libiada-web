@@ -11,7 +11,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -63,19 +62,20 @@
                 }
             }
         }
-        <hr />
-        <footer>
+    </div>
+    <footer>
+        <div class="container modal-footer">
             @if (UserHelper.IsAdmin())
             {
                 <h2 class='@{
-                           var result = DbHelper.ConnectionStatus ? "text-success" : "text-danger";
-                           @result
-                       }'>
+                       var result = DbHelper.ConnectionStatus ? "text-success" : "text-danger";
+                       @result
+                   }'>
                     Current database: @DbHelper.DbName
                 </h2>
             }
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
-        </footer>
-    </div>
+        </div>
+    </footer>
 </body>
 </html>
