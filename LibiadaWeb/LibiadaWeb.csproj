@@ -254,6 +254,7 @@
     </Compile>
     <Compile Include="Controllers\AbstractResultController.cs" />
     <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\ChartsController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\BuildingSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -521,6 +522,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\charts.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
@@ -530,6 +532,7 @@
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
     <Content Include="Scripts\Angular\Controllers\taskManager.js" />
+    <Content Include="Scripts\Angular\Directives\tableParse.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\CrossFilter\crossfilter.js" />
@@ -665,6 +668,7 @@
     <Content Include="Views\Partial\_FeaturesSelect.cshtml" />
     <Content Include="Views\Calculators\AccordanceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_MattersSubmit.cshtml" />
+    <Content Include="Views\Calculators\Charts\Index.cshtml" />
     <None Include="Views\Calculators\SubsequencesDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\SubsequencesDistribution\Result.cshtml" />
     <Content Include="Views\Partial\_LocalFile.cshtml" />

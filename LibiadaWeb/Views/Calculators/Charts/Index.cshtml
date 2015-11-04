@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Charts";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div ng-app="Charts" ng-controller="ChartsCtrl">
+    <table-parse ng-model="rawPaste" ng-array="parsedPaste" />
+
+    <div class="row">
+        <table class="table table-bordered table-hover">
+            <tr ng-repeat="row in parsedPaste">
+                <td ng-repeat="col in row">{{col}}</td>
+            </tr>
+            <tr ng-show="parsedPaste.length==0">
+                <td>Paste data from excel onto this page using Ctrl + V</td>
+            </tr>
+        </table>
+
+        <div class="eleven columns">
+            <form ng-submit="addY(l)">
+                <select ng-model="l" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
+                <input class="btn btn-default" type="submit" value="Submit">
+            </form>
+        </div>
+
+        <br/>
+
+        <div class="eleven columns">
+            <form ng-submit="addX(i,j)">
+                <select ng-model="i" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
+                <select ng-model="j" ng-options="parsedPaste[0].indexOf(row) as row for row in parsedPaste[0]" class="form-control"></select>
+                <input class="btn btn-default" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/functions")
+    @Scripts.Render("~/bundles/dc.js")
+    @Scripts.Render("~/bundles/controllers/charts")
+}

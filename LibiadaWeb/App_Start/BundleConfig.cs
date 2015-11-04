@@ -83,6 +83,10 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/taskManager").Include(
                         "~/Scripts/Angular/Controllers/taskManager.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/charts").Include(
+                        "~/Scripts/Angular/Directives/tableParse.js",
+                        "~/Scripts/Angular/Controllers/charts.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css", 
                       "~/Content/site.css",
