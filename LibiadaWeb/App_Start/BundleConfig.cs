@@ -53,9 +53,6 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/sequencesAlignment").Include(
-                        "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
-
             bundles.Add(new ScriptBundle("~/bundles/controllers/buildingsSimilarity").Include(
                         "~/Scripts/Angular/Controllers/buildingsSimilarity.js"));
 
@@ -68,17 +65,23 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/customCalculation").Include(
                         "~/Scripts/Angular/Controllers/customCalculation.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/genesImport").Include(
+                        "~/Scripts/Angular/Controllers/genesImport.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
+                        "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/sequencesAlignment").Include(
+                        "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesCalculation").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesDistribution").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistribution.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/genesImport").Include(
-                        "~/Scripts/Angular/Controllers/genesImport.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
-                        "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
+            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesDistributionResult").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/taskManager").Include(
                         "~/Scripts/Angular/Controllers/taskManager.js"));

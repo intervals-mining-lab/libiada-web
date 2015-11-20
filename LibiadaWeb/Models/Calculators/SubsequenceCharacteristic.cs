@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The genes characteristics.
@@ -8,9 +9,19 @@
     public class SubsequenceCharacteristic
     {
         /// <summary>
-        /// The subsequence.
+        /// The starts.
         /// </summary>
-        public readonly Subsequence Subsequence;
+        public readonly List<int> Starts;
+
+        /// <summary>
+        /// The lengths.
+        /// </summary>
+        public readonly List<int> Lengths;
+
+        /// <summary>
+        /// The feature.
+        /// </summary>
+        public readonly string Feature; 
 
         /// <summary>
         /// The characteristic.
@@ -36,7 +47,19 @@
         /// </param>
         public SubsequenceCharacteristic(Subsequence subsequence, double characteristic, List<string> attributes)
         {
-            Subsequence = subsequence;
+            Starts = new List<int>();
+            Starts.Add(subsequence.Start);
+            Lengths = new List<int>();
+            Lengths.Add(subsequence.Length);
+            foreach (var position in subsequence.Position)
+            {
+                Starts.Add(position.Start);
+                Lengths.Add(position.Length);
+            }
+
+            Feature = subsequence.Feature.Name;
+            Attributes = subsequence.SequenceAttribute.Select(a => a.Attribute.Name + " = " + a.Value).ToList();
+
             Characteristic = characteristic;
             Attributes = attributes;
         }

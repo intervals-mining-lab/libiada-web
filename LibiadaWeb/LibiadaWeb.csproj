@@ -531,6 +531,7 @@
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesCalculation.js" />
     <Content Include="Scripts\Angular\Controllers\matterSequenceCreate.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesDistributionResult.js" />
     <Content Include="Scripts\Angular\Controllers\taskManager.js" />
     <Content Include="Scripts\Angular\Directives\tableParse.js" />
     <Content Include="Scripts\bootstrap.js" />

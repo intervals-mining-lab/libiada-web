@@ -8,8 +8,11 @@
 
 @if (ViewBag.Error == null)
 {
-    <script type='text/javascript'>
+    <script type="text/javascript">
+        "use strict";
 
+        var data = @Html.Raw(Json.Encode(ViewBag));
+        SubsequencesDistributionResultController(data);
     </script>
 
     <table class="table table-bordered table-hover">
@@ -40,22 +43,19 @@
                         if (i < res.SubsequencesCharacteristics.Count)
                         {
                             <td>
-                                @res.SubsequencesCharacteristics[i].Subsequence.Feature.Name
+                                @res.SubsequencesCharacteristics[i].Feature
                             </td>
                             <td>
                                 @foreach (var attribute in res.SubsequencesCharacteristics[i].Attributes)
                                 {
                                     @attribute
-                                    <br/>
+                                    <br />
                                 }
                             </td>
                             <td>
-                                @res.SubsequencesCharacteristics[i].Subsequence.Start
-                                <br />
-
-                                @foreach (var position in res.SubsequencesCharacteristics[i].Subsequence.Position)
+                                @foreach (var position in res.SubsequencesCharacteristics[i].Starts)
                                 {
-                                    @position.Start
+                                    @position
                                     <br />
                                 }
                             </td>
@@ -75,8 +75,17 @@
             }
         </tbody>
     </table>
+    <br />
+    <div ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
+        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw" />
+        <div id="chart">
+        </div>
+    </div>
 
     @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/angularjs")
+        @Scripts.Render("~/bundles/functions")
+        @Scripts.Render("~/bundles/dc.js")
+        @Scripts.Render("~/bundles/controllers/subsequencesDistributionResult")
     }
 }
