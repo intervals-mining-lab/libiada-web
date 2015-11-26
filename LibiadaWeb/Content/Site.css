@@ -61,6 +61,10 @@ input[type="checkbox"].input-validation-error {
 }
 
 .text-bold {
-font-weight: bold;
+    font-weight: bold;
+}
 
+.empty-table {
+    font-weight: bold;
+    text-align: center;
 }
