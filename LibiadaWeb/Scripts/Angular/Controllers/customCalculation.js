@@ -15,14 +15,25 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         };
 
+        function addSequence() {
+            $scope.customSequences.push({});
+        };
+
+        function deleteSequence(customSequence) {
+            $scope.customSequences.splice($scope.customSequences.indexOf(customSequence), 1);
+        };
+
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
+        $scope.addSequence = addSequence;
+        $scope.deleteSequence = deleteSequence;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
         $scope.disableSubmit = fakeDisableSubmit;
 
         $scope.characteristics = [];
+        $scope.customSequences = [];
     }
 
     angular.module("CustomCalculation", []).controller("CustomCalculationCtrl", ["$scope", customCalculation]);

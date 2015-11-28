@@ -36,7 +36,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController()
+            : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -89,8 +90,8 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
-        /// <param name="customSequence">
-        /// The custom sequence.
+        /// <param name="customSequences">
+        /// The custom sequences.
         /// </param>
         /// <param name="localFile">
         /// The local file.
@@ -102,7 +103,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
-        public ActionResult Index(int[] characteristicTypeLinkIds, string customSequence, bool localFile, HttpPostedFileBase[] file)
+        public ActionResult Index(int[] characteristicTypeLinkIds, string[] customSequences, bool localFile, HttpPostedFileBase[] file)
         {
             return Action(() =>
                 {
@@ -121,8 +122,11 @@
                     }
                     else
                     {
-                        sequences.Add(customSequence);
-                        names.Add("Custom sequence. Length: " + customSequence.Length);
+                        for (int i = 0; i < customSequences.Length; i++)
+                        {
+                            sequences.Add(customSequences[i]);
+                            names.Add("Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length);
+                        }
                     }
 
                     var characteristics = new List<List<double>>();

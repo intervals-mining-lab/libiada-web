@@ -22,18 +22,33 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @Html.CheckBox("localFile", new { ng_model = "localFile" })
-                @Html.Label("localFile", "Load sequence from fasta file")
+                @Html.Label("localFile", "Load sequence from fasta file(s)")
             </div>
         </div>
         <div class="form-group" ng-hide="localFile">
-            @Html.Label("Sequence", new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.Editor("customSequence", new { @class = "form-control" })
-                @Html.ValidationMessage("customSequence", "", new { @class = "text-danger" })
+            <div ng-repeat="customSequence in customSequences">
+                <div class="form-group">
+                    <label class="control-label col-md-2" for="customSequence">Sequence:</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">Delete sequence</button>
+                    </div>
+                </div>
+                <br />
             </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">Add sequence</button>
+                </div>
+            </div>
+
         </div>
         <div class="form-group" ng-show="localFile">
-            @Html.Label("file", "Sequence file", new { @class = "control-label col-md-2" })
+            @Html.Label("file", "Sequence file(s)", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <input type="file" name="file" multiple />
                 @Html.ValidationMessage("file", "", new { @class = "text-danger" })
