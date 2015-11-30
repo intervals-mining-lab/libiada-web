@@ -6,13 +6,16 @@
 
         function prepareDataAndDraw() {
             var points = [];
+            var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 for (var j = 0; j < $scope.result[i].SubsequencesCharacteristics.length; j++) {
                     points.push({
+                        id : id,
                         name: $scope.result[i].MatterName,
                         x: $scope.result[i].Characteristic,
                         y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
                     });
+                    id++;
                 }
             }
 
@@ -22,7 +25,7 @@
         function drawScatter(points) {
             var margin = { top: 30, right: 20, bottom: 60, left: 60 };
             var width = 800 - margin.left - margin.right;
-            var height = 600 - margin.top - margin.bottom;
+            var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
             var xValue = function (d) { return d.x; }, // data -> value
@@ -52,7 +55,7 @@
             var chart = dc.seriesChart("#chart");
             var ndx = crossfilter(points);
             var runDimension = ndx.dimension(function (d, index) {
-                return [d.name, +d.x];
+                return [d.id, +d.x];
             });
             var runGroup = runDimension.group().reduceSum(function (d) { return +d.y; });
 
@@ -96,6 +99,7 @@
 
         $scope.drawScatter = drawScatter;
         $scope.prepareDataAndDraw = prepareDataAndDraw;
+        $scope.hight = 250;
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", subsequencesDistributionResult]);
