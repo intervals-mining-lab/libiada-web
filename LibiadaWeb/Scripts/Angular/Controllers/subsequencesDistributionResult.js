@@ -55,7 +55,7 @@
             var chart = dc.seriesChart("#chart");
             var ndx = crossfilter(points);
             var runDimension = ndx.dimension(function (d, index) {
-                return [d.id, +d.x];
+                return [+d.id, +d.x];
             });
             var runGroup = runDimension.group().reduceSum(function (d) { return +d.y; });
 
@@ -99,7 +99,7 @@
 
         $scope.drawScatter = drawScatter;
         $scope.prepareDataAndDraw = prepareDataAndDraw;
-        $scope.hight = 250;
+        $scope.hight = 800;
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", subsequencesDistributionResult]);
