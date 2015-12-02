@@ -10,7 +10,8 @@
             for (var i = 0; i < $scope.result.length; i++) {
                 for (var j = 0; j < $scope.result[i].SubsequencesCharacteristics.length; j++) {
                     points.push({
-                        id : id,
+                        id: id,
+                        color: i,
                         name: $scope.result[i].MatterName,
                         x: $scope.result[i].Characteristic,
                         y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
@@ -23,83 +24,126 @@
         }
 
         function drawScatter(points) {
+
             var margin = { top: 30, right: 20, bottom: 60, left: 60 };
             var width = 800 - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xValue = function (d) { return d.x; }, // data -> value
-                xScale = d3.scale.linear().range([0, width]); // value -> display
-            //    xMap = function(d) { return xScale(xValue(d));}, // data -> display
-            //   xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+            var xValue = function (d) { return d.x; }; // data -> value
+            var xScale = d3.scale.linear().range([0, width]); // value -> display
+            var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
 
             // setup y
 
-            var yValue = function (d) { return d.y; }, // data -> value
-                yScale = d3.scale.linear().range([height, 0]); // value -> display
-            // yMap = function(d) { return yScale(yValue(d));}, // data -> display
-            // yAxis = d3.svg.axis().scale(yScale).orient("left");
+            var yValue = function (d) { return d.y; }; // data -> value
+            var yScale = d3.scale.linear().range([height, 0]); // value -> display
+            var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
+            var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
+            // setup fill color
+            var cValue = function (d) { return d.name; };
+            var color = d3.scale.category10();
 
+            // add the graph canvas to the body of the webpage
+            var svg = d3.select("#chart").append("svg")
+                .attr("width", $scope.width)
+                .attr("height", $scope.hight)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // add the tooltip area to the webpage
+            var tooltip = d3.select("#chart").append("div")
+                .attr("class", "tooltip")
+                .style("opacity", 0);
 
             var xMin = d3.min(points, xValue);
-            var yMin = d3.min(points, yValue);
             var xMax = d3.max(points, xValue);
+            var xMargin = (xMax - xMin) * 0.05;
             var yMax = d3.max(points, yValue);
+            var yMin = d3.min(points, yValue);
+            var yMargin = (yMax - yMin) * 0.05;
 
             // don't want dots overlapping axis, so add in buffer to data domain
-            xScale.domain([xMin, xMax]);
-            yScale.domain([yMin, yMax]);
+            xScale.domain([xMin - xMargin, xMax + xMargin]);
+            yScale.domain([yMin - yMargin, yMax + yMargin]);
 
+            // x-axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis)
+                .append("text")
+                .attr("class", "label")
+                .attr("x", width)
+                .attr("y", -6)
+                .style("text-anchor", "end")
+                .text($scope.fullCharacteristicName);
 
-            var chart = dc.seriesChart("#chart");
-            var ndx = crossfilter(points);
-            var runDimension = ndx.dimension(function (d, index) {
-                return [+d.id, +d.x];
-            });
-            var runGroup = runDimension.group().reduceSum(function (d) { return +d.y; });
+            // y-axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text($scope.subsequencesCharacteristicName);
 
-            var symbolScale = d3.scale.ordinal().range(d3.svg.symbolTypes);
-            var symbolAccessor = function (d) { return symbolScale(d.key[0]); };
-            var subChart = function (c) {
-                return dc.scatterPlot(c)
-                    .symbol(symbolAccessor)
-                    .symbolSize(8)
-                    .highlightedSize(10);
-            };
+            // draw dots
+            svg.selectAll(".dot")
+                .data(points)
+              .enter().append("circle")
+                .attr("class", "dot")
+                .attr("r", 3.5)
+                .attr("cx", xMap)
+                .attr("cy", yMap)
+                .style("fill", function (d) { return color(cValue(d)); })
+                .on("mouseover", function (d) {
+                    tooltip.transition()
+                         .duration(200)
+                         .style("opacity", .9);
+                    tooltip.html(d["name"] + "<br/> (" + xValue(d)
+                      + ", " + yValue(d) + ")")
+                         .style("left", (d3.event.pageX + 5) + "px")
+                         .style("top", (d3.event.pageY - 28) + "px");
+                })
+                .on("mouseout", function (d) {
+                    tooltip.transition()
+                         .duration(500)
+                         .style("opacity", 0);
+                });
 
-            chart
-                .chart(subChart)
-                .x(xScale)
-                .y(yScale)
-                .width(width)
-                .height(height)
-                //.brushOn(false)
-                .xAxisLabel($scope.fullCharacteristicName)
-                .yAxisLabel($scope.subsequencesCharacteristicName)
-                .xAxisPadding((xMax - xMin) * 0.05)
-                .yAxisPadding((yMax - yMin) * 0.05)
-                .clipPadding(10)
-                .margins(margin)
-                .elasticX(true)
-                .elasticY(true)
-                //.dimension(runDimension)
-                .group(runGroup)
-                // .mouseZoomable(true)
-                .seriesAccessor(function (d) { return d.key[0]; })
-                .keyAccessor(function (d) { return d.key[1]; })
-                .valueAccessor(function (d) { return +d.value; });
-            //.legend(dc.legend().x(350).y(350).itemHeight(13).gap(5).horizontal(1).legendWidth(140).itemWidth(70));
-            //chart.yAxis().tickFormat(function (d) { return d3.format(",d")(d + 299500); });
+            // draw legend
+            var legend = svg.selectAll(".legend")
+                .data(color.domain())
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
 
+            // draw legend colored rectangles
+            legend.append("rect")
+                .attr("x", width - 18)
+                .attr("width", 18)
+                .attr("height", 18)
+                .style("fill", color);
 
-
-            dc.renderAll();
+            // draw legend text
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) { return d; }).style("font-size", "9pt");
         }
 
         $scope.drawScatter = drawScatter;
         $scope.prepareDataAndDraw = prepareDataAndDraw;
         $scope.hight = 800;
+        $scope.width = 800;
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", subsequencesDistributionResult]);
