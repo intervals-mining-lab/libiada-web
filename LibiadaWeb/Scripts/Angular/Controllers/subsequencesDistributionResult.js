@@ -12,7 +12,7 @@
                     points.push({
                         id: id,
                         name: $scope.result[i].MatterName,
-                        x: $scope.result[i].Characteristic,
+                        x: $scope.numericXAxis ? i + 1 : $scope.result[i].Characteristic,
                         y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
                     });
                     id++;

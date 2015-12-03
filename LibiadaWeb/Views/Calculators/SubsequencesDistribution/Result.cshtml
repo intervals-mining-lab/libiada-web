@@ -77,8 +77,23 @@
     </table>
     <br />
     <div ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
-        <input class="form-control" name="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
-        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw"/>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input name="numericXAxis" type="checkbox" ng-model="numericXAxis" value="false"/>
+                @Html.Label("numericXAxis", "Numeric x axis")
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("hight", "Hight", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input class="form-control" name="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw" />
+            </div>
+        </div>
         <div id="chart">
         </div>
     </div>
