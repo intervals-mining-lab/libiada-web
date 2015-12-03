@@ -11,7 +11,6 @@
                 for (var j = 0; j < $scope.result[i].SubsequencesCharacteristics.length; j++) {
                     points.push({
                         id: id,
-                        color: i,
                         name: $scope.result[i].MatterName,
                         x: $scope.result[i].Characteristic,
                         y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
@@ -25,7 +24,7 @@
 
         function drawScatter(points) {
 
-            var margin = { top: 30, right: 20, bottom: 60, left: 60 };
+            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
             var width = 800 - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
@@ -79,7 +78,8 @@
                 .attr("x", width)
                 .attr("y", -6)
                 .style("text-anchor", "end")
-                .text($scope.fullCharacteristicName);
+                .text($scope.fullCharacteristicName)
+                .style("font-size", "12pt");
 
             // y-axis
             svg.append("g")
@@ -91,7 +91,8 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text($scope.subsequencesCharacteristicName);
+                .text($scope.subsequencesCharacteristicName)
+                .style("font-size", "12pt");
 
             // draw dots
             svg.selectAll(".dot")
@@ -106,8 +107,7 @@
                     tooltip.transition()
                          .duration(200)
                          .style("opacity", .9);
-                    tooltip.html(d["name"] + "<br/> (" + xValue(d)
-                      + ", " + yValue(d) + ")")
+                    tooltip.html(d["name"] + "<br/> (" + xValue(d) + ", " + yValue(d) + ")")
                          .style("left", (d3.event.pageX + 5) + "px")
                          .style("top", (d3.event.pageY - 28) + "px");
                 })
@@ -129,20 +129,24 @@
                 .attr("x", width - 18)
                 .attr("width", 18)
                 .attr("height", 18)
-                .style("fill", color);
+                .style("fill", color)
+                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
             // draw legend text
             legend.append("text")
                 .attr("x", width - 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
+                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
                 .style("text-anchor", "end")
-                .text(function(d) { return d; }).style("font-size", "9pt");
+                .text(function (d) { return d; })
+                .style("font-size", "9pt");
         }
 
         $scope.drawScatter = drawScatter;
         $scope.prepareDataAndDraw = prepareDataAndDraw;
-        $scope.hight = 800;
+        $scope.legendHeight = $scope.result.length * 20;
+        $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
     }
 

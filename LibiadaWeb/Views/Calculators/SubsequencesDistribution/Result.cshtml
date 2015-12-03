@@ -77,7 +77,7 @@
     </table>
     <br />
     <div ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
-        <input class="form-control" name="hight" type="number" min="100" step="50" ng-model="hight" />
+        <input class="form-control" name="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
         <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw"/>
         <div id="chart">
         </div>
