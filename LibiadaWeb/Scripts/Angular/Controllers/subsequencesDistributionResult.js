@@ -12,6 +12,9 @@
                     points.push({
                         id: id,
                         name: $scope.result[i].MatterName,
+                        attributes: $scope.result[i].SubsequencesCharacteristics[j].Attributes,
+                        feature: $scope.result[i].SubsequencesCharacteristics[j].Feature,
+                        positions: $scope.result[i].SubsequencesCharacteristics[j].Starts,
                         x: $scope.numericXAxis ? i + 1 : $scope.result[i].Characteristic,
                         y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
                     });
@@ -33,6 +36,7 @@
             var xScale = d3.scale.linear().range([0, width]); // value -> display
             var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+            xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
 
             // setup y
 
@@ -40,7 +44,7 @@
             var yScale = d3.scale.linear().range([height, 0]); // value -> display
             var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
             var yAxis = d3.svg.axis().scale(yScale).orient("left");
-
+            yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
             // setup fill color
             var cValue = function (d) { return d.name; };
             var color = d3.scale.category10();
@@ -107,7 +111,7 @@
                     tooltip.transition()
                          .duration(200)
                          .style("opacity", .9);
-                    tooltip.html(d["name"] + "<br/> (" + xValue(d) + ", " + yValue(d) + ")")
+                    tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>" + d["attributes"].join("<br/>") + " (" + xValue(d) + ", " + yValue(d) + ")")
                          .style("left", (d3.event.pageX + 5) + "px")
                          .style("top", (d3.event.pageY - 28) + "px");
                 })
