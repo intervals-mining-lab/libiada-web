@@ -35,7 +35,7 @@
                      "~/Scripts/angular.js",
                      "~/Scripts/smart-table.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/dc.js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/dcjs").Include(
                         "~/Scripts/d3/d3.js",
                         "~/Scripts/CrossFilter/crossfilter.js",
                         "~/Scripts/DC/dc.js"));
