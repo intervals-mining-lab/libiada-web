@@ -45,7 +45,7 @@
                     smtp.Credentials = new NetworkCredential(username, password);
                     smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     smtp.ServicePoint.MaxIdleTime = 1;
-                    smtp.EnableSsl = true;
+                    smtp.EnableSsl = false;
 
                     mailMessage.IsBodyHtml = true;
                     smtp.Send(mailMessage);
