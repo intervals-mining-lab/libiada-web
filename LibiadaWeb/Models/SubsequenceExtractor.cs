@@ -148,12 +148,12 @@
         /// </returns>
         private Chain ExtractJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
         {
-            var joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ToString();
+            var joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
 
-            for (int j = 0; j < subsequence.Position.Count; j++)
+            var position = subsequence.Position.ToArray();
+
+            for (int j = 0; j < position.Length; j++)
             {
-                var position = subsequence.Position.ToArray();
-
                 joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
             }
 
@@ -174,14 +174,32 @@
         /// </returns>
         private Chain ExtractJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
         {
+            var bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
+            var position = subsequence.Position.ToArray();
+            string resultSequence;
+
             if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
             {
+                var joinedSequence = bioSequence.ConvertToString();
+                
+                for (int j = 0; j < position.Length; j++)
+                {
+                    joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
+                }
+
+                resultSequence = new Sequence(Alphabets.DNA, joinedSequence).GetReverseComplementedSequence().ConvertToString();
             }
             else
             {
+                resultSequence = bioSequence.GetReverseComplementedSequence().ConvertToString();
+                
+                for (int j = 0; j < position.Length; j++)
+                {
+                    resultSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).GetReverseComplementedSequence().ConvertToString();
+                }
             }
 
-            throw new NotImplementedException();
+            return new Chain(resultSequence);
         }
     }
 }
