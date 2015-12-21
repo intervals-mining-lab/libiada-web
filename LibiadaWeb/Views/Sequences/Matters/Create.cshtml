@@ -1,5 +1,6 @@
 ﻿@using LibiadaWeb.Models
 @using LibiadaWeb.Models.Account
+@using Newtonsoft.Json
 @model CommonSequence
 
 @{
@@ -9,7 +10,7 @@
 <script>
     "use strict";
 
-    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
     matterSequenceCreateController(data);
 </script>
 

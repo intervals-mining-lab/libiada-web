@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Matter>
+﻿@using Newtonsoft.Json
+@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Transformation of order of sequences";
@@ -7,7 +8,7 @@
 <script language="javascript">
     "use strict";
 
-    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
     SubsequencesCalculationController(data);
 </script>
 

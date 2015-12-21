@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Matter>
+﻿@using Newtonsoft.Json
+@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Relation characteristics";
@@ -7,7 +8,7 @@
 <script type="text/javascript">
     "use strict";
 
-    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
     AccordanceController(data);
 </script>
 

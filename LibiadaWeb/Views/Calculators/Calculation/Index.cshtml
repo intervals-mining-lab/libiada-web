@@ -1,4 +1,5 @@
-﻿@model dynamic
+﻿@using Newtonsoft.Json
+@model dynamic
 
 @{
     ViewBag.Title = "Characteristics calculation";
@@ -7,7 +8,7 @@
 <script type="text/javascript">
     "use strict";
 
-    var data = @Html.Raw(Json.Encode(ViewBag.data));
+    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
     CalculationController(data);
 </script>
 
