@@ -9,6 +9,8 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The annotations check controller.
     /// </summary>
@@ -48,7 +50,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");
             data.Add("natureId", Aliases.Nature.Genetic);
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(data);
             ViewBag.angularController = "GenesImportController";
             return View();
         }

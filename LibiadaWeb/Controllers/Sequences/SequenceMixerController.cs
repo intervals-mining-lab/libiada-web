@@ -10,6 +10,8 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The sequence mixer controller.
     /// </summary>
@@ -79,7 +81,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = viewDataHelper.FillViewData(1, 1, false, "Mix");
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(1, 1, false, "Mix"));
             ViewBag.angularController = "BuildingsSimilarityController";
             return View();
         }

@@ -14,6 +14,8 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The sequences matters controller.
     /// </summary>
@@ -119,7 +121,7 @@
                 features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, new List<int>());
             }
 
-            ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetMatterSelectList() }, 
                     { "natures", natures }, 
@@ -129,7 +131,7 @@
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
-                };
+                });
             ViewBag.angularController = "MatterSequenceCreateController";
             return View();
         }

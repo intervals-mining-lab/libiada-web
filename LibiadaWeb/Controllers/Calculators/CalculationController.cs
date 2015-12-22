@@ -20,6 +20,8 @@
     using Models;
     using Models.Repositories.Catalogs;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The calculation controller.
     /// </summary>
@@ -86,7 +88,7 @@
                 filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
             }
 
-            ViewBag.data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate"));
             ViewBag.angularController = "CalculationController";
             return View();
         }
@@ -241,7 +243,7 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "data", result },
+                               { "data", JsonConvert.SerializeObject(result) },
                                { "angularController", "CalculationResultController" }
                            };
             });

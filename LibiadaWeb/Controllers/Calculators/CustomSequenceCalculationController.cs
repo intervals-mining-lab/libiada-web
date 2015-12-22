@@ -17,6 +17,8 @@
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The quick calculation controller.
     /// </summary>
@@ -76,10 +78,10 @@
                 filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
             }
 
-            ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(filter) }
-                };
+                });
             ViewBag.angularController = "CustomCalculationController";
             return View();
         }

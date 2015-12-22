@@ -10,6 +10,8 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The calculation controller.
     /// </summary>
@@ -50,10 +52,10 @@
                             t.UserId
                         });
 
-            ViewBag.data = new Dictionary<string, object>
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "tasks", tasks }
-                };
+                });
             ViewBag.angularController = "TaskManagerController";
             return View();
         }

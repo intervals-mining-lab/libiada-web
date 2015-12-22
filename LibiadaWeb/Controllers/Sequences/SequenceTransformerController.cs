@@ -11,6 +11,8 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The DNA transformation controller.
     /// </summary>
@@ -61,7 +63,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Transform");
             data.Add("natureId", Aliases.Nature.Genetic);
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(data);
             ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }

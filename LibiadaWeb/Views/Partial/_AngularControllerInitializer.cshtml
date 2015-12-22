@@ -1,9 +1,7 @@
-﻿@using Newtonsoft.Json
-
-<script type="text/javascript">
+﻿<script type="text/javascript">
     "use strict";
 
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
+    var data = @Html.Raw(ViewBag.data);
     var controllerConstructor = @ViewBag.angularController;
     controllerConstructor(data);
 </script>

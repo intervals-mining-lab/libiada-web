@@ -15,6 +15,8 @@
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The subsequences similarity controller.
     /// </summary>
@@ -61,8 +63,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.GetSubsequencesViewData(2, 2, true, "Compare");
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(2, 2, true, "Compare"));
             ViewBag.angularController = "SequencesAlignmentController";
             return View();
         }

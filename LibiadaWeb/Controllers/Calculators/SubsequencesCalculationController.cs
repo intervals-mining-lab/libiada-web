@@ -11,6 +11,8 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The subsequences calculation controller.
     /// </summary>
@@ -57,8 +59,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate");
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate"));
             ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }

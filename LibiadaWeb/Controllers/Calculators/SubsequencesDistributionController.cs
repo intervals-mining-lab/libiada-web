@@ -14,6 +14,8 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The subsequences distribution controller.
     /// </summary>
@@ -66,8 +68,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate");
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate"));
             ViewBag.angularController = "SubsequencesDistributionController";
             return View();
         }
@@ -208,7 +209,7 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "data", result },
+                    { "data", JsonConvert.SerializeObject(result) },
                     { "angularController", "SubsequencesDistributionResultController" }
                 };
             });

@@ -27,14 +27,8 @@
             <td ng-bind="$index + 1" />
             <td>
                 <label>
-                    @if (ViewBag.data["mattersCheckboxes"])
-                    {
-                        <input type="checkbox" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
-                    }
-                    else
-                    {
-                        <input type="radio" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
-                    }
+                    <input type="checkbox" ng-if="mattersCheckboxes" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
+                    <input type="radio" ng-if="!mattersCheckboxes" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
 
                     {{matter.Text}}
                 </label>

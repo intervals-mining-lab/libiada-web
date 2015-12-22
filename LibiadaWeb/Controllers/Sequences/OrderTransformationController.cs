@@ -10,6 +10,8 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The order transformation controller.
     /// </summary>
@@ -47,7 +49,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
             data.Add("links", new SelectList(db.Link.OrderBy(n => n.Id), "id", "name"));
-            ViewBag.data = data;
+            ViewBag.data = JsonConvert.SerializeObject(data);
             ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }

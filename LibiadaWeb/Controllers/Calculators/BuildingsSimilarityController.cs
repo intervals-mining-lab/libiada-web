@@ -12,6 +12,8 @@
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The buildings comparison controller.
     /// </summary>
@@ -46,7 +48,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = viewDataHelper.FillViewData(2, 2, true, "Compare");
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(2, 2, true, "Compare"));
             ViewBag.angularController = "BuildingsSimilarityController";
             return View();
         }

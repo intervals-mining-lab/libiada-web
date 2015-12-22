@@ -17,6 +17,8 @@
 
     using Models.Repositories.Catalogs;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The local calculation controller.
     /// </summary>
@@ -57,7 +59,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 1, int.MaxValue, true, "Calculate");
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 1, int.MaxValue, true, "Calculate"));
             ViewBag.angularController = "CalculationController";
             return View();
         }
