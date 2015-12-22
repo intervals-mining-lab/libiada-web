@@ -44,8 +44,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController()
-            : base("Calculation", "Characteristics calculation")
+        public CalculationController() : base("Calculation", "Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -88,6 +87,7 @@
             }
 
             ViewBag.data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate");
+            ViewBag.angularController = "CalculationController";
             return View();
         }
 
@@ -134,7 +134,7 @@
         {
             return Action(() =>
             {
-                var result = new List<object>();
+                var mattersCharacteristics = new List<object>();
 
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToList();
@@ -213,7 +213,7 @@
                         }
                     }
 
-                    result.Add(new { matterName = matters.Single(m => m.Id == matterId).Name, characteristics });
+                    mattersCharacteristics.Add(new { matterName = matters.Single(m => m.Id == matterId).Name, characteristics });
                 }
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -232,12 +232,18 @@
                     });
                 }
 
+                var result = new Dictionary<string, object>()
+                                 {
+                                     { "characteristics", mattersCharacteristics },
+                                     { "characteristicNames", characteristicNames },
+                                     { "characteristicsList", characteristicsList }
+                                 };
+
                 return new Dictionary<string, object>
-                                    {
-                                        { "characteristics", result },
-                                        { "characteristicNames", characteristicNames }, 
-                                        { "characteristicsList", characteristicsList }
-                                    };
+                           {
+                               { "data", result },
+                               { "angularController", "CalculationResultController" }
+                           };
             });
         }
     }

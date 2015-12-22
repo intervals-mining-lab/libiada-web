@@ -1,9 +1,10 @@
 ﻿@using LibiadaWeb.Models.Account
-@using Newtonsoft.Json
+
 @{
     ViewBag.Title = "Libiada task manager";
 }
 
+@Html.Partial("_AngularControllerInitializer")
 <script>
     "use strict";
 
@@ -12,9 +13,6 @@
     }
 
     setInterval(autoRefresh, 1 * 60 * 1000);
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    TaskManagerController(data);
 </script>
 
 <h2>Task manager</h2>
@@ -114,5 +112,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/taskManager")
+   @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

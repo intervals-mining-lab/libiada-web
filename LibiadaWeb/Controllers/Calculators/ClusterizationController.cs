@@ -58,6 +58,7 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 3, int.MaxValue, true, "Calculate");
+            ViewBag.angularController = "CalculationController";
             return View();
         }
 

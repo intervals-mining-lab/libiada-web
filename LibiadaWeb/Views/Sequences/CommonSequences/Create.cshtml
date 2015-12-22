@@ -1,18 +1,12 @@
 ﻿@using LibiadaWeb.Models
 @using LibiadaWeb.Models.Account
-@using Newtonsoft.Json
 @model CommonSequence
 
 @{
     ViewBag.Title = "Create sequence";
 }
 
-<script>
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    matterSequenceCreateController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Create sequence</h2>
 
@@ -159,5 +153,5 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/matterSequenceCreate")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

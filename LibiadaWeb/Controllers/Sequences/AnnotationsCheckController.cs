@@ -46,13 +46,10 @@
             var matterIds = db.DnaSequence.Where(c => genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
-
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");
-
             data.Add("natureId", Aliases.Nature.Genetic);
-
             ViewBag.data = data;
-
+            ViewBag.angularController = "GenesImportController";
             return View();
         }
 

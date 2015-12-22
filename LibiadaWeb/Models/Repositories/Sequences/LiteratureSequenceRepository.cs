@@ -1,7 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.IO;
-    using System.Text;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;

@@ -36,8 +36,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController()
-            : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -81,6 +80,7 @@
                 {
                     { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(filter) }
                 };
+            ViewBag.angularController = "CustomCalculationController";
             return View();
         }
 

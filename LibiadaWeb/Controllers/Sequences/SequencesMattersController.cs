@@ -30,7 +30,7 @@
         protected bool ThreadDisposable = true;
 
         /// <summary>
-        /// The dna sequence repository.
+        /// The DNA sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
@@ -130,6 +130,7 @@
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
                 };
+            ViewBag.angularController = "MatterSequenceCreateController";
             return View();
         }
 

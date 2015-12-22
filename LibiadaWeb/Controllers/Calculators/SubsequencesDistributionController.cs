@@ -68,6 +68,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate");
             ViewBag.data = data;
+            ViewBag.angularController = "SubsequencesDistributionController";
             return View();
         }
 
@@ -106,7 +107,7 @@
         {
             return Action(() =>
             {
-                var result = new List<SequenceCharacteristics>();
+                var sequenceCharacterisitcs = new List<SequenceCharacteristics>();
 
                 var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
 
@@ -189,20 +190,26 @@
 
                     subsequencesCharacteristics = subsequencesCharacteristics.OrderBy(g => g.Characteristic).ToList();
 
-                    result.Add(new SequenceCharacteristics(matterName, sequenceCharacteristic, subsequencesCharacteristics));
+                    sequenceCharacterisitcs.Add(new SequenceCharacteristics(matterName, sequenceCharacteristic, subsequencesCharacteristics));
                 }
 
-                result = result.OrderBy(r => r.Characteristic).ToList();
+                sequenceCharacterisitcs = sequenceCharacterisitcs.OrderBy(r => r.Characteristic).ToList();
 
                 var fullCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
                 var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
 
+                var result = new Dictionary<string, object>
+                                 {
+                                     { "result", sequenceCharacterisitcs },
+                                     { "maxSubsequences", maxSubsequences },
+                                     { "subsequencesCharacteristicName", subsequencesCharacteristicName },
+                                     { "fullCharacteristicName", fullCharacteristicName }
+                                 };
+
                 return new Dictionary<string, object>
                 {
-                    { "result", result },
-                    { "maxSubsequences", maxSubsequences },
-                    { "subsequencesCharacteristicName", subsequencesCharacteristicName },
-                    { "fullCharacteristicName", fullCharacteristicName }
+                    { "data", result },
+                    { "angularController", "SubsequencesDistributionResultController" }
                 };
             });
         }

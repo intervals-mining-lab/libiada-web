@@ -1,5 +1,4 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Subsequences characteristics distributions";
@@ -9,12 +8,7 @@
 
 @if (ViewBag.Error == null)
 {
-    <script type="text/javascript">
-        "use strict";
-
-        var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag));
-        SubsequencesDistributionResultController(data);
-    </script>
+    @Html.Partial("_AngularControllerInitializer")
 
     <table class="table table-bordered table-hover">
         <thead>
@@ -103,6 +97,6 @@
         @Scripts.Render("~/bundles/angularjs")
         @Scripts.Render("~/bundles/functions")
         @Scripts.Render("~/bundles/dcjs")
-        @Scripts.Render("~/bundles/controllers/subsequencesDistributionResult")
+        @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
     }
 }

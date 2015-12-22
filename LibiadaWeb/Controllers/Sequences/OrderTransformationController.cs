@@ -45,13 +45,10 @@
             var matterIds = db.Matter.Select(d => d.Id).ToList(); 
 
             var viewDataHelper = new ViewDataHelper(db);
-
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
-            
             data.Add("links", new SelectList(db.Link.OrderBy(n => n.Id), "id", "name"));
-
             ViewBag.data = data;
-
+            ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }
 

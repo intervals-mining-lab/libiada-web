@@ -2,11 +2,20 @@
 {
     using System.Web.Mvc;
 
+    /// <summary>
+    /// The charts controller.
+    /// </summary>
     public class ChartsController : Controller
     {
-        // GET: Charts
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
+            ViewBag.angularController = "ChartsController";
             return View();
         }
     }

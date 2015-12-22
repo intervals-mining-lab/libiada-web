@@ -12,7 +12,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The dna transformation controller.
+    /// The DNA transformation controller.
     /// </summary>
     [Authorize(Roles = "Admin")]
     public class SequenceTransformerController : Controller
@@ -23,7 +23,7 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The dna sequence repository.
+        /// The DNA sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
@@ -59,13 +59,10 @@
             var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId);
 
             var viewDataHelper = new ViewDataHelper(db);
-
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Transform");
-            
             data.Add("natureId", Aliases.Nature.Genetic);
-
             ViewBag.data = data;
-
+            ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }
 

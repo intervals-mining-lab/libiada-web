@@ -63,6 +63,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetSubsequencesViewData(2, 2, true, "Compare");
             ViewBag.data = data;
+            ViewBag.angularController = "SequencesAlignmentController";
             return View();
         }
 

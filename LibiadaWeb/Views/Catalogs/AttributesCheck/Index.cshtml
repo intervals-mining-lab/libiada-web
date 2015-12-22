@@ -1,16 +1,10 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Attributes check";
 }
 
-<script>
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    GenesImportController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Attributes check</h2>
 
@@ -31,5 +25,5 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/genesImport")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

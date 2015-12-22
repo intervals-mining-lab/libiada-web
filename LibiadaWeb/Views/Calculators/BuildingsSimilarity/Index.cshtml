@@ -1,5 +1,4 @@
 ﻿@using LibiadaWeb.Models
-@using Newtonsoft.Json
 @model dynamic
 
 @{
@@ -8,12 +7,7 @@
 
 <h2>Buildings comparison</h2>
 
-<script type="text/javascript">
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    BuildingsSimilarityController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 @using (Html.BeginForm())
 {
@@ -78,5 +72,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/buildingsSimilarity")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

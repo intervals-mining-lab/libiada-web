@@ -59,6 +59,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate");
             ViewBag.data = data;
+            ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }
 

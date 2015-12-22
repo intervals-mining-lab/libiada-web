@@ -1,5 +1,4 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Characteristics";
@@ -9,12 +8,7 @@
 {
     <h2>Characteristics</h2>
 
-    <script type="text/javascript">
-        "use strict";
-
-        var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag));
-        CalculationResultController(data);
-    </script>
+    @Html.Partial("_AngularControllerInitializer")
 
     <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
         <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
@@ -56,5 +50,5 @@
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
     @Scripts.Render("~/bundles/dcjs")
-    @Scripts.Render("~/bundles/controllers/calculationResult")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

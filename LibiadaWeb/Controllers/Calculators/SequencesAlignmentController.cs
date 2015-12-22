@@ -24,9 +24,9 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
-        /// The subsequence extracter.
+        /// The subsequence extractor.
         /// </summary>
-        private readonly SubsequenceExtractor subsequenceExtracter;
+        private readonly SubsequenceExtractor subsequenceExtractor;
 
         /// <summary>
         /// The characteristic type repository.
@@ -39,7 +39,7 @@
         public SequencesAlignmentController() : base("SequencesAlignment", "Sequences alignment")
         {
             db = new LibiadaWebEntities();
-            subsequenceExtracter = new SubsequenceExtractor(db);
+            subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -54,6 +54,7 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetSubsequencesViewData(2, 2, true, "Align");
             ViewBag.data = data;
+            ViewBag.angularController = "SequencesAlignmentController";
             return View();
         }
 
@@ -220,9 +221,9 @@
 
             var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
-            List<Subsequence> subsequences = subsequenceExtracter.GetSubsequences(parentSequenceId, featureIds);
+            List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
 
-            var sequences = subsequenceExtracter.ExtractChains(subsequences, parentSequenceId);
+            var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);

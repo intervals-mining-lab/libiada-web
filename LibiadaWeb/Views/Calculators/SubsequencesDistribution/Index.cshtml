@@ -1,17 +1,10 @@
-﻿@using Newtonsoft.Json
-@model IEnumerable<Matter>
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Subsequences characteristics distribution";
 }
 
-<script type="text/javascript">
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    
-    SubsequencesDistributionController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Subsequences characteristics distribution</h2>
 
@@ -81,6 +74,6 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/subsequencesDistribution")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }
 

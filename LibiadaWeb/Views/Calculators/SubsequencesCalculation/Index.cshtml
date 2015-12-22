@@ -1,16 +1,10 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Subsequences characteristics calculation";
 }
 
-<script type="text/javascript">
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    SubsequencesCalculationController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Subsequences characteristics calculation</h2>
 
@@ -38,5 +32,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/subsequencesCalculation")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

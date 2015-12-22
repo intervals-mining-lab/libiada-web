@@ -2,10 +2,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
     using System.IO;
-    using System.Text;
 
     using Bio.Extensions;
-    using Bio.IO.FastA;
 
     using LibiadaCore.Core;
 
@@ -16,7 +14,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using NpgsqlTypes;
 
     /// <summary>
-    /// The dna sequence repository.
+    /// The DNA sequence repository.
     /// </summary>
     public class DnaSequenceRepository : SequenceImporter, IDnaSequenceRepository
     {
@@ -31,7 +29,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create dna sequence.
+        /// The create DNA sequence.
         /// </summary>
         /// <param name="sequence">
         /// The common sequence.
@@ -46,7 +44,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The complementary.
         /// </param>
         /// <param name="webApiId">
-        /// The web api id.
+        /// The web API id.
         /// </param>
         /// <exception cref="Exception">
         /// Thrown if at least one element of new sequence is missing in db
@@ -87,7 +85,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The fasta header.
         /// </param>
         /// <param name="webApiId">
-        /// The web api id.
+        /// The web API id.
         /// </param>
         /// <param name="complementary">
         /// The complementary.

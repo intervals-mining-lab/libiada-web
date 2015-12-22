@@ -1,16 +1,10 @@
-﻿@using Newtonsoft.Json
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Sequences alignment";
 }
 
-<script type="text/javascript">
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    SequencesAlignmentController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Sequences alignment</h2>
 
@@ -81,5 +75,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/sequencesAlignment")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

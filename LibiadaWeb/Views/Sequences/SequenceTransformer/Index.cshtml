@@ -1,16 +1,10 @@
-﻿@using Newtonsoft.Json
-@model IEnumerable<Matter>
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Transformation of genetic sequences";
 }
 
-<script language="javascript">
-    "use strict";
-
-    var data = @Html.Raw(JsonConvert.SerializeObject(ViewBag.data));
-    SubsequencesCalculationController(data);
-</script>
+@Html.Partial("_AngularControllerInitializer")
 
 <h2>Transformation of genetic sequences</h2>
 
@@ -47,5 +41,5 @@
 @section Scripts {
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/subsequencesCalculation")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

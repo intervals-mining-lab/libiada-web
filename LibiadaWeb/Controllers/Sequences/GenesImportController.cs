@@ -53,13 +53,10 @@
                                                            c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
-
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Import");
-
             data.Add("natureId", Aliases.Nature.Genetic);
-
             ViewBag.data = data;
-
+            ViewBag.angularController = "GenesImportController";
             return View();
         }
 

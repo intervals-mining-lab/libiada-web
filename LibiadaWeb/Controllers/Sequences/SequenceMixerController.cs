@@ -27,7 +27,7 @@
         private readonly CommonSequenceRepository sequenceRepository;
 
         /// <summary>
-        /// The dna sequence repository.
+        /// The DNA sequence repository.
         /// </summary>
         private readonly DnaSequenceRepository dnaSequenceRepository;
 
@@ -80,7 +80,7 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = viewDataHelper.FillViewData(1, 1, false, "Mix");
-
+            ViewBag.angularController = "BuildingsSimilarityController";
             return View();
         }
 

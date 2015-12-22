@@ -1,4 +1,4 @@
-﻿function matterSequenceCreateController(data) {
+﻿function MatterSequenceCreateController(data) {
     "use strict";
 
     function matterSequenceCreate($scope, filterFilter) {

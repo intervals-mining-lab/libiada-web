@@ -50,43 +50,43 @@
             bundles.Add(new ScriptBundle("~/bundles/functions").Include(
                         "~/Scripts/Angular/functions.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/accordance").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/AccordanceController").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/buildingsSimilarity").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BuildingsSimilarityController").Include(
                         "~/Scripts/Angular/Controllers/buildingsSimilarity.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/calculation").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationController").Include(
                         "~/Scripts/Angular/Controllers/calculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/calculationResult").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationResultController").Include(
                         "~/Scripts/Angular/Controllers/calculationResult.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/customCalculation").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/CustomCalculationController").Include(
                         "~/Scripts/Angular/Controllers/customCalculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/genesImport").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/GenesImportController").Include(
                         "~/Scripts/Angular/Controllers/genesImport.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/matterSequenceCreate").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/sequencesAlignment").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesAlignmentController").Include(
                         "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesCalculation").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesDistribution").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistribution.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/subsequencesDistributionResult").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/taskManager").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
                         "~/Scripts/Angular/Controllers/taskManager.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/controllers/charts").Include(
+            bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
                         "~/Scripts/Angular/Directives/tableParse.js",
                         "~/Scripts/Angular/Controllers/charts.js"));
 

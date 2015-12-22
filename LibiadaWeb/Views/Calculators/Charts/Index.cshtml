@@ -4,6 +4,8 @@
 
 <h2>@ViewBag.Title</h2>
 
+@Html.Partial("_AngularControllerInitializer")
+
 <div ng-app="Charts" ng-controller="ChartsCtrl">
     <table-parse ng-model="rawPaste" ng-array="parsedPaste" />
 
@@ -41,5 +43,5 @@
     @Scripts.Render("~/bundles/angularjs")
     @Scripts.Render("~/bundles/functions")
     @Scripts.Render("~/bundles/dc.js")
-    @Scripts.Render("~/bundles/controllers/charts")
+    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }
