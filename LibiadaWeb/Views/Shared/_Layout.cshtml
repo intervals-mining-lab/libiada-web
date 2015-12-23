@@ -6,11 +6,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    @if (!string.IsNullOrEmpty(ViewBag.angularController))
+    {
+        @Scripts.Render("~/bundles/angularjs")
+        @Scripts.Render("~/bundles/functions")
+        @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
+    }
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -67,13 +75,11 @@
         <div class="container modal-footer">
             @if (UserHelper.IsAdmin())
             {
-                <h2 class='@{
-                       var result = DbHelper.ConnectionStatus ? "text-success" : "text-danger";
-                       @result
-                   }'>
+                <h2 class='@(DbHelper.ConnectionSuccessful ? "text-success" : "text-danger")'>
                     Current database: @DbHelper.DbName
                 </h2>
             }
+            <p>All nucleotide sequences are downloaded from <a href="http://www.ncbi.nlm.nih.gov" target="_blank">GenBank</a></p>
             <p>&copy; @DateTime.Now.Year - foarLab.org</p>
         </div>
     </footer>

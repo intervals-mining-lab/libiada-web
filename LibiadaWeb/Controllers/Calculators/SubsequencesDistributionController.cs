@@ -112,7 +112,8 @@
 
                 var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
 
-                double maxSubsequences = 0;
+                int maxSubsequences = 0;
+                int maxSubsequencesIndex = 0;
 
                 for (int w = 0; w < matterIds.Length; w++)
                 {
@@ -153,6 +154,7 @@
                     if (maxSubsequences < subsequences.Count)
                     {
                         maxSubsequences = subsequences.Count;
+                        maxSubsequencesIndex = w;
                     }
 
                     var subsequencesCharacteristics = new List<SubsequenceCharacteristic>();
@@ -202,7 +204,7 @@
                 var result = new Dictionary<string, object>
                                  {
                                      { "result", sequenceCharacterisitcs },
-                                     { "maxSubsequences", maxSubsequences },
+                                     { "maxSubsequencesIndex", maxSubsequencesIndex },
                                      { "subsequencesCharacteristicName", subsequencesCharacteristicName },
                                      { "fullCharacteristicName", fullCharacteristicName }
                                  };

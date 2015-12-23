@@ -9,72 +9,52 @@
 @if (ViewBag.Error == null)
 {
     @Html.Partial("_AngularControllerInitializer")
-
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                @foreach (var res in ViewBag.result)
-                {
-                    <th colspan="4">
-                        @res.MatterName
-                    </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                @foreach (var res in ViewBag.result)
-                {
-                    <td colspan="4">
-                        @res.Characteristic
-                    </td>
-                }
-            </tr>
-            @for (var i = 0; i < ViewBag.maxSubsequences; i++)
-            {
-                <tr>
-                    @foreach (var res in ViewBag.result)
-                    {
-                        if (i < res.SubsequencesCharacteristics.Count)
-                        {
-                            <td>
-                                @res.SubsequencesCharacteristics[i].Feature
-                            </td>
-                            <td>
-                                @foreach (var attribute in res.SubsequencesCharacteristics[i].Attributes)
-                                {
-                                    @attribute
-                                    <br />
-                                }
-                            </td>
-                            <td>
-                                @foreach (var position in res.SubsequencesCharacteristics[i].Starts)
-                                {
-                                    @position
-                                    <br />
-                                }
-                            </td>
-                            <td>
-                                @res.SubsequencesCharacteristics[i].Characteristic
-                            </td>
-                        }
-                        else
-                        {
-                            <td />
-                            <td />
-                            <td />
-                            <td />
-                        }
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
-    <br />
     <div ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th colspan="4" ng-repeat="res in result" ng-bind="res.MatterName" />
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="4" ng-repeat="res in result" ng-bind="res.Characteristic" />
+                </tr>
+                <tr ng-repeat="maxSubsequences in result[maxSubsequencesIndex].SubsequencesCharacteristics" ng-init="matterIndex = $index">
+                    <td ng-repeat-start="res in result">
+                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
+                            {{res.SubsequencesCharacteristics[matterIndex].Feature}}
+                        </div>
+                    </td>
+                    <td>
+                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
+                            <div ng-repeat="attribute in res.SubsequencesCharacteristics[matterIndex].Attributes">
+                                {{attribute}}
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
+                            <div ng-repeat="position in res.SubsequencesCharacteristics[matterIndex].Starts">
+                                {{position}}
+                                <br />
+                            </div>
+                        </div>
+                    </td>
+                    <td ng-repeat-end>
+                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
+                            {{res.SubsequencesCharacteristics[matterIndex].Characteristic}}
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input name="numericXAxis" type="checkbox" ng-model="numericXAxis" value="false"/>
+                <input name="numericXAxis" type="checkbox" ng-model="numericXAxis" value="false" />
                 @Html.Label("numericXAxis", "Numeric x axis")
             </div>
         </div>
@@ -94,9 +74,6 @@
     </div>
 
     @section Scripts {
-        @Scripts.Render("~/bundles/angularjs")
-        @Scripts.Render("~/bundles/functions")
         @Scripts.Render("~/bundles/dcjs")
-        @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
     }
 }
