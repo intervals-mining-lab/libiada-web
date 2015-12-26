@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Matter>
+
+@{
+    ViewBag.Title = "Transformation of order of sequences";
+}
+
+@Html.Partial("_AngularControllerInitializer")
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal" ng-controller="OrderTransformerCtrl" ng-app="OrderTransformer">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_MattersTable")
+        <hr />
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="Link" ng-model="link" ng-options="l.Text for l in links"></select>
+                <input type="hidden" name="linkId" ng-value="link.Value" />
+                @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
+    </div>
+}

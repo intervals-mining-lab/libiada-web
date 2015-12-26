@@ -71,6 +71,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformerController").Include(
+                       "~/Scripts/Angular/Controllers/orderTransformer.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesAlignmentController").Include(
                         "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
 

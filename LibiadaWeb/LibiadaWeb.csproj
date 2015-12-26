@@ -274,7 +274,7 @@
     <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
-    <Compile Include="Controllers\Sequences\OrderTransformationController.cs" />
+    <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
@@ -523,6 +523,7 @@
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\charts.js" />
+    <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
@@ -692,8 +693,8 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Sequences\Matters\Result.cshtml" />
-    <Content Include="Views\Sequences\OrderTransformation\Index.cshtml" />
-    <Content Include="Views\Sequences\OrderTransformation\Result.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformer\Index.cshtml" />
+    <Content Include="Views\Sequences\OrderTransformer\Result.cshtml" />
     <Content Include="Views\Partial\_AngularControllerInitializer.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,8 @@
     /// <summary>
     /// The order transformation controller.
     /// </summary>
-    public class OrderTransformationController : AbstractResultController
+    [Authorize(Roles = "Admin")]
+    public class OrderTransformerController : AbstractResultController
     {
        /// <summary>
         /// The db.
@@ -28,9 +29,9 @@
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderTransformationController"/> class.
+        /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
         /// </summary>
-        public OrderTransformationController() : base("OrderTransformation", "Order transformation")
+        public OrderTransformerController() : base("OrderTransformation", "Order transformation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -48,9 +49,10 @@
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
-            data.Add("links", new SelectList(db.Link.OrderBy(n => n.Id), "id", "name"));
+            var linksFilter = new List<int> { (int)Link.Start, (int)Link.End, (int)Link.CycleStart, (int)Link.CycleEnd };
+            data.Add("links", new SelectList(db.Link.Where(l => linksFilter.Contains(l.Id)).OrderBy(n => n.Id), "id", "name"));
             ViewBag.data = JsonConvert.SerializeObject(data);
-            ViewBag.angularController = "SubsequencesCalculationController";
+            ViewBag.angularController = "OrderTransformerController";
             return View();
         }
 
