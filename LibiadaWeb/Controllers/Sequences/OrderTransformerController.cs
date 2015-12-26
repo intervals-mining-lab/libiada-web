@@ -31,7 +31,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
         /// </summary>
-        public OrderTransformerController() : base("OrderTransformation", "Order transformation")
+        public OrderTransformerController() : base("OrderTransformer", "Order transformation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -56,30 +56,28 @@
             return View();
         }
 
-        /// <summary>
-        /// The index.
-        /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
-        /// </param>
-        /// <param name="linkId">
-        /// The link id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
+       
         [HttpPost]
-        public ActionResult Index(long matterId, int linkId)
+        public ActionResult Index(long matterId, int[] linkIds, string[] transformations)
         {
             return Action(() =>
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
-                Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
-
-                BaseChain transformedChain = HighOrderFactory.Create(sourceChain, (Link)linkId);
+                var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                for (int i = 0; i < transformations.Length; i++)
+                {
+                    if (transformations[i] == "Dissimilar")
+                    {
+                        sequence = DissimilarChainFactory.Create(sequence);
+                    }
+                    else
+                    {
+                        sequence = HighOrderFactory.Create(sequence, (Link)linkIds[i]);
+                    }
+                }
                 var result = new Dictionary<string, object>
                 {
-                    { "Chain", transformedChain }
+                    { "Chain", sequence }
                 };
                 return result;
             });

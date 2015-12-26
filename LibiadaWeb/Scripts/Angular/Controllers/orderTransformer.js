@@ -16,13 +16,25 @@
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         };
 
+        function addTransformation() {
+            $scope.transformations.push({
+                link: $scope.links[0],
+                operation: { name: "Dissimilar" }
+            });
+        };
+
+        function deleteTransformation(transformation) {
+            $scope.transformations.splice($scope.transformations.indexOf(transformation), 1);
+        };
 
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
 
         $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.addTransformation = addTransformation;
+        $scope.deleteTransformation = deleteTransformation;
 
-        $scope.link = $scope.links[0];
+        $scope.transformations = [];
         $scope.selectedMatters = 0;
     }
 

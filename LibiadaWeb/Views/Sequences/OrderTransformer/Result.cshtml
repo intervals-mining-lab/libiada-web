@@ -4,8 +4,11 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<div>
-    @ViewBag.Chain.ToString()
-</div>
+@if (ViewBag.Error == null)
+{
+    <div>
+        @ViewBag.Chain.ToString()
+    </div>
+}
 
 
