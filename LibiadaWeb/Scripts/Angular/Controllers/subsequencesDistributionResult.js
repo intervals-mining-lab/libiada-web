@@ -26,6 +26,9 @@
         }
 
         function drawScatter(points) {
+            d3.select("svg").remove();
+
+            var hideTooltip = true;
 
             var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
             var width = 800 - margin.left - margin.right;
@@ -61,6 +64,22 @@
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
+            // tooltip drawing method
+            var showTooltip = function (d) {
+                tooltip.style("opacity", .9);
+                tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>" + d["attributes"].join("<br/>") + "<br/>" + " (" + xValue(d) + ", " + yValue(d) + ")")
+                    .style("background", "#000")
+                    .style("color", "#fff")
+                    .style("border-radius", "5px")
+                    .style("font-family", "monospace")
+                    .style("padding", "5px")
+                    .style("left", (d3.event.pageX + 5) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+
+                hideTooltip = false;
+            }
+
+            // calculating margins for dots
             var xMin = d3.min(points, xValue);
             var xMax = d3.max(points, xValue);
             var xMargin = (xMax - xMin) * 0.05;
@@ -101,32 +120,43 @@
             // draw dots
             svg.selectAll(".dot")
                 .data(points)
-              .enter().append("circle")
+                .enter()
+                .append("circle")
                 .attr("class", "dot")
                 .attr("r", 3.5)
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", function (d) { return color(cValue(d)); })
-                .on("mouseover", function (d) {
-                    tooltip.transition()
-                         .duration(200)
-                         .style("opacity", .9);
-                    tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>" + d["attributes"].join("<br/>") + " (" + xValue(d) + ", " + yValue(d) + ")")
-                         .style("left", (d3.event.pageX + 5) + "px")
-                         .style("top", (d3.event.pageY - 28) + "px");
-                })
-                .on("mouseout", function (d) {
-                    tooltip.transition()
-                         .duration(500)
-                         .style("opacity", 0);
-                });
+                .on("click", showTooltip);
+
+            // preventing tooltip hiding
+            tooltip.on("click", function (d) {
+                hideTooltip = false;
+            });
+
+            // hiding tooltip
+            d3.select("#chart").on("click", function (d) {
+                if (hideTooltip) {
+                    tooltip.style("opacity", 0);
+                    tooltip.html("");
+                }
+
+                hideTooltip = true;
+            });
 
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data(color.domain())
                 .enter().append("g")
                 .attr("class", "legend")
-                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; });
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
+                .on("click", function (d) {
+                    var legend = d3.select(this);
+                    legend.style("opacity", function(d) { return legend.style("opacity") == 1 ? .5 : 1; });
+                    svg.selectAll(".dot")
+                        .filter(function (dot) { return dot.name == d })
+                        .style("opacity", function(d) { return legend.style("opacity") == 1 ? 1 : 0; });
+            });
 
             // draw legend colored rectangles
             legend.append("rect")
