@@ -25,15 +25,12 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractResultController"/> class.
         /// </summary>
-        /// <param name="controllerName">
-        /// The controller name.
-        /// </param>
         /// <param name="displayName">
         /// The display name.
         /// </param>
-        protected AbstractResultController(string controllerName, string displayName)
+        protected AbstractResultController(string displayName)
         {
-            this.controllerName = controllerName;
+            this.controllerName = System.Web.HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("controller");
             this.displayName = displayName;
         }
 

@@ -42,7 +42,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
         /// </summary>
-        public CongenericCalculationController() : base("CongenericCalculation", "Congeneric calculation")
+        public CongenericCalculationController() : base("Congeneric calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

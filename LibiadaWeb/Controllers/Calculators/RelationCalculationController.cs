@@ -48,7 +48,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController() : base("RelationCalculation", "Relation calculation")
+        public RelationCalculationController() : base("Relation calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

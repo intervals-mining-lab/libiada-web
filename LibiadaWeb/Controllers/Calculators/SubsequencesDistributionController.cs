@@ -50,7 +50,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController() : base("SubsequencesDistribution", "Subsequences distribution")
+        public SubsequencesDistributionController() : base("Subsequences distribution")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

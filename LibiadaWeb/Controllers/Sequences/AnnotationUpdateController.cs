@@ -27,7 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AnnotationsUpdateController"/> class.
         /// </summary>
-        public AnnotationsUpdateController() : base("AnnotationsUpdate", "Annotations update")
+        public AnnotationsUpdateController() : base("Annotations update")
         {
             db = new LibiadaWebEntities();
             subsequenceRepository = new SubsequenceRepository(db);

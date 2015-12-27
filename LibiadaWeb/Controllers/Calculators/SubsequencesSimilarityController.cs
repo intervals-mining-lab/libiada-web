@@ -46,7 +46,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public SubsequencesSimilarityController() : base("SubsequencesSimilarity", "Subsequences similarity")
+        public SubsequencesSimilarityController() : base("Subsequences similarity")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);

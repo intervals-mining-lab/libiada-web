@@ -28,7 +28,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public SequenceCheckController() : base("SequenceCheck", "Sequence check")
+        public SequenceCheckController() : base("Sequence check")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

@@ -12,13 +12,6 @@
     public class CommonSequencesController : SequencesMattersController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
-        /// </summary>
-        public CommonSequencesController() : base("CommonSequences", "Sequence upload")
-        {
-        }
-
-        /// <summary>
         /// The index.
         /// </summary>
         /// <returns>

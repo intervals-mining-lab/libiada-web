@@ -25,7 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
-        public AttributesCheckController() : base("AttributesCheck", "Attributes check")
+        public AttributesCheckController() : base("Attributes check")
         {
             db = new LibiadaWebEntities();
         }

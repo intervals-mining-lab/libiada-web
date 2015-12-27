@@ -46,7 +46,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Calculation", "Characteristics calculation")
+        public CalculationController() : base("Characteristics calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

@@ -74,13 +74,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
-        /// <param name="controllerName">
-        /// The controller name.
-        /// </param>
         /// <param name="displayName">
         /// The display name.
         /// </param>
-        protected SequencesMattersController(string controllerName, string displayName) : base(controllerName, displayName)
+        protected SequencesMattersController() : base("Sequence upload")
         {
             Db = new LibiadaWebEntities();
             dnaSequenceRepository = new DnaSequenceRepository(Db);

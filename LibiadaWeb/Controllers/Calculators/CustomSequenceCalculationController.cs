@@ -38,7 +38,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base("CustomSequenceCalculation", "Custom sequence calculation")
+        public CustomSequenceCalculationController() : base("Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);

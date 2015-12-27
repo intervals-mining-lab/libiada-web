@@ -43,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController() : base("Clusterization", "Clusterization")
+        public ClusterizationController() : base("Clusterization")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

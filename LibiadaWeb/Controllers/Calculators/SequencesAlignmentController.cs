@@ -38,7 +38,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public SequencesAlignmentController() : base("SequencesAlignment", "Sequences alignment")
+        public SequencesAlignmentController() : base("Sequences alignment")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);

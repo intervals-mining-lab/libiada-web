@@ -9,6 +9,8 @@ CREATE EXTENSION IF NOT EXISTS plv8 WITH SCHEMA pg_catalog;
 
 COMMENT ON EXTENSION plv8 IS 'PL/JavaScript (v8) trusted procedural language';
 
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 CREATE FUNCTION check_element_in_alphabet(chain_id bigint, element_id bigint) RETURNS boolean
     LANGUAGE plv8
     AS $_$var plan = plv8.prepare( 'SELECT count(*) = 1 result FROM (SELECT unnest(alphabet) a FROM chain WHERE id = $1) c WHERE c.a = $2', ['bigint', 'bigint']);

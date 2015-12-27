@@ -33,7 +33,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController() : base("GenesImport", "Genes Import")
+        public GenesImportController() : base("Genes Import")
         {
             db = new LibiadaWebEntities();
             subsequenceRepository = new SubsequenceRepository(db);

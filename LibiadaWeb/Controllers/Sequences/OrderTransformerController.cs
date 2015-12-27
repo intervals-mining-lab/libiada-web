@@ -31,7 +31,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
         /// </summary>
-        public OrderTransformerController() : base("OrderTransformer", "Order transformation")
+        public OrderTransformerController() : base("Order transformation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

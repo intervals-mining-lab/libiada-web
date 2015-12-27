@@ -42,7 +42,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController() : base("SubsequencesCalculation", "Subsequences characteristics calculation")
+        public SubsequencesCalculationController() : base("Subsequences characteristics calculation")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);

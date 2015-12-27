@@ -30,7 +30,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AnnotationsCheckController"/> class.
         /// </summary>
-        public AnnotationsCheckController() : base("AnnotationsCheck", "Subsequences annotations check")
+        public AnnotationsCheckController() : base("Subsequences annotations check")
         {
             db = new LibiadaWebEntities();
             subsequenceRepository = new SubsequenceRepository(db);
