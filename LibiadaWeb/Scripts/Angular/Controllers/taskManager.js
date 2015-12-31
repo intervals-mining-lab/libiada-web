@@ -16,7 +16,7 @@
                      : status === "Error" ? "glyphicon-alert text-danger"
                      : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
 
-            return "glyphicon " + icon;
+            return "glyphicon " + icon + " lead";
         }
 
         $scope.calculateStatusClass = calculateStatusClass;
