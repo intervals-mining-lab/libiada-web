@@ -202,20 +202,18 @@
                         if (theoretical)
                         {
                             theoreticalRanks[w].Add(new List<double>());
-                            ICongenericCalculator countCalculator =
-                                CalculatorsFactory.CreateCongenericCalculator("Count");
+                            ICongenericCalculator countCalculator = CalculatorsFactory.CreateCongenericCalculator("Count");
                             var counts = new List<int>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
-                                counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.End));
+                                counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
                             }
 
-                            ICongenericCalculator frequencyCalculator =
-                                CalculatorsFactory.CreateCongenericCalculator("Probability");
+                            ICongenericCalculator frequencyCalculator = CalculatorsFactory.CreateCongenericCalculator("Probability");
                             var frequency = new List<double>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
-                                frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.End));
+                                frequency.Add(frequencyCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
                             }
 
                             double maxFrequency = frequency.Max();

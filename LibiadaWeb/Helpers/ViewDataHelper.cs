@@ -12,6 +12,8 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using Link = LibiadaCore.Core.Link;
+
     /// <summary>
     /// Class filling data for ViewBag.
     /// </summary>
@@ -178,15 +180,21 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = db.Link.Include(l => l.CharacteristicTypeLink).ToList();
+            var links = Enum.GetValues(typeof(Link)).Cast<Link>();
 
             if (!UserHelper.IsAdmin())
             {
-                var linkIds = new List<int> { Aliases.Link.NotApplied, Aliases.Link.Start, Aliases.Link.Cycle };
-                links = links.Where(l => linkIds.Contains(l.Id)).ToList();
+                links = new List<Link> { Link.NotApplied, Link.Start, Link.Cycle };
             }
-            
-            var linksData = links.Select(l => new { Value = l.Id, Text = l.Name, CharacteristicTypeLink = l.CharacteristicTypeLink.Select(ctl => ctl.Id) }).ToList();
+
+            var characteristicTypeLinks = db.CharacteristicTypeLink.ToList();
+
+            var linksData = links.Select(l => new
+                                                {
+                                                    Value = (int)l, 
+                                                    Text = EnumHelper.GetDisplayValue(l), 
+                                                    CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.LinkId == (int)l).Select(ctl => ctl.Id)
+                                                }).ToList();
 
             foreach (var characteristicType in characteristicTypes)
             {

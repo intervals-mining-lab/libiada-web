@@ -49,14 +49,29 @@
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
-            var linksFilter = new List<int> { (int)Link.Start, (int)Link.End, (int)Link.CycleStart, (int)Link.CycleEnd };
-            data.Add("links", new SelectList(db.Link.Where(l => linksFilter.Contains(l.Id)).OrderBy(n => n.Id), "id", "name"));
+            var links = new List<Link> { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
+            links = links.OrderBy(n => (int)n).ToList();
+            data.Add("links", links.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToList());
             ViewBag.data = JsonConvert.SerializeObject(data);
             ViewBag.angularController = "OrderTransformerController";
             return View();
         }
 
-       
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
+        /// <param name="linkIds">
+        /// The link ids.
+        /// </param>
+        /// <param name="transformations">
+        /// The transformations.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         public ActionResult Index(long matterId, int[] linkIds, string[] transformations)
         {

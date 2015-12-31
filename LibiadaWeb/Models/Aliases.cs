@@ -231,7 +231,7 @@
         public static class Link
         {
             /// <summary>
-            /// Link not applied.
+            /// Link is not applied.
             /// </summary>
             public const int NotApplied = 0;
 
@@ -259,6 +259,16 @@
             /// Cycle link.
             /// </summary>
             public const int Cycle = 5;
+
+            /// <summary>
+            /// The cycle start link.
+            /// </summary>
+            public const int CycleStart = 6;
+
+            /// <summary>
+            /// The cycle end link.
+            /// </summary>
+            public const int CycleEnd = 7;
         }
 
         /// <summary>

@@ -287,7 +287,7 @@
             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
-                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.None);
+                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
                 frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
             }
 
