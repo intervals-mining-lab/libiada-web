@@ -7,6 +7,7 @@
     using System.Threading;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 
@@ -49,6 +50,7 @@
                             Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
                             ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
                             TaskState = t.TaskState.ToString(),
+                            TaskStateName = EnumHelper.GetDisplayValue(t.TaskState),
                             t.UserId
                         });
 

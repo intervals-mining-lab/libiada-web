@@ -20,76 +20,75 @@
 <div ng-app="TaskManager" ng-controller="TaskManagerCtrl">
     <table st-table="tasks" class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>
-                #
-            </th>
-            @if (UserHelper.IsAdmin())
-            {
+            <tr>
                 <th>
-                    User id
+                    #
                 </th>
-            }
-            <th>
-                Name
-            </th>
-            <th>
-                Created
-            </th>
-            <th>
-                Started
-            </th>
-            <th>
-                Completed
-            </th>
-            <th>
-                Execution time
-            </th>
-            <th>
-                Status
-            </th>
-            <th>
-                Results
-            </th>
-            <th>
-                Actions
-            </th>
-        </tr>
+                @if (UserHelper.IsAdmin())
+                {
+                    <th>
+                        User id
+                    </th>
+                }
+                <th>
+                    Name
+                </th>
+                <th>
+                    Created
+                </th>
+                <th>
+                    Started
+                </th>
+                <th>
+                    Completed
+                </th>
+                <th>
+                    Execution time
+                </th>
+                <th>
+                    <span class="glyphicon glyphicon-info-sign text-primary" title="Status" aria-hidden="true"></span> 
+                </th>
+                <th>
+                    Results
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
         </thead>
         <tbody>
-
-        <tr ng-if="tasks.length == 0">
-            <td colspan="11" class="empty-table">
-                There are no sheduled or active tasks
-            </td>
-        </tr>
-
-        <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
-            <td ng-bind="$index + 1"/>
-            @if (UserHelper.IsAdmin())
-            {
-                <td ng-bind="task.UserId"/>
-            }
-            <td ng-bind="task.DisplayName"/>
-            <td ng-bind="task.Created"/>
-            <td ng-bind="task.Started"/>
-            <td ng-bind="task.Completed"/>
-            <td ng-bind="task.ExecutionTime"/>
-            <td ng-bind="task.TaskState" class="text-bold"/>
-            <td>
-                <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}">View result</a>
-            </td>
-            <td>
-                @using (Html.BeginForm("Delete", "TaskManager", FormMethod.Post))
+            <tr ng-if="tasks.length == 0">
+                <td colspan="10" class="empty-table">
+                    There are no sheduled or active tasks
+                </td>
+            </tr>
+            <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
+                <td ng-bind="$index + 1" />
+                @if (UserHelper.IsAdmin())
                 {
-                    @Html.AntiForgeryToken()
-
-                    <input type="hidden" name="id" ng-value="task.Id"/>
-                    <input type="submit" value="Delete task" class="btn btn-default"/>
+                    <td ng-bind="task.UserId" />
                 }
-            </td>
-        </tr>
+                <td ng-bind="task.DisplayName" />
+                <td ng-bind="task.Created" />
+                <td ng-bind="task.Started" />
+                <td ng-bind="task.Completed" />
+                <td ng-bind="task.ExecutionTime" />
+                <td aria-label="{{task.TaskStateName}}">
+                    <span ng-class="calculateStatusGlyphicon(task.TaskState)" title="{{task.TaskStateName}}" aria-hidden="true"></span>
+                </td>
+                <td>
+                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}">View result</a>
+                </td>
+                <td>
+                    @using (Html.BeginForm("Delete", "TaskManager", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
 
+                        <input type="hidden" name="id" ng-value="task.Id" />
+                        <input type="submit" value="Delete task" class="btn btn-default" />
+                    }
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -102,7 +101,7 @@
         <div class="form-horizontal">
             <div class="form-group">
                 <div class="col-md-offset-0 col-md-10">
-                    <input type="submit" value="Delete all tasks" class="btn btn-default" ng-hide="tasks.length == 0" ng-cloak/>
+                    <input type="submit" value="Delete all tasks" class="btn btn-default" ng-hide="tasks.length == 0" ng-cloak />
                 </div>
             </div>
         </div>

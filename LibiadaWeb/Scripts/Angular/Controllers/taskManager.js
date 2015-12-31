@@ -10,7 +10,17 @@
                  : status === "Error" ? "danger" : "";
         }
 
+        function calculateStatusGlyphicon(status) {
+            var icon = status === "InProgress" ? "glyphicon-tasks text-info"
+                     : status === "Completed" ? "glyphicon-ok-sign text-success"
+                     : status === "Error" ? "glyphicon-alert text-danger"
+                     : status === "InQueue" ? "glyphicon-hourglass text-muted" : "";
+
+            return "glyphicon " + icon;
+        }
+
         $scope.calculateStatusClass = calculateStatusClass;
+        $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
     }
 
     angular.module("TaskManager", []).controller("TaskManagerCtrl", ["$scope", taskManager]);
