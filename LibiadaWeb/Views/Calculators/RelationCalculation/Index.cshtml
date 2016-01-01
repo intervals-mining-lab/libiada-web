@@ -25,9 +25,9 @@
             </div>
             <div ng-show="showFilters">
                 <div class="form-group">
-                    @Html.Label("filterSize", "Count of strongest dependencies to show", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="filterSize">Count of strongest dependencies to show:</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="filterSize" type="number" value="10" min="1" />
+                        <input class="form-control" name="filterSize" type="number" value="10" min="1" id="filterSize" />
                         @Html.ValidationMessage("filterSize", "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -38,9 +38,9 @@
                     </div>
                 </div>
                 <div class="form-group" ng-show="frequencyFilter">
-                    @Html.Label("frequencyCount", "X", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="frequencyCount">X:</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="frequencyCount" type="number" value="10" min="1" />
+                        <input class="form-control" name="frequencyCount" type="number" value="10" min="1" id="frequencyCount" />
                         @Html.ValidationMessage("frequencyCount", "", new { @class = "text-danger" })
                     </div>
                 </div>

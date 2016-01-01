@@ -697,6 +697,7 @@
     <Content Include="Views\Sequences\OrderTransformer\Index.cshtml" />
     <Content Include="Views\Sequences\OrderTransformer\Result.cshtml" />
     <Content Include="Views\Partial\_AngularControllerInitializer.cshtml" />
+    <Content Include="Views\Partial\_CharacteristicNatureParams.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

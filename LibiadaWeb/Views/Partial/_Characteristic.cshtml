@@ -1,56 +1,30 @@
-﻿@using LibiadaWeb.Models
-@using LibiadaWeb.Models.Account
-@model dynamic
+﻿@using LibiadaWeb.Models.Account
 
 <br />
 <div class="form-group">
+    <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
     <div class="col-md-10">
-        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)"></select>
-        <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value" />
-        @Html.ValidationMessage("characteristicId", "", new { @class = "text-danger" })
+        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
+        <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value"/>
     </div>
 </div>
 <div class="form-group" ng-show="isLinkable(characteristic)">
+    <label class="control-label col-md-2" for="link">Link:</label>
     <div class="col-md-10">
-        <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks"></select>
+        <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
         <input type="hidden" name="linkId" ng-value="characteristic.link.Value"/>
         <input type="hidden" name="characteristicTypeLinkId" ng-value="characteristic.link.CharacteristicTypeLinkId"/>
-        @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
     </div>
 </div>
 @if (UserHelper.IsAdmin())
 {
     <div class="form-group">
+        <label class="control-label col-md-2" for="notation">Notation:</label>
         <div class="col-md-10">
-            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
-            @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>
         </div>
     </div>
 }
-<input type="hidden" name="notationId" ng-value="characteristic.notation.Value" />
-<div ng-switch="natureId">
-    <div ng-switch-when="@Aliases.Nature.Literature">
-        <div class="form-group">
-            <div class="col-md-10">
-                <select class="form-control" title="Language" ng-model="characteristic.language" ng-options="l.Text for l in languages"></select>
-                <input type="hidden" name="languageId" ng-value="characteristic.language.Value"/>
-                @Html.ValidationMessage("languageId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-10">
-                <select class="form-control" title="Translator" ng-model="characteristic.translator" ng-options="t.Text for t in translators"></select>
-                <input type="hidden" name="translatorId" ng-value="characteristic.translator.Value"/>
-                @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-    <div ng-switch-when="@Aliases.Nature.Genetic">
-    </div>
-    <div ng-switch-when="@Aliases.Nature.Music">
-    </div>
-    <div ng-switch-when="@Aliases.Nature.Data">
-    </div>
-</div>
-<hr/>
-<br/>
+<input type="hidden" name="notationId" ng-value="characteristic.notation.Value"/>
+
+@Html.Partial("_CharacteristicNatureParams")

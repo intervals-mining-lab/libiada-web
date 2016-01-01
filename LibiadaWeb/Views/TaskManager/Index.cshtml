@@ -45,8 +45,8 @@
                 <th>
                     Execution time
                 </th>
-                <th>
-                    <span class="glyphicon glyphicon-info-sign text-primary lead" title="Status" aria-hidden="true"></span>
+                <th class="text-center">
+                    <big><span class="glyphicon glyphicon-info-sign text-primary" title="Status" aria-hidden="true"></span></big>
                 </th>
                 <th>
                     Results
@@ -74,7 +74,7 @@
                 <td ng-bind="task.Completed" />
                 <td ng-bind="task.ExecutionTime" />
                 <td aria-label="{{task.TaskStateName}}">
-                    <span ng-class="calculateStatusGlyphicon(task.TaskState)" title="{{task.TaskStateName}}" aria-hidden="true"></span>
+                    <big><span ng-class="calculateStatusGlyphicon(task.TaskState)" title="{{task.TaskStateName}}" aria-hidden="true"></span></big>
                 </td>
                 <td>
                     <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}">View result</a>

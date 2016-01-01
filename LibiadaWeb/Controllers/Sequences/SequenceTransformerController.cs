@@ -58,7 +58,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId);
+            var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Transform");

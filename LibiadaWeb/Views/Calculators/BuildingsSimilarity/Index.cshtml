@@ -1,5 +1,4 @@
-﻿@using LibiadaWeb.Models
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Buildings comparison";
@@ -20,47 +19,25 @@
             @Html.Partial("_MattersTable")
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("congeneric")
-                    @Html.Label("congeneric", "Compare buildings of congeneric sequences")
+                    <label>
+                        <input type="checkbox" name="congeneric"/>
+                        Compare buildings of congeneric sequences
+                    </label>
                 </div>
             </div>
             <hr />
             <div class="form-group">
+                <label class="control-label col-md-2" for="notation">Notation:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
-                    <input type="hidden" name="notationId" ng-value="notation.Value" />
-                    @Html.ValidationMessage("notationId", "", new { @class = "text-danger" })
+                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>
+                    <input type="hidden" name="notationId" ng-value="notation.Value"/>
                 </div>
             </div>
-            <div ng-switch="natureId">
-                <div ng-switch-when="@Aliases.Nature.Literature">
-                    <div class="form-group">
-                        <div class="col-md-10">
-                            <select class="form-control" title="Language" ng-model="language" ng-options="l.Text for l in languages"></select>
-                            <input type="hidden" name="languageIds" ng-value="language.Value" />
-                            @Html.ValidationMessage("languageIds", "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-10">
-                            <select class="form-control" title="Translator" ng-model="translator" ng-options="t.Text for t in translators"></select>
-                            <input type="hidden" name="translatorIds" ng-value="translator.Value" />
-                            @Html.ValidationMessage("translatorIds", "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                </div>
-                <div ng-switch-when="@Aliases.Nature.Genetic">
-                </div>
-                <div ng-switch-when="@Aliases.Nature.Music">
-                </div>
-                <div ng-switch-when="@Aliases.Nature.Data">
-                </div>
-            </div>
-            <hr />
+            @Html.Partial("_CharacteristicNatureParams")
             <div class="form-group">
-                @Html.Label("length", "Window size", new { @class = "control-label col-md-2" })
+                <label class="control-label col-md-2" for="length">Window size:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="length" type="number" value="10" min="1" />
+                    <input class="form-control" name="length" type="number" value="10" min="1" id="length"/>
                     @Html.ValidationMessage("length", "", new { @class = "text-danger" })
                 </div>
             </div>

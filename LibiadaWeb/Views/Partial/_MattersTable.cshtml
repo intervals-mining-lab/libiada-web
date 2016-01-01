@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<Matter>
 
-<br />
-@(Html.Label("matterIds", "Sequences", new { @class = "control-label" }))
-<table st-table="matters | filter:{Nature: natureId}" st-safe-src="matters" class="table table-bordered table-hover">
+<br/>
+<label class="control-label">Sequences:</label>
+<table st-table="matters | filter:{Nature: natureId}" st-safe-src="matters" ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>

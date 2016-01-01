@@ -74,9 +74,6 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
-        /// <param name="displayName">
-        /// The display name.
-        /// </param>
         protected SequencesMattersController() : base("Sequence upload")
         {
             Db = new LibiadaWebEntities();

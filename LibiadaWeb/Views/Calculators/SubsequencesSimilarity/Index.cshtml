@@ -19,15 +19,13 @@
             @Html.Partial("_FeaturesSelect")
             @Html.Partial("_Characteristic")
             <div class="form-group">
-                @Html.Label("maxDifference", "Maximum difference", new { @class = "control-label col-md-2" })
+                <label class="control-label col-md-2" for="maxDifference">Maximum difference:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" />
+                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" id="maxDifference" />
                     @Html.ValidationMessage("maxDifference", "", new { @class = "text-danger" })
                 </div>
             </div>
-
             <hr />
-
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>

@@ -34,22 +34,22 @@
                 </div>
             </div>
             <div class="form-group" ng-show="transformation.operation.name == 'HigherOrder'">
+                <label class="control-label col-md-2" for="link">Link:</label>
                 <div class="col-md-10">
-                    <select class="form-control" title="Link" ng-model="transformation.link" ng-options="l.Text for l in links"></select>
-                    <input type="hidden" name="linkIds" ng-value="link.Value" />
-                    @Html.ValidationMessage("linkId", "", new { @class = "text-danger" })
+                    <select class="form-control" title="Link" ng-model="transformation.link" ng-options="l.Text for l in links" id="link"></select>
+                    <input type="hidden" name="linkIds" ng-value="link.Value"/>
                 </div>
             </div>
             <br />
             <div class="form-group">
-                <div class="col-md-10">
+                <div class=" col-md-offset-2 col-md-10">
                     <button type="button" class="btn btn-danger" ng-click="deleteTransformation(transformation)" ng-disabled="transformation.length <= 1">Delete transformation</button>
                 </div>
             </div>
             <br />
         </div>
         <div class="form-group">
-            <div class="col-md-10">
+            <div class="col-md-offset-2  col-md-10">
                 <button type="button" class="btn btn-success" ng-init="addTransformation()" ng-click="addTransformation()">Add transformation</button>
             </div>
         </div>

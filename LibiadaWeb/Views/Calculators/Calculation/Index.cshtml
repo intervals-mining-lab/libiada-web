@@ -32,9 +32,9 @@
             </div>
             <hr />
             <div class="form-group" ng-show="rotate">
-                @Html.Label("rotationLength", "Rotation length", new { @class = "control-label col-md-2" })
+                <label class="control-label col-md-2" for="rotationLength">Rotation length:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="rotationLength" type="number" value="100" min="1"/>
+                    <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
                     @Html.ValidationMessage("rotationLength", "", new { @class = "text-danger" })
                 </div>
             </div>
