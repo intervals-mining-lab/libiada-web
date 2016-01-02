@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Controllers.Catalogs
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
     using System.Collections.Generic;
@@ -27,7 +27,7 @@
         /// </summary>
         public AttributesCheckController() : base("Attributes check")
         {
-            db = new LibiadaWebEntities();
+            this.db = new LibiadaWebEntities();
         }
 
         /// <summary>
@@ -38,20 +38,20 @@
         /// </returns>
         public ActionResult Index()
         {
-            var subsequencesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
+            var subsequencesSequenceIds = this.db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var matterIds = this.db.DnaSequence.Where(c => c.WebApiId != null && 
                                                       !subsequencesSequenceIds.Contains(c.Id) &&
                                                       (c.FeatureId == Aliases.Feature.FullGenome || 
                                                        c.FeatureId == Aliases.Feature.MitochondrionGenome || 
                                                        c.FeatureId == Aliases.Feature.Plasmid))
                                                       .Select(c => c.MatterId).ToList();
 
-            var viewDataHelper = new ViewDataHelper(db);
+            var viewDataHelper = new ViewDataHelper(this.db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Check");
             data.Add("natureId", Aliases.Nature.Genetic);
-            ViewBag.data = JsonConvert.SerializeObject(data);
-            ViewBag.angularController = "GenesImportController";
-            return View();
+            this.ViewBag.data = JsonConvert.SerializeObject(data);
+            this.ViewBag.angularController = "GenesImportController";
+            return this.View();
         }
 
         /// <summary>
@@ -72,15 +72,15 @@
         [HttpPost]
         public ActionResult Index(long[] matterIds)
         {
-            return Action(() =>
+            return this.Action(() =>
                 {
                     var matterNames = new List<string>();
                     var attributes = new List<string>();
 
                     foreach (var matterId in matterIds)
                     {
-                        long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                        DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
+                        long sequenceId = this.db.DnaSequence.Single(d => d.MatterId == matterId).Id;
+                        DnaSequence parentSequence = this.db.DnaSequence.Single(c => c.Id == sequenceId);
 
                         Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
                         var features = NcbiHelper.GetFeatures(stream);
@@ -91,10 +91,10 @@
                             attributes.AddRange(featureAttributes.Select(attribute => attribute.Key));
                         }
 
-                        matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                        matterNames.Add(this.db.Matter.Single(m => m.Id == matterId).Name);
                     }
 
-                    var databaseAttributes = db.Attribute.Select(a => a.Name).ToList();
+                    var databaseAttributes = this.db.Attribute.Select(a => a.Name).ToList();
                     attributes = attributes.Distinct().Where(a => !databaseAttributes.Contains(a)).ToList();
 
                     return new Dictionary<string, object>

@@ -268,7 +268,7 @@
     <Compile Include="Controllers\Calculators\RelationCalculationController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
-    <Compile Include="Controllers\Catalogs\AttributesCheckController.cs" />
+    <Compile Include="Controllers\Sequences\AttributesCheckController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
@@ -681,8 +681,8 @@
     <Content Include="Views\Calculators\SubsequencesSimilarity\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequencesSimilarity\Index.cshtml" />
     <Content Include="Views\Partial\_MattersTable.cshtml" />
-    <Content Include="Views\Catalogs\AttributesCheck\Index.cshtml" />
-    <Content Include="Views\Catalogs\AttributesCheck\Result.cshtml" />
+    <Content Include="Views\Sequences\AttributesCheck\Index.cshtml" />
+    <Content Include="Views\Sequences\AttributesCheck\Result.cshtml" />
     <Content Include="Views\Sequences\AnnotationsCheck\Index.cshtml" />
     <Content Include="Views\Sequences\AnnotationsCheck\Result.cshtml" />
     <Content Include="Views\Sequences\AnnotationUpdate\Result.cshtml" />
