@@ -19,6 +19,7 @@
                         attributes: subsequencesData.Attributes,
                         feature: subsequencesData.Feature,
                         positions: subsequencesData.Starts,
+                        lengths: subsequencesData.Lengths,
                         subsequenceWebApiId: subsequencesData.WebApiId,
                         x: $scope.numericXAxis ? i + 1 : sequenceData.Characteristic,
                         y: subsequencesData.Characteristic
@@ -72,9 +73,27 @@
             // tooltip drawing method
             var showTooltip = function (d) {
                 tooltip.style("opacity", .9);
-                tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>"
+
+                var genBank = "http://www.ncbi.nlm.nih.gov/nuccore/";
+
+                var tooltipHeader = d["sequenceWebApiId"] ? 
+                                    "<a target='_blank' href='" + genBank + d["sequenceWebApiId"] + "'>" + d["name"] + "</a>" :
+                                    d["name"];
+
+                var peptideGenbankLink = d["subsequenceWebApiId"] ?
+                                         "<a target='_blank' href='" + genBank + d["subsequenceWebApiId"] + "'>Peptide ncbi page</a><br/>" : "";
+
+                var start = d["positions"][0] + 1;
+                var end = d["positions"][0] + d["lengths"][0];
+
+                var positionGenbankLink = d["sequenceWebApiId"] ? 
+                                          "<a target='_blank' href='" + genBank + d["sequenceWebApiId"] + "?from=" + start + "&to=" + end + "'>" + d["positions"].join(", ") + "</a>" :
+                                          d["positions"].join(", ");
+                tooltip.html(tooltipHeader + "<br/>"
+                           + peptideGenbankLink
+                           + d["feature"] + "<br/>"
                            + d["attributes"].join("<br/>") + "<br/>"
-                           + "Position: " + d["positions"].join(", ") + "<br/>"
+                           + "Position: " + positionGenbankLink + "<br/>"
                            + " (" + xValue(d) + ", " + yValue(d) + ")")
                     .style("background", "#000")
                     .style("color", "#fff")
