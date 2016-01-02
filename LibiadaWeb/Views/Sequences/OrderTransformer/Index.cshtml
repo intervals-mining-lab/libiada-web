@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <div class="form-horizontal" ng-controller="OrderTransformerCtrl" ng-app="OrderTransformer">
         <h4>Sequences and parameters</h4>
         <hr />

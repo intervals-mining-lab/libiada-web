@@ -73,6 +73,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId, int[] linkIds, string[] transformations)
         {
             return Action(() =>

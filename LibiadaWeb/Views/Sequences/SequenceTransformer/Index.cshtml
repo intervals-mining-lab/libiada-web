@@ -8,29 +8,30 @@
 
 @using (Html.BeginForm())
 {
-        <div class="form-horizontal" ng-app="SubsequencesCalculation" ng-controller="SubsequencesCalculationCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_MattersTable")
-            <label class="control-label col-md-2" for="transformType">Transform nucleotide sequences To:</label>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="transformType" value="toAmino" checked id="transformType" />
-                        Amino
-                    </label>
-                </div>
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" ng-app="SubsequencesCalculation" ng-controller="SubsequencesCalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_MattersTable")
+        <label class="control-label col-md-2" for="transformType">Transform nucleotide sequences To:</label>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="transformType" value="toAmino" checked id="transformType" />
+                    Amino
+                </label>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="transformType" value="toTriplet" id="transformType" />
-                        Triplet
-                    </label>
-                </div>
-            </div>
-            <hr />
-            @Html.Partial("_MattersSubmit")
         </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="transformType" value="toTriplet" id="transformType" />
+                    Triplet
+                </label>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
+    </div>
 }

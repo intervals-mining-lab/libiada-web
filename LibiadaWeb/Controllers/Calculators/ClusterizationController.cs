@@ -95,6 +95,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,

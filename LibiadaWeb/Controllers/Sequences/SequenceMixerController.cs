@@ -111,6 +111,7 @@
         /// Thrown if sequence nature is unknown.
         /// </exception>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId, int notationId, int? languageId, int? translatorId, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);

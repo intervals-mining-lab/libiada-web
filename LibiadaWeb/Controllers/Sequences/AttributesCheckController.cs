@@ -70,6 +70,7 @@
         /// Thrown if unknown part is found.
         /// </exception>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(long[] matterIds)
         {
             return Action(() =>

@@ -8,6 +8,7 @@
 
 @using (Html.BeginForm("Index", "CustomSequenceCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    @Html.AntiForgeryToken()
     <div class="form-horizontal" ng-app="CustomCalculation" ng-controller="CustomCalculationCtrl">
         <h4>Sequence and parameters</h4>
         <hr />

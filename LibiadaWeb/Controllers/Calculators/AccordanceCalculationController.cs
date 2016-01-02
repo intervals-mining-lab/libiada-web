@@ -93,6 +93,7 @@
         /// Thrown alphabets of sequences are not equal.
         /// </exception>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,

@@ -59,6 +59,7 @@
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId, string[] file)
         {
             return Action(() =>
