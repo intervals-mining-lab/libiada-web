@@ -31,7 +31,7 @@
             var hideTooltip = true;
 
             var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
-            var width = 800 - margin.left - margin.right;
+            var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
@@ -50,7 +50,7 @@
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
             // setup fill color
             var cValue = function (d) { return d.name; };
-            var color = d3.scale.category10();
+            var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -151,12 +151,12 @@
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
                 .on("click", function (d) {
-                    var legend = d3.select(this);
-                    legend.style("opacity", function(d) { return legend.style("opacity") == 1 ? .5 : 1; });
+                    var legendEntry = d3.select(this);
+                    legendEntry.style("opacity", function (d) { return legendEntry.style("opacity") == 1 ? .5 : 1; });
                     svg.selectAll(".dot")
                         .filter(function (dot) { return dot.name == d })
-                        .style("opacity", function(d) { return legend.style("opacity") == 1 ? 1 : 0; });
-            });
+                        .attr("r", function (d) { return legendEntry.style("opacity") == 1 ? 3.5 : 0; });
+                });
 
             // draw legend colored rectangles
             legend.append("rect")
