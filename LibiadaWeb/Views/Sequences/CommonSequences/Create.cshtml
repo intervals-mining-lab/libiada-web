@@ -90,37 +90,43 @@
             <div ng-switch-when="@Aliases.Nature.Genetic">
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.CheckBox("partial")
-                        @Html.Label("partial", "Sequence is partial (incomplete)")
+                        <label>
+                            <input type="checkbox" name="partial" />
+                            Sequence is partial (incomplete)
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.CheckBox("complementary")
-                        @Html.Label("complementary", "Sequence is complementary to source sequence")
+                        <label>
+                            <input type="checkbox" name="complementary" />
+                            Sequence is complementary to source sequence
+                        </label>
                     </div>
                 </div>
             </div>
             <div ng-switch-when="@Aliases.Nature.Literature">
                 <div class="form-group">
-                    @Html.Label("languageId", "Language of literary work", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="languageId">Language of literary work:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages"></select>
-                        <input type="hidden" name="languageId" ng-value="languageId" />
+                        <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages" id="languageId"></select>
+                        <input type="hidden" name="languageId" ng-value="languageId"/>
                         @Html.ValidationMessage("languageId", "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.CheckBox("original", new { ng_model = "original" })
-                        @Html.Label("original", "Literary work is in original language (not in translation)")
+                        <label>
+                            <input type="checkbox" name="original" ng-model="original" />
+                            Literary work is in original language (not in translation)
+                        </label>
                     </div>
                 </div>
                 <div class="form-group" ng-hide="original">
-                    @Html.Label("translatorId", "Translator", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="translatorId">Translator:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators"></select>
-                        <input type="hidden" name="translatorId" ng-value="translatorId" />
+                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translatorId"></select>
+                        <input type="hidden" name="translatorId" ng-value="translatorId"/>
                         @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -129,9 +135,9 @@
             </div>
             <div ng-switch-when="@Aliases.Nature.Data">
                 <div class="form-group">
-                    @Html.Label("precision", "Precision of elements", new { @class = "control-label col-md-2" })
+                    <label class="control-label col-md-2" for="precision">Precision of elements:</label>
                     <div class="col-md-10">
-                        <input class="form-control" name="precision" type="number" value="0" min="0" max="6" />
+                        <input class="form-control" name="precision" id="precision" type="number" value="0" min="0" max="6" />
                         @Html.ValidationMessage("precision", "", new { @class = "text-danger" })
                     </div>
                 </div>

@@ -20,14 +20,18 @@
             @Html.Partial("_Characteristics")
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("complementary", new { ng_model = "complementary" })
-                    @Html.Label("complementary", "Calculate characteristic for complementary sequence")
+                    <label>
+                        <input type="checkbox" name="complementary" ng-model="complementary" />
+                        Calculate characteristic for complementary sequence
+                    </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("rotate", new { ng_model = "rotate" })
-                    @Html.Label("rotate", "Rotate sequences cyclically")
+                    <label>
+                        <input type="checkbox" name="rotate" ng-model="rotate" />
+                        Rotate sequences cyclically
+                    </label>
                 </div>
             </div>
             <hr />

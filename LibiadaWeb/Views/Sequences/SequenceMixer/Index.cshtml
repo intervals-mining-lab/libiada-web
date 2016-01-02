@@ -1,5 +1,4 @@
-﻿@using LibiadaWeb.Models
-@model IEnumerable<Matter>
+﻿@model IEnumerable<Matter>
 
 @{
     ViewBag.Title = "Generate sequence rearrangements";
@@ -27,9 +26,9 @@
             </div>
             @Html.Partial("_CharacteristicNatureParams")
             <div class="form-group">
-                @Html.Label("scrambling", "Scrambling count", new { @class = "control-label col-md-2" })
+                <label class="control-label col-md-2" for="scrambling">Scrambling count:</label>
                 <div class="col-md-10">
-                    <input class="form-control" name="scrambling" type="number" value="10" min="1" />
+                    <input class="form-control" name="scrambling" id="scrambling" type="number" value="10" min="1" />
                     @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })
                 </div>
             </div>

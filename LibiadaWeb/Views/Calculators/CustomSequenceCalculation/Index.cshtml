@@ -16,8 +16,10 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                @Html.CheckBox("localFile", new { ng_model = "localFile" })
-                @Html.Label("localFile", "Load sequence from fasta file(s)")
+                <label>
+                    <input type="checkbox" name="localFile" ng-model="localFile" />
+                    Load sequence from fasta file(s)
+                </label>
             </div>
         </div>
         <div class="form-group" ng-hide="localFile">

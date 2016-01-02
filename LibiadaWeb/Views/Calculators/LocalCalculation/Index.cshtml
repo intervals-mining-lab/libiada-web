@@ -36,26 +36,34 @@
             <hr />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("delta")
-                    @Html.Label("delta", "Calculate difference between characteristics")
+                    <label>
+                        <input type="checkbox" name="delta" />
+                        Calculate difference between characteristics
+                    </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("growingWindow")
-                    @Html.Label("growingWindow", "Growing window (start is fixed at 0 position)")
+                    <label>
+                        <input type="checkbox" name="growingWindow" />
+                        Growing window (start is fixed at 0 position)
+                    </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("fourier")
-                    @Html.Label("fourier", "Calculate Fast fourier transform")
+                    <label>
+                        <input type="checkbox" name="fourier" />
+                        Calculate Fast fourier transform
+                    </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("autocorrelation")
-                    @Html.Label("autocorrelation", "Calculate autocorrelation")
+                    <label>
+                        <input type="checkbox" name="autocorrelation" />
+                        Calculate autocorrelation
+                    </label>
                 </div>
             </div>
             <hr/>

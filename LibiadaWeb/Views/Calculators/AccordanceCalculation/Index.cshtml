@@ -18,11 +18,11 @@
             @Html.Partial("_NatureSelect")
             @Html.Partial("_MattersTable")
             @Html.Partial("_Characteristic")
-            @Html.Label("calculationType", "Calculation type", new { @class = "control-label" })
+            <label class="control-label col-md-2" for="calculationType">Calculation type:</label>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="calculationType" value="Equality" checked />
+                        <input type="radio" name="calculationType" id="calculationType" value="Equality" checked />
                         Equality of elements
                     </label>
                 </div>
@@ -30,7 +30,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="calculationType" value="All" />
+                        <input type="radio" name="calculationType" id="calculationType" value="All" />
                         All-to-All
                     </label>
                 </div>
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="calculationType" value="Specified" />
+                        <input type="radio" name="calculationType" id="calculationType" value="Specified" />
                         Specified
                     </label>
                 </div>

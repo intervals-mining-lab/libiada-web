@@ -18,11 +18,11 @@
             @Html.Partial("_MattersTable")
             @Html.Partial("_FeaturesSelect")
             @Html.Partial("_Characteristic")
-            @Html.Label("validationType", "Alignment validation type", new { @class = "control-label" })
+            <label class="control-label col-md-2" for="validationType">Alignment validation type:</label>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="validationType" value="Similarity" checked />
+                        <input type="radio" name="validationType" id="validationType" value="Similarity" checked />
                         Similarity
                     </label>
                 </div>
@@ -30,7 +30,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="validationType" value="Difference" />
+                        <input type="radio" name="validationType" id="validationType" value="Difference" />
                         Difference
                     </label>
                 </div>
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="validationType" value="NormalizedDifference"/>
+                        <input type="radio" name="validationType" id="validationType" value="NormalizedDifference" />
                         Normalized difference
                     </label>
                 </div>
@@ -46,7 +46,7 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="radio" name="validationType" value="Equality" />
+                        <input type="radio" name="validationType" id="validationType" value="Equality" />
                         Equality of elements
                     </label>
                 </div>
@@ -55,15 +55,19 @@
             <hr />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("cyclicShift")
-                    @Html.Label("cyclicShift", "Cyclic shift")
+                    <label>
+                        <input type="checkbox" name="cyclicShift" />
+                        Cyclic shift
+                    </label>
                 </div>
             </div>
             <br />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("sort")
-                    @Html.Label("sort", "Sort into rank distribution")
+                    <label>
+                        <input type="checkbox" name="sort" />
+                        Sort into rank distribution
+                    </label>
                 </div>
             </div>
             <hr/>

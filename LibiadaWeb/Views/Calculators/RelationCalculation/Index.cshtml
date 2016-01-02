@@ -19,8 +19,10 @@
             @Html.Partial("_Characteristic")
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    @Html.CheckBox("filter", new { ng_model = "showFilters" })
-                    @Html.Label("filter", "Filtration")
+                    <label>
+                        <input type="checkbox" name="filter" ng-model="showFilters" />
+                        Filtration
+                    </label>
                 </div>
             </div>
             <div ng-show="showFilters">
@@ -33,8 +35,10 @@
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        @Html.CheckBox("frequencyFilter", new { ng_model = "frequencyFilter" })
-                        @Html.Label("frequencyFilter", "Calculate only for X most frequent elements")
+                        <label>
+                            <input type="checkbox" name="frequencyFilter" ng-model="frequencyFilter" />
+                            Calculate only for X most frequent elements
+                        </label>
                     </div>
                 </div>
                 <div class="form-group" ng-show="frequencyFilter">
