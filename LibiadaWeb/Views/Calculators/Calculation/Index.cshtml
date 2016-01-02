@@ -1,49 +1,44 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Characteristics calculation";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Characteristics calculation</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="Calculation">
-        <div class="form-horizontal" ng-controller="CalculationCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_NatureSelect")
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_Characteristics")
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="complementary" ng-model="complementary" />
-                        Calculate characteristic for complementary sequence
-                    </label>
-                </div>
+    <div class="form-horizontal" ng-app="Calculation" ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_Characteristics")
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="complementary" ng-model="complementary" />
+                    Calculate characteristic for complementary sequence
+                </label>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="rotate" ng-model="rotate" />
-                        Rotate sequences cyclically
-                    </label>
-                </div>
-            </div>
-            <hr />
-            <div class="form-group" ng-show="rotate">
-                <label class="control-label col-md-2" for="rotationLength">Rotation length:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
-                    @Html.ValidationMessage("rotationLength", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <hr/>
-            @Html.Partial("_MattersSubmit")
         </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="rotate" ng-model="rotate" />
+                    Rotate sequences cyclically
+                </label>
+            </div>
+        </div>
+        <div class="form-group" ng-show="rotate">
+            <label class="control-label col-md-2" for="rotationLength">Rotation length:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
+                @Html.ValidationMessage("rotationLength", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

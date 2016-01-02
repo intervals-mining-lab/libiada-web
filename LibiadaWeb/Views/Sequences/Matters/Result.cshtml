@@ -1,12 +1,11 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Sequence import result";
 }
 
+<h2>@ViewBag.Title</h2>
+
 @if (ViewBag.Error == null)
 {
-    <h2>Sequence import result</h2>
     <br />
     <div>
         Sequence <strong> @ViewBag.matterName </strong> imported successfully

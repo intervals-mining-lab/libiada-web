@@ -1,50 +1,46 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Accordance calculation";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Accordance calculation</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="Accordance">
-        <div class="form-horizontal" ng-controller="AccordanceCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_NatureSelect")
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_Characteristic")
-            <label class="control-label col-md-2" for="calculationType">Calculation type:</label>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="calculationType" id="calculationType" value="Equality" checked />
-                        Equality of elements
-                    </label>
-                </div>
+    <div class="form-horizontal" ng-app="Accordance" ng-controller="AccordanceCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_Characteristic")
+        <label class="control-label col-md-2" for="calculationType">Calculation type:</label>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="calculationType" id="calculationType" value="Equality" checked />
+                    Equality of elements
+                </label>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="calculationType" id="calculationType" value="All" />
-                        All-to-All
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="calculationType" id="calculationType" value="Specified" />
-                        Specified
-                    </label>
-                </div>
-            </div>
-            <hr/>
-            @Html.Partial("_MattersSubmit")
         </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="calculationType" id="calculationType" value="All" />
+                    All-to-All
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="calculationType" id="calculationType" value="Specified" />
+                    Specified
+                </label>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

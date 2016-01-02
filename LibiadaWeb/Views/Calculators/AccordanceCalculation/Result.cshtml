@@ -1,12 +1,10 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Accordance calculation";
 }
 
 @if (ViewBag.Error == null)
 {
-    <h2>Accordance calculation</h2>
+    <h2>@ViewBag.Title</h2>
 
     @ViewBag.matterNames[0]
     <br />
@@ -49,7 +47,7 @@
                     }
                 </tbody>
             </table>
-                    break;
+        break;
         case "All":
         <div>
             @Html.Raw(ViewBag.characteristicName.Replace("  ", "<br/>"))
@@ -63,7 +61,7 @@
                     @for (int j = 0; j < ViewBag.characteristics[0].Count; j++)
                     {
                         <th>
-                           @ViewBag.secondAlphabet[j]
+                            @ViewBag.secondAlphabet[j]
                         </th>
                     }
                 </tr>
@@ -85,6 +83,6 @@
                 }
             </tbody>
         </table>
-                break;
+        break;
     }
 }

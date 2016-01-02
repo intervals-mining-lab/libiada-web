@@ -10,7 +10,6 @@
 
 @if (Request.IsAuthenticated)
 {
-
     <div class="row">
         <div class="col-md-4">
             <h2>Data</h2>
@@ -35,7 +34,7 @@
             <h2>Calculators</h2>
             @Html.ActionLink("Calculation of integral characteristics", "Index", "Calculation")
             <br />
-            @Html.ActionLink("Calculation of integral characteristics of custom sequence", "Index", "CustomSequenceCalculation")
+            @Html.ActionLink("Calculation of integral characteristics of custom sequences", "Index", "CustomSequenceCalculation")
             <br />
             @if (UserHelper.IsAdmin())
             {

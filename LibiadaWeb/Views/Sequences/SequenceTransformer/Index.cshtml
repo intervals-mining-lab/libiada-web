@@ -1,17 +1,14 @@
-﻿@model IEnumerable<Matter>
-
-@{
+﻿@{
     ViewBag.Title = "Transformation of genetic sequences";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Transformation of genetic sequences</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="SubsequencesCalculation">
-        <div class="form-horizontal" ng-controller="SubsequencesCalculationCtrl">
+        <div class="form-horizontal" ng-app="SubsequencesCalculation" ng-controller="SubsequencesCalculationCtrl">
             <h4>Sequences and parameters</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -36,10 +33,4 @@
             <hr />
             @Html.Partial("_MattersSubmit")
         </div>
-    </div>
-}
-@section Scripts {
-    
-    @Scripts.Render("~/bundles/functions")
-    @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
 }

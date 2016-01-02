@@ -1,49 +1,45 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Subsequences similarity";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Subsequences similarity</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="SequencesAlignment">
-        <div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_FeaturesSelect")
-            @Html.Partial("_Characteristic")
-            <div class="form-group">
-                <label class="control-label col-md-2" for="maxDifference">Maximum difference:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" id="maxDifference" />
-                    @Html.ValidationMessage("maxDifference", "", new { @class = "text-danger" })
-                </div>
+    <div class="form-horizontal" ng-app="SequencesAlignment" ng-controller="SequencesAlignmentCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_FeaturesSelect")
+        @Html.Partial("_Characteristic")
+        <div class="form-group">
+            <label class="control-label col-md-2" for="maxDifference">Maximum difference:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="maxDifference" type="number" value="0" step="any" min="0" id="maxDifference" />
+                @Html.ValidationMessage("maxDifference", "", new { @class = "text-danger" })
             </div>
-            <hr />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="excludeType" value="Exclude" checked />
-                        Exclude similar subsequences
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="excludeType" value="NotExclude" />
-                        Don't exclude similar subsequences
-                    </label>
-                </div>
-            </div>
-
-            @Html.Partial("_MattersSubmit")
         </div>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="excludeType" value="Exclude" checked />
+                    Exclude similar subsequences
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="excludeType" value="NotExclude" />
+                    Don't exclude similar subsequences
+                </label>
+            </div>
+        </div>
+
+        @Html.Partial("_MattersSubmit")
     </div>
 }

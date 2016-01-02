@@ -1,48 +1,44 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Buildings comparison";
 }
 
-<h2>Buildings comparison</h2>
+<h2>@ViewBag.Title</h2>
 
 @Html.Partial("_AngularControllerInitializer")
 
 @using (Html.BeginForm())
 {
-    <div ng-app="BuildingsSimilarity">
-        <div class="form-horizontal" ng-controller="BuildingsSimilarityCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_NatureSelect")
-            @Html.Partial("_MattersTable")
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="congeneric"/>
-                        Compare buildings of congeneric sequences
-                    </label>
-                </div>
+    <div class="form-horizontal" ng-app="BuildingsSimilarity" ng-controller="BuildingsSimilarityCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="congeneric" />
+                    Compare buildings of congeneric sequences
+                </label>
             </div>
-            <hr />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="notation">Notation:</label>
-                <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>
-                    <input type="hidden" name="notationId" ng-value="notation.Value"/>
-                </div>
-            </div>
-            @Html.Partial("_CharacteristicNatureParams")
-            <div class="form-group">
-                <label class="control-label col-md-2" for="length">Window size:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="length" type="number" value="10" min="1" id="length"/>
-                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <hr />
-            @Html.Partial("_MattersSubmit")
         </div>
+        <hr />
+        <div class="form-group">
+            <label class="control-label col-md-2" for="notation">Notation:</label>
+            <div class="col-md-10">
+                <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>
+                <input type="hidden" name="notationId" ng-value="notation.Value" />
+            </div>
+        </div>
+        @Html.Partial("_CharacteristicNatureParams")
+        <div class="form-group">
+            <label class="control-label col-md-2" for="length">Window size:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="length" type="number" value="10" min="1" id="length" />
+                @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

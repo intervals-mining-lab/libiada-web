@@ -1,77 +1,73 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Sequences alignment";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Sequences alignment</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
-    <div ng-app="SequencesAlignment">
-        <div class="form-horizontal" ng-controller="SequencesAlignmentCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_FeaturesSelect")
-            @Html.Partial("_Characteristic")
-            <label class="control-label col-md-2" for="validationType">Alignment validation type:</label>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="validationType" id="validationType" value="Similarity" checked />
-                        Similarity
-                    </label>
-                </div>
+    <div class="form-horizontal" ng-app="SequencesAlignment" ng-controller="SequencesAlignmentCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_FeaturesSelect")
+        @Html.Partial("_Characteristic")
+        <label class="control-label col-md-2" for="validationType">Alignment validation type:</label>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" id="validationType" value="Similarity" checked />
+                    Similarity
+                </label>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="validationType" id="validationType" value="Difference" />
-                        Difference
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="validationType" id="validationType" value="NormalizedDifference" />
-                        Normalized difference
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="validationType" id="validationType" value="Equality" />
-                        Equality of elements
-                    </label>
-                </div>
-            </div>
-            <br />
-            <hr />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="cyclicShift" />
-                        Cyclic shift
-                    </label>
-                </div>
-            </div>
-            <br />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="sort" />
-                        Sort into rank distribution
-                    </label>
-                </div>
-            </div>
-            <hr/>
-            @Html.Partial("_MattersSubmit")
         </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" id="validationType" value="Difference" />
+                    Difference
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" id="validationType" value="NormalizedDifference" />
+                    Normalized difference
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="radio" name="validationType" id="validationType" value="Equality" />
+                    Equality of elements
+                </label>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="cyclicShift" />
+                    Cyclic shift
+                </label>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="sort" />
+                    Sort into rank distribution
+                </label>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

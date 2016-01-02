@@ -1,73 +1,69 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Local characteristics";
 }
 
-<h2>Local characteristics</h2>
+<h2>@ViewBag.Title</h2>
 
 @Html.Partial("_AngularControllerInitializer")
 
 @using (Html.BeginForm())
 {
-    <div ng-app="Calculation">
-        <div class="form-horizontal" ng-controller="CalculationCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_NatureSelect")
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_Characteristics")
-            <br />
-            <div class="form-group">
-                <label class="control-label col-md-2" for="length">Window size:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="length" type="number" value="50" min="1" id="length" />
-                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
-                </div>
+    <div class="form-horizontal" ng-app="Calculation" ng-controller="CalculationCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_Characteristics")
+        <br />
+        <div class="form-group">
+            <label class="control-label col-md-2" for="length">Window size:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="length" type="number" value="50" min="1" id="length" />
+                @Html.ValidationMessage("length", "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
-                <label class="control-label col-md-2" for="step">Step size:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
-                    @Html.ValidationMessage("step", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <hr />
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="delta" />
-                        Calculate difference between characteristics
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="growingWindow" />
-                        Growing window (start is fixed at 0 position)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="fourier" />
-                        Calculate Fast fourier transform
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="checkbox" name="autocorrelation" />
-                        Calculate autocorrelation
-                    </label>
-                </div>
-            </div>
-            <hr/>
-            @Html.Partial("_MattersSubmit")
         </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="step">Step size:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="step" type="number" value="1" min="1" id="step" />
+                @Html.ValidationMessage("step", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="delta" />
+                    Calculate difference between characteristics
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="growingWindow" />
+                    Growing window (start is fixed at 0 position)
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="fourier" />
+                    Calculate Fast fourier transform
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="autocorrelation" />
+                    Calculate autocorrelation
+                </label>
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

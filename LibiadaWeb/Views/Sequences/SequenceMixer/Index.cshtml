@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Matter>
-
-@{
+﻿@{
     ViewBag.Title = "Generate sequence rearrangements";
 }
 
@@ -10,30 +8,28 @@
 
 @using (Html.BeginForm())
 {
-    <div ng-app="BuildingsSimilarity">
-        <div class="form-horizontal" ng-controller="BuildingsSimilarityCtrl">
-            <h4>Sequences and parameters</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_NatureSelect")
-            <br/>
-            @Html.Partial("_MattersTable")
-            <div class="form-group">
-                <div class="col-md-10">
-                    <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
-                    <input type="hidden" name="notationId" ng-value="notation.Value" />
-                </div>
+    <div class="form-horizontal" ng-app="BuildingsSimilarity" ng-controller="BuildingsSimilarityCtrl">
+        <h4>Sequences and parameters</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_NatureSelect")
+        <br />
+        @Html.Partial("_MattersTable")
+        <div class="form-group">
+            <div class="col-md-10">
+                <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}"></select>
+                <input type="hidden" name="notationId" ng-value="notation.Value" />
             </div>
-            @Html.Partial("_CharacteristicNatureParams")
-            <div class="form-group">
-                <label class="control-label col-md-2" for="scrambling">Scrambling count:</label>
-                <div class="col-md-10">
-                    <input class="form-control" name="scrambling" id="scrambling" type="number" value="10" min="1" />
-                    @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <hr />
-            @Html.Partial("_MattersSubmit")
         </div>
+        @Html.Partial("_CharacteristicNatureParams")
+        <div class="form-group">
+            <label class="control-label col-md-2" for="scrambling">Scrambling count:</label>
+            <div class="col-md-10">
+                <input class="form-control" name="scrambling" id="scrambling" type="number" value="10" min="1" />
+                @Html.ValidationMessage("scrambling", "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <hr />
+        @Html.Partial("_MattersSubmit")
     </div>
 }

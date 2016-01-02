@@ -1,23 +1,20 @@
-﻿@model dynamic
-
-@{
+﻿@{
     ViewBag.Title = "Genes import";
 }
 
 @Html.Partial("_AngularControllerInitializer")
 
-<h2>Genes import</h2>
+<h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div ng-app="GenesImport">
-        <div class="form-horizontal" ng-controller="GenesImportCtrl">
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            @Html.Partial("_LocalFile")
-            @Html.Partial("_MattersTable")
-            @Html.Partial("_MattersSubmit")
-        </div>
+
+    <div class="form-horizontal" ng-app="GenesImport" ng-controller="GenesImportCtrl">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.Partial("_LocalFile")
+        @Html.Partial("_MattersTable")
+        @Html.Partial("_MattersSubmit")
     </div>
 }
 
