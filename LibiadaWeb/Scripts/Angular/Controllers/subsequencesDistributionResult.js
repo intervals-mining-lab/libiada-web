@@ -8,15 +8,20 @@
             var points = [];
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
-                for (var j = 0; j < $scope.result[i].SubsequencesCharacteristics.length; j++) {
+                var sequenceData = $scope.result[i];
+                for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
+                    var subsequencesData = sequenceData.SubsequencesData[j];
+
                     points.push({
                         id: id,
-                        name: $scope.result[i].MatterName,
-                        attributes: $scope.result[i].SubsequencesCharacteristics[j].Attributes,
-                        feature: $scope.result[i].SubsequencesCharacteristics[j].Feature,
-                        positions: $scope.result[i].SubsequencesCharacteristics[j].Starts,
-                        x: $scope.numericXAxis ? i + 1 : $scope.result[i].Characteristic,
-                        y: $scope.result[i].SubsequencesCharacteristics[j].Characteristic
+                        name: sequenceData.MatterName,
+                        sequenceWebApiId: sequenceData.WebApiId,
+                        attributes: subsequencesData.Attributes,
+                        feature: subsequencesData.Feature,
+                        positions: subsequencesData.Starts,
+                        subsequenceWebApiId: subsequencesData.WebApiId,
+                        x: $scope.numericXAxis ? i + 1 : sequenceData.Characteristic,
+                        y: subsequencesData.Characteristic
                     });
                     id++;
                 }

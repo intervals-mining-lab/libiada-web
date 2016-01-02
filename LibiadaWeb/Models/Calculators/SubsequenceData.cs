@@ -4,9 +4,9 @@
     using System.Linq;
 
     /// <summary>
-    /// The genes characteristics.
+    /// The genes data.
     /// </summary>
-    public class SubsequenceCharacteristic
+    public class SubsequenceData
     {
         /// <summary>
         /// The starts.
@@ -21,12 +21,7 @@
         /// <summary>
         /// The feature.
         /// </summary>
-        public readonly string Feature; 
-
-        /// <summary>
-        /// The characteristic.
-        /// </summary>
-        public readonly double Characteristic;
+        public readonly string Feature;
 
         /// <summary>
         /// The attributes.
@@ -34,7 +29,17 @@
         public readonly List<string> Attributes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceCharacteristic"/> class.
+        /// The web api id.
+        /// </summary>
+        public readonly int? WebApiId;
+
+        /// <summary>
+        /// The characteristic.
+        /// </summary>
+        public readonly double Characteristic;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubsequenceData"/> class.
         /// </summary>
         /// <param name="subsequence">
         /// The subsequence.
@@ -45,12 +50,11 @@
         /// <param name="attributes">
         /// The attributes.
         /// </param>
-        public SubsequenceCharacteristic(Subsequence subsequence, double characteristic, List<string> attributes)
+        public SubsequenceData(Subsequence subsequence, double characteristic, List<string> attributes)
         {
-            Starts = new List<int>();
-            Starts.Add(subsequence.Start);
-            Lengths = new List<int>();
-            Lengths.Add(subsequence.Length);
+            WebApiId = subsequence.WebApiId;
+            Starts = new List<int> { subsequence.Start };
+            Lengths = new List<int> { subsequence.Length };
             foreach (var position in subsequence.Position)
             {
                 Starts.Add(position.Start);

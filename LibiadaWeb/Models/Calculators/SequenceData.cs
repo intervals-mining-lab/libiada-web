@@ -5,7 +5,7 @@
     /// <summary>
     /// The sequence characteristics.
     /// </summary>
-    public class SequenceCharacteristics
+    public class SequenceData
     {
         /// <summary>
         /// The matter name.
@@ -13,32 +13,41 @@
         public readonly string MatterName;
 
         /// <summary>
+        /// Sequence web api id.
+        /// </summary>
+        public readonly int? WebApiId;
+
+        /// <summary>
         /// The characteristic.
         /// </summary>
         public readonly double Characteristic;
 
         /// <summary>
-        /// The genes characteristics.
+        /// The genes data.
         /// </summary>
-        public readonly List<SubsequenceCharacteristic> SubsequencesCharacteristics;
+        public readonly List<SubsequenceData> SubsequencesData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SequenceCharacteristics"/> class.
+        /// Initializes a new instance of the <see cref="SequenceData"/> class.
         /// </summary>
         /// <param name="matterName">
         /// The matter name.
         /// </param>
+        /// <param name="webApiId">
+        /// Sequence web api id.
+        /// </param>
         /// <param name="characteristic">
         /// The characteristic.
         /// </param>
-        /// <param name="subsequencesCharacteristics">
-        /// The genes characteristics.
+        /// <param name="subsequencesData">
+        /// The genes data.
         /// </param>
-        public SequenceCharacteristics(string matterName, double characteristic, List<SubsequenceCharacteristic> subsequencesCharacteristics)
+        public SequenceData(string matterName, int? webApiId, double characteristic, List<SubsequenceData> subsequencesData)
         {
             MatterName = matterName;
+            WebApiId = webApiId;
             Characteristic = characteristic;
-            SubsequencesCharacteristics = subsequencesCharacteristics;
+            SubsequencesData = subsequencesData;
         }
     }
 }

@@ -18,31 +18,31 @@
                 <tr>
                     <td colspan="4" ng-repeat="res in result" ng-bind="res.Characteristic" />
                 </tr>
-                <tr ng-repeat="maxSubsequences in result[maxSubsequencesIndex].SubsequencesCharacteristics" ng-init="matterIndex = $index">
+                <tr ng-repeat="maxSubsequences in result[maxSubsequencesIndex].SubsequencesData" ng-init="matterIndex = $index">
                     <td ng-repeat-start="res in result">
-                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
-                            {{res.SubsequencesCharacteristics[matterIndex].Feature}}
+                        <div ng-if="matterIndex < res.SubsequencesData.length">
+                            {{res.SubsequencesData[matterIndex].Feature}}
                         </div>
                     </td>
                     <td>
-                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
-                            <div ng-repeat="attribute in res.SubsequencesCharacteristics[matterIndex].Attributes">
+                        <div ng-if="matterIndex < res.SubsequencesData.length">
+                            <div ng-repeat="attribute in res.SubsequencesData[matterIndex].Attributes">
                                 {{attribute}}
                                 <br />
                             </div>
                         </div>
                     </td>
                     <td>
-                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
-                            <div ng-repeat="position in res.SubsequencesCharacteristics[matterIndex].Starts">
+                        <div ng-if="matterIndex < res.SubsequencesData.length">
+                            <div ng-repeat="position in res.SubsequencesData[matterIndex].Starts">
                                 {{position}}
                                 <br />
                             </div>
                         </div>
                     </td>
                     <td ng-repeat-end>
-                        <div ng-if="matterIndex < res.SubsequencesCharacteristics.length">
-                            {{res.SubsequencesCharacteristics[matterIndex].Characteristic}}
+                        <div ng-if="matterIndex < res.SubsequencesData.length">
+                            {{res.SubsequencesData[matterIndex].Characteristic}}
                         </div>
                     </td>
                 </tr>

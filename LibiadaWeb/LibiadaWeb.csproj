@@ -383,8 +383,8 @@
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\Calculators\CharacteristicData.cs" />
     <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
-    <Compile Include="Models\Calculators\SubsequenceCharacteristic.cs" />
-    <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
+    <Compile Include="Models\Calculators\SubsequenceData.cs" />
+    <Compile Include="Models\Calculators\SequenceData.cs" />
     <Compile Include="Models\Calculators\IntPair.cs" />
     <Compile Include="Models\Repositories\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
