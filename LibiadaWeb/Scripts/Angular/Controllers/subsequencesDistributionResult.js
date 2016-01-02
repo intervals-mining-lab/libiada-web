@@ -67,7 +67,10 @@
             // tooltip drawing method
             var showTooltip = function (d) {
                 tooltip.style("opacity", .9);
-                tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>" + d["attributes"].join("<br/>") + "<br/>" + " (" + xValue(d) + ", " + yValue(d) + ")")
+                tooltip.html(d["name"] + "<br/>" + d["feature"] + "<br/>"
+                           + d["attributes"].join("<br/>") + "<br/>"
+                           + "Position: " + d["positions"].join(", ") + "<br/>"
+                           + " (" + xValue(d) + ", " + yValue(d) + ")")
                     .style("background", "#000")
                     .style("color", "#fff")
                     .style("border-radius", "5px")
@@ -137,8 +140,7 @@
             // hiding tooltip
             d3.select("#chart").on("click", function (d) {
                 if (hideTooltip) {
-                    tooltip.style("opacity", 0);
-                    tooltip.html("");
+                    tooltip.html("").style("opacity", 0);
                 }
 
                 hideTooltip = true;
