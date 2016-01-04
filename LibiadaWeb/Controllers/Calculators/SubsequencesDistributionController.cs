@@ -194,7 +194,7 @@
 
                     subsequencesCharacteristics = subsequencesCharacteristics.OrderBy(g => g.Characteristic).ToList();
                     var webApiId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == firstNotationId).WebApiId;
-                    sequenceCharacteristics.Add(new SequenceData(matterName, webApiId, sequenceCharacteristic, subsequencesCharacteristics));
+                    sequenceCharacteristics.Add(new SequenceData(matterId, matterName, webApiId, sequenceCharacteristic, subsequencesCharacteristics));
                 }
 
                 sequenceCharacteristics = sequenceCharacteristics.OrderBy(r => r.Characteristic).ToList();

@@ -8,6 +8,11 @@
     public class SequenceData
     {
         /// <summary>
+        /// The matter id.
+        /// </summary>
+        public readonly long MatterId; 
+
+        /// <summary>
         /// The matter name.
         /// </summary>
         public readonly string MatterName;
@@ -30,6 +35,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceData"/> class.
         /// </summary>
+        /// <param name="matterId">
+        /// The matter id.
+        /// </param>
         /// <param name="matterName">
         /// The matter name.
         /// </param>
@@ -42,8 +50,9 @@
         /// <param name="subsequencesData">
         /// The genes data.
         /// </param>
-        public SequenceData(string matterName, int? webApiId, double characteristic, List<SubsequenceData> subsequencesData)
+        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic, List<SubsequenceData> subsequencesData)
         {
+            MatterId = matterId;
             MatterName = matterName;
             WebApiId = webApiId;
             Characteristic = characteristic;
