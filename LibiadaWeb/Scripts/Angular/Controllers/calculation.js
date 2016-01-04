@@ -47,7 +47,7 @@
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
-        $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.disableMattersSelect = FakeDisableMattersSelect;
 
         $scope.selectedMatters = 0;
         $scope.characteristics = [];

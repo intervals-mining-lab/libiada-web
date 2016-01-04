@@ -199,20 +199,24 @@
 
                 sequenceCharacteristics = sequenceCharacteristics.OrderBy(r => r.Characteristic).ToList();
 
-                var fullCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
+                var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
                 var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
 
-                var result = new Dictionary<string, object>
+                var features = db.Feature.Where(f => f.NatureId == Aliases.Nature.Genetic && !f.Complete).ToList();
+                var featuresSelectList = features.Select(f => new { Value = f.Id, Text = f.Name, Selected = true });
+
+                var resultData = new Dictionary<string, object>
                                  {
                                      { "result", sequenceCharacteristics },
                                      { "maxSubsequencesIndex", maxSubsequencesIndex },
                                      { "subsequencesCharacteristicName", subsequencesCharacteristicName },
-                                     { "fullCharacteristicName", fullCharacteristicName }
+                                     { "sequenceCharacteristicName", sequenceCharacteristicName },
+                                     { "features", featuresSelectList }
                                  };
 
                 return new Dictionary<string, object>
                 {
-                    { "data", JsonConvert.SerializeObject(result) },
+                    { "data", JsonConvert.SerializeObject(resultData) },
                     { "angularController", "SubsequencesDistributionResultController" }
                 };
             });

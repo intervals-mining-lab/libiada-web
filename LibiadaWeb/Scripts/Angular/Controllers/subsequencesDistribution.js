@@ -22,7 +22,8 @@
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
         $scope.setCheckBoxesState = SetCheckBoxesState;
-        $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.disableMattersSelect = FakeDisableMattersSelect;
+        $scope.filterByFeature = FakeFilterByFeature;
 
         $scope.selectedMatters = 0;
         $scope.firstCharacteristic = {

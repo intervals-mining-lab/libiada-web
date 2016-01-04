@@ -30,7 +30,7 @@
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
-        $scope.disableSubmit = fakeDisableSubmit;
+        $scope.disableSubmit = FakeDisableSubmit;
 
         $scope.characteristics = [];
         $scope.customSequences = [];

@@ -30,7 +30,7 @@
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
 
-        $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.disableMattersSelect = FakeDisableMattersSelect;
         $scope.addTransformation = addTransformation;
         $scope.deleteTransformation = deleteTransformation;
 

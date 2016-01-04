@@ -29,10 +29,14 @@ function SetCheckBoxesState(checkboxes, state) {
     });
 }
 
-function fakeDisableMattersSelect() {
+function FakeDisableMattersSelect() {
     return false;
 };
 
-function fakeDisableSubmit() {
+function FakeFilterByFeature() {
+    return false;
+}
+
+function FakeDisableSubmit() {
     return false;
 };

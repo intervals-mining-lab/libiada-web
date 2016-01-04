@@ -19,7 +19,7 @@
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
 
-        $scope.disableMattersSelect = fakeDisableMattersSelect;
+        $scope.disableMattersSelect = FakeDisableMattersSelect;
 
         $scope.localFile = false;
         $scope.selectedMatters = 0;   
