@@ -21,7 +21,7 @@
                 <tr ng-repeat="maxSubsequences in result[maxSubsequencesIndex].SubsequencesData" ng-init="matterIndex = $index">
                     <td ng-repeat-start="res in result">
                         <div ng-if="matterIndex < res.SubsequencesData.length">
-                            {{res.SubsequencesData[matterIndex].Feature}}
+                            {{res.SubsequencesData[matterIndex].FeatureName}}
                         </div>
                     </td>
                     <td>

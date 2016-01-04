@@ -8,11 +8,13 @@
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 var sequenceData = $scope.result[i];
+                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName });
+
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
                     var subsequenceData = sequenceData.SubsequencesData[j];
                     $scope.points.push({
                         id: id,
-                        matterId: sequenceData.matterId,
+                        matterId: sequenceData.MatterId,
                         name: sequenceData.MatterName,
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
@@ -21,11 +23,13 @@
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
                         subsequenceWebApiId: subsequenceData.WebApiId,
-                        x: $scope.numericXAxis ? i + 1 : sequenceData.Characteristic,
+                        numericX: i + 1,
+                        x: sequenceData.Characteristic,
                         y: subsequenceData.Characteristic,
                         featureVisible: true,
-                        organismVisible: true
+                        matterVisible: true
                     });
+
                     id++;
                 }
             }
@@ -41,7 +45,7 @@
         }
 
         function pointVisible(point) {
-            return point.featureVisible && point.organismVisible;
+            return point.featureVisible && point.matterVisible;
         }
 
         function drawGenesMap() {
@@ -50,7 +54,7 @@
 
             // all organisms are visible after redrawing
             $scope.points.forEach(function (point) {
-                point.organismVisible = true;
+                point.matterVisible = true;
                 for (var i = 0; i < $scope.features.length; i++) {
                     if ($scope.features[i].Value === point.featureId) {
                         point.featureVisible = $scope.features[i].Selected;
@@ -65,7 +69,7 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xValue = function (d) { return d.x; }; // data -> value
+            var xValue = function (d) { return $scope.numericXAxis ? d.numericX : d.x; }; // data -> value
             var xScale = d3.scale.linear().range([0, width]); // value -> display
             var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -79,7 +83,7 @@
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
             // setup fill color
-            var cValue = function (d) { return d.name; };
+            var cValue = function (d) { return d.matterId; };
             var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
@@ -118,7 +122,7 @@
                            + d.featureName + "<br/>"
                            + d.attributes.join("<br/>") + "<br/>"
                            + "Position: " + positionGenbankLink + "<br/>"
-                           + " (" + xValue(d) + ", " + yValue(d) + ")")
+                           + " (" + d.x + ", " + d.y + ")")
                     .style("background", "#000")
                     .style("color", "#fff")
                     .style("border-radius", "5px")
@@ -196,7 +200,7 @@
 
             // draw legend
             var legend = svg.selectAll(".legend")
-                .data(color.domain())
+                .data($scope.matters)
                 .enter().append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
@@ -205,9 +209,9 @@
                     legendEntry.style("opacity", function (d) { return legendEntry.style("opacity") == 1 ? .5 : 1; });
 
                     svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.name == d })
+                        .filter(function (dot) { return dot.matterId === d.id })
                         .attr("r", function (d) {
-                            d.organismVisible = legendEntry.style("opacity") == 1;
+                            d.matterVisible = legendEntry.style("opacity") == 1;
                             return $scope.pointVisible(d) ? $scope.pointRadius : 0;
                         });
                 });
@@ -217,7 +221,7 @@
                 .attr("x", width - 18)
                 .attr("width", 18)
                 .attr("height", 18)
-                .style("fill", color)
+                .style("fill", function (d) { return color(d.id); })
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
             // draw legend text
@@ -227,7 +231,7 @@
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
                 .style("text-anchor", "end")
-                .text(function (d) { return d; })
+                .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
         }
 
@@ -242,6 +246,7 @@
 
         $scope.pointRadius = 3.5;
         $scope.points = [];
+        $scope.matters = [];
         $scope.fillPoints();
 
     }
