@@ -12,10 +12,12 @@
                     var subsequenceData = sequenceData.SubsequencesData[j];
                     $scope.points.push({
                         id: id,
+                        matterId: sequenceData.matterId,
                         name: sequenceData.MatterName,
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
-                        feature: subsequenceData.Feature,
+                        featureId:subsequenceData.FeatureId,
+                        featureName: subsequenceData.FeatureName,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
                         subsequenceWebApiId: subsequenceData.WebApiId,
@@ -31,7 +33,7 @@
 
         function filterByFeature(feature) {
             d3.selectAll(".dot")
-                .filter(function (dot) { return dot.feature === feature.Text })
+                .filter(function (dot) { return dot.featureId === feature.Value })
                 .attr("r", function (d) {
                     d.featureVisible = feature.Selected;
                     return $scope.pointVisible(d) ? $scope.pointRadius : 0;
@@ -50,7 +52,7 @@
             $scope.points.forEach(function (point) {
                 point.organismVisible = true;
                 for (var i = 0; i < $scope.features.length; i++) {
-                    if ($scope.features[i].Text === point.feature) {
+                    if ($scope.features[i].Value === point.featureId) {
                         point.featureVisible = $scope.features[i].Selected;
                         break;
                     }
@@ -98,23 +100,23 @@
 
                 var genBank = "http://www.ncbi.nlm.nih.gov/nuccore/";
 
-                var tooltipHeader = d["sequenceWebApiId"] ?
-                                    "<a target='_blank' href='" + genBank + d["sequenceWebApiId"] + "'>" + d["name"] + "</a>" :
-                                    d["name"];
+                var tooltipHeader = d.sequenceWebApiId ?
+                                    "<a target='_blank' href='" + genBank + d.sequenceWebApiId + "'>" + d.name + "</a>" :
+                                    d.name;
 
-                var peptideGenbankLink = d["subsequenceWebApiId"] ?
-                                         "<a target='_blank' href='" + genBank + d["subsequenceWebApiId"] + "'>Peptide ncbi page</a><br/>" : "";
+                var peptideGenbankLink = d.subsequenceWebApiId ?
+                                         "<a target='_blank' href='" + genBank + d.subsequenceWebApiId + "'>Peptide ncbi page</a><br/>" : "";
 
-                var start = d["positions"][0] + 1;
-                var end = d["positions"][0] + d["lengths"][0];
-                var positionGenbankLink = d["sequenceWebApiId"] ?
-                                          "<a target='_blank' href='" + genBank + d["sequenceWebApiId"] + "?from=" + start + "&to=" + end + "'>" + d["positions"].join(", ") + "</a>" :
-                                          d["positions"].join(", ");
+                var start = d.positions[0] + 1;
+                var end = d.positions[0] + d.lengths[0];
+                var positionGenbankLink = d.sequenceWebApiId ?
+                                          "<a target='_blank' href='" + genBank + d.sequenceWebApiId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
+                                          d.positions.join(", ");
 
                 tooltip.html(tooltipHeader + "<br/>"
                            + peptideGenbankLink
-                           + d["feature"] + "<br/>"
-                           + d["attributes"].join("<br/>") + "<br/>"
+                           + d.featureName + "<br/>"
+                           + d.attributes.join("<br/>") + "<br/>"
                            + "Position: " + positionGenbankLink + "<br/>"
                            + " (" + xValue(d) + ", " + yValue(d) + ")")
                     .style("background", "#000")

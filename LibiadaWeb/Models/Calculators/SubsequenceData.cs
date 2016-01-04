@@ -19,9 +19,14 @@
         public readonly List<int> Lengths;
 
         /// <summary>
-        /// The feature.
+        /// The feature id.
         /// </summary>
-        public readonly string Feature;
+        public readonly int FeatureId;
+
+        /// <summary>
+        /// Subsequence feature name.
+        /// </summary>
+        public readonly string FeatureName;
 
         /// <summary>
         /// The attributes.
@@ -61,7 +66,8 @@
                 Lengths.Add(position.Length);
             }
 
-            Feature = subsequence.Feature.Name;
+            FeatureId = subsequence.FeatureId;
+            FeatureName = subsequence.Feature.Name;
             Attributes = subsequence.SequenceAttribute.Select(a => a.Attribute.Name + " = " + a.Value).ToList();
 
             Characteristic = characteristic;

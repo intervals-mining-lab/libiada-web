@@ -143,7 +143,7 @@
 
                     series.data[i].y = y;
                     series.data[i].name = pointName;
-                    
+
                     xVals.push(i);
                     yVals.push(y);
                 }
@@ -233,9 +233,9 @@
 
     for (int d = 0; d < ViewBag.characteristics.Count; d++)
     {
-        @ViewBag.matterNames[d]
-        <table class="table table-bordered table-hover" id="resultTable">
-            <thead>
+    @ViewBag.matterNames[d]
+    <table class="table table-bordered table-hover" id="resultTable">
+        <thead>
             <tr>
                 <th>
                     Element
@@ -247,8 +247,8 @@
                     </th>
                 }
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
             {
                 <tr>
@@ -263,24 +263,24 @@
                     }
                 </tr>
             }
-            </tbody>
-        </table>
+        </tbody>
+    </table>
     }
 
-    <br/>
+    <br />
     <div id="visualization_container" style="width: 800px; height: 500px"></div>
-    <br/>
-    <br/>
-    <input type="checkbox" name="Rank" id="Rank" value="true" onclick=" SwitchXAxis() "/>
+    <br />
+    <br />
+    <input type="checkbox" name="Rank" id="Rank" value="true" onclick=" SwitchXAxis() " />
     <label for="Rank">Rank distribution</label>
-    <br/>
-    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() "/>
+    <br />
+    <input type="checkbox" name="allGraphics" id="allGraphics" value="true" disabled="disabled" onclick=" SwitchYAxis() " />
     <label for="allGraphics">Show all charts</label>
-    <br/>
-    <input type="checkbox" name="logarithmicScale" id="logarithmicScale" value="true" disabled="disabled"/>
+    <br />
+    <input type="checkbox" name="logarithmicScale" id="logarithmicScale" value="true" disabled="disabled" />
     <label for="logarithmicScale">Log scale</label>
-    <br/>
-    <br/>
+    <br />
+    <br />
     <div id="xhider">
         @Html.Label("X axis")
         <select name="xaxis" id="xaxis">
@@ -290,7 +290,7 @@
             }
         </select>
     </div>
-    <br/>
+    <br />
     <div id="yhider">
         @Html.Label("Y axis")
         <select name="yaxis" id="yaxis">
@@ -300,6 +300,6 @@
             }
         </select>
     </div>
-    <br/>
+    <br />
     <button onclick=" DrawChart() ">Show</button>
 }
