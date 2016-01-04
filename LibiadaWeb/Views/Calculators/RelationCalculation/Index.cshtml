@@ -19,7 +19,8 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="filter" ng-model="showFilters" />
+                    <input type="checkbox" name="filter" ng-model="showFilters" value="true"/>
+                    <input type="hidden" name="filter" value="false" />
                     Filtration
                 </label>
             </div>
@@ -35,7 +36,8 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
-                        <input type="checkbox" name="frequencyFilter" ng-model="frequencyFilter" />
+                        <input type="checkbox" name="frequencyFilter" ng-model="frequencyFilter" value="true"/>
+                        <input type="hidden" name="frequencyFilter" value="false" />
                         Calculate only for X most frequent elements
                     </label>
                 </div>

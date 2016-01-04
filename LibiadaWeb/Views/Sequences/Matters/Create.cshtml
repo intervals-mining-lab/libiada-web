@@ -89,7 +89,8 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <label>
-                            <input type="checkbox" name="partial" />
+                            <input type="checkbox" name="partial" value="true" />
+                            <input type="hidden" name="partial" value="false" />
                             Sequence is partial (incomplete)
                         </label>
                     </div>
@@ -97,7 +98,8 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <label>
-                            <input type="checkbox" name="complementary" />
+                            <input type="checkbox" name="complementary" value="true" />
+                            <input type="hidden" name="complementary" value="false" />
                             Sequence is complementary to source sequence
                         </label>
                     </div>
@@ -115,7 +117,8 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <label>
-                            <input type="checkbox" name="original" ng-model="original" />
+                            <input type="checkbox" name="original" ng-model="original" value="true" />
+                            <input type="hidden" name="original" value="false" />
                             Literary work is in original language (not in translation)
                         </label>
                     </div>
