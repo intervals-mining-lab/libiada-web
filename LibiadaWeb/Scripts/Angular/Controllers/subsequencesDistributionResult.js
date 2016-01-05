@@ -4,6 +4,7 @@
     function subsequencesDistributionResult($scope) {
         MapModelFromJson($scope, data);
 
+        // initializes data for genes map 
         function fillPoints() {
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
@@ -18,7 +19,7 @@
                         name: sequenceData.MatterName,
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
-                        featureId:subsequenceData.FeatureId,
+                        featureId: subsequenceData.FeatureId,
                         featureName: subsequenceData.FeatureName,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
@@ -35,21 +36,114 @@
             }
         }
 
+        // filters dots by subsequences feature
         function filterByFeature(feature) {
             d3.selectAll(".dot")
                 .filter(function (dot) { return dot.featureId === feature.Value })
                 .attr("r", function (d) {
                     d.featureVisible = feature.Selected;
-                    return $scope.pointVisible(d) ? $scope.pointRadius : 0;
+                    return $scope.dotVisible(d) ? $scope.dotRadius : 0;
                 });
         }
 
-        function pointVisible(point) {
-            return point.featureVisible && point.matterVisible;
+        // checks if dot is visible
+        function dotVisible(dot) {
+            return dot.featureVisible && dot.matterVisible;
+        }
+
+        // constructs string representing tooltip text (inner html)
+        function fillPointTooltip(d) {
+            var tooltipContent = [];
+            var genBankLink = "<a target='_blank' href='http://www.ncbi.nlm.nih.gov/nuccore/";
+
+            var header = d.sequenceWebApiId ? genBankLink + d.sequenceWebApiId + "'>" + d.name + "</a>" : d.name;
+            tooltipContent.push(header);
+
+            if (d.subsequenceWebApiId) {
+                var peptideGenbankLink = genBankLink + d.subsequenceWebApiId + "'>Peptide ncbi page</a><br/>";
+                tooltipContent.push(peptideGenbankLink);
+            }
+
+            tooltipContent.push(d.featureName);
+            if (d.attributes.length > 0) {
+                tooltipContent.push(d.attributes.join("<br/>"));
+            }
+
+            var start = d.positions[0] + 1;
+            var end = d.positions[0] + d.lengths[0];
+            var positionGenbankLink = d.sequenceWebApiId ?
+                                      genBankLink + d.sequenceWebApiId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
+                                      d.positions.join(", ");
+            tooltipContent.push("Position: " + positionGenbankLink);
+            tooltipContent.push("(" + d.x + ", " + d.y + ")");
+
+            return tooltipContent.join("</br>");
+        }
+
+        function showTooltip(d) {
+            $scope.clearTooltip();
+
+            $scope.tooltip.style("opacity", .9);
+            $scope.tooltip.selectedDot = d3.select(this);
+            $scope.tooltip.selectedDot.attr("r", function (dot) { return $scope.dotRadius * 3; });
+
+            if ($scope.highlight) {
+                var tooltipHtml = [];
+                tooltipHtml.push("<strong>" + $scope.fillPointTooltip(d) + "</strong>");
+
+                $scope.tooltip.similarDots = $scope.svg.selectAll(".dot")
+                    .filter(function (dot) {
+                        if (dot.y === d.y && $scope.dotVisible(d) && dot.id !== d.id) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                    .attr("r", function (dot) {
+                        return $scope.dotVisible(dot) ? $scope.dotRadius * 3 : 0;
+                    });
+
+                $scope.tooltip.html(tooltipHtml.join("</br></br>"));
+
+            } else {
+                $scope.tooltip.html($scope.fillPointTooltip(d));
+            }
+
+            $scope.tooltip.style("background", "#000")
+                .style("color", "#fff")
+                .style("border-radius", "5px")
+                .style("font-family", "monospace")
+                .style("padding", "5px")
+                .style("left", (d3.event.pageX + 18) + "px")
+                .style("top", (d3.event.pageY + 18) + "px");
+
+            $scope.tooltip.hideTooltip = false;
+        }
+
+        function clearTooltip() {
+            if ($scope.tooltip) {
+                if ($scope.tooltip.hideTooltip) {
+                    $scope.tooltip.html("").style("opacity", 0);
+
+                    if ($scope.tooltip.selectedDot) {
+                        $scope.tooltip.selectedDot
+                            .attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                    }
+
+                    if ($scope.tooltip.similarDots) {
+                        $scope.tooltip.similarDots
+                            .attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                    }
+                }
+
+                $scope.tooltip.hideTooltip = true;
+            }
         }
 
         function drawGenesMap() {
-            //removing previous chart is any
+            // removing previous chart is any
+            $scope.clearTooltip();
             d3.select("svg").remove();
 
             // all organisms are visible after redrawing
@@ -87,66 +181,22 @@
             var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
-            var svg = d3.select("#chart").append("svg")
+            $scope.svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.hight)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add the tooltip area to the webpage
-            var tooltip = d3.select("#chart").append("div")
+            $scope.tooltip = d3.select("#chart").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-            // tooltip drawing method
-            var showTooltip = function (d) {
-                tooltip.style("opacity", .9);
-
-                var genBank = "http://www.ncbi.nlm.nih.gov/nuccore/";
-
-                var tooltipHeader = d.sequenceWebApiId ?
-                                    "<a target='_blank' href='" + genBank + d.sequenceWebApiId + "'>" + d.name + "</a>" :
-                                    d.name;
-
-                var peptideGenbankLink = d.subsequenceWebApiId ?
-                                         "<a target='_blank' href='" + genBank + d.subsequenceWebApiId + "'>Peptide ncbi page</a><br/>" : "";
-
-                var start = d.positions[0] + 1;
-                var end = d.positions[0] + d.lengths[0];
-                var positionGenbankLink = d.sequenceWebApiId ?
-                                          "<a target='_blank' href='" + genBank + d.sequenceWebApiId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
-                                          d.positions.join(", ");
-
-                tooltip.html(tooltipHeader + "<br/>"
-                           + peptideGenbankLink
-                           + d.featureName + "<br/>"
-                           + d.attributes.join("<br/>") + "<br/>"
-                           + "Position: " + positionGenbankLink + "<br/>"
-                           + " (" + d.x + ", " + d.y + ")")
-                    .style("background", "#000")
-                    .style("color", "#fff")
-                    .style("border-radius", "5px")
-                    .style("font-family", "monospace")
-                    .style("padding", "5px")
-                    .style("left", (d3.event.pageX + 5) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-
-                tooltip.hideTooltip = false;
-            }
-
-            // preventing tooltip hiding
-            tooltip.on("click", function (d) {
-                tooltip.hideTooltip = false;
-            });
+            // preventing tooltip hiding if dot clicked
+            $scope.tooltip.on("click", function (d) { $scope.tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function (d) {
-                if (tooltip.hideTooltip) {
-                    tooltip.html("").style("opacity", 0);
-                }
-
-                tooltip.hideTooltip = true;
-            });
+            d3.select("#chart").on("click", function (d) { $scope.clearTooltip(); });
 
             // calculating margins for dots
             var xMin = d3.min($scope.points, xValue);
@@ -161,7 +211,7 @@
             yScale.domain([yMin - yMargin, yMax + yMargin]);
 
             // x-axis
-            svg.append("g")
+            $scope.svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis)
@@ -174,7 +224,7 @@
                 .style("font-size", "12pt");
 
             // y-axis
-            svg.append("g")
+            $scope.svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
@@ -187,19 +237,19 @@
                 .style("font-size", "12pt");
 
             // draw dots
-            svg.selectAll(".dot")
+            $scope.svg.selectAll(".dot")
                 .data($scope.points)
                 .enter()
                 .append("circle")
                 .attr("class", "dot")
-                .attr("r", function (d) { return pointVisible(d) ? $scope.pointRadius : 0; })
+                .attr("r", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", function (d) { return color(cValue(d)); })
-                .on("click", showTooltip);
+                .on("click", $scope.showTooltip);
 
             // draw legend
-            var legend = svg.selectAll(".legend")
+            var legend = $scope.svg.selectAll(".legend")
                 .data($scope.matters)
                 .enter().append("g")
                 .attr("class", "legend")
@@ -208,11 +258,11 @@
                     var legendEntry = d3.select(this);
                     legendEntry.style("opacity", function (d) { return legendEntry.style("opacity") == 1 ? .5 : 1; });
 
-                    svg.selectAll(".dot")
+                    $scope.svg.selectAll(".dot")
                         .filter(function (dot) { return dot.matterId === d.id })
                         .attr("r", function (d) {
                             d.matterVisible = legendEntry.style("opacity") == 1;
-                            return $scope.pointVisible(d) ? $scope.pointRadius : 0;
+                            return $scope.dotVisible(d) ? $scope.dotRadius : 0;
                         });
                 });
 
@@ -236,15 +286,17 @@
         }
 
         $scope.drawGenesMap = drawGenesMap;
-        $scope.pointVisible = pointVisible;
+        $scope.dotVisible = dotVisible;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
+        $scope.fillPointTooltip = fillPointTooltip;
+        $scope.showTooltip = showTooltip;
+        $scope.clearTooltip = clearTooltip;
 
         $scope.legendHeight = $scope.result.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
-
-        $scope.pointRadius = 3.5;
+        $scope.dotRadius = 3.5;
         $scope.points = [];
         $scope.matters = [];
         $scope.fillPoints();
