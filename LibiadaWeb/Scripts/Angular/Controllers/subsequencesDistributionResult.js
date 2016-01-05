@@ -60,7 +60,7 @@
             tooltipContent.push(header);
 
             if (d.subsequenceWebApiId) {
-                var peptideGenbankLink = genBankLink + d.subsequenceWebApiId + "'>Peptide ncbi page</a><br/>";
+                var peptideGenbankLink = genBankLink + d.subsequenceWebApiId + "'>Peptide ncbi page</a>";
                 tooltipContent.push(peptideGenbankLink);
             }
 
@@ -89,7 +89,7 @@
 
             if ($scope.highlight) {
                 var tooltipHtml = [];
-                tooltipHtml.push("<strong>" + $scope.fillPointTooltip(d) + "</strong>");
+                tooltipHtml.push($scope.fillPointTooltip(d));
 
                 $scope.tooltip.similarDots = $scope.svg.selectAll(".dot")
                     .filter(function (dot) {
