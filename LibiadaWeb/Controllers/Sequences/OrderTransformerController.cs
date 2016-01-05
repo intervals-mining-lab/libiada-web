@@ -53,7 +53,6 @@
             links = links.OrderBy(n => (int)n).ToList();
             data.Add("links", links.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToList());
             ViewBag.data = JsonConvert.SerializeObject(data);
-            ViewBag.angularController = "OrderTransformerController";
             return View();
         }
 

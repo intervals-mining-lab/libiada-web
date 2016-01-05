@@ -1,8 +1,10 @@
-﻿@{
+﻿@using LibiadaWeb.Models
+@using LibiadaWeb.Models.Account
+@{
     ViewBag.Title = "Characteristics calculation";
 }
 
-@Html.Partial("_AngularControllerInitializer")
+@Html.Partial("_AngularControllerInitializer", "CalculationController")
 
 <h2>@ViewBag.Title</h2>
 
@@ -16,32 +18,35 @@
         @Html.Partial("_NatureSelect")
         @Html.Partial("_MattersTable")
         @Html.Partial("_Characteristics")
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="complementary" value="true" ng-model="complementary" />
-                    <input type="hidden" name="complementary" value="false" />
-                    Calculate characteristic for complementary sequence
-                </label>
+        @if (UserHelper.IsAdmin())
+        {
+            <div class="form-group" ng-if="natureId==@Aliases.Nature.Genetic">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="complementary" value="true" ng-model="complementary" />
+                        Calculate characteristic for complementary sequence
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="rotate" value="true" ng-model="rotate" />
-                    <input type="hidden" name="rotate" value="false" />
-                    Rotate sequences cyclically
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="rotate" value="true" ng-model="rotate" />
+                        Rotate sequences cyclically
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group" ng-show="rotate">
-            <label class="control-label col-md-2" for="rotationLength">Rotation length:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
-                @Html.ValidationMessage("rotationLength", "", new { @class = "text-danger" })
+            <div class="form-group" ng-show="rotate">
+                <label class="control-label col-md-2" for="rotationLength">Rotation length:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="rotationLength" type="number" value="100" min="1" id="rotationLength" />
+                    @Html.ValidationMessage("rotationLength", "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <hr />
+            <hr />
+        }
+        <input type="hidden" name="complementary" value="false"/>
+        <input type="hidden" name="rotate" value="false" />
         @Html.Partial("_MattersSubmit")
     </div>
 }

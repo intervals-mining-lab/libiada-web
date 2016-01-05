@@ -69,7 +69,6 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, true, "Calculate"));
-            ViewBag.angularController = "SubsequencesDistributionController";
             return View();
         }
 
@@ -216,8 +215,7 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "data", JsonConvert.SerializeObject(resultData) },
-                    { "angularController", "SubsequencesDistributionResultController" }
+                    { "data", JsonConvert.SerializeObject(resultData) }
                 };
             });
         }

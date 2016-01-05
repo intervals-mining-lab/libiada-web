@@ -4,7 +4,7 @@
 
 <h2>@ViewBag.Title</h2>
 
-@Html.Partial("_AngularControllerInitializer")
+@Html.Partial("_AngularControllerInitializer", "CustomCalculationController")
 
 @using (Html.BeginForm("Index", "CustomSequenceCalculation", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {

@@ -12,13 +12,6 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    @if (!string.IsNullOrEmpty(ViewBag.angularController))
-    {
-        @Scripts.Render("~/bundles/angularjs")
-        @Scripts.Render("~/bundles/functions")
-        @Scripts.Render("~/bundles/controllers/" + ViewBag.angularController)
-    }
-
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">

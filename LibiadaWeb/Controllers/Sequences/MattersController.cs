@@ -30,8 +30,6 @@
                 matter = matter.Where(m => m.NatureId == Aliases.Nature.Genetic);
             }
 
-            ViewBag.angularController = "MatterSequenceCreateController";
-
             return View(await matter.ToListAsync());
         }
 

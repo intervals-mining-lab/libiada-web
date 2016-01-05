@@ -59,7 +59,6 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.CongenericSequenceApplicable, 1, int.MaxValue, true, "Calculate"));
-            ViewBag.angularController = "CalculationController";
             return View();
         }
 

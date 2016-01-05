@@ -66,7 +66,6 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.BinarySequenceApplicable, 1, 1, false, "Calculate"));
-            ViewBag.angularController = "AccordanceController";
             return View();
         }
 

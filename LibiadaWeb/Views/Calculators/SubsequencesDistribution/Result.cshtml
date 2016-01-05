@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer")
+    @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
     <div class="form-horizontal" ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
         <table class="table table-bordered table-hover">
             <thead>

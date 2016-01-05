@@ -64,7 +64,6 @@
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Transform");
             data.Add("natureId", Aliases.Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
-            ViewBag.angularController = "SubsequencesCalculationController";
             return View();
         }
 

@@ -58,7 +58,6 @@
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Import");
             data.Add("natureId", Aliases.Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
-            ViewBag.angularController = "GenesImportController";
             return View();
         }
 

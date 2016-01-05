@@ -82,7 +82,7 @@
                 {
                     { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(filter) }
                 });
-            ViewBag.angularController = "CustomCalculationController";
+
             return View();
         }
 

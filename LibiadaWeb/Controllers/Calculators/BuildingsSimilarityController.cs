@@ -49,7 +49,6 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(2, 2, true, "Compare"));
-            ViewBag.angularController = "BuildingsSimilarityController";
             return View();
         }
 

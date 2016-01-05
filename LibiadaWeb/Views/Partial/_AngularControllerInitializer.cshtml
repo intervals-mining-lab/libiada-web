@@ -1,7 +1,16 @@
-﻿<script type="text/javascript">
+﻿@model string
+
+
+@Scripts.Render("~/bundles/angularjs")
+@Scripts.Render("~/bundles/functions")
+@Scripts.Render("~/bundles/controllers/" + @Model)
+
+
+
+<script type="text/javascript">
     "use strict";
 
     var data = @Html.Raw(ViewBag.data);
-    var controllerConstructor = @ViewBag.angularController;
+    var controllerConstructor = @Model;
     controllerConstructor(data);
 </script>

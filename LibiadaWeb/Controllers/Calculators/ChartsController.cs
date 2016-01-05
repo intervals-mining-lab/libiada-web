@@ -15,7 +15,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.angularController = "ChartsController";
             return View();
         }
     }

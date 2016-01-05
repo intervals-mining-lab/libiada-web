@@ -55,7 +55,6 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(2, 2, true, "Align"));
-            ViewBag.angularController = "SequencesAlignmentController";
             return View();
         }
 

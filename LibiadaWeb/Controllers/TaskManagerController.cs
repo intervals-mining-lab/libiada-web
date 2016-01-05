@@ -58,7 +58,7 @@
                 {
                     { "tasks", tasks }
                 });
-            ViewBag.angularController = "TaskManagerController";
+
             return View();
         }
 

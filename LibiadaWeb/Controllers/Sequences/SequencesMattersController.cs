@@ -126,7 +126,7 @@
                     { "translators", translators }, 
                     { "natureLiterature", Aliases.Nature.Literature }
                 });
-            ViewBag.angularController = "MatterSequenceCreateController";
+
             return View();
         }
 

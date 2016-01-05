@@ -89,7 +89,6 @@
             }
 
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate"));
-            ViewBag.angularController = "CalculationController";
             return View();
         }
 
@@ -244,8 +243,7 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "data", JsonConvert.SerializeObject(result) },
-                               { "angularController", "CalculationResultController" }
+                               { "data", JsonConvert.SerializeObject(result) }
                            };
             });
         }
