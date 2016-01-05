@@ -201,7 +201,7 @@
                 var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
                 var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
 
-                var features = db.Feature.Where(f => f.NatureId == Aliases.Nature.Genetic && !f.Complete).ToList();
+                var features = db.Feature.Where(f => featureIds.Contains(f.Id)).ToList();
                 var featuresSelectList = features.Select(f => new { Value = f.Id, Text = f.Name, Selected = true });
 
                 var resultData = new Dictionary<string, object>
