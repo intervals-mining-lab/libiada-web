@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -37,7 +38,7 @@
         /// <summary>
         /// The sequence attribute repository.
         /// </summary>
-        private readonly SequenceAttributeRepository sequenceAttributeRepository; 
+        private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
@@ -101,6 +102,13 @@
                 var sequencesPositions = new List<List<long>>();
                 var sequenceFeatures = new List<List<string>>();
                 var characteristicNames = new List<string>();
+                var newCharacteristics = new List<Characteristic>();
+
+                var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && notationIds.Contains(s.NotationId)).ToArray();
+                var sequenceIds = parentSequences.Select(s => s.Id).ToArray();
+                var subsequenceIds = db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId)).Select(s => s.Id).ToArray();
+                var dbCharacteristics = db.Characteristic.Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId)).ToList();
+
 
                 // cycle through matters; first level of characteristics array
                 foreach (long matterId in matterIds)
@@ -115,8 +123,7 @@
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         var notationId = notationIds[i];
-                        var id = matterId;
-                        var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == id && c.NotationId == notationId).Id;
+                        var parentSequenceId = parentSequences.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
                         List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
                         var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
@@ -131,7 +138,7 @@
                         {
                             long subsequenceId = subsequences[j].Id;
 
-                            if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                            if (!dbCharacteristics.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                             {
                                 double value = calculator.Calculate(sequences[j], link);
                                 var currentCharacteristic = new Characteristic
@@ -142,15 +149,15 @@
                                                                     ValueString = value.ToString()
                                                                 };
 
-                                db.Characteristic.Add(currentCharacteristic);
-                                db.SaveChanges();
+                                newCharacteristics.Add(currentCharacteristic);
+                                dbCharacteristics.Add(currentCharacteristic);
                             }
                         }
 
                         for (int d = 0; d < sequences.Count; d++)
                         {
                             long subsequenceId = subsequences[d].Id;
-                            double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                            double characteristic = dbCharacteristics.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));
 
@@ -166,6 +173,38 @@
                         }
                     }
                 }
+
+                // trying to save calculated characteristics to database
+                if (newCharacteristics.Count > 0)
+                {
+                    try
+                    {
+                        db.Characteristic.AddRange(newCharacteristics);
+                        db.SaveChanges();
+                    }
+                    catch (Exception exception)
+                    {
+                        var characteristicsSequences = newCharacteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                        var characteristicsTypes = newCharacteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
+                        var characteristicsFilter = newCharacteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
+                        var wasteCharacteristics = db.Characteristic.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
+                                                                    .ToArray()
+                                                                    .Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }))
+                                                                    .Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
+                        var wasteNewCharacteristics = newCharacteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
+
+                        db.Characteristic.RemoveRange(wasteNewCharacteristics);
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception anotherException)
+                        {
+                        }
+                    }
+                }
+
+
 
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
