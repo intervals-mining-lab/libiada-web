@@ -87,14 +87,8 @@
         /// <param name="firstCharacteristicTypeLinkId">
         /// The first characteristic type and link id.
         /// </param>
-        /// <param name="firstNotationId">
-        /// The first notation id.
-        /// </param>
         /// <param name="secondCharacteristicTypeLinkId">
         /// The second characteristic type and link id.
-        /// </param>
-        /// <param name="secondNotationId">
-        /// The second notation id.
         /// </param>
         /// <param name="featureIds">
         /// The feature ids.
@@ -104,19 +98,13 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(
-            long[] matterIds,
-            int firstCharacteristicTypeLinkId,
-            int firstNotationId,
-            int secondCharacteristicTypeLinkId,
-            int secondNotationId,
-            int[] featureIds)
+        public ActionResult Index(long[] matterIds, int firstCharacteristicTypeLinkId, int secondCharacteristicTypeLinkId, int[] featureIds)
         {
             return Action(() =>
             {
                 var sequenceCharacteristics = new List<SequenceData>();
 
-                var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
+                var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == Aliases.Notation.Nucleotide).Select(c => c.Id).ToList();
                 var subsequenceIds = db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId)).Select(s => s.Id).ToArray();
                 var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
@@ -201,14 +189,14 @@
                     }
 
                     subsequencesCharacteristics = subsequencesCharacteristics.OrderBy(g => g.Characteristic).ToList();
-                    var webApiId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == firstNotationId).WebApiId;
+                    var webApiId = db.DnaSequence.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).WebApiId;
                     sequenceCharacteristics.Add(new SequenceData(matterId, matterName, webApiId, sequenceCharacteristic, subsequencesCharacteristics));
                 }
 
                 sequenceCharacteristics = sequenceCharacteristics.OrderBy(r => r.Characteristic).ToList();
 
-                var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
-                var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
+                var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, Aliases.Notation.Nucleotide);
+                var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, Aliases.Notation.Nucleotide);
 
                 var features = featureRepository.GetFeaturesById(featureIds);
                 var featuresSelectList = features.Select(f => new { Value = f.Id, Text = f.Name, Selected = true });

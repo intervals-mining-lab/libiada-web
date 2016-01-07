@@ -31,13 +31,6 @@
                 <input type="hidden" name="firstCharacteristicTypeLinkId" ng-value="firstCharacteristic.link.CharacteristicTypeLinkId" />
             </div>
         </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="firstNotation">Notation:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="Notation" ng-model="firstCharacteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="firstNotation"></select>
-                <input type="hidden" name="firstNotationId" ng-value="firstCharacteristic.notation.Value" />
-            </div>
-        </div>
         <br />
         <hr />
         <br />
@@ -54,13 +47,6 @@
                 <select class="form-control" title="Link" ng-model="secondCharacteristic.link" ng-options="l.Text for l in secondCharacteristic.characteristicType.CharacteristicLinks" id="secondLink"></select>
                 <input type="hidden" name="secondLinkId" ng-value="secondCharacteristic.link.Value" />
                 <input type="hidden" name="secondCharacteristicTypeLinkId" ng-value="secondCharacteristic.link.CharacteristicTypeLinkId" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="secondNotation">Notation:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="Notation" ng-model="secondCharacteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="secondNotation"></select>
-                <input type="hidden" name="secondNotationId" ng-value="secondCharacteristic.notation.Value" />
             </div>
         </div>
         <hr />

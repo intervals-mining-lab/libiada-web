@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Link = LibiadaCore.Core.Link;
@@ -15,6 +16,11 @@
         private readonly LibiadaWebEntities db;
 
         /// <summary>
+        /// The characteristic type links.
+        /// </summary>
+        private readonly List<CharacteristicTypeLink> characteristicTypeLinks;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicTypeLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
@@ -23,6 +29,7 @@
         public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
         {
             this.db = db;
+            characteristicTypeLinks = db.CharacteristicTypeLink.ToList();
         }
 
         /// <summary>
@@ -36,7 +43,7 @@
         /// </returns>
         public Link GetLibiadaLink(int characteristicTypeLinkId)
         {
-            return (Link)db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).LinkId;
+            return (Link)characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).LinkId;
         }
 
         /// <summary>
@@ -50,7 +57,7 @@
         /// </returns>
         public CharacteristicType GetCharacteristicType(int characteristicTypeLinkId)
         {
-            var characteristicTypeId = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).CharacteristicTypeId;
+            var characteristicTypeId = characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).CharacteristicTypeId;
             return db.CharacteristicType.Single(c => c.Id == characteristicTypeId);
         }
 
@@ -86,7 +93,7 @@
         {
             var characteristicType = GetCharacteristicType(characteristicTypeLinkId).Name;
 
-            var databaseLink = db.CharacteristicTypeLink.Single(c => c.Id == characteristicTypeLinkId).Link;
+            var databaseLink = characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
             var link = databaseLink.Id != Aliases.Link.NotApplied ? databaseLink.Name : string.Empty;
 
             return string.Join("  ", characteristicType, link);

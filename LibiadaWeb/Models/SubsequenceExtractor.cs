@@ -78,9 +78,28 @@
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        public List<Subsequence> GetSubsequences(long sequenceId, int[] featureIds)
+        public List<Subsequence> GetSubsequences(long sequenceId, IEnumerable<int> featureIds)
         {
             return db.Subsequence.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId))
+                                        .Include(g => g.Position)
+                                        .Include(g => g.SequenceAttribute).ToList();
+        }
+
+        /// <summary>
+        /// The get subsequences.
+        /// </summary>
+        /// <param name="sequenceIds">
+        /// The sequences ids.
+        /// </param>
+        /// <param name="featureIds">
+        /// The feature ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        public List<Subsequence> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
+        {
+            return db.Subsequence.Where(g => sequenceIds.Contains(g.SequenceId) && featureIds.Contains(g.FeatureId))
                                         .Include(g => g.Position)
                                         .Include(g => g.SequenceAttribute).ToList();
         }
