@@ -1081,6 +1081,13 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Stem loop', 'H
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Displacement loop', 'A region within mitochondrial DNA in which a short stretch of RNA is paired with one strand of DNA, displacing the original partner DNA strand in this region; also used to describe the displacement of a region of one strand of duplex DNA by a single stranded invader in the reaction catalyzed by RecA protein.', 1, 'D-loop');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Diversity segment', 'Diversity segment of immunoglobulin heavy chain, and T-cell receptor beta chain.', 1, 'D_segment');
 
+-- 07.01.2016
+-- Removing characteristics' string value.
+
+ALTER TABLE accordance_characteristic  DROP COLUMN value_string; 
+ALTER TABLE binary_characteristic  DROP COLUMN value_string; 
+ALTER TABLE characteristic  DROP COLUMN value_string; 
+ALTER TABLE congeneric_characteristic  DROP COLUMN value_string; 
 
 
 COMMIT;

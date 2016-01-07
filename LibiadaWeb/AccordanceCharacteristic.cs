@@ -19,7 +19,6 @@ namespace LibiadaWeb
         public long SecondSequenceId { get; set; }
         public int CharacteristicTypeLinkId { get; set; }
         public double Value { get; set; }
-        public string ValueString { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long FirstElementId { get; set; }
         public long SecondElementId { get; set; }

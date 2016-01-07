@@ -138,8 +138,7 @@
                         {
                             SequenceId = sequenceId,
                             CharacteristicTypeLinkId = firstCharacteristicTypeLinkId,
-                            Value = sequenceCharacteristic,
-                            ValueString = sequenceCharacteristic.ToString()
+                            Value = sequenceCharacteristic
                         };
                         db.Characteristic.Add(dataBaseCharacteristic);
                         db.SaveChanges();
@@ -170,8 +169,7 @@
                             {
                                 SequenceId = subsequenceId,
                                 CharacteristicTypeLinkId = secondCharacteristicTypeLinkId,
-                                Value = value,
-                                ValueString = value.ToString()
+                                Value = value
                             };
 
                             db.Characteristic.Add(currentCharacteristic);

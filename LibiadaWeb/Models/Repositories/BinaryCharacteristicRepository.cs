@@ -47,8 +47,7 @@ namespace LibiadaWeb.Models.Repositories
                 CharacteristicTypeLinkId = characteristicTypeLinkId, 
                 FirstElementId = firstElementId, 
                 SecondElementId = secondElementId, 
-                Value = value, 
-                ValueString = value.ToString()
+                Value = value
             };
             db.BinaryCharacteristic.Add(characteristic);
             db.SaveChanges();

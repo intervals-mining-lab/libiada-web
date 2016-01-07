@@ -158,8 +158,7 @@
                                 {
                                     SequenceId = subsequences[j].Id,
                                     CharacteristicTypeLinkId = characteristicTypeLinkId,
-                                    Value = value,
-                                    ValueString = value.ToString()
+                                    Value = value
                                 };
 
                                 newCharacteristics.Add(currentCharacteristic);

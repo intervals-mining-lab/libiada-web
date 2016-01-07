@@ -171,8 +171,7 @@
                                         SequenceId = sequenceId,
                                         CharacteristicTypeLinkId = characteristicTypeLinkId,
                                         ElementId = elementId,
-                                        Value = value,
-                                        ValueString = value.ToString(),
+                                        Value = value
                                     };
 
                                     db.CongenericCharacteristic.Add(currentCharacteristic);

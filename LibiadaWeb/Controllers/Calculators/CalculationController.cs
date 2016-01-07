@@ -207,8 +207,7 @@
                                 {
                                     SequenceId = sequenceId,
                                     CharacteristicTypeLinkId = characteristicTypeLinkIds[i],
-                                    Value = characteristicValue,
-                                    ValueString = characteristicValue.ToString()
+                                    Value = characteristicValue
                                 };
 
                                 newCharacteristics.Add(characteristic);

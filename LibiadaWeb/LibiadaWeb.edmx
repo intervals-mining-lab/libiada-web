@@ -14,7 +14,6 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="value_string" Type="text" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
@@ -30,7 +29,6 @@
           <Property Name="second_chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="value_string" Type="text" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
@@ -61,7 +59,6 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="value_string" Type="text" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
@@ -303,7 +300,6 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="value_string" Type="text" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="element_id" Type="int8" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -1848,7 +1844,6 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
@@ -1868,7 +1863,6 @@
           <Property Name="SecondSequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
@@ -1910,7 +1904,6 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_characteristic_chain" FromRole="Characteristic" ToRole="CommonSequence" />
@@ -2253,7 +2246,6 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="ValueString" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="ElementId" Type="Int64" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -3970,7 +3962,6 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="ValueString" ColumnName="value_string" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
@@ -3987,7 +3978,6 @@
                 <ScalarProperty Name="SecondSequenceId" ColumnName="second_chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="ValueString" ColumnName="value_string" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
@@ -4020,7 +4010,6 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="ValueString" ColumnName="value_string" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -4282,7 +4271,6 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="ValueString" ColumnName="value_string" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="ElementId" ColumnName="element_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

@@ -247,8 +247,7 @@
                     {
                         SequenceId = subsequenceId,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
-                        Value = value,
-                        ValueString = value.ToString()
+                        Value = value
                     };
 
                     db.Characteristic.Add(currentCharacteristic);
