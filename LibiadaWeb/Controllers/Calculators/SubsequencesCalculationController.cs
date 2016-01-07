@@ -41,14 +41,21 @@
         private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
         /// <summary>
+        /// The feature repository.
+        /// </summary>
+        private readonly FeatureRepository featureRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController() : base("Subsequences characteristics calculation")
+        public SubsequencesCalculationController()
+            : base("Subsequences characteristics calculation")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
+            featureRepository = new FeatureRepository(db);
         }
 
         /// <summary>
@@ -73,9 +80,6 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="notationIds">
-        /// The notation ids.
-        /// </param>
         /// <param name="featureIds">
         /// The feature ids.
         /// </param>
@@ -90,7 +94,6 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int[] notationIds,
             int[] featureIds,
             bool sort)
         {
@@ -104,11 +107,11 @@
                 var characteristicNames = new List<string>();
                 var newCharacteristics = new List<Characteristic>();
 
-                var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && notationIds.Contains(s.NotationId)).ToArray();
+                var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && (s.NotationId == Aliases.Notation.Nucleotide)).ToArray();
                 var sequenceIds = parentSequences.Select(s => s.Id).ToArray();
                 var subsequenceIds = db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId)).Select(s => s.Id).ToArray();
                 var dbCharacteristics = db.Characteristic.Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId)).ToList();
-
+                var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
                 // cycle through matters; first level of characteristics array
                 foreach (long matterId in matterIds)
@@ -119,14 +122,13 @@
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
+                    var parentSequenceId = parentSequences.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
+                    List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+                    var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
+
                     // cycle through characteristics and notations; second level of characteristics array
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        var notationId = notationIds[i];
-                        var parentSequenceId = parentSequences.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
-                        List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
-                        var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
-
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
@@ -154,23 +156,19 @@
                             }
                         }
 
-                        for (int d = 0; d < sequences.Count; d++)
+                        for (int k = 0; k < subsequences.Count; k++)
                         {
-                            long subsequenceId = subsequences[d].Id;
-                            double characteristic = dbCharacteristics.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
-
-                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));
-
-                            if (i == 0)
-                            {
-                                sequenceAttributes.Last().Add(sequenceAttributeRepository.GetAttributes(subsequences[d].Id));
-                                sequencesPositions.Last().Add(subsequences[d].Start);
-
-                                var featureId = subsequences[d].FeatureId;
-
-                                sequenceFeatures.Last().Add(db.Feature.Single(p => featureId == p.Id).Name);
-                            }
+                            double characteristic = dbCharacteristics.Single(c => c.SequenceId == subsequences[k].Id && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                            characteristics.Last().Last().Add(new KeyValuePair<int, double>(k, characteristic));
                         }
+                    }
+
+                    foreach (Subsequence subsequence in subsequences)
+                    {
+                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(dbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                        sequenceAttributes.Last().Add(attributes);
+                        sequencesPositions.Last().Add(subsequence.Start);
+                        sequenceFeatures.Last().Add(featureRepository.GetFeatureById(subsequence.FeatureId).Name);
                     }
                 }
 
@@ -209,7 +207,7 @@
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k]));
                 }
 
                 // rank sorting

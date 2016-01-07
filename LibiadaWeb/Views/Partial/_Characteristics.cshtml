@@ -20,7 +20,7 @@
     </div>
     @if (UserHelper.IsAdmin())
     {
-        <div class="form-group">
+        <div class="form-group" ng-hide="hideNotation">
             <label class="control-label col-md-2" for="notation">Notation:</label>
             <div class="col-md-10">
                 <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>

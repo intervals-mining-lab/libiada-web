@@ -116,14 +116,27 @@
                 List<Subsequence> firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, featureIds);
                 var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
-                var firstSequenceAttributes = firstSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
+                var firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
+                var firstSequenceAttributes = new List<List<string>>();
+                foreach (var subsequence in firstSequenceSubsequences)
+                {
+                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(firstDbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                    firstSequenceAttributes.Add(attributes);
+                }
 
                 var secondMatterId = matterIds[1];
                 var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
                 List<Subsequence> secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, featureIds);
                 var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
-                var secondSequenceAttributes = secondSequenceSubsequences.Select(s => sequenceAttributeRepository.GetAttributes(s.Id)).ToList();
+                var secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
+                var secondSequenceAttributes = new List<List<string>>();
+                foreach (var subsequence in secondSequenceSubsequences)
+                {
+                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(secondDbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                    secondSequenceAttributes.Add(attributes);
+                }
+
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 

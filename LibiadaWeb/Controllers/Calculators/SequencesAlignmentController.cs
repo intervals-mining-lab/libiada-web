@@ -36,6 +36,11 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
+        /// The feature repository.
+        /// </summary>
+        private readonly FeatureRepository featureRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
         public SequencesAlignmentController() : base("Sequences alignment")
@@ -43,6 +48,7 @@
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            featureRepository = new FeatureRepository(db);
         }
 
         /// <summary>
@@ -152,7 +158,7 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "features", db.Feature.Where(p => featureIds.Contains(p.Id)).Select(p => p.Name).ToList() },
+                    { "features", featureRepository.GetFeaturesById(featureIds).Select(p => p.Name).ToList() },
                     { "optimalRotation", optimalRotation },
                     { "distances", distances },
                     { "validationType", validationType },

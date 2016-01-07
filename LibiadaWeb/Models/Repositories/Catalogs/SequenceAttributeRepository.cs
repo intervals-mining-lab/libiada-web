@@ -93,18 +93,30 @@
         /// <summary>
         /// The get attributes.
         /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
+        /// <param name="sequenceIds">
+        /// The subsequences ids.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The <see cref="List{SequenceAttribute}"/>.
         /// </returns>
-        public List<string> GetAttributes(long sequenceId)
+        public List<SequenceAttribute> GetAttributes(IEnumerable<long> sequenceIds)
         {
-            var sequenceAttributes = db.SequenceAttribute.Where(sa => sa.SequenceId == sequenceId).Include(sa => sa.Attribute);
-
-            return sequenceAttributes.Select(sa => sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)).ToList();
+            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToList();
         }
+
+        /// <summary>
+        /// The convert attributes to string.
+        /// </summary>
+        /// <param name="attributes">
+        /// The attributes.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{String}"/>.
+        /// </returns>
+        public List<string> ConvertAttributesToString(IEnumerable<SequenceAttribute> attributes)
+        {
+            return attributes.Select(sa => sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)).ToList();
+        } 
 
         /// <summary>
         /// Creates and adds to db subsequence attributes.

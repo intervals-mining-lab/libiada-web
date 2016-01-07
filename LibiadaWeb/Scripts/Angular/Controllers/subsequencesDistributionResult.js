@@ -285,6 +285,8 @@
                 .style("font-size", "9pt");
         }
 
+        $scope.setCheckBoxesState = SetCheckBoxesState;
+
         $scope.drawGenesMap = drawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.filterByFeature = filterByFeature;

@@ -17,7 +17,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The features.
         /// </summary>
-        private readonly List<Feature> features;
+        private readonly List<Feature> features; 
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureRepository"/> class.
@@ -29,6 +29,17 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             this.db = db;
             features = db.Feature.OrderBy(f => f.Id).ToList();
+        }
+
+        /// <summary>
+        /// Gets the features.
+        /// </summary>
+        public IEnumerable<Feature> Features
+        {
+            get
+            {
+                return features.ToList();
+            }
         }
 
         /// <summary>
@@ -54,6 +65,34 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public int GetFeatureIdByName(string name)
         {
             return features.Single(f => f.Type == name).Id;
+        }
+
+        /// <summary>
+        /// The get features by id.
+        /// </summary>
+        /// <param name="featureIds">
+        /// The feature ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Feature}"/>.
+        /// </returns>
+        public IEnumerable<Feature> GetFeaturesById(int[] featureIds)
+        {
+            return features.Where(f => featureIds.Contains(f.Id));
+        }
+
+        /// <summary>
+        /// The get feature by id.
+        /// </summary>
+        /// <param name="featureId">
+        /// The feature id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Feature"/>.
+        /// </returns>
+        public Feature GetFeatureById(int featureId)
+        {
+            return features.Single(f => f.Id == featureId);
         }
 
         /// <summary>
@@ -106,7 +145,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
-            return GetSelectListWithNature(db.Feature.Select(f => f.Id), selectedFeatures);
+            return GetSelectListWithNature(features.Select(f => f.Id), selectedFeatures);
         }
 
         /// <summary>

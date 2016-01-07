@@ -48,6 +48,11 @@
         private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
         /// <summary>
+        /// The feature repository.
+        /// </summary>
+        private readonly FeatureRepository featureRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
         public SubsequencesDistributionController() : base("Subsequences distribution")
@@ -57,6 +62,7 @@
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
+            featureRepository = new FeatureRepository(db);
         }
 
         /// <summary>
@@ -111,6 +117,9 @@
                 var sequenceCharacteristics = new List<SequenceData>();
 
                 var sequenceIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.NotationId == secondNotationId).Select(c => c.Id).ToList();
+                var subsequenceIds = db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId)).Select(s => s.Id).ToArray();
+                var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+
 
                 int maxSubsequences = 0;
                 int maxSubsequencesIndex = 0;
@@ -186,8 +195,8 @@
                     {
                         long subsequenceId = subsequences[d].Id;
                         double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId).Value;
-
-                        var geneCharacteristic = new SubsequenceData(subsequences[d], characteristic, sequenceAttributeRepository.GetAttributes(subsequences[d].Id));
+                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(dbSubsequencesAttributes.Where(a => a.SequenceId == subsequenceId));
+                        var geneCharacteristic = new SubsequenceData(subsequences[d], characteristic, attributes);
                         subsequencesCharacteristics.Add(geneCharacteristic);
                     }
 
@@ -201,7 +210,7 @@
                 var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, firstNotationId);
                 var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, secondNotationId);
 
-                var features = db.Feature.Where(f => featureIds.Contains(f.Id)).ToList();
+                var features = featureRepository.GetFeaturesById(featureIds);
                 var featuresSelectList = features.Select(f => new { Value = f.Id, Text = f.Name, Selected = true });
 
                 var resultData = new Dictionary<string, object>

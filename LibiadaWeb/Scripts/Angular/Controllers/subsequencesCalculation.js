@@ -41,6 +41,7 @@
 
         $scope.selectedMatters = 0;
         $scope.characteristics = [];
+        $scope.hideNotation = true;
     }
 
     angular.module("SubsequencesCalculation", []).controller("SubsequencesCalculationCtrl", ["$scope", subsequencesCalculation]);
