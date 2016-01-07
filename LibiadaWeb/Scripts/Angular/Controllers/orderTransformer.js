@@ -19,7 +19,7 @@
         function addTransformation() {
             $scope.transformations.push({
                 link: $scope.links[0],
-                operation: { name: "Dissimilar" }
+                operation: $scope.operations[0]
             });
         };
 

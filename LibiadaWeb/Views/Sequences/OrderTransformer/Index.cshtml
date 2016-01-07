@@ -17,26 +17,17 @@
         <hr />
         <div ng-repeat="transformation in transformations">
             <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="transformations" value="Dissimilar" ng-model="transformation.operation.name" />
-                        Dissimilar
-                    </label>
+                <label class="control-label col-md-2" for="operation">Transformation:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Operation" ng-model="transformation.operation" ng-options="o.Text for o in operations" id="operation"></select>
+                    <input type="hidden" name="transformationIds" ng-value="transformation.operation.Value" />
                 </div>
             </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <label>
-                        <input type="radio" name="transformations" value="HigherOrder" ng-model="transformation.operation.name" />
-                        Higher order
-                    </label>
-                </div>
-            </div>
-            <div class="form-group" ng-show="transformation.operation.name == 'HigherOrder'">
+           <div class="form-group" ng-show="transformation.operation.Value == 2">
                 <label class="control-label col-md-2" for="link">Link:</label>
                 <div class="col-md-10">
                     <select class="form-control" title="Link" ng-model="transformation.link" ng-options="l.Text for l in links" id="link"></select>
-                    <input type="hidden" name="linkIds" ng-value="link.Value"/>
+                    <input type="hidden" name="linkIds" ng-value="transformation.link.Value"/>
                 </div>
             </div>
             <br />
