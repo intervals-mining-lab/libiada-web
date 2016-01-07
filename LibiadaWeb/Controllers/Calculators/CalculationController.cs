@@ -141,6 +141,7 @@
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToList();
                 var characteristicNames = new List<string>();
+                var newCharacteristics = new List<Characteristic>();
 
                 foreach (var matterId in matterIds)
                 {
@@ -168,10 +169,12 @@
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        if (!rotate && !complementary && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                        Func<Characteristic, bool> characteristicFilter = c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId;
+
+                        if (!rotate && !complementary && db.Characteristic.Any(characteristicFilter))
                         {
-                            double dataBaseCharacteristic = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
-                            characteristics.Add(dataBaseCharacteristic);
+                            double characteristicValue = db.Characteristic.Single(characteristicFilter).Value;
+                            characteristics.Add(characteristicValue);
                         }
                         else
                         {
@@ -200,15 +203,15 @@
                             var characteristicValue = calculator.Calculate(tempChain, link);
                             if (!rotate && !complementary)
                             {
-                                var dataBaseCharacteristic = new Characteristic
+                                var characteristic = new Characteristic
                                 {
                                     SequenceId = sequenceId,
                                     CharacteristicTypeLinkId = characteristicTypeLinkIds[i],
                                     Value = characteristicValue,
                                     ValueString = characteristicValue.ToString()
                                 };
-                                db.Characteristic.Add(dataBaseCharacteristic);
-                                db.SaveChanges();
+
+                                newCharacteristics.Add(characteristic);
                             }
 
                             characteristics.Add(characteristicValue);
@@ -216,6 +219,36 @@
                     }
 
                     mattersCharacteristics.Add(new { matterName = matters.Single(m => m.Id == matterId).Name, characteristics });
+                }
+
+                // trying to save calculated characteristics to database
+                if (newCharacteristics.Count > 0)
+                {
+                    try
+                    {
+                        db.Characteristic.AddRange(newCharacteristics);
+                        db.SaveChanges();
+                    }
+                    catch (Exception exception)
+                    {
+                        var characteristicsSequences = newCharacteristics.Select(c => c.SequenceId).Distinct().ToArray();
+                        var characteristicsTypes = newCharacteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
+                        var characteristicsFilter = newCharacteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
+                        var wasteCharacteristics = db.Characteristic.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
+                                                                    .ToArray()
+                                                                    .Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }))
+                                                                    .Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
+                        var wasteNewCharacteristics = newCharacteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
+
+                        db.Characteristic.RemoveRange(wasteNewCharacteristics);
+                        try
+                        {
+                            db.SaveChanges();
+                        }
+                        catch (Exception anotherException)
+                        {
+                        }
+                    }
                 }
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)

@@ -91,11 +91,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(
-            long[] matterIds,
-            int[] characteristicTypeLinkIds,
-            int[] featureIds,
-            bool sort)
+        public ActionResult Index(long[] matterIds, int[] characteristicTypeLinkIds, int[] featureIds, bool sort)
         {
             return Action(() =>
             {
