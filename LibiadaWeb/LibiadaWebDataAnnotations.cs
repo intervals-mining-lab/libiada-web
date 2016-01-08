@@ -96,12 +96,6 @@
         /// </summary>
         [Display(Name = "Sequence")]
         public long SequenceId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value string.
-        /// </summary>
-        [Display(Name = "Value as string")]
-        public string ValueString { get; set; }
     }
 
     /// <summary>
