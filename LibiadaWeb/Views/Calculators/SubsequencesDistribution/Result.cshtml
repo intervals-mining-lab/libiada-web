@@ -37,9 +37,23 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
+                    <input type="checkbox" name="highlight" ng-model="highlight" value="false"/>
                     Highlight similar subsequences
                 </label>
+            </div>
+        </div>
+        <div class="form-group" ng-show="highlight">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="highlightAll" ng-model="highlightAll" value="false"/>
+                    Highlight all similar subsequences of selected organism
+                </label>
+            </div>
+        </div>
+        <div class="form-group" ng-show="highlight">
+            <label class="control-label col-md-2" for="precision">Precision of characteristics comparison:</label>
+            <div class="col-md-10">
+                <input class="form-control" ng-model="precision" type="number" value="0" step="any" min="0" id="precision" />
             </div>
         </div>
         <div id="chart">

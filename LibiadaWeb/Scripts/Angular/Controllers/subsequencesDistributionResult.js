@@ -80,20 +80,20 @@
             return tooltipContent.join("</br>");
         }
 
-        function showTooltip(d) {
-            $scope.clearTooltip();
+        function showTooltip(d, tooltip, svg) {
+            $scope.clearTooltip(tooltip);
 
-            $scope.tooltip.style("opacity", .9);
-            $scope.tooltip.selectedDot = d3.select(this);
-            $scope.tooltip.selectedDot.attr("r", function (dot) { return $scope.dotRadius * 3; });
+            tooltip.style("opacity", .9);
+            tooltip.selectedDot = tooltip.newSelectedDot;
+            tooltip.selectedDot.attr("r", function (dot) { return $scope.dotRadius * 3; });
 
             if ($scope.highlight) {
                 var tooltipHtml = [];
                 tooltipHtml.push($scope.fillPointTooltip(d));
 
-                $scope.tooltip.similarDots = $scope.svg.selectAll(".dot")
+                tooltip.similarDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.y === d.y && $scope.dotVisible(d) && dot.id !== d.id) {
+                        if (dot.y >= (d.y - $scope.precision) && dot.y <= (d.y + $scope.precision) && $scope.dotVisible(d) && dot.id !== d.id) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
@@ -104,13 +104,13 @@
                         return $scope.dotVisible(dot) ? $scope.dotRadius * 3 : 0;
                     });
 
-                $scope.tooltip.html(tooltipHtml.join("</br></br>"));
+                tooltip.html(tooltipHtml.join("</br></br>"));
 
             } else {
-                $scope.tooltip.html($scope.fillPointTooltip(d));
+                tooltip.html($scope.fillPointTooltip(d));
             }
 
-            $scope.tooltip.style("background", "#000")
+            tooltip.style("background", "#000")
                 .style("color", "#fff")
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
@@ -118,32 +118,30 @@
                 .style("left", (d3.event.pageX + 18) + "px")
                 .style("top", (d3.event.pageY + 18) + "px");
 
-            $scope.tooltip.hideTooltip = false;
+            tooltip.hideTooltip = false;
         }
 
-        function clearTooltip() {
-            if ($scope.tooltip) {
-                if ($scope.tooltip.hideTooltip) {
-                    $scope.tooltip.html("").style("opacity", 0);
+        function clearTooltip(tooltip) {
+            if (tooltip) {
+                if (tooltip.hideTooltip) {
+                    tooltip.html("").style("opacity", 0);
 
-                    if ($scope.tooltip.selectedDot) {
-                        $scope.tooltip.selectedDot
-                            .attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                    if (tooltip.selectedDot) {
+                        tooltip.selectedDot.attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
                     }
 
-                    if ($scope.tooltip.similarDots) {
-                        $scope.tooltip.similarDots
-                            .attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                    if (tooltip.similarDots) {
+                        tooltip.similarDots.attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
                     }
                 }
 
-                $scope.tooltip.hideTooltip = true;
+                tooltip.hideTooltip = true;
             }
         }
 
         function drawGenesMap() {
-            // removing previous chart is any
-            $scope.clearTooltip();
+            // removing previous chart and tooltip if any
+            d3.select(".tooltip").remove();
             d3.select("svg").remove();
 
             // all organisms are visible after redrawing
@@ -181,22 +179,22 @@
             var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
-            $scope.svg = d3.select("#chart").append("svg")
+            var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.hight)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             // add the tooltip area to the webpage
-            $scope.tooltip = d3.select("#chart").append("div")
+            var tooltip = d3.select("#chart").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            $scope.tooltip.on("click", function (d) { $scope.tooltip.hideTooltip = false; });
+            tooltip.on("click", function (d) { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function (d) { $scope.clearTooltip(); });
+            d3.select("#chart").on("click", function (d) { $scope.clearTooltip(tooltip); });
 
             // calculating margins for dots
             var xMin = d3.min($scope.points, xValue);
@@ -211,7 +209,7 @@
             yScale.domain([yMin - yMargin, yMax + yMargin]);
 
             // x-axis
-            $scope.svg.append("g")
+            svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis)
@@ -224,7 +222,7 @@
                 .style("font-size", "12pt");
 
             // y-axis
-            $scope.svg.append("g")
+            svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
                 .append("text")
@@ -237,7 +235,7 @@
                 .style("font-size", "12pt");
 
             // draw dots
-            $scope.svg.selectAll(".dot")
+            svg.selectAll(".dot")
                 .data($scope.points)
                 .enter()
                 .append("circle")
@@ -246,10 +244,13 @@
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", function (d) { return color(cValue(d)); })
-                .on("click", $scope.showTooltip);
+                .on("click", function (d) {
+                    tooltip.newSelectedDot = d3.select(this);
+                    return $scope.showTooltip(d, tooltip, svg);
+                });
 
             // draw legend
-            var legend = $scope.svg.selectAll(".legend")
+            var legend = svg.selectAll(".legend")
                 .data($scope.matters)
                 .enter().append("g")
                 .attr("class", "legend")
@@ -258,7 +259,7 @@
                     var legendEntry = d3.select(this);
                     legendEntry.style("opacity", function (d) { return legendEntry.style("opacity") == 1 ? .5 : 1; });
 
-                    $scope.svg.selectAll(".dot")
+                    svg.selectAll(".dot")
                         .filter(function (dot) { return dot.matterId === d.id })
                         .attr("r", function (d) {
                             d.matterVisible = legendEntry.style("opacity") == 1;
@@ -299,6 +300,7 @@
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
         $scope.dotRadius = 3.5;
+        $scope.precision = 0;
         $scope.points = [];
         $scope.matters = [];
         $scope.fillPoints();
