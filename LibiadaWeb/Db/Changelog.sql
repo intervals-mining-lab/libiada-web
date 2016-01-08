@@ -1089,5 +1089,10 @@ ALTER TABLE binary_characteristic  DROP COLUMN value_string;
 ALTER TABLE characteristic  DROP COLUMN value_string; 
 ALTER TABLE congeneric_characteristic  DROP COLUMN value_string; 
 
+-- 08.01.2016
+-- Adding index on characteristics.
+
+CREATE INDEX ix_characteristic_chain_characteristic_type ON characteristic (chain_id, characteristic_type_link_id);
+
 
 COMMIT;
