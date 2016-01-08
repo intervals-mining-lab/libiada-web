@@ -1,4 +1,4 @@
-namespace LibiadaWeb.Models.Repositories
+namespace LibiadaWeb.Models.Repositories.Calculators
 {
     /// <summary>
     /// The binary characteristic repository.

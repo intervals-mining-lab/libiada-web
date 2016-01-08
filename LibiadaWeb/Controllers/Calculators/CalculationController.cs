@@ -16,6 +16,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Account;
+    using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
     using Models;
     using Models.Repositories.Catalogs;
@@ -44,6 +45,11 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
+        /// The characteristic repository.
+        /// </summary>
+        private readonly CharacteristicRepository characteristicRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
         public CalculationController() : base("Characteristics calculation")
@@ -51,6 +57,7 @@
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicRepository = new CharacteristicRepository(db);
         }
 
         /// <summary>
@@ -221,34 +228,7 @@
                 }
 
                 // trying to save calculated characteristics to database
-                if (newCharacteristics.Count > 0)
-                {
-                    try
-                    {
-                        db.Characteristic.AddRange(newCharacteristics);
-                        db.SaveChanges();
-                    }
-                    catch (Exception exception)
-                    {
-                        var characteristicsSequences = newCharacteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                        var characteristicsTypes = newCharacteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
-                        var characteristicsFilter = newCharacteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
-                        var wasteCharacteristics = db.Characteristic.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
-                                                                    .ToArray()
-                                                                    .Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }))
-                                                                    .Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
-                        var wasteNewCharacteristics = newCharacteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
-
-                        db.Characteristic.RemoveRange(wasteNewCharacteristics);
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (Exception anotherException)
-                        {
-                        }
-                    }
-                }
+                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {

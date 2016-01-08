@@ -10,6 +10,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
@@ -46,6 +47,11 @@
         private readonly FeatureRepository featureRepository;
 
         /// <summary>
+        /// The characteristic repository.
+        /// </summary>
+        private readonly CharacteristicRepository characteristicRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
         public SubsequencesCalculationController()
@@ -56,6 +62,7 @@
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
             featureRepository = new FeatureRepository(db);
+            characteristicRepository = new CharacteristicRepository(db);
         }
 
         /// <summary>
@@ -104,8 +111,8 @@
                 var newCharacteristics = new List<Characteristic>();
 
                 var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && (s.NotationId == Aliases.Notation.Nucleotide)).ToArray();
-                var sequenceIds = parentSequences.Select(s => s.Id);
-                var allSubsequences = subsequenceExtractor.GetSubsequences(sequenceIds, featureIds).ToArray();
+                var parentSequenceIds = parentSequences.Select(s => s.Id);
+                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds).ToArray();
                 var subsequenceIds = allSubsequences.Select(s => s.Id);
                 var dbCharacteristics = db.Characteristic.Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId)).ToList();
                 var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
@@ -145,11 +152,11 @@
                         {
                             double value;
 
-                            Func<Characteristic, bool> filter = c => c.SequenceId == subsequences[j].Id && c.CharacteristicTypeLinkId == characteristicTypeLinkId;
+                            Func<Characteristic, bool> characteristicFilter = c => c.SequenceId == subsequences[j].Id && c.CharacteristicTypeLinkId == characteristicTypeLinkId;
 
-                            if (dbCharacteristics.Any(filter))
+                            if (dbCharacteristics.Any(characteristicFilter))
                             {
-                                value = dbCharacteristics.Single(filter).Value;
+                                value = dbCharacteristics.Single(characteristicFilter).Value;
                             }
                             else
                             {
@@ -163,7 +170,6 @@
 
                                 newCharacteristics.Add(currentCharacteristic);
                                 dbCharacteristics.Add(currentCharacteristic);
-                                
                             }
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(j, value));
@@ -172,36 +178,7 @@
                 }
 
                 // trying to save calculated characteristics to database
-                if (newCharacteristics.Count > 0)
-                {
-                    try
-                    {
-                        db.Characteristic.AddRange(newCharacteristics);
-                        db.SaveChanges();
-                    }
-                    catch (Exception exception)
-                    {
-                        var characteristicsSequences = newCharacteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                        var characteristicsTypes = newCharacteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
-                        var characteristicsFilter = newCharacteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
-                        var wasteCharacteristics = db.Characteristic.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
-                                                                    .ToArray()
-                                                                    .Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }))
-                                                                    .Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
-                        var wasteNewCharacteristics = newCharacteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
-
-                        db.Characteristic.RemoveRange(wasteNewCharacteristics);
-                        try
-                        {
-                            db.SaveChanges();
-                        }
-                        catch (Exception anotherException)
-                        {
-                        }
-                    }
-                }
-
-
+                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)

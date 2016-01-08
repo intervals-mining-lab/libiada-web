@@ -11,6 +11,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Models;
