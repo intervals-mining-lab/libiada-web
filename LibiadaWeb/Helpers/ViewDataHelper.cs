@@ -40,6 +40,11 @@
         private readonly FeatureRepository featureRepository;
 
         /// <summary>
+        /// The characteristic type link repository.
+        /// </summary>
+        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
@@ -51,6 +56,7 @@
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository(db);
             featureRepository = new FeatureRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -180,14 +186,10 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = Enum.GetValues(typeof(Link)).Cast<Link>();
+            var links = UserHelper.IsAdmin() ? Enum.GetValues(typeof(Link)).Cast<Link>().ToList() 
+                                             : new List<Link> { Link.NotApplied, Link.Start, Link.Cycle };
 
-            if (!UserHelper.IsAdmin())
-            {
-                links = new List<Link> { Link.NotApplied, Link.Start, Link.Cycle };
-            }
-
-            var characteristicTypeLinks = db.CharacteristicTypeLink.ToList();
+            var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
 
             var linksData = links.Select(l => new
                                                 {

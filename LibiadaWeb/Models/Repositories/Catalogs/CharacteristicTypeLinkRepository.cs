@@ -33,6 +33,17 @@
         }
 
         /// <summary>
+        /// Gets the characteristic type links.
+        /// </summary>
+        public IEnumerable<CharacteristicTypeLink> CharacteristicTypeLinks
+        {
+            get
+            {
+                return characteristicTypeLinks.ToArray();
+            }
+        } 
+
+        /// <summary>
         /// The get libiada link.
         /// </summary>
         /// <param name="characteristicTypeLinkId">

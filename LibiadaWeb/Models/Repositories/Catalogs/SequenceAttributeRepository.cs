@@ -63,7 +63,7 @@
         /// </param>
         public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
         {
-            var localAttributes = localSubsequence.SequenceAttribute.ToList();
+            var localAttributes = localSubsequence.SequenceAttribute.ToLookup(a => a.AttributeId);
 
             foreach (var qualifier in feature.Qualifiers)
             {
@@ -75,13 +75,14 @@
 
                 var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
 
-                var equalAttributes = localAttributes.Where(a => a.AttributeId == attributeId).ToList();
+                var equalAttributes = localAttributes[attributeId].ToDictionary(a => a.Value);
 
                 var cleanedValue = CleanAndJoinAttributeValues(qualifier.Value);
 
-                if (equalAttributes.Any(a => a.Value == cleanedValue))
+                SequenceAttribute value;
+                if (equalAttributes.TryGetValue(cleanedValue, out value))
                 {
-                    localSubsequence.SequenceAttribute.Remove(equalAttributes.Single(a => a.Value == cleanedValue));
+                    localSubsequence.SequenceAttribute.Remove(value);
                 }
             }
 
@@ -97,11 +98,11 @@
         /// The subsequences ids.
         /// </param>
         /// <returns>
-        /// The <see cref="List{SequenceAttribute}"/>.
+        /// The <see cref="ILookup{Int64, SequenceAttribute}"/>.
         /// </returns>
-        public List<SequenceAttribute> GetAttributes(IEnumerable<long> sequenceIds)
+        public ILookup<long, SequenceAttribute> GetAttributes(IEnumerable<long> sequenceIds)
         {
-            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToList();
+            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToLookup(sa => sa.SequenceId);
         }
 
         /// <summary>

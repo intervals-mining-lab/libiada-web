@@ -120,7 +120,7 @@
                 var firstSequenceAttributes = new List<List<string>>();
                 foreach (var subsequence in firstSequenceSubsequences)
                 {
-                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(firstDbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(firstDbSubsequencesAttributes[subsequence.Id]);
                     firstSequenceAttributes.Add(attributes);
                 }
 
@@ -133,7 +133,7 @@
                 var secondSequenceAttributes = new List<List<string>>();
                 foreach (var subsequence in secondSequenceSubsequences)
                 {
-                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(secondDbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                    var attributes = sequenceAttributeRepository.ConvertAttributesToString(secondDbSubsequencesAttributes[subsequence.Id]);
                     secondSequenceAttributes.Add(attributes);
                 }
 

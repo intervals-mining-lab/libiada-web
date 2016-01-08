@@ -95,13 +95,13 @@
         /// The feature ids.
         /// </param>
         /// <returns>
-        /// The <see cref="List"/>.
+        /// The <see cref="ILookup{Int64, Subsequence}"/>.
         /// </returns>
-        public List<Subsequence> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
+        public ILookup<long, Subsequence> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
         {
-            return db.Subsequence.Where(g => sequenceIds.Contains(g.SequenceId) && featureIds.Contains(g.FeatureId))
-                                        .Include(g => g.Position)
-                                        .Include(g => g.SequenceAttribute).ToList();
+            return db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId))
+                                        .Include(s => s.Position).Include(s => s.SequenceAttribute)
+                                        .ToLookup(s => s.SequenceId);
         }
 
         /// <summary>

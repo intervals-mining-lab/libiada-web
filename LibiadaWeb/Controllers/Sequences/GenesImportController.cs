@@ -110,7 +110,10 @@
                 subsequenceRepository.CreateSubsequences(features, sequenceId);
 
                 var matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                var sequenceSubsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId).Include(g => g.Position).Include(g => g.Feature).Include(g => g.SequenceAttribute).ToList();
+                var sequenceSubsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId)
+                                             .Include(g => g.Position)
+                                             .Include(g => g.Feature)
+                                             .Include(g => g.SequenceAttribute).ToList();
 
                 return new Dictionary<string, object>
                                      {

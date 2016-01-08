@@ -44,7 +44,7 @@
                                                       (c.FeatureId == Aliases.Feature.FullGenome || 
                                                        c.FeatureId == Aliases.Feature.MitochondrionGenome || 
                                                        c.FeatureId == Aliases.Feature.Plasmid))
-                                                      .Select(c => c.MatterId).ToList();
+                                                      .Select(c => c.MatterId).ToArray();
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Check");

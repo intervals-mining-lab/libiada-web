@@ -114,26 +114,23 @@
                 var sequenceCharacteristics = new List<SequenceData>();
                 var newCharacteristics = new List<Characteristic>();
 
-                var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && (s.NotationId == Aliases.Notation.Nucleotide)).ToArray();
-                var parentSequenceIds = parentSequences.Select(s => s.Id).ToArray();
-                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds).ToArray();
-                var subsequenceIds = allSubsequences.Select(s => s.Id);
+                var parentSequences = db.DnaSequence.Where(s => s.NotationId == Aliases.Notation.Nucleotide && matterIds.Contains(s.MatterId))
+                                        .ToDictionary(s => s.Id);
+                var parentSequenceIds = parentSequences.Keys.ToArray();
+                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds);
+                var subsequenceIds = allSubsequences.SelectMany(s => s).Select(s => s.Id);
                 Func<Characteristic, bool> parentCharacteristicFilter = c => parentSequenceIds.Contains(c.SequenceId) && c.CharacteristicTypeLinkId == firstCharacteristicTypeLinkId;
                 var parentDbCharacteristics = db.Characteristic.Where(parentCharacteristicFilter).ToList();
                 Func<Characteristic, bool> subsequenceCharacteristicFilter = c => subsequenceIds.Contains(c.SequenceId) && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId;
                 var subsequenceDbCharacteristics = db.Characteristic.Where(subsequenceCharacteristicFilter).ToList();
-
                 var subsequencesDbAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
                 int maxSubsequences = 0;
-                int maxSubsequencesIndex = 0;
 
-                for (int w = 0; w < matterIds.Length; w++)
+                foreach (long parentSequenceId in parentSequenceIds)
                 {
-                    long matterId = matterIds[w];
+                    long matterId = parentSequences[parentSequenceId].MatterId;
                     var matterName = db.Matter.Single(m => m.Id == matterId).Name;
-
-                    var parentSequenceId = parentSequences.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
 
                     double sequenceCharacteristicValue;
 
@@ -153,23 +150,22 @@
                         sequenceCharacteristicValue = firstCalculator.Calculate(sequence, firstLink);
 
                         var dataBaseCharacteristic = new Characteristic
-                        {
-                            SequenceId = parentSequenceId,
-                            CharacteristicTypeLinkId = firstCharacteristicTypeLinkId,
-                            Value = sequenceCharacteristicValue
-                        };
+                                                         {
+                                                             SequenceId = parentSequenceId,
+                                                             CharacteristicTypeLinkId = firstCharacteristicTypeLinkId,
+                                                             Value = sequenceCharacteristicValue
+                                                         };
 
                         newCharacteristics.Add(dataBaseCharacteristic);
                         parentDbCharacteristics.Add(dataBaseCharacteristic);
                     }
 
-                    List<Subsequence> subsequences = allSubsequences.Where(s => s.SequenceId == parentSequenceId).ToList();
+                    List<Subsequence> subsequences = allSubsequences[parentSequenceId].ToList();
                     var libiadaSubsequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
                     if (maxSubsequences < subsequences.Count)
                     {
                         maxSubsequences = subsequences.Count;
-                        maxSubsequencesIndex = w;
                     }
 
                     var subsequencesCharacteristics = new List<SubsequenceData>();
@@ -191,17 +187,17 @@
                         {
                             subsequenceCharacteristicValue = secondCalculator.Calculate(libiadaSubsequences[j], secondLink);
                             var currentCharacteristic = new Characteristic
-                            {
-                                SequenceId = subsequences[j].Id,
-                                CharacteristicTypeLinkId = secondCharacteristicTypeLinkId,
-                                Value = subsequenceCharacteristicValue
-                            };
+                                                            {
+                                                                SequenceId = subsequences[j].Id,
+                                                                CharacteristicTypeLinkId = secondCharacteristicTypeLinkId,
+                                                                Value = subsequenceCharacteristicValue
+                                                            };
 
                             newCharacteristics.Add(currentCharacteristic);
                             subsequenceDbCharacteristics.Add(currentCharacteristic);
                         }
 
-                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(subsequencesDbAttributes.Where(a => a.SequenceId == subsequences[j].Id));
+                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(subsequencesDbAttributes[subsequences[j].Id]);
                         var geneCharacteristic = new SubsequenceData(subsequences[j], subsequenceCharacteristicValue, attributes);
                         subsequencesCharacteristics.Add(geneCharacteristic);
                     }
@@ -226,7 +222,6 @@
                 var resultData = new Dictionary<string, object>
                                  {
                                      { "result", sequenceCharacteristics },
-                                     { "maxSubsequencesIndex", maxSubsequencesIndex },
                                      { "subsequencesCharacteristicName", subsequencesCharacteristicName },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
                                      { "features", featuresSelectList }

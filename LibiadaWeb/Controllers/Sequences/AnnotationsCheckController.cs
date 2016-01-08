@@ -45,7 +45,7 @@
         public ActionResult Index()
         {
             var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
+            var matterIds = db.DnaSequence.Where(c => genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToArray();
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");

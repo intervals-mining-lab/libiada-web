@@ -112,7 +112,7 @@
             {
                 natures = new SelectList(Db.Nature.Where(n => n.Id == Aliases.Nature.Genetic).OrderBy(n => n.Id), "id", "name");
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
-                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, new List<int>());
+                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
             }
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>

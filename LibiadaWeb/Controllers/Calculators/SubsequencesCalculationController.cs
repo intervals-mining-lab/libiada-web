@@ -110,29 +110,32 @@
                 var characteristicNames = new List<string>();
                 var newCharacteristics = new List<Characteristic>();
 
-                var parentSequences = db.DnaSequence.Where(s => matterIds.Contains(s.MatterId) && (s.NotationId == Aliases.Notation.Nucleotide)).ToArray();
-                var parentSequenceIds = parentSequences.Select(s => s.Id);
-                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds).ToArray();
-                var subsequenceIds = allSubsequences.Select(s => s.Id);
-                var dbCharacteristics = db.Characteristic.Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId)).ToList();
+                var parentSequences = db.DnaSequence.Where(s => s.NotationId == Aliases.Notation.Nucleotide && matterIds.Contains(s.MatterId))
+                                        .ToDictionary(s => s.Id);
+                var parentSequenceIds = parentSequences.Keys.ToArray();
+                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds);
+                var subsequenceIds = allSubsequences.SelectMany(s => s).Select(s => s.Id);
+                Func<Characteristic, bool> characteristicsFilter = c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) 
+                                                                     && subsequenceIds.Contains(c.SequenceId);
+                var dbCharacteristics = db.Characteristic.Where(characteristicsFilter).ToList();
                 var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
                 // cycle through matters; first level of characteristics array
-                foreach (long matterId in matterIds)
+                foreach (long parentSequenceId in parentSequenceIds)
                 {
+                    var matterId = parentSequences[parentSequenceId].MatterId;
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     sequenceAttributes.Add(new List<List<string>>());
                     sequencesPositions.Add(new List<long>());
                     sequenceFeatures.Add(new List<string>());
                     characteristics.Add(new List<List<KeyValuePair<int, double>>>());
 
-                    var parentSequenceId = parentSequences.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
-                    List<Subsequence> subsequences = allSubsequences.Where(s => s.SequenceId == parentSequenceId).ToList();
+                    List<Subsequence> subsequences = allSubsequences[parentSequenceId].ToList();
                     var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
                     foreach (Subsequence subsequence in subsequences)
                     {
-                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(dbSubsequencesAttributes.Where(a => a.SequenceId == subsequence.Id));
+                        var attributes = sequenceAttributeRepository.ConvertAttributesToString(dbSubsequencesAttributes[subsequence.Id]);
                         sequenceAttributes.Last().Add(attributes);
                         sequencesPositions.Last().Add(subsequence.Start);
                         sequenceFeatures.Last().Add(featureRepository.GetFeatureById(subsequence.FeatureId).Name);
@@ -169,7 +172,6 @@
                                 };
 
                                 newCharacteristics.Add(currentCharacteristic);
-                                dbCharacteristics.Add(currentCharacteristic);
                             }
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(j, value));

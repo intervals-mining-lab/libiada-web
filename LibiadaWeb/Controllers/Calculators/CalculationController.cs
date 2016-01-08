@@ -146,7 +146,7 @@
                 var mattersCharacteristics = new List<object>();
 
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToList();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
                 var characteristicNames = new List<string>();
                 var newCharacteristics = new List<Characteristic>();
 
@@ -158,7 +158,7 @@
                         int notationId = notationIds[i];
 
                         long sequenceId;
-                        if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
+                        if (matters[matterId].NatureId == Aliases.Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];
@@ -224,7 +224,7 @@
                         }
                     }
 
-                    mattersCharacteristics.Add(new { matterName = matters.Single(m => m.Id == matterId).Name, characteristics });
+                    mattersCharacteristics.Add(new { matterName = matters[matterId].Name, characteristics });
                 }
 
                 // trying to save calculated characteristics to database
