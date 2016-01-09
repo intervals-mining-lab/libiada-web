@@ -102,7 +102,7 @@
         /// </returns>
         public ILookup<long, SequenceAttribute> GetAttributes(IEnumerable<long> sequenceIds)
         {
-            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToLookup(sa => sa.SequenceId);
+            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToArray().ToLookup(sa => sa.SequenceId);
         }
 
         /// <summary>

@@ -28,12 +28,13 @@
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js", 
-                      "~/Scripts/respond.js"));
+                        "~/Scripts/bootstrap.js", 
+                        "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
-                     "~/Scripts/angular.js",
-                     "~/Scripts/smart-table.js"));
+                        "~/Scripts/Angular/functions.js",
+                        "~/Scripts/angular.js",
+                        "~/Scripts/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dcjs").Include(
                         "~/Scripts/d3/d3.js",
@@ -46,9 +47,6 @@
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
                         "~/Scripts/jQAllRangeSliders-withRuler-min.js",
                         "~/Scripts/jquery.mousewheel.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/functions").Include(
-                        "~/Scripts/Angular/functions.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/AccordanceController").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
@@ -72,7 +70,7 @@
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformerController").Include(
-                       "~/Scripts/Angular/Controllers/orderTransformer.js"));
+                        "~/Scripts/Angular/Controllers/orderTransformer.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SequencesAlignmentController").Include(
                         "~/Scripts/Angular/Controllers/sequencesAlignment.js"));
@@ -94,12 +92,12 @@
                         "~/Scripts/Angular/Controllers/charts.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css", 
-                      "~/Content/site.css",
-                      "~/Content/dc.css"));
+                        "~/Content/bootstrap.css", 
+                        "~/Content/site.css",
+                        "~/Content/dc.css"));
 
             bundles.Add(new StyleBundle("~/Content/slider").Include(
-                "~/Content/themes/JQAllRange/iThing.css"));
+                        "~/Content/themes/JQAllRange/iThing.css"));
 
             // BundleTable.EnableOptimizations = true;
         }

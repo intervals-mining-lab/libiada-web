@@ -101,7 +101,7 @@
         {
             return db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId))
                                         .Include(s => s.Position).Include(s => s.SequenceAttribute)
-                                        .ToLookup(s => s.SequenceId);
+                                        .ToArray().ToLookup(s => s.SequenceId);
         }
 
         /// <summary>
