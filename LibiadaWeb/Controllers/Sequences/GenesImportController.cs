@@ -47,7 +47,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var genesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
                                                           !genesSequenceIds.Contains(c.Id) && 
                                                           (c.FeatureId == Aliases.Feature.FullGenome || 
@@ -110,10 +110,10 @@
                 subsequenceRepository.CreateSubsequences(features, sequenceId);
 
                 var matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                var sequenceSubsequences = db.Subsequence.Where(g => g.SequenceId == sequenceId)
-                                             .Include(g => g.Position)
-                                             .Include(g => g.Feature)
-                                             .Include(g => g.SequenceAttribute).ToList();
+                var sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId)
+                                             .Include(s => s.Position)
+                                             .Include(s => s.Feature)
+                                             .Include(s => s.SequenceAttribute).ToList();
 
                 return new Dictionary<string, object>
                                      {

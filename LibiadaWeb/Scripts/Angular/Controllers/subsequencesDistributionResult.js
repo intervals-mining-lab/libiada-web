@@ -20,13 +20,12 @@
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
                         featureId: subsequenceData.FeatureId,
-                        featureName: subsequenceData.FeatureName,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
                         subsequenceWebApiId: subsequenceData.WebApiId,
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
-                        y: subsequenceData.Characteristic,
+                        y: subsequenceData.CharacteristicsValues[0],
                         featureVisible: true,
                         matterVisible: true
                     });
@@ -64,7 +63,7 @@
                 tooltipContent.push(peptideGenbankLink);
             }
 
-            tooltipContent.push(d.featureName);
+            tooltipContent.push($scope.featuresNames[d.featureId]);
             if (d.attributes.length > 0) {
                 tooltipContent.push(d.attributes.join("<br/>"));
             }

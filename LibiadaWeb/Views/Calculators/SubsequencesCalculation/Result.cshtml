@@ -6,7 +6,7 @@
 
 @if (ViewBag.Error == null)
 {
-    for (int d = 0; d < ViewBag.characteristics.Count; d++)
+    for (int d = 0; d < ViewBag.characteristics.Length; d++)
     {
         @ViewBag.matterNames[d]
         <table class="table table-bordered table-hover">
@@ -30,26 +30,30 @@
                 </tr>
             </thead>
             <tbody>
-                @for (int i = 0; i < ViewBag.characteristics[d][0].Count; i++)
+                @foreach (var subsequenceData in ViewBag.characteristics[d])
                 {
                     <tr>
                         <td>
-                            @ViewBag.sequenceFeatures[d][i]
+                            @ViewBag.features[subsequenceData.FeatureId]
                         </td>
                         <td>
-                            @foreach (var attribute in ViewBag.sequenceAttributes[d][i])
+                            @foreach (var attribute in subsequenceData.Attributes)
                             {
                                 @attribute
-                                <br/>  
-                            } 
+                                <br />
+                            }
                         </td>
                         <td>
-                            @ViewBag.sequencesPositions[d][i]
+                            @foreach (var start in subsequenceData.Starts)
+                            {
+                                @start
+                                <br />
+                            }
                         </td>
-                        @foreach (var characteristic in ViewBag.characteristics[d])
+                        @foreach (var characteristic in subsequenceData.CharacteristicsValues)
                         {
                             <td>
-                                @characteristic[i].Value
+                                @characteristic
                             </td>
                         }
                     </tr>
@@ -57,7 +61,7 @@
             </tbody>
         </table>
     }
-    
+
     @section Scripts {
         @Scripts.Render("~/bundles/jqueryui")
     }

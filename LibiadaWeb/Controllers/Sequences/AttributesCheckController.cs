@@ -38,7 +38,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var subsequencesSequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var subsequencesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
                                                       !subsequencesSequenceIds.Contains(c.Id) &&
                                                       (c.FeatureId == Aliases.Feature.FullGenome || 

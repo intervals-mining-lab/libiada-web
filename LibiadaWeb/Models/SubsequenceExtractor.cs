@@ -50,17 +50,17 @@
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public List<Chain> ExtractChains(List<Subsequence> subsequences, long chainId)
+        public Chain[] ExtractChains(Subsequence[] subsequences, long chainId)
         {
             var parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
             var sourceSequence = new Sequence(Alphabets.DNA, parentChain);
-            var result = new List<Chain>();
+            var result = new Chain[subsequences.Length];
 
-            foreach (Subsequence subsequence in subsequences)
+            for (int i = 0; i < subsequences.Length; i++)
             {
-                result.Add(subsequence.Position.Count == 0
-                        ? ExtractSimpleSubsequence(sourceSequence, subsequence)
-                        : ExtractJoinedSubsequence(sourceSequence, subsequence));
+                result[i] = subsequences[i].Position.Count == 0
+                        ? ExtractSimpleSubsequence(sourceSequence, subsequences[i])
+                        : ExtractJoinedSubsequence(sourceSequence, subsequences[i]);
             }
 
             return result;
@@ -78,11 +78,12 @@
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        public List<Subsequence> GetSubsequences(long sequenceId, IEnumerable<int> featureIds)
+        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<int> featureIds)
         {
-            return db.Subsequence.Where(g => g.SequenceId == sequenceId && featureIds.Contains(g.FeatureId))
-                                        .Include(g => g.Position)
-                                        .Include(g => g.SequenceAttribute).ToList();
+            return db.Subsequence.Where(s => s.SequenceId == sequenceId && featureIds.Contains(s.FeatureId))
+                                        .Include(s => s.Position)
+                                        .Include(s => s.SequenceAttribute)
+                                        .ToArray();
         }
 
         /// <summary>
@@ -95,13 +96,15 @@
         /// The feature ids.
         /// </param>
         /// <returns>
-        /// The <see cref="ILookup{Int64, Subsequence}"/>.
+        /// The <see cref="T:Dictionary{Int64, Subsequence[]}"/>.
         /// </returns>
-        public ILookup<long, Subsequence> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
+        public Dictionary<long, Subsequence[]> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
         {
             return db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId))
-                                        .Include(s => s.Position).Include(s => s.SequenceAttribute)
-                                        .ToArray().ToLookup(s => s.SequenceId);
+                                 .Include(s => s.Position)
+                                 .Include(s => s.SequenceAttribute)
+                                 .GroupBy(s => s.SequenceId)
+                                 .ToDictionary(s => s.Key, s => s.ToArray());
         }
 
         /// <summary>

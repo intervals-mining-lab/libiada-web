@@ -63,7 +63,9 @@
         /// </param>
         public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
         {
-            var localAttributes = localSubsequence.SequenceAttribute.ToLookup(a => a.AttributeId);
+            var localAttributes = localSubsequence.SequenceAttribute
+                                                  .GroupBy(a => a.AttributeId)
+                                                  .ToDictionary(a => a.Key, a => a.ToArray());
 
             foreach (var qualifier in feature.Qualifiers)
             {
@@ -94,30 +96,24 @@
         /// <summary>
         /// The get attributes.
         /// </summary>
-        /// <param name="sequenceIds">
+        /// <param name="subsequenceIds">
         /// The subsequences ids.
         /// </param>
         /// <returns>
-        /// The <see cref="ILookup{Int64, SequenceAttribute}"/>.
+        /// The <see cref="T:Dictionary{Int64, String[]}"/>.
         /// </returns>
-        public ILookup<long, SequenceAttribute> GetAttributes(IEnumerable<long> sequenceIds)
+        public Dictionary<long, string[]> GetAttributes(IEnumerable<long> subsequenceIds)
         {
-            return db.SequenceAttribute.Where(sa => sequenceIds.Contains(sa.SequenceId)).Include(sa => sa.Attribute).ToArray().ToLookup(sa => sa.SequenceId);
+            return db.SequenceAttribute.Where(sa => subsequenceIds.Contains(sa.SequenceId))
+                                       .Include(sa => sa.Attribute)
+                                       .Select(sa => new
+                                                     {
+                                                         sa.SequenceId,
+                                                         Text = sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)
+                                                     })
+                                       .GroupBy(sa => sa.SequenceId)
+                                       .ToDictionary(sa => sa.Key, sa => sa.Select(s => s.Text).ToArray());
         }
-
-        /// <summary>
-        /// The convert attributes to string.
-        /// </summary>
-        /// <param name="attributes">
-        /// The attributes.
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{String}"/>.
-        /// </returns>
-        public List<string> ConvertAttributesToString(IEnumerable<SequenceAttribute> attributes)
-        {
-            return attributes.Select(sa => sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)).ToList();
-        } 
 
         /// <summary>
         /// Creates and adds to db subsequence attributes.

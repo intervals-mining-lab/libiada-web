@@ -228,7 +228,7 @@
 
             var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
-            List<Subsequence> subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+            Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
 
             var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 
@@ -236,7 +236,7 @@
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
             var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
-            for (int j = 0; j < sequences.Count; j++)
+            for (int j = 0; j < sequences.Length; j++)
             {
                 long subsequenceId = subsequences[j].Id;
 
@@ -256,7 +256,7 @@
 
             db.SaveChanges();
 
-            for (int d = 0; d < sequences.Count; d++)
+            for (int d = 0; d < sequences.Length; d++)
             {
                 long subsequenceId = subsequences[d].Id;
                 double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;

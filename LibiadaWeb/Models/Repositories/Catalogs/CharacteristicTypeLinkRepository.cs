@@ -1,6 +1,8 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;
+    using System.Data.Entity;
+    using System.Diagnostics;
     using System.Linq;
 
     using Link = LibiadaCore.Core.Link;
@@ -29,7 +31,7 @@
         public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            characteristicTypeLinks = db.CharacteristicTypeLink.ToList();
+            characteristicTypeLinks = db.CharacteristicTypeLink.Include(ctl => ctl.CharacteristicType).Include(ctl => ctl.Link).ToList();
         }
 
         /// <summary>

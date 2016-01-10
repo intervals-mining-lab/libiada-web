@@ -157,7 +157,7 @@
         {
             var featureIds = featureRepository.Features.Where(f => f.NatureId == Aliases.Nature.Genetic && !f.Complete).Select(f => f.Id);
 
-            var sequenceIds = db.Subsequence.Select(g => g.SequenceId).Distinct();
+            var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
             var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id), submitName);
