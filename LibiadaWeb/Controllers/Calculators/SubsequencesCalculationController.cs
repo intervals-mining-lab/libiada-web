@@ -115,18 +115,10 @@
 
                 var characteristics = new List<SubsequenceData>[parentSequenceIds.Length];
                 var matterNames = new string[parentSequenceIds.Length];
-
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
-                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k]);
-                    characteristicsList[k] = new SelectListItem
-                    {
-                        Value = k.ToString(),
-                        Text = characteristicNames[k],
-                        Selected = false
-                    };
                 }
 
                 // cycle through matters; first level of characteristics array
@@ -139,16 +131,8 @@
 
                     Subsequence[] subsequences = allSubsequences[parentSequenceId].ToArray();
                     var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
-                    
-
                     for (int j = 0; j < sequences.Length; j++)
                     {
-                        string[] attributes;
-                        if (!dbSubsequencesAttributes.TryGetValue(subsequences[j].Id, out attributes))
-                        {
-                            attributes = new string[0];
-                        }
-                        
                         var values = new double[characteristicTypeLinkIds.Length];
 
                         // cycle through characteristics and notations; second level of characteristics array
@@ -182,6 +166,12 @@
                             }
                         }
 
+                        string[] attributes;
+                        if (!dbSubsequencesAttributes.TryGetValue(subsequences[j].Id, out attributes))
+                        {
+                            attributes = new string[0];
+                        }
+
                         characteristics[m].Add(new SubsequenceData(subsequences[j], values, attributes));
                     }
 
@@ -194,7 +184,6 @@
                     { "characteristics", characteristics },
                     { "matterNames", matterNames },
                     { "characteristicNames", characteristicNames },
-                    { "characteristicsList", characteristicsList },
                     { "features", featureRepository.Features.ToDictionary(f => f.Id, f => f.Name) }
                 };
             });

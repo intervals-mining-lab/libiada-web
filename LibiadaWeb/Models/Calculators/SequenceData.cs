@@ -1,7 +1,5 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// The sequence characteristics.
     /// </summary>
@@ -30,7 +28,7 @@
         /// <summary>
         /// The genes data.
         /// </summary>
-        public readonly List<SubsequenceData> SubsequencesData;
+        public readonly SubsequenceData[] SubsequencesData;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceData"/> class.
@@ -50,7 +48,7 @@
         /// <param name="subsequencesData">
         /// The genes data.
         /// </param>
-        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic, List<SubsequenceData> subsequencesData)
+        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic,SubsequenceData[] subsequencesData)
         {
             MatterId = matterId;
             MatterName = matterName;

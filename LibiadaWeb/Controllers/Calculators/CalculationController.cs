@@ -176,11 +176,9 @@
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        Func<Characteristic, bool> characteristicFilter = c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId;
-
-                        if (!rotate && !complementary && db.Characteristic.Any(characteristicFilter))
+                        if (!rotate && !complementary && db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
-                            double characteristicValue = db.Characteristic.Single(characteristicFilter).Value;
+                            double characteristicValue = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
                             characteristics.Add(characteristicValue);
                         }
                         else
