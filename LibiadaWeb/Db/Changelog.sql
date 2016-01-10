@@ -1094,5 +1094,10 @@ ALTER TABLE congeneric_characteristic  DROP COLUMN value_string;
 
 CREATE INDEX ix_characteristic_chain_characteristic_type ON characteristic (chain_id, characteristic_type_link_id);
 
+-- 10.01.2016
+-- Adding another index on characteristics table.
+
+CREATE INDEX ix_characteristic_characteristic_type_link ON characteristic (characteristic_type_link_id);
+
 
 COMMIT;
