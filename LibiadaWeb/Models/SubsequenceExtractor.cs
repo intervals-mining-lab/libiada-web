@@ -103,6 +103,7 @@
             return db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId))
                                  .Include(s => s.Position)
                                  .Include(s => s.SequenceAttribute)
+                                 .ToArray()
                                  .GroupBy(s => s.SequenceId)
                                  .ToDictionary(s => s.Key, s => s.ToArray());
         }

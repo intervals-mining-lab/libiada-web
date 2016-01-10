@@ -63,7 +63,7 @@
         /// </param>
         public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
         {
-            var localAttributes = localSubsequence.SequenceAttribute
+            var localAttributes = localSubsequence.SequenceAttribute.ToArray()
                                                   .GroupBy(a => a.AttributeId)
                                                   .ToDictionary(a => a.Key, a => a.ToArray());
 
@@ -111,6 +111,7 @@
                                                          sa.SequenceId,
                                                          Text = sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)
                                                      })
+                                       .ToArray()
                                        .GroupBy(sa => sa.SequenceId)
                                        .ToDictionary(sa => sa.Key, sa => sa.Select(s => s.Text).ToArray());
         }

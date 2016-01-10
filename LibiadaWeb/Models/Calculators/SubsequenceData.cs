@@ -52,7 +52,7 @@
         public SubsequenceData(Subsequence subsequence, double[] characteristics, string[] attributes)
         {
             CharacteristicsValues = characteristics;
-            Attributes = attributes;
+            Attributes = attributes ?? new string[0];
             FeatureId = subsequence.FeatureId;
             WebApiId = subsequence.WebApiId;
 
