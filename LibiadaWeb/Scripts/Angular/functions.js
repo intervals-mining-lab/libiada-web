@@ -21,11 +21,14 @@ function IsLinkable(characteristic) {
     return characteristic.characteristicType.CharacteristicLinks.length > 1;
 }
 
-function SetCheckBoxesState(checkboxes, state) {
+function SetCheckBoxesState(checkboxes, state, filter) {
     "use strict";
 
     angular.forEach(checkboxes, function (item) {
         item.Selected = state;
+        if (filter) {
+            filter(item);
+        }
     });
 }
 

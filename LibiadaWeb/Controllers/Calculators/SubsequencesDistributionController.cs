@@ -116,32 +116,28 @@
                                         .Select(s => new { s.Id, MatterName = s.Matter.Name, s.MatterId, s.WebApiId })
                                         .ToDictionary(s => s.Id);
                 var parentSequenceIds = parentSequences.Keys.ToArray();
-                var allSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds, featureIds);
-                var subsequenceIds = allSubsequences.SelectMany(s => s.Value).Select(s => s.Id);
+                
                 var parentDbCharacteristics = db.Characteristic
                                                 .Where(c => c.CharacteristicTypeLinkId == firstCharacteristicTypeLinkId && parentSequenceIds.Contains(c.SequenceId))
-                                                .ToList();
-                var subsequenceDbCharacteristics = db.Characteristic
-                                                     .Where(c => c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId && subsequenceIds.Contains(c.SequenceId))
-                                                     .ToList();
-                var subsequencesDbAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
-
-                var sequenceCharacteristics = new SequenceData[parentSequenceIds.Length];
+                                                .ToArray()
+                                                .GroupBy(c => c.SequenceId)
+                                                .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
+                
+                var sequenceData = new SequenceData[parentSequenceIds.Length];
 
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
+                    // complete sequence calculations
                     var newCharacteristics = new List<Characteristic>();
-
-                    double sequenceCharacteristicValue;
-
                     var parentSequenceId = parentSequenceIds[i];
-                    Func<Characteristic, bool> firstCharacteristicFilter = c => c.SequenceId == parentSequenceId && c.CharacteristicTypeLinkId == firstCharacteristicTypeLinkId;
-
-                    if (parentDbCharacteristics.Any(firstCharacteristicFilter))
+                    double sequenceCharacteristicValue;
+                    Dictionary<int, double> sequenceDbCharacteristics;
+                    if (!parentDbCharacteristics.TryGetValue(parentSequenceId, out sequenceDbCharacteristics))
                     {
-                        sequenceCharacteristicValue = parentDbCharacteristics.Single(firstCharacteristicFilter).Value;
+                        sequenceDbCharacteristics = new Dictionary<int, double>();
                     }
-                    else
+                    
+                    if (!sequenceDbCharacteristics.TryGetValue(firstCharacteristicTypeLinkId, out sequenceCharacteristicValue))
                     {
                         Chain sequence = commonSequenceRepository.ToLibiadaChain(parentSequenceId);
                         sequence.FillIntervalManagers();
@@ -158,60 +154,64 @@
                                                          };
 
                         newCharacteristics.Add(dataBaseCharacteristic);
-                        parentDbCharacteristics.Add(dataBaseCharacteristic);
                     }
 
-                    Subsequence[] subsequences = allSubsequences[parentSequenceId].ToArray();
-                    var libiadaSubsequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
+                    // all subsequence calculations
+                    var dbSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+                    var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
+                    var subsequencesData = new SubsequenceData[dbSubsequences.Length];
+                    var subsequencesDbAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+                    var subsequencesDbCharacteristics = db.Characteristic
+                                                         .Where(c => c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId && subsequenceIds.Contains(c.SequenceId))
+                                                         .ToArray()
+                                                         .GroupBy(c => c.SequenceId)
+                                                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
-                    SubsequenceData[] subsequencesData = new SubsequenceData[subsequences.Length];
+                    var libiadaSubsequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceId);
                     string secondClassName = characteristicTypeLinkRepository.GetCharacteristicType(secondCharacteristicTypeLinkId).ClassName;
                     IFullCalculator secondCalculator = CalculatorsFactory.CreateFullCalculator(secondClassName);
                     var secondLink = characteristicTypeLinkRepository.GetLibiadaLink(secondCharacteristicTypeLinkId);
 
-                    for (int j = 0; j < subsequences.Length; j++)
+                    for (int j = 0; j < dbSubsequences.Length; j++)
                     {
                         double subsequenceCharacteristicValue;
-
-                        Func<Characteristic, bool> secondCharacteristicFilter = c => c.SequenceId == subsequences[j].Id && c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId;
-
-                        if (subsequenceDbCharacteristics.Any(secondCharacteristicFilter))
+                        Dictionary<int, double> subsequenceDbCharacteristics;
+                        if (!subsequencesDbCharacteristics.TryGetValue(dbSubsequences[j].Id, out subsequenceDbCharacteristics))
                         {
-                            subsequenceCharacteristicValue = subsequenceDbCharacteristics.Single(secondCharacteristicFilter).Value;
+                            subsequenceDbCharacteristics = new Dictionary<int, double>();
                         }
-                        else
+
+                        if (!subsequenceDbCharacteristics.TryGetValue(secondCharacteristicTypeLinkId, out subsequenceCharacteristicValue))
                         {
                             subsequenceCharacteristicValue = secondCalculator.Calculate(libiadaSubsequences[j], secondLink);
                             var currentCharacteristic = new Characteristic
                                                             {
-                                                                SequenceId = subsequences[j].Id,
+                                                                SequenceId = dbSubsequences[j].Id,
                                                                 CharacteristicTypeLinkId = secondCharacteristicTypeLinkId,
                                                                 Value = subsequenceCharacteristicValue
                                                             };
 
                             newCharacteristics.Add(currentCharacteristic);
-                            subsequenceDbCharacteristics.Add(currentCharacteristic);
                         }
 
                         string[] attributes;
-                        if (!subsequencesDbAttributes.TryGetValue(subsequences[j].Id, out attributes))
+                        if (!subsequencesDbAttributes.TryGetValue(dbSubsequences[j].Id, out attributes))
                         {
                             attributes = new string[0];
                         }
 
-                        subsequencesData[j] = new SubsequenceData(subsequences[j], new[] { subsequenceCharacteristicValue }, attributes);
+                        subsequencesData[j] = new SubsequenceData(dbSubsequences[j], new[] { subsequenceCharacteristicValue }, attributes);
                     }
 
-
-                    subsequencesData = subsequencesData.OrderBy(sd => sd.CharacteristicsValues[0]).ToArray();
                     var parent = parentSequences[parentSequenceId];
-                    sequenceCharacteristics[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.WebApiId, sequenceCharacteristicValue, subsequencesData);
+                    sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.WebApiId, sequenceCharacteristicValue, subsequencesData);
                     
                     // trying to save calculated characteristics to database
                     characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
                 }
 
-                sequenceCharacteristics = sequenceCharacteristics.OrderBy(r => r.Characteristic).ToArray();
+                // sorting organisms by their characteristic
+                sequenceData = sequenceData.OrderBy(r => r.Characteristic).ToArray();
 
                 var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(firstCharacteristicTypeLinkId, Aliases.Notation.Nucleotide);
                 var subsequencesCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(secondCharacteristicTypeLinkId, Aliases.Notation.Nucleotide);
@@ -221,10 +221,10 @@
 
                 var resultData = new Dictionary<string, object>
                                  {
-                                     { "result", sequenceCharacteristics },
+                                     { "result", sequenceData },
                                      { "subsequencesCharacteristicName", subsequencesCharacteristicName },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
-                                     { "features", featuresSelectList },
+                                     { "features", featuresSelectList.ToDictionary(f => f.Value) },
                                      { "featuresNames", featureRepository.Features.ToDictionary(f => f.Id, f => f.Name) }
                                  };
 

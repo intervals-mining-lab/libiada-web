@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -56,8 +55,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
         /// </summary>
-        public SubsequencesCalculationController()
-            : base("Subsequences characteristics calculation")
+        public SubsequencesCalculationController() : base("Subsequences characteristics calculation")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
@@ -107,7 +105,7 @@
                                         .ToDictionary(s => s.Id);
                 var parentSequenceIds = parentSequences.Keys.ToArray();
 
-                var characteristics = new List<SubsequenceData>[parentSequenceIds.Length];
+                var characteristics = new Dictionary<string, List<SubsequenceData>>(parentSequenceIds.Length);
                 var matterNames = new string[parentSequenceIds.Length];
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -131,7 +129,7 @@
 
                     var sequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceId);
                     matterNames[m] = parentSequences[parentSequenceId].MatterName;
-                    characteristics[m] = new List<SubsequenceData>();
+                    characteristics.Add(matterNames[m], new List<SubsequenceData>());
 
                     for (int j = 0; j < sequences.Length; j++)
                     {
@@ -171,7 +169,7 @@
                             attributes = new string[0];
                         }
 
-                        characteristics[m].Add(new SubsequenceData(dbSubsequences[j], values, attributes));
+                        characteristics[matterNames[m]].Add(new SubsequenceData(dbSubsequences[j], values, attributes));
                     }
 
                     // trying to save calculated characteristics to database
