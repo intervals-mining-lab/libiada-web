@@ -39,7 +39,7 @@
         function filterByFeature(feature) {
             d3.selectAll(".dot")
                 .filter(function (dot) { return dot.featureId === feature.Value })
-                .attr("r", function (d) {
+                .attr("rx", function (d) {
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? $scope.dotRadius : 0;
                 });
@@ -79,12 +79,12 @@
             return tooltipContent.join("</br>");
         }
 
-        function showTooltip(d, tooltip, svg) {
+        function showTooltip(d, tooltip, newSelectedDot, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", .9);
-            tooltip.selectedDot = tooltip.newSelectedDot;
-            tooltip.selectedDot.attr("r", function (dot) { return $scope.dotRadius * 3; });
+            tooltip.selectedDot = newSelectedDot;
+            tooltip.selectedDot.attr("rx", function (dot) { return $scope.selectedDotRadius; });
 
             if ($scope.highlight) {
                 var tooltipHtml = [];
@@ -99,8 +99,8 @@
                             return false;
                         }
                     })
-                    .attr("r", function (dot) {
-                        return $scope.dotVisible(dot) ? $scope.dotRadius * 3 : 0;
+                    .attr("rx", function (dot) {
+                        return $scope.dotVisible(dot) ? $scope.selectedDotRadius : 0;
                     });
 
                 tooltip.html(tooltipHtml.join("</br></br>"));
@@ -126,11 +126,11 @@
                     tooltip.html("").style("opacity", 0);
 
                     if (tooltip.selectedDot) {
-                        tooltip.selectedDot.attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                        tooltip.selectedDot.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
                     }
 
                     if (tooltip.similarDots) {
-                        tooltip.similarDots.attr("r", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                        tooltip.similarDots.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
                     }
                 }
 
@@ -237,16 +237,14 @@
             svg.selectAll(".dot")
                 .data($scope.points)
                 .enter()
-                .append("circle")
+                .append("ellipse")
                 .attr("class", "dot")
-                .attr("r", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
+                .attr("rx", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
+                .attr("ry", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill", function (d) { return color(cValue(d)); })
-                .on("click", function (d) {
-                    tooltip.newSelectedDot = d3.select(this);
-                    return $scope.showTooltip(d, tooltip, svg);
-                });
+                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -260,7 +258,7 @@
 
                     svg.selectAll(".dot")
                         .filter(function (dot) { return dot.matterId === d.id })
-                        .attr("r", function (d) {
+                        .attr("rx", function (d) {
                             d.matterVisible = legendEntry.style("opacity") == 1;
                             return $scope.dotVisible(d) ? $scope.dotRadius : 0;
                         });
@@ -298,7 +296,8 @@
         $scope.legendHeight = $scope.result.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
-        $scope.dotRadius = 3.5;
+        $scope.dotRadius = 4;
+        $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.precision = 0;
         $scope.points = [];
         $scope.matters = [];
