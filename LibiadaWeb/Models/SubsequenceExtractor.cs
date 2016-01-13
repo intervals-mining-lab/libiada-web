@@ -87,28 +87,6 @@
         }
 
         /// <summary>
-        /// The get subsequences.
-        /// </summary>
-        /// <param name="sequenceIds">
-        /// The sequences ids.
-        /// </param>
-        /// <param name="featureIds">
-        /// The feature ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:Dictionary{Int64, Subsequence[]}"/>.
-        /// </returns>
-        public Dictionary<long, Subsequence[]> GetSubsequences(IEnumerable<long> sequenceIds, IEnumerable<int> featureIds)
-        {
-            return db.Subsequence.Where(s => sequenceIds.Contains(s.SequenceId) && featureIds.Contains(s.FeatureId))
-                                 .Include(s => s.Position)
-                                 .Include(s => s.SequenceAttribute)
-                                 .ToArray()
-                                 .GroupBy(s => s.SequenceId)
-                                 .ToDictionary(s => s.Key, s => s.ToArray());
-        }
-
-        /// <summary>
         /// Extracts subsequence without joins (additional positions).
         /// </summary>
         /// <param name="sourceSequence">

@@ -1,6 +1,6 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
-    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The genes data.
@@ -10,12 +10,12 @@
         /// <summary>
         /// The starts.
         /// </summary>
-        public readonly List<int> Starts;
+        public readonly int[] Starts;
 
         /// <summary>
         /// The lengths.
         /// </summary>
-        public readonly List<int> Lengths;
+        public readonly int[] Lengths;
 
         /// <summary>
         /// The feature id.
@@ -56,12 +56,16 @@
             FeatureId = subsequence.FeatureId;
             WebApiId = subsequence.WebApiId;
 
-            Starts = new List<int> { subsequence.Start };
-            Lengths = new List<int> { subsequence.Length };
-            foreach (var position in subsequence.Position)
+            var positions = subsequence.Position.ToArray();
+
+            Starts = new int[positions.Length + 1];
+            Starts[0] = subsequence.Start;
+            Lengths = new int[positions.Length + 1];
+            Lengths[0] = subsequence.Length;
+            for (int i = 0; i < positions.Length; i++)
             {
-                Starts.Add(position.Start);
-                Lengths.Add(position.Length);
+                Starts[i + 1] = positions[i].Start;
+                Lengths[i + 1] = positions[i].Length;
             }
         }
     }
