@@ -83,16 +83,12 @@
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", .9);
-            tooltip.selectedDot = newSelectedDot;
-            tooltip.selectedDot.attr("rx", function (dot) { return $scope.selectedDotRadius; });
 
-            if ($scope.highlight) {
-                var tooltipHtml = [];
-                tooltipHtml.push($scope.fillPointTooltip(d));
+            var tooltipHtml = [];
 
-                tooltip.similarDots = svg.selectAll(".dot")
+            tooltip.selectedDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.y >= (d.y - $scope.precision) && dot.y <= (d.y + $scope.precision) && $scope.dotVisible(d) && dot.id !== d.id) {
+                        if (dot.matterId === d.matterId && dot.y === d.y && $scope.dotVisible(dot)) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
@@ -103,11 +99,22 @@
                         return $scope.dotVisible(dot) ? $scope.selectedDotRadius : 0;
                     });
 
-                tooltip.html(tooltipHtml.join("</br></br>"));
-
-            } else {
-                tooltip.html($scope.fillPointTooltip(d));
+            if ($scope.highlight) {
+                tooltip.similarDots = svg.selectAll(".dot")
+                    .filter(function (dot) {
+                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision) && $scope.dotVisible(dot)) {
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    })
+                    .attr("rx", function (dot) {
+                        return $scope.dotVisible(dot) ? $scope.selectedDotRadius : 0;
+                    });
             }
+
+            tooltip.html(tooltipHtml.join("</br></br>"));
 
             tooltip.style("background", "#000")
                 .style("color", "#fff")
@@ -125,8 +132,8 @@
                 if (tooltip.hideTooltip) {
                     tooltip.html("").style("opacity", 0);
 
-                    if (tooltip.selectedDot) {
-                        tooltip.selectedDot.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                    if (tooltip.selectedDots) {
+                        tooltip.selectedDots.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
                     }
 
                     if (tooltip.similarDots) {
