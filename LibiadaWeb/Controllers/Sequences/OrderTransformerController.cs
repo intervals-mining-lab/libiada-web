@@ -45,15 +45,18 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.Matter.Select(d => d.Id).ToList(); 
+            var matterIds = db.Matter.Select(d => d.Id).ToArray(); 
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
-            var links = new List<Link> { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
-            links = links.OrderBy(n => (int)n).ToList();
-            data.Add("links", links.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToList());
+            
+            var links = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
+            links = links.OrderBy(n => (int)n).ToArray();
+            data.Add("links", links.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToArray());
+            
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
+            
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }

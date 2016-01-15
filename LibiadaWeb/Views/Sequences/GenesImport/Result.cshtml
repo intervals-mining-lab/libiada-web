@@ -31,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                @for (int d = 0; d < ViewBag.genes.Count; d++)
+                @for (int d = 0; d < ViewBag.genes.Length; d++)
                 {
                     <tr>
                         <td>
@@ -56,8 +56,4 @@
                 }
             </tbody>
         </table>
-
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
-    }
 }

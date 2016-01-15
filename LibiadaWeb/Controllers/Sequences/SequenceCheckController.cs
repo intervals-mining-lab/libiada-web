@@ -126,7 +126,7 @@
                     {
                         if (!chain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
                         {
-                            message = i + "Elements in alphabet are not equal. Indb - " + dataBaseChain.Alphabet[i] + ". In file - " + chain.Alphabet[i];
+                            message = i + "Elements in alphabet are not equal. In db - " + dataBaseChain.Alphabet[i] + ". In file - " + chain.Alphabet[i];
 
                             return new Dictionary<string, object> { { "message", message } };
                         }

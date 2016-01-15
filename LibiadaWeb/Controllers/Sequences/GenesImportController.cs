@@ -21,22 +21,10 @@
     public class GenesImportController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The subsequence repository.
-        /// </summary>
-        private readonly SubsequenceRepository subsequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
         public GenesImportController() : base("Genes Import")
         {
-            db = new LibiadaWebEntities();
-            subsequenceRepository = new SubsequenceRepository(db);
         }
 
         /// <summary>
@@ -47,10 +35,11 @@
         /// </returns>
         public ActionResult Index()
         {
+            var db = new LibiadaWebEntities();
             var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
-                                                          !genesSequenceIds.Contains(c.Id) && 
-                                                          (c.FeatureId == Aliases.Feature.FullGenome || 
+            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null &&
+                                                          !genesSequenceIds.Contains(c.Id) &&
+                                                          (c.FeatureId == Aliases.Feature.FullGenome ||
                                                            c.FeatureId == Aliases.Feature.MitochondrionGenome ||
                                                            c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToList();
 
@@ -84,43 +73,50 @@
         public ActionResult Index(long matterId, bool localFile)
         {
             return Action(() =>
-            {
-                long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
-
-                Stream stream;
-                if (localFile)
                 {
-                    HttpPostedFileBase file = Request.Files[0];
-
-                    if (file == null || file.ContentLength == 0)
+                    string matterName;
+                    Subsequence[] sequenceSubsequences;
+                    using (var db = new LibiadaWebEntities())
                     {
-                        throw new ArgumentNullException("file", "Sequence file is empty");
+                        var subsequenceRepository = new SubsequenceRepository(db);
+                        long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
+                        DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
+
+                        Stream stream;
+                        if (localFile)
+                        {
+                            HttpPostedFileBase file = Request.Files[0];
+
+                            if (file == null || file.ContentLength == 0)
+                            {
+                                throw new ArgumentNullException("file", "Sequence file is empty");
+                            }
+
+                            stream = file.InputStream;
+                        }
+                        else
+                        {
+                            stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
+                        }
+
+                        var features = NcbiHelper.GetFeatures(stream);
+
+                        subsequenceRepository.CreateSubsequences(features, parentSequenceId);
+
+                        matterName = db.Matter.Single(m => m.Id == matterId).Name;
+                        sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
+                                                             .Include(s => s.Position)
+                                                             .Include(s => s.Feature)
+                                                             .Include(s => s.SequenceAttribute)
+                                                             .ToArray();
                     }
 
-                    stream = file.InputStream;
-                }
-                else
-                {
-                    stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
-                }
-
-                var features = NcbiHelper.GetFeatures(stream);
-
-                subsequenceRepository.CreateSubsequences(features, sequenceId);
-
-                var matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                var sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId)
-                                             .Include(s => s.Position)
-                                             .Include(s => s.Feature)
-                                             .Include(s => s.SequenceAttribute).ToList();
-
-                return new Dictionary<string, object>
+                    return new Dictionary<string, object>
                                      {
                                          { "matterName", matterName }, 
                                          { "genes", sequenceSubsequences }
                                      };
-            });
+                });
         }
     }
 }

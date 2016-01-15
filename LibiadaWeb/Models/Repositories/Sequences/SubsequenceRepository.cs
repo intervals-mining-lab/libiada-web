@@ -257,7 +257,7 @@
         /// The local subsequences.
         /// </param>
         /// <returns>
-        /// The <see cref="FeatureItem"/>.
+        /// The missing features <see cref="FeatureItem"/>.
         /// </returns>
         private FeatureItem CheckFeature(FeatureItem feature, List<Subsequence> localSubsequences)
         {

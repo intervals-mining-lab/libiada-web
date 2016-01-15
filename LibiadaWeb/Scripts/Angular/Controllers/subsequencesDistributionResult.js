@@ -19,6 +19,8 @@
                         name: sequenceData.MatterName,
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
+                        complement: subsequenceData.Complement,
+                        partial: subsequenceData.partial,
                         featureId: subsequenceData.FeatureId,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
@@ -64,8 +66,17 @@
             }
 
             tooltipContent.push($scope.featuresNames[d.featureId]);
+
             if (d.attributes.length > 0) {
                 tooltipContent.push(d.attributes.join("<br/>"));
+            }
+
+            if (d.complement) {
+                tooltipContent.push("complement");
+            }
+
+            if (d.partial) {
+                tooltipContent.push("partial");
             }
 
             var start = d.positions[0] + 1;

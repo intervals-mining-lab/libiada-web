@@ -110,42 +110,45 @@
         {
             return Action(() =>
                 {
-                    var sequences = new List<string>();
-                    var names = new List<string>();
+                    string[] sequences;
+                    string[] names;
 
                     if (localFile)
                     {
+                        sequences = new string[Request.Files.Count];
+                        names = new string[customSequences.Length];
                         for (int i = 0; i < Request.Files.Count; i++)
                         {
                             var sequenceStream = FileHelper.GetFileStream(file[i]);
                             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                            sequences.Add(fastaSequence.ConvertToString());
-                            names.Add(fastaSequence.ID);
+                            sequences[i] = fastaSequence.ConvertToString();
+                            names[i] = fastaSequence.ID;
                         }
                     }
                     else
                     {
+                        sequences = new string[customSequences.Length];
+                        names = new string[customSequences.Length];
                         for (int i = 0; i < customSequences.Length; i++)
                         {
-                            sequences.Add(customSequences[i]);
-                            names.Add("Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length);
+                            sequences[i] = customSequences[i];
+                            names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
                         }
                     }
 
-                    var characteristics = new List<List<double>>();
+                    var characteristics = new double[sequences.Length, characteristicTypeLinkIds.Length];
 
-                    foreach (var sequence in sequences)
+                    for (int j = 0; j < sequences.Length; j++)
                     {
-                        characteristics.Add(new List<double>());
-                        foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
+                        for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
-                            var chain = new Chain(sequence);
+                            var chain = new Chain(sequences[j]);
 
-                            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
-                            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
+                            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
                             var calculator = CalculatorsFactory.CreateFullCalculator(className);
 
-                            characteristics.Last().Add(calculator.Calculate(chain, link));
+                            characteristics[j, k] = calculator.Calculate(chain, link);
                         }
                     }
 

@@ -30,34 +30,10 @@
     public class CalculationController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
-        /// The characteristic type repository.
-        /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
-
-        /// <summary>
-        /// The characteristic repository.
-        /// </summary>
-        private readonly CharacteristicRepository characteristicRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
         public CalculationController() : base("Characteristics calculation")
         {
-            db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-            characteristicRepository = new CharacteristicRepository(db);
         }
 
         /// <summary>
@@ -68,6 +44,7 @@
         /// </returns>
         public ActionResult Index()
         {
+            var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
             ViewBag.MattersCheckboxes = true;
 
@@ -143,15 +120,21 @@
         {
             return Action(() =>
             {
-                var mattersCharacteristics = new List<object>();
+                var db = new LibiadaWebEntities();
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                var characteristicRepository = new CharacteristicRepository(db);
+                var mattersCharacteristics = new object[matterIds.Length];
 
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
-                var characteristicNames = new List<string>();
+
+                var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 var newCharacteristics = new List<Characteristic>();
 
-                foreach (var matterId in matterIds)
+                for (int j = 0; j < matterIds.Length; j++)
                 {
+                    var matterId = matterIds[j];
                     var characteristics = new List<double>();
                     for (int i = 0; i < notationIds.Length; i++)
                     {
@@ -222,7 +205,7 @@
                         }
                     }
 
-                    mattersCharacteristics.Add(new { matterName = matters[matterId].Name, characteristics });
+                    mattersCharacteristics[j] = new { matterName = matters[matterId].Name, characteristics };
                 }
 
                 // trying to save calculated characteristics to database
@@ -230,18 +213,18 @@
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
                 }
 
-                var characteristicsList = new List<SelectListItem>();
-                for (int i = 0; i < characteristicNames.Count; i++)
+                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                for (int i = 0; i < characteristicNames.Length; i++)
                 {
-                    characteristicsList.Add(new SelectListItem
+                    characteristicsList[i] = new SelectListItem
                     {
                         Value = i.ToString(),
                         Text = characteristicNames[i],
                         Selected = false
-                    });
+                    };
                 }
 
                 var result = new Dictionary<string, object>()

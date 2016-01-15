@@ -120,8 +120,7 @@
                 var firstSequenceAttributes = new List<string[]>();
                 foreach (var subsequence in firstSequenceSubsequences)
                 {
-                    var attributes = firstDbSubsequencesAttributes[subsequence.Id].ToArray();
-                    firstSequenceAttributes.Add(attributes);
+                    firstSequenceAttributes.Add(firstDbSubsequencesAttributes[subsequence.Id]);
                 }
 
                 var secondMatterId = matterIds[1];
@@ -133,10 +132,8 @@
                 var secondSequenceAttributes = new List<string[]>();
                 foreach (var subsequence in secondSequenceSubsequences)
                 {
-                    var attributes = secondDbSubsequencesAttributes[subsequence.Id].ToArray();
-                    secondSequenceAttributes.Add(attributes);
+                    secondSequenceAttributes.Add(secondDbSubsequencesAttributes[subsequence.Id]);
                 }
-
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
