@@ -1099,5 +1099,14 @@ CREATE INDEX ix_characteristic_chain_characteristic_type ON characteristic (chai
 
 CREATE INDEX ix_characteristic_characteristic_type_link ON characteristic (characteristic_type_link_id);
 
+-- 15.01.2016
+-- Adding new attributes.
+
+INSERT INTO attribute(name) VALUES ('regulatory_class');
+INSERT INTO attribute(name) VALUES ('artificial_location');
+INSERT INTO attribute(name) VALUES ('proviral');
+INSERT INTO attribute(name) VALUES ('operon');
+INSERT INTO attribute(name) VALUES ('number');
+
 
 COMMIT;
