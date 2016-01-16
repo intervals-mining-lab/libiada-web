@@ -21,7 +21,12 @@
         /// <summary>
         /// The attributes.
         /// </summary>
-        private readonly List<Attribute> attributes; 
+        private readonly Attribute[] attributes;
+
+        /// <summary>
+        /// The attributes dictionary.
+        /// </summary>
+        private readonly Dictionary<string, Attribute> attributesDictionary;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributeRepository"/> class.
@@ -32,7 +37,8 @@
         public AttributeRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            attributes = db.Attribute.ToList();
+            attributes = db.Attribute.ToArray();
+            attributesDictionary = attributes.ToDictionary(a => a.Name);
         }
 
         /// <summary>
@@ -49,12 +55,15 @@
         /// </exception>
         public Attribute GetAttributeByName(string name)
         {
-            if (attributes.All(a => a.Name != name))
+            Attribute value;
+            if (attributesDictionary.TryGetValue(name, out value))
+            {
+                return value;
+            }
+            else
             {
                 throw new Exception("Unknown attribute: " + name);
             }
-
-            return attributes.Single(a => a.Name == name);
         }
 
         /// <summary>
@@ -71,12 +80,14 @@
         /// </exception>
         public string GetAttributeNameById(int id)
         {
-            if (attributes.All(a => a.Id != id))
+            if (attributes.Any(a => a.Id == id))
+            {
+                return attributes.Single(a => a.Id == id).Name;
+            }
+            else
             {
                 throw new Exception("Unknown attribute: " + id);
             }
-
-            return attributes.Single(a => a.Id == id).Name;
         }
 
         /// <summary>

@@ -423,7 +423,7 @@
         private bool[] CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
         {
             var positionsMap = new bool[features[0].Location.LocationEnd];
-
+            var pseudoGene = attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo);
             for (int i = 1; i < features.Count; i++)
             {
                 var feature = features[i];
@@ -431,8 +431,7 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
-                    if (!pseudo)
+                    if (!feature.Qualifiers.ContainsKey(pseudoGene))
                     {
                         continue;
                     }
@@ -607,17 +606,8 @@
         /// </returns>
         private bool CheckPartial(List<ILocation> leafLocations)
         {
-            var partial = false;
-            foreach (var leafLocation in leafLocations)
-            {
-                if (leafLocation.LocationStart.ToString() != leafLocation.StartData
-                    || leafLocation.LocationEnd.ToString() != leafLocation.EndData)
-                {
-                    partial = true;
-                }
-            }
-
-            return partial;
+            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData 
+                                  || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
         }
     }
 }
