@@ -14,14 +14,14 @@
     public class AttributeRepository : IAttributeRepository
     {
         /// <summary>
+        /// The attributes.
+        /// </summary>
+        public readonly Attribute[] Attributes;
+
+        /// <summary>
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The attributes.
-        /// </summary>
-        private readonly Attribute[] attributes;
 
         /// <summary>
         /// The attributes dictionary.
@@ -37,8 +37,8 @@
         public AttributeRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            attributes = db.Attribute.ToArray();
-            attributesDictionary = attributes.ToDictionary(a => a.Name);
+            Attributes = db.Attribute.ToArray();
+            attributesDictionary = Attributes.ToDictionary(a => a.Name);
         }
 
         /// <summary>
@@ -80,9 +80,9 @@
         /// </exception>
         public string GetAttributeNameById(int id)
         {
-            if (attributes.Any(a => a.Id == id))
+            if (Attributes.Any(a => a.Id == id))
             {
-                return attributes.Single(a => a.Id == id).Name;
+                return Attributes.Single(a => a.Id == id).Name;
             }
             else
             {

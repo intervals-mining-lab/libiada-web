@@ -134,8 +134,13 @@
         /// <exception cref="Exception">
         /// Thrown if qualifier has more than one value.
         /// </exception>
-        public void CreateSubsequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
+        /// <returns>
+        /// The <see cref="List{SequenceAttribute}"/>.
+        /// </returns>
+        public List<SequenceAttribute> CreateSubsequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
         {
+            var result = new List<SequenceAttribute>();
+
             foreach (var qualifier in qualifiers)
             {
                 if (qualifier.Value.Count == 1)
@@ -161,11 +166,13 @@
                             break;
                     }
 
-                    CreateSequenceAttribute(qualifier.Key, CleanAndJoinAttributeValues(qualifier.Value), subsequence.Id);
+                    result.Add(CreateSequenceAttribute(qualifier.Key, CleanAndJoinAttributeValues(qualifier.Value), subsequence.Id));
                 }
             }
 
-            CreateComplementJoinPartialAttributes(complement, complementJoin, subsequence);
+            result.AddRange(CreateComplementJoinPartialAttributes(complement, complementJoin, subsequence));
+
+            return result;
         }
 
         /// <summary>
@@ -180,7 +187,10 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        private void CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
+        /// <returns>
+        /// The <see cref="SequenceAttribute"/>.
+        /// </returns>
+        private SequenceAttribute CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
         {
             var attributeId = attributeRepository.GetAttributeByName(attributeName).Id;
 
@@ -191,7 +201,7 @@
                 Value = attributeValue
             };
 
-            db.SequenceAttribute.Add(subsequenceAttribute);
+            return subsequenceAttribute;
         }
 
         /// <summary>
@@ -206,7 +216,10 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        private void CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
+        /// <returns>
+        /// The <see cref="SequenceAttribute"/>.
+        /// </returns>
+        private SequenceAttribute CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
         {
             var subsequenceAttribute = new SequenceAttribute
             {
@@ -215,7 +228,7 @@
                 Value = attributeValue
             };
 
-            db.SequenceAttribute.Add(subsequenceAttribute);
+            return subsequenceAttribute;
         }
 
         /// <summary>
@@ -227,9 +240,12 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        private void CreateSequenceAttribute(int attributeId, long sequenceId)
+        /// <returns>
+        /// The <see cref="SequenceAttribute"/>.
+        /// </returns>
+        private SequenceAttribute CreateSequenceAttribute(int attributeId, long sequenceId)
         {
-            CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
+            return CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
         }
 
         /// <summary>
@@ -281,22 +297,28 @@
         /// <param name="subsequence">
         /// The subsequence.
         /// </param>
-        private void CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
+        /// <returns>
+        /// The <see cref="List{SequenceAttribute}"/>.
+        /// </returns>
+        private List<SequenceAttribute> CreateComplementJoinPartialAttributes(bool complement, bool complementJoin, Subsequence subsequence)
         {
+            var result = new List<SequenceAttribute>();
             if (complement)
             {
-                CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence.Id);
+                result.Add(CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence.Id));
 
                 if (complementJoin)
                 {
-                    CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence.Id);
+                    result.Add(CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence.Id));
                 }
             }
 
             if (subsequence.Partial)
             {
-                CreateSequenceAttribute(Aliases.Attribute.Partial, subsequence.Id);
+                result.Add(CreateSequenceAttribute(Aliases.Attribute.Partial, subsequence.Id));
             }
+
+            return result;
         }
     }
 }

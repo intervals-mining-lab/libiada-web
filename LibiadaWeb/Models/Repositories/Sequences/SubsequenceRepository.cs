@@ -16,7 +16,7 @@
     public class SubsequenceRepository : ISubsequenceRepository
     {
         /// <summary>
-        /// The db.
+        /// The database context.
         /// </summary>
         private readonly LibiadaWebEntities db;
 
@@ -44,7 +44,7 @@
         /// Initializes a new instance of the <see cref="SubsequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
-        /// The db.
+        /// The database context.
         /// </param>
         public SubsequenceRepository(LibiadaWebEntities db)
         {
@@ -86,10 +86,7 @@
                 throw new Exception("Error occured during importability check.", e);
             }
 
-            var positionsMap = CreateFeatureSubsequences(features, sequenceId);
-            CreateNonCodingSubsequences(positionsMap, sequenceId);
-
-            db.SaveChanges();
+            CreateFeatureSubsequences(features, sequenceId);
         }
 
         /// <summary>
@@ -162,7 +159,7 @@
 
             return new Dictionary<string, object>
                        {
-                           { "attributes", db.Attribute.ToList() },
+                           { "attributes", attributeRepository.Attributes },
                            { "localSubsequences", localSubsequences },
                            { "missingRemoteFeatures", missingRemoteFeatures },
                            { "annotationsUpdatable", annotationsUpdatable }
@@ -409,7 +406,8 @@
         }
 
         /// <summary>
-        /// Create subsequences from features.
+        /// Create subsequences from features
+        /// and noncoding subsequences from gaps.
         /// </summary>
         /// <param name="features">
         /// The features.
@@ -417,11 +415,11 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        /// <returns>
-        /// The <see cref="T:bool[]"/>.
-        /// </returns>
-        private bool[] CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
+        private void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
         {
+            var newSubsequences = new List<Subsequence>();
+            var newPositions = new List<Position>();
+            var newSequenceAttributes = new List<SequenceAttribute>();
             var positionsMap = new bool[features[0].Location.LocationEnd];
             var pseudoGene = attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo);
             for (int i = 1; i < features.Count; i++)
@@ -470,7 +468,7 @@
                     Length = length
                 };
 
-                db.Subsequence.Add(subsequence);
+                newSubsequences.Add(subsequence);
 
                 AddPositionToMap(positionsMap, start, end);
 
@@ -488,15 +486,21 @@
                         Length = leafLength
                     };
 
-                    db.Position.Add(position);
+                    newPositions.Add(position);
 
                     AddPositionToMap(positionsMap, leafStart, leafEnd);
                 }
 
-                sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence);
+                newSequenceAttributes.AddRange(sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence));
             }
 
-            return positionsMap;
+            newSubsequences.AddRange(CreateNonCodingSubsequences(positionsMap, sequenceId));
+
+            db.Subsequence.AddRange(newSubsequences);
+            db.Position.AddRange(newPositions);
+            db.SequenceAttribute.AddRange(newSequenceAttributes);
+
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -508,11 +512,15 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        private void CreateNonCodingSubsequences(bool[] positionsMap, long sequenceId)
+        /// <returns>
+        /// The <see cref="List{Subsequence}"/>.
+        /// </returns>
+        private List<Subsequence> CreateNonCodingSubsequences(bool[] positionsMap, long sequenceId)
         {
             var positions = ExtractNonCodingSubsequences(positionsMap);
             var starts = positions[0];
             var lengths = positions[1];
+            var result = new List<Subsequence>();
 
             for (int i = 0; i < lengths.Count; i++)
             {
@@ -527,8 +535,10 @@
                     Length = lengths[i]
                 };
 
-                db.Subsequence.Add(subsequence);
+                result.Add(subsequence);
             }
+
+            return result;
         }
 
         /// <summary>
