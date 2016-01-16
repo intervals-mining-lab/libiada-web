@@ -202,6 +202,41 @@
             /// The mobile element type.
             /// </summary>
             public const int MobileElementType = 32;
+
+            /// <summary>
+            /// The experiment.
+            /// </summary>
+            public const int Experiment = 33;
+
+            /// <summary>
+            /// The citation.
+            /// </summary>
+            public const int Citation = 34;
+
+            /// <summary>
+            /// The regulatory class.
+            /// </summary>
+            public const int RegulatoryClass = 35;
+
+            /// <summary>
+            /// The artificial location.
+            /// </summary>
+            public const int ArtificialLocation = 36;
+
+            /// <summary>
+            /// The proviral.
+            /// </summary>
+            public const int Proviral = 37;
+
+            /// <summary>
+            /// The operon.
+            /// </summary>
+            public const int Operon = 38;
+
+            /// <summary>
+            /// The number.
+            /// </summary>
+            public const int Number = 39;
         }
 
         /// <summary>
@@ -538,6 +573,21 @@
             /// The diversity segment.
             /// </summary>
             public const int DiversitySegment = 27;
+
+            /// <summary>
+            /// The mobile element.
+            /// </summary>
+            public const int MobileElement = 28;
+
+            /// <summary>
+            /// The variation.
+            /// </summary>
+            public const int Variation = 29;
+
+            /// <summary>
+            /// The protein bind.
+            /// </summary>
+            public const int ProteinBind = 30; 
         }
 
         /// <summary>

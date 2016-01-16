@@ -1108,5 +1108,9 @@ INSERT INTO attribute(name) VALUES ('proviral');
 INSERT INTO attribute(name) VALUES ('operon');
 INSERT INTO attribute(name) VALUES ('number');
 
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Mobile element', 'Region of genome containing mobile elements.', 1, 'mobile_element');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Variation', 'A related strain contains stable mutations from the same gene (e.g., RFLPs, polymorphisms, etc.) which differ from the presented sequence at this location (and possibly others). Used to describe alleles, RFLPs,and other naturally occurring mutations and  polymorphisms; variability arising as a result of genetic manipulation (e.g. site directed mutagenesis) should described with the misc_difference feature.', 1, 'variation');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Protein_bind', 'Non-covalent protein binding site on nucleic acid. Note that feature key regulatory with /regulatory_class="ribosome_binding_site" should be used for ribosome binding sites.', 1, 'protein_bind');
+
 
 COMMIT;
