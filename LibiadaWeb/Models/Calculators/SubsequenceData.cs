@@ -28,11 +28,6 @@
         public readonly string[] Attributes;
 
         /// <summary>
-        /// The complement flag.
-        /// </summary>
-        public readonly bool Complement;
-
-        /// <summary>
         /// The partial flag.
         /// </summary>
         public readonly bool Partial;
@@ -65,7 +60,6 @@
             Attributes = attributes ?? new string[0];
             FeatureId = subsequence.FeatureId;
             WebApiId = subsequence.WebApiId;
-            Complement = subsequence.Complementary;
             Partial = subsequence.Partial;
 
             var positions = subsequence.Position.ToArray();

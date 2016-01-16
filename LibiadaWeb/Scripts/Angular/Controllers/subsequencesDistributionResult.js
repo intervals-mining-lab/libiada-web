@@ -19,7 +19,6 @@
                         name: sequenceData.MatterName,
                         sequenceWebApiId: sequenceData.WebApiId,
                         attributes: subsequenceData.Attributes,
-                        complement: subsequenceData.Complement,
                         partial: subsequenceData.partial,
                         featureId: subsequenceData.FeatureId,
                         positions: subsequenceData.Starts,
@@ -69,10 +68,6 @@
 
             if (d.attributes.length > 0) {
                 tooltipContent.push(d.attributes.join("<br/>"));
-            }
-
-            if (d.complement) {
-                tooltipContent.push("complement");
             }
 
             if (d.partial) {
