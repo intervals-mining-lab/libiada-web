@@ -199,7 +199,7 @@
         private List<double> CalculateCharacteristic(int characteristicTypeLinkId, Chain[] sequences, Subsequence[] subsequences)
         {
             var characteristics = new List<double>();
-
+            var newCharacteristics = new List<Characteristic>();
             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
             var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
@@ -217,11 +217,11 @@
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
                         Value = value
                     };
-
-                    db.Characteristic.Add(currentCharacteristic);
+                    newCharacteristics.Add(currentCharacteristic);
                 }
             }
 
+            db.Characteristic.AddRange(newCharacteristics);
             db.SaveChanges();
 
             for (int d = 0; d < sequences.Length; d++)

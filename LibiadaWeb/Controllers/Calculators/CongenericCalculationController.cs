@@ -107,6 +107,7 @@
                 var matterNames = new List<string>();
                 var elementNames = new List<List<string>>();
                 var characteristicNames = new List<string>();
+                var newCharacteristics = new List<CongenericCharacteristic>();
 
                 bool isLiteratureSequence = false;
 
@@ -174,8 +175,7 @@
                                         Value = value
                                     };
 
-                                    db.CongenericCharacteristic.Add(currentCharacteristic);
-                                    db.SaveChanges();
+                                    newCharacteristics.Add(currentCharacteristic);
                                 }
                             }
                         }
@@ -230,6 +230,9 @@
                         }
                     }
                 }
+
+                db.CongenericCharacteristic.AddRange(newCharacteristics);
+                db.SaveChanges();
 
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)

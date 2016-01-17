@@ -39,7 +39,10 @@ namespace LibiadaWeb.Models.Repositories.Calculators
         /// <param name="value">
         /// The value.
         /// </param>
-        public void CreateBinaryCharacteristic(long sequenceId, int characteristicTypeLinkId, long firstElementId, long secondElementId, double value)
+        /// <returns>
+        /// The <see cref="BinaryCharacteristic"/>.
+        /// </returns>
+        public BinaryCharacteristic CreateBinaryCharacteristic(long sequenceId, int characteristicTypeLinkId, long firstElementId, long secondElementId, double value)
         {
             var characteristic = new BinaryCharacteristic
             {
@@ -49,8 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Calculators
                 SecondElementId = secondElementId, 
                 Value = value
             };
-            db.BinaryCharacteristic.Add(characteristic);
-            db.SaveChanges();
+            return characteristic;
         }
 
         /// <summary>

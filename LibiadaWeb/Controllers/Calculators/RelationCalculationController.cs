@@ -227,7 +227,11 @@
             IBinaryCalculator calculator,
             Link link)
         {
-            int calculatedCount = db.BinaryCharacteristic.Count(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId);
+            var newCharacteristics = new List<BinaryCharacteristic>();
+            var dbCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
+                                                                    && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                                                           .ToArray();
+            int calculatedCount = dbCharacteristics.Length;
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
                 List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
@@ -237,19 +241,18 @@
                     {
                         long firstElementId = sequenceElements[i];
                         long secondElementId = sequenceElements[i];
-                        if (!db.BinaryCharacteristic.Any(b =>
-                                                          b.SequenceId == sequenceId &&
-                                                          b.CharacteristicTypeLinkId == characteristicTypeLinkId &&
-                                                          b.FirstElementId == firstElementId &&
-                                                          b.SecondElementId == secondElementId))
+                        if (!dbCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                            binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result);
+                            newCharacteristics.Add(binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result));
                         }
                     }
                 }
             }
+
+            db.BinaryCharacteristic.AddRange(newCharacteristics);
+            db.SaveChanges();
         }
 
         /// <summary>
@@ -282,6 +285,10 @@
             Link link)
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
+            var newCharacteristics = new List<BinaryCharacteristic>();
+            var dbCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
+                                                                    && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                                                           .ToArray(); 
 
             // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();
@@ -306,18 +313,17 @@
                     long secondElementId = sequenceElements[secondElementNumber];
 
                     // searching characteristic in database
-                    if (!db.BinaryCharacteristic.Any(b =>
-                                                      b.SequenceId == sequenceId &&
-                                                      b.CharacteristicTypeLinkId == characteristicTypeLinkId &&
-                                                      b.FirstElementId == firstElementId &&
-                                                      b.SecondElementId == secondElementId))
+                    if (!dbCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                     {
                         double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                        binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result);
+                        newCharacteristics.Add(binaryCharacteristicRepository.CreateBinaryCharacteristic(sequenceId, characteristicTypeLinkId, firstElementId, secondElementId, result));
                     }
                 }
             }
+
+            db.BinaryCharacteristic.AddRange(newCharacteristics);
+            db.SaveChanges();
         }
 
         /// <summary>

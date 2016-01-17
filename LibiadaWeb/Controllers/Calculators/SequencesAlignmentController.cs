@@ -225,7 +225,7 @@
         private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, int notationId, int[] featureIds)
         {
             var characteristics = new List<double>();
-
+            var newCharacteristics = new List<Characteristic>();
             var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
 
             Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
@@ -249,11 +249,11 @@
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
                         Value = value
                     };
-
-                    db.Characteristic.Add(currentCharacteristic);
+                    newCharacteristics.Add(currentCharacteristic);
                 }
             }
 
+            db.Characteristic.AddRange(newCharacteristics);
             db.SaveChanges();
 
             for (int d = 0; d < sequences.Length; d++)

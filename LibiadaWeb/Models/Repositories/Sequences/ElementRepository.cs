@@ -88,6 +88,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public long[] GetOrCreateNotesInDb(Alphabet alphabet)
         {
+            var newNotes = new List<Note>();
             var result = new long[alphabet.Cardinality];
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
@@ -122,12 +123,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
                         NotationId = Aliases.Notation.Notes
                     };
-                    db.Note.Add(newNote);
-                    db.SaveChanges();
+                    newNotes.Add(newNote);
                     result[i] = newNote.Id;
                 }
             }
 
+            db.Note.AddRange(newNotes);
+            db.SaveChanges();
             return result;
         }
 
@@ -261,6 +263,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
         {
+            var newPitches = new List<LibiadaWeb.Pitch>();
             var result = new int[pitches.Count];
 
             for (int i = 0; i < pitches.Count; i++)
@@ -290,13 +293,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Octave = pitch.Octave,
                         Midinumber = pitch.MidiNumber
                     };
-
-                    db.Pitch.Add(newPitch);
-                    db.SaveChanges();
+                    newPitches.Add(newPitch);
                     result[i] = newPitch.Id;
                 }
             }
 
+            db.Pitch.AddRange(newPitches);
+            db.SaveChanges();
             return result;
         }
 
@@ -311,6 +314,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
         {
+            var newElements = new List<Element>();
             List<string> elements = (from IBaseObject element in libiadaAlphabet select element.ToString()).ToList();
 
             var existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.NotationId == notationId).Select(e => e.Value);
@@ -325,10 +329,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     Name = element,
                     NotationId = notationId
                 };
-
-                db.Element.Add(newElement);
+                newElements.Add(newElement);
             }
 
+            db.Element.AddRange(newElements);
             db.SaveChanges();
         }
     }
