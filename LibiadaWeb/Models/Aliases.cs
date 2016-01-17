@@ -237,6 +237,16 @@
             /// The number.
             /// </summary>
             public const int Number = 39;
+
+            /// <summary>
+            /// The replace.
+            /// </summary>
+            public const int Replace = 40;
+
+            /// <summary>
+            /// The compare.
+            /// </summary>
+            public const int Compare = 41;
         }
 
         /// <summary>
@@ -587,7 +597,17 @@
             /// <summary>
             /// The protein bind.
             /// </summary>
-            public const int ProteinBind = 30; 
+            public const int ProteinBind = 30;
+
+            /// <summary>
+            /// The mature peptid.
+            /// </summary>
+            public const int MaturePeptid = 31;
+
+            /// <summary>
+            /// The miscellaneous difference.
+            /// </summary>
+            public const int MiscellaneousDifference = 32; 
         }
 
         /// <summary>

@@ -1100,7 +1100,7 @@ CREATE INDEX ix_characteristic_chain_characteristic_type ON characteristic (chai
 CREATE INDEX ix_characteristic_characteristic_type_link ON characteristic (characteristic_type_link_id);
 
 -- 15.01.2016
--- Adding new attributes.
+-- Adding new attributes and features.
 
 INSERT INTO attribute(name) VALUES ('regulatory_class');
 INSERT INTO attribute(name) VALUES ('artificial_location');
@@ -1111,6 +1111,15 @@ INSERT INTO attribute(name) VALUES ('number');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Mobile element', 'Region of genome containing mobile elements.', 1, 'mobile_element');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Variation', 'A related strain contains stable mutations from the same gene (e.g., RFLPs, polymorphisms, etc.) which differ from the presented sequence at this location (and possibly others). Used to describe alleles, RFLPs,and other naturally occurring mutations and  polymorphisms; variability arising as a result of genetic manipulation (e.g. site directed mutagenesis) should described with the misc_difference feature.', 1, 'variation');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Protein_bind', 'Non-covalent protein binding site on nucleic acid. Note that feature key regulatory with /regulatory_class="ribosome_binding_site" should be used for ribosome binding sites.', 1, 'protein_bind');
+
+-- 17.01.2016
+-- Adding new feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Mature peptid', 'Mature peptide or protein coding sequence; coding sequence for the mature or final peptide or protein product following post-translational modification; the location does not include the stop codon (unlike the corresponding CDS).', 1, 'mat_peptide');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous difference', 'feature sequence is different from that presented in the entry and cannot be described by any other difference key (old_sequence, variation, or modified_base).', 1, 'misc_difference');
+INSERT INTO attribute(name) VALUES ('replace');
+INSERT INTO attribute(name) VALUES ('compare');
+
 
 
 COMMIT;
