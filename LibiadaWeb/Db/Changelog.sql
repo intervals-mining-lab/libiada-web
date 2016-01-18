@@ -1120,6 +1120,11 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous 
 INSERT INTO attribute(name) VALUES ('replace');
 INSERT INTO attribute(name) VALUES ('compare');
 
+-- 18.01.2016
+-- Removing redundant complementary columns.
+
+ALTER TABLE dna_chain DROP COLUMN complementary;
+ALTER TABLE subsequence DROP COLUMN complementary;
 
 
 COMMIT;

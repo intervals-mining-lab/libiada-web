@@ -168,7 +168,6 @@
                         resultsequence,
                         dnaSequence.FastaHeader,
                         null,
-                        dnaSequence.Complementary,
                         dnaSequence.Partial,
                         alphabet,
                         chain.Building);

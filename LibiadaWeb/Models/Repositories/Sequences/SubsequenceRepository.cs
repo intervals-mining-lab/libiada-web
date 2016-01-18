@@ -294,8 +294,7 @@
             var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start 
                                                                    && s.Length == length 
                                                                    && s.FeatureId == featureId 
-                                                                   && s.Partial == partial 
-                                                                   && s.Complementary == complement).ToList();
+                                                                   && s.Partial == partial).ToList();
 
             if (equalLocalSubsequences.Any())
             {
@@ -378,8 +377,7 @@
             var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start
                                                                    && s.Length == length
                                                                    && s.FeatureId == featureId
-                                                                   && s.Partial == partial
-                                                                   && s.Complementary == complement).ToList();
+                                                                   && s.Partial == partial).ToList();
 
             if (equalLocalSubsequences.Any())
             {
@@ -462,7 +460,6 @@
                     Id = DbHelper.GetNewElementId(db),
                     FeatureId = featureId,
                     Partial = partial,
-                    Complementary = complement,
                     SequenceId = sequenceId,
                     Start = start,
                     Length = length
@@ -529,7 +526,6 @@
                     Id = DbHelper.GetNewElementId(db),
                     FeatureId = Aliases.Feature.NonCodingSequence,
                     Partial = false,
-                    Complementary = false,
                     SequenceId = sequenceId,
                     Start = starts[i],
                     Length = lengths[i]
