@@ -1120,6 +1120,28 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Miscellaneous 
 INSERT INTO attribute(name) VALUES ('replace');
 INSERT INTO attribute(name) VALUES ('compare');
 
+-- 18.01.2016 
+-- Updating characteristics trigger function
 
+CREATE OR REPLACE FUNCTION trigger_delete_chain_characteristics()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "INSERT" || TG_OP == "UPDATE"){
+	plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.chain_id = c.id AND accordance_characteristic.created < c.modified;');
+} else{
+	plv8.elog(ERROR, 'Неизвестная операция. Данный тригер предназначен только для операций добавления и изменения записей.');
+}
+
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Триггерная функция, удаляющая все характеристики при удалении или изменении цепочки.'; 
 
 COMMIT;
