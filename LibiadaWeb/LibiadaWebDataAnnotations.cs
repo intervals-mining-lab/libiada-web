@@ -172,6 +172,12 @@
         /// </summary>
         [Display(Name = "Sequence is partial (incomplete)")]
         public bool Partial { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether sequence complementary.
+        /// </summary>
+        [Display(Name = "Sequence is complementary to source sequence")]
+        public bool Complementary { get; set; }
     }
 
     /// <summary>
@@ -202,6 +208,11 @@
     /// </summary>
     public class SubsequenceDataAnnotations
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether sequence complementary.
+        /// </summary>
+        [Display(Name = "Sequence is complementary to source sequence")]
+        public bool Complementary { get; set; }
     }
 
     /// <summary>

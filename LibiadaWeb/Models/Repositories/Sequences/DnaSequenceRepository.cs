@@ -40,6 +40,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="partial">
         /// The partial.
         /// </param>
+        /// <param name="complementary">
+        /// The complementary.
+        /// </param>
         /// <param name="webApiId">
         /// The web API id.
         /// </param>
@@ -47,7 +50,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// Thrown if at least one element of new sequence is missing in db
         /// or if sequence is empty or invalid.
         /// </exception>
-        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial, int? webApiId)
+        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial, bool complementary, int? webApiId)
         {
             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
             string fastaHeader = ">" + fastaSequence.ID;
@@ -69,7 +72,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             MatterRepository.CreateMatterFromSequence(sequence);
 
             var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
-            Create(sequence, fastaHeader, webApiId, partial, alphabet, chain.Building);
+            Create(sequence, fastaHeader, webApiId, complementary, partial, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -84,6 +87,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="webApiId">
         /// The web API id.
         /// </param>
+        /// <param name="complementary">
+        /// The complementary.
+        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>
@@ -93,7 +99,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, bool partial, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, bool complementary, bool partial, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
             parameters.Add(new NpgsqlParameter
@@ -114,6 +120,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 NpgsqlDbType = NpgsqlDbType.Boolean, 
                 Value = partial
             });
+            parameters.Add(new NpgsqlParameter
+            {
+                ParameterName = "complementary", 
+                NpgsqlDbType = NpgsqlDbType.Boolean,
+                Value = complementary
+            });
 
             const string Query = @"INSERT INTO dna_chain (
                                         id, 
@@ -127,7 +139,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         remote_id, 
                                         remote_db_id, 
                                         web_api_id,
-                                        partial
+                                        partial,
+                                        complementary
                                     ) VALUES (
                                         @id, 
                                         @notation_id,
@@ -140,7 +153,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @remote_id, 
                                         @remote_db_id, 
                                         @web_api_id,
-                                        @partial
+                                        @partial,
+                                        @complementary
                                     );";
 
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
@@ -160,7 +174,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, sequence.Partial, alphabet, building);
+            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, false, false, alphabet, building);
         }
 
         /// <summary>

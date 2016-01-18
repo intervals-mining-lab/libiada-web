@@ -111,6 +111,7 @@
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="web_api_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
+          <Property Name="complementary" Type="bool" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -127,6 +128,7 @@
           <Property Name="length" Type="int4" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="web_api_id" Type="int4" />
+          <Property Name="complementary" Type="bool" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
         </EntityType>
 
@@ -1961,6 +1963,7 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="FastaHeader" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_dna_chain" FromRole="DnaSequence" ToRole="BinaryCharacteristic" />
@@ -1985,6 +1988,7 @@
           <Property Name="Length" Type="Int32" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="WebApiId" Type="Int32" />
+          <Property Name="Complementary" Type="Boolean" Nullable="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
 
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="Subsequence" ToRole="DnaSequence" />
@@ -4062,6 +4066,7 @@
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="Complementary" ColumnName="complementary" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
                 <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
@@ -4079,6 +4084,7 @@
                 <ScalarProperty Name="Length" ColumnName="length" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
+                <ScalarProperty Name="Complementary" ColumnName="complementary" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
               </MappingFragment>
             </EntityTypeMapping>

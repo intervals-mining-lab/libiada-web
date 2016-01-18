@@ -28,6 +28,7 @@ namespace LibiadaWeb
         public int Length { get; set; }
         public int FeatureId { get; set; }
         public Nullable<int> WebApiId { get; set; }
+        public bool Complementary { get; set; }
         public bool Partial { get; set; }
     
         public virtual DnaSequence DnaSequence { get; set; }
