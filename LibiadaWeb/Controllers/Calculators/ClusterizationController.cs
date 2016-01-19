@@ -143,7 +143,7 @@
 
                 DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
                 var clusterizator = new KrabClusterization(data, equipotencyWeight, normalizedDistanceWeight, distanceWeight);
-                ClusterizationResult result = clusterizator.Clusterizate(clustersCount);
+                ClusterizationResult result = clusterizator.Cluster(clustersCount);
                 var clusters = new List<List<long>>();
                 for (int i = 0; i < result.Clusters.Count; i++)
                 {

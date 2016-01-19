@@ -43,7 +43,7 @@
 
                 Complex[] data = FourierTransform(complex.ToArray()); 
 
-                // переводим в массив double
+                // converting array to double
                 for (int g = 0; g < characteristics[i].Count; g++)
                 {
                     characteristics[i][g] = data[g].Real;
@@ -52,13 +52,13 @@
         }
 
         /// <summary>
-        /// Возвращает спектр сигнала
+        /// Calculates spectrum of given signal.
         /// </summary>
         /// <param name="x">
-        /// Массив значений сигнала. Количество значений должно быть степенью 2
+        /// Array of signal values. array size should be power of 2.
         /// </param>
         /// <returns>
-        /// Массив со значениями спектра сигнала
+        /// Spectrum of the signal. 
         /// </returns>
         public static Complex[] FourierTransform(Complex[] x)
         {
@@ -94,7 +94,7 @@
         }
 
         /// <summary>
-        /// Вычисление поворачивающего модуля e^(-i*2*PI*k/N).
+        /// Calculates turning mod(?) e^(-i*2*PI*k/N).
         /// </summary>
         /// <param name="k">
         /// The k.

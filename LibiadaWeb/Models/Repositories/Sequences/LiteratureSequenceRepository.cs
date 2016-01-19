@@ -57,7 +57,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var chain = new BaseChain(text.Length - 1);
 
             // file always contains empty string at the end
-            // TODO: переделать этот говнокод и вообще добавить проверку на пустую строку в конце, а лучше сделать нормальный trim
+            // TODO: rewrite this, add empty string check at the end or write a normal trim
             for (int i = 0; i < text.Length - 1; i++)
             {
                 chain.Set(new ValueString(text[i]), i);
