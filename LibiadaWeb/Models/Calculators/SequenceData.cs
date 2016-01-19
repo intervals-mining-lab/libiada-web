@@ -48,7 +48,7 @@
         /// <param name="subsequencesData">
         /// The genes data.
         /// </param>
-        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic,SubsequenceData[] subsequencesData)
+        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic, SubsequenceData[] subsequencesData)
         {
             MatterId = matterId;
             MatterName = matterName;

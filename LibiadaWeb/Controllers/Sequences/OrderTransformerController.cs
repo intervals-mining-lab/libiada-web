@@ -70,7 +70,7 @@
         /// <param name="linkIds">
         /// The link ids.
         /// </param>
-        /// <param name="transformations">
+        /// <param name="transformationIds">
         /// The transformations.
         /// </param>
         /// <returns>
@@ -95,6 +95,7 @@
                         sequence = HighOrderFactory.Create(sequence, (Link)linkIds[i]);
                     }
                 }
+
                 var result = new Dictionary<string, object>
                 {
                     { "Chain", sequence }

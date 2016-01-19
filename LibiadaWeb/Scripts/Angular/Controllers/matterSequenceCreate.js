@@ -20,12 +20,32 @@
             }
         };
 
+        function featureChanged(featureId) {
+            var featureName = "";
+            for (var i = 0; i < $scope.features.length; i++) {
+                if ($scope.features[i].Value === featureId) {
+                    featureName = $scope.features[i].Text;
+                    break;
+                }
+            }
+            $scope.description = featureName;
+        }
+
+        function remoteIdChanged(remoteId) {
+            var nameParts = $scope.name.split(" | ");
+            if (nameParts.length <= 2) {
+                    $scope.name = nameParts[0] + (remoteId ?  " | " + remoteId : "");
+            }
+        }
+
         function isRemoteDbDefined() {
             return $scope.remoteDbsFiltered.length > 0 && $scope.remoteDbId > 0;
         };
 
         $scope.filterByNature = filterByNature;
         $scope.isRemoteDbDefined = isRemoteDbDefined;
+        $scope.featureChanged = featureChanged;
+        $scope.remoteIdChanged = remoteIdChanged;
 
         $scope.original = false;
         $scope.localFile = false;

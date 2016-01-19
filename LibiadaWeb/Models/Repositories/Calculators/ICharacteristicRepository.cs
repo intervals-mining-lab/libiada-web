@@ -7,6 +7,5 @@
     /// </summary>
     public interface ICharacteristicRepository : IDisposable
     {
-         
     }
 }
