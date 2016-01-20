@@ -9,7 +9,7 @@
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
                 var sequenceData = $scope.result[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName });
+                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true });
 
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
                     var subsequenceData = sequenceData.SubsequencesData[j];
@@ -268,32 +268,36 @@
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
                 .on("click", function (d) {
+                    d.visible = !d.visible;
                     var legendEntry = d3.select(this);
-                    legendEntry.style("opacity", function (d) { return legendEntry.style("opacity") == 1 ? .5 : 1; });
+                    legendEntry.select("text")
+                        .style("opacity", function (text) { return d.visible ? 1 : .5; });
+                    legendEntry.select("rect")
+                        .style("fill-opacity", function (rect) { return d.visible ? 1 : 0; });
 
                     svg.selectAll(".dot")
                         .filter(function (dot) { return dot.matterId === d.id })
-                        .attr("rx", function (d) {
-                            d.matterVisible = legendEntry.style("opacity") == 1;
-                            return $scope.dotVisible(d) ? $scope.dotRadius : 0;
+                        .attr("rx", function (dot) {
+                            dot.matterVisible = d.visible;
+                            return $scope.dotVisible(dot) ? $scope.dotRadius : 0;
                         });
                 });
 
             // draw legend colored rectangles
             legend.append("rect")
-                .attr("x", width - 18)
-                .attr("width", 18)
-                .attr("height", 18)
+                .attr("width", 15)
+                .attr("height", 15)
                 .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
+                .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
             // draw legend text
             legend.append("text")
-                .attr("x", width - 24)
+                .attr("x", 24)
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .style("text-anchor", "end")
                 .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
         }
