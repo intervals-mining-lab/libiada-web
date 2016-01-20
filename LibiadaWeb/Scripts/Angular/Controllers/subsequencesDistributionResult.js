@@ -256,7 +256,9 @@
                 .attr("ry", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
                 .attr("cx", xMap)
                 .attr("cy", yMap)
+                .style("fill-opacity", 0.6)
                 .style("fill", function (d) { return color(cValue(d)); })
+                .style("stroke", function (d) { return color(cValue(d)); })
                 .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
 
             // draw legend
