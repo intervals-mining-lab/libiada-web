@@ -80,6 +80,7 @@
                                       genBankLink + d.sequenceWebApiId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
                                       d.positions.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
+            tooltipContent.push("Length: " + d.lengths.join(", "));
             tooltipContent.push("(" + d.x + ", " + d.y + ")");
 
             return tooltipContent.join("</br>");
@@ -260,6 +261,20 @@
                 .style("fill", function (d) { return color(cValue(d)); })
                 .style("stroke", function (d) { return color(cValue(d)); })
                 .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+
+            $scope.mattersDots = [];
+            for (var i = 0; i < $scope.matters; i++) {
+                var matterId = $scope.matters[i].id;
+                $scope.mattersDots[matterId] = d3.selectAll(".dot")
+                    .filter(function (dot) { return dot.matterId === matterId });
+            }
+
+            $scope.featuresDots = [];
+            for (var j = 0; j < $scope.features; j++) {
+                var featureId = $scope.features[j].Value;
+                $scope.mattersDots[featureId] = d3.selectAll(".dot")
+                    .filter(function (dot) { return dot.featureId === featureId });
+            }
 
             // draw legend
             var legend = svg.selectAll(".legend")
