@@ -1144,4 +1144,18 @@ $BODY$
   COST 100;
 COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Триггерная функция, удаляющая все характеристики при удалении или изменении цепочки.'; 
 
+-- 25.01.2016
+-- Removing characteristic type creation function and new characteristic type.
+
+DROP FUNCTION create_chatacteristic_type(character varying, text, integer, character varying, boolean, boolean, boolean, boolean, boolean);
+
+INSERT INTO characteristic_type (name, class_name, full_chain_applicable, congeneric_chain_applicable, binary_chain_applicable, accordance_applicable) VALUES ('Uniformity', 'Uniformity', true, true, false, false);
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 1 FROM characteristic_type) c);
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 2 FROM characteristic_type) c);
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 3 FROM characteristic_type) c);
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 4 FROM characteristic_type) c);
+INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 5 FROM characteristic_type) c);
+	
+
+
 COMMIT;
