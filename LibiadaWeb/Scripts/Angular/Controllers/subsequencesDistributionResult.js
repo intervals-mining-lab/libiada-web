@@ -40,9 +40,9 @@
         function filterByFeature(feature) {
             d3.selectAll(".dot")
                 .filter(function (dot) { return dot.featureId === feature.Value })
-                .attr("rx", function (d) {
+                .attr("visibility", function (d) {
                     d.featureVisible = feature.Selected;
-                    return $scope.dotVisible(d) ? $scope.dotRadius : 0;
+                    return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
         }
 
@@ -95,30 +95,26 @@
 
             tooltip.selectedDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.matterId === d.matterId && dot.y === d.y && $scope.dotVisible(dot)) {
+                        if (dot.matterId === d.matterId && dot.y === d.y) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
                             return false;
                         }
                     })
-                    .attr("rx", function (dot) {
-                        return $scope.dotVisible(dot) ? $scope.selectedDotRadius : 0;
-                    });
+                    .attr("rx", $scope.selectedDotRadius);
 
             if ($scope.highlight) {
                 tooltip.similarDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision) && $scope.dotVisible(dot)) {
+                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision)) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
                             return false;
                         }
                     })
-                    .attr("rx", function (dot) {
-                        return $scope.dotVisible(dot) ? $scope.selectedDotRadius : 0;
-                    });
+                    .attr("rx", $scope.selectedDotRadius);
             }
 
             tooltip.html(tooltipHtml.join("</br></br>"));
@@ -140,11 +136,11 @@
                     tooltip.html("").style("opacity", 0);
 
                     if (tooltip.selectedDots) {
-                        tooltip.selectedDots.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                        tooltip.selectedDots.attr("rx",  $scope.dotRadius);
                     }
 
                     if (tooltip.similarDots) {
-                        tooltip.similarDots.attr("rx", function (dot) { return $scope.dotVisible(dot) ? $scope.dotRadius : 0; });
+                        tooltip.similarDots.attr("rx", $scope.dotRadius);
                     }
                 }
 
@@ -253,13 +249,16 @@
                 .enter()
                 .append("ellipse")
                 .attr("class", "dot")
-                .attr("rx", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
-                .attr("ry", function (d) { return $scope.dotVisible(d) ? $scope.dotRadius : 0; })
+                .attr("rx",  $scope.dotRadius)
+                .attr("ry", $scope.dotRadius)
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill-opacity", 0.6)
                 .style("fill", function (d) { return color(cValue(d)); })
                 .style("stroke", function (d) { return color(cValue(d)); })
+                .attr("visibility", function (dot) {
+                    return $scope.dotVisible(dot) ? "visible" : "hidden";
+                })
                 .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
 
             $scope.mattersDots = [];
@@ -292,9 +291,9 @@
 
                     svg.selectAll(".dot")
                         .filter(function (dot) { return dot.matterId === d.id })
-                        .attr("rx", function (dot) {
+                        .attr("visibility", function (dot) {
                             dot.matterVisible = d.visible;
-                            return $scope.dotVisible(dot) ? $scope.dotRadius : 0;
+                            return $scope.dotVisible(dot) ? "visible" : "hidden";
                         });
                 });
 
