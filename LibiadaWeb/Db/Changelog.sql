@@ -1155,7 +1155,12 @@ INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT m
 INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 3 FROM characteristic_type);
 INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 4 FROM characteristic_type);
 INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT max(id), 5 FROM characteristic_type);
+
+-- 01.02.2016
+-- Removing redundant "complement" columns.
+
+ALTER TABLE public.dna_chain DROP COLUMN complementary;
+ALTER TABLE public.subsequence DROP COLUMN complementary;
+
 	
-
-
 COMMIT;
