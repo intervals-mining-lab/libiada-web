@@ -151,9 +151,6 @@
         /// <param name="partial">
         /// The partial.
         /// </param>
-        /// <param name="complementary">
-        /// The complementary.
-        /// </param>
         /// <param name="precision">
         /// Precision of data sequence.
         /// </param>
@@ -169,7 +166,6 @@
             bool? original,
             int? translatorId,
             bool? partial,
-            bool? complementary,
             int? precision)
         {
             ThreadDisposable = false;
@@ -197,7 +193,7 @@
                         switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId)
                         {
                             case Aliases.Nature.Genetic:
-                                dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false, complementary ?? false, webApiId);
+                                dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false, webApiId);
                                 break;
                             case Aliases.Nature.Music:
                                 musicSequenceRepository.Create(commonSequence, sequenceStream);
