@@ -1,0 +1,30 @@
+﻿<hr />
+<div ng-repeat="transformation in transformations">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="operation">Transformation:</label>
+        <div class="col-md-10">
+            <select class="form-control" title="Operation" ng-model="transformation.operation" ng-options="o.Text for o in operations" id="operation"></select>
+            <input type="hidden" name="transformationIds" ng-value="transformation.operation.Value" />
+        </div>
+    </div>
+    <div class="form-group" ng-show="transformation.operation.Value == 2">
+        <label class="control-label col-md-2" for="transformationLink">Link:</label>
+        <div class="col-md-10">
+            <select class="form-control" title="transformationLink" ng-model="transformation.link" ng-options="l.Text for l in transformationLinks" id="transformationLink"></select>
+            <input type="hidden" name="transformationLinkIds" ng-value="transformation.link.Value" />
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <div class=" col-md-offset-2 col-md-10">
+            <button type="button" class="btn btn-danger" ng-click="deleteTransformation(transformation)" ng-disabled="transformations.length <= 1">Delete transformation</button>
+        </div>
+    </div>
+    <br />
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2  col-md-10">
+        <button type="button" class="btn btn-success" ng-init="addTransformation()" ng-click="addTransformation()">Add transformation</button>
+    </div>
+</div>
+<hr />

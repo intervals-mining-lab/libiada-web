@@ -49,10 +49,10 @@
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
-            
-            var links = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
-            links = links.OrderBy(n => (int)n).ToArray();
-            data.Add("links", links.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToArray());
+
+            var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
+            transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
+            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToArray());
             
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
@@ -78,7 +78,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, int[] linkIds, int[] transformationIds)
+        public ActionResult Index(long matterId, int[] transformationLinkIds, int[] transformationIds)
         {
             return Action(() =>
             {
@@ -92,7 +92,7 @@
                     }
                     else
                     {
-                        sequence = HighOrderFactory.Create(sequence, (Link)linkIds[i]);
+                        sequence = HighOrderFactory.Create(sequence, (Link)transformationLinkIds[i]);
                     }
                 }
 
