@@ -175,11 +175,19 @@ namespace LibiadaWeb.Controllers.Calculators
                     };
                 }
 
+                var transformations = new List<string>();
+                for (int i = 0; i < transformationIds.Length; i++)
+                {
+                    var link = EnumHelper.GetDisplayValue((LibiadaCore.Core.Link) transformationLinkIds[i]);
+                    transformations.Add(transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                }
+
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", mattersCharacteristics },
                                      { "characteristicNames", characteristicNames },
-                                     { "characteristicsList", characteristicsList }
+                                     { "characteristicsList", characteristicsList },
+                                     { "transformationsList", transformations }
                                  };
 
                 return new Dictionary<string, object>

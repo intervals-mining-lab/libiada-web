@@ -9,23 +9,30 @@
     @Html.Partial("_AngularControllerInitializer", "CalculationResultController")
 
     <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
-        <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
-            <thead>
-                <tr>
-                    <th>
-                        Sequence name
-                    </th>
-                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
-                </tr>
-            </thead>
+        <table class="table table-bordered table-hover" ng-cloak>
             <tbody>
-                <tr ng-repeat="characteristic in characteristics">
-                    <td ng-bind="characteristic.matterName" />
-                    <td ng-repeat="value in characteristic.characteristics" ng-bind="value" />
+                <tr ng-repeat="t in transformationsList">
+                    <td ng-bind="t" />
                 </tr>
             </tbody>
         </table>
-        <br />
+        <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+            <thead>
+            <tr>
+                <th>
+                    Sequence name
+                </th>
+                <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName"/>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="characteristic in characteristics">
+                <td ng-bind="characteristic.matterName"/>
+                <td ng-repeat="value in characteristic.characteristics" ng-bind="value"/>
+            </tr>
+            </tbody>
+        </table>
+        <br/>
         <div class="form-group">
             <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
             <div class="col-md-10">
@@ -38,12 +45,12 @@
                 <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
             </div>
         </div>
-        <br />
-        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw" />
+        <br/>
+        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw"/>
         <div id="chart">
         </div>
     </div>
-    <br />
+    <br/>
 }
 
 @section Scripts {
