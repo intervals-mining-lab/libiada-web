@@ -1,11 +1,7 @@
 ﻿namespace LibiadaWeb
 {
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-
-    using Microsoft.Ajax.Utilities;
 
     /// <summary>
     /// Nature of sequence, elements, etc.
@@ -29,14 +25,14 @@
         /// <summary>
         /// Literary works, letters, words, etc.
         /// </summary>
-        [Display(Name = "Literary works, letters, words, etc.")]
-        [Description("Link")]
+        [Display(Name = "Literature")]
+        [Description("Literary works, letters, words, etc.")]
         Literature = 3,
 
         /// <summary>
         /// Ordered arrays of measurement data, numbers, etc.
         /// </summary>
-        [Display(Name = "Measurement data sequences")]
+        [Display(Name = "Measurement data")]
         [Description("Ordered arrays of measurement data, numbers, etc.")]
         MeasurementData = 4
     }

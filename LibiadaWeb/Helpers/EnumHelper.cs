@@ -14,7 +14,7 @@
     public static class EnumHelper
     {
         /// <summary>
-        /// The get display value.
+        /// Gets enum display name.
         /// </summary>
         /// <param name="value">
         /// The value.
@@ -47,7 +47,7 @@
         }
 
         /// <summary>
-        /// The get name.
+        /// Gets enum name as in code.
         /// </summary>
         /// <param name="value">
         /// The nature.
@@ -109,6 +109,9 @@
         /// <exception cref="TypeArgumentException">
         /// Thrown if type argument is not enum.
         /// </exception>
+        /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
         public static SelectList ToSelectList<T>() where T : struct, IComparable, IFormattable, IConvertible
         {
             Type type = typeof(T);
@@ -137,6 +140,9 @@
         /// <exception cref="TypeArgumentException">
         /// Thrown if type argument is not enum.
         /// </exception>
+        /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
         public static SelectList ToSelectList<T>(this IEnumerable<T> values) where T : struct, IComparable, IFormattable, IConvertible
         {
             Type type = typeof(T);
@@ -146,7 +152,7 @@
                 throw new TypeArgumentException("Type argument must be enum.");
             }
 
-            return new SelectList(values.Select(e => new { id = Convert.ToByte(e), name = GetName(e) }), "id", "name");
+            return new SelectList(values.Select(e => new { id = Convert.ToByte(e), name = GetDisplayValue(e) }), "id", "name");
         }
 
         /// <summary>
@@ -167,6 +173,9 @@
         /// <exception cref="TypeArgumentException">
         /// Thrown if type argument is not enum.
         /// </exception>
+        /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
         public static SelectList ToSelectList<T>(this IEnumerable<T> values, T selected) where T : struct, IComparable, IFormattable, IConvertible
         {
             Type type = typeof(T);
@@ -176,7 +185,7 @@
                 throw new TypeArgumentException("Type argument must be enum.");
             }
 
-            var list = values.Select(e => new { id = Convert.ToByte(e), name = GetName(e) });
+            var list = values.Select(e => new { id = Convert.ToByte(e), name = GetDisplayValue(e) });
             return new SelectList(list, "id", "name", Convert.ToByte(selected));
         }
     }
