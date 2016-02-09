@@ -167,7 +167,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Value = p.Id, 
                 Text = p.Name, 
                 Selected = selectedFeatures.Contains(p.Id), 
-                Nature = p.NatureId
+                Nature = p.Nature
             });
         }
 

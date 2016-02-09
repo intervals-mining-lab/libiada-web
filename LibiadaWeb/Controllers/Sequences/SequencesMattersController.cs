@@ -98,19 +98,19 @@
             var translators = new SelectList(Db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "Нет" });
 
-            SelectList natures;
             IEnumerable<object> notations;
             IEnumerable<object> features;
+            IEnumerable<Nature> natures;
 
             if (UserHelper.IsAdmin())
             {
-                natures = new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name");
+                natures = EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n);
                 notations = notationRepository.GetSelectListWithNature();
                 features = featureRepository.GetSelectListWithNature();
             }
             else
             {
-                natures = new SelectList(Db.Nature.Where(n => n.Id == Aliases.Nature.Genetic).OrderBy(n => n.Id), "id", "name");
+                natures = new List<Nature> { Nature.Genetic };
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
                 features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
             }
@@ -118,13 +118,13 @@
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "natures", natures }, 
+                    { "natures", natures.ToSelectList() }, 
                     { "notations", notations }, 
                     { "features", features }, 
                     { "languages", new SelectList(Db.Language, "id", "name") }, 
                     { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
                     { "translators", translators }, 
-                    { "natureLiterature", Aliases.Nature.Literature }
+                    { "natureLiterature", (byte)Nature.Literature }
                 });
 
             return View();
@@ -190,18 +190,18 @@
                             sequenceStream = NcbiHelper.GetFileStream(webApiId.ToString());
                         }
 
-                        switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId)
+                        switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature)
                         {
-                            case Aliases.Nature.Genetic:
+                            case Nature.Genetic:
                                 dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false, webApiId);
                                 break;
-                            case Aliases.Nature.Music:
+                            case Nature.Music:
                                 musicSequenceRepository.Create(commonSequence, sequenceStream);
                                 break;
-                            case Aliases.Nature.Literature:
+                            case Nature.Literature:
                                 literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
                                 break;
-                            case Aliases.Nature.Data:
+                            case Nature.MeasurementData:
                                 dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                                 break;
                             default:
@@ -221,7 +221,7 @@
                         ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
                         : remoteDbRepository.GetSelectListWithNature();
 
-                    var sequenceNatureId = Db.Notation.Single(m => m.Id == commonSequence.NotationId).NatureId;
+                    var sequenceNature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
 
                     SelectList natures;
                     IEnumerable<object> notations;
@@ -229,13 +229,13 @@
 
                     if (UserHelper.IsAdmin())
                     {
-                        natures = new SelectList(Db.Nature.OrderBy(n => n.Id), "id", "name", sequenceNatureId);
+                        natures = new SelectList(EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n), "id", "name", sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature();
                     }
                     else
                     {
-                        natures = new SelectList(Db.Nature.Where(n => n.Id == Aliases.Nature.Genetic).OrderBy(n => n.Id), "id", "name", sequenceNatureId);
+                        natures = new SelectList(EnumHelper.ToArray<Nature>().Where(n => n == Nature.Genetic).OrderBy(n => (byte)n), "id", "name", sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide }, commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, commonSequence.FeatureId);
                     }
@@ -249,9 +249,9 @@
                         { "features", features },
                         { "languages", new SelectList(Db.Language, "id", "name", languageId) },
                         { "remoteDbs", remoteDbs },
-                        { "natureId", sequenceNatureId },
+                        { "natureId", (byte)sequenceNature },
                         { "translators", translators },
-                        { "natureLiterature", Aliases.Nature.Literature },
+                        { "natureLiterature", (byte)Nature.Literature },
                         { "commonSequence", commonSequence }
                     };
 

@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Models;
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Account;
 
     /// <summary>
@@ -23,14 +23,14 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var matter = Db.Matter.Include(m => m.Nature);
+            var matter = await Db.Matter.ToListAsync();
 
             if (!UserHelper.IsAdmin())
             {
-                matter = matter.Where(m => m.NatureId == Aliases.Nature.Genetic);
+                matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
             }
 
-            return View(await matter.ToListAsync());
+            return View(matter);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@
             {
                 return HttpNotFound();
             }
-
-            ViewBag.NatureId = new SelectList(Db.Nature, "Id", "Name", matter.NatureId);
+            
+            ViewBag.NatureId = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
             return View(matter);
         }
 
@@ -95,7 +95,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,NatureId,Description")] Matter matter)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,Description")] Matter matter)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@
                 return RedirectToAction("Index");
             }
 
-            ViewBag.NatureId = new SelectList(Db.Nature, "Id", "Name", matter.NatureId);
+            ViewBag.NatureId = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
             return View(matter);
         }
 

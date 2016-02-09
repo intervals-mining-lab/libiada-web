@@ -10,7 +10,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
-    using Models;
 
     using Newtonsoft.Json;
 
@@ -94,7 +93,7 @@
                 var secondMatterId = matterIds[1];
 
                 long firstSequenceId;
-                if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
+                if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
                                 l.NotationId == notationId
@@ -110,9 +109,9 @@
                 Chain firstLibiadaChain = sequenceRepository.ToLibiadaChain(firstSequenceId);
 
                 long secondSequenceId;
-                if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
+                if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
-                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
+                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
                                 l.NotationId == notationId
                                 && l.LanguageId == languageId
                                 && ((translatorId == null && l.TranslatorId == null)
@@ -120,7 +119,7 @@
                 }
                 else
                 {
-                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
                 }
 
                 Chain secondLibiadaChain = sequenceRepository.ToLibiadaChain(secondSequenceId);

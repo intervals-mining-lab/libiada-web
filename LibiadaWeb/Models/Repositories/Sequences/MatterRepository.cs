@@ -83,7 +83,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Value = m.Id, 
                 Text = m.Name, 
                 Selected = selectedMatters.Contains(m.Id), 
-                Nature = m.NatureId, 
+                Nature = m.Nature, 
                 Description = m.Description,
                 Created = m.Created.ToString(),
                 Modified = m.Modified.ToString()
@@ -106,7 +106,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Value = m.Id,
                 Text = m.Name,
                 Selected = false,
-                Nature = m.NatureId,
+                Nature = m.Nature,
                 Description = m.Description,
                 Created = m.Created.ToString(),
                 Modified = m.Modified.ToString()

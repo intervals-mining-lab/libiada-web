@@ -11,7 +11,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Math;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -121,7 +120,7 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
                 long firstSequenceId;
-                if (db.Matter.Single(m => m.Id == firstMatterId).NatureId == Aliases.Nature.Literature)
+                if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
                                 l.NotationId == notationId && l.LanguageId == languageId && 
@@ -136,7 +135,7 @@
                 firstChain.FillIntervalManagers();
 
                 long secondSequenceId;
-                if (db.Matter.Single(m => m.Id == secondMatterId).NatureId == Aliases.Nature.Literature)
+                if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
                                 l.NotationId == notationId && l.LanguageId == languageId

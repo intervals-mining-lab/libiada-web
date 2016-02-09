@@ -6,7 +6,6 @@
     using System.Web.Mvc;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -49,7 +48,7 @@
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");
-            data.Add("natureId", Aliases.Nature.Genetic);
+            data.Add("natureId", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }

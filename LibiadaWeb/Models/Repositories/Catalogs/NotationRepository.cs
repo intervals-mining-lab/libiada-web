@@ -37,7 +37,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Value = n.Id, 
                 Text = n.Name, 
                 Selected = false, 
-                Nature = n.NatureId
+                Nature = n.Nature
             });
         }
 
@@ -57,7 +57,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Value = n.Id, 
                 Text = n.Name, 
                 Selected = n.Id == selectedNotation, 
-                Nature = n.NatureId
+                Nature = n.Nature
             });
         }
 
@@ -77,7 +77,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Value = n.Id,
                 Text = n.Name,
                 Selected = false,
-                Nature = n.NatureId
+                Nature = n.Nature
             });
         }
 
@@ -100,7 +100,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
                 Value = n.Id,
                 Text = n.Name,
                 Selected = n.Id == selectedNotation,
-                Nature = n.NatureId
+                Nature = n.Nature
             });
         }
 

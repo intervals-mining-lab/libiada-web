@@ -202,15 +202,6 @@
           <Property Name="modified" Type="timestamptz"/>
         </EntityType>
 
-        <EntityType Name="nature">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
         <EntityType Name="notation">
           <Key>
             <PropertyRef Name="id" />
@@ -808,32 +799,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_matter_nature">
-          <End Role="nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="matter" Type="Self.matter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="nature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="matter">
-              <PropertyRef Name="nature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_remote_db_nature">
-          <End Role="nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="remote_db" Type="Self.remote_db" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="nature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="remote_db">
-              <PropertyRef Name="nature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_chain_remote_db">
           <End Role="remote_db" Type="Self.remote_db" Multiplicity="0..1" />
           <End Role="chain" Type="Self.chain" Multiplicity="*" />
@@ -921,32 +886,6 @@
             </Principal>
             <Dependent Role="measure">
               <PropertyRef Name="remote_db_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_notation_nature">
-          <End Role="nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="notation" Type="Self.notation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="nature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="notation">
-              <PropertyRef Name="nature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_feature_nature">
-          <End Role="nature" Type="Self.nature" Multiplicity="1" />
-          <End Role="feature" Type="Self.feature" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="nature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="feature">
-              <PropertyRef Name="nature_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1515,7 +1454,6 @@
           <EntitySet Name="link" EntityType="Self.link" store:Type="Tables" Schema="public"/>
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="nature" EntityType="Self.nature" store:Type="Tables" Schema="public"/>
           <EntitySet Name="notation" EntityType="Self.notation" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
           <EntitySet Name="attribute" EntityType="Self.attribute" store:Type="Tables" Schema="public"/>
@@ -1677,11 +1615,6 @@
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_matter_nature" Association="Self.fk_matter_nature">
-            <End Role="nature" EntitySet="nature" />
-            <End Role="matter" EntitySet="matter" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_chain_remote_db" Association="Self.fk_chain_remote_db">
             <End Role="remote_db" EntitySet="remote_db" />
             <End Role="chain" EntitySet="chain" />
@@ -1715,16 +1648,6 @@
           <AssociationSet Name="fk_measure_remote_db" Association="Self.fk_measure_remote_db">
             <End Role="remote_db" EntitySet="remote_db" />
             <End Role="measure" EntitySet="measure" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_notation_nature" Association="Self.fk_notation_nature">
-            <End Role="nature" EntitySet="nature" />
-            <End Role="notation" EntitySet="notation" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_feature_nature" Association="Self.fk_feature_nature">
-            <End Role="nature" EntitySet="nature" />
-            <End Role="feature" EntitySet="feature" />
           </AssociationSet>
 
           <AssociationSet Name="fk_fmotiv_matter" Association="Self.fk_fmotiv_matter">
@@ -1820,11 +1743,6 @@
           <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
             <End Role="instrument" EntitySet="instrument" />
             <End Role="pitch" EntitySet="pitch" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_remote_db_nature" Association="Self.fk_remote_db_nature">
-            <End Role="nature" EntitySet="nature" />
-            <End Role="remote_db" EntitySet="remote_db" />
           </AssociationSet>
 
         </EntityContainer>
@@ -2082,7 +2000,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="NatureId" Type="Int32" Nullable="false" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2090,25 +2008,10 @@
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_matter" FromRole="Matter" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_matter" FromRole="Matter" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_matter" FromRole="Matter" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Nature" Relationship="Self.fk_matter_nature" FromRole="Matter" ToRole="Nature" />
           <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_matter" FromRole="Matter" ToRole="Fmotiv" />
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_matter" FromRole="Matter" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
-        </EntityType>
-
-        <EntityType Name="Nature">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-
-          <NavigationProperty Name="Matter" Relationship="Self.fk_matter_nature" FromRole="Nature" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_notation_nature" FromRole="Nature" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_feature_nature" FromRole="Nature" ToRole="Feature" />
-          <NavigationProperty Name="RemoteDb" Relationship="Self.fk_remote_db_nature" FromRole="Nature" ToRole="RemoteDb" />
         </EntityType>
 
         <EntityType Name="Notation">
@@ -2118,13 +2021,12 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="NatureId" Type="Int32" Nullable="false" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
 
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_notation" FromRole="Notation" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_notation" FromRole="Notation" ToRole="DnaSequence" />
           <NavigationProperty Name="Element" Relationship="Self.fk_element_notation" FromRole="Notation" ToRole="Element" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_notation" FromRole="Notation" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Nature" Relationship="Self.fk_notation_nature" FromRole="Notation" ToRole="Nature" />
           <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_notation" FromRole="Notation" ToRole="Fmotiv" />
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_notation" FromRole="Notation" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_notation" FromRole="Notation" ToRole="MusicSequence" />
@@ -2163,14 +2065,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="NatureId" Type="Int32" Nullable="false" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
           <Property Name="Type" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Complete" Type="Boolean" Nullable="false" />
 
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_feature" FromRole="Feature" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_feature" FromRole="Feature" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_feature" FromRole="Feature" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Nature" Relationship="Self.fk_feature_nature" FromRole="Feature" ToRole="Nature" />
           <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_feature" FromRole="Feature" ToRole="Fmotiv" />
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_feature" FromRole="Feature" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_feature" FromRole="Feature" ToRole="MusicSequence" />
@@ -2196,7 +2097,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Url" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="NatureId" Type="Int32" Nullable="false" />
+          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_remote_db" FromRole="RemoteDb" ToRole="CommonSequence" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_remote_db" FromRole="RemoteDb" ToRole="DnaSequence" />
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_remote_db" FromRole="RemoteDb" ToRole="LiteratureSequence" />
@@ -2204,7 +2105,6 @@
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_remote_db" FromRole="RemoteDb" ToRole="DataSequence" />
           <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_remote_db" FromRole="RemoteDb" ToRole="Fmotiv" />
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_remote_db" FromRole="RemoteDb" ToRole="Measure" />
-          <NavigationProperty Name="Nature" Relationship="Self.fk_remote_db_nature" FromRole="RemoteDb" ToRole="Nature" />
         </EntityType>
 
         <EntityType Name="Fmotiv">
@@ -2912,32 +2812,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_matter_nature">
-          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
-          <End Role="Matter" Type="Self.Matter" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Matter">
-              <PropertyRef Name="NatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_remote_db_nature">
-          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
-          <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RemoteDb">
-              <PropertyRef Name="NatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_dna_chain_remote_db">
           <End Role="RemoteDb" Type="Self.RemoteDb" Multiplicity="0..1" />
           <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
@@ -3025,32 +2899,6 @@
             </Principal>
             <Dependent Role="Measure">
               <PropertyRef Name="RemoteDbId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_notation_nature">
-          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
-          <End Role="Notation" Type="Self.Notation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Notation">
-              <PropertyRef Name="NatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_feature_nature">
-          <End Role="Nature" Type="Self.Nature" Multiplicity="1" />
-          <End Role="Feature" Type="Self.Feature" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Feature">
-              <PropertyRef Name="NatureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3517,7 +3365,6 @@
           <EntitySet Name="Link" EntityType="Self.Link" />
           <EntitySet Name="LiteratureSequence" EntityType="Self.LiteratureSequence" />
           <EntitySet Name="Matter" EntityType="Self.Matter" />
-          <EntitySet Name="Nature" EntityType="Self.Nature" />
           <EntitySet Name="Notation" EntityType="Self.Notation" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
           <EntitySet Name="Attribute" EntityType="Self.Attribute" />
@@ -3677,11 +3524,6 @@
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_matter_nature" Association="Self.fk_matter_nature">
-            <End Role="Nature" EntitySet="Nature" />
-            <End Role="Matter" EntitySet="Matter" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_chain_remote_db" Association="Self.fk_chain_remote_db">
             <End Role="RemoteDb" EntitySet="RemoteDb" />
             <End Role="CommonSequence" EntitySet="CommonSequence" />
@@ -3715,16 +3557,6 @@
           <AssociationSet Name="fk_measure_remote_db" Association="Self.fk_measure_remote_db">
             <End Role="RemoteDb" EntitySet="RemoteDb" />
             <End Role="Measure" EntitySet="Measure" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_notation_nature" Association="Self.fk_notation_nature">
-            <End Role="Nature" EntitySet="Nature" />
-            <End Role="Notation" EntitySet="Notation" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_feature_nature" Association="Self.fk_feature_nature">
-            <End Role="Nature" EntitySet="Nature" />
-            <End Role="Feature" EntitySet="Feature" />
           </AssociationSet>
 
           <AssociationSet Name="fk_binary_characteristic_chain" Association="Self.fk_binary_characteristic_chain">
@@ -3932,17 +3764,13 @@
             <End Role="Pitch" EntitySet="Pitch" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_remote_db_nature" Association="Self.fk_remote_db_nature">
-            <End Role="Nature" EntitySet="Nature" />
-            <End Role="RemoteDb" EntitySet="RemoteDb" />
-          </AssociationSet>
-
           <AssociationSet Name="note_pitch" Association="Self.note_pitch">
             <End Role="Note" EntitySet="Note" />
             <End Role="Pitch" EntitySet="Pitch" />
           </AssociationSet>
 
         </EntityContainer>
+        <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -4154,20 +3982,10 @@
               <MappingFragment StoreEntitySet="matter">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Nature" ColumnName="nature_id" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Nature">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Nature">
-              <MappingFragment StoreEntitySet="nature">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4178,7 +3996,7 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Nature" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4209,7 +4027,7 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Nature" ColumnName="nature_id" />
                 <ScalarProperty Name="Type" ColumnName="type" />
                 <ScalarProperty Name="Complete" ColumnName="complete" />
               </MappingFragment>
@@ -4233,7 +4051,7 @@
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Url" ColumnName="url" />
-                <ScalarProperty Name="NatureId" ColumnName="nature_id" />
+                <ScalarProperty Name="Nature" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

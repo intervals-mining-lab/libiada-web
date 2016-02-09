@@ -25,7 +25,7 @@
             @Html.DisplayNameFor(model => model.Modified)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.NatureId)
+            @Html.DisplayNameFor(model => model.Nature)
         </th>
         @if (UserHelper.IsAdmin())
         {
@@ -48,7 +48,7 @@
                 @Html.DisplayFor(modelItem => item.Modified)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nature.Name)
+                @Html.DisplayFor(modelItem => item.Nature)
             </td>
             @if (UserHelper.IsAdmin())
             {

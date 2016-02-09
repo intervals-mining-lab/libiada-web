@@ -48,7 +48,7 @@
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillMattersData(1, int.MaxValue, true, m => matterIds.Contains(m.Id), "Check");
-            data.Add("natureId", Aliases.Nature.Genetic);
+            data.Add("natureId", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }

@@ -141,7 +141,7 @@
                         int notationId = notationIds[i];
 
                         long sequenceId;
-                        if (matters[matterId].NatureId == Aliases.Nature.Literature)
+                        if (matters[matterId].Nature == Nature.Literature)
                         {
                             int languageId = languageIds[i];
                             int? translatorId = translatorIds[i];

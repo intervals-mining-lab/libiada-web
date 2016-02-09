@@ -1,7 +1,5 @@
-﻿@using LibiadaWeb.Models
-
-<div ng-switch="natureId">
-    <div ng-switch-when="@Aliases.Nature.Literature">
+﻿<div ng-switch="natureId">
+    <div ng-switch-when="@((byte)Nature.Literature)">
         <div class="form-group">
             <label class="control-label col-md-2" for="language">Language:</label>
             <div class="col-md-10">
@@ -17,11 +15,11 @@
             </div>
         </div>
     </div>
-    <div ng-switch-when="@Aliases.Nature.Genetic">
+    <div ng-switch-when="@((byte)Nature.Genetic)">
     </div>
-    <div ng-switch-when="@Aliases.Nature.Music">
+    <div ng-switch-when="@((byte)Nature.Music)">
     </div>
-    <div ng-switch-when="@Aliases.Nature.Data">
+    <div ng-switch-when="@((byte)Nature.MeasurementData)">
     </div>
 </div>
 <hr/>

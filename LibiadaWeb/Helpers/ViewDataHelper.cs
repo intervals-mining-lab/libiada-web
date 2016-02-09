@@ -89,16 +89,16 @@
 
             if (UserHelper.IsAdmin())
             {
-                natures = db.Nature;
+                natures = EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n);
                 notations = notationRepository.GetSelectListWithNature();
             }
             else
             {
-                natures = db.Nature.Where(n => n.Id == Aliases.Nature.Genetic);
+                natures = new List<Nature> { Nature.Genetic };
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
             }
 
-            data.Add("natures", new SelectList(natures.OrderBy(n => n.Id), "id", "name"));
+            data.Add("natures",  natures.ToSelectList());
             data.Add("notations", notations);
             data.Add("languages", new SelectList(db.Language, "id", "name"));
             data.Add("translators", translators);
@@ -155,18 +155,18 @@
         /// </returns>
         public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
         {
-            var featureIds = featureRepository.Features.Where(f => f.NatureId == Aliases.Nature.Genetic && !f.Complete).Select(f => f.Id);
+            var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
 
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
             var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id), submitName);
 
-            var geneticNotations = db.Notation.Where(n => n.NatureId == Aliases.Nature.Genetic).Select(n => n.Id).ToList();
+            var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
 
             data.Add("characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable));
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
-            data.Add("natureId", Aliases.Nature.Genetic);
+            data.Add("natureId", (byte)Nature.Genetic);
             data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
 
             return data;

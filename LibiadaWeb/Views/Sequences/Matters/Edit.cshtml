@@ -26,10 +26,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.NatureId, "NatureId", new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Nature, "Nature", new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("NatureId", null, new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.NatureId, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.Nature, "", new { @class = "text-danger" })
             </div>
         </div>
 

@@ -7,7 +7,6 @@
     using LibiadaCore.Core;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -115,7 +114,7 @@
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
-            if (matter.NatureId == Aliases.Nature.Literature)
+            if (matter.Nature == Nature.Literature)
             {
                 long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
                                                                     && l.NotationId == notationId
@@ -143,7 +142,7 @@
 
             var resultMatter = new Matter
                 {
-                    NatureId = matter.NatureId,
+                    Nature = matter.Nature,
                     Name = matter.Name + " " + scrambling + " mixes"
                 };
             db.Matter.Add(resultMatter);
@@ -159,9 +158,9 @@
 
             long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, dataBaseSequence.NotationId, false);
 
-            switch (matter.NatureId)
+            switch (matter.Nature)
             {
-                case Aliases.Nature.Genetic:
+                case Nature.Genetic:
                     DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
 
                     dnaSequenceRepository.Create(
@@ -172,10 +171,10 @@
                         alphabet,
                         chain.Building);
                     break;
-                case Aliases.Nature.Music:
+                case Nature.Music:
                     musicSequenceRepository.Create(resultsequence, alphabet, chain.Building);
                     break;
-                case Aliases.Nature.Literature:
+                case Nature.Literature:
 
                     LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
 
@@ -187,7 +186,7 @@
                         alphabet,
                         chain.Building);
                     break;
-                case Aliases.Nature.Data:
+                case Nature.MeasurementData:
                     dataSequenceRepository.Create(resultsequence, alphabet, chain.Building);
                     break;
                 default:

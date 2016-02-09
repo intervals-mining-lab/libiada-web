@@ -130,7 +130,7 @@
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
-                    int natureId = db.Matter.Single(m => m.Id == matterId).NatureId;
+                    Nature nature = db.Matter.Single(m => m.Id == matterId).Nature;
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     chains.Add(new List<Chain>());
 
@@ -138,9 +138,9 @@
                     {
                         long sequenceId;
 
-                        switch (natureId)
+                        switch (nature)
                         {
-                            case Aliases.Nature.Literature:
+                            case Nature.Literature:
                                 var languageId = languageIds[k];
                                 var translatorId = translatorIds[k];
                                 sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId

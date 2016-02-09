@@ -1,5 +1,5 @@
-﻿@using LibiadaWeb.Models
-@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Models.Account
+
 @{
     ViewBag.Title = "Characteristics calculation";
 }
@@ -20,7 +20,7 @@
         @Html.Partial("_Characteristics")
         @if (UserHelper.IsAdmin())
         {
-            <div class="form-group" ng-if="natureId==@Aliases.Nature.Genetic">
+            <div class="form-group" ng-if="natureId==@((byte)Nature.Genetic)">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
                         <input type="checkbox" name="complementary" value="true" ng-model="complementary" />

@@ -27,7 +27,7 @@ namespace LibiadaWeb
     
         public long Id { get; set; }
         public string Name { get; set; }
-        public int NatureId { get; set; }
+        public Nature Nature { get; set; }
         public string Description { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }
@@ -35,7 +35,6 @@ namespace LibiadaWeb
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }
         public virtual ICollection<LiteratureSequence> LiteratureSequence { get; set; }
-        public virtual Nature Nature { get; set; }
         public virtual ICollection<Fmotiv> Fmotiv { get; set; }
         public virtual ICollection<Measure> Measure { get; set; }
         public virtual ICollection<MusicSequence> MusicSequence { get; set; }

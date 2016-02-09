@@ -40,7 +40,6 @@ namespace LibiadaWeb
         public virtual DbSet<Link> Link { get; set; }
         public virtual DbSet<LiteratureSequence> LiteratureSequence { get; set; }
         public virtual DbSet<Matter> Matter { get; set; }
-        public virtual DbSet<Nature> Nature { get; set; }
         public virtual DbSet<Notation> Notation { get; set; }
         public virtual DbSet<SequenceAttribute> SequenceAttribute { get; set; }
         public virtual DbSet<Attribute> Attribute { get; set; }

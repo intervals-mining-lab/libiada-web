@@ -29,7 +29,7 @@ namespace LibiadaWeb
         public string Name { get; set; }
         public string Description { get; set; }
         public string Url { get; set; }
-        public int NatureId { get; set; }
+        public Nature Nature { get; set; }
     
         public virtual ICollection<CommonSequence> Sequence { get; set; }
         public virtual ICollection<DnaSequence> DnaSequence { get; set; }
@@ -38,6 +38,5 @@ namespace LibiadaWeb
         public virtual ICollection<DataSequence> DataSequence { get; set; }
         public virtual ICollection<Fmotiv> Fmotiv { get; set; }
         public virtual ICollection<Measure> Measure { get; set; }
-        public virtual Nature Nature { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿@using LibiadaWeb.Models
-@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Models.Account
 @model CommonSequence
 
 @{
@@ -23,10 +22,10 @@
         @if (UserHelper.IsAdmin())
         {
             <div class="form-group">
-                @Html.LabelFor(model => model.Matter.NatureId, new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Matter.Nature, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-control" ng-model="natureId" ng-options="n.Value as n.Text for n in natures" ng-change="filterByNature()" ng-init="filterByNature()"></select>
-                    @Html.ValidationMessageFor(model => model.Matter.NatureId, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Matter.Nature, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="form-group">
@@ -83,7 +82,7 @@
             </div>
         </div>
         <div ng-switch="natureId">
-            <div ng-switch-when="@Aliases.Nature.Genetic">
+            <div ng-switch-when="@((byte)Nature.Genetic)">
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <label>
@@ -94,7 +93,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-switch-when="@Aliases.Nature.Literature">
+            <div ng-switch-when="@((byte)Nature.Literature)">
                 <div class="form-group">
                     <label class="control-label col-md-2" for="languageId">Language of literary work:</label>
                     <div class="col-md-10">
@@ -121,9 +120,9 @@
                     </div>
                 </div>
             </div>
-            <div ng-switch-when="@Aliases.Nature.Music">
+            <div ng-switch-when="@((byte)Nature.Music)">
             </div>
-            <div ng-switch-when="@Aliases.Nature.Data">
+            <div ng-switch-when="@((byte)Nature.MeasurementData)">
                 <div class="form-group">
                     <label class="control-label col-md-2" for="precision">Precision of elements:</label>
                     <div class="col-md-10">

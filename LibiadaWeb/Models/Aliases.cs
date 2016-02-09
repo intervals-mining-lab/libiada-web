@@ -317,32 +317,6 @@
         }
 
         /// <summary>
-        /// The nature.
-        /// </summary>
-        public static class Nature
-        {
-            /// <summary>
-            /// The genetic nature.
-            /// </summary>
-            public const int Genetic = 1;
-
-            /// <summary>
-            /// The music nature.
-            /// </summary>
-            public const int Music = 2;
-
-            /// <summary>
-            /// The literature nature.
-            /// </summary>
-            public const int Literature = 3;
-
-            /// <summary>
-            /// The data nature.
-            /// </summary>
-            public const int Data = 4;
-        }
-
-        /// <summary>
         /// The notation.
         /// </summary>
         public static class Notation

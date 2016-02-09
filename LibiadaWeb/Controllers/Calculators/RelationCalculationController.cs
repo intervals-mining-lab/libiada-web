@@ -14,8 +14,6 @@
     using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
 
-    using Models;
-    using Models.Repositories;
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
@@ -125,7 +123,7 @@
                 var secondElements = new List<Element>();
 
                 long sequenceId;
-                if (db.Matter.Single(m => m.Id == matterId).NatureId == Aliases.Nature.Literature)
+                if (db.Matter.Single(m => m.Id == matterId).Nature == Nature.Literature)
                 {
                     sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
                                 l.NotationId == notationId

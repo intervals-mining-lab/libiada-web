@@ -309,11 +309,6 @@
     /// </summary>
     public class MatterDataAnnotations
     {
-        /// <summary>
-        /// Gets or sets the nature id.
-        /// </summary>
-        [Display(Name = "Nature")]
-        public int NatureId { get; set; }
     }
 
     /// <summary>
@@ -382,11 +377,6 @@
     /// </summary>
     public class NotationDataAnnotations
     {
-        /// <summary>
-        /// Gets or sets the nature id.
-        /// </summary>
-        [Display(Name = "Nature of notation")]
-        public int NatureId { get; set; }
     }
 
     /// <summary>

@@ -117,7 +117,7 @@ namespace LibiadaWeb.Controllers.Calculators
                     {
                         int notationId = notationIds[k];
                         long sequenceId;
-                        if (matters[matterId].NatureId == Aliases.Nature.Literature)
+                        if (matters[matterId].Nature == Nature.Literature)
                         {
                             int languageId = languageIds[k];
                             int? translatorId = translatorIds[k];
