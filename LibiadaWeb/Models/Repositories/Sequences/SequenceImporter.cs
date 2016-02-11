@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
     using System.Collections.Generic;
 
     using LibiadaWeb.Helpers;
@@ -105,13 +106,13 @@
                 {
                     ParameterName = "remote_id", 
                     NpgsqlDbType = NpgsqlDbType.Varchar, 
-                    Value = commonSequence.RemoteId
+                    Value = (object)commonSequence.RemoteId ?? DBNull.Value
                 }, 
                 new NpgsqlParameter
                 {
                     ParameterName = "remote_db_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = commonSequence.RemoteDbId
+                    Value = (object)commonSequence.RemoteDbId ?? DBNull.Value
                 }, 
                 new NpgsqlParameter
                 {

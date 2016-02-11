@@ -28,7 +28,7 @@
         };
 
         function filterByNature() {
-            var notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
+            var notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
 
             angular.forEach($scope.characteristics, function (characteristic) {
                 characteristic.notation = notation;
@@ -39,7 +39,7 @@
             $scope.characteristics.push({
                 characteristicType: $scope.characteristicTypes[0],
                 link: $scope.characteristicTypes[0].CharacteristicLinks[0],
-                notation: filterFilter($scope.notations, { Nature: $scope.natureId })[0],
+                notation: filterFilter($scope.notations, { Nature: $scope.nature })[0],
                 language: $scope.languages[0],
                 translator: $scope.translators[0]
             });
@@ -64,7 +64,7 @@
         $scope.transformations = [];
         $scope.characteristics = [];
         $scope.selectedMatters = 0;
-        $scope.natureId = $scope.natures[0].Value;
+        $scope.nature = $scope.natures[0].Value;
     }
 
     angular.module("OrderTransformer", []).controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);

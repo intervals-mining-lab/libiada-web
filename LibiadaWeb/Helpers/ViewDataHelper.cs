@@ -166,7 +166,7 @@
 
             data.Add("characteristicTypes", GetCharacteristicTypes(c => c.FullSequenceApplicable));
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
-            data.Add("natureId", (byte)Nature.Genetic);
+            data.Add("nature", (byte)Nature.Genetic);
             data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
 
             return data;

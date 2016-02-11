@@ -200,7 +200,7 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.Any(qualifier => qualifier.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                     if (!pseudo)
                     {
                         continue;

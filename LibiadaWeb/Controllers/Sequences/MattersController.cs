@@ -80,7 +80,7 @@
                 return HttpNotFound();
             }
             
-            ViewBag.NatureId = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
+            ViewBag.Nature = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
             return View(matter);
         }
 
@@ -104,7 +104,7 @@
                 return RedirectToAction("Index");
             }
 
-            ViewBag.NatureId = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
+            ViewBag.Nature = EnumHelper.ToArray<Nature>().ToSelectList(matter.Nature);
             return View(matter);
         }
 

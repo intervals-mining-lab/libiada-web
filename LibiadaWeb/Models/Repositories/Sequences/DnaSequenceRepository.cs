@@ -105,8 +105,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "web_api_id", 
-                NpgsqlDbType = NpgsqlDbType.Integer, 
-                Value = webApiId
+                NpgsqlDbType = NpgsqlDbType.Integer,
+                Value = (object)webApiId ?? DBNull.Value
             });
             parameters.Add(new NpgsqlParameter
             {

@@ -249,7 +249,7 @@
                         { "features", features },
                         { "languages", new SelectList(Db.Language, "id", "name", languageId) },
                         { "remoteDbs", remoteDbs },
-                        { "natureId", (byte)sequenceNature },
+                        { "nature", (byte)sequenceNature },
                         { "translators", translators },
                         { "natureLiterature", (byte)Nature.Literature },
                         { "commonSequence", commonSequence }

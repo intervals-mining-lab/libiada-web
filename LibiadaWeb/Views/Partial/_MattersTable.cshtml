@@ -2,7 +2,7 @@
 
 <br />
 <label class="control-label">Sequences:</label>
-<table st-table="matters | filter:{Nature: natureId}" st-safe-src="matters" ng-cloak class="table table-bordered table-hover">
+<table st-table="matters | filter:{ Nature: nature }" st-safe-src="matters" ng-cloak class="table table-bordered table-hover">
     <thead>
         <tr>
             <th>
@@ -23,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{Nature: natureId}" ng-cloak>
+        <tr ng-repeat="matter in matters | filter:{ Nature: nature }" ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>

@@ -20,7 +20,7 @@
         @Html.Partial("_Characteristics")
         @if (UserHelper.IsAdmin())
         {
-            <div class="form-group" ng-if="natureId==@((byte)Nature.Genetic)">
+            <div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
                 <div class="col-md-offset-2 col-md-10">
                     <label>
                         <input type="checkbox" name="complementary" value="true" ng-model="complementary" />

@@ -9,7 +9,7 @@
 
             arraysForFiltration.forEach(function (arrayName) {
                 if (angular.isDefined($scope[arrayName])) {
-                    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.natureId });
+                    $scope[arrayName + "Filtered"] = filterFilter($scope[arrayName], { Nature: $scope.nature });
                 }
             });
 
@@ -50,7 +50,8 @@
         $scope.original = false;
         $scope.localFile = false;
         $scope.languageId = $scope.languages[0].Value;
-        $scope.natureId = $scope.natures[0].Value;
+        $scope.nature = $scope.natures[0].Value;
+        $scope.name = "";
     }
 
     angular.module("MatterSequenceCreate", []).controller("MatterSequenceCreateCtrl", ["$scope", "filterFilter", matterSequenceCreate]);

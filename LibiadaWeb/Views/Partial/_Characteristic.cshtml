@@ -21,7 +21,7 @@
     <div class="form-group">
         <label class="control-label col-md-2" for="notation">Notation:</label>
         <div class="col-md-10">
-            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{Nature: natureId}" id="notation"></select>
+            <select class="form-control" title="Notation" ng-model="characteristic.notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="notation"></select>
         </div>
     </div>
 }

@@ -5,7 +5,7 @@
         MapModelFromJson($scope, data);
 
         function filterByNature() {
-            $scope.notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
+            $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
         };
 
         function matterCheckChanged(matter) {
@@ -29,7 +29,7 @@
         $scope.disableMattersSelect = disableMattersSelect;
         $scope.disableSubmit = disableSubmit;
 
-        $scope.natureId = $scope.natures[0].Value;
+        $scope.nature = $scope.natures[0].Value;
         $scope.selectedMatters = 0;
     }
 

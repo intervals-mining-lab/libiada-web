@@ -1,5 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System;
     using System.IO;
 
     using LibiadaCore.Core;
@@ -111,7 +112,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 ParameterName = "translator_id", 
                 NpgsqlDbType = NpgsqlDbType.Integer, 
-                Value = translatorId
+                Value = (object)translatorId ?? DBNull.Value
             });
 
             const string Query = @"INSERT INTO literature_chain (

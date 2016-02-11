@@ -21,7 +21,7 @@
         };
 
         function filterByNature() {
-            $scope.characteristic.notation = filterFilter($scope.notations, { Nature: $scope.natureId })[0];
+            $scope.characteristic.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
         };
 
         $scope.matterCheckChanged = matterCheckChanged;
@@ -33,11 +33,11 @@
         $scope.selectLink = SelectLink;
 
         $scope.selectedMatters = 0;
-        $scope.natureId = $scope.natures[0].Value;
+        $scope.nature = $scope.natures[0].Value;
         $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
-            notation: filterFilter($scope.notations, { Nature: $scope.natureId })[0]
+            notation: filterFilter($scope.notations, { Nature: $scope.nature })[0]
         };
     }
 
