@@ -5,6 +5,7 @@
     using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
@@ -84,21 +85,21 @@
 
             var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true, submitName);
 
-            IEnumerable<Nature> natures;
+            IEnumerable<SelectListItem> natures;
             IEnumerable<object> notations;
 
             if (UserHelper.IsAdmin())
             {
-                natures = EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n);
+                natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
             }
             else
             {
-                natures = new List<Nature> { Nature.Genetic };
+                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
             }
 
-            data.Add("natures",  natures.ToSelectList());
+            data.Add("natures",  natures);
             data.Add("notations", notations);
             data.Add("languages", new SelectList(db.Language, "id", "name"));
             data.Add("translators", translators);

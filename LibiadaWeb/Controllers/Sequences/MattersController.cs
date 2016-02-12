@@ -5,6 +5,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Account;
@@ -80,7 +81,7 @@
                 return HttpNotFound();
             }
             
-            ViewBag.Nature = EnumExtensions.ToArray<Nature>().ToSelectList(matter.Nature);
+            ViewBag.Nature = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
             return View(matter);
         }
 
@@ -104,7 +105,7 @@
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Nature = EnumExtensions.ToArray<Nature>().ToSelectList(matter.Nature);
+            ViewBag.Nature = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
             return View(matter);
         }
 

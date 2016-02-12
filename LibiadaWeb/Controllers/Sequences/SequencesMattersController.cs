@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
@@ -100,17 +101,17 @@
 
             IEnumerable<object> notations;
             IEnumerable<object> features;
-            IEnumerable<Nature> natures;
+            IEnumerable<SelectListItem> natures;
 
             if (UserHelper.IsAdmin())
             {
-                natures = EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n);
+                natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
                 features = featureRepository.GetSelectListWithNature();
             }
             else
             {
-                natures = new List<Nature> { Nature.Genetic };
+                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
                 features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
             }
@@ -118,7 +119,7 @@
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
                     { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "natures", natures.ToSelectList() }, 
+                    { "natures", natures }, 
                     { "notations", notations }, 
                     { "features", features }, 
                     { "languages", new SelectList(Db.Language, "id", "name") }, 
@@ -223,19 +224,19 @@
 
                     var sequenceNature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
 
-                    SelectList natures;
+                    IEnumerable<SelectListItem> natures;
                     IEnumerable<object> notations;
                     IEnumerable<object> features;
 
                     if (UserHelper.IsAdmin())
                     {
-                        natures = new SelectList(EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n), "id", "name", sequenceNature);
+                        natures = EnumHelper.GetSelectList(typeof(Nature), sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature();
                     }
                     else
                     {
-                        natures = new SelectList(EnumExtensions.ToArray<Nature>().Where(n => n == Nature.Genetic).OrderBy(n => (byte)n), "id", "name", sequenceNature);
+                        natures = new List<Nature> { Nature.Genetic }.ToSelectList(sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide }, commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, commonSequence.FeatureId);
                     }
