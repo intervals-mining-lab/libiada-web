@@ -104,7 +104,7 @@
 
             if (UserHelper.IsAdmin())
             {
-                natures = EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n);
+                natures = EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n);
                 notations = notationRepository.GetSelectListWithNature();
                 features = featureRepository.GetSelectListWithNature();
             }
@@ -229,13 +229,13 @@
 
                     if (UserHelper.IsAdmin())
                     {
-                        natures = new SelectList(EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n), "id", "name", sequenceNature);
+                        natures = new SelectList(EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n), "id", "name", sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature();
                     }
                     else
                     {
-                        natures = new SelectList(EnumHelper.ToArray<Nature>().Where(n => n == Nature.Genetic).OrderBy(n => (byte)n), "id", "name", sequenceNature);
+                        natures = new SelectList(EnumExtensions.ToArray<Nature>().Where(n => n == Nature.Genetic).OrderBy(n => (byte)n), "id", "name", sequenceNature);
                         notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide }, commonSequence.NotationId);
                         features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, commonSequence.FeatureId);
                     }

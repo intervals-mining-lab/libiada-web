@@ -52,7 +52,7 @@
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
-            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToArray());
+            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = l.GetDisplayValue(), Value = ((int)l).ToString() }).ToArray());
             
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);

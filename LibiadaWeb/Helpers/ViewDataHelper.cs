@@ -89,7 +89,7 @@
 
             if (UserHelper.IsAdmin())
             {
-                natures = EnumHelper.ToArray<Nature>().OrderBy(n => (byte)n);
+                natures = EnumExtensions.ToArray<Nature>().OrderBy(n => (byte)n);
                 notations = notationRepository.GetSelectListWithNature();
             }
             else
@@ -186,17 +186,17 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = UserHelper.IsAdmin() ? Enum.GetValues(typeof(Link)).Cast<Link>().ToList() 
-                                             : new List<Link> { Link.NotApplied, Link.Start, Link.Cycle };
+            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>() 
+                                             : new[] { Link.NotApplied, Link.Start, Link.Cycle };
 
             var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
 
             var linksData = links.Select(l => new
                                                 {
                                                     Value = (int)l, 
-                                                    Text = EnumHelper.GetDisplayValue(l), 
+                                                    Text = l.GetDisplayValue(), 
                                                     CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.LinkId == (int)l).Select(ctl => ctl.Id)
-                                                }).ToList();
+                                                });
 
             foreach (var characteristicType in characteristicTypes)
             {

@@ -11,7 +11,7 @@
     /// <summary>
     /// The enum helper.
     /// </summary>
-    public static class EnumHelper
+    public static class EnumExtensions
     {
         /// <summary>
         /// Gets enum display name.

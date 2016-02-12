@@ -50,7 +50,7 @@
                             Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
                             ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
                             TaskState = t.TaskState.ToString(),
-                            TaskStateName = EnumHelper.GetDisplayValue(t.TaskState),
+                            TaskStateName = t.TaskState.GetDisplayValue(),
                             t.UserId
                         });
 

@@ -65,7 +65,7 @@ namespace LibiadaWeb.Controllers.Calculators
             
             var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
-            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = EnumHelper.GetDisplayValue(l), Value = ((int)l).ToString() }).ToArray());
+            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = l.GetDisplayValue(), Value = ((int)l).ToString() }).ToArray());
             
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
@@ -178,7 +178,7 @@ namespace LibiadaWeb.Controllers.Calculators
                 var transformations = new List<string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = EnumHelper.GetDisplayValue((LibiadaCore.Core.Link) transformationLinkIds[i]);
+                    var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
                     transformations.Add(transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
                 }
 
