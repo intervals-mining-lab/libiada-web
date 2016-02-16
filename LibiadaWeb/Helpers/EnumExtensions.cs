@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Web.Mvc;
@@ -71,6 +72,63 @@
             }
 
             return Enum.GetName(type, value);
+        }
+
+        /// <summary>
+        /// Gets description attribute of the given enum value.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <typeparam name="T">
+        /// Enum type.
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetDescription<T>(this T value) where T : struct, IComparable, IFormattable, IConvertible
+        {
+            Type type = value.GetType();
+
+            if (!type.IsEnum)
+            {
+                throw new TypeArgumentException("Type argument must be enum.");
+            }
+
+            var memberInfo = type.GetMember(value.ToString());
+            var attributes = memberInfo[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return ((DescriptionAttribute)attributes[0]).Description;
+        }
+
+        /// <summary>
+        /// The get attribute.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <typeparam name="T">
+        /// Enum type
+        /// </typeparam>
+        /// <typeparam name="TAttribute">
+        /// Attribute type.
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="TA"/>.
+        /// </returns>
+        public static TAttribute GetAttribute<T, TAttribute>(this T value)
+            where T : struct, IComparable, IFormattable, IConvertible
+            where TAttribute : Attribute
+        {
+            Type type = value.GetType();
+
+            if (!type.IsEnum)
+            {
+                throw new TypeArgumentException("Type argument must be enum.");
+            }
+
+            var memberInfo = type.GetMember(value.ToString());
+            var attributes = memberInfo[0].GetCustomAttributes(typeof(TAttribute), false);
+            return (attributes.Length > 0) ? (TAttribute)attributes[0] : null;
         }
 
         /// <summary>
