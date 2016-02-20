@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using LibiadaCore.Core.Characteristics;
-using LibiadaCore.Core.Characteristics.Calculators;
-using LibiadaCore.Misc;
-using LibiadaWeb.Controllers.Sequences;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Account;
-using LibiadaWeb.Models.Repositories.Calculators;
-using LibiadaWeb.Models.Repositories.Catalogs;
-using LibiadaWeb.Models.Repositories.Sequences;
-using Newtonsoft.Json;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Mvc;
+    using System.Web.Mvc.Html;
+
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Misc;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
+
+    using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// The order transformation calculation controller.
+    /// </summary>
     public class OrderTransformationCalculationController : AbstractResultController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
+        /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
         public OrderTransformationCalculationController() : base("Order transformation/derivative characteristics calculation")
         {
-            
         }
 
         /// <summary>
@@ -65,7 +69,7 @@ namespace LibiadaWeb.Controllers.Calculators
             
             var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
-            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = l.GetDisplayValue(), Value = ((int)l).ToString() }).ToArray());
+            data.Add("transformationLinks", transformationLinks.ToSelectList());
             
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
@@ -77,14 +81,26 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="matterId">
-        /// The matter id.
+        /// <param name="matterIds">
+        /// The matter ids.
         /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="transformationLinkIds">
+        /// The transformation link ids.
         /// </param>
         /// <param name="transformationIds">
-        /// The transformations.
+        /// The transformation ids.
+        /// </param>
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type link ids.
+        /// </param>
+        /// <param name="notationIds">
+        /// The notation ids.
+        /// </param>
+        /// <param name="languageIds">
+        /// The language ids.
+        /// </param>
+        /// <param name="translatorIds">
+        /// The translator ids.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -144,9 +160,10 @@ namespace LibiadaWeb.Controllers.Calculators
                             }
                             else
                             {
-                                sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link) transformationLinkIds[j]);
+                                sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[j]);
                             }
                         }
+
                         int characteristicTypeLinkId = characteristicTypeLinkIds[k];
                         var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;

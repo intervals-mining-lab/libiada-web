@@ -50,7 +50,7 @@
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
-            data.Add("transformationLinks", transformationLinks.Select(l => new SelectListItem { Text = l.GetDisplayValue(), Value = ((int)l).ToString() }).ToArray());
+            data.Add("transformationLinks", transformationLinks.ToSelectList());
             
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
@@ -65,11 +65,11 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="linkIds">
-        /// The link ids.
+        /// <param name="transformationLinkIds">
+        /// The transformation link ids.
         /// </param>
         /// <param name="transformationIds">
-        /// The transformations.
+        /// The transformation ids.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
