@@ -175,11 +175,11 @@ namespace LibiadaWeb.Controllers.Calculators
                     };
                 }
 
-                var transformations = new List<string>();
+                var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
                     var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
-                    transformations.Add(transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
                 }
 
                 var result = new Dictionary<string, object>

@@ -45,10 +45,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.Matter.Select(d => d.Id).ToArray(); 
-
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillMattersData(1, int.MaxValue, false, m => matterIds.Contains(m.Id), "Transform");
+            var data = viewDataHelper.FillViewData(1, int.MaxValue, false, "Transform");
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
@@ -96,9 +94,17 @@
                     }
                 }
 
+                var transformations = new Dictionary<int, string>();
+                for (int i = 0; i < transformationIds.Length; i++)
+                {
+                    var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                }
+
                 var result = new Dictionary<string, object>
                 {
-                    { "Chain", sequence }
+                    { "chain", sequence },
+                    { "transformationsList", transformations }
                 };
                 return result;
             });

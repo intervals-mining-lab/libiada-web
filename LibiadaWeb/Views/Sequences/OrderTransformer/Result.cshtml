@@ -1,14 +1,24 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Order transformation result";
 }
 
 <h2>@ViewBag.Title</h2>
 @if (ViewBag.Error == null)
 {
+    <table>
+        <tbody>
+        @foreach (var transformation in ViewBag.transformationsList)
+        {
+            <tr>
+                <td>
+                    @transformation.Value
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <br/>
     <div>
-        @ViewBag.Chain.ToString()
+        @ViewBag.chain.ToString()
     </div>
 }
-
-
