@@ -1,8 +1,11 @@
 ﻿namespace LibiadaWeb.Tasks
 {
     using System;
+    using System.Web;
 
     using AutoMapper;
+
+    using LibiadaWeb.Models.Account;
 
     /// <summary>
     /// The task data.
@@ -23,6 +26,11 @@
         /// The user id.
         /// </summary>
         public readonly string UserId;
+
+        /// <summary>
+        /// The user name.
+        /// </summary>
+        public readonly string UserName;
 
         /// <summary>
         /// The task state.
@@ -65,6 +73,7 @@
         {
             Id = id;
             UserId = userId;
+            UserName = HttpContext.Current.User.Identity.Name;
             DisplayName = displayName;
             Created = DateTime.Now;
         }

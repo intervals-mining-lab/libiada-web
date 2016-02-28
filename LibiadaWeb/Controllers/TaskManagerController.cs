@@ -51,7 +51,8 @@
                             ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
                             TaskState = t.TaskState.ToString(),
                             TaskStateName = t.TaskState.GetDisplayValue(),
-                            t.UserId
+                            t.UserId,
+                            t.UserName
                         });
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
