@@ -53,14 +53,13 @@
         /// <summary>
         /// Tests that all natures have display value.
         /// </summary>
+        /// <param name="nature">
+        /// The nature.
+        /// </param>
         [Test]
-        public void NatureHasDisplayValueTest()
+        public void NatureHasDisplayValueTest([Values]Nature nature)
         {
-            var natures = EnumExtensions.ToArray<Nature>();
-            foreach (var nature in natures)
-            {
-                Assert.IsFalse(string.IsNullOrEmpty(nature.GetDisplayValue()));
-            }
+            Assert.IsFalse(string.IsNullOrEmpty(nature.GetDisplayValue()));
         }
 
         /// <summary>
