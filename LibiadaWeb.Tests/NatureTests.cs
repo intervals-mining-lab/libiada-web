@@ -10,7 +10,7 @@
     /// <summary>
     /// The nature enum tests.
     /// </summary>
-    [TestFixture]
+    [TestFixture(TestOf = typeof(Nature))]
     public class NatureTests
     {
         /// <summary>
@@ -73,6 +73,17 @@
             {
                 Assert.IsFalse(string.IsNullOrEmpty(nature.GetDescription()));
             }
+        }
+
+        /// <summary>
+        /// Tests that all nature values are unique.
+        /// </summary>
+        [Test]
+        public void NatureValuesUniqueTest()
+        {
+            var natures = EnumExtensions.ToArray<Nature>();
+            var natureValues = natures.Cast<byte>();
+            Assert.That(natureValues, Is.Unique);
         }
     }
 }
