@@ -1189,7 +1189,11 @@ COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Trigger function 
 ALTER TABLE dna_chain DROP COLUMN web_api_id;
 ALTER TABLE subsequence DROP COLUMN web_api_id;
 ALTER TABLE subsequence  ADD COLUMN remote_id character varying(255);
+
 UPDATE subsequence s SET remote_id = c.value FROM chain_attribute c WHERE c.attribute_id = 2 AND c.chain_id = s.id;
+
+ALTER TABLE chain_attribute DROP CONSTRAINT uk_chain_attribute;
+ALTER TABLE chain_attribute ADD CONSTRAINT uk_chain_attribute UNIQUE(chain_id, attribute_id, value);
 
 	
 COMMIT;
