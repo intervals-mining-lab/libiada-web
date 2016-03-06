@@ -613,7 +613,7 @@
         private bool CheckPartial(List<ILocation> leafLocations)
         {
             return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData 
-                                  || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
+                                                  || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
         }
     }
 }

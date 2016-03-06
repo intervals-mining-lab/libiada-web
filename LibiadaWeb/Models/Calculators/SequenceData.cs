@@ -18,7 +18,7 @@
         /// <summary>
         /// Sequence web api id.
         /// </summary>
-        public readonly int? WebApiId;
+        public readonly string RemoteId;
 
         /// <summary>
         /// The characteristic.
@@ -39,7 +39,7 @@
         /// <param name="matterName">
         /// The matter name.
         /// </param>
-        /// <param name="webApiId">
+        /// <param name="remoteId">
         /// Sequence web api id.
         /// </param>
         /// <param name="characteristic">
@@ -48,11 +48,11 @@
         /// <param name="subsequencesData">
         /// The genes data.
         /// </param>
-        public SequenceData(long matterId, string matterName, int? webApiId, double characteristic, SubsequenceData[] subsequencesData)
+        public SequenceData(long matterId, string matterName, string remoteId, double characteristic, SubsequenceData[] subsequencesData)
         {
             MatterId = matterId;
             MatterName = matterName;
-            WebApiId = webApiId;
+            RemoteId = remoteId;
             Characteristic = characteristic;
             SubsequencesData = subsequencesData;
         }

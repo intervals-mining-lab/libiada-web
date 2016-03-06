@@ -166,7 +166,6 @@
                     dnaSequenceRepository.Create(
                         resultsequence,
                         dnaSequence.FastaHeader,
-                        null,
                         dnaSequence.Partial,
                         alphabet,
                         chain.Building);

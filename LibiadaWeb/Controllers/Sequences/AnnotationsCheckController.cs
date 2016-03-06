@@ -77,7 +77,7 @@
                     long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                     DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
 
-                    Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
+                    Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
                     var features = NcbiHelper.GetFeatures(stream);
 
                     var result = subsequenceRepository.CheckAnnotations(features, sequenceId);

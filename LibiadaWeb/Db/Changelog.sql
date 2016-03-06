@@ -1162,5 +1162,34 @@ INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT m
 ALTER TABLE public.dna_chain DROP COLUMN complementary;
 ALTER TABLE public.subsequence DROP COLUMN complementary;
 
+-- 06.03.2016
+-- Removing web api id coumns. Adding remote_id column into subsequences table. And fixed delete characteristics function. 
+
+CREATE OR REPLACE FUNCTION trigger_delete_chain_characteristics()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "UPDATE"){
+	plv8.execute('DELETE FROM characteristic USING chain c WHERE characteristic.chain_id = c.id AND characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id AND binary_characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id AND congeneric_characteristic.created < c.modified;');
+	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE (accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id) AND accordance_characteristic.created < c.modified;');
+} else{
+	plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
+}
+
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Trigger function deleting all characteristics of sequences that has been updated.';
+
+ALTER TABLE dna_chain DROP COLUMN web_api_id;
+ALTER TABLE subsequence DROP COLUMN web_api_id;
+ALTER TABLE subsequence  ADD COLUMN remote_id character varying(255);
+UPDATE subsequence s SET remote_id = c.value FROM chain_attribute c WHERE c.attribute_id = 2 AND c.chain_id = s.id;
+
 	
 COMMIT;

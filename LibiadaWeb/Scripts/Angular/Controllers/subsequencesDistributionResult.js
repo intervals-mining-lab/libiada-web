@@ -17,13 +17,13 @@
                         id: id,
                         matterId: sequenceData.MatterId,
                         name: sequenceData.MatterName,
-                        sequenceWebApiId: sequenceData.WebApiId,
+                        sequenceRemoteId: sequenceData.RemoteId,
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.partial,
                         featureId: subsequenceData.FeatureId,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,
-                        subsequenceWebApiId: subsequenceData.WebApiId,
+                        subsequenceRemoteId: subsequenceData.RemoteId,
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
                         y: subsequenceData.CharacteristicsValues[0],
@@ -56,11 +56,11 @@
             var tooltipContent = [];
             var genBankLink = "<a target='_blank' href='http://www.ncbi.nlm.nih.gov/nuccore/";
 
-            var header = d.sequenceWebApiId ? genBankLink + d.sequenceWebApiId + "'>" + d.name + "</a>" : d.name;
+            var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + d.name + "</a>" : d.name;
             tooltipContent.push(header);
 
-            if (d.subsequenceWebApiId) {
-                var peptideGenbankLink = genBankLink + d.subsequenceWebApiId + "'>Peptide ncbi page</a>";
+            if (d.subsequenceRemoteId) {
+                var peptideGenbankLink = genBankLink + d.subsequenceRemoteId + "'>Peptide ncbi page</a>";
                 tooltipContent.push(peptideGenbankLink);
             }
 
@@ -76,8 +76,8 @@
 
             var start = d.positions[0] + 1;
             var end = d.positions[0] + d.lengths[0];
-            var positionGenbankLink = d.sequenceWebApiId ?
-                                      genBankLink + d.sequenceWebApiId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
+            var positionGenbankLink = d.sequenceRemoteId ?
+                                      genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
                                       d.positions.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
             tooltipContent.push("Length: " + d.lengths.join(", "));

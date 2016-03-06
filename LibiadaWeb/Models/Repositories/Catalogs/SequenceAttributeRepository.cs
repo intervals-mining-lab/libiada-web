@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using Bio.IO.GenBank;
 
@@ -79,12 +78,14 @@
 
                 var equalAttributes = localAttributes[attributeId].ToDictionary(a => a.Value);
 
-                var cleanedValue = CleanAndJoinAttributeValues(qualifier.Value);
-
-                SequenceAttribute value;
-                if (equalAttributes.TryGetValue(cleanedValue, out value))
+                foreach (var value in qualifier.Value)
                 {
-                    localSubsequence.SequenceAttribute.Remove(value);
+                    var cleanedValue = CleanAttributeValue(value);
+                    SequenceAttribute attribute;
+                    if (equalAttributes.TryGetValue(cleanedValue, out attribute))
+                    {
+                        localSubsequence.SequenceAttribute.Remove(attribute);
+                    }
                 }
             }
 
@@ -143,30 +144,24 @@
 
             foreach (var qualifier in qualifiers)
             {
-                if (qualifier.Value.Count == 1)
+                foreach (var value in qualifier.Value)
                 {
-                    switch (qualifier.Key)
+                    if (qualifier.Key == "translation")
                     {
-                        case "translation":
-                            continue;
-                        case "db_xref":
-                            foreach (var value in qualifier.Value)
-                            {
-                                if (Regex.IsMatch(value, "^\"GI:\\d+\"$"))
-                                {
-                                    if (subsequence.WebApiId != null)
-                                    {
-                                        throw new Exception("Several web api ids in one subsequence. First " + subsequence.Id + "Second " + value);
-                                    }
-
-                                    subsequence.WebApiId = int.Parse(Regex.Replace(value, @"[^\d]", string.Empty));
-                                }
-                            }
-
-                            break;
+                        break;
                     }
 
-                    result.Add(CreateSequenceAttribute(qualifier.Key, CleanAndJoinAttributeValues(qualifier.Value), subsequence.Id));
+                    if (qualifier.Key == "protein_id")
+                    {
+                        if (!string.IsNullOrEmpty(subsequence.RemoteId))
+                        {
+                            throw new Exception("Several remote ids in one subsequence. First " + subsequence.RemoteId + "Second " + value);
+                        }
+
+                        subsequence.RemoteId = value.Replace("\"", string.Empty);
+                    }
+
+                    result.Add(CreateSequenceAttribute(qualifier.Key, CleanAttributeValue(value), subsequence.Id));
                 }
             }
 
@@ -270,18 +265,16 @@
         }
 
         /// <summary>
-        /// The clean and join attribute values.
+        /// Cleans attribute value.
         /// </summary>
-        /// <param name="attributeValues">
-        /// The attribute values.
+        /// <param name="attributeValue">
+        /// The attribute value.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private string CleanAndJoinAttributeValues(List<string> attributeValues)
+        private string CleanAttributeValue(string attributeValue)
         {
-            var attributeValue = string.Join("    ", attributeValues);
-
             return attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ");
         }
 

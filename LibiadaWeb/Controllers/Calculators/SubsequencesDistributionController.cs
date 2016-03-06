@@ -113,7 +113,7 @@
             {
                 var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                         .Where(s => s.NotationId == Aliases.Notation.Nucleotide && matterIds.Contains(s.MatterId))
-                                        .Select(s => new { s.Id, MatterName = s.Matter.Name, s.MatterId, s.WebApiId })
+                                        .Select(s => new { s.Id, MatterName = s.Matter.Name, s.MatterId, s.RemoteId })
                                         .ToDictionary(s => s.Id);
                 var parentSequenceIds = parentSequences.Keys.ToArray();
                 
@@ -204,7 +204,7 @@
                     }
 
                     var parent = parentSequences[parentSequenceId];
-                    sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.WebApiId, sequenceCharacteristicValue, subsequencesData);
+                    sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.RemoteId, sequenceCharacteristicValue, subsequencesData);
                     
                     // trying to save calculated characteristics to database
                     characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);

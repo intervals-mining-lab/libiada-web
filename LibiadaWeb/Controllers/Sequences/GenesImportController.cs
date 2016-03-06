@@ -37,7 +37,7 @@
         {
             var db = new LibiadaWebEntities();
             var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null &&
+            var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
                                                           !genesSequenceIds.Contains(c.Id) &&
                                                           (c.FeatureId == Aliases.Feature.FullGenome ||
                                                            c.FeatureId == Aliases.Feature.MitochondrionGenome ||
@@ -96,7 +96,7 @@
                         }
                         else
                         {
-                            stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
+                            stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
                         }
 
                         var features = NcbiHelper.GetFeatures(stream);

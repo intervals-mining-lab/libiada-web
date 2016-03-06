@@ -40,14 +40,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="partial">
         /// The partial.
         /// </param>
-        /// <param name="webApiId">
-        /// The web API id.
-        /// </param>
         /// <exception cref="Exception">
         /// Thrown if at least one element of new sequence is missing in db
         /// or if sequence is empty or invalid.
         /// </exception>
-        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial, int? webApiId)
+        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial)
         {
             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
             string fastaHeader = ">" + fastaSequence.ID;
@@ -69,7 +66,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             MatterRepository.CreateMatterFromSequence(sequence);
 
             var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
-            Create(sequence, fastaHeader, webApiId, partial, alphabet, chain.Building);
+            Create(sequence, fastaHeader, partial, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -81,9 +78,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="fastaHeader">
         /// The fasta header.
         /// </param>
-        /// <param name="webApiId">
-        /// The web API id.
-        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>
@@ -93,21 +87,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, string fastaHeader, int? webApiId, bool partial, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, string fastaHeader, bool partial, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
+            
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "fasta_header", 
                 NpgsqlDbType = NpgsqlDbType.Varchar, 
                 Value = fastaHeader
             });
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "web_api_id", 
-                NpgsqlDbType = NpgsqlDbType.Integer,
-                Value = (object)webApiId ?? DBNull.Value
-            });
+
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "partial", 
@@ -125,8 +115,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         alphabet, 
                                         building, 
                                         remote_id, 
-                                        remote_db_id, 
-                                        web_api_id,
+                                        remote_db_id,
                                         partial
                                     ) VALUES (
                                         @id, 
@@ -138,8 +127,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @alphabet, 
                                         @building, 
                                         @remote_id, 
-                                        @remote_db_id, 
-                                        @web_api_id,
+                                        @remote_db_id,
                                         @partial
                                     );";
 
@@ -160,7 +148,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Create(ToCommonSequence(sequence), sequence.FastaHeader, sequence.WebApiId, false, alphabet, building);
+            Create(ToCommonSequence(sequence), sequence.FastaHeader, false, alphabet, building);
         }
 
         /// <summary>

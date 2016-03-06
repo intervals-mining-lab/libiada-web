@@ -33,9 +33,9 @@
         public readonly bool Partial;
 
         /// <summary>
-        /// The web api id.
+        /// Sequence remote id.
         /// </summary>
-        public readonly int? WebApiId;
+        public readonly string RemoteId;
 
         /// <summary>
         /// The characteristics.
@@ -59,7 +59,7 @@
             CharacteristicsValues = characteristics;
             Attributes = attributes ?? new string[0];
             FeatureId = subsequence.FeatureId;
-            WebApiId = subsequence.WebApiId;
+            RemoteId = subsequence.RemoteId;
             Partial = subsequence.Partial;
 
             var positions = subsequence.Position.ToArray();

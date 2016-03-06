@@ -38,8 +38,8 @@
         /// </returns>
         public ActionResult Index()
         {
-            var subsequencesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => c.WebApiId != null && 
+            var subsequencesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct().ToArray();
+            var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) && 
                                                       !subsequencesSequenceIds.Contains(c.Id) &&
                                                       (c.FeatureId == Aliases.Feature.FullGenome || 
                                                        c.FeatureId == Aliases.Feature.MitochondrionGenome || 
@@ -82,7 +82,7 @@
                         long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                         DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
 
-                        Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.WebApiId.ToString());
+                        Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
                         var features = NcbiHelper.GetFeatures(stream);
 
                         for (int j = 1; j < features.Count; j++)

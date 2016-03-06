@@ -109,7 +109,6 @@
           <Property Name="fasta_header" Type="varchar" MaxLength="255" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
-          <Property Name="web_api_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="description" Type="text" />
@@ -126,7 +125,7 @@
           <Property Name="start" Type="int4" Nullable="false" />
           <Property Name="length" Type="int4" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="web_api_id" Type="int4" />
+          <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="partial" Type="bool" Nullable="false" />
         </EntityType>
 
@@ -1875,7 +1874,6 @@
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
-          <Property Name="WebApiId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="FastaHeader" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -1902,7 +1900,7 @@
           <Property Name="Start" Type="Int32" Nullable="false" />
           <Property Name="Length" Type="Int32" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="WebApiId" Type="Int32" />
+          <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
 
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="Subsequence" ToRole="DnaSequence" />
@@ -3888,7 +3886,6 @@
                 <ScalarProperty Name="FastaHeader" ColumnName="fasta_header" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
-                <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -3906,7 +3903,7 @@
                 <ScalarProperty Name="Start" ColumnName="start" />
                 <ScalarProperty Name="Length" ColumnName="length" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="WebApiId" ColumnName="web_api_id" />
+                <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
               </MappingFragment>
             </EntityTypeMapping>

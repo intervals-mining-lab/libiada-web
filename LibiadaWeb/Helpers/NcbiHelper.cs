@@ -69,8 +69,8 @@
         /// <summary>
         /// The get id.
         /// </summary>
-        /// <param name="id">
-        /// The id.
+        /// <param name="remoteId">
+        /// Sequence remote id.
         /// </param>
         /// <returns>
         /// The <see cref="int"/>.
@@ -78,9 +78,9 @@
         /// <exception cref="Exception">
         /// Thrown if received not one sequence.
         /// </exception>
-        public static int GetId(string id)
+        public static int GetId(string remoteId)
         {
-            var memoryStream = GetResponseStream(@"esearch.fcgi?db=nucleotide&term=" + id);
+            var memoryStream = GetResponseStream(@"esearch.fcgi?db=nucleotide&term=" + remoteId);
             var doc = new XmlDocument();
 
             try
@@ -105,15 +105,15 @@
         /// <summary>
         /// Returns genbank file FileStream.
         /// </summary>
-        /// <param name="id">
-        /// The id.
+        /// <param name="remoteId">
+        /// Sequence remote id.
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetGenesFileStream(string id)
+        public static Stream GetGenesFileStream(string remoteId)
         {
-            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + id);
+            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + remoteId);
         }
 
         /// <summary>
