@@ -1159,8 +1159,8 @@ INSERT INTO characteristic_type_link (characteristic_type_id, link_id) (SELECT m
 -- 01.02.2016
 -- Removing redundant "complement" columns.
 
-ALTER TABLE public.dna_chain DROP COLUMN complementary;
-ALTER TABLE public.subsequence DROP COLUMN complementary;
+ALTER TABLE dna_chain DROP COLUMN complementary;
+ALTER TABLE subsequence DROP COLUMN complementary;
 
 -- 06.03.2016
 -- Removing web api id coumns. Adding remote_id column into subsequences table. And fixed delete characteristics function. 
@@ -1194,6 +1194,7 @@ UPDATE subsequence s SET remote_id = c.value FROM chain_attribute c WHERE c.attr
 
 ALTER TABLE chain_attribute DROP CONSTRAINT uk_chain_attribute;
 ALTER TABLE chain_attribute ADD CONSTRAINT uk_chain_attribute UNIQUE(chain_id, attribute_id, value);
+
 
 	
 COMMIT;

@@ -6,6 +6,7 @@
     using System.Linq;
 
     using Bio.IO.GenBank;
+    using Bio.Util;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -262,7 +263,7 @@
 
             if (feature.Key == "gene")
             {
-                bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                 if (!pseudo)
                 {
                     return null;
@@ -345,7 +346,7 @@
 
             if (feature.Key == "gene")
             {
-                bool pseudo = feature.Qualifiers.Any(q => q.Key == attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
                 if (!pseudo)
                 {
                     throw new ArgumentException("No genes allowed here", "feature");
@@ -419,16 +420,46 @@
             var newPositions = new List<Position>();
             var newSequenceAttributes = new List<SequenceAttribute>();
             var positionsMap = new bool[features[0].Location.LocationEnd];
-            var pseudoGene = attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo);
+            
             for (int i = 1; i < features.Count; i++)
             {
                 var feature = features[i];
+                var location = feature.Location;
+                var leafLocations = location.GetLeafLocations();
                 int featureId;
 
                 if (feature.Key == "gene")
                 {
-                    if (!feature.Qualifiers.ContainsKey(pseudoGene))
+                    if (!feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) && 
+                        !feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene)))
                     {
+                        var nextFeature = features[i + 1];
+                        var nextLocation = nextFeature.Location;
+                        var nextLeafLocations = nextLocation.GetLeafLocations();
+                        
+                        if (nextLeafLocations.Count != leafLocations.Count)
+                        {
+                            if (nextLeafLocations.Count > leafLocations.Count && 
+                                leafLocations[0].LocationStart == nextLeafLocations[0].LocationStart && 
+                                leafLocations[0].LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                            {
+                                continue;
+                            }
+
+                            throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocations[0].StartData);
+                        }
+
+                        for (int j = 0; j < leafLocations.Count; j++)
+                        {
+                            if (leafLocations[j].LocationStart != nextLeafLocations[j].LocationStart ||
+                                leafLocations[j].LocationEnd != nextLeafLocations[j].LocationEnd ||
+                                leafLocations[j].StartData != nextLeafLocations[j].StartData ||
+                                leafLocations[j].EndData != nextLeafLocations[j].EndData)
+                            {
+                                throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocations[j].StartData);
+                            }
+                        }
+
                         continue;
                     }
 
@@ -439,8 +470,6 @@
                     featureId = featureRepository.GetFeatureIdByName(feature.Key);
                 }
 
-                var location = feature.Location;
-                var leafLocations = feature.Location.GetLeafLocations();
                 bool partial = CheckPartial(leafLocations);
                 bool complement = location.Operator == LocationOperator.Complement;
                 bool join = leafLocations.Count > 1;
@@ -462,7 +491,8 @@
                     Partial = partial,
                     SequenceId = sequenceId,
                     Start = start,
-                    Length = length
+                    Length = length,
+                    RemoteId = location.Accession
                 };
 
                 newSubsequences.Add(subsequence);

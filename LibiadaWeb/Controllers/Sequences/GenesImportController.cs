@@ -23,7 +23,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController() : base("Genes Import")
+        public GenesImportController()
+            : base("Genes Import")
         {
         }
 
@@ -73,50 +74,50 @@
         public ActionResult Index(long matterId, bool localFile)
         {
             return Action(() =>
+            {
+                string matterName;
+                Subsequence[] sequenceSubsequences;
+                using (var db = new LibiadaWebEntities())
                 {
-                    string matterName;
-                    Subsequence[] sequenceSubsequences;
-                    using (var db = new LibiadaWebEntities())
+                    var subsequenceRepository = new SubsequenceRepository(db);
+                    long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
+                    DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
+
+                    Stream stream;
+                    if (localFile)
                     {
-                        var subsequenceRepository = new SubsequenceRepository(db);
-                        long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                        DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
+                        HttpPostedFileBase file = Request.Files[0];
 
-                        Stream stream;
-                        if (localFile)
+                        if (file == null || file.ContentLength == 0)
                         {
-                            HttpPostedFileBase file = Request.Files[0];
-
-                            if (file == null || file.ContentLength == 0)
-                            {
-                                throw new ArgumentNullException("file", "Sequence file is empty");
-                            }
-
-                            stream = file.InputStream;
-                        }
-                        else
-                        {
-                            stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
+                            throw new ArgumentNullException("file", "Sequence file is empty");
                         }
 
-                        var features = NcbiHelper.GetFeatures(stream);
-
-                        subsequenceRepository.CreateSubsequences(features, parentSequenceId);
-
-                        matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                        sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
-                                                             .Include(s => s.Position)
-                                                             .Include(s => s.Feature)
-                                                             .Include(s => s.SequenceAttribute)
-                                                             .ToArray();
+                        stream = file.InputStream;
+                    }
+                    else
+                    {
+                        stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
                     }
 
-                    return new Dictionary<string, object>
+                    var features = NcbiHelper.GetFeatures(stream);
+
+                    subsequenceRepository.CreateSubsequences(features, parentSequenceId);
+
+                    matterName = db.Matter.Single(m => m.Id == matterId).Name;
+                    sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
+                                                         .Include(s => s.Position)
+                                                         .Include(s => s.Feature)
+                                                         .Include(s => s.SequenceAttribute)
+                                                         .ToArray();
+                }
+
+                return new Dictionary<string, object>
                                      {
                                          { "matterName", matterName }, 
                                          { "genes", sequenceSubsequences }
                                      };
-                });
+            });
         }
     }
 }
