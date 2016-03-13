@@ -64,7 +64,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.BinarySequenceApplicable, 1, 1, false, "Calculate"));
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.BinarySequenceApplicable, 1, 1, "Calculate"));
             return View();
         }
 

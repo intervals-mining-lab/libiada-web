@@ -64,7 +64,7 @@
 
             var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate");
+            var data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate");
             
             var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();

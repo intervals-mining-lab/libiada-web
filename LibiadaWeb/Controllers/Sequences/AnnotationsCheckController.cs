@@ -47,7 +47,7 @@
             var matterIds = db.DnaSequence.Where(c => genesSequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToArray();
 
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Check");
+            var data = viewDataHelper.FillMattersData(1, 1, m => matterIds.Contains(m.Id), "Check");
             data.Add("nature", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();

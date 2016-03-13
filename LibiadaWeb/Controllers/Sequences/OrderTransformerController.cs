@@ -46,7 +46,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillViewData(1, int.MaxValue, false, "Transform");
+            var data = viewDataHelper.FillViewData(1, 1, "Transform");
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();

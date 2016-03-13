@@ -265,6 +265,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
     <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
+    <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
@@ -693,6 +694,8 @@
     <Content Include="Views\Calculators\OrderTransformationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\OrderTransformationCalculation\Index.cshtml" />
     <Content Include="Views\Partial\_OrderTransformations.cshtml" />
+    <Content Include="Views\Sequences\BatchGenesImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchGenesImport\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

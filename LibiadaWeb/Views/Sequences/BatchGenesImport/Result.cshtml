@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Batch genes import result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sequence
+                </th>
+                <th>
+                    Result
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.matterNames.Length; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.matterNames[i]
+                    </td>
+                    <td>
+                        @ViewBag.results[i]
+                        <br />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

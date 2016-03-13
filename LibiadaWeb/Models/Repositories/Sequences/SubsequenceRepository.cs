@@ -201,7 +201,8 @@
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
+                                  feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
                     if (!pseudo)
                     {
                         continue;
@@ -263,7 +264,8 @@
 
             if (feature.Key == "gene")
             {
-                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) || 
+                              feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
                 if (!pseudo)
                 {
                     return null;
@@ -346,7 +348,8 @@
 
             if (feature.Key == "gene")
             {
-                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo));
+                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
+                              feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
                 if (!pseudo)
                 {
                     throw new ArgumentException("No genes allowed here", "feature");
@@ -420,7 +423,7 @@
             var newPositions = new List<Position>();
             var newSequenceAttributes = new List<SequenceAttribute>();
             var positionsMap = new bool[features[0].Location.LocationEnd];
-            
+
             for (int i = 1; i < features.Count; i++)
             {
                 var feature = features[i];
@@ -428,10 +431,16 @@
                 var leafLocations = location.GetLeafLocations();
                 int featureId;
 
+                if (feature.Key == "source")
+                {
+                    throw new Exception("Sequence seems to be chimeric as it is several 'source' records in file. Second source location = " + leafLocations[0].StartData);
+                }
+
                 if (feature.Key == "gene")
                 {
-                    if (!feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) && 
-                        !feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene)))
+                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
+                                  feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
+                    if (!pseudo)
                     {
                         var nextFeature = features[i + 1];
                         var nextLocation = nextFeature.Location;

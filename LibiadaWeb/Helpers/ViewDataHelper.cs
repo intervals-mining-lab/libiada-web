@@ -69,21 +69,18 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
-        /// <param name="mattersCheckboxes">
-        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
-        /// </param>
         /// <param name="submitName">
         /// The submit button name.
         /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
+        public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => true, submitName);
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<object> notations;
@@ -119,18 +116,15 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
-        /// <param name="mattersCheckboxes">
-        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
-        /// </param>
         /// <param name="submitName">
         /// The submit button name.
         /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
+        public Dictionary<string, object> FillViewData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
-            var data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, submitName);
+            var data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, submitName);
             data.Add("characteristicTypes", GetCharacteristicTypes(filter));
 
             return data;
@@ -145,23 +139,20 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
-        /// <param name="mattersCheckboxes">
-        /// Flag, identifying whether to creates checkboxes or radiobutton table for matters
-        /// </param>
         /// <param name="submitName">
         /// The submit button name.
         /// </param>
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, string submitName)
+        public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
             var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
 
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, mattersCheckboxes, m => matterIds.Contains(m.Id), submitName);
+            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
             var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
 
@@ -234,9 +225,6 @@
         /// <param name="maximumSelectedMatters">
         /// The maximum selected matters.
         /// </param>
-        /// <param name="mattersCheckboxes">
-        /// The matters checkboxes.
-        /// </param>
         /// <param name="filter">
         /// Filter for matters.
         /// </param>
@@ -246,14 +234,16 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, bool mattersCheckboxes, Func<Matter, bool> filter, string submitName)
+        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, Func<Matter, bool> filter, string submitName)
         {
+            var radiobuttonsForMatters = maximumSelectedMatters == 1 && minimumSelectedMatters == 1;
+
             return new Dictionary<string, object>
                 {
                     { "minimumSelectedMatters", minimumSelectedMatters },
                     { "maximumSelectedMatters", maximumSelectedMatters },
                     { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "mattersCheckboxes", mattersCheckboxes },
+                    { "radiobuttonsForMatters", radiobuttonsForMatters },
                     { "submitName", submitName }
                 };
         }

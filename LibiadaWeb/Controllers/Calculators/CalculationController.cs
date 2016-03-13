@@ -46,7 +46,6 @@
         {
             var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.MattersCheckboxes = true;
 
             Func<CharacteristicType, bool> filter;
             if (UserHelper.IsAdmin())
@@ -72,7 +71,7 @@
                 filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
             }
 
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, true, "Calculate"));
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate"));
             return View();
         }
 

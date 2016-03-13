@@ -1,22 +1,19 @@
 ﻿@{
-    ViewBag.Title = "Genes import";
+    ViewBag.Title = "Batch genes import";
 }
 
 @Html.Partial("_AngularControllerInitializer", "GenesImportController")
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Index", "GenesImport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal" ng-app="GenesImport" ng-controller="GenesImportCtrl">
-        @Html.Partial("_LocalFile")
         @Html.Partial("_MattersTable")
         @Html.Partial("_MattersSubmit")
     </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

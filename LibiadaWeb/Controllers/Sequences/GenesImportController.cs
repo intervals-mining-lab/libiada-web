@@ -23,8 +23,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController()
-            : base("Genes Import")
+        public GenesImportController() : base("Genes import")
         {
         }
 
@@ -45,7 +44,7 @@
                                                            c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillMattersData(1, 1, false, m => matterIds.Contains(m.Id), "Import");
+            var data = viewDataHelper.FillMattersData(1, 1, m => matterIds.Contains(m.Id), "Import");
             data.Add("nature", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();

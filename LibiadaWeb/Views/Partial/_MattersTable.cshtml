@@ -27,8 +27,8 @@
             <td ng-bind="$index + 1" />
             <td>
                 <label>
-                    <input type="checkbox" ng-if="mattersCheckboxes" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
-                    <input type="radio" ng-if="!mattersCheckboxes" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
+                    <input type="radio" ng-if="radiobuttonsForMatters" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
+                    <input type="checkbox" ng-if="!radiobuttonsForMatters" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
 
                     {{matter.Text}}
                 </label>
