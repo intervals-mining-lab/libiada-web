@@ -2,11 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
     using Bio.IO.GenBank;
-    using Bio.Util;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -91,83 +89,6 @@
         }
 
         /// <summary>
-        /// The update annotations.
-        /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        public void UpdateAnnotations(List<FeatureItem> features, long sequenceId)
-        {
-            var localSubsequences = db.Subsequence
-                    .Include(s => s.Feature)
-                    .Include(s => s.Position)
-                    .Include(s => s.SequenceAttribute)
-                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
-
-            for (int i = 1; i < features.Count; i++)
-            {
-                UpdateAnnotation(features[i], localSubsequences);
-            }
-        }
-
-        /// <summary>
-        /// The check annotations.
-        /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Dictionary{String, Object}"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if error occurs during importability check.
-        /// </exception>
-        public Dictionary<string, object> CheckAnnotations(List<FeatureItem> features, long sequenceId)
-        {
-            try
-            {
-                CheckImportability(features, sequenceId);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error occured during importability check.", e);
-            }
-
-            var localSubsequences = db.Subsequence
-                    .Include(s => s.Feature)
-                    .Include(s => s.Position)
-                    .Include(s => s.SequenceAttribute)
-                    .Where(s => s.SequenceId == sequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence).ToList();
-            
-            var missingRemoteFeatures = new List<FeatureItem>();
-
-            for (int i = 1; i < features.Count; i++)
-            {
-                var missingFeature = CheckFeature(features[i], localSubsequences);
-                if (missingFeature != null)
-                {
-                    missingRemoteFeatures.Add(missingFeature);
-                }
-            }
-
-            var annotationsUpdatable = missingRemoteFeatures.Count == 0 && localSubsequences.Count > 0;
-
-            return new Dictionary<string, object>
-                       {
-                           { "attributes", attributeRepository.Attributes },
-                           { "localSubsequences", localSubsequences },
-                           { "missingRemoteFeatures", missingRemoteFeatures },
-                           { "annotationsUpdatable", annotationsUpdatable }
-                       };
-        }
-
-        /// <summary>
         /// Checks importability of subsequences.
         /// </summary>
         /// <param name="features">
@@ -188,6 +109,12 @@
 
             var parentLength = parentSequence.GetLength();
             var sourceLength = features[0].Location.LocationEnd;
+            var allNonGenesLeafLocations = features
+                                            .Where(f => f.Key != "gene")
+                                            .Select(f => f.Location.GetLeafLocations())
+                                            .Where(l => l.Count == 1)
+                                            .Select(l => l[0])
+                                            .ToArray();
 
             if (parentLength != sourceLength)
             {
@@ -198,25 +125,57 @@
             for (int i = 1; i < features.Count; i++)
             {
                 var feature = features[i];
+                var location = feature.Location;
+                var leafLocations = location.GetLeafLocations();
+
+                if (feature.Key == "source")
+                {
+                    throw new Exception("Sequence seems to be chimeric as it is several 'source' records in file. Second source location = " + leafLocations[0].StartData);
+                }
 
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                                  feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
-                    if (!pseudo)
+                    if (!(feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
+                         feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene))))
                     {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if (!featureRepository.FeatureExists(feature.Key))
-                    {
-                        throw new Exception("Unknown feature. Feature name = " + feature.Key);
-                    }
-                }
+                        if (leafLocations.Count > 1)
+                        {
+                            throw new Exception("Gene can only have one leaf location.");
+                        }
 
-                var location = feature.Location;
+                        var leafLocation = leafLocations[0];
+                        var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
+
+                        // if there is join in child record parent record contains only
+                        // first child start and last child end
+                        if (nextLeafLocations.Count > 1)
+                        {
+                            if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart &&
+                                leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                            {
+                                // don't need to import this gene
+                                continue;
+                            }
+
+                            throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocation.StartData);
+                        }
+
+                        // checking if there is any feature with identical position
+                        if (allNonGenesLeafLocations
+                                .Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                          leafLocation.LocationEnd == l.LocationEnd &&
+                                          leafLocation.StartData == l.StartData &&
+                                          leafLocation.EndData == l.EndData))
+                        {
+                            // don't need to import this gene
+                            continue;
+                        }
+                    }
+                }
+                else if (!featureRepository.FeatureExists(feature.Key))
+                {
+                    throw new Exception("Unknown feature. Feature name = " + feature.Key);
+                }
 
                 if (location.SubLocations.Count > 0)
                 {
@@ -232,8 +191,6 @@
                     }
                 }
 
-                var leafLocations = feature.Location.GetLeafLocations();
-
                 if (leafLocations.Count == 0)
                 {
                     throw new Exception("No leaf locations");
@@ -242,167 +199,6 @@
                 if (leafLocations.Any(leafLocation => leafLocation.LocationEnd < leafLocation.LocationStart))
                 {
                     throw new Exception("Subsequence length cant be less than 1.");
-                }
-            }
-        }
-
-        /// <summary>
-        /// The check feature.
-        /// </summary>
-        /// <param name="feature">
-        /// The feature.
-        /// </param>
-        /// <param name="localSubsequences">
-        /// The local subsequences.
-        /// </param>
-        /// <returns>
-        /// The missing features <see cref="FeatureItem"/>.
-        /// </returns>
-        private FeatureItem CheckFeature(FeatureItem feature, List<Subsequence> localSubsequences)
-        {
-            int featureId;
-
-            if (feature.Key == "gene")
-            {
-                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) || 
-                              feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
-                if (!pseudo)
-                {
-                    return null;
-                }
-
-                featureId = Aliases.Feature.PseudoGen;
-            }
-            else
-            {
-                featureId = featureRepository.GetFeatureIdByName(feature.Key);
-            }
-
-            var location = feature.Location;
-            var leafLocations = location.GetLeafLocations();
-            var partial = CheckPartial(leafLocations);
-            bool complement = location.Operator == LocationOperator.Complement;
-            bool join = leafLocations.Count > 1;
-            bool complementJoin = join && complement;
-
-            if (location.SubLocations.Count > 0)
-            {
-                complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
-            }
-
-            int start = leafLocations[0].LocationStart - 1;
-            int end = leafLocations[0].LocationEnd - 1;
-            int length = end - start + 1;
-
-            var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start 
-                                                                   && s.Length == length 
-                                                                   && s.FeatureId == featureId 
-                                                                   && s.Partial == partial).ToList();
-
-            if (equalLocalSubsequences.Any())
-            {
-                var localSubsequence = equalLocalSubsequences.Single();
-                var localPositions = localSubsequence.Position.ToList();
-                
-                sequenceAttributeRepository.CheckSequenceAttributes(feature, localSubsequence, ref complement, ref complementJoin, ref partial);
-
-                for (int k = 1; k < leafLocations.Count; k++)
-                {
-                    var leafLocation = leafLocations[k];
-                    var leafStart = leafLocation.LocationStart - 1;
-                    var leafEnd = leafLocation.LocationEnd - 1;
-                    var leafLength = leafEnd - leafStart + 1;
-
-                    if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
-                    {
-                        return feature;
-                    }
-                }
-
-                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin && !partial)
-                {
-                    localSubsequences.Remove(localSubsequence);
-                }
-
-                return null;
-            }
-            else
-            {
-                return feature;
-            }
-        }
-
-        /// <summary>
-        /// The update annotation.
-        /// </summary>
-        /// <param name="feature">
-        /// The feature.
-        /// </param>
-        /// <param name="localSubsequences">
-        /// The local subsequences.
-        /// </param>
-        private void UpdateAnnotation(FeatureItem feature, List<Subsequence> localSubsequences)
-        {
-            throw new NotImplementedException();
-            int featureId;
-
-            if (feature.Key == "gene")
-            {
-                bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                              feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
-                if (!pseudo)
-                {
-                    throw new ArgumentException("No genes allowed here", "feature");
-                }
-
-                featureId = Aliases.Feature.PseudoGen;
-            }
-            else
-            {
-                featureId = featureRepository.GetFeatureIdByName(feature.Key);
-            }
-
-            var location = feature.Location;
-            var leafLocations = location.GetLeafLocations();
-            var partial = CheckPartial(leafLocations);
-            bool complement = location.Operator == LocationOperator.Complement;
-            bool join = leafLocations.Count > 1;
-            bool complementJoin = join && complement;
-
-            if (location.SubLocations.Count > 0)
-            {
-                complement = complement || location.SubLocations[0].Operator == LocationOperator.Complement;
-            }
-
-            int start = leafLocations[0].LocationStart - 1;
-            int end = leafLocations[0].LocationEnd - 1;
-            int length = end - start + 1;
-
-            var equalLocalSubsequences = localSubsequences.Where(s => s.Start == start
-                                                                   && s.Length == length
-                                                                   && s.FeatureId == featureId
-                                                                   && s.Partial == partial).ToList();
-
-            if (equalLocalSubsequences.Any())
-            {
-                var localSubsequence = equalLocalSubsequences.Single();
-                var localPositions = localSubsequence.Position.ToList();
-
-                for (int k = 1; k < leafLocations.Count; k++)
-                {
-                    var leafLocation = leafLocations[k];
-                    var leafStart = leafLocation.LocationStart - 1;
-                    var leafEnd = leafLocation.LocationEnd - 1;
-                    var leafLength = leafEnd - leafStart + 1;
-
-                    if (localPositions.Count(p => p.Start == leafStart && p.Length == leafLength) != 1)
-                    {
-                    }
-                }
-
-                if (localSubsequence.SequenceAttribute.Count == 0 && !complement && !complementJoin && !partial)
-                {
-                    localSubsequences.Remove(localSubsequence);
                 }
             }
         }
@@ -423,6 +219,12 @@
             var newPositions = new List<Position>();
             var newSequenceAttributes = new List<SequenceAttribute>();
             var positionsMap = new bool[features[0].Location.LocationEnd];
+            var allNonGenesLeafLocations = features
+                                            .Where(f => f.Key != "gene")
+                                            .Select(f => f.Location.GetLeafLocations())
+                                            .Where(l => l.Count == 1)
+                                            .Select(l => l[0])
+                                            .ToArray();
 
             for (int i = 1; i < features.Count; i++)
             {
@@ -431,48 +233,41 @@
                 var leafLocations = location.GetLeafLocations();
                 int featureId;
 
-                if (feature.Key == "source")
-                {
-                    throw new Exception("Sequence seems to be chimeric as it is several 'source' records in file. Second source location = " + leafLocations[0].StartData);
-                }
-
                 if (feature.Key == "gene")
                 {
-                    bool pseudo = feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                                  feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene));
-                    if (!pseudo)
+                    if (feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) || 
+                        feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene)))
                     {
-                        var nextFeature = features[i + 1];
-                        var nextLocation = nextFeature.Location;
-                        var nextLeafLocations = nextLocation.GetLeafLocations();
-                        
-                        if (nextLeafLocations.Count != leafLocations.Count)
-                        {
-                            if (nextLeafLocations.Count > leafLocations.Count && 
-                                leafLocations[0].LocationStart == nextLeafLocations[0].LocationStart && 
-                                leafLocations[0].LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
-                            {
-                                continue;
-                            }
-
-                            throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocations[0].StartData);
-                        }
-
-                        for (int j = 0; j < leafLocations.Count; j++)
-                        {
-                            if (leafLocations[j].LocationStart != nextLeafLocations[j].LocationStart ||
-                                leafLocations[j].LocationEnd != nextLeafLocations[j].LocationEnd ||
-                                leafLocations[j].StartData != nextLeafLocations[j].StartData ||
-                                leafLocations[j].EndData != nextLeafLocations[j].EndData)
-                            {
-                                throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocations[j].StartData);
-                            }
-                        }
-
-                        continue;
+                        featureId = Aliases.Feature.PseudoGen;
                     }
+                    else
+                    {
+                        var leafLocation = leafLocations[0];
+                        var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
 
-                    featureId = Aliases.Feature.PseudoGen;
+                        // if there is join in child record parent record contains only
+                        // first child start and last child end
+                        if (nextLeafLocations.Count > 1
+                            && leafLocation.LocationStart == nextLeafLocations[0].LocationStart
+                            && leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                        {
+                            // don't need to import this gene
+                            continue;
+                        }
+
+                        // checking if there is any feature with identical position
+                        if (allNonGenesLeafLocations
+                                .Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                          leafLocation.LocationEnd == l.LocationEnd && 
+                                          leafLocation.StartData == l.StartData && 
+                                          leafLocation.EndData == l.EndData))
+                        {
+                            // don't need to import this gene
+                            continue;
+                        }
+
+                        featureId = Aliases.Feature.Gene;
+                    }
                 }
                 else
                 {
@@ -651,7 +446,7 @@
         /// </returns>
         private bool CheckPartial(List<ILocation> leafLocations)
         {
-            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData 
+            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData
                                                   || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
         }
     }

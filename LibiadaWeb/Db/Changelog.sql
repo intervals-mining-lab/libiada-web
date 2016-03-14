@@ -1195,6 +1195,12 @@ UPDATE subsequence s SET remote_id = c.value FROM chain_attribute c WHERE c.attr
 ALTER TABLE chain_attribute DROP CONSTRAINT uk_chain_attribute;
 ALTER TABLE chain_attribute ADD CONSTRAINT uk_chain_attribute UNIQUE(chain_id, attribute_id, value);
 
+-- 14.03.2016
+-- Added new feature.
+
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Gene (non coding)', 'Gene without CDS (coding sequence) associated with it.', 1, 'gene');
+
+
 
 	
 COMMIT;

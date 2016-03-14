@@ -263,8 +263,6 @@
     <Compile Include="Controllers\Catalogs\AccidentalsController.cs" />
     <Compile Include="Controllers\Sequences\AttributesCheckController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\Sequences\AnnotationsCheckController.cs" />
-    <Compile Include="Controllers\Sequences\AnnotationUpdateController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
@@ -676,9 +674,6 @@
     <Content Include="Views\Partial\_MattersTable.cshtml" />
     <Content Include="Views\Sequences\AttributesCheck\Index.cshtml" />
     <Content Include="Views\Sequences\AttributesCheck\Result.cshtml" />
-    <Content Include="Views\Sequences\AnnotationsCheck\Index.cshtml" />
-    <Content Include="Views\Sequences\AnnotationsCheck\Result.cshtml" />
-    <Content Include="Views\Sequences\AnnotationUpdate\Result.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
     <Content Include="Views\Manage\Index.cshtml" />

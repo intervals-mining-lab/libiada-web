@@ -581,7 +581,12 @@
             /// <summary>
             /// The miscellaneous difference.
             /// </summary>
-            public const int MiscellaneousDifference = 32; 
+            public const int MiscellaneousDifference = 32;
+
+            /// <summary>
+            /// The non coding gene.
+            /// </summary>
+            public const int Gene = 33;
         }
 
         /// <summary>
