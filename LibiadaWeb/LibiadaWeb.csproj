@@ -264,6 +264,7 @@
     <Compile Include="Controllers\Sequences\AttributesCheckController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
+    <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
@@ -515,6 +516,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
+    <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\charts.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
@@ -691,6 +693,8 @@
     <Content Include="Views\Partial\_OrderTransformations.cshtml" />
     <Content Include="Views\Sequences\BatchGenesImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchGenesImport\Result.cshtml" />
+    <None Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

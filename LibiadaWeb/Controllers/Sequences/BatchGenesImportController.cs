@@ -77,20 +77,18 @@
                         {
                             var subsequenceRepository = new SubsequenceRepository(db);
                             long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                            string parentRemoteId =
-                                db.DnaSequence.Single(c => c.Id == parentSequenceId).RemoteId;
+                            string parentRemoteId = db.DnaSequence.Single(c => c.Id == parentSequenceId).RemoteId;
 
                             Stream stream = NcbiHelper.GetGenesFileStream(parentRemoteId);
                             var features = NcbiHelper.GetFeatures(stream);
 
                             subsequenceRepository.CreateSubsequences(features, parentSequenceId);
 
-                            results[i] = "Successfully imported "
-                                            + db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
-                                                .Include(s => s.Position)
-                                                .Include(s => s.Feature)
-                                                .Include(s => s.SequenceAttribute)
-                                                .Count() + " subsequences";
+                            results[i] = "Successfully imported " + db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
+                                                                        .Include(s => s.Position)
+                                                                        .Include(s => s.Feature)
+                                                                        .Include(s => s.SequenceAttribute)
+                                                                        .Count() + " subsequences";
                         }
                         catch (Exception exception)
                         {
@@ -103,7 +101,11 @@
                     }
                 }
 
-                return new Dictionary<string, object> { { "matterNames", matterNames }, { "results", results } };
+                return new Dictionary<string, object>
+                           {
+                               { "matterNames", matterNames }, 
+                               { "results", results }
+                           };
             });
         }
     }

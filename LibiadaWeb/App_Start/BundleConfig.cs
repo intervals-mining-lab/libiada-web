@@ -51,6 +51,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/AccordanceController").Include(
                         "~/Scripts/Angular/Controllers/accordance.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/BatchSequenceImportController").Include(
+                        "~/Scripts/Angular/Controllers/batchSequenceImport.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/BuildingsSimilarityController").Include(
                         "~/Scripts/Angular/Controllers/buildingsSimilarity.js"));
 
