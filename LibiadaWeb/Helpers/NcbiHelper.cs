@@ -111,7 +111,7 @@
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetGenesFileStream(string remoteId)
+        public static Stream GetGenBankFileStream(string remoteId)
         {
             return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + remoteId);
         }

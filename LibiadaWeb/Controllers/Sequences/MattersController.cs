@@ -7,7 +7,6 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Account;
 
     /// <summary>

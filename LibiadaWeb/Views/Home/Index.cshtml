@@ -18,6 +18,8 @@
             @if (UserHelper.IsAdmin())
             {
                 @Html.ActionLink("Sequences", "Index", "CommonSequences")
+                <br/>
+                @Html.ActionLink("Batch sequences import", "Index", "BatchsequenceImport")
                 <br />
                 @Html.ActionLink("Genes import", "Index", "GenesImport")
                 <br/>

@@ -82,7 +82,7 @@
                         long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                         DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
 
-                        Stream stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
+                        Stream stream = NcbiHelper.GetGenBankFileStream(parentSequence.RemoteId);
                         var features = NcbiHelper.GetFeatures(stream);
 
                         for (int j = 1; j < features.Count; j++)

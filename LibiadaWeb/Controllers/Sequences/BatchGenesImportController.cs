@@ -79,7 +79,7 @@
                             long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                             string parentRemoteId = db.DnaSequence.Single(c => c.Id == parentSequenceId).RemoteId;
 
-                            Stream stream = NcbiHelper.GetGenesFileStream(parentRemoteId);
+                            Stream stream = NcbiHelper.GetGenBankFileStream(parentRemoteId);
                             var features = NcbiHelper.GetFeatures(stream);
 
                             subsequenceRepository.CreateSubsequences(features, parentSequenceId);

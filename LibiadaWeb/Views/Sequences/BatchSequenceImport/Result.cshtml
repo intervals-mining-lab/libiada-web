@@ -8,25 +8,31 @@
 {
     <table class="table table-bordered table-hover">
         <thead>
-            <tr>
-                <th>
-                    Sequence
-                </th>
-                <th>
-                    Result
-                </th>
-            </tr>
+        <tr>
+            <th>
+                #
+            </th>
+            <th>
+                Sequence
+            </th>
+            <th>
+                Result
+            </th>
+        </tr>
         </thead>
         <tbody>
             @for (int i = 0; i < ViewBag.matterNames.Length; i++)
             {
                 <tr>
                     <td>
+                        @(i + 1)
+                    </td>
+                    <td>
                         @ViewBag.matterNames[i]
                     </td>
                     <td>
                         @ViewBag.results[i]
-                        <br />
+                        <br/>
                     </td>
                 </tr>
             }

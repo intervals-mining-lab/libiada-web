@@ -96,7 +96,7 @@
                     }
                     else
                     {
-                        stream = NcbiHelper.GetGenesFileStream(parentSequence.RemoteId);
+                        stream = NcbiHelper.GetGenBankFileStream(parentSequence.RemoteId);
                     }
 
                     var features = NcbiHelper.GetFeatures(stream);

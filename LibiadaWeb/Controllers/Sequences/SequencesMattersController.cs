@@ -312,7 +312,7 @@
         /// The dispose.
         /// </summary>
         /// <param name="disposing">
-        /// The disposing.
+        /// The disposing flag.
         /// </param>
         protected override void Dispose(bool disposing)
         {

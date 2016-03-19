@@ -28,9 +28,11 @@
                 acessions count={{accessions.length}}
             </div>
         </div>
+        <br/>
         <div ng-repeat="accession in accessions">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
+                    <input type="hidden" name="accessions" ng-value="accession.value" />
                     <div ng-bind="accession.value"></div>
                 </div>
             </div>
