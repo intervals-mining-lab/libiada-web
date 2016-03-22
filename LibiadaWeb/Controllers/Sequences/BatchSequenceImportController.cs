@@ -19,6 +19,7 @@
     /// <summary>
     /// The batch sequence import controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class BatchSequenceImportController : AbstractResultController
     {
         /// <summary>
@@ -102,12 +103,6 @@
                                 throw new Exception("sequence metadata is missing.");
                             }
 
-                            if ((metadata.Source.Organism.Species != metadata.Source.CommonName + " " + metadata.Source.CommonName) || !metadata.Definition.Contains(metadata.Source.CommonName))
-                            {
-                                throw new Exception("Sequences names are not equal. CommonName = " + metadata.Source.CommonName + 
-                                                    ", Species = " + metadata.Source.Organism.Species +
-                                                    ", Definition = " + metadata.Definition);
-                            }
 
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
@@ -115,15 +110,18 @@
                             }
                             else
                             {
+                                var matterName = NcbiHelper.ExtractSequenceName(metadata) + " | " + metadata.Version.CompoundAccession;
+                                matterNames[i] = "Common name=" + metadata.Source.CommonName +
+                                                 ", Species=" + metadata.Source.Organism.Species +
+                                                 ", Definition=" + metadata.Definition +
+                                                 ", Matter name=" + matterName;
+
                                 var matter = new Matter
                                                  {
-                                                     Name = metadata.Source.CommonName + " | " + metadata.Version.CompoundAccession,
+                                                     Name = matterName,
                                                      Nature = Nature.Genetic
                                                  };
-                                matterNames[i] = "common name = " + metadata.Source.CommonName + 
-                                                 ", Species = " + metadata.Source.Organism.Species +
-                                                 ", Definition = " + metadata.Definition + 
-                                                 " | " + metadata.Version.CompoundAccession;
+                                
                                 var sequence = new CommonSequence
                                                    {
                                                        Matter = matter,
@@ -133,7 +131,7 @@
                                                        RemoteId = metadata.Version.CompoundAccession,
                                                        PiecePosition = 0
                                                    };
-                                dnaSequenceRepository.Create(sequence, sequenceStream, false);
+                                dnaSequenceRepository.Create(sequence, sequenceStream, metadata.Definition.ToLower().Contains("partial"));
                                 results[i] = "successfully imported sequence";
                             }
                         }

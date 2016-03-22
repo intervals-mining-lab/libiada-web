@@ -131,6 +131,65 @@
         }
 
         /// <summary>
+        /// Extracts supposed sequence name from metadata.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// Supposed name as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if all name fields are contradictory.
+        /// </exception>
+        public static string ExtractSequenceName(GenBankMetadata metadata)
+        {
+            string species = metadata.Source.Organism.Species;
+            string commonName = metadata.Source.CommonName;
+            string definition = metadata.Definition.TrimEnd(", complete genome.")
+                                                   .TrimEnd(", complete sequence.")
+                                                   .TrimEnd(", complete CDS.")
+                                                   .TrimEnd(", complete cds.")
+                                                   .TrimEnd(", genome.");
+
+            if (species == commonName ||
+                species == (commonName + " " + commonName) ||
+                species == (commonName + " " + commonName + " " + commonName))
+            {
+                if (definition.Contains(species))
+                {
+                    return definition;
+                }
+
+                return species + " | " + definition;
+            }
+
+            if (commonName.Contains(species))
+            {
+                if (definition.Contains(commonName))
+                {
+                    return definition;
+                }
+
+                return commonName + " | " + definition;
+            }
+
+            if (species.Contains(commonName))
+            {
+                if (definition.Contains(species))
+                {
+                    return definition;
+                }
+
+                return species + " | " + definition;
+            }
+
+            throw new Exception("Sequences names are not equal. CommonName = " + commonName + 
+                                ", Species = " + species +
+                                ", Definition = " + definition);
+        }
+
+        /// <summary>
         /// The get response.
         /// </summary>
         /// <param name="url">

@@ -299,6 +299,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EnumExtensions.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Models\Account\UserHelper.cs" />
     <Compile Include="Helpers\ViewDataHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
