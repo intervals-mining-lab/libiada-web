@@ -20,7 +20,7 @@
         <tbody>
             @for (int i = 0; i < ViewBag.matterNames.Length; i++)
             {
-                <tr>
+                <tr class="@Helpers.GetCssClassForImportResult(ViewBag.status[i])">
                     <td>
                         @ViewBag.matterNames[i]
                     </td>

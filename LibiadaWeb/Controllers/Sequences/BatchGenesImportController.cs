@@ -66,6 +66,7 @@
             {
                 var matterNames = new string[matterIds.Length];
                 var results = new string[matterIds.Length];
+                var statuses = new string[matterIds.Length];
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {
@@ -73,6 +74,7 @@
                     {
                         var matterId = matterIds[i];
                         matterNames[i] = db.Matter.Single(m => m.Id == matterId).Name;
+                        
                         try
                         {
                             var subsequenceRepository = new SubsequenceRepository(db);
@@ -84,6 +86,7 @@
 
                             subsequenceRepository.CreateSubsequences(features, parentSequenceId);
 
+                            statuses[i] = "Success";
                             results[i] = "Successfully imported " + db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
                                                                         .Include(s => s.Position)
                                                                         .Include(s => s.Feature)
@@ -92,6 +95,7 @@
                         }
                         catch (Exception exception)
                         {
+                            statuses[i] = "Error";
                             results[i] = exception.Message;
                             if (exception.InnerException != null)
                             {
@@ -104,7 +108,8 @@
                 return new Dictionary<string, object>
                            {
                                { "matterNames", matterNames }, 
-                               { "results", results }
+                               { "results", results },
+                               { "status", statuses }
                            };
             });
         }

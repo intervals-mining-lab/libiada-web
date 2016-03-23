@@ -154,21 +154,17 @@
 
             if (species == commonName ||
                 species == (commonName + " " + commonName) ||
-                species == (commonName + " " + commonName + " " + commonName))
-            {
-                if (definition.Contains(species))
-                {
-                    return definition;
-                }
-
-                return species + " | " + definition;
-            }
-
-            if (commonName.Contains(species))
+                species == (commonName + " " + commonName + " " + commonName) ||
+                commonName.Contains(species))
             {
                 if (definition.Contains(commonName))
                 {
                     return definition;
+                }
+
+                if (commonName.Contains(definition))
+                {
+                    return commonName;
                 }
 
                 return commonName + " | " + definition;
@@ -179,6 +175,11 @@
                 if (definition.Contains(species))
                 {
                     return definition;
+                }
+
+                if (species.Contains(definition))
+                {
+                    return species;
                 }
 
                 return species + " | " + definition;

@@ -42,6 +42,7 @@
                 }
                 catch (Exception exception)
                 {
+                    // todo: refactor and optimize all this
                     var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
                     var characteristicsTypes = characteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
                     var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();

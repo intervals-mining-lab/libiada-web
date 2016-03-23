@@ -66,7 +66,7 @@
                 <td ng-bind="$index + 1" />
                 @if (UserHelper.IsAdmin())
                 {
-                    <td aria-label="{{task.UserName}}" title="{{task.UserName}}" ng-bind="task.UserId"/>
+                    <td aria-label="{{task.UserName}}" title="{{task.UserName}}" ng-bind="task.UserId" />
                 }
                 <td ng-bind="task.DisplayName" />
                 <td ng-bind="task.Created" />
@@ -85,7 +85,7 @@
                         @Html.AntiForgeryToken()
 
                         <input type="hidden" name="id" ng-value="task.Id" />
-                        <input type="submit" value="Delete task" class="btn btn-default" />
+                        <input type="submit" value="Delete task" class="btn btn-danger" />
                     }
                 </td>
             </tr>
@@ -101,7 +101,7 @@
         <div class="form-horizontal">
             <div class="form-group">
                 <div class="col-md-offset-0 col-md-10">
-                    <input type="submit" value="Delete all tasks" class="btn btn-default" ng-hide="tasks.length == 0" ng-cloak />
+                    <input type="submit" value="Delete all tasks" class="btn btn-danger" ng-hide="tasks.length == 0" ng-cloak />
                 </div>
             </div>
         </div>

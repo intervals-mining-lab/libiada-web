@@ -226,10 +226,10 @@
             Link link)
         {
             var newCharacteristics = new List<BinaryCharacteristic>();
-            var dbCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
+            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
                                                                     && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                                                            .ToArray();
-            int calculatedCount = dbCharacteristics.Length;
+            int calculatedCount = databaseCharacteristics.Length;
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
                 List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
@@ -239,7 +239,7 @@
                     {
                         long firstElementId = sequenceElements[i];
                         long secondElementId = sequenceElements[i];
-                        if (!dbCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
+                        if (!databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
@@ -284,7 +284,7 @@
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
             var newCharacteristics = new List<BinaryCharacteristic>();
-            var dbCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
+            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
                                                                     && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                                                            .ToArray(); 
 
@@ -311,7 +311,7 @@
                     long secondElementId = sequenceElements[secondElementNumber];
 
                     // searching characteristic in database
-                    if (!dbCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
+                    if (!databaseCharacteristics.Any(b => b.FirstElementId == firstElementId && b.SecondElementId == secondElementId))
                     {
                         double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 

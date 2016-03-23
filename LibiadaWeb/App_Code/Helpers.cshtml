@@ -1,0 +1,17 @@
+﻿@functions{
+    public static string GetCssClassForImportResult(string result)
+    {
+        switch (result)
+        {
+            case "Success":
+                return "success";
+            case "Exist":
+                return "info";
+            case "Error":
+                return "danger";
+            default:
+                return string.Empty;
+        }
+    }
+
+}

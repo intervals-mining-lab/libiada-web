@@ -78,10 +78,10 @@
                 var existingAccessions = Db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                 var matterNames = new string[accessions.Length];
                 var results = new string[accessions.Length];
+                var statuses = new string[accessions.Length];
 
                 for (int i = 0; i < accessions.Length; i++)
                 {
-                    
                     try
                     {
                         string accession = accessions[i];
@@ -89,6 +89,7 @@
                         if (existingAccessions.Contains(accession) || existingAccessions.Contains(accession + ".1"))
                         {
                             results[i] = "Sequence already exists";
+                            statuses[i] = "Exist";
                         }
                         else
                         {
@@ -103,10 +104,10 @@
                                 throw new Exception("sequence metadata is missing.");
                             }
 
-
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
                                 results[i] = "Sequence already exists";
+                                statuses[i] = "Exist";
                             }
                             else
                             {
@@ -133,15 +134,16 @@
                                                    };
                                 dnaSequenceRepository.Create(sequence, sequenceStream, metadata.Definition.ToLower().Contains("partial"));
                                 results[i] = "successfully imported sequence";
+                                statuses[i] = "Success";
                             }
                         }
                     }
                     catch (Exception exception)
                     {
                         results[i] = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
+                        statuses[i] = "Error";
                     }
                 }
-                
 
                 var orphanMatter = Db.Matter.Include(m => m.Sequence).Where(m => matterNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
 
@@ -156,7 +158,8 @@
                 return new Dictionary<string, object>
                            {
                                { "matterNames", matterNames },
-                               { "results", results }
+                               { "results", results },
+                               { "status", statuses }
                            };
             });
         }
