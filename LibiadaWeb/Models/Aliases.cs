@@ -139,9 +139,9 @@
             public const int NcRnaClass = 19;
 
             /// <summary>
-            /// The standart name.
+            /// The standard name.
             /// </summary>
-            public const int StandartName = 20;
+            public const int StandardName = 20;
 
             /// <summary>
             /// The repeat family.
@@ -626,37 +626,37 @@
             public const int Length = 12;
 
             /// <summary>
-            /// The gc ratio.
+            /// The GC ratio.
             /// </summary>
             public const int GCRatio = 33;
 
             /// <summary>
-            /// The gc skew.
+            /// The GC skew.
             /// </summary>
             public const int GCSkew = 34;
 
             /// <summary>
-            /// The at skew.
+            /// The AT skew.
             /// </summary>
             public const int ATSkew = 35;
 
             /// <summary>
-            /// The gc to at ratio.
+            /// The GC to AT ratio.
             /// </summary>
             public const int GCToATRatio = 36;
 
             /// <summary>
-            /// The mk skew.
+            /// The MK skew.
             /// </summary>
             public const int MKSkew = 37;
 
             /// <summary>
-            /// The ry skew.
+            /// The RY skew.
             /// </summary>
             public const int RYSkew = 38;
 
             /// <summary>
-            /// The sw skew.
+            /// The SW skew.
             /// </summary>
             public const int SWSkew = 39;
         }

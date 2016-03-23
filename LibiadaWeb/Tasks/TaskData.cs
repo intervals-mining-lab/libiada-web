@@ -5,8 +5,6 @@
 
     using AutoMapper;
 
-    using LibiadaWeb.Models.Account;
-
     /// <summary>
     /// The task data.
     /// </summary>

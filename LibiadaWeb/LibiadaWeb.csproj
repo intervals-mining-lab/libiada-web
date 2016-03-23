@@ -695,7 +695,7 @@
     <Content Include="Views\Sequences\BatchGenesImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchGenesImport\Result.cshtml" />
     <Content Include="App_Code\Helpers.cshtml" />
-    <None Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
+    <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
