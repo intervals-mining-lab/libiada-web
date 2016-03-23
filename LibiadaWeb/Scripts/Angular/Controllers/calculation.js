@@ -10,11 +10,11 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         function filterByNature() {
             var notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
@@ -22,7 +22,7 @@
             angular.forEach($scope.characteristics, function (characteristic) {
                 characteristic.notation = notation;
             });
-        };
+        }
 
         function addCharacteristic() {
             $scope.characteristics.push({
@@ -32,11 +32,11 @@
                 language: $scope.languages[0],
                 translator: $scope.translators[0]
             });
-        };
+        }
 
         function deleteCharacteristic(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-        };
+        }
 
 
         $scope.matterCheckChanged = matterCheckChanged;

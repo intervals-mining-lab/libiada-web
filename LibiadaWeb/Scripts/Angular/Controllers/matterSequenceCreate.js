@@ -18,7 +18,7 @@
             if (angular.isDefined($scope.mattersFiltered) && angular.isDefined($scope.mattersFiltered[0])) {
                 $scope.matterId = $scope.mattersFiltered[0].Value;
             }
-        };
+        }
 
         function featureChanged(featureId) {
             var featureName = "";
@@ -40,7 +40,7 @@
 
         function isRemoteDbDefined() {
             return $scope.remoteDbsFiltered.length > 0 && $scope.remoteDbId > 0;
-        };
+        }
 
         $scope.filterByNature = filterByNature;
         $scope.isRemoteDbDefined = isRemoteDbDefined;

@@ -10,11 +10,11 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;

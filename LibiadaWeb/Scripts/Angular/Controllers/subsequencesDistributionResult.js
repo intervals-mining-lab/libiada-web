@@ -39,7 +39,7 @@
         // filters dots by subsequences feature
         function filterByFeature(feature) {
             d3.selectAll(".dot")
-                .filter(function (dot) { return dot.featureId === feature.Value })
+                .filter(function (dot) { return dot.featureId === feature.Value; })
                 .attr("visibility", function (d) {
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
@@ -89,7 +89,7 @@
         function showTooltip(d, tooltip, newSelectedDot, svg) {
             $scope.clearTooltip(tooltip);
 
-            tooltip.style("opacity", .9);
+            tooltip.style("opacity", 0.9);
 
             var tooltipHtml = [];
 
@@ -200,10 +200,10 @@
                 .style("opacity", 0);
 
             // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function (d) { tooltip.hideTooltip = false; });
+            tooltip.on("click", function () { tooltip.hideTooltip = false; });
 
             // hiding tooltip
-            d3.select("#chart").on("click", function (d) { $scope.clearTooltip(tooltip); });
+            d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
 
             // calculating margins for dots
             var xMin = d3.min($scope.points, xValue);
@@ -265,14 +265,14 @@
             for (var i = 0; i < $scope.matters; i++) {
                 var matterId = $scope.matters[i].id;
                 $scope.mattersDots[matterId] = d3.selectAll(".dot")
-                    .filter(function (dot) { return dot.matterId === matterId });
+                    .filter(function (dot) { return dot.matterId === matterId; });
             }
 
             $scope.featuresDots = [];
             for (var j = 0; j < $scope.features; j++) {
                 var featureId = $scope.features[j].Value;
                 $scope.mattersDots[featureId] = d3.selectAll(".dot")
-                    .filter(function (dot) { return dot.featureId === featureId });
+                    .filter(function (dot) { return dot.featureId === featureId; });
             }
 
             // draw legend
@@ -285,12 +285,12 @@
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function (text) { return d.visible ? 1 : .5; });
+                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
                     legendEntry.select("rect")
-                        .style("fill-opacity", function (rect) { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
 
                     svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.matterId === d.id })
+                        .filter(function (dot) { return dot.matterId === d.id; })
                         .attr("visibility", function (dot) {
                             dot.matterVisible = d.visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";

@@ -10,15 +10,15 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableMattersSelect(matter) {
             return ($scope.selectedMatters === $scope.maximumSelectedMatters) && !matter.Selected;
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableMattersSelect = disableMattersSelect;

@@ -10,11 +10,11 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         function addCharacteristic() {
             $scope.characteristics.push({
@@ -22,11 +22,11 @@
                 link: $scope.characteristicTypes[0].CharacteristicLinks[0],
                 notation: $scope.notations[0]
             });
-        };
+        }
 
         function deleteCharacteristic(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-        };
+        }
 
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;

@@ -6,7 +6,7 @@
 
         function filterByNature() {
             $scope.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-        };
+        }
 
         function matterCheckChanged(matter) {
             if (matter.Selected) {
@@ -14,15 +14,15 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableMattersSelect(matter) {
             return ($scope.selectedMatters === $scope.maximumSelectedMatters) && !matter.Selected;
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         $scope.filterByNature = filterByNature;
         $scope.matterCheckChanged = matterCheckChanged;

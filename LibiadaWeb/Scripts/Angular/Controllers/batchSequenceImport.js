@@ -12,11 +12,11 @@
                 }
             }
             $scope.accessionsField = "";
-        };
+        }
 
         function deleteCharacteristic(accession) {
             $scope.accessions.splice($scope.accessions.indexOf(accession), 1);
-        };
+        }
 
         $scope.parseIds = parseIds;
         $scope.deleteCharacteristic = deleteCharacteristic;

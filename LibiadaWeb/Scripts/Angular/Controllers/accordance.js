@@ -10,19 +10,19 @@
             } else {
                 $scope.selectedMatters--;
             }
-        };
+        }
 
         function disableMattersSelect(matter) {
             return ($scope.selectedMatters === $scope.maximumSelectedMatters) && !matter.Selected;
-        };
+        }
 
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        };
+        }
 
         function filterByNature() {
             $scope.characteristic.notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
-        };
+        }
 
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableMattersSelect = disableMattersSelect;

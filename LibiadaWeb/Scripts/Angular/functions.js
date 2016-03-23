@@ -34,7 +34,7 @@ function SetCheckBoxesState(checkboxes, state, filter) {
 
 function FakeDisableMattersSelect() {
     return false;
-};
+}
 
 function FakeFilterByFeature() {
     return false;
@@ -42,4 +42,4 @@ function FakeFilterByFeature() {
 
 function FakeDisableSubmit() {
     return false;
-};
+}

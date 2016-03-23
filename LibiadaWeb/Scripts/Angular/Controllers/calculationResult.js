@@ -51,7 +51,7 @@
 
             var chart = dc.seriesChart("#chart");
             var ndx = crossfilter(points);
-            var runDimension = ndx.dimension(function (d, index) {
+            var runDimension = ndx.dimension(function (d) {
                 return [d.name, +d.x];
             });
             var runGroup = runDimension.group().reduceSum(function (d) { return +d.y; });

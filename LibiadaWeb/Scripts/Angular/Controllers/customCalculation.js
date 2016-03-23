@@ -9,19 +9,19 @@
                 characteristicType: $scope.characteristicTypes[0],
                 link: $scope.characteristicTypes[0].CharacteristicLinks[0]
             });
-        };
+        }
 
         function deleteCharacteristic(characteristic) {
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
-        };
+        }
 
         function addSequence() {
             $scope.customSequences.push({});
-        };
+        }
 
         function deleteSequence(customSequence) {
             $scope.customSequences.splice($scope.customSequences.indexOf(customSequence), 1);
-        };
+        }
 
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
