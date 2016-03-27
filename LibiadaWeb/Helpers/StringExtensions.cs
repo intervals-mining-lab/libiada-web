@@ -26,5 +26,30 @@
 
             return source.Remove(source.LastIndexOf(value));
         }
+
+        /// <summary>
+        /// Gets largest repeating substring.
+        /// </summary>
+        /// <param name="source">
+        /// The source string.
+        /// </param>
+        /// <returns>
+        /// The repeating substring as <see cref="string"/>.
+        /// </returns>
+        public static string GetLargestRepeatingSubstring(this string source)
+        {
+            string trimmedSource = source.Trim();
+            for (int i = 1; i < trimmedSource.Length; i++)
+            {
+                string substring = trimmedSource.Substring(0, i);
+                string sourceWithoutSubstring = source.Replace(substring, string.Empty);
+                if (string.IsNullOrWhiteSpace(sourceWithoutSubstring))
+                {
+                    return substring;
+                }
+            }
+
+            return source;
+        }
     }
 }

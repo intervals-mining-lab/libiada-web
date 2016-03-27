@@ -144,7 +144,7 @@
         /// </exception>
         public static string ExtractSequenceName(GenBankMetadata metadata)
         {
-            string species = metadata.Source.Organism.Species;
+            string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
             string commonName = metadata.Source.CommonName;
             string definition = metadata.Definition.TrimEnd(", complete genome.")
                                                    .TrimEnd(", complete sequence.")
@@ -152,10 +152,7 @@
                                                    .TrimEnd(", complete cds.")
                                                    .TrimEnd(", genome.");
 
-            if (species == commonName ||
-                species == (commonName + " " + commonName) ||
-                species == (commonName + " " + commonName + " " + commonName) ||
-                commonName.Contains(species))
+            if (commonName.Contains(species))
             {
                 if (definition.Contains(commonName))
                 {
