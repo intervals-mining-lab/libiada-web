@@ -26,7 +26,12 @@
                            .TrimEnd(", complete sequence.")
                            .TrimEnd(", complete CDS.")
                            .TrimEnd(", complete cds.")
-                           .TrimEnd(", genome.");
+                           .TrimEnd(", genome.")
+                           .TrimEnd(" complete genome.")
+                           .TrimEnd(" complete sequence.")
+                           .TrimEnd(" complete CDS.")
+                           .TrimEnd(" complete cds.")
+                           .TrimEnd(" genome.");
             Assert.AreEqual(expected, actual);
         }
 
