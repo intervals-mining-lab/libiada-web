@@ -335,7 +335,6 @@
         $scope.points = [];
         $scope.matters = [];
         $scope.fillPoints();
-
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", subsequencesDistributionResult]);
