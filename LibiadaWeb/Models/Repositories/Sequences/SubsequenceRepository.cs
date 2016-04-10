@@ -243,24 +243,27 @@
                     else
                     {
                         var leafLocation = leafLocations[0];
-                        var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
-
-                        // if there is join in child record parent record contains only
-                        // first child start and last child end
-                        if (nextLeafLocations.Count > 1
-                            && leafLocation.LocationStart == nextLeafLocations[0].LocationStart
-                            && leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                        
+                        if ((i + 1) < features.Count)
                         {
-                            // don't need to import this gene
-                            continue;
-                        }
+                            var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
 
+                            // if there is join in child record parent record contains only
+                            // first child start and last child end
+                            if (nextLeafLocations.Count > 1 && 
+                                leafLocation.LocationStart == nextLeafLocations[0].LocationStart && 
+                                leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                            {
+                                // don't need to import this gene
+                                continue;
+                            }
+                        }
+                        
                         // checking if there is any feature with identical position
-                        if (allNonGenesLeafLocations
-                                .Any(l => leafLocation.LocationStart == l.LocationStart &&
-                                          leafLocation.LocationEnd == l.LocationEnd && 
-                                          leafLocation.StartData == l.StartData && 
-                                          leafLocation.EndData == l.EndData))
+                        if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                                              leafLocation.LocationEnd == l.LocationEnd && 
+                                                              leafLocation.StartData == l.StartData && 
+                                                              leafLocation.EndData == l.EndData))
                         {
                             // don't need to import this gene
                             continue;
@@ -348,14 +351,14 @@
         /// </returns>
         private List<Subsequence> CreateNonCodingSubsequences(bool[] positionsMap, long sequenceId)
         {
-            var positions = ExtractNonCodingSubsequences(positionsMap);
+            var positions = ExtractNonCodingSubsequencesPositions(positionsMap);
             var starts = positions[0];
             var lengths = positions[1];
             var result = new List<Subsequence>();
 
             for (int i = 0; i < lengths.Count; i++)
             {
-                var subsequence = new Subsequence
+                result.Add(new Subsequence
                 {
                     Id = DbHelper.GetNewElementId(db),
                     FeatureId = Aliases.Feature.NonCodingSequence,
@@ -363,9 +366,7 @@
                     SequenceId = sequenceId,
                     Start = starts[i],
                     Length = lengths[i]
-                };
-
-                result.Add(subsequence);
+                });
             }
 
             return result;
@@ -392,7 +393,8 @@
         }
 
         /// <summary>
-        /// The extract non coding subsequences.
+        /// Extracts non coding subsequences positions
+        /// from filled positions map.
         /// </summary>
         /// <param name="positionsMap">
         /// The positions map.
@@ -400,7 +402,7 @@
         /// <returns>
         /// The <see cref="T:List{Int32}[]"/>.
         /// </returns>
-        private List<int>[] ExtractNonCodingSubsequences(bool[] positionsMap)
+        private List<int>[] ExtractNonCodingSubsequencesPositions(bool[] positionsMap)
         {
             var starts = new List<int>();
             var lengths = new List<int>();
@@ -446,8 +448,8 @@
         /// </returns>
         private bool CheckPartial(List<ILocation> leafLocations)
         {
-            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData
-                                                  || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
+            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData || 
+                                                     leafLocation.LocationEnd.ToString() != leafLocation.EndData);
         }
     }
 }
