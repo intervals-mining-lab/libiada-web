@@ -253,6 +253,7 @@
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequenceComparerController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesSimilarityController.cs" />
@@ -334,6 +335,7 @@
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Nature.cs" />
     <Compile Include="Models\OutputFormats.cs" />
     <Compile Include="Models\Repositories\Calculators\CharacteristicRepository.cs" />
@@ -698,6 +700,7 @@
     <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequenceComparer\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

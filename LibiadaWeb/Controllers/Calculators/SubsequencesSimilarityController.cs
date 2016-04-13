@@ -170,11 +170,11 @@
 
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
-                var similarity = similarSubsequences.Count * 200.0 / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
+                var similarity = similarSubsequences.Count * 200d / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
 
-                var firstSequenceSimilarity = similarSubsequences.Count * 100.0 / firstSequenceSubsequences.Length;
+                var firstSequenceSimilarity = similarSubsequences.Count * 100d / firstSequenceSubsequences.Length;
 
-                var secondSequenceSimilarity = similarSubsequences.Count * 100.0 / secondSequenceSubsequences.Length;
+                var secondSequenceSimilarity = similarSubsequences.Count * 100d / secondSequenceSubsequences.Length;
 
                 return new Dictionary<string, object>
                 {
