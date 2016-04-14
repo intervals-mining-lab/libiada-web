@@ -27,9 +27,10 @@
             var tooltipContent = [];
             tooltipContent.push("Name: " + d.name);
 
+
             var pointSharacteristics = [];
             for (var i = 0; i < $scope.characteristics[d.id].characteristics.length; i++) {
-                pointSharacteristics.push($scope.characteristicsList.Text + ": " + $scope.characteristics[d.id].characteristrics[i])
+                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].characteristics[i]);
             }
 
             tooltipContent.push(pointSharacteristics.join("<br/>"));
@@ -46,14 +47,15 @@
 
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function(dot) {
-                    if (dot.x === d.x && dot.y === d) {
+                    if (dot.x === d.x && dot.y === d.y) {
                         tooltipHtml.push($scope.fillPointTooltip(dot));
                         return true;
                     } else {
                         return false;
                     }
                 })
-                .attr("rx", $scope.selectedDotRadius);
+                .attr("rx", $scope.selectedDotRadius)
+                .attr("ry", $scope.selectedDotRadius);
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
@@ -62,8 +64,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 18) + "px")
-                .style("top", (d3.event.pageY + 18) + "px");
+                .style("left", (d3.event.pageX + 10) + "px")
+                .style("top", (d3.event.pageY - 8) + "px");
 
             tooltip.hideTooltip = false;
         }
@@ -74,7 +76,8 @@
                     tooltip.html("").style("opacity", 0);
 
                     if (tooltip.selectedDots) {
-                        tooltip.selectedDots.attr("rx", $scope.dotRadius);
+                        tooltip.selectedDots.attr("rx", $scope.dotRadius)
+                                            .attr("ry", $scope.dotRadius);
                     }
                 }
 
@@ -220,9 +223,11 @@
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
         $scope.dotRadius = 4;
-        $scope.selectedDotRadius = $scope.dotRadius * 3;
+        $scope.selectedDotRadius = $scope.dotRadius * 2;
         $scope.points = [];
         $scope.matters = [];
+        $scope.firstCharacteristic = $scope.characteristicsList[0];
+        $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
     }
 
     angular.module("CalculationResult", []).controller("CalculationResultCtrl", ["$scope", calculationResult]);
