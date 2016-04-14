@@ -107,13 +107,17 @@
         {
             return Action(() =>
             {
-                var characteristics = new List<List<double>>();
                 var characteristicNames = new List<string>();
-                var sequenceNames = new List<string>();
-                foreach (var matterId in matterIds)
+                var mattersCharacteristics = new object[matterIds.Length];
+                var allCharacteristics = new List<List<double>>();
+                var clusters = new long[clustersCount];
+                matterIds = matterIds.OrderBy(m => m).ToArray();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+
+                for (int j = 0; j < matterIds.Length; j++)
                 {
-                    sequenceNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    characteristics.Add(new List<double>());
+                    var matterId = matterIds[j];
+                    var characteristics = new List<double>();
                     for (int i = 0; i < notationIds.Length; i++)
                     {
                         long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.NotationId == notationIds[i]).Id;
@@ -121,8 +125,7 @@
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
                         if (db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
-                            characteristics.Last()
-                                .Add(db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value);
+                            characteristics.Add(db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value);
                         }
                         else
                         {
@@ -131,9 +134,11 @@
                             var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                            characteristics.Last().Add(calculator.Calculate(tempChain, link));
+                            characteristics.Add(calculator.Calculate(tempChain, link));
                         }
                     }
+
+                    allCharacteristics.Add(characteristics);
                 }
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -141,28 +146,20 @@
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
-                DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), characteristics);
+                DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), allCharacteristics);
                 var clusterizator = new KrabClusterization(data, equipotencyWeight, normalizedDistanceWeight, distanceWeight);
-                ClusterizationResult result = clusterizator.Cluster(clustersCount);
-                var clusters = new List<List<long>>();
-                for (int i = 0; i < result.Clusters.Count; i++)
+                ClusterizationResult clusterizationResult = clusterizator.Cluster(clustersCount);
+                int n = 0;
+                for (int i = 0; i < clusterizationResult.Clusters.Count; i++)
                 {
-                    clusters.Add(new List<long>());
-                    foreach (var item in ((Cluster)result.Clusters[i]).Items)
+                    var cluster = ((Cluster) clusterizationResult.Clusters[i]).Items;
+                    clusters[i] = i+1;
+                    foreach (long matterId in cluster)
                     {
-                        clusters.Last().Add((long)item);
+                        mattersCharacteristics[n++] = new { matterName = matters[matterId].Name, cluster = clusters[i], characteristics = allCharacteristics[matterIds.ToList().IndexOf(matterId)] };
                     }
                 }
 
-                var clusterNames = new List<List<string>>();
-                foreach (var cluster in clusters)
-                {
-                    clusterNames.Add(new List<string>());
-                    foreach (var matterId in cluster)
-                    {
-                        clusterNames.Last().Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    }
-                }
 
                 var characteristicsList = new List<SelectListItem>();
                 for (int i = 0; i < characteristicNames.Count; i++)
@@ -175,17 +172,18 @@
                     });
                 }
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
-                    { "clusters", clusters },
                     { "characteristicNames", characteristicNames },
-                    { "characteristicIds", new List<int>(characteristicTypeLinkIds) },
-                    { "characteristics", characteristics },
-                    { "sequenceNames", sequenceNames },
-                    { "matterIds", new List<long>(matterIds) },
-                    { "clusterNames", clusterNames },
-                    { "characteristicsList", characteristicsList }
+                    { "characteristics", mattersCharacteristics },
+                    { "characteristicsList", characteristicsList },
+                    { "clusters", clusters }
                 };
+
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
     }

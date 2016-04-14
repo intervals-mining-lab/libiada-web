@@ -4,19 +4,32 @@
     function calculationResult($scope) {
         MapModelFromJson($scope, data);
 
-        // initializes data for genes map 
+        function fillLegend() {
+            $scope.legend = [];
+            if ($scope.clusters) {
+                for (var j = 0; j < $scope.clusters.length; j++) {
+                    $scope.legend.push({ name: $scope.clusters[j] });
+                }
+            } else {
+                for (var k = 0; k < $scope.characteristics.length; k++) {
+                    $scope.legend.push({ name: $scope.characteristics[k].matterName });
+                }
+            }
+        }
+
+        // initializes data for chart
         function fillPoints() {
             var first = +$scope.firstCharacteristic.Value;
             var second = +$scope.secondCharacteristic.Value;
-
+            
             for (var i = 0; i < $scope.characteristics.length; i++) {
                 var characteristic = $scope.characteristics[i];
-                $scope.matters.push({ name: characteristic.matterName });
                 $scope.points.push({
                     id: i,
                     name: characteristic.matterName,
                     x: characteristic.characteristics[first],
-                    y: characteristic.characteristics[second]
+                    y: characteristic.characteristics[second],
+                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.matterName
                 });
             }
         }
@@ -112,7 +125,7 @@
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
             // setup fill color
-            var cValue = function(d) { return d.name; };
+            var cValue = function(d) { return d.cluster; };
             var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
@@ -188,7 +201,7 @@
 
             // draw legend
             var legend = svg.selectAll(".legend")
-                .data($scope.matters)
+                .data($scope.legend)
                 .enter()
                 .append("g")
                 .attr("class", "legend")
@@ -209,7 +222,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function(d) { return d.name; })
+                .text(function(d) { return "Cluster " + d.name; })
                 .style("font-size", "9pt");
         }
 
@@ -218,16 +231,19 @@
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
+        $scope.fillLegend = fillLegend;
 
-        $scope.legendHeight = $scope.characteristics.length * 20;
+        $scope.fillLegend();
+
+        $scope.points = [];
+        $scope.firstCharacteristic = $scope.characteristicsList[0];
+        $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+
+        $scope.legendHeight = $scope.legend.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
-        $scope.points = [];
-        $scope.matters = [];
-        $scope.firstCharacteristic = $scope.characteristicsList[0];
-        $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
     }
 
     angular.module("CalculationResult", []).controller("CalculationResultCtrl", ["$scope", calculationResult]);
