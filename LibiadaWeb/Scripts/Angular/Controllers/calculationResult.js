@@ -11,10 +11,10 @@
 
             for (var i = 0; i < $scope.characteristics.length; i++) {
                 var characteristic = $scope.characteristics[i];
-                $scope.matters.push({ nmae: characteristic.MatterName });
+                $scope.matters.push({ name: characteristic.matterName });
                 $scope.points.push({
                     id: i,
-                    name: characteristic.MatterName,
+                    name: characteristic.matterName,
                     x: characteristic.characteristics[first],
                     y: characteristic.characteristics[second]
                 });
