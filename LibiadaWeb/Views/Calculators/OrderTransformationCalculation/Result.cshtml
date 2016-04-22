@@ -11,11 +11,15 @@
     <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
         <table class="table table-bordered table-hover" ng-cloak>
             <tbody>
-                <tr ng-repeat="t in transformationsList">
-                    <td ng-bind="t" />
-                </tr>
+            <tr ng-repeat="t in transformationsList">
+                <td ng-bind="t"/>
+            </tr>
             </tbody>
         </table>
+        <br />
+        <div class="monospace">
+            Transformations repeated {{iterationsCount}} times
+        </div>
         <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
             <thead>
             <tr>

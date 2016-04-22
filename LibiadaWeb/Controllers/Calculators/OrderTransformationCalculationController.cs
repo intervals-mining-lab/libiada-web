@@ -89,6 +89,9 @@
         /// <param name="transformationIds">
         /// The transformation ids.
         /// </param>
+        /// <param name="iterationsCount">
+        /// Number of transformations iterations.
+        /// </param>
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
@@ -109,7 +112,8 @@
         public ActionResult Index(
             long[] matterIds, 
             int[] transformationLinkIds, 
-            int[] transformationIds, 
+            int[] transformationIds,
+            int iterationsCount,
             int[] characteristicTypeLinkIds,
             int[] notationIds,
             int[] languageIds,
@@ -151,15 +155,18 @@
                         }
 
                         var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                        for (int j = 0; j < transformationIds.Length; j++)
+                        for (int l = 0; l < iterationsCount; l++)
                         {
-                            if (transformationIds[j] == 1)
+                            for (int j = 0; j < transformationIds.Length; j++)
                             {
-                                sequence = DissimilarChainFactory.Create(sequence);
-                            }
-                            else
-                            {
-                                sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[j]);
+                                if (transformationIds[j] == 1)
+                                {
+                                    sequence = DissimilarChainFactory.Create(sequence);
+                                }
+                                else
+                                {
+                                    sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link) transformationLinkIds[j]);
+                                }
                             }
                         }
 
@@ -203,7 +210,8 @@
                                      { "characteristics", mattersCharacteristics },
                                      { "characteristicNames", characteristicNames },
                                      { "characteristicsList", characteristicsList },
-                                     { "transformationsList", transformations }
+                                     { "transformationsList", transformations },
+                                     { "iterationsCount", iterationsCount }
                                  };
 
                 return new Dictionary<string, object>

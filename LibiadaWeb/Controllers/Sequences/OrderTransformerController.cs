@@ -18,7 +18,7 @@
     [Authorize(Roles = "Admin")]
     public class OrderTransformerController : AbstractResultController
     {
-       /// <summary>
+        /// <summary>
         /// The db.
         /// </summary>
         private readonly LibiadaWebEntities db;
@@ -71,26 +71,32 @@
         /// <param name="transformationIds">
         /// The transformation ids.
         /// </param>
+        /// <param name="iterationsCount">
+        /// Number of transformations iterations.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, int[] transformationLinkIds, int[] transformationIds)
+        public ActionResult Index(long matterId, int[] transformationLinkIds, int[] transformationIds, int iterationsCount)
         {
             return Action(() =>
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
                 var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                for (int i = 0; i < transformationIds.Length; i++)
+                for (int j = 0; j < iterationsCount; j++)
                 {
-                    if (transformationIds[i] == 1)
+                    for (int i = 0; i < transformationIds.Length; i++)
                     {
-                        sequence = DissimilarChainFactory.Create(sequence);
-                    }
-                    else
-                    {
-                        sequence = HighOrderFactory.Create(sequence, (Link)transformationLinkIds[i]);
+                        if (transformationIds[i] == 1)
+                        {
+                            sequence = DissimilarChainFactory.Create(sequence);
+                        }
+                        else
+                        {
+                            sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[i]);
+                        }
                     }
                 }
 
@@ -103,8 +109,9 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "chain", sequence },
-                    { "transformationsList", transformations }
+                    {"chain", sequence},
+                    {"transformationsList", transformations},
+                    {"iterationsCount", iterationsCount}
                 };
                 return result;
             });
