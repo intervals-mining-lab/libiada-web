@@ -80,6 +80,8 @@ input[type="checkbox"].input-validation-error {
   stroke: #000;
 }
 
-#chart {
+#chart, .monospace {
   font-family: monospace;
 }
+
+
