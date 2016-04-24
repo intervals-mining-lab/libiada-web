@@ -336,6 +336,7 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SubsequenceComparer.cs" />
+    <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Nature.cs" />
     <Compile Include="Models\OutputFormats.cs" />
     <Compile Include="Models\Repositories\Calculators\CharacteristicRepository.cs" />

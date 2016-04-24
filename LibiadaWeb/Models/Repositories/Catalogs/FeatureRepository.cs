@@ -82,7 +82,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
-        /// The get feature by id.
+        /// Gets feature by its id.
         /// </summary>
         /// <param name="featureId">
         /// The feature id.
@@ -93,6 +93,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public Feature GetFeatureById(int featureId)
         {
             return features.Single(f => f.Id == featureId);
+        }
+
+        /// <summary>
+        /// Gets feature name by id.
+        /// </summary>
+        /// <param name="featureId">
+        /// The feature id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string GetFeatureNameById(int featureId)
+        {
+            return GetFeatureById(featureId).Name;
         }
 
         /// <summary>

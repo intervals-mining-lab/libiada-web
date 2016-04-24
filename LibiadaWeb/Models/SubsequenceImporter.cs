@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models.Repositories.Sequences
+﻿namespace LibiadaWeb.Models
 {
     using System;
     using System.Collections.Generic;
@@ -8,11 +8,12 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
-    /// The subsequence repository.
+    /// The subsequence importer.
     /// </summary>
-    public class SubsequenceRepository : ISubsequenceRepository
+    public class SubsequenceImporter
     {
         /// <summary>
         /// The database context.
@@ -30,28 +31,75 @@
         private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
         /// <summary>
-        /// The common sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// The attribute repository.
         /// </summary>
         private readonly AttributeRepository attributeRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceRepository"/> class.
+        /// The sequence id.
+        /// </summary>
+        private readonly long sequenceId;
+
+        /// <summary>
+        /// The features.
+        /// </summary>
+        private readonly List<FeatureItem> features;
+
+        /// <summary>
+        /// The parent length.
+        /// </summary>
+        private readonly int parentLength;
+
+        /// <summary>
+        /// The source length.
+        /// </summary>
+        private readonly int sourceLength;
+
+        /// <summary>
+        /// The all non genes leaf locations.
+        /// </summary>
+        private readonly ILocation[] allNonGenesLeafLocations;
+
+        /// <summary>
+        /// The positions map.
+        /// </summary>
+        private readonly bool[] positionsMap;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
         /// </summary>
         /// <param name="db">
         /// The database context.
         /// </param>
-        public SubsequenceRepository(LibiadaWebEntities db)
+        /// <param name="features">
+        /// The features.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        public SubsequenceImporter(LibiadaWebEntities db, List<FeatureItem> features, long sequenceId)
         {
             this.db = db;
+            this.features = features;
+            this.sequenceId = sequenceId;
             featureRepository = new FeatureRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
-            commonSequenceRepository = new CommonSequenceRepository(db);
             attributeRepository = new AttributeRepository(db);
+
+            using (var commonSequenceRepository = new CommonSequenceRepository(db))
+            {
+                var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
+                parentLength = parentSequence.GetLength();
+            }
+            
+            sourceLength = features[0].Location.LocationEnd;
+            positionsMap = new bool[parentLength];
+            allNonGenesLeafLocations = features
+                                            .Where(f => f.Key != "gene")
+                                            .Select(f => f.Location.GetLeafLocations())
+                                            .Where(l => l.Count == 1)
+                                            .Select(l => l[0])
+                                            .ToArray();
         }
 
         /// <summary>
@@ -65,57 +113,34 @@
         /// <summary>
         /// Adds all subsequences of given sequence to database.
         /// </summary>
-        /// <param name="features">
-        /// The subsequences.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The source sequence id.
-        /// </param>
         /// <exception cref="Exception">
         /// Thrown if error occurs during importability check.
         /// </exception>
-        public void CreateSubsequences(List<FeatureItem> features, long sequenceId)
+        public void CreateSubsequences()
         {
             try
             {
-                CheckImportability(features, sequenceId);
+                CheckImportability();
             }
             catch (Exception e)
             {
                 throw new Exception("Error occured during importability check.", e);
             }
 
-            CreateFeatureSubsequences(features, sequenceId);
+            CreateFeatureSubsequences();
         }
 
         /// <summary>
         /// Checks importability of subsequences.
         /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
         /// <exception cref="Exception">
         /// Thrown if subsequences are not importable.
         /// Thrown if feature contains no leaf location or  
         /// if source length not equals to parent sequence length or 
         /// if feature length is less than 1.
         /// </exception>
-        private void CheckImportability(List<FeatureItem> features, long sequenceId)
+        private void CheckImportability()
         {
-            var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
-
-            var parentLength = parentSequence.GetLength();
-            var sourceLength = features[0].Location.LocationEnd;
-            var allNonGenesLeafLocations = features
-                                            .Where(f => f.Key != "gene")
-                                            .Select(f => f.Location.GetLeafLocations())
-                                            .Where(l => l.Count == 1)
-                                            .Select(l => l[0])
-                                            .ToArray();
-
             if (parentLength != sourceLength)
             {
                 throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength
@@ -208,24 +233,11 @@
         /// Create subsequences from features
         /// and noncoding subsequences from gaps.
         /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        private void CreateFeatureSubsequences(List<FeatureItem> features, long sequenceId)
+        private void CreateFeatureSubsequences()
         {
             var newSubsequences = new List<Subsequence>();
             var newPositions = new List<Position>();
             var newSequenceAttributes = new List<SequenceAttribute>();
-            var positionsMap = new bool[features[0].Location.LocationEnd];
-            var allNonGenesLeafLocations = features
-                                            .Where(f => f.Key != "gene")
-                                            .Select(f => f.Location.GetLeafLocations())
-                                            .Where(l => l.Count == 1)
-                                            .Select(l => l[0])
-                                            .ToArray();
 
             for (int i = 1; i < features.Count; i++)
             {
@@ -239,7 +251,7 @@
                     if (!(feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
                           feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene))))
                     {
-                        if (!CheckIfGeneNeedsImport(features, leafLocations, i, allNonGenesLeafLocations))
+                        if (!CheckIfGeneNeedsImport(leafLocations, i))
                         {
                             continue;
                         }
@@ -249,7 +261,6 @@
                     else
                     {
                         featureId = Aliases.Feature.PseudoGen;
-
                     }
                 }
                 else
@@ -284,7 +295,7 @@
 
                 newSubsequences.Add(subsequence);
 
-                AddPositionToMap(positionsMap, start, end);
+                AddPositionToMap(start, end);
 
                 for (int k = 1; k < leafLocations.Count; k++)
                 {
@@ -302,13 +313,13 @@
 
                     newPositions.Add(position);
 
-                    AddPositionToMap(positionsMap, leafStart, leafEnd);
+                    AddPositionToMap(leafStart, leafEnd);
                 }
 
                 newSequenceAttributes.AddRange(sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence));
             }
 
-            newSubsequences.AddRange(CreateNonCodingSubsequences(positionsMap, sequenceId));
+            newSubsequences.AddRange(CreateNonCodingSubsequences());
 
             db.Subsequence.AddRange(newSubsequences);
             db.Position.AddRange(newPositions);
@@ -320,32 +331,22 @@
         /// <summary>
         /// Checks if gene needs import.
         /// </summary>
-        /// <param name="features">
-        /// The features.
-        /// </param>
         /// <param name="leafLocations">
         /// The leaf locations.
         /// </param>
-        /// <param name="i">
-        /// The i.
-        /// </param>
-        /// <param name="allNonGenesLeafLocations">
-        /// The all non genes leaf locations.
+        /// <param name="index">
+        /// Index of feature to check.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool CheckIfGeneNeedsImport(
-            List<FeatureItem> features,
-            List<ILocation> leafLocations,
-            int i,
-            ILocation[] allNonGenesLeafLocations)
+        private bool CheckIfGeneNeedsImport(List<ILocation> leafLocations, int index)
         {
             var leafLocation = leafLocations[0];
 
-            if ((i + 1) < features.Count)
+            if ((index + 1) < features.Count)
             {
-                var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
+                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
 
                 // if there is join in child record parent record contains only
                 // first child start and last child end
@@ -358,31 +359,27 @@
             }
 
             // checking if there is any feature with identical position
-            if (
-                allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart && leafLocation.LocationEnd == l.LocationEnd && 
-                                                  leafLocation.StartData == l.StartData && leafLocation.EndData == l.EndData))
+            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart && 
+                                                  leafLocation.LocationEnd == l.LocationEnd && 
+                                                  leafLocation.StartData == l.StartData && 
+                                                  leafLocation.EndData == l.EndData))
             {
                 // don't need to import this gene
                 return false;
             }
+
             return true;
         }
 
         /// <summary>
         /// Creates non coding subsequences.
         /// </summary>
-        /// <param name="positionsMap">
-        /// The positions map.
-        /// </param>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        private List<Subsequence> CreateNonCodingSubsequences(bool[] positionsMap, long sequenceId)
+        private List<Subsequence> CreateNonCodingSubsequences()
         {
-            var positions = ExtractNonCodingSubsequencesPositions(positionsMap);
+            var positions = ExtractNonCodingSubsequencesPositions();
             var starts = positions[0];
             var lengths = positions[1];
             var result = new List<Subsequence>();
@@ -406,16 +403,13 @@
         /// <summary>
         /// The add position to map.
         /// </summary>
-        /// <param name="positionsMap">
-        /// The positions map.
-        /// </param>
         /// <param name="start">
         /// The start.
         /// </param>
         /// <param name="end">
         /// The end.
         /// </param>
-        private void AddPositionToMap(bool[] positionsMap, int start, int end)
+        private void AddPositionToMap(int start, int end)
         {
             for (int j = start; j <= end; j++)
             {
@@ -427,13 +421,10 @@
         /// Extracts non coding subsequences positions
         /// from filled positions map.
         /// </summary>
-        /// <param name="positionsMap">
-        /// The positions map.
-        /// </param>
         /// <returns>
         /// The <see cref="T:List{Int32}[]"/>.
         /// </returns>
-        private List<int>[] ExtractNonCodingSubsequencesPositions(bool[] positionsMap)
+        private List<int>[] ExtractNonCodingSubsequencesPositions()
         {
             var starts = new List<int>();
             var lengths = new List<int>();
@@ -481,6 +472,6 @@
         {
             return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData ||
                                                      leafLocation.LocationEnd.ToString() != leafLocation.EndData);
-        }
+        } 
     }
 }
