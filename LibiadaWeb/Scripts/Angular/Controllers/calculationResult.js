@@ -8,17 +8,18 @@
             $scope.legend = [];
             if ($scope.clusters) {
                 for (var j = 0; j < $scope.clusters.length; j++) {
-                    $scope.legend.push({ name: $scope.clusters[j] });
+                    $scope.legend.push({ name: $scope.clusters[j], visible: true });
                 }
             } else {
                 for (var k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ name: $scope.characteristics[k].matterName });
+                    $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
                 }
             }
         }
 
         // initializes data for chart
         function fillPoints() {
+            $scope.points = [];
             var first = +$scope.firstCharacteristic.Value;
             var second = +$scope.secondCharacteristic.Value;
             
@@ -205,7 +206,21 @@
                 .enter()
                 .append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
+                .on("click", function (d) {
+                    d.visible = !d.visible;
+                    var legendEntry = d3.select(this);
+                    legendEntry.select("text")
+                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                    legendEntry.select("rect")
+                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+
+                    svg.selectAll(".dot")
+                        .filter(function (dot) { return dot.cluster === d.name; })
+                        .attr("visibility", function (dot) {
+                            return d.visible ? "visible" : "hidden";
+                        });
+            });;
 
             // draw legend colored rectangles
             legend.append("rect")
@@ -235,7 +250,6 @@
 
         $scope.fillLegend();
 
-        $scope.points = [];
         $scope.firstCharacteristic = $scope.characteristicsList[0];
         $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
 
