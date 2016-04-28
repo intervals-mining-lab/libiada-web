@@ -38,7 +38,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base("Custom sequence calculation")
+        public CustomSequenceCalculationController()
+            : base("Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -110,26 +111,20 @@
         {
             return Action(() =>
                 {
-                    string[] sequences;
-                    string[] names;
+                    int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
+                    var sequences = new string[sequencesCount];
+                    var names = new string[sequencesCount];
 
-                    if (localFile)
+                    for (int i = 0; i < sequencesCount; i++)
                     {
-                        sequences = new string[Request.Files.Count];
-                        names = new string[customSequences.Length];
-                        for (int i = 0; i < Request.Files.Count; i++)
+                        if (localFile)
                         {
                             var sequenceStream = FileHelper.GetFileStream(file[i]);
                             var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                             sequences[i] = fastaSequence.ConvertToString();
                             names[i] = fastaSequence.ID;
                         }
-                    }
-                    else
-                    {
-                        sequences = new string[customSequences.Length];
-                        names = new string[customSequences.Length];
-                        for (int i = 0; i < customSequences.Length; i++)
+                        else
                         {
                             sequences[i] = customSequences[i];
                             names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
