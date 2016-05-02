@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Characteristics of custom sequence";
+}
+
+<h2>@ViewBag.Title</h2>
+@if (ViewBag.Error == null)
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Sequence \ characteristic name
+                </th>
+                @foreach (var characteristicName in ViewBag.characteristicNames)
+                {
+                    <th>
+                        @Html.Raw(characteristicName.Replace("  ", "<br/>"))
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < ViewBag.characteristics.GetLength(0); i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.names[i]
+                    </td>
+                    @for (int j = 0; j < ViewBag.characteristics.GetLength(1); j++)
+                    {
+                        <td>
+                            @ViewBag.characteristics[i, j]
+                    </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

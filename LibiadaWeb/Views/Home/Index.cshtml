@@ -18,11 +18,11 @@
             @if (UserHelper.IsAdmin())
             {
                 @Html.ActionLink("Sequences", "Index", "CommonSequences")
-                <br/>
+                <br />
                 @Html.ActionLink("Batch sequences import", "Index", "BatchsequenceImport")
                 <br />
                 @Html.ActionLink("Genes import", "Index", "GenesImport")
-                <br/>
+                <br />
                 @Html.ActionLink("Batch genes import", "Index", "BatchGenesImport")
                 <br />
                 @Html.ActionLink("Subsequences attributes check", "Index", "AttributesCheck")
@@ -30,6 +30,8 @@
                 @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
                 <br />
                 @Html.ActionLink("Order transformation", "Index", "OrderTransformer")
+                <br />
+                @Html.ActionLink("Custom sequences order transformation", "Index", "CustomSequenceOrderTransformer")
             }
         </div>
         <div class="col-md-4">
@@ -59,11 +61,13 @@
                 @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
                 <br />
                 @Html.ActionLink("Subsequences comparer", "Index", "SubsequenceComparer")
-                <br/>
+                <br />
                 @Html.ActionLink("Order transformation/derivative characteristics calculation", "Index", "OrderTransformationCalculation")
                 <br />
+                @Html.ActionLink("Custom sequences order transformation/derivative characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
+                <br />
                 @Html.ActionLink("Order comparison", "Index", "BuildingsSimilarity")
-                <br/>
+                <br />
                 @Html.ActionLink("Charts for table data", "Index", "Charts")
             }
         </div>

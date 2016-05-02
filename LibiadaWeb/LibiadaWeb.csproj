@@ -248,6 +248,7 @@
     <Compile Include="Controllers\Calculators\AccordanceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\BuildingsSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\ChartsController.cs" />
+    <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Controllers\Sequences\BatchGenesImportController.cs" />
     <Compile Include="Controllers\Sequences\BatchSequenceImportController.cs" />
     <Compile Include="Controllers\Sequences\CommonSequencesController.cs" />
+    <Compile Include="Controllers\Sequences\CustomSequenceOrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
@@ -702,6 +704,11 @@
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
     <Content Include="Views\Calculators\SubsequenceComparer\Index.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
+    <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
+    <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Index.cshtml" />
+    <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Result.cshtml" />
+    <Content Include="Views\Partial\_CustomSequences.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

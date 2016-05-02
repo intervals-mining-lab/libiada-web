@@ -1,0 +1,38 @@
+﻿<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="checkbox" name="localFile" ng-model="localFile" value="true" />
+            <input type="hidden" name="localFile" value="false" />
+            Load sequence from fasta file(s)
+        </label>
+    </div>
+</div>
+<div class="form-group" ng-hide="localFile">
+    <div ng-repeat="customSequence in customSequences">
+        <div class="form-group">
+            <label class="control-label col-md-2" for="customSequence">Sequence:</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">Delete sequence</button>
+            </div>
+        </div>
+        <br />
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">Add sequence</button>
+        </div>
+    </div>
+</div>
+<div class="form-group" ng-show="localFile">
+    <label class="control-label col-md-2" for="file">Sequence file(s):</label>
+    <div class="col-md-10">
+        <input type="file" name="file" id="file" multiple />
+        @Html.ValidationMessage("file", "", new { @class = "text-danger" })
+    </div>
+</div>
+<hr />

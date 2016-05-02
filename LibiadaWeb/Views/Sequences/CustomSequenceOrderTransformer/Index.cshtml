@@ -2,19 +2,19 @@
     ViewBag.Title = "Transformation of order of sequences";
 }
 
-@Html.Partial("_AngularControllerInitializer", "OrderTransformerController")
+@Html.Partial("_AngularControllerInitializer", "CustomCalculationController")
 
 <h2>@ViewBag.Title</h2>
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-controller="OrderTransformerCtrl" ng-app="OrderTransformer">
+    <div class="form-horizontal" ng-controller="CustomCalculationCtrl" ng-app="CustomCalculation">
         <h4>Sequences and parameters</h4>
+        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.Partial("_CustomSequences")
         @Html.Partial("_OrderTransformations")
-        @Html.Partial("_Characteristics")
         <hr />
         <br />
         <div class="form-group">
