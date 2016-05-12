@@ -27,6 +27,7 @@
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
                         y: subsequenceData.CharacteristicsValues[0],
+                        gcRatio: subsequenceData.CharacteristicsValues[subsequenceData.CharacteristicsValues.length - 1],
                         featureVisible: true,
                         matterVisible: true
                     });
@@ -81,6 +82,7 @@
                                       d.positions.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
             tooltipContent.push("Length: " + d.lengths.join(", "));
+            tooltipContent.push("GC ratio: " + d.gcRatio);
             tooltipContent.push("(" + d.x + ", " + d.y + ")");
 
             return tooltipContent.join("</br>");
@@ -107,7 +109,7 @@
             if ($scope.highlight) {
                 tooltip.similarDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision)) {
+                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision) && Math.abs(dot.gcRatio - d.gcRatio) <= 10) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {

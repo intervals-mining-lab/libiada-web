@@ -161,26 +161,32 @@
                     var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
                     var subsequencesData = new SubsequenceData[dbSubsequences.Length];
                     var subsequencesDbAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+                    const int gcRatioTypeLinkId = 109;
                     var subsequencesDbCharacteristics = db.Characteristic
-                                                         .Where(c => c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId && subsequenceIds.Contains(c.SequenceId))
+                                                         .Where(c => (c.CharacteristicTypeLinkId == secondCharacteristicTypeLinkId || c.CharacteristicTypeLinkId == gcRatioTypeLinkId) 
+                                                                        && subsequenceIds.Contains(c.SequenceId))
                                                          .ToArray()
                                                          .GroupBy(c => c.SequenceId)
                                                          .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
                     var libiadaSubsequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceId);
+                    
                     string secondClassName = characteristicTypeLinkRepository.GetCharacteristicType(secondCharacteristicTypeLinkId).ClassName;
                     IFullCalculator secondCalculator = CalculatorsFactory.CreateFullCalculator(secondClassName);
                     var secondLink = characteristicTypeLinkRepository.GetLibiadaLink(secondCharacteristicTypeLinkId);
 
+                    string gcRatioCalculatorName = characteristicTypeLinkRepository.GetCharacteristicType(gcRatioTypeLinkId).ClassName;
+                    IFullCalculator gcRatioCalculator = CalculatorsFactory.CreateFullCalculator(gcRatioCalculatorName);
+
                     for (int j = 0; j < dbSubsequences.Length; j++)
                     {
-                        double subsequenceCharacteristicValue;
                         Dictionary<int, double> subsequenceDbCharacteristics;
                         if (!subsequencesDbCharacteristics.TryGetValue(dbSubsequences[j].Id, out subsequenceDbCharacteristics))
                         {
                             subsequenceDbCharacteristics = new Dictionary<int, double>();
                         }
 
+                        double subsequenceCharacteristicValue;
                         if (!subsequenceDbCharacteristics.TryGetValue(secondCharacteristicTypeLinkId, out subsequenceCharacteristicValue))
                         {
                             subsequenceCharacteristicValue = secondCalculator.Calculate(libiadaSubsequences[j], secondLink);
@@ -194,13 +200,27 @@
                             newCharacteristics.Add(currentCharacteristic);
                         }
 
+                        double gcRatioValue;
+                        if (!subsequenceDbCharacteristics.TryGetValue(gcRatioTypeLinkId, out gcRatioValue))
+                        {
+                            gcRatioValue = gcRatioCalculator.Calculate(libiadaSubsequences[j], Link.NotApplied);
+                            var currentCharacteristic = new Characteristic
+                            {
+                                SequenceId = dbSubsequences[j].Id,
+                                CharacteristicTypeLinkId = gcRatioTypeLinkId,
+                                Value = gcRatioValue
+                            };
+
+                            newCharacteristics.Add(currentCharacteristic);
+                        }
+
                         string[] attributes;
                         if (!subsequencesDbAttributes.TryGetValue(dbSubsequences[j].Id, out attributes))
                         {
                             attributes = new string[0];
                         }
 
-                        subsequencesData[j] = new SubsequenceData(dbSubsequences[j], new[] { subsequenceCharacteristicValue }, attributes);
+                        subsequencesData[j] = new SubsequenceData(dbSubsequences[j], new[] { subsequenceCharacteristicValue, gcRatioValue }, attributes);
                     }
 
                     var parent = parentSequences[parentSequenceId];
