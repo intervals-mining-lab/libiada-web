@@ -50,10 +50,18 @@
                 </label>
             </div>
         </div>
-        <div class="form-group" ng-show="highlight">
-            <label class="control-label col-md-2" for="precision">Precision of characteristics comparison:</label>
-            <div class="col-md-10">
-                <input class="form-control" ng-model="precision" type="number" value="0" step="any" min="0" id="precision" />
+        <div ng-show="highlight">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="precision">Precision of characteristics comparison:</label>
+                <div class="col-md-10">
+                    <input class="form-control" ng-model="precision" type="number" value="0" step="any" min="0" id="precision" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="gcPrecision">Precision of GC ratio comparison:</label>
+                <div class="col-md-10">
+                    <input class="form-control" ng-model="gcPrecision" type="number" value="10" step="any" min="0" max="100" id="gcPrecision" />
+                </div>
             </div>
         </div>
         <div id="chart">

@@ -109,7 +109,9 @@
             if ($scope.highlight) {
                 tooltip.similarDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.matterId !== d.matterId && Math.abs(dot.y - d.y) <= ($scope.precision) && Math.abs(dot.gcRatio - d.gcRatio) <= 10) {
+                        if (dot.matterId !== d.matterId
+                            && Math.abs(dot.y - d.y) <= $scope.precision
+                            && Math.abs(dot.gcRatio - d.gcRatio) <= $scope.gcPrecision) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
@@ -334,6 +336,7 @@
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.precision = 0;
+        $scope.gcPrecision = 10;
         $scope.points = [];
         $scope.matters = [];
         $scope.fillPoints();
