@@ -88,13 +88,14 @@
             return tooltipContent.join("</br>");
         }
 
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        function showTooltip(d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
 
             var tooltipHtml = [];
 
+            tooltip.selectedPoint = d;
             tooltip.selectedDots = svg.selectAll(".dot")
                     .filter(function (dot) {
                         if (dot.matterId === d.matterId && dot.y === d.y) {
@@ -263,7 +264,7 @@
                 .attr("visibility", function (dot) {
                     return $scope.dotVisible(dot) ? "visible" : "hidden";
                 })
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+                .on("click", function (d) { return $scope.showTooltip(d, tooltip, svg); });
 
             $scope.mattersDots = [];
             for (var i = 0; i < $scope.matters; i++) {
@@ -318,6 +319,37 @@
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
                 .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
+
+            d3.select("body")
+                .on("keydown", function () {
+                    var nextPoint;
+                    var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
+                    switch (d3.event.keyCode) {
+                    case 40:
+                        for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
+                            if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
+                                nextPoint = $scope.points[i];
+                                break;
+                            }
+                        }
+                        if (nextPoint) {
+                            return $scope.showTooltip(nextPoint, tooltip, svg);
+                        }
+                        break;
+                    case 38:
+                        for (var j = indexOfPoint - 1; j >= 0; j++) {
+                            if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
+                                nextPoint = $scope.points[j];
+                                break;
+                            }
+                        }
+
+                        if (nextPoint) {
+                            return $scope.showTooltip(nextPoint, tooltip, svg);
+                        }
+                        break;
+                    }
+                });
         }
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
