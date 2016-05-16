@@ -321,37 +321,46 @@
                 .style("font-size", "9pt");
 
             d3.select("body")
-                .on("keydown", function() {
-                    var nextPoint;
-                    var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
-                    switch (d3.event.keyCode) {
-                    case 40:
-                        $scope.clearTooltip(tooltip);
-                        for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
-                            if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
-                                nextPoint = $scope.points[i];
-                                break;
+                .on("keydown", function () {
+                    if (tooltip.selectedPoint) {
+                        var nextPoint;
+                        var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
+                        switch (d3.event.keyCode) {
+                        case 40:
+                            $scope.clearTooltip(tooltip);
+                            for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
+                                if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
+                                    nextPoint = $scope.points[i];
+                                    break;
+                                }
                             }
-                        }
-                        if (nextPoint) {
-                            return $scope.showTooltip(nextPoint, tooltip, svg);
-                        }
-                        break;
-                    case 38:
-                        $scope.clearTooltip(tooltip);
-                        for (var j = indexOfPoint - 1; j >= 0; j++) {
-                            if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
-                                nextPoint = $scope.points[j];
-                                break;
+                            if (nextPoint) {
+                                return $scope.showTooltip(nextPoint, tooltip, svg);
                             }
-                        }
+                            break;
+                        case 38:
+                            $scope.clearTooltip(tooltip);
+                            for (var j = indexOfPoint - 1; j >= 0; j++) {
+                                if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
+                                    nextPoint = $scope.points[j];
+                                    break;
+                                }
+                            }
 
-                        if (nextPoint) {
-                            return $scope.showTooltip(nextPoint, tooltip, svg);
+                            if (nextPoint) {
+                                return $scope.showTooltip(nextPoint, tooltip, svg);
+                            }
+                            break;
                         }
-                        break;
                     }
                 });
+
+            window.addEventListener("keydown", function (e) {
+                // space and arrow keys
+                if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                    e.preventDefault();
+                }
+            }, false);
         }
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
