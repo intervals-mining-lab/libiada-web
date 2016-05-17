@@ -132,25 +132,25 @@
                 .style("left", (d3.event.pageX + 18) + "px")
                 .style("top", (d3.event.pageY + 18) + "px");
 
-            tooltip.hideTooltip = false;
+            //tooltip.hideTooltip = false;
         }
 
         function clearTooltip(tooltip) {
             if (tooltip) {
-                if (tooltip.hideTooltip) {
-                    tooltip.html("").style("opacity", 0);
+                tooltip.html("").style("opacity", 0);
 
-                    if (tooltip.selectedDots) {
-                        tooltip.selectedDots.attr("rx",  $scope.dotRadius);
-                    }
-
-                    if (tooltip.similarDots) {
-                        tooltip.similarDots.attr("rx", $scope.dotRadius);
-                    }
+                if (tooltip.selectedDots) {
+                    tooltip.selectedDots.attr("rx", $scope.dotRadius);
                 }
 
-                tooltip.hideTooltip = true;
+                if (tooltip.similarDots) {
+                    tooltip.similarDots.attr("rx", $scope.dotRadius);
+                }
             }
+        }
+
+        function isKeyUpOrDown(keyCode) {
+            return keyCode === 40 || keyCode === 38;
         }
 
         function drawGenesMap() {
@@ -159,7 +159,7 @@
             d3.select("svg").remove();
 
             // all organisms are visible after redrawing
-            $scope.points.forEach(function(point) {
+            $scope.points.forEach(function (point) {
                 point.matterVisible = true;
                 for (var i = 0; i < $scope.features.length; i++) {
                     if ($scope.features[i].Value === point.featureId) {
@@ -175,21 +175,21 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xValue = function(d) { return $scope.numericXAxis ? d.numericX : d.x; }; // data -> value
+            var xValue = function (d) { return $scope.numericXAxis ? d.numericX : d.x; }; // data -> value
             var xScale = d3.scale.linear().range([0, width]); // value -> display
-            var xMap = function(d) { return xScale(xValue(d)); }; // data -> display
+            var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
             xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
 
             // setup y
-            var yValue = function(d) { return d.y; }; // data -> value
+            var yValue = function (d) { return d.y; }; // data -> value
             var yScale = d3.scale.linear().range([height, 0]); // value -> display
-            var yMap = function(d) { return yScale(yValue(d)); }; // data -> display
+            var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
             var yAxis = d3.svg.axis().scale(yScale).orient("left");
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
             // setup fill color
-            var cValue = function(d) { return d.matterId; };
+            var cValue = function (d) { return d.matterId; };
             var color = d3.scale.category20();
 
             // add the graph canvas to the body of the webpage
@@ -204,11 +204,6 @@
                 .attr("class", "tooltip")
                 .style("opacity", 0);
 
-            // preventing tooltip hiding if dot clicked
-            tooltip.on("click", function() { tooltip.hideTooltip = false; });
-
-            // hiding tooltip
-            d3.select("#chart").on("click", function() { $scope.clearTooltip(tooltip); });
 
             // calculating margins for dots
             var xMin = d3.min($scope.points, xValue);
@@ -259,44 +254,56 @@
                 .attr("cx", xMap)
                 .attr("cy", yMap)
                 .style("fill-opacity", 0.6)
-                .style("fill", function(d) { return color(cValue(d)); })
-                .style("stroke", function(d) { return color(cValue(d)); })
-                .attr("visibility", function(dot) {
+                .style("fill", function (d) { return color(cValue(d)); })
+                .style("stroke", function (d) { return color(cValue(d)); })
+                .attr("visibility", function (dot) {
                     return $scope.dotVisible(dot) ? "visible" : "hidden";
-                })
-                .on("click", function(d) { return $scope.showTooltip(d, tooltip, svg); });
+                });
 
-            $scope.mattersDots = [];
-            for (var i = 0; i < $scope.matters; i++) {
-                var matterId = $scope.matters[i].id;
-                $scope.mattersDots[matterId] = d3.selectAll(".dot")
-                    .filter(function(dot) { return dot.matterId === matterId; });
-            }
+            d3.select("body").on("click", function () {
+                var clickedDots = svg.selectAll(".dot").filter(function () {
+                    return this === d3.event.target;
+                });
 
-            $scope.featuresDots = [];
-            for (var j = 0; j < $scope.features; j++) {
-                var featureId = $scope.features[j].Value;
-                $scope.mattersDots[featureId] = d3.selectAll(".dot")
-                    .filter(function(dot) { return dot.featureId === featureId; });
-            }
+                if (clickedDots.empty()) {
+                    $scope.clearTooltip(tooltip);
+                } else {
+                    var points = clickedDots.data();
+                    $scope.showTooltip(points[0], tooltip, svg);
+                }
+            });
+
+            //$scope.mattersDots = [];
+            //for (var i = 0; i < $scope.matters; i++) {
+            //    var matterId = $scope.matters[i].id;
+            //    $scope.mattersDots[matterId] = d3.selectAll(".dot")
+            //        .filter(function (dot) { return dot.matterId === matterId; });
+            //}
+
+            //$scope.featuresDots = [];
+            //for (var j = 0; j < $scope.features; j++) {
+            //    var featureId = $scope.features[j].Value;
+            //    $scope.mattersDots[featureId] = d3.selectAll(".dot")
+            //        .filter(function (dot) { return dot.featureId === featureId; });
+            //}
 
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.matters)
                 .enter().append("g")
                 .attr("class", "legend")
-                .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; })
-                .on("click", function(d) {
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
+                .on("click", function (d) {
                     d.visible = !d.visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function() { return d.visible ? 1 : 0.5; });
+                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
                     legendEntry.select("rect")
-                        .style("fill-opacity", function() { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
 
                     svg.selectAll(".dot")
-                        .filter(function(dot) { return dot.matterId === d.id; })
-                        .attr("visibility", function(dot) {
+                        .filter(function (dot) { return dot.matterId === d.id; })
+                        .attr("visibility", function (dot) {
                             dot.matterVisible = d.visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";
                         });
@@ -306,8 +313,8 @@
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function(d) { return color(d.id); })
-                .style("stroke", function(d) { return color(d.id); })
+                .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -317,47 +324,48 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function(d) { return d.name; })
+                .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
 
             d3.select("body")
                 .on("keydown", function () {
                     if (tooltip.selectedPoint) {
-                        var nextPoint;
-                        var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
-                        switch (d3.event.keyCode) {
-                        case 40:
+                        var keyCode = d3.event.keyCode;
+                        if (isKeyUpOrDown(keyCode)) {
+                            var nextPoint;
+                            var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
                             $scope.clearTooltip(tooltip);
-                            for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
-                                if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
-                                    nextPoint = $scope.points[i];
+                            
+                            switch (keyCode) {
+                                case 40:
+                                    for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
+                                        if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
+                                            nextPoint = $scope.points[i];
+                                            break;
+                                        }
+                                    }
                                     break;
-                                }
-                            }
-                            if (nextPoint) {
-                                return $scope.showTooltip(nextPoint, tooltip, svg);
-                            }
-                            break;
-                        case 38:
-                            $scope.clearTooltip(tooltip);
-                            for (var j = indexOfPoint - 1; j >= 0; j++) {
-                                if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
-                                    nextPoint = $scope.points[j];
+                                case 38:
+                                    for (var j = indexOfPoint - 1; j >= 0; j--) {
+                                        if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
+                                            nextPoint = $scope.points[j];
+                                            break;
+                                        }
+                                    }
                                     break;
-                                }
                             }
 
                             if (nextPoint) {
                                 return $scope.showTooltip(nextPoint, tooltip, svg);
                             }
-                            break;
+
                         }
                     }
                 });
 
             window.addEventListener("keydown", function (e) {
                 // space and arrow keys
-                if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                if (isKeyUpOrDown(e.keyCode)) {
                     e.preventDefault();
                 }
             }, false);
@@ -372,6 +380,7 @@
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
+        $scope.isKeyUpOrDown = isKeyUpOrDown;
 
         $scope.legendHeight = $scope.result.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
