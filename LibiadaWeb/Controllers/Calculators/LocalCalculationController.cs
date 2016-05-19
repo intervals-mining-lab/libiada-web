@@ -43,7 +43,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController() : base("Local calculation")
+        public LocalCalculationController()
+            : base("Local calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -72,13 +73,13 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="languageIds">
+        /// <param name="languageId">
         /// The language id.
         /// </param>
-        /// <param name="translatorIds">
-        /// The translators ids.
+        /// <param name="translatorId">
+        /// The translators id.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notationId">
         /// The notation id.
         /// </param>
         /// <param name="length">
@@ -107,9 +108,9 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int?[] languageIds,
-            int?[] translatorIds,
-            int[] notationIds,
+            int? languageId,
+            int? translatorId,
+            int notationId,
             int length,
             int step,
             bool delta,
@@ -120,7 +121,6 @@
             return Action(() =>
             {
                 var matterNames = new List<string>();
-                var notationNames = new List<string>();
                 var characteristicNames = new List<string>();
                 var partNames = new List<List<List<string>>>();
                 var starts = new List<List<List<int>>>();
@@ -134,29 +134,23 @@
                     matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                     chains.Add(new List<Chain>());
 
-                    foreach (var notationId in notationIds)
+                    long sequenceId;
+                    switch (nature)
                     {
-                        long sequenceId;
-
-                        switch (nature)
-                        {
-                            case Nature.Literature:
-                                var languageId = languageIds[k];
-                                var translatorId = translatorIds[k];
-                                sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                               && l.NotationId == notationId
-                                                                               && l.LanguageId == languageId
-                                                                               && l.TranslatorId == translatorId).Id;
-                                break;
-                            default:
-                                var id = notationId;
-                                sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
-                                                                           && c.NotationId == id).Id;
-                                break;
-                        }
-
-                        chains[k].Add(commonSequenceRepository.ToLibiadaChain(sequenceId));
+                        case Nature.Literature:
+                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                        && l.NotationId == notationId
+                                                                        && l.LanguageId == languageId
+                                                                        && l.TranslatorId == translatorId).Id;
+                            break;
+                        default:
+                            var id = notationId;
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
+                                                                    && c.NotationId == id).Id;
+                            break;
                     }
+
+                    chains[k].Add(commonSequenceRepository.ToLibiadaChain(sequenceId));
                 }
 
                 List<List<List<double>>> characteristics = CalculateCharacteristics(chains, characteristicTypeLinkIds, length, step, growingWindow);
@@ -217,16 +211,13 @@
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name);
                 }
 
-                foreach (var notationId in notationIds)
-                {
-                    notationNames.Add(db.Notation.Single(n => n.Id == notationId).Name);
-                }
+                string notationName = db.Notation.Single(n => n.Id == notationId).Name;
 
                 return new Dictionary<string, object>
                 {
                     { "characteristics", characteristics },
                     { "matterNames", matterNames },
-                    { "notationNames", notationNames },
+                    { "notationName", notationName },
                     { "starts", starts },
                     { "partNames", partNames },
                     { "lengthes", lengthes },
