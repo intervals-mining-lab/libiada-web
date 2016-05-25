@@ -120,19 +120,21 @@
         {
             return Action(() =>
             {
-                var matterNames = new List<string>();
-                var characteristicNames = new List<string>();
-                var partNames = new List<List<List<string>>>();
-                var starts = new List<List<List<int>>>();
-                var lengthes = new List<List<List<int>>>();
-                var chains = new List<List<Chain>>();
+                var matterNames = new string[matterIds.Length];
+                var characteristicNames = new string[characteristicTypeLinkIds.Length];
+                var partNames = new List<string>[matterIds.Length];
+                var starts = new List<int>[matterIds.Length];
+                var lengthes = new List<int>[matterIds.Length];
+                var chains = new Chain[matterIds.Length];
+                var characteristics = new List<double>[matterIds.Length][];
+                var calculators = new List<IFullCalculator>();
+                var links = new List<Link>();
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
                     Nature nature = db.Matter.Single(m => m.Id == matterId).Nature;
-                    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
-                    chains.Add(new List<Chain>());
+                    matterNames[k] = db.Matter.Single(m => m.Id == matterId).Name;
 
                     long sequenceId;
                     switch (nature)
@@ -150,65 +152,75 @@
                             break;
                     }
 
-                    chains[k].Add(commonSequenceRepository.ToLibiadaChain(sequenceId));
+                    chains[k] = commonSequenceRepository.ToLibiadaChain(sequenceId);
                 }
 
-                List<List<List<double>>> characteristics = CalculateCharacteristics(chains, characteristicTypeLinkIds, length, step, growingWindow);
-
-                for (int i = 0; i < chains.Count; i++)
+                foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
                 {
-                    partNames.Add(new List<List<string>>());
-                    starts.Add(new List<List<int>>());
-                    lengthes.Add(new List<List<int>>());
+                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                    calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
+                    links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
+                }
 
-                    for (int j = 0; j < chains[i].Count; j++)
+                
+                for (int i = 0; i < chains.Length; i++)
+                {
+                    CutRule cutRule = growingWindow
+                            ? (CutRule)new CutRuleWithFixedStart(chains[i].GetLength(), step)
+                            : new SimpleCutRule(chains[i].GetLength(), step, length);
+
+                    CutRuleIterator iter = cutRule.GetIterator();
+
+                    List<Chain> fragments = new List<Chain>();
+                    partNames[i] = new List<string>();
+                    starts[i] = new List<int>();
+                    lengthes[i] = new List<int>();
+                    characteristics[i] = new List<double>[characteristicTypeLinkIds.Length];
+
+                    while (iter.Next())
                     {
-                        partNames[i].Add(new List<string>());
-                        starts[i].Add(new List<int>());
-                        lengthes[i].Add(new List<int>());
+                        var fragment = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
 
-                        var chain = chains[i][j];
-
-                        CutRule cutRule = growingWindow
-                        ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
-                        : new SimpleCutRule(chain.GetLength(), step, length);
-
-                        CutRuleIterator iter = cutRule.GetIterator();
-
-                        while (iter.Next())
+                        for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
                         {
-                            var tempChain = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
-
-                            for (int m = 0; iter.GetStartPosition() + m < iter.GetEndPosition(); m++)
-                            {
-                                tempChain.Set(chain[iter.GetStartPosition() + m], m);
-                            }
-
-                            partNames[i][j].Add(tempChain.ToString());
-                            starts[i][j].Add(iter.GetStartPosition());
-                            lengthes[i][j].Add(tempChain.GetLength());
+                            fragment.Set(chains[i][iter.GetStartPosition() + k], k);
                         }
 
-                        if (delta)
-                        {
-                            CalculateDelta(characteristics[i]);
-                        }
+                        fragments.Add(fragment);
+                        partNames[i].Add(fragment.ToString());
+                        starts[i].Add(iter.GetStartPosition());
+                        lengthes[i].Add(fragment.GetLength());
+                    }
 
-                        if (fourier)
+                    
+                    for (int j = 0; j < calculators.Count; j++)
+                    {
+                        characteristics[i][j] = new List<double>();
+                        for (int k = 0; k < fragments.Count; k++)
                         {
-                            FastFourierTransform.FourierTransform(characteristics[i]);
+                            characteristics[i][j].Add(calculators[j].Calculate(fragments[k], links[j]));
                         }
+                    }
 
-                        if (autocorrelation)
-                        {
-                            AutoCorrelation.CalculateAutocorrelation(characteristics[i]);
-                        }
+                    if (delta)
+                    {
+                        CalculateDelta(characteristics[i]);
+                    }
+
+                    if (fourier)
+                    {
+                        FastFourierTransform.FourierTransform(characteristics[i]);
+                    }
+
+                    if (autocorrelation)
+                    {
+                        characteristics[i] = AutoCorrelation.CalculateAutocorrelation(characteristics[i]);
                     }
                 }
 
                 for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name);
+                    characteristicNames[l] = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name;
                 }
 
                 string notationName = db.Notation.Single(n => n.Id == notationId).Name;
@@ -233,90 +245,19 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        private static void CalculateDelta(List<List<double>> characteristics)
+        private static void CalculateDelta(List<double>[] characteristics)
         {
             // cycle through characteristics 
-            for (int i = 0; i < characteristics.Count; i++)
+            for (int i = 0; i < characteristics.Length; i++)
             {
                 // cycle through fragments
                 for (int j = characteristics[i].Count - 1; j > 0; j--)
                 {
-                    characteristics[i][j] -= characteristics[i - 1][j];
+                    characteristics[i][j] -= characteristics[i ][j - 1];
                 }
 
                 characteristics[i].RemoveAt(0);
             }
-        }
-
-        /// <summary>
-        /// The calculate characteristics.
-        /// </summary>
-        /// <param name="chains">
-        /// The chains.
-        /// </param>
-        /// <param name="characteristicTypeLinkIds">
-        /// The characteristic type link ids.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <param name="step">
-        /// The step.
-        /// </param>
-        /// <param name="growingWindow">
-        /// The growing window.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:List{List{List{Double}}}"/>.
-        /// </returns>
-        private List<List<List<double>>> CalculateCharacteristics(
-            List<List<Chain>> chains,
-            int[] characteristicTypeLinkIds,
-            int length,
-            int step,
-            bool growingWindow)
-        {
-            var calculators = new List<IFullCalculator>();
-            var links = new List<Link>();
-
-            foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
-            {
-                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
-                links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
-            }
-
-            var characteristics = new List<List<List<double>>>();
-            for (int i = 0; i < chains.Count; i++)
-            {
-                characteristics.Add(new List<List<double>>());
-                for (int j = 0; j < chains[i].Count; j++)
-                {
-                    characteristics[i].Add(new List<double>());
-                    Chain chain = chains[i][j];
-
-                    CutRule cutRule = growingWindow
-                        ? (CutRule)new CutRuleWithFixedStart(chain.GetLength(), step)
-                        : new SimpleCutRule(chain.GetLength(), step, length);
-
-                    CutRuleIterator iter = cutRule.GetIterator();
-
-                    while (iter.Next())
-                    {
-                        var tempChain = new Chain();
-                        tempChain.ClearAndSetNewLength(iter.GetEndPosition() - iter.GetStartPosition());
-
-                        for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
-                        {
-                            tempChain.Set(chain[iter.GetStartPosition() + k], k);
-                        }
-
-                        characteristics[i][j].Add(calculators[j].Calculate(tempChain, links[j]));
-                    }
-                }
-            }
-
-            return characteristics;
         }
     }
 }

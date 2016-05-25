@@ -15,26 +15,17 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public static void CalculateAutocorrelation(List<List<double>> characteristics)
+        public static List<double>[] CalculateAutocorrelation(List<double>[] characteristics)
         {
-            for (int i = 0; i < characteristics.Count; i++)
+            var result = new List<double>[characteristics.Length];
+
+            for (int i = 0; i < characteristics.Length; i++)
             {
-                var temp = new double[characteristics.Count];
-
-                // cycle through all sequence fragments
-                for (int j = 0; j < characteristics[i].Count; j++)
-                {
-                    temp[j] = characteristics[i][j];
-                }
-
-                double[] res = Execute(temp);
-                for (int j = 0; j < res.Length; j++)
-                {
-                    characteristics[i][j] = res[j];
-                }
-
-                characteristics.RemoveRange(res.Length, characteristics.Count - res.Length);
+                double[] res = Execute(characteristics[i].ToArray());
+                result[i] = res.ToList();
             }
+
+            return result;
         }
 
         /// <summary>

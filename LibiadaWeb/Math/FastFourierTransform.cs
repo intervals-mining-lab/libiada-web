@@ -14,11 +14,11 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public static void FourierTransform(List<List<double>> characteristics)
+        public static void FourierTransform(List<double>[] characteristics)
         {
             // переводим в комлексный вид
             // cycle through all characteristics
-            for (int i = 0; i < characteristics.Count; i++)
+            for (int i = 0; i < characteristics.Length; i++)
             {
                 var complex = new List<Complex>();
                 int j;
