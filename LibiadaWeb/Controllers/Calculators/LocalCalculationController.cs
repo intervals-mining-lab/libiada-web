@@ -120,21 +120,21 @@
         {
             return Action(() =>
             {
-                var matterNames = new string[matterIds.Length];
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 var partNames = new List<string>[matterIds.Length];
                 var starts = new List<int>[matterIds.Length];
                 var lengthes = new List<int>[matterIds.Length];
                 var chains = new Chain[matterIds.Length];
-                var characteristics = new List<double>[matterIds.Length][];
+                var mattersCharacteristics = new object[matterIds.Length];
                 var calculators = new List<IFullCalculator>();
                 var links = new List<Link>();
+                matterIds = matterIds.OrderBy(m => m).ToArray();
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
                     long matterId = matterIds[k];
                     Nature nature = db.Matter.Single(m => m.Id == matterId).Nature;
-                    matterNames[k] = db.Matter.Single(m => m.Id == matterId).Name;
 
                     long sequenceId;
                     switch (nature)
@@ -175,7 +175,7 @@
                     partNames[i] = new List<string>();
                     starts[i] = new List<int>();
                     lengthes[i] = new List<int>();
-                    characteristics[i] = new List<double>[characteristicTypeLinkIds.Length];
+                    var fragmentsData = new FragmentData[characteristicTypeLinkIds.Length];
 
                     while (iter.Next())
                     {
@@ -195,27 +195,31 @@
                     
                     for (int j = 0; j < calculators.Count; j++)
                     {
-                        characteristics[i][j] = new List<double>();
+                        var characteristics = new List<double>();
                         for (int k = 0; k < fragments.Count; k++)
                         {
-                            characteristics[i][j].Add(calculators[j].Calculate(fragments[k], links[j]));
+                            characteristics.Add(calculators[j].Calculate(fragments[k], links[j]));
                         }
+
+                        fragmentsData[i] = new FragmentData(characteristics, fragments[i].ToString(), iter.GetStartPosition(), fragments[i].GetLength());
                     }
 
                     if (delta)
                     {
-                        CalculateDelta(characteristics[i]);
+                        CalculateDelta(fragmentsData[i].Characteristics);
                     }
 
                     if (fourier)
                     {
-                        FastFourierTransform.FourierTransform(characteristics[i]);
+                        FastFourierTransform.FourierTransform(characteristics);
                     }
 
                     if (autocorrelation)
                     {
-                        characteristics[i] = AutoCorrelation.CalculateAutocorrelation(characteristics[i]);
+                        characteristics = AutoCorrelation.CalculateAutocorrelation(characteristics);
                     }
+
+                    mattersCharacteristics[i] = new { matterName = matters[matterIds[i]].Name, characteristics };
                 }
 
                 for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
@@ -227,8 +231,7 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "characteristics", characteristics },
-                    { "matterNames", matterNames },
+                    { "characteristics", mattersCharacteristics },
                     { "notationName", notationName },
                     { "starts", starts },
                     { "partNames", partNames },
