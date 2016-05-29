@@ -1,7 +1,6 @@
 ﻿namespace LibiadaWeb.Math
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -15,14 +14,29 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public static List<double>[] CalculateAutocorrelation(List<double>[] characteristics)
+        /// <returns>
+        /// Autocorrelation as <see cref="T:double[][]"/>.
+        /// </returns>
+        public static double[][] CalculateAutocorrelation(double[][] characteristics)
         {
-            var result = new List<double>[characteristics.Length];
+            var result = new double[characteristics.Length][];
 
             for (int i = 0; i < characteristics.Length; i++)
             {
-                double[] res = Execute(characteristics[i].ToArray());
-                result[i] = res.ToList();
+                result[i] = new double[characteristics[0].Length];
+            }
+
+            // cycle through all characteristics
+            for (int i = 0; i < characteristics[0].Length; i++)
+            {
+                var currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
+                double[] characteristicResult = CalculateAutocorrelation(currentCharacteristic);
+
+                // cycle through all sequence fragments
+                for (int j = 0; j < characteristics.Length; j++)
+                {
+                    result[j][i] = characteristicResult[j];
+                }             
             }
 
             return result;
@@ -37,7 +51,7 @@
         /// <returns>
         /// The <see cref="T:double[]"/>.
         /// </returns>
-        public static double[] Execute(double[] x)
+        public static double[] CalculateAutocorrelation(double[] x)
         {
             double[] result = GetAutoCorrelationOfSeries(x);
             return result;

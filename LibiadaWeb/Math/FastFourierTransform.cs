@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Math
 {
-    using System.Collections.Generic;
     using System.Numerics;
 
     /// <summary>
@@ -14,41 +13,40 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public static void FourierTransform(List<double>[] characteristics)
+        /// <returns>
+        /// Spectrum of the signal as <see cref="T:double[][]"/>.
+        /// </returns>
+        public static double[][] CalculateFastFourierTransform(double[][] characteristics)
         {
-            // переводим в комлексный вид
-            // cycle through all characteristics
-            for (int i = 0; i < characteristics.Length; i++)
+            var powerOfTwo = PowerOfTwoCeiling(characteristics.Length);
+            var result = new double[powerOfTwo][];
+            for (int j = 0; j < powerOfTwo; j++)
             {
-                var complex = new List<Complex>();
-                int j;
+                result[j] = new double[characteristics[0].Length];
+            }
+
+            // transforming into complex representation
+            // cycle through all characteristics
+            for (int i = 0; i < characteristics[0].Length; i++)
+            {
+                var complex = new Complex[powerOfTwo];
 
                 // cycle through all sequence fragments
-                for (j = 0; j < characteristics[i].Count; j++)
+                for (int j = 0; j < powerOfTwo; j++)
                 {
-                    complex.Add(new Complex(characteristics[i][j], 0));
+                    complex[j] = j < characteristics.Length ? new Complex(characteristics[j][i], 0) : new Complex(0, 0);
                 }
 
-                int m = 1;
-
-                while (m < j)
-                {
-                    m *= 2;
-                }
-
-                for (; j < m; j++)
-                {
-                    complex.Add(new Complex(0, 0));
-                }
-
-                Complex[] data = FourierTransform(complex.ToArray()); 
+                Complex[] complexResult = CalculateFastFourierTransform(complex);
 
                 // converting array to double
-                for (int g = 0; g < characteristics[i].Count; g++)
+                for (int g = 0; g < powerOfTwo; g++)
                 {
-                    characteristics[i][g] = data[g].Real;
+                    result[g][i] = complexResult[g].Real;
                 }
             }
+
+            return result;
         }
 
         /// <summary>
@@ -60,7 +58,7 @@
         /// <returns>
         /// Spectrum of the signal. 
         /// </returns>
-        public static Complex[] FourierTransform(Complex[] x)
+        public static Complex[] CalculateFastFourierTransform(Complex[] x)
         {
             Complex[] result;
             int n = x.Length;
@@ -80,8 +78,8 @@
                     odd[i] = x[(2 * i) + 1];
                 }
 
-                even = FourierTransform(even);
-                odd = FourierTransform(odd);
+                even = CalculateFastFourierTransform(even);
+                odd = CalculateFastFourierTransform(odd);
                 result = new Complex[n];
                 for (int i = 0; i < n / 2; i++)
                 {
@@ -91,6 +89,27 @@
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Calculates nearest greater power of 2 for the given number.
+        /// </summary>
+        /// <param name="number">
+        /// The number.
+        /// </param>
+        /// <returns>
+        /// Prower of two as <see cref="int"/>.
+        /// </returns>
+        private static int PowerOfTwoCeiling(int number)
+        {
+            int powerOfTwo = 1;
+
+            while (powerOfTwo < number)
+            {
+                powerOfTwo *= 2;
+            }
+
+            return powerOfTwo;
         }
 
         /// <summary>

@@ -337,6 +337,7 @@
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FragmentData.cs" />
     <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Nature.cs" />

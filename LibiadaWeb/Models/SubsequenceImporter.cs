@@ -18,7 +18,7 @@
         /// <summary>
         /// The database context.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly LibiadaWebEntities db = new LibiadaWebEntities();
 
         /// <summary>
         /// The feature repository.
@@ -68,18 +68,14 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
         /// </summary>
-        /// <param name="db">
-        /// The database context.
-        /// </param>
         /// <param name="features">
         /// The features.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        public SubsequenceImporter(LibiadaWebEntities db, List<FeatureItem> features, long sequenceId)
+        public SubsequenceImporter(List<FeatureItem> features, long sequenceId)
         {
-            this.db = db;
             this.features = features;
             this.sequenceId = sequenceId;
             featureRepository = new FeatureRepository(db);
@@ -143,8 +139,7 @@
         {
             if (parentLength != sourceLength)
             {
-                throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength
-                                                                           + " source length = " + sourceLength);
+                throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength + " source length = " + sourceLength);
             }
 
             for (int i = 1; i < features.Count; i++)
@@ -191,11 +186,10 @@
                         }
 
                         // checking if there is any feature with identical position
-                        if (allNonGenesLeafLocations
-                                .Any(l => leafLocation.LocationStart == l.LocationStart &&
-                                          leafLocation.LocationEnd == l.LocationEnd &&
-                                          leafLocation.StartData == l.StartData &&
-                                          leafLocation.EndData == l.EndData))
+                        if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                                              leafLocation.LocationEnd == l.LocationEnd &&
+                                                              leafLocation.StartData == l.StartData &&
+                                                              leafLocation.EndData == l.EndData))
                         {
                             // don't need to import this gene
                             continue;

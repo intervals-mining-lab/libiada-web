@@ -43,8 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController()
-            : base("Local calculation")
+        public LocalCalculationController() : base("Local calculation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -126,6 +125,7 @@
                 var lengthes = new List<int>[matterIds.Length];
                 var chains = new Chain[matterIds.Length];
                 var mattersCharacteristics = new object[matterIds.Length];
+
                 var calculators = new List<IFullCalculator>();
                 var links = new List<Link>();
                 matterIds = matterIds.OrderBy(m => m).ToArray();
@@ -162,7 +162,6 @@
                     links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
                 }
 
-                
                 for (int i = 0; i < chains.Length; i++)
                 {
                     CutRule cutRule = growingWindow
@@ -175,7 +174,7 @@
                     partNames[i] = new List<string>();
                     starts[i] = new List<int>();
                     lengthes[i] = new List<int>();
-                    var fragmentsData = new FragmentData[characteristicTypeLinkIds.Length];
+                    
 
                     while (iter.Next())
                     {
@@ -192,34 +191,38 @@
                         lengthes[i].Add(fragment.GetLength());
                     }
 
-                    
-                    for (int j = 0; j < calculators.Count; j++)
+                    var fragmentsData = new FragmentData[characteristicTypeLinkIds.Length];
+                    for (int k = 0; k < fragments.Count; k++)
                     {
-                        var characteristics = new List<double>();
-                        for (int k = 0; k < fragments.Count; k++)
+                        var characteristics = new double[calculators.Count];
+                        for (int j = 0; j < calculators.Count; j++)
                         {
-                            characteristics.Add(calculators[j].Calculate(fragments[k], links[j]));
+                            characteristics[j] = calculators[j].Calculate(fragments[k], links[j]);
                         }
 
                         fragmentsData[i] = new FragmentData(characteristics, fragments[i].ToString(), iter.GetStartPosition(), fragments[i].GetLength());
                     }
 
+                    double[][] differenceData = null;
+                    double[][] fourierData = null;
+                    double[][] autocorrelationData = null;
+
                     if (delta)
                     {
-                        CalculateDelta(fragmentsData[i].Characteristics);
+                        differenceData = CalculateDifference(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
                     if (fourier)
                     {
-                        FastFourierTransform.FourierTransform(characteristics);
+                        fourierData = FastFourierTransform.CalculateFastFourierTransform(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
                     if (autocorrelation)
                     {
-                        characteristics = AutoCorrelation.CalculateAutocorrelation(characteristics);
+                        autocorrelationData = AutoCorrelation.CalculateAutocorrelation(fragmentsData.Select(f => f.Characteristics).ToArray());
                     }
 
-                    mattersCharacteristics[i] = new { matterName = matters[matterIds[i]].Name, characteristics };
+                    mattersCharacteristics[i] = new { matterName = matters[matterIds[i]].Name, fragmentsData, differenceData, fourierData, autocorrelationData };
                 }
 
                 for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
@@ -243,24 +246,31 @@
         }
 
         /// <summary>
-        /// The calculate delta.
+        /// Calculates difference between characteristics of nearest fragments.
         /// </summary>
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        private static void CalculateDelta(List<double>[] characteristics)
+        /// <returns>
+        /// Difference between next and current fragment characteristics as <see cref="T:double[][]"/>.
+        /// </returns>
+        private double[][] CalculateDifference(double[][] characteristics)
         {
-            // cycle through characteristics 
-            for (int i = 0; i < characteristics.Length; i++)
-            {
-                // cycle through fragments
-                for (int j = characteristics[i].Count - 1; j > 0; j--)
-                {
-                    characteristics[i][j] -= characteristics[i ][j - 1];
-                }
+            var result = new double[characteristics.Length - 1][];
 
-                characteristics[i].RemoveAt(0);
+            // cycle through fragments
+            for (int i = 0; i < characteristics.Length - 1; i++)
+            {
+                result[i] = new double[characteristics[i].Length];
+
+                // cycle through characteristics
+                for (int j = 0; j < characteristics[i].Length; j++)
+                {
+                    result[i][j] = characteristics[i + 1][j] - characteristics[i][j];
+                }
             }
+
+            return result;
         }
     }
 }
