@@ -19,24 +19,19 @@
         /// </returns>
         public static double[][] CalculateAutocorrelation(double[][] characteristics)
         {
-            var result = new double[characteristics.Length][];
-
-            for (int i = 0; i < characteristics.Length; i++)
-            {
-                result[i] = new double[characteristics[0].Length];
-            }
+            var transposedResult = new double[characteristics[0].Length][];
 
             // cycle through all characteristics
             for (int i = 0; i < characteristics[0].Length; i++)
             {
                 var currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
-                double[] characteristicResult = CalculateAutocorrelation(currentCharacteristic);
+                transposedResult[i] = CalculateAutocorrelation(currentCharacteristic);          
+            }
 
-                // cycle through all sequence fragments
-                for (int j = 0; j < characteristics.Length; j++)
-                {
-                    result[j][i] = characteristicResult[j];
-                }             
+            var result = new double[transposedResult[0].Length][];
+            for (int i = 0; i < transposedResult.Length; i++)
+            {
+                result[i] = transposedResult.Select(r => r[i]).ToArray();
             }
 
             return result;

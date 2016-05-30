@@ -191,7 +191,7 @@
                         lengthes[i].Add(fragment.GetLength());
                     }
 
-                    var fragmentsData = new FragmentData[characteristicTypeLinkIds.Length];
+                    var fragmentsData = new FragmentData[fragments.Count];
                     for (int k = 0; k < fragments.Count; k++)
                     {
                         var characteristics = new double[calculators.Count];
@@ -200,7 +200,7 @@
                             characteristics[j] = calculators[j].Calculate(fragments[k], links[j]);
                         }
 
-                        fragmentsData[i] = new FragmentData(characteristics, fragments[i].ToString(), iter.GetStartPosition(), fragments[i].GetLength());
+                        fragmentsData[k] = new FragmentData(characteristics, fragments[k].ToString(), starts[i][k], fragments[k].GetLength());
                     }
 
                     double[][] differenceData = null;
