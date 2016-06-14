@@ -9,9 +9,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     public class RemoteDbRepository : IRemoteDbRepository
     {
         /// <summary>
-        /// The db.
+        /// The remote dbs.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly RemoteDb[] remoteDbs;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RemoteDbRepository"/> class.
@@ -21,7 +21,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </param>
         public RemoteDbRepository(LibiadaWebEntities db)
         {
-            this.db = db;
+            remoteDbs = db.RemoteDb.ToArray();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.RemoteDb.Select(n => new
+            return remoteDbs.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedDb)
         {
-            return db.RemoteDb.Select(n => new
+            return remoteDbs.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -66,7 +66,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose() 
         {
-            db.Dispose();
         }
     }
 }

@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Data.Entity;
-    using System.Diagnostics;
     using System.Linq;
 
     using Link = LibiadaCore.Core.Link;
@@ -13,14 +12,14 @@
     public class CharacteristicTypeLinkRepository : ICharacteristicTypeLinkRepository
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
         /// The characteristic type links.
         /// </summary>
         private readonly List<CharacteristicTypeLink> characteristicTypeLinks;
+
+        /// <summary>
+        /// All notations.
+        /// </summary>
+        private readonly List<Notation> notations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicTypeLinkRepository"/> class.
@@ -30,8 +29,8 @@
         /// </param>
         public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
         {
-            this.db = db;
             characteristicTypeLinks = db.CharacteristicTypeLink.Include(ctl => ctl.CharacteristicType).Include(ctl => ctl.Link).ToList();
+            notations = db.Notation.ToList();
         }
 
         /// <summary>
@@ -70,8 +69,7 @@
         /// </returns>
         public CharacteristicType GetCharacteristicType(int characteristicTypeLinkId)
         {
-            var characteristicTypeId = characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).CharacteristicTypeId;
-            return db.CharacteristicType.Single(c => c.Id == characteristicTypeId);
+            return characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).CharacteristicType;
         }
 
         /// <summary>
@@ -88,7 +86,7 @@
         /// </returns>
         public string GetCharacteristicName(int characteristicTypeLinkId, int notationId)
         {
-            var notation = db.Notation.Single(n => n.Id == notationId).Name;
+            var notation = notations.Single(n => n.Id == notationId).Name;
 
             return string.Join("  ", GetCharacteristicName(characteristicTypeLinkId), notation);
         }
@@ -117,7 +115,6 @@
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
         }
     }
 }

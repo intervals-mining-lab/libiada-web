@@ -10,11 +10,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     public class FeatureRepository : IFeatureRepository
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
         /// The features.
         /// </summary>
         private readonly List<Feature> features; 
@@ -27,7 +22,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </param>
         public FeatureRepository(LibiadaWebEntities db)
         {
-            this.db = db;
             features = db.Feature.OrderBy(f => f.Id).ToList();
         }
 
@@ -47,7 +41,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose() 
         {
-            db.Dispose();
         }
 
         /// <summary>
@@ -93,20 +86,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public Feature GetFeatureById(int featureId)
         {
             return features.Single(f => f.Id == featureId);
-        }
-
-        /// <summary>
-        /// Gets feature name by id.
-        /// </summary>
-        /// <param name="featureId">
-        /// The feature id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public string GetFeatureNameById(int featureId)
-        {
-            return GetFeatureById(featureId).Name;
         }
 
         /// <summary>

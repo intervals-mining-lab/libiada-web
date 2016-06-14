@@ -125,7 +125,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            Db.Dispose();
         }
     }
 }

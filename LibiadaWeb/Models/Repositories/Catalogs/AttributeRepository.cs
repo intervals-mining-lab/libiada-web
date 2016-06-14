@@ -16,12 +16,7 @@
         /// <summary>
         /// The attributes.
         /// </summary>
-        public readonly Attribute[] Attributes;
-
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly Attribute[] attributes;
 
         /// <summary>
         /// The attributes dictionary.
@@ -36,9 +31,8 @@
         /// </param>
         public AttributeRepository(LibiadaWebEntities db)
         {
-            this.db = db;
-            Attributes = db.Attribute.ToArray();
-            attributesDictionary = Attributes.ToDictionary(a => a.Name);
+            attributes = db.Attribute.ToArray();
+            attributesDictionary = attributes.ToDictionary(a => a.Name);
         }
 
         /// <summary>
@@ -80,9 +74,9 @@
         /// </exception>
         public string GetAttributeNameById(int id)
         {
-            if (Attributes.Any(a => a.Id == id))
+            if (attributes.Any(a => a.Id == id))
             {
-                return Attributes.Single(a => a.Id == id).Name;
+                return attributes.Single(a => a.Id == id).Name;
             }
             else
             {
@@ -95,7 +89,6 @@
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
         }
     }
 }

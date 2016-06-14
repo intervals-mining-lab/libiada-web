@@ -9,9 +9,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     public class NotationRepository : INotationRepository
     {
         /// <summary>
-        /// The db.
+        /// The notations.
         /// </summary>
-        private readonly LibiadaWebEntities db;
+        private readonly Notation[] notations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotationRepository"/> class.
@@ -21,7 +21,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </param>
         public NotationRepository(LibiadaWebEntities db)
         {
-            this.db = db;
+            notations = db.Notation.ToArray();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return db.Notation.Select(n => new
+            return notations.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedNotation)
         {
-            return db.Notation.Select(n => new
+            return notations.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -72,7 +72,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> notationIds)
         {
-            return db.Notation.Where(n => notationIds.Contains(n.Id)).Select(n => new
+            return notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
             {
                 Value = n.Id,
                 Text = n.Name,
@@ -95,7 +95,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> notationIds, int selectedNotation)
         {
-            return db.Notation.Where(n => notationIds.Contains(n.Id)).Select(n => new
+            return notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
             {
                 Value = n.Id,
                 Text = n.Name,
@@ -109,7 +109,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
         }
     }
 }

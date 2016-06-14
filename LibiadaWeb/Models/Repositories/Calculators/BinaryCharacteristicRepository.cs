@@ -5,20 +5,13 @@ namespace LibiadaWeb.Models.Repositories.Calculators
     /// </summary>
     public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     {
-        /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
         /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        public BinaryCharacteristicRepository(LibiadaWebEntities db)
+        public BinaryCharacteristicRepository()
         {
-            this.db = db;
         }
 
         /// <summary>
@@ -60,7 +53,6 @@ namespace LibiadaWeb.Models.Repositories.Calculators
         /// </summary>
         public void Dispose() 
         {
-            db.Dispose();
         }
     }
 }

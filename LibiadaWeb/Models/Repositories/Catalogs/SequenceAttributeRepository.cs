@@ -5,8 +5,6 @@
     using System.Data.Entity;
     using System.Linq;
 
-    using Bio.IO.GenBank;
-
     /// <summary>
     /// The sequence attribute.
     /// </summary>
@@ -39,59 +37,6 @@
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
-        }
-
-        /// <summary>
-        /// The check sequence attributes.
-        /// </summary>
-        /// <param name="feature">
-        /// The feature.
-        /// </param>
-        /// <param name="localSubsequence">
-        /// The local subsequence.
-        /// </param>
-        /// <param name="complement">
-        /// The complement.
-        /// </param>
-        /// <param name="complementJoin">
-        /// The complement join.
-        /// </param>
-        /// <param name="partial">
-        /// The partial.
-        /// </param>
-        public void CheckSequenceAttributes(FeatureItem feature, Subsequence localSubsequence, ref bool complement, ref bool complementJoin, ref bool partial)
-        {
-            var localAttributes = localSubsequence.SequenceAttribute.ToArray()
-                                                  .GroupBy(a => a.AttributeId)
-                                                  .ToDictionary(a => a.Key, a => a.ToArray());
-
-            foreach (var qualifier in feature.Qualifiers)
-            {
-                switch (qualifier.Key)
-                {
-                    case "translation":
-                        continue;
-                }
-
-                var attributeId = attributeRepository.GetAttributeByName(qualifier.Key).Id;
-
-                var equalAttributes = localAttributes[attributeId].ToDictionary(a => a.Value);
-
-                foreach (var value in qualifier.Value)
-                {
-                    var cleanedValue = CleanAttributeValue(value);
-                    SequenceAttribute attribute;
-                    if (equalAttributes.TryGetValue(cleanedValue, out attribute))
-                    {
-                        localSubsequence.SequenceAttribute.Remove(attribute);
-                    }
-                }
-            }
-
-            CheckBoolAttribute(ref complement, Aliases.Attribute.Complement, localSubsequence);
-            CheckBoolAttribute(ref complementJoin, Aliases.Attribute.ComplementJoin, localSubsequence);
-            CheckBoolAttribute(ref partial, Aliases.Attribute.Partial, localSubsequence);
         }
 
         /// <summary>
@@ -243,27 +188,6 @@
         private SequenceAttribute CreateSequenceAttribute(int attributeId, long sequenceId)
         {
             return CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
-        }
-
-        /// <summary>
-        /// The check bool attribute.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <param name="attributeId">
-        /// The attribute id.
-        /// </param>
-        /// <param name="localSubsequence">
-        /// The local subsequence.
-        /// </param>
-        private void CheckBoolAttribute(ref bool value, int attributeId, Subsequence localSubsequence)
-        {
-            if (value && localSubsequence.SequenceAttribute.Any(a => a.AttributeId == attributeId))
-            {
-                localSubsequence.SequenceAttribute.Remove(localSubsequence.SequenceAttribute.Single(a => a.AttributeId == attributeId));
-                value = false;
-            }
         }
 
         /// <summary>
