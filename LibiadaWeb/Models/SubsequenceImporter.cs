@@ -13,7 +13,7 @@
     /// <summary>
     /// The subsequence importer.
     /// </summary>
-    public class SubsequenceImporter
+    public class SubsequenceImporter : IDisposable
     {
         /// <summary>
         /// The database context.
@@ -66,6 +66,11 @@
         private readonly bool[] positionsMap;
 
         /// <summary>
+        /// Gene feature type name.
+        /// </summary>
+        private readonly string gene;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
         /// </summary>
         /// <param name="features">
@@ -87,15 +92,15 @@
                 var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
                 parentLength = parentSequence.GetLength();
             }
-            
+
+            gene = featureRepository.GetFeatureById(Aliases.Feature.Gene).Type;
             sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
-            allNonGenesLeafLocations = features
-                                            .Where(f => f.Key != "gene")
-                                            .Select(f => f.Location.GetLeafLocations())
-                                            .Where(l => l.Count == 1)
-                                            .Select(l => l[0])
-                                            .ToArray();
+            allNonGenesLeafLocations = features.Where(f => f.Key != gene)
+                                               .Select(f => f.Location.GetLeafLocations())
+                                               .Where(l => l.Count == 1)
+                                               .Select(l => l[0])
+                                               .ToArray();
         }
 
         /// <summary>
@@ -158,43 +163,40 @@
                     throw new Exception("Unknown feature. Feature name = " + feature.Key);
                 }
 
-                if (feature.Key == featureRepository.GetFeatureNameById(Aliases.Attribute.Gene))
+                if (feature.Key == gene)
                 {
-                    if (!(feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                          feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene))))
+                    if (leafLocations.Count > 1)
                     {
-                        if (leafLocations.Count > 1)
-                        {
-                            throw new Exception("Gene can only have one leaf location.");
-                        }
+                        throw new Exception("Gene can only have one leaf location.");
+                    }
 
-                        var leafLocation = leafLocations[0];
-                        var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
+                    var leafLocation = leafLocations[0];
+                    var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
 
-                        // if there is join in child record parent record contains only
-                        // first child start and last child end
-                        if (nextLeafLocations.Count > 1)
-                        {
-                            if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart &&
-                                leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
-                            {
-                                // don't need to import this gene
-                                continue;
-                            }
-
-                            throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocation.StartData);
-                        }
-
-                        // checking if there is any feature with identical position
-                        if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
-                                                              leafLocation.LocationEnd == l.LocationEnd &&
-                                                              leafLocation.StartData == l.StartData &&
-                                                              leafLocation.EndData == l.EndData))
+                    // if there is join in child record parent record contains only
+                    // first child start and last child end
+                    if (nextLeafLocations.Count > 1)
+                    {
+                        if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart &&
+                            leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
                         {
                             // don't need to import this gene
                             continue;
                         }
+
+                        throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocation.StartData);
                     }
+
+                    // checking if there is any feature with identical position
+                    if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                                          leafLocation.LocationEnd == l.LocationEnd &&
+                                                          leafLocation.StartData == l.StartData &&
+                                                          leafLocation.EndData == l.EndData))
+                    {
+                        // don't need to import this gene
+                        continue;
+                    }
+
                 }
 
                 if (location.SubLocations.Count > 0)
@@ -240,26 +242,24 @@
                 var leafLocations = location.GetLeafLocations();
                 int featureId;
 
-                if (feature.Key == featureRepository.GetFeatureNameById(Aliases.Attribute.Gene))
+                if (feature.Key == gene)
                 {
-                    if (!(feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                          feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene))))
+                    if (!CheckIfGeneNeedsImport(leafLocations, i))
                     {
-                        if (!CheckIfGeneNeedsImport(leafLocations, i))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        featureId = Aliases.Feature.Gene;
-                    }
-                    else
-                    {
-                        featureId = Aliases.Feature.PseudoGen;
-                    }
+                    featureId = Aliases.Feature.Gene;
                 }
                 else
                 {
                     featureId = featureRepository.GetFeatureIdByName(feature.Key);
+                }
+
+                if (feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
+                    feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene)))
+                {
+                    featureId = Aliases.Feature.PseudoGen;
                 }
 
                 bool partial = CheckPartial(leafLocations);
@@ -338,6 +338,7 @@
         {
             var leafLocation = leafLocations[0];
 
+            // if feature is not last
             if ((index + 1) < features.Count)
             {
                 var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
@@ -353,15 +354,16 @@
             }
 
             // checking if there is any feature with identical position
-            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart && 
-                                                  leafLocation.LocationEnd == l.LocationEnd && 
-                                                  leafLocation.StartData == l.StartData && 
+            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
+                                                  leafLocation.LocationEnd == l.LocationEnd &&
+                                                  leafLocation.StartData == l.StartData &&
                                                   leafLocation.EndData == l.EndData))
             {
                 // don't need to import this gene
                 return false;
             }
 
+            // there are no "children" features with identical position
             return true;
         }
 
@@ -466,6 +468,6 @@
         {
             return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData ||
                                                      leafLocation.LocationEnd.ToString() != leafLocation.EndData);
-        } 
+        }
     }
 }

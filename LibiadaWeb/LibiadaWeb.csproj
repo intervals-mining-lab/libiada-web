@@ -408,7 +408,6 @@
     <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DnaSequenceRepository.cs" />
-    <Compile Include="Models\Repositories\Sequences\SubsequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ICommonSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IDnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ILiteratureSequenceRepository.cs" />

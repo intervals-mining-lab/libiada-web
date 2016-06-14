@@ -9,7 +9,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -77,15 +76,16 @@
                         
                         try
                         {
-                            var subsequenceRepository = new SubsequenceRepository(db);
                             long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                             string parentRemoteId = db.DnaSequence.Single(c => c.Id == parentSequenceId).RemoteId;
 
                             Stream stream = NcbiHelper.GetGenBankFileStream(parentRemoteId);
                             var features = NcbiHelper.GetFeatures(stream);
-
-                            subsequenceRepository.CreateSubsequences(features, parentSequenceId);
-
+                            using (var subsequenceImporter = new SubsequenceImporter(features, parentSequenceId))
+                            {
+                                subsequenceImporter.CreateSubsequences();
+                            }
+                            
                             statuses[i] = "Success";
                             results[i] = "Successfully imported " + db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
                                                                         .Include(s => s.Position)

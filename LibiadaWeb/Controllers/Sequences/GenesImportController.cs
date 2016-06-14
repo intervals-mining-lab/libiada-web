@@ -78,7 +78,6 @@
                 Subsequence[] sequenceSubsequences;
                 using (var db = new LibiadaWebEntities())
                 {
-                    var subsequenceRepository = new SubsequenceRepository(db);
                     long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                     DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
 
@@ -100,8 +99,10 @@
                     }
 
                     var features = NcbiHelper.GetFeatures(stream);
-
-                    subsequenceRepository.CreateSubsequences(features, parentSequenceId);
+                    using (var subsequenceImporter = new SubsequenceImporter(features, parentSequenceId))
+                    {
+                        subsequenceImporter.CreateSubsequences();
+                    }
 
                     matterName = db.Matter.Single(m => m.Id == matterId).Name;
                     sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
