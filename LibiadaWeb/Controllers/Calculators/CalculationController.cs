@@ -210,18 +210,14 @@
                 // trying to save calculated characteristics to database
                 characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
 
+                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
-                }
-
-                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
-                for (int i = 0; i < characteristicNames.Length; i++)
-                {
-                    characteristicsList[i] = new SelectListItem
+                    characteristicsList[k] = new SelectListItem
                     {
-                        Value = i.ToString(),
-                        Text = characteristicNames[i],
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
                         Selected = false
                     };
                 }

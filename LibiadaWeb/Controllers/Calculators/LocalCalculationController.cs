@@ -230,9 +230,21 @@
                     characteristicNames[l] = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name;
                 }
 
+                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                {
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationId);
+                    characteristicsList[k] = new SelectListItem
+                    {
+                        Value = k.ToString(),
+                        Text = characteristicNames[k],
+                        Selected = false
+                    };
+                }
+
                 string notationName = db.Notation.Single(n => n.Id == notationId).Name;
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "characteristics", mattersCharacteristics },
                     { "notationName", notationName },
@@ -240,8 +252,11 @@
                     { "partNames", partNames },
                     { "lengthes", lengthes },
                     { "characteristicNames", characteristicNames },
-                    { "matterIds", matterIds }
+                    { "matterIds", matterIds },
+                    { "characteristicsList", characteristicsList }
                 };
+
+                return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(result) } };
             });
         }
 

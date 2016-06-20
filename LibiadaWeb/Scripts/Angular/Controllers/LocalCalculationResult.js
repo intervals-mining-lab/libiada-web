@@ -6,15 +6,11 @@
 
         function fillLegend() {
             $scope.legend = [];
-            if ($scope.clusters) {
-                for (var j = 0; j < $scope.clusters.length; j++) {
-                    $scope.legend.push({ name: $scope.clusters[j], visible: true });
-                }
-            } else {
-                for (var k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
-                }
+
+            for (var k = 0; k < $scope.characteristics.length; k++) {
+                $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
             }
+
         }
 
         // initializes data for chart
@@ -25,13 +21,18 @@
 
             for (var i = 0; i < $scope.characteristics.length; i++) {
                 var characteristic = $scope.characteristics[i];
-                $scope.points.push({
-                    id: i,
-                    name: characteristic.matterName,
-                    x: characteristic.characteristics[first],
-                    y: characteristic.characteristics[second],
-                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.matterName
-                });
+                for (var j = 0; j < characteristic.fragmentsData.length; j++) {
+                    var fragmentData = characteristic.fragmentsData[j];
+                    $scope.points.push({
+                        id: j,
+                        characteristicId: i,
+                        name: fragmentData.Name,
+                        x: fragmentData.Characteristics[first],
+                        y: fragmentData.Characteristics[second],
+                        cluster: characteristic.matterName
+                    });
+                }
+
             }
         }
 
@@ -43,8 +44,9 @@
 
 
             var pointSharacteristics = [];
-            for (var i = 0; i < $scope.characteristics[d.id].characteristics.length; i++) {
-                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].characteristics[i]);
+            var characteristics = $scope.characteristics[d.characteristicId].fragmentsData[d.id].Characteristics;
+            for (var i = 0; i < characteristics.length; i++) {
+                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + characteristics[i]);
             }
 
             tooltipContent.push(pointSharacteristics.join("<br/>"));

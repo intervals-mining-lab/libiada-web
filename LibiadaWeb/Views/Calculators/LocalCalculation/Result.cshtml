@@ -6,68 +6,37 @@
 
 @if (ViewBag.Error == null)
 {
-    for (int i = 0; i < ViewBag.characteristics.Count; i++)
-    {
-        <h3>Matter @ViewBag.matterNames[i]</h3>
-        for (int j = 0; j < ViewBag.characteristics[i].Count; j++)
-        {
-            <h4>Notation: @ViewBag.notationNames[j]</h4>
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            Start
-                        </th>
-                        <th>
-                            Length
-                        </th>
-                        <th>
-                            @ViewBag.characteristicNames[j]
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int k = 0; k < ViewBag.characteristics[i][j].Count; k++)
-                    {
-                        <tr>
-                            <td>
-                                @ViewBag.starts[i][j][k]
-                            </td>
-                            <td>
-                                @ViewBag.lengthes[i][j][k]
-                            </td>
-                            <td>
-                                @ViewBag.characteristics[i][j][k]
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        <br />
-    }
+    @Html.Partial("_AngularControllerInitializer", "LocalCalculationResultController")
 
     <div ng-app="LocalCalculationResult" ng-controller="LocalCalculationResultCtrl">
         <div ng-repeat="chainsCharacteristics in characteristics">
             <h3>Matter {{chainsCharacteristics.matterName}}</h3>
             <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
                 <thead>
-                <tr>
-                    <th>
-                        Sequence name
-                    </th>
-                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName"/>
-                </tr>
+                    <tr>
+                        <th>
+                            Fragment name
+                        </th>
+                        <th>
+                            Start
+                        </th>
+                        <th>
+                            Length
+                        </th>
+                        <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="characteristic in chainsCharacteristics">
-                    <td ng-bind="characteristic.matterName"/>
-                    <td ng-repeat="value in characteristic.characteristics" ng-bind="value"/>
-                </tr>
+                    <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
+                        <td ng-bind="fragmentsData.Name"/>
+                        <td ng-bind="fragmentsData.Start" />
+                        <td ng-bind="fragmentsData.Length" />
+                        <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
+                    </tr>
                 </tbody>
             </table>
 
-            <br/>
+            <br />
         </div>
         <div class="form-group">
             <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
@@ -102,6 +71,7 @@
     <br />
 
     @section Scripts {
+        @Scripts.Render("~/bundles/dcjs")
         @Scripts.Render("~/bundles/jqueryui")
     }
 }
