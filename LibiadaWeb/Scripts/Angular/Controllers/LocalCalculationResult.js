@@ -114,22 +114,35 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xValue = function (d) { return d.x; }; // data -> value
+            var xValue = function (d) { return $scope.lineChart ? d.id : d.x; }; // data -> value
             var xScale = d3.scale.linear().range([0, width]); // value -> display
             var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
             xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
 
             // setup y
-            var yValue = function (d) { return d.y; }; // data -> value
+            var yValue = function (d) { return $scope.lineChart ? d.x : d.y; }; // data -> value
             var yScale = d3.scale.linear().range([height, 0]); // value -> display
             var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
             var yAxis = d3.svg.axis().scale(yScale).orient("left");
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
+            // calculating margins for dots
+            var xMin = d3.min($scope.points, xValue);
+            var xMax = d3.max($scope.points, xValue);
+            var xMargin = (xMax - xMin) * 0.05;
+            var yMax = d3.max($scope.points, yValue);
+            var yMin = d3.min($scope.points, yValue);
+            var yMargin = (yMax - yMin) * 0.05;
+
+            // don't want dots overlapping axis, so add in buffer to data domain
+            xScale.domain([xMin - xMargin, xMax + xMargin]);
+            yScale.domain([yMin - yMargin, yMax + yMargin]);
+
             // setup fill color
             var cValue = function (d) { return d.cluster; };
             var color = d3.scale.category20();
+            var elementColor = function(d) { return color(cValue(d)); };
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -149,18 +162,6 @@
             // hiding tooltip
             d3.select("#chart").on("click", function () { $scope.clearTooltip(tooltip); });
 
-            // calculating margins for dots
-            var xMin = d3.min($scope.points, xValue);
-            var xMax = d3.max($scope.points, xValue);
-            var xMargin = (xMax - xMin) * 0.05;
-            var yMax = d3.max($scope.points, yValue);
-            var yMin = d3.min($scope.points, yValue);
-            var yMargin = (yMax - yMin) * 0.05;
-
-            // don't want dots overlapping axis, so add in buffer to data domain
-            xScale.domain([xMin - xMargin, xMax + xMargin]);
-            yScale.domain([yMin - yMargin, yMax + yMargin]);
-
             // x-axis
             svg.append("g")
                 .attr("class", "x axis")
@@ -171,7 +172,7 @@
                 .attr("x", width)
                 .attr("y", -6)
                 .style("text-anchor", "end")
-                .text($scope.firstCharacteristic.Text)
+                .text($scope.lineChart ? "Fragment №" : $scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
 
             // y-axis
@@ -184,24 +185,57 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text($scope.secondCharacteristic.Text)
+                .text($scope.lineChart ? $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
-            // draw dots
-            svg.selectAll(".dot")
-                .data($scope.points)
-                .enter()
-                .append("ellipse")
-                .attr("class", "dot")
-                .attr("rx", $scope.dotRadius)
-                .attr("ry", $scope.dotRadius)
-                .attr("cx", xMap)
-                .attr("cy", yMap)
-                .style("fill-opacity", 0.6)
-                .style("fill", function (d) { return color(cValue(d)); })
-                .style("stroke", function (d) { return color(cValue(d)); })
-                .on("click", function (d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+            if ($scope.lineChart) {
+                var line = d3.svg.line()
+                    .x(xMap)
+                    .y(yMap);
 
+                //svg.append("path")
+                //    .datum($scope.points)
+                //    .attr("class", "line")
+                //    .attr("d", line)
+                //    .attr('stroke', elementColor)
+                //    .attr('stroke-width', 1)
+                //    .attr('fill', 'none')
+                //    .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+
+
+                // Nest the entries by symbol
+                var dataNest = d3.nest()
+                    .key(function(d) { return d.cluster })
+                    .entries($scope.points);
+
+                // Loop through each symbol / key
+                dataNest.forEach(function(d) {
+                    svg.append("path")
+                        .datum(d.values)
+                        .attr("class", "line")
+                        .attr("d", line)
+                        .attr('stroke', function (d) { return color(cValue(d[0])); })
+                        .attr('stroke-width', 1)
+                        .attr('fill', 'none')
+                        .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+                });
+
+            } else {
+                // draw dots
+                svg.selectAll(".dot")
+                    .data($scope.points)
+                    .enter()
+                    .append("ellipse")
+                    .attr("class", "dot")
+                    .attr("rx", $scope.dotRadius)
+                    .attr("ry", $scope.dotRadius)
+                    .attr("cx", xMap)
+                    .attr("cy", yMap)
+                    .style("fill-opacity", 0.6)
+                    .style("fill", elementColor)
+                    .style("stroke", elementColor)
+                    .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+            }
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.legend)
