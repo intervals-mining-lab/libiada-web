@@ -246,6 +246,12 @@
                         .attr("visibility", function (dot) {
                             return d.visible ? "visible" : "hidden";
                         });
+
+                    svg.selectAll(".line")
+                        .filter(function (line) { return line[0].cluster === d.name; })
+                        .attr("visibility", function (line) {
+                            return d.visible ? "visible" : "hidden";
+                        });
                 });;
 
             // draw legend colored rectangles
