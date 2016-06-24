@@ -5,8 +5,6 @@ namespace LibiadaWeb.Models.Repositories.Calculators
     /// </summary>
     public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     {
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
         /// </summary>

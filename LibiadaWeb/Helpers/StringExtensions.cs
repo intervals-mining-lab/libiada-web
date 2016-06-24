@@ -28,7 +28,8 @@
         }
 
         /// <summary>
-        /// Gets largest repeating substring.
+        /// Gets largest repeating substring 
+        /// or whole string if there is no repeating substrings.
         /// </summary>
         /// <param name="source">
         /// The source string.

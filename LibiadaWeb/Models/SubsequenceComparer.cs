@@ -7,6 +7,9 @@
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
+    /// <summary>
+    /// The subsequence comparer.
+    /// </summary>
     public class SubsequenceComparer
     {
         /// <summary>
@@ -14,11 +17,41 @@
         /// </summary>
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubsequenceComparer"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
         public SubsequenceComparer(LibiadaWebEntities db)
         {
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
+        /// <summary>
+        /// The compare sequences by subsequences.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="notationId">
+        /// The notation id.
+        /// </param>
+        /// <param name="firstChains">
+        /// The first chains.
+        /// </param>
+        /// <param name="secondChains">
+        /// The second chains.
+        /// </param>
+        /// <param name="difference">
+        /// The difference.
+        /// </param>
+        /// <param name="excludeType">
+        /// The exclude type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
         public double CompareSequencesBySubsequences(int characteristicTypeLinkId, int notationId, Chain[] firstChains, Chain[] secondChains, double difference, string excludeType)
         {
             var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstChains);
@@ -47,6 +80,18 @@
             return similarSubsequences.Count * 200d / (firstChains.Length + secondChains.Length);
         }
 
+        /// <summary>
+        /// The calculate characteristic.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="sequences">
+        /// The sequences.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Double}"/>.
+        /// </returns>
         private List<double> CalculateCharacteristic(int characteristicTypeLinkId, Chain[] sequences)
         {
             var characteristics = new List<double>();

@@ -224,7 +224,8 @@
                     }
 
                     var parent = parentSequences[parentSequenceId];
-                    sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.RemoteId, sequenceCharacteristicValue, subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray());
+                    subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();
+                    sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.RemoteId, sequenceCharacteristicValue, subsequencesData);
                     
                     // trying to save calculated characteristics to database
                     characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);

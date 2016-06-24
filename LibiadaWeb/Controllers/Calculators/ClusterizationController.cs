@@ -152,14 +152,13 @@
                 int n = 0;
                 for (int i = 0; i < clusterizationResult.Clusters.Count; i++)
                 {
-                    var cluster = ((Cluster) clusterizationResult.Clusters[i]).Items;
-                    clusters[i] = i+1;
+                    var cluster = ((Cluster)clusterizationResult.Clusters[i]).Items;
+                    clusters[i] = i + 1;
                     foreach (long matterId in cluster)
                     {
                         mattersCharacteristics[n++] = new { matterName = matters[matterId].Name, cluster = clusters[i], characteristics = allCharacteristics[matterIds.ToList().IndexOf(matterId)] };
                     }
                 }
-
 
                 var characteristicsList = new List<SelectListItem>();
                 for (int i = 0; i < characteristicNames.Count; i++)

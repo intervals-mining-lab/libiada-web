@@ -109,9 +109,9 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    {"chain", sequence},
-                    {"transformationsList", transformations},
-                    {"iterationsCount", iterationsCount}
+                    { "chain", sequence },
+                    { "transformationsList", transformations },
+                    { "iterationsCount", iterationsCount }
                 };
                 return result;
             });

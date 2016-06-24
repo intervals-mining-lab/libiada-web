@@ -174,7 +174,6 @@
                     partNames[i] = new List<string>();
                     starts[i] = new List<int>();
                     lengthes[i] = new List<int>();
-                    
 
                     while (iter.Next())
                     {

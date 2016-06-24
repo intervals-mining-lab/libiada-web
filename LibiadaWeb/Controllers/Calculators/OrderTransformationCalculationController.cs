@@ -165,7 +165,7 @@
                                 }
                                 else
                                 {
-                                    sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link) transformationLinkIds[j]);
+                                    sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[j]);
                                 }
                             }
                         }

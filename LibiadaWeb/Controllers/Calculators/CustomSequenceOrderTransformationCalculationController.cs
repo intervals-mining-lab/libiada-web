@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Bio.Extensions;
-using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics;
-using LibiadaCore.Core.Characteristics.Calculators;
-using LibiadaCore.Misc;
-using LibiadaWeb.Helpers;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Account;
-using LibiadaWeb.Models.Repositories.Catalogs;
-using LibiadaWeb.Models.Repositories.Sequences;
-using Newtonsoft.Json;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Bio.Extensions;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Misc;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Account;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// The custom sequence order transformation calculation controller.
+    /// </summary>
     public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
+        /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformationCalculationController(): base("Custom sequences order transformation/derivative characteristics calculation")
+        public CustomSequenceOrderTransformationCalculationController() : base("Custom sequences order transformation/derivative characteristics calculation")
         {
         }
 
@@ -92,6 +97,15 @@ namespace LibiadaWeb.Controllers.Calculators
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
+        /// <param name="customSequences">
+        /// Custom sequences inputed by user.
+        /// </param>
+        /// <param name="localFile">
+        /// Local file flag.
+        /// </param>
+        /// <param name="file">
+        /// Sequences as fasta files.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -151,6 +165,7 @@ namespace LibiadaWeb.Controllers.Calculators
                                 }
                             }
                         }
+
                         var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
                         var calculator = CalculatorsFactory.CreateFullCalculator(className);

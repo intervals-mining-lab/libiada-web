@@ -196,7 +196,6 @@
                         // don't need to import this gene
                         continue;
                     }
-
                 }
 
                 if (location.SubLocations.Count > 0)

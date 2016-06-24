@@ -1,23 +1,23 @@
-﻿using Bio.Extensions;
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Account;
-
-namespace LibiadaWeb.Controllers.Sequences
+﻿namespace LibiadaWeb.Controllers.Sequences
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
 
-    using LibiadaCore.Misc;
+    using Bio.Extensions;
+
     using LibiadaCore.Core;
+    using LibiadaCore.Misc;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
+    /// <summary>
+    /// The custom sequence order transformer controller.
+    /// </summary>
     public class CustomSequenceOrderTransformerController : AbstractResultController
     {
         /// <summary>
@@ -31,10 +31,9 @@ namespace LibiadaWeb.Controllers.Sequences
         private readonly CommonSequenceRepository commonSequenceRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
+        /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformerController()
-            : base("Custom sequences order transformation")
+        public CustomSequenceOrderTransformerController() : base("Custom sequences order transformation")
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -73,6 +72,15 @@ namespace LibiadaWeb.Controllers.Sequences
         /// <param name="iterationsCount">
         /// Number of transformations iterations.
         /// </param>
+        /// <param name="customSequences">
+        /// Custom sequences inputed by user.
+        /// </param>
+        /// <param name="localFile">
+        /// Local file flag.
+        /// </param>
+        /// <param name="file">
+        /// Sequences as fasta files.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -108,6 +116,7 @@ namespace LibiadaWeb.Controllers.Sequences
                         names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
                     }
                 }
+
                 for (int k = 0; k < iterationsCount; k++)
                 {
                     var sequence = new Chain(sourceSequences[k]);
@@ -126,6 +135,7 @@ namespace LibiadaWeb.Controllers.Sequences
                         }
                     }
                 }
+
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
@@ -135,10 +145,10 @@ namespace LibiadaWeb.Controllers.Sequences
 
                 var result = new Dictionary<string, object>
                 {
-                    {"names", names},    
-                    {"sequences", sequences},
-                    {"transformationsList", transformations},
-                    {"iterationsCount", iterationsCount}
+                    { "names", names },    
+                    { "sequences", sequences },
+                    { "transformationsList", transformations },
+                    { "iterationsCount", iterationsCount }
                 };
                 return result;
             });
