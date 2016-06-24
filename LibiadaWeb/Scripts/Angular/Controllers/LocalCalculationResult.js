@@ -40,9 +40,9 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
+            tooltipContent.push(d.cluster);
             tooltipContent.push("Name: " + d.name);
-
-
+            tooltipContent.push("Fragment №: " + d.id);
             var pointSharacteristics = [];
             var characteristics = $scope.characteristics[d.characteristicId].fragmentsData[d.id].Characteristics;
             for (var i = 0; i < characteristics.length; i++) {
@@ -193,16 +193,6 @@
                     .x(xMap)
                     .y(yMap);
 
-                //svg.append("path")
-                //    .datum($scope.points)
-                //    .attr("class", "line")
-                //    .attr("d", line)
-                //    .attr('stroke', elementColor)
-                //    .attr('stroke-width', 1)
-                //    .attr('fill', 'none')
-                //    .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
-
-
                 // Nest the entries by symbol
                 var dataNest = d3.nest()
                     .key(function(d) { return d.cluster })
@@ -216,11 +206,10 @@
                         .attr("d", line)
                         .attr('stroke', function (d) { return color(cValue(d[0])); })
                         .attr('stroke-width', 1)
-                        .attr('fill', 'none')
-                        .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+                        .attr('fill', 'none');
                 });
 
-            } else {
+            } 
                 // draw dots
                 svg.selectAll(".dot")
                     .data($scope.points)
@@ -232,10 +221,11 @@
                     .attr("cx", xMap)
                     .attr("cy", yMap)
                     .style("fill-opacity", 0.6)
+                    .style("opacity", $scope.lineChart ? 0 : 1)
                     .style("fill", elementColor)
                     .style("stroke", elementColor)
                     .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
-            }
+            
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.legend)
@@ -273,7 +263,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return "Cluster " + d.name; })
+                .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
         }
 
