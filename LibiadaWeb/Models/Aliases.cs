@@ -481,7 +481,7 @@
             /// <summary>
             /// The feature mitochondrion ribosomal rna.
             /// </summary>
-            public const int MitochondrionRRNA = 12;
+            public const int MitochondrionRibosomalRNA = 12;
 
             /// <summary>
             /// The feature repeat region.
@@ -587,6 +587,21 @@
             /// The non coding gene.
             /// </summary>
             public const int Gene = 33;
+
+            /// <summary>
+            /// 3'UTR end.
+            /// </summary>
+            public const int ThreeEnd = 34;
+
+            /// <summary>
+            /// 5'UTR end.
+            /// </summary>
+            public const int FiveEnd = 35;
+
+            /// <summary>
+            /// Primer bind site.
+            /// </summary>
+            public const int PrimerBind = 36;
         }
 
         /// <summary>

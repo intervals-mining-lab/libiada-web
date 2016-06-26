@@ -1200,7 +1200,11 @@ ALTER TABLE chain_attribute ADD CONSTRAINT uk_chain_attribute UNIQUE(chain_id, a
 
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Gene (non coding)', 'Gene without CDS (coding sequence) associated with it.', 1, 'gene');
 
+-- 26.06.2016
+-- Added new features.
 
-
+INSERT INTO feature (name, description, nature_id, type) VALUES ('3 end', 'Region at the 3 end of a mature transcript (following the stop codon) that is not translated into a protein; region at the 3 end of an RNA virus (following the last stop codon) that is not translated into a protein.', 1, '3''UTR');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('5 end', 'Region at the 5 end of a mature transcript (preceding the initiation codon) that is not translated into a protein;region at the 5 end of an RNA virus genome (preceding the first initiation codon) that is not translated into a protein.', 1, '5''UTR');
+INSERT INTO feature (name, description, nature_id, type) VALUES ('Primer bind', 'Non-covalent primer binding site for initiation of replication, transcription, or reverse transcription; includes site(s) for synthetic e.g., PCR primer elements.', 1, 'primer_bind');
 	
 COMMIT;

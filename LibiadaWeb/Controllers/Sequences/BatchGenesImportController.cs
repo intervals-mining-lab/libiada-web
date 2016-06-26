@@ -86,12 +86,11 @@
                                 subsequenceImporter.CreateSubsequences();
                             }
                             
+                            var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequenceId && s.FeatureId == Aliases.Feature.NonCodingSequence);
+                            var featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequenceId && s.FeatureId != Aliases.Feature.NonCodingSequence);
+
                             statuses[i] = "Success";
-                            results[i] = "Successfully imported " + db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
-                                                                        .Include(s => s.Position)
-                                                                        .Include(s => s.Feature)
-                                                                        .Include(s => s.SequenceAttribute)
-                                                                        .Count() + " subsequences";
+                            results[i] = "Successfully imported " + featuresCount + " features and " + nonCodingCount + " non coding subsequences";
                         }
                         catch (Exception exception)
                         {

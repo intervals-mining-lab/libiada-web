@@ -165,49 +165,31 @@
 
                 if (feature.Key == gene)
                 {
-                    if (leafLocations.Count > 1)
+                    if (!GeneImportable(leafLocations, i))
                     {
-                        throw new Exception("Gene can only have one leaf location.");
-                    }
-
-                    var leafLocation = leafLocations[0];
-                    var nextLeafLocations = features[i + 1].Location.GetLeafLocations();
-
-                    // if there is join in child record parent record contains only
-                    // first child start and last child end
-                    if (nextLeafLocations.Count > 1)
-                    {
-                        if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart &&
-                            leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
-                        {
-                            // don't need to import this gene
-                            continue;
-                        }
-
-                        throw new Exception("Gene and next element's locations are not equal. Location = " + leafLocation.StartData);
-                    }
-
-                    // checking if there is any feature with identical position
-                    if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
-                                                          leafLocation.LocationEnd == l.LocationEnd &&
-                                                          leafLocation.StartData == l.StartData &&
-                                                          leafLocation.EndData == l.EndData))
-                    {
-                        // don't need to import this gene
                         continue;
                     }
+                }
+
+                if (location.Operator == LocationOperator.Order || location.Operator == LocationOperator.Order)
+                {
+                    throw new Exception("Unknown operator: " + location.Operator);
                 }
 
                 if (location.SubLocations.Count > 0)
                 {
                     var subLocationOperator = location.SubLocations[0].Operator;
 
+                    if (subLocationOperator == LocationOperator.Order || subLocationOperator == LocationOperator.Order)
+                    {
+                        throw new Exception("Unknown operator: " + subLocationOperator);
+                    }
+
                     foreach (var subLocation in location.SubLocations)
                     {
                         if (subLocation.Operator != subLocationOperator)
                         {
-                            throw new Exception("SubLocation operators does not match: " + subLocationOperator
-                                                                               + " and " + subLocation.Operator);
+                            throw new Exception("SubLocation operators does not match: " + subLocationOperator + " and " + subLocation.Operator);
                         }
                     }
                 }
@@ -222,6 +204,81 @@
                     throw new Exception("Subsequence length cant be less than 1.");
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks if gene is valid and needs import.
+        /// </summary>
+        /// <param name="leafLocations">
+        /// The leaf locations.
+        /// </param>
+        /// <param name="index">
+        /// The index of gene.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool GeneImportable(List<ILocation> leafLocations, int index)
+        {
+            if (leafLocations.Count > 1)
+            {
+                // if feature is last
+                if ((index + 1) >= features.Count)
+                {
+                    throw new Exception("Multipositional gene has no corresponding child feature. Location = " + leafLocations[0].StartData);
+                }
+
+                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
+                if (nextLeafLocations.Count != leafLocations.Count)
+                {
+                    throw new Exception("Gene's and next element's locations are not equal. Location = " + leafLocations[0].StartData);
+                }
+
+                for (int j = 0; j < leafLocations.Count; j++)
+                {
+                    // comparing gene's positions and corresponding child feature's position
+                    if (leafLocations[j].LocationStart != nextLeafLocations[j].LocationStart
+                     || leafLocations[j].LocationEnd != nextLeafLocations[j].LocationEnd)
+                    {
+                        throw new Exception("Multipositional gene and corresponding child feature's locations are not equal. Location = " + leafLocations[j].StartData);
+                    }
+                }
+
+                // don't need to import this gene
+                return false;
+            }
+
+            var leafLocation = leafLocations[0];
+
+            // if feature is not last
+            if ((index + 1) < features.Count)
+            {
+                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
+
+                // if there is join in child record parent record contains only
+                // first child start and last child end
+                if (nextLeafLocations.Count > 1)
+                {
+                    if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart
+                     && leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
+                    {
+                        // don't need to import this gene
+                        return false;
+                    }
+
+                    throw new Exception("Gene's and next element's locations are not equal. Location = " + leafLocation.StartData);
+                }
+            }
+
+            // checking if there is any feature with identical position
+            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart && leafLocation.LocationEnd == l.LocationEnd
+                                               && leafLocation.StartData == l.StartData && leafLocation.EndData == l.EndData))
+            {
+                // don't need to import this gene
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -243,7 +300,7 @@
 
                 if (feature.Key == gene)
                 {
-                    if (!CheckIfGeneNeedsImport(leafLocations, i))
+                    if (!GeneNeedsImport(leafLocations, i))
                     {
                         continue;
                     }
@@ -333,8 +390,14 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool CheckIfGeneNeedsImport(List<ILocation> leafLocations, int index)
+        private bool GeneNeedsImport(List<ILocation> leafLocations, int index)
         {
+            if (leafLocations.Count > 1)
+            {
+                // don't need to import this gene
+                return false;
+            }
+
             var leafLocation = leafLocations[0];
 
             // if feature is not last
