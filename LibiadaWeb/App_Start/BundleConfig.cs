@@ -37,12 +37,7 @@
                         "~/Scripts/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dcjs").Include(
-                        "~/Scripts/d3/d3.js",
-                        "~/Scripts/CrossFilter/crossfilter.js",
-                        "~/Scripts/DC/dc.js"));
-
-            bundles.Add(new ScriptBundle("~/bundles/highCharts").Include(
-                        "~/Scripts/Highcharts-2.3.5/highcharts.src.js"));
+                        "~/Scripts/d3/d3.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
                         "~/Scripts/jQAllRangeSliders-withRuler-min.js",
@@ -99,8 +94,7 @@
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css", 
-                        "~/Content/site.css",
-                        "~/Content/dc.css"));
+                        "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/slider").Include(
                         "~/Content/themes/JQAllRange/iThing.css"));

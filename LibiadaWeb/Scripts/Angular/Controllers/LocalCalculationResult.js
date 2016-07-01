@@ -229,7 +229,7 @@
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.legend)
-                .enter()
+                .enter() 
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
