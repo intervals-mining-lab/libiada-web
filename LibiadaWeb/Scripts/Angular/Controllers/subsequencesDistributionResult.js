@@ -13,7 +13,7 @@
 
                 for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
                     var subsequenceData = sequenceData.SubsequencesData[j];
-                    $scope.points.push({
+                    var point = {
                         id: id,
                         matterId: sequenceData.MatterId,
                         name: sequenceData.MatterName,
@@ -27,11 +27,13 @@
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
                         y: subsequenceData.CharacteristicsValues[0],
-                        gcRatio: subsequenceData.CharacteristicsValues[subsequenceData.CharacteristicsValues.length - 1],
+                        gcRatio: subsequenceData
+                            .CharacteristicsValues[subsequenceData.CharacteristicsValues.length - 1],
                         featureVisible: true,
                         matterVisible: true
-                    });
-
+                    };
+                    $scope.points.push(point);
+                    $scope.visiblePoints.push(point);
                     id++;
                 }
             }
@@ -45,6 +47,20 @@
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
+            if (feature.Selected) {
+                for (var i = 0; i < $scope.points.length; i++) {
+                    if ($scope.points[i].featureId === feature.Value) {
+                        $scope.visiblePoints.push($scope.points[i]);
+                    }
+                }
+            } else {
+                for (var j = 0; j < $scope.visiblePoints.length; j++) {
+                    if ($scope.visiblePoints[j].featureId === feature.Value) {
+                        $scope.visiblePoints.splice($scope.visiblePoints.indexOf($scope.visiblePoints[j]), 1);
+                        j--;
+                    }
+                }
+            }
         }
 
         // checks if dot is visible
@@ -287,6 +303,7 @@
             //        .filter(function (dot) { return dot.featureId === featureId; });
             //}
 
+
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.matters)
@@ -333,22 +350,22 @@
                         var keyCode = d3.event.keyCode;
                         if (isKeyUpOrDown(keyCode)) {
                             var nextPoint;
-                            var indexOfPoint = $scope.points.indexOf(tooltip.selectedPoint);
+                            var indexOfPoint = $scope.visiblePoints.indexOf(tooltip.selectedPoint);
                             $scope.clearTooltip(tooltip);
                             
                             switch (keyCode) {
                                 case 40:
-                                    for (var i = indexOfPoint + 1; i < $scope.points.length; i++) {
-                                        if ($scope.points[i].matterId === tooltip.selectedPoint.matterId) {
-                                            nextPoint = $scope.points[i];
+                                    for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
+                                        if ($scope.visiblePoints[i].matterId === tooltip.selectedPoint.matterId) {
+                                            nextPoint = $scope.visiblePoints[i];
                                             break;
                                         }
                                     }
                                     break;
                                 case 38:
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
-                                        if ($scope.points[j].matterId === tooltip.selectedPoint.matterId) {
-                                            nextPoint = $scope.points[j];
+                                        if ($scope.visiblePoints[j].matterId === tooltip.selectedPoint.matterId) {
+                                            nextPoint = $scope.visiblePoints[j];
                                             break;
                                         }
                                     }
@@ -390,6 +407,7 @@
         $scope.precision = 0;
         $scope.gcPrecision = 10;
         $scope.points = [];
+        $scope.visiblePoints = [];
         $scope.matters = [];
         $scope.fillPoints();
     }
