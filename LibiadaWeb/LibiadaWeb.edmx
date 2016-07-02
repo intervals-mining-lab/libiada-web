@@ -44,7 +44,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -105,7 +104,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="fasta_header" Type="varchar" MaxLength="255" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
@@ -180,7 +178,6 @@
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="translator_id" Type="int4" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="original" Type="bool" Nullable="false" />
           <Property Name="language_id" Type="int4" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -270,7 +267,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
@@ -311,7 +307,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
@@ -333,7 +328,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -349,7 +343,6 @@
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="piece_position" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -1798,7 +1791,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1872,7 +1864,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="FastaHeader" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1973,7 +1964,6 @@
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="TranslatorId" Type="Int32"  />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="Original" Type="Boolean" Nullable="false" />
           <Property Name="LanguageId" Type="Int32" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
@@ -2114,7 +2104,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -2166,7 +2155,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -2195,7 +2183,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2218,7 +2205,6 @@
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
-          <Property Name="PiecePosition" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -3816,7 +3802,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -3882,7 +3867,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="FastaHeader" ColumnName="fasta_header" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
@@ -3963,7 +3947,6 @@
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="Original" ColumnName="original" />
                 <ScalarProperty Name="LanguageId" ColumnName="language_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
@@ -4061,7 +4044,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -4105,7 +4087,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -4128,7 +4109,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -4145,7 +4125,6 @@
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="PiecePosition" ColumnName="piece_position" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

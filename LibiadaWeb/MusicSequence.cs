@@ -26,7 +26,6 @@ namespace LibiadaWeb
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
         public int FeatureId { get; set; }
-        public long PiecePosition { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }

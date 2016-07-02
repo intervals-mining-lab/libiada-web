@@ -1207,4 +1207,13 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('3 end', 'Regio
 INSERT INTO feature (name, description, nature_id, type) VALUES ('5 end', 'Region at the 5 end of a mature transcript (preceding the initiation codon) that is not translated into a protein;region at the 5 end of an RNA virus genome (preceding the first initiation codon) that is not translated into a protein.', 1, '5''UTR');
 INSERT INTO feature (name, description, nature_id, type) VALUES ('Primer bind', 'Non-covalent primer binding site for initiation of replication, transcription, or reverse transcription; includes site(s) for synthetic e.g., PCR primer elements.', 1, 'primer_bind');
 	
+	
+-- 02.07.2016
+-- Removing not used column in chain.
+
+ALTER TABLE chain DROP COLUMN piece_position;
+ALTER TABLE data_chain DROP COLUMN piece_position;
+
+
+
 COMMIT;

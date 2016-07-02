@@ -129,8 +129,7 @@
                                                        FeatureId = Aliases.Feature.FullGenome,
                                                        NotationId = Aliases.Notation.Nucleotide,
                                                        RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
-                                                       RemoteId = metadata.Version.CompoundAccession,
-                                                       PiecePosition = 0
+                                                       RemoteId = metadata.Version.CompoundAccession
                                                    };
                                 dnaSequenceRepository.Create(sequence, sequenceStream, metadata.Definition.ToLower().Contains("partial"));
                                 results[i] = "successfully imported sequence";

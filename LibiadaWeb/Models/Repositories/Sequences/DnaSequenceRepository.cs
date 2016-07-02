@@ -109,8 +109,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         id, 
                                         notation_id,
                                         matter_id, 
-                                        feature_id, 
-                                        piece_position, 
+                                        feature_id,
                                         fasta_header, 
                                         alphabet, 
                                         building, 
@@ -121,8 +120,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @id, 
                                         @notation_id,
                                         @matter_id,
-                                        @feature_id, 
-                                        @piece_position, 
+                                        @feature_id,
                                         @fasta_header, 
                                         @alphabet, 
                                         @building, 
@@ -175,8 +173,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Id = source.Id,
                 NotationId = source.NotationId, 
                 MatterId = source.MatterId, 
-                FeatureId = source.FeatureId, 
-                PiecePosition = source.PiecePosition
+                FeatureId = source.FeatureId
             };
         }
     }

@@ -113,12 +113,6 @@
                     ParameterName = "remote_db_id", 
                     NpgsqlDbType = NpgsqlDbType.Integer, 
                     Value = (object)commonSequence.RemoteDbId ?? DBNull.Value
-                }, 
-                new NpgsqlParameter
-                {
-                    ParameterName = "piece_position", 
-                    NpgsqlDbType = NpgsqlDbType.Integer, 
-                    Value = commonSequence.PiecePosition
                 }
             };
             return parameters;

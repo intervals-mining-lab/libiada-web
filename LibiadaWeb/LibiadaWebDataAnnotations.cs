@@ -60,12 +60,6 @@
         public int FeatureId { get; set; }
 
         /// <summary>
-        /// Gets or sets the piece position.
-        /// </summary>
-        [Display(Name = "Position of subsequence")]
-        public long PiecePosition { get; set; }
-
-        /// <summary>
         /// Gets or sets the remote db id.
         /// </summary>
         [Display(Name = "Remote database")]

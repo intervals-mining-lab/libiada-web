@@ -152,7 +152,6 @@
                 {
                     NotationId = notationId,
                     FeatureId = dataBaseSequence.FeatureId,
-                    PiecePosition = dataBaseSequence.PiecePosition,
                     MatterId = resultMatter.Id
                 };
 

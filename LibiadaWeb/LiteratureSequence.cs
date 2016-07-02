@@ -27,7 +27,6 @@ namespace LibiadaWeb
         public long MatterId { get; set; }
         public int FeatureId { get; set; }
         public Nullable<int> TranslatorId { get; set; }
-        public long PiecePosition { get; set; }
         public bool Original { get; set; }
         public int LanguageId { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
