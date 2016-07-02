@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink("Matters", "Index", "Matters")
+            @Html.ActionLink(UserHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
             <br />
             @if (UserHelper.IsAdmin())
             {
@@ -29,9 +29,9 @@
                 <br />
                 @Html.ActionLink("Genetic sequences transformation", "Index", "SequenceTransformer")
                 <br />
-                @Html.ActionLink("Order transformation", "Index", "OrderTransformer")
+                @Html.ActionLink("Order transformation (high order)", "Index", "OrderTransformer")
                 <br />
-                @Html.ActionLink("Custom sequences order transformation", "Index", "CustomSequenceOrderTransformer")
+                @Html.ActionLink("Custom sequences order transformation (high order)", "Index", "CustomSequenceOrderTransformer")
             }
         </div>
         <div class="col-md-4">
@@ -42,33 +42,34 @@
             <br />
             @if (UserHelper.IsAdmin())
             {
+                @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
+                <br />
+                @Html.ActionLink("Clusterization", "Index", "Clusterization")
+                <br />
+                @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
+                <br />
+                @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
+                <br />
+                @Html.ActionLink("Genes map (Subsequences distribution)", "Index", "SubsequencesDistribution")
+                <br />
+                @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
+                <br />
+                @Html.ActionLink("Subsequences comparer", "Index", "SubsequenceComparer")
+                <br/>
                 @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
                 <br />
                 @Html.ActionLink("Calculation of relation characteristics of congeneric sequences", "Index", "RelationCalculation")
                 <br />
                 @Html.ActionLink("Calculation of accordance characteristics of congeneric sequences", "Index", "AccordanceCalculation")
                 <br />
-                @Html.ActionLink("Calculation of local characteristics (Functions of sequences)", "Index", "LocalCalculation")
+                @Html.ActionLink("Order transformation (high order) characteristics calculation", "Index", "OrderTransformationCalculation")
                 <br />
-                @Html.ActionLink("Clusterization by characteristics", "Index", "Clusterization")
-                <br />
-                @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
-                <br />
-                @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
-                <br />
-                @Html.ActionLink("Subsequences distribution", "Index", "SubsequencesDistribution")
-                <br />
-                @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
-                <br />
-                @Html.ActionLink("Subsequences comparer", "Index", "SubsequenceComparer")
-                <br />
-                @Html.ActionLink("Order transformation/derivative characteristics calculation", "Index", "OrderTransformationCalculation")
-                <br />
-                @Html.ActionLink("Custom sequences order transformation/derivative characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
+                @Html.ActionLink("Custom sequences order transformation (high order) characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
                 <br />
                 @Html.ActionLink("Order comparison", "Index", "BuildingsSimilarity")
+                
                 <br />
-                @Html.ActionLink("Charts for table data", "Index", "Charts")
+                @Html.ActionLink("Data visualization", "Index", "Charts")
             }
         </div>
         <div class="col-md-4">
