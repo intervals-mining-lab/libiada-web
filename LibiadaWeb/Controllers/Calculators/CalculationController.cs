@@ -176,7 +176,7 @@
 
                             if (rotate)
                             {
-                                var building = ArrayManipulator.RotateArray(tempChain.Building, rotationLength ?? 0);
+                                var building = tempChain.Building.Rotate(rotationLength ?? 0);
                                 var newSequence = building.Select(t => new ValueInt(t)).Cast<IBaseObject>().ToList();
                                 tempChain = new Chain(newSequence);
                             }
