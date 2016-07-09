@@ -26,9 +26,7 @@
                         subsequenceRemoteId: subsequenceData.RemoteId,
                         numericX: i + 1,
                         x: sequenceData.Characteristic,
-                        y: subsequenceData.CharacteristicsValues[0],
-                        gcRatio: subsequenceData
-                            .CharacteristicsValues[subsequenceData.CharacteristicsValues.length - 1],
+                        subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
                         featureVisible: true,
                         matterVisible: true
                     };
@@ -99,7 +97,7 @@
             tooltipContent.push("Position: " + positionGenbankLink);
             tooltipContent.push("Length: " + d.lengths.join(", "));
             tooltipContent.push("GC ratio: " + d.gcRatio);
-            tooltipContent.push("(" + d.x + ", " + d.y + ")");
+            tooltipContent.push("(" + d.x + ", " + yValue(d) + ")");
 
             return tooltipContent.join("</br>");
         }
@@ -114,7 +112,7 @@
             tooltip.selectedPoint = d;
             tooltip.selectedDots = svg.selectAll(".dot")
                     .filter(function (dot) {
-                        if (dot.matterId === d.matterId && dot.y === d.y) {
+                        if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else {
@@ -127,7 +125,7 @@
                 tooltip.similarDots = svg.selectAll(".dot")
                     .filter(function (dot) {
                         if (dot.matterId !== d.matterId
-                            && Math.abs(dot.y - d.y) <= $scope.precision
+                            && Math.abs(yValue(dot) - yValue(d)) <= $scope.precision
                             && Math.abs(dot.gcRatio - d.gcRatio) <= $scope.gcPrecision) {
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
@@ -147,8 +145,6 @@
                 .style("padding", "5px")
                 .style("left", (d3.event.pageX + 18) + "px")
                 .style("top", (d3.event.pageY + 18) + "px");
-
-            //tooltip.hideTooltip = false;
         }
 
         function clearTooltip(tooltip) {
@@ -167,6 +163,14 @@
 
         function isKeyUpOrDown(keyCode) {
             return keyCode === 40 || keyCode === 38;
+        }
+
+        function xValue(d) {
+            return $scope.numericXAxis ? d.numericX : d.x;
+        }
+
+        function yValue(d) {
+            return d.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
         }
 
         function drawGenesMap() {
@@ -191,16 +195,14 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xValue = function (d) { return $scope.numericXAxis ? d.numericX : d.x; }; // data -> value
             var xScale = d3.scale.linear().range([0, width]); // value -> display
-            var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
+            var xMap = function (d) { return xScale($scope.xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
             xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
 
             // setup y
-            var yValue = function (d) { return d.y; }; // data -> value
             var yScale = d3.scale.linear().range([height, 0]); // value -> display
-            var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
+            var yMap = function (d) { return yScale($scope.yValue(d)); }; // data -> display
             var yAxis = d3.svg.axis().scale(yScale).orient("left");
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
@@ -222,11 +224,11 @@
 
 
             // calculating margins for dots
-            var xMin = d3.min($scope.points, xValue);
-            var xMax = d3.max($scope.points, xValue);
+            var xMin = d3.min($scope.points, $scope.xValue);
+            var xMax = d3.max($scope.points, $scope.xValue);
             var xMargin = (xMax - xMin) * 0.05;
-            var yMax = d3.max($scope.points, yValue);
-            var yMin = d3.min($scope.points, yValue);
+            var yMax = d3.max($scope.points, $scope.yValue);
+            var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
             // don't want dots overlapping axis, so add in buffer to data domain
@@ -288,21 +290,6 @@
                     $scope.showTooltip(points[0], tooltip, svg);
                 }
             });
-
-            //$scope.mattersDots = [];
-            //for (var i = 0; i < $scope.matters; i++) {
-            //    var matterId = $scope.matters[i].id;
-            //    $scope.mattersDots[matterId] = d3.selectAll(".dot")
-            //        .filter(function (dot) { return dot.matterId === matterId; });
-            //}
-
-            //$scope.featuresDots = [];
-            //for (var j = 0; j < $scope.features; j++) {
-            //    var featureId = $scope.features[j].Value;
-            //    $scope.mattersDots[featureId] = d3.selectAll(".dot")
-            //        .filter(function (dot) { return dot.featureId === featureId; });
-            //}
-
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -398,6 +385,8 @@
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
         $scope.isKeyUpOrDown = isKeyUpOrDown;
+        $scope.xValue = xValue;
+        $scope.yValue = yValue;
 
         $scope.legendHeight = $scope.result.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
@@ -409,6 +398,7 @@
         $scope.points = [];
         $scope.visiblePoints = [];
         $scope.matters = [];
+        $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
         $scope.fillPoints();
     }
 

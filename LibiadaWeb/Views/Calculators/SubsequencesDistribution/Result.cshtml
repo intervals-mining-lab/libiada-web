@@ -9,6 +9,12 @@
     @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
     <div class="form-horizontal" ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
         <div class="form-group">
+            <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
+            <div class="col-md-10">
+                <select class="form-control" title="Subsequnce characteristic" ng-model="subsequenceCharacteristic" ng-options="c.Text for c in subsequencesCharacteristicsList" id="subsequenceCharacteristic"></select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-md-2" for="hight">Hight:</label>
             <div class="col-md-10">
                 <input class="form-control" name="hight" id="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
@@ -17,7 +23,7 @@
         <div class="form-group">
             <label class="control-label col-md-2" for="width">Width:</label>
             <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width"/>
+                <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
             </div>
         </div>
         <div class="form-group">
@@ -37,7 +43,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="highlight" ng-model="highlight" value="false"/>
+                    <input type="checkbox" name="highlight" ng-model="highlight" value="false" />
                     Highlight similar subsequences
                 </label>
             </div>
@@ -45,7 +51,7 @@
         <div class="form-group" ng-show="highlight">
             <div class="col-md-offset-2 col-md-10">
                 <label>
-                    <input type="checkbox" name="highlightAll" ng-model="highlightAll" value="false"/>
+                    <input type="checkbox" name="highlightAll" ng-model="highlightAll" value="false" />
                     Highlight all similar subsequences of selected organism
                 </label>
             </div>

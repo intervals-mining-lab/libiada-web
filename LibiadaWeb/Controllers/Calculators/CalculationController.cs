@@ -222,7 +222,7 @@
                     };
                 }
 
-                var result = new Dictionary<string, object>()
+                var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", mattersCharacteristics },
                                      { "characteristicNames", characteristicNames },

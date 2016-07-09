@@ -16,8 +16,22 @@
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         }
 
+        function addCharacteristic() {
+            $scope.characteristics.push({
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.characteristicTypes[0].CharacteristicLinks[0],
+                notation: $scope.notations[0]
+            });
+        }
+
+        function deleteCharacteristic(characteristic) {
+            $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
+        }
+
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
+        $scope.addCharacteristic = addCharacteristic;
+        $scope.deleteCharacteristic = deleteCharacteristic;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
@@ -26,16 +40,12 @@
         $scope.filterByFeature = FakeFilterByFeature;
 
         $scope.selectedMatters = 0;
-        $scope.firstCharacteristic = {
+        $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notations[0]
         };
-        $scope.secondCharacteristic = {
-            characteristicType: $scope.characteristicTypes[0],
-            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
-            notation: $scope.notations[0]
-        };
+        $scope.characteristics = [];
     }
 
     angular.module("SubsequencesDistribution", []).controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
