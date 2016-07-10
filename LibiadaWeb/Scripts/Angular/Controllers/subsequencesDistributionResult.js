@@ -4,6 +4,14 @@
     function subsequencesDistributionResult($scope) {
         MapModelFromJson($scope, data);
 
+        function addCharacteristicComparer() {
+            $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
+        }
+
+        function deleteCharacteristicComparer(characteristicComparer) {
+            $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
+        }
+
         // initializes data for genes map 
         function fillPoints() {
             var id = 0;
@@ -45,13 +53,14 @@
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
-            if (feature.Selected) {
+
+            if (feature.Selected) { // adding new visible poins
                 for (var i = 0; i < $scope.points.length; i++) {
                     if ($scope.points[i].featureId === feature.Value) {
                         $scope.visiblePoints.push($scope.points[i]);
                     }
                 }
-            } else {
+            } else { // removing not visible points
                 for (var j = 0; j < $scope.visiblePoints.length; j++) {
                     if ($scope.visiblePoints[j].featureId === feature.Value) {
                         $scope.visiblePoints.splice($scope.visiblePoints.indexOf($scope.visiblePoints[j]), 1);
@@ -64,6 +73,48 @@
         // checks if dot is visible
         function dotVisible(dot) {
             return dot.featureVisible && dot.matterVisible;
+        }
+
+        // shows tooltip for dot or group of dots
+        function showTooltip(d, tooltip, svg) {
+            $scope.clearTooltip(tooltip);
+
+            tooltip.style("opacity", 0.9);
+
+            var tooltipHtml = [];
+
+            tooltip.selectedPoint = d;
+            tooltip.selectedDots = svg.selectAll(".dot")
+                .filter(function (dot) {
+                    if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) { // if dots are in the same position
+                        tooltipHtml.push($scope.fillPointTooltip(dot));
+                        return true;
+                    } else if ($scope.highlight) { // if similar dot are highlighted
+                        for (var i = 0; i < $scope.characteristicComparers.length; i++) {
+                            var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+                            var dValue = d.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+                            if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
+                                return false;
+                            }
+                        }
+
+                        tooltipHtml.push($scope.fillPointTooltip(dot));
+                        return true;
+                    }
+
+                    return false;
+                })
+                .attr("rx", $scope.selectedDotRadius);
+
+            tooltip.html(tooltipHtml.join("</br></br>"));
+
+            tooltip.style("background", "#000")
+                .style("color", "#fff")
+                .style("border-radius", "5px")
+                .style("font-family", "monospace")
+                .style("padding", "5px")
+                .style("left", (d3.event.pageX + 18) + "px")
+                .style("top", (d3.event.pageY + 18) + "px");
         }
 
         // constructs string representing tooltip text (inner html)
@@ -96,55 +147,9 @@
                                       d.positions.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
             tooltipContent.push("Length: " + d.lengths.join(", "));
-            tooltipContent.push("GC ratio: " + d.gcRatio);
             tooltipContent.push("(" + d.x + ", " + yValue(d) + ")");
 
             return tooltipContent.join("</br>");
-        }
-
-        function showTooltip(d, tooltip, svg) {
-            $scope.clearTooltip(tooltip);
-
-            tooltip.style("opacity", 0.9);
-
-            var tooltipHtml = [];
-
-            tooltip.selectedPoint = d;
-            tooltip.selectedDots = svg.selectAll(".dot")
-                    .filter(function (dot) {
-                        if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) {
-                            tooltipHtml.push($scope.fillPointTooltip(dot));
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    })
-                    .attr("rx", $scope.selectedDotRadius);
-
-            if ($scope.highlight) {
-                tooltip.similarDots = svg.selectAll(".dot")
-                    .filter(function (dot) {
-                        if (dot.matterId !== d.matterId
-                            && Math.abs(yValue(dot) - yValue(d)) <= $scope.precision
-                            && Math.abs(dot.gcRatio - d.gcRatio) <= $scope.gcPrecision) {
-                            tooltipHtml.push($scope.fillPointTooltip(dot));
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    })
-                    .attr("rx", $scope.selectedDotRadius);
-            }
-
-            tooltip.html(tooltipHtml.join("</br></br>"));
-
-            tooltip.style("background", "#000")
-                .style("color", "#fff")
-                .style("border-radius", "5px")
-                .style("font-family", "monospace")
-                .style("padding", "5px")
-                .style("left", (d3.event.pageX + 18) + "px")
-                .style("top", (d3.event.pageY + 18) + "px");
         }
 
         function clearTooltip(tooltip) {
@@ -153,10 +158,6 @@
 
                 if (tooltip.selectedDots) {
                     tooltip.selectedDots.attr("rx", $scope.dotRadius);
-                }
-
-                if (tooltip.similarDots) {
-                    tooltip.similarDots.attr("rx", $scope.dotRadius);
                 }
             }
         }
@@ -173,6 +174,7 @@
             return d.subsequenceCharacteristics[$scope.subsequenceCharacteristic.Value];
         }
 
+        // main drawing method
         function drawGenesMap() {
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
@@ -231,7 +233,7 @@
             var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
-            // don't want dots overlapping axis, so add in buffer to data domain
+            // don't want dots overlapping axis, so adding buffer to data domain
             xScale.domain([xMin - xMargin, xMax + xMargin]);
             yScale.domain([yMin - yMargin, yMax + yMargin]);
 
@@ -258,7 +260,7 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text($scope.subsequencesCharacteristicName)
+                .text($scope.subsequenceCharacteristic.Text)
                 .style("font-size", "12pt");
 
             // draw dots
@@ -277,19 +279,6 @@
                 .attr("visibility", function (dot) {
                     return $scope.dotVisible(dot) ? "visible" : "hidden";
                 });
-
-            d3.select("body").on("click", function () {
-                var clickedDots = svg.selectAll(".dot").filter(function () {
-                    return this === d3.event.target;
-                });
-
-                if (clickedDots.empty()) {
-                    $scope.clearTooltip(tooltip);
-                } else {
-                    var points = clickedDots.data();
-                    $scope.showTooltip(points[0], tooltip, svg);
-                }
-            });
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -331,6 +320,21 @@
                 .text(function (d) { return d.name; })
                 .style("font-size", "9pt");
 
+            // tooltip event bind
+            d3.select("body").on("click", function () {
+                var clickedDots = svg.selectAll(".dot").filter(function () {
+                    return this === d3.event.target;
+                });
+
+                if (clickedDots.empty()) {
+                    $scope.clearTooltip(tooltip);
+                } else {
+                    var points = clickedDots.data();
+                    $scope.showTooltip(points[0], tooltip, svg);
+                }
+            });
+
+            // tooltip show on key up or key down
             d3.select("body")
                 .on("keydown", function () {
                     if (tooltip.selectedPoint) {
@@ -339,9 +343,9 @@
                             var nextPoint;
                             var indexOfPoint = $scope.visiblePoints.indexOf(tooltip.selectedPoint);
                             $scope.clearTooltip(tooltip);
-                            
+
                             switch (keyCode) {
-                                case 40:
+                                case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
                                         if ($scope.visiblePoints[i].matterId === tooltip.selectedPoint.matterId) {
                                             nextPoint = $scope.visiblePoints[i];
@@ -349,7 +353,7 @@
                                         }
                                     }
                                     break;
-                                case 38:
+                                case 38: // up
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
                                         if ($scope.visiblePoints[j].matterId === tooltip.selectedPoint.matterId) {
                                             nextPoint = $scope.visiblePoints[j];
@@ -362,13 +366,12 @@
                             if (nextPoint) {
                                 return $scope.showTooltip(nextPoint, tooltip, svg);
                             }
-
                         }
                     }
                 });
 
+            // preventing scroll in key up and key down
             window.addEventListener("keydown", function (e) {
-                // space and arrow keys
                 if (isKeyUpOrDown(e.keyCode)) {
                     e.preventDefault();
                 }
@@ -387,18 +390,19 @@
         $scope.isKeyUpOrDown = isKeyUpOrDown;
         $scope.xValue = xValue;
         $scope.yValue = yValue;
+        $scope.addCharacteristicComparer = addCharacteristicComparer;
+        $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
 
         $scope.legendHeight = $scope.result.length * 20;
         $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
-        $scope.precision = 0;
-        $scope.gcPrecision = 10;
         $scope.points = [];
         $scope.visiblePoints = [];
         $scope.matters = [];
         $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+        $scope.characteristicComparers = [];
         $scope.fillPoints();
     }
 
