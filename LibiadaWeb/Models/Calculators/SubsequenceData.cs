@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -25,7 +26,7 @@
         /// <summary>
         /// The attributes.
         /// </summary>
-        public readonly string[] Attributes;
+        public readonly Dictionary<string, string> Attributes;
 
         /// <summary>
         /// The partial flag.
@@ -52,12 +53,12 @@
         /// The characteristic.
         /// </param>
         /// <param name="attributes">
-        /// The attributes.
+        /// Attributes of the given subsequence in form of dictionary.
         /// </param>
-        public SubsequenceData(Subsequence subsequence, double[] characteristics, string[] attributes)
+        public SubsequenceData(Subsequence subsequence, double[] characteristics, Dictionary<string, string> attributes)
         {
             CharacteristicsValues = characteristics;
-            Attributes = attributes ?? new string[0];
+            Attributes = attributes ?? new Dictionary<string, string>();
             FeatureId = subsequence.FeatureId;
             RemoteId = subsequence.RemoteId;
             Partial = subsequence.Partial;

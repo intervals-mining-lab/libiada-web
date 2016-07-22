@@ -203,10 +203,10 @@
                             }
                         }
 
-                        string[] attributes;
+                        Dictionary<string, string> attributes;
                         if (!subsequencesDbAttributes.TryGetValue(dbSubsequences[j].Id, out attributes))
                         {
-                            attributes = new string[0];
+                            attributes = new Dictionary<string, string>();
                         }
 
                         subsequencesData[j] = new SubsequenceData(dbSubsequences[j], subsequenceCharacteristicsValue, attributes);

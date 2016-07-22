@@ -117,13 +117,13 @@
                 var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
                 var firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
-                var firstSequenceAttributes = new List<string[]>();
+                var firstSequenceAttributes = new List<Dictionary<string, string>>();
                 foreach (var subsequence in firstSequenceSubsequences)
                 {
-                    string[] attributes;
+                    Dictionary<string, string> attributes;
                     if (!firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out attributes))
                     {
-                        attributes = new string[0];
+                        attributes = new Dictionary<string, string>();
                     }
 
                     firstSequenceAttributes.Add(attributes);
@@ -135,13 +135,13 @@
                 var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
                 var secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
-                var secondSequenceAttributes = new List<string[]>();
+                var secondSequenceAttributes = new List<Dictionary<string, string>>();
                 foreach (var subsequence in secondSequenceSubsequences)
                 {
-                    string[] attributes;
+                    Dictionary<string, string> attributes;
                     if (!secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out attributes))
                     {
-                        attributes = new string[0];
+                        attributes = new Dictionary<string, string>();
                     }
 
                     secondSequenceAttributes.Add(attributes);

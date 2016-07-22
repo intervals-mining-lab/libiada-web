@@ -75,6 +75,25 @@
             return dot.featureVisible && dot.matterVisible;
         }
 
+        function dotsSimilar(d, dot) {
+            if (d.featureId !== dot.featureId) {
+                return false;
+            }
+
+            switch(d.featureId) {
+                case 4: // CDS
+                case 5: // RRNA
+                case 6: // TRNA
+                    if (d.attributes["product"] !== dot.attributes["product"]) {
+                        return false;
+                    }
+                    break;
+            }
+
+            return true;
+            
+        }
+
         // shows tooltip for dot or group of dots
         function showTooltip(d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
@@ -98,7 +117,10 @@
                             }
                         }
 
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
+                        var tooltipColor = $scope.dotsSimilar(d, dot) ? "text-success" : "text-danger";
+
+                        tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
+
                         return true;
                     }
 
@@ -132,9 +154,13 @@
 
             tooltipContent.push($scope.featuresNames[d.featureId]);
 
-            if (d.attributes.length > 0) {
-                tooltipContent.push(d.attributes.join("<br/>"));
+            var attributes = [];
+
+            for (var key in d.attributes) {
+                attributes.push(key + (d.attributes[key] === "" ? "" : " = " + d.attributes[key]));
             }
+
+            tooltipContent.push(attributes.join("<br/>"));
 
             if (d.partial) {
                 tooltipContent.push("partial");
@@ -382,6 +408,7 @@
 
         $scope.drawGenesMap = drawGenesMap;
         $scope.dotVisible = dotVisible;
+        $scope.dotsSimilar = dotsSimilar;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;

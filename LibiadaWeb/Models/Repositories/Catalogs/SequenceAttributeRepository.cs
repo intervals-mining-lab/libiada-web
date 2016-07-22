@@ -48,18 +48,19 @@
         /// <returns>
         /// The <see cref="T:Dictionary{Int64, String[]}"/>.
         /// </returns>
-        public Dictionary<long, string[]> GetAttributes(IEnumerable<long> subsequenceIds)
+        public Dictionary<long, Dictionary<string, string>> GetAttributes(IEnumerable<long> subsequenceIds)
         {
             return db.SequenceAttribute.Where(sa => subsequenceIds.Contains(sa.SequenceId))
                                        .Include(sa => sa.Attribute)
                                        .Select(sa => new
                                                      {
                                                          sa.SequenceId,
-                                                         Text = sa.Attribute.Name + (sa.Value == string.Empty ? string.Empty : " = " + sa.Value)
+                                                         Key = sa.Attribute.Name,
+                                                         sa.Value
                                                      })
                                        .ToArray()
                                        .GroupBy(sa => sa.SequenceId)
-                                       .ToDictionary(sa => sa.Key, sa => sa.Select(s => s.Text).ToArray());
+                                       .ToDictionary(sa => sa.Key, sa => sa.GroupBy(s => s.Key).ToDictionary(s => s.Key, s => s.Select(v => v.Value).Aggregate((n, c) => n + " " + c)));
         }
 
         /// <summary>
