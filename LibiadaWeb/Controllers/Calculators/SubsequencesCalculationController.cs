@@ -179,16 +179,5 @@
                 };
             });
         }
-
-        /// <summary>
-        /// The sort key value pair list.
-        /// </summary>
-        /// <param name="arrayForSort">
-        /// The array for sort.
-        /// </param>
-        private void SortKeyValuePairList(List<KeyValuePair<int, double>> arrayForSort)
-        {
-            arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
-        }
     }
 }

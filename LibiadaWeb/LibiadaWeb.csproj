@@ -685,6 +685,7 @@
     <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Result.cshtml" />
     <Content Include="Views\Partial\_CustomSequences.cshtml" />
     <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
+    <Content Include="Views\Calculators\SubsequenceComparer\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
