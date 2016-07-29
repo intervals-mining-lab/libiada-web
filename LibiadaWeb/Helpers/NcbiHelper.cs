@@ -19,7 +19,7 @@
         /// <summary>
         /// The base url.
         /// </summary>
-        private const string BaseUrl = @"http://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+        private const string BaseUrl = @"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
         /// <summary>
         /// Gets features from GenBank file stream.

@@ -142,7 +142,7 @@
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];
-            var genBankLink = "<a target='_blank' href='http://www.ncbi.nlm.nih.gov/nuccore/";
+            var genBankLink = "<a target='_blank' href='https://www.ncbi.nlm.nih.gov/nuccore/";
 
             var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + d.name + "</a>" : d.name;
             tooltipContent.push(header);
