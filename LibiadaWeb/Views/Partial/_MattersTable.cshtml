@@ -2,28 +2,42 @@
 
 <br />
 <label class="control-label">Sequences:</label>
-<table st-table="matters | filter:{ Nature: nature }" st-safe-src="matters" ng-cloak class="table table-bordered table-hover">
+<table ng-cloak class="table table-bordered table-hover">
     <thead>
-        <tr>
-            <th>
-                #
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Name))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Description))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Created))
-            </th>
-            <th>
-                @(Html.DisplayNameFor(model => model.Modified))
-            </th>
-        </tr>
+    <tr>
+        <th>
+        </th>
+        <th>
+            <input type="text" class="form-control" placeholder="Filter by name" ng-model="searchMatter"/>
+        </th>
+        <th>
+            <input type="text" class="form-control" placeholder="Filter by description" ng-model="searchDescription"/>
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+    </tr>
+    <tr>
+        <th>
+            #
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Name))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Description))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Created))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.Modified))
+        </th>
+    </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{ Nature: nature }" ng-cloak>
+        <tr ng-repeat="matter in matters | filter:{ Nature: nature } | filter:{ Text: searchMatter} | filter: { Description: searchDescription }" ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>
@@ -38,12 +52,5 @@
             <td ng-bind="matter.Modified" />
         </tr>
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="5" class="text-center">
-                <div st-pagination="" st-items-by-page="20" st-displayed-pages="7"></div>
-            </td>
-        </tr>
-    </tfoot>
 </table>
 <br />
