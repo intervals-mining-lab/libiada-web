@@ -19,8 +19,15 @@
             return "glyphicon " + icon;
         }
 
+        function autoRefresh () {
+            window.location.reload();
+        }
+
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
+        $scope.autoRefresh = autoRefresh;
+
+        setInterval($scope.autoRefresh, 1 * 60 * 1000);
     }
 
     angular.module("TaskManager", []).controller("TaskManagerCtrl", ["$scope", taskManager]);

@@ -5,15 +5,6 @@
 }
 
 @Html.Partial("_AngularControllerInitializer", "TaskManagerController")
-<script>
-    "use strict";
-
-    var autoRefresh = function () {
-        window.location.reload();
-    }
-
-    setInterval(autoRefresh, 1 * 60 * 1000);
-</script>
 
 <h2>@ViewBag.Title</h2>
 
