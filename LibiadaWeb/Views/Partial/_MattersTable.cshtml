@@ -37,7 +37,7 @@
     </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{ Nature: nature } | filter:{ Text: searchMatter} | filter: { Description: searchDescription }" ng-cloak>
+        <tr ng-repeat="matter in matters | filter:{ Nature: nature }" ng-show="([matter] | filter:{ Text: searchMatter} | filter: { Description: searchDescription }).length > 0" ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>
