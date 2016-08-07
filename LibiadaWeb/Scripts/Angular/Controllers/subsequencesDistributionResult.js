@@ -45,6 +45,36 @@
             }
         }
 
+        // filters dots by subsequences product
+        function filterByProduct() {
+            if ($scope.productFilter) {
+                d3.selectAll(".dot")
+                    .filter(function(dot) { return $scope.dotVisible(dot); })
+                    .attr("visibility",
+                        function (d) {
+                            return (d.attributes["product"] && d.attributes["product"].indexOf($scope.productFilter) !== -1) ? "visible" : "hidden";
+                        });
+
+                $scope.visiblePoints = [];
+                for (var i = 0; i < $scope.points.length; i++) {
+                    var point = $scope.points[i];
+                    if ($scope.dotVisible(point) && point.attributes["product"] && point.attributes["product"].indexOf($scope.productFilter) !== -1) {
+                        $scope.visiblePoints.push(point);
+                    }
+                }
+            } else {
+                d3.selectAll(".dot")
+                    .filter(function (dot) { return $scope.dotVisible(dot); })
+                    .attr("visibility", "visible");
+
+                for (var j = 0; j < $scope.points.length; j++) {
+                    if ($scope.dotVisible($scope.points[j])) {
+                        $scope.visiblePoints.push($scope.points[j]);
+                    }
+                }
+            }
+        }
+
         // filters dots by subsequences feature
         function filterByFeature(feature) {
             d3.selectAll(".dot")
@@ -409,6 +439,7 @@
         $scope.drawGenesMap = drawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
+        $scope.filterByProduct = filterByProduct;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
