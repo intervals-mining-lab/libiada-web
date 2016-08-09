@@ -36,7 +36,8 @@
                         x: sequenceData.Characteristic,
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
                         featureVisible: true,
-                        matterVisible: true
+                        matterVisible: true,
+                        filterVisible: true
                     };
                     $scope.points.push(point);
                     $scope.visiblePoints.push(point);
@@ -47,29 +48,31 @@
 
         // filters dots by subsequences product
         function filterByProduct() {
-            if ($scope.productFilter) {
+            if ($scope.productFilter === "") {
+                for (var k = 0; k < $scope.points.length; k++) {
+                    if (!$scope.points[k].filterVisible) {
+                        $scope.points[k].filterVisible = true;
+                        if ($scope.dotVisible($scope.points[k])) {
+                            $scope.visiblePoints.push($scope.points[k]);
+                        }
+                    }
+                }
+
                 d3.selectAll(".dot")
-                    .filter(function(dot) { return $scope.dotVisible(dot); })
+                    .filter(function (dot) { return $scope.dotVisible(dot) })
+                    .attr("visibility", "visible");
+            } else {
+                d3.selectAll(".dot")
                     .attr("visibility",
                         function (d) {
-                            return (d.attributes["product"] && d.attributes["product"].indexOf($scope.productFilter) !== -1) ? "visible" : "hidden";
+                            d.filterVisible = d.attributes["product"] && d.attributes["product"].indexOf($scope.productFilter) !== -1;
+                            return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
 
                 $scope.visiblePoints = [];
                 for (var i = 0; i < $scope.points.length; i++) {
-                    var point = $scope.points[i];
-                    if ($scope.dotVisible(point) && point.attributes["product"] && point.attributes["product"].indexOf($scope.productFilter) !== -1) {
-                        $scope.visiblePoints.push(point);
-                    }
-                }
-            } else {
-                d3.selectAll(".dot")
-                    .filter(function (dot) { return $scope.dotVisible(dot); })
-                    .attr("visibility", "visible");
-
-                for (var j = 0; j < $scope.points.length; j++) {
-                    if ($scope.dotVisible($scope.points[j])) {
-                        $scope.visiblePoints.push($scope.points[j]);
+                    if ($scope.dotVisible($scope.points[i])) {
+                        $scope.visiblePoints.push($scope.points[i]);
                     }
                 }
             }
@@ -102,7 +105,7 @@
 
         // checks if dot is visible
         function dotVisible(dot) {
-            return dot.featureVisible && dot.matterVisible;
+            return dot.featureVisible && dot.matterVisible && dot.filterVisible;
         }
 
         function dotsSimilar(d, dot) {
@@ -110,7 +113,7 @@
                 return false;
             }
 
-            switch(d.featureId) {
+            switch (d.featureId) {
                 case 4: // CDS
                 case 5: // RRNA
                 case 6: // TRNA
@@ -121,7 +124,7 @@
             }
 
             return true;
-            
+
         }
 
         // shows tooltip for dot or group of dots
@@ -135,23 +138,24 @@
             tooltip.selectedPoint = d;
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
-                    if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) { // if dots are in the same position
-                        tooltipHtml.push($scope.fillPointTooltip(dot));
-                        return true;
-                    } else if ($scope.highlight) { // if similar dot are highlighted
-                        for (var i = 0; i < $scope.characteristicComparers.length; i++) {
-                            var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                            var dValue = d.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                            if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
-                                return false;
+                    if ($scope.dotVisible(dot)) {
+                        if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) { // if dots are in the same position
+                            tooltipHtml.push($scope.fillPointTooltip(dot));
+                            return true;
+                        } else if ($scope.highlight) { // if similar dot are highlighted
+                            for (var i = 0; i < $scope.characteristicComparers.length; i++) {
+                                var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+                                var dValue = d.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+                                if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
+                                    return false;
+                                }
                             }
+
+                            var tooltipColor = $scope.dotsSimilar(d, dot) ? "text-success" : "text-danger";
+                            tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
+
+                            return true;
                         }
-
-                        var tooltipColor = $scope.dotsSimilar(d, dot) ? "text-success" : "text-danger";
-
-                        tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-
-                        return true;
                     }
 
                     return false;
@@ -461,6 +465,7 @@
         $scope.matters = [];
         $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
         $scope.characteristicComparers = [];
+        $scope.productFilter = "";
         $scope.fillPoints();
     }
 
