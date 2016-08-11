@@ -65,7 +65,7 @@
                 d3.selectAll(".dot")
                     .attr("visibility",
                         function (d) {
-                            d.filterVisible = d.attributes["product"] && d.attributes["product"].indexOf($scope.productFilter) !== -1;
+                            d.filterVisible = d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf($scope.productFilter.toUpperCase()) !== -1;
                             return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
 
