@@ -58,7 +58,7 @@
         /// <summary>
         /// The all non genes leaf locations.
         /// </summary>
-        private readonly ILocation[] allNonGenesLeafLocations;
+        private readonly List<ILocation>[] allNonGenesLeafLocations;
 
         /// <summary>
         /// The positions map.
@@ -98,8 +98,6 @@
             positionsMap = new bool[parentLength];
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)
                                                .Select(f => f.Location.GetLeafLocations())
-                                               .Where(l => l.Count == 1)
-                                               .Select(l => l[0])
                                                .ToArray();
         }
 
@@ -165,13 +163,14 @@
 
                 if (feature.Key == gene)
                 {
-                    if (!GeneImportable(leafLocations, i))
+                    // checking if there is any feature with identical location
+                    if (allNonGenesLeafLocations.Where(l => leafLocations[0].LocationStart == l[0].LocationStart).Any(l => LocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
                 }
 
-                if (location.Operator == LocationOperator.Order || location.Operator == LocationOperator.Order)
+                if (location.Operator == LocationOperator.Order || location.Operator == LocationOperator.Bond)
                 {
                     throw new Exception("Unknown operator: " + location.Operator);
                 }
@@ -180,7 +179,7 @@
                 {
                     var subLocationOperator = location.SubLocations[0].Operator;
 
-                    if (subLocationOperator == LocationOperator.Order || subLocationOperator == LocationOperator.Order)
+                    if (subLocationOperator == LocationOperator.Order || subLocationOperator == LocationOperator.Bond)
                     {
                         throw new Exception("Unknown operator: " + subLocationOperator);
                     }
@@ -207,77 +206,45 @@
         }
 
         /// <summary>
-        /// Checks if gene is valid and needs import.
+        /// Checks if gene have equal location with another feature.
         /// </summary>
-        /// <param name="leafLocations">
-        /// The leaf locations.
+        /// <param name="geneLocation">
+        /// The gene leaf locations.
         /// </param>
-        /// <param name="index">
-        /// The index of gene.
+        /// <param name="otherLocation">
+        /// The other feature leaf locations.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool GeneImportable(List<ILocation> leafLocations, int index)
+        private bool LocationsEqual(List<ILocation> geneLocation, List<ILocation> otherLocation)
         {
-            if (leafLocations.Count > 1)
+            // if there is join in child record parent record contains only
+            // first child start and last child end
+            if (geneLocation.Count == 1
+                && geneLocation[0].LocationStart == otherLocation[0].LocationStart
+                && geneLocation[0].LocationEnd == otherLocation[otherLocation.Count - 1].LocationEnd)
             {
-                // if feature is last
-                if ((index + 1) >= features.Count)
-                {
-                    throw new Exception("Multipositional gene has no corresponding child feature. Location = " + leafLocations[0].StartData);
-                }
+                return true;
+            }
 
-                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
-                if (nextLeafLocations.Count != leafLocations.Count)
-                {
-                    throw new Exception("Gene's and next element's locations are not equal. Location = " + leafLocations[0].StartData);
-                }
-
-                for (int j = 0; j < leafLocations.Count; j++)
-                {
-                    // comparing gene's positions and corresponding child feature's position
-                    if (leafLocations[j].LocationStart != nextLeafLocations[j].LocationStart
-                     || leafLocations[j].LocationEnd != nextLeafLocations[j].LocationEnd)
-                    {
-                        throw new Exception("Multipositional gene and corresponding child feature's locations are not equal. Location = " + leafLocations[j].StartData);
-                    }
-                }
-
-                // don't need to import this gene
+            // if gene is multipositional
+            if (geneLocation.Count != otherLocation.Count)
+            {
                 return false;
             }
 
-            var leafLocation = leafLocations[0];
-
-            // if feature is not last
-            if ((index + 1) < features.Count)
+            for (int i = 0; i < geneLocation.Count; i++)
             {
-                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
-
-                // if there is join in child record parent record contains only
-                // first child start and last child end
-                if (nextLeafLocations.Count > 1)
+                // if any sublocations are not equal
+                if (geneLocation[i].LocationStart != otherLocation[i].LocationStart
+                 || geneLocation[i].LocationEnd != otherLocation[i].LocationEnd)
                 {
-                    if (leafLocation.LocationStart == nextLeafLocations[0].LocationStart
-                     && leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
-                    {
-                        // don't need to import this gene
-                        return false;
-                    }
-
-                    throw new Exception("Gene's and next element's locations are not equal. Location = " + leafLocation.StartData);
+                    return false;
                 }
             }
 
-            // checking if there is any feature with identical position
-            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart && leafLocation.LocationEnd == l.LocationEnd
-                                               && leafLocation.StartData == l.StartData && leafLocation.EndData == l.EndData))
-            {
-                // don't need to import this gene
-                return false;
-            }
-
+            // if all sublocations are equal
             return true;
         }
 
@@ -300,7 +267,7 @@
 
                 if (feature.Key == gene)
                 {
-                    if (!GeneNeedsImport(leafLocations, i))
+                    if (allNonGenesLeafLocations.Where(l => leafLocations[0].LocationStart == l[0].LocationStart).Any(l => LocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
@@ -376,57 +343,6 @@
             db.SequenceAttribute.AddRange(newSequenceAttributes);
 
             db.SaveChanges();
-        }
-
-        /// <summary>
-        /// Checks if gene needs import.
-        /// </summary>
-        /// <param name="leafLocations">
-        /// The leaf locations.
-        /// </param>
-        /// <param name="index">
-        /// Index of feature to check.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        private bool GeneNeedsImport(List<ILocation> leafLocations, int index)
-        {
-            if (leafLocations.Count > 1)
-            {
-                // don't need to import this gene
-                return false;
-            }
-
-            var leafLocation = leafLocations[0];
-
-            // if feature is not last
-            if ((index + 1) < features.Count)
-            {
-                var nextLeafLocations = features[index + 1].Location.GetLeafLocations();
-
-                // if there is join in child record parent record contains only
-                // first child start and last child end
-                if (nextLeafLocations.Count > 1 && leafLocation.LocationStart == nextLeafLocations[0].LocationStart
-                    && leafLocation.LocationEnd == nextLeafLocations[nextLeafLocations.Count - 1].LocationEnd)
-                {
-                    // don't need to import this gene
-                    return false;
-                }
-            }
-
-            // checking if there is any feature with identical position
-            if (allNonGenesLeafLocations.Any(l => leafLocation.LocationStart == l.LocationStart &&
-                                                  leafLocation.LocationEnd == l.LocationEnd &&
-                                                  leafLocation.StartData == l.StartData &&
-                                                  leafLocation.EndData == l.EndData))
-            {
-                // don't need to import this gene
-                return false;
-            }
-
-            // there are no "children" features with identical position
-            return true;
         }
 
         /// <summary>
