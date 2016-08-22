@@ -3,14 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-    using System.IO;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -23,7 +20,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController() : base("Genes import")
+        public GenesImportController()
+            : base("Genes import")
         {
         }
 
@@ -56,21 +54,15 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="localFile">
-        /// The local file.
-        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown if there is no file with sequence.
-        /// </exception>
         /// <exception cref="Exception">
-        /// Thrown if unknown part is found.
+        /// Thrown if unknown feature or attribute is found.
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, bool localFile)
+        public ActionResult Index(long matterId)
         {
             return Action(() =>
             {
@@ -81,24 +73,7 @@
                     long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
                     DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
 
-                    Stream stream;
-                    if (localFile)
-                    {
-                        HttpPostedFileBase file = Request.Files[0];
-
-                        if (file == null || file.ContentLength == 0)
-                        {
-                            throw new ArgumentNullException("file", "Sequence file is empty");
-                        }
-
-                        stream = file.InputStream;
-                    }
-                    else
-                    {
-                        stream = NcbiHelper.GetGenBankFileStream(parentSequence.RemoteId);
-                    }
-
-                    var features = NcbiHelper.GetFeatures(stream);
+                    var features = NcbiHelper.GetFeatures(parentSequence.RemoteId);
                     using (var subsequenceImporter = new SubsequenceImporter(features, parentSequenceId))
                     {
                         subsequenceImporter.CreateSubsequences();

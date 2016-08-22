@@ -1,8 +1,8 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
-    using System.IO;
 
+    using Bio;
     using Bio.Extensions;
 
     using LibiadaCore.Core;
@@ -34,8 +34,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequence">
         /// The common sequence.
         /// </param>
-        /// <param name="sequenceStream">
-        /// The string sequence.
+        /// <param name="fastaSequence">
+        /// Sequence as <see cref="ISequence"/>>.
         /// </param>
         /// <param name="partial">
         /// The partial.
@@ -44,9 +44,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// Thrown if at least one element of new sequence is missing in db
         /// or if sequence is empty or invalid.
         /// </exception>
-        public void Create(CommonSequence sequence, Stream sequenceStream, bool partial)
+        public void Create(CommonSequence sequence, ISequence fastaSequence, bool partial)
         {
-            var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+            // TODO: fix it fir batch import or remove fasta headers completely
             string fastaHeader = ">" + fastaSequence.ID;
 
             if (fastaHeader.Contains("Resource temporarily unavailable"))
@@ -154,7 +154,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            Db.Dispose();
         }
 
         /// <summary>

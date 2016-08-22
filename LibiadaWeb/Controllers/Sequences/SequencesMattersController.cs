@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
@@ -177,14 +178,22 @@
                     string errorMessage = string.Empty;
                     if (ModelState.IsValid)
                     {
-                        var sequenceStream = localFile ? 
-                            FileHelper.GetFileStream(this.Request.Files[0]) : 
-                            NcbiHelper.GetFileStream(commonSequence.RemoteId);
+                        Stream sequenceStream;
+                        var nature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
+                        if (nature == Nature.Genetic && !localFile)
+                        {
+                            sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
+                        }
+                        else
+                        {
+                            sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
+                        }
 
                         switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature)
                         {
                             case Nature.Genetic:
-                                dnaSequenceRepository.Create(commonSequence, sequenceStream, partial ?? false);
+                                var bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                                dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
                                 break;
                             case Nature.Music:
                                 musicSequenceRepository.Create(commonSequence, sequenceStream);

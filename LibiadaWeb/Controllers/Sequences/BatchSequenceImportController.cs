@@ -6,10 +6,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Bio;
-    using Bio.IO;
-    using Bio.IO.GenBank;
-
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -23,27 +19,10 @@
     public class BatchSequenceImportController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        protected readonly LibiadaWebEntities Db;
-
-        /// <summary>
-        /// The thread disposable.
-        /// </summary>
-        protected bool ThreadDisposable = true;
-
-        /// <summary>
-        /// The DNA sequence repository.
-        /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
         public BatchSequenceImportController() : base("Batch sequences import")
         {
-            Db = new LibiadaWebEntities();
-            dnaSequenceRepository = new DnaSequenceRepository(Db);
         }
 
         /// <summary>
@@ -71,18 +50,20 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(string[] accessions)
         {
-            ThreadDisposable = false;
-
             return Action(() =>
             {
-                var existingAccessions = Db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                 var matterNames = new string[accessions.Length];
+                var savedMatterNames = new string[accessions.Length];
                 var results = new string[accessions.Length];
                 var statuses = new string[accessions.Length];
 
-                for (int i = 0; i < accessions.Length; i++)
+                using (var db = new LibiadaWebEntities())
                 {
-                    try
+                    var existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
+                    var dnaSequenceRepository = new DnaSequenceRepository(db);
+                    var bioSequences = NcbiHelper.GetGenBankSequences(accessions);
+
+                    for (int i = 0; i < accessions.Length; i++)
                     {
                         string accession = accessions[i];
                         matterNames[i] = accession;
@@ -90,70 +71,59 @@
                         {
                             results[i] = "Sequence already exists";
                             statuses[i] = "Exist";
+                            continue;
                         }
-                        else
-                        {
-                            var genBankFile = NcbiHelper.GetGenBankFileStream(accession);
-                            ISequenceParser parser = new GenBankParser();
-                            ISequence bioSequence = parser.ParseOne(genBankFile);
-                            GenBankMetadata metadata = bioSequence.Metadata["GenBank"] as GenBankMetadata;
-                            var sequenceStream = NcbiHelper.GetFileStream(accession);
 
-                            if (metadata == null)
-                            {
-                                throw new Exception("sequence metadata is missing.");
-                            }
+                        try
+                        {
+                            var metadata = NcbiHelper.GetMetadata(bioSequences[i]);
 
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
                                 results[i] = "Sequence already exists";
                                 statuses[i] = "Exist";
+                                continue;
                             }
-                            else
-                            {
-                                var matterName = NcbiHelper.ExtractSequenceName(metadata) + " | " + metadata.Version.CompoundAccession;
-                                matterNames[i] = "Common name=" + metadata.Source.CommonName +
-                                                 ", Species=" + metadata.Source.Organism.Species +
-                                                 ", Definition=" + metadata.Definition +
-                                                 ", Matter name=" + matterName;
 
-                                var matter = new Matter
-                                                 {
-                                                     Name = matterName,
-                                                     Nature = Nature.Genetic
-                                                 };
-                                
-                                var sequence = new CommonSequence
-                                                   {
-                                                       Matter = matter,
-                                                       FeatureId = Aliases.Feature.FullGenome,
-                                                       NotationId = Aliases.Notation.Nucleotide,
-                                                       RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
-                                                       RemoteId = metadata.Version.CompoundAccession
-                                                   };
-                                dnaSequenceRepository.Create(sequence, sequenceStream, metadata.Definition.ToLower().Contains("partial"));
-                                results[i] = "successfully imported sequence";
-                                statuses[i] = "Success";
-                            }
+                            savedMatterNames[i] = NcbiHelper.ExtractSequenceName(metadata) + " | " + metadata.Version.CompoundAccession;
+                            matterNames[i] = "Common name=" + metadata.Source.CommonName +
+                                             ", Species=" + metadata.Source.Organism.Species +
+                                             ", Definition=" + metadata.Definition +
+                                             ", Saved matter name=" + savedMatterNames[i];
+
+                            var matter = new Matter { Name = savedMatterNames[i], Nature = Nature.Genetic };
+
+                            // TODO: detect feature from metadata
+                            var sequence = new CommonSequence
+                                               {
+                                                   Matter = matter,
+                                                   FeatureId = Aliases.Feature.FullGenome,
+                                                   NotationId = Aliases.Notation.Nucleotide,
+                                                   RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
+                                                   RemoteId = metadata.Version.CompoundAccession
+                                               };
+
+                            dnaSequenceRepository.Create(sequence, bioSequences[i], metadata.Definition.ToLower().Contains("partial"));
+                            results[i] = "successfully imported sequence";
+                            statuses[i] = "Success";
+                        }
+                        catch (Exception exception)
+                        {
+                            results[i] = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
+                            statuses[i] = "Error";
                         }
                     }
-                    catch (Exception exception)
+
+                    // removing matters for whitch adding of sequence failed
+                    var orphanMatters = db.Matter.Include(m => m.Sequence).Where(m => savedMatterNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
+
+                    if (orphanMatters.Length > 0)
                     {
-                        results[i] = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
-                        statuses[i] = "Error";
+                        db.Matter.RemoveRange(orphanMatters);
+                        db.SaveChanges();
                     }
                 }
 
-                var orphanMatter = Db.Matter.Include(m => m.Sequence).Where(m => matterNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
-
-                if (orphanMatter.Length > 0)
-                {
-                    Db.Matter.Remove(orphanMatter[0]);
-                    Db.SaveChanges();
-                }
-
-                ThreadDisposable = true;
-                Dispose(true);
                 return new Dictionary<string, object>
                            {
                                { "matterNames", matterNames },
@@ -161,22 +131,6 @@
                                { "status", statuses }
                            };
             });
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <param name="disposing">
-        /// The disposing flag.
-        /// </param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && ThreadDisposable)
-            {
-                Db.Dispose();
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

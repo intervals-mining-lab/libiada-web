@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -18,16 +17,10 @@
     public class AttributesCheckController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
         public AttributesCheckController() : base("Attributes check")
         {
-            db = new LibiadaWebEntities();
         }
 
         /// <summary>
@@ -38,18 +31,22 @@
         /// </returns>
         public ActionResult Index()
         {
-            var subsequencesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct().ToArray();
-            var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) && 
-                                                      !subsequencesSequenceIds.Contains(c.Id) &&
-                                                      (c.FeatureId == Aliases.Feature.FullGenome || 
-                                                       c.FeatureId == Aliases.Feature.MitochondrionGenome || 
-                                                       c.FeatureId == Aliases.Feature.Plasmid))
-                                                      .Select(c => c.MatterId).ToArray();
+            using (var db = new LibiadaWebEntities())
+            {
+                var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct().ToArray();
+                var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
+                                                          !sequencesWithSubsequencesIds.Contains(c.Id) &&
+                                                          (c.FeatureId == Aliases.Feature.FullGenome ||
+                                                           c.FeatureId == Aliases.Feature.MitochondrionGenome ||
+                                                           c.FeatureId == Aliases.Feature.Plasmid))
+                                                          .Select(c => c.MatterId).ToArray();
 
-            var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Check");
-            data.Add("nature", (byte)Nature.Genetic);
-            ViewBag.data = JsonConvert.SerializeObject(data);
+                var viewDataHelper = new ViewDataHelper(db);
+                var data = viewDataHelper.FillMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Check");
+                data.Add("nature", (byte)Nature.Genetic);
+                ViewBag.data = JsonConvert.SerializeObject(data);
+            }
+
             return View();
         }
 
@@ -74,27 +71,28 @@
         {
             return Action(() =>
                 {
-                    var matterNames = new List<string>();
+                    string[] matterNames;
                     var attributes = new List<string>();
-
-                    foreach (var matterId in matterIds)
+                    string[] databaseAttributes;
+                    string[] parentRemoteIds;
+                    using (var db = new LibiadaWebEntities())
                     {
-                        long sequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                        DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
-
-                        Stream stream = NcbiHelper.GetGenBankFileStream(parentSequence.RemoteId);
-                        var features = NcbiHelper.GetFeatures(stream);
-
-                        for (int j = 1; j < features.Count; j++)
-                        {
-                            var featureAttributes = features[j].Qualifiers;
-                            attributes.AddRange(featureAttributes.Select(attribute => attribute.Key));
-                        }
-
-                        matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
+                        databaseAttributes = db.Attribute.Select(a => a.Name).ToArray();
+                        matterNames = db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToArray();
+                        parentRemoteIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId)).OrderBy(c => c.MatterId).Select(c => c.RemoteId).ToArray();
                     }
 
-                    var databaseAttributes = db.Attribute.Select(a => a.Name).ToList();
+                    var features = NcbiHelper.GetFeatures(parentRemoteIds);
+
+                    for (int i = 0; i < matterIds.Length; i++)
+                    {
+                        for (int j = 1; j < features[i].Count; j++)
+                        {
+                            var featureAttributes = features[i][j].Qualifiers;
+                            attributes.AddRange(featureAttributes.Select(attribute => attribute.Key));
+                        }
+                    }
+
                     attributes = attributes.Distinct().Where(a => !databaseAttributes.Contains(a)).ToList();
 
                     return new Dictionary<string, object>

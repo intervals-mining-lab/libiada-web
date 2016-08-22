@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Net;
-    using System.Xml;
 
     using Bio;
     using Bio.IO;
@@ -22,22 +22,72 @@
         private const string BaseUrl = @"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
 
         /// <summary>
-        /// Gets features from GenBank file stream.
+        /// Extracts features from genBank file downloaded from ncbi.
         /// </summary>
-        /// <param name="genBankFileStream">
-        /// The genBank file stream.
+        /// <param name="id">
+        /// Accession id of the sequence in ncbi (remote id).
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{FeatureItem}"/>.
+        /// </returns>
+        public static List<FeatureItem> GetFeatures(string id)
+        {
+            var metadata = GetMetadata(GetGenBankSequence(id));
+            return metadata.Features.All;
+        }
+
+        /// <summary>
+        /// Extracts features from genBank files downloaded from ncbi.
+        /// </summary>
+        /// <param name="ids">
+        /// Accession ids of the sequences in ncbi (remote ids).
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{FeatureItem}"/>.
+        /// </returns>
+        public static List<FeatureItem>[] GetFeatures(string[] ids)
+        {
+            var result = new List<FeatureItem>[ids.Length];
+            var sequences = GetGenBankSequences(ids);
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                var metadata = GetMetadata(sequences[i]);
+                result[i] = metadata.Features.All;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Extracts sequences from genbank files.
+        /// </summary>
+        /// <param name="ids">
+        /// The ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ISequence[]"/>.
+        /// </returns>
+        public static ISequence[] GetGenBankSequences(string[] ids)
+        {
+            Stream fileStream = GetResponseStream(GetEfetchParamsString("gbwithparts") + string.Join(",", ids));
+            ISequenceParser parser = new GenBankParser();
+            return parser.Parse(fileStream).ToArray();
+        }
+
+        /// <summary>
+        /// Extracts metadata from genbank file.
+        /// </summary>
+        /// <param name="sequence">
+        /// Sequence extracted from genbank file.
         /// </param>
         /// <returns>
         /// The <see cref="GenBankMetadata"/>.
         /// </returns>
         /// <exception cref="Exception">
-        /// Thrown if metadata is empty.
+        /// Thrown if metadata is abscent.
         /// </exception>
-        public static List<FeatureItem> GetFeatures(Stream genBankFileStream)
+        public static GenBankMetadata GetMetadata(ISequence sequence)
         {
-            ISequenceParser parser = new GenBankParser();
-            ISequence sequence = parser.ParseOne(genBankFileStream);
-
             GenBankMetadata metadata = sequence.Metadata["GenBank"] as GenBankMetadata;
 
             if (metadata == null)
@@ -45,11 +95,11 @@
                 throw new Exception("GenBank file metadata is empty.");
             }
 
-            return metadata.Features.All;
+            return metadata;
         }
 
         /// <summary>
-        /// The get sequence string.
+        /// Downloads sequence as fasta file from ncbi.
         /// </summary>
         /// <param name="fastaFileStream">
         /// The fasta file stream.
@@ -67,67 +117,31 @@
         }
 
         /// <summary>
-        /// The get id.
+        /// Downloads sequence as fasta file from ncbi.
         /// </summary>
-        /// <param name="remoteId">
-        /// Sequence remote id.
+        /// <param name="id">
+        /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
-        /// The <see cref="int"/>.
+        /// The <see cref="ISequence"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if received not one sequence.
-        /// </exception>
-        public static int GetId(string remoteId)
+        public static ISequence GetFastaSequence(string id)
         {
-            var memoryStream = GetResponseStream(@"esearch.fcgi?db=nucleotide&term=" + remoteId);
-            var doc = new XmlDocument();
-
-            try
-            {
-                doc.Load(memoryStream);
-            }
-            finally
-            {
-                memoryStream.Close();
-            }
-            
-            XmlNodeList elemList = doc.GetElementsByTagName("Id");
-
-            if (elemList.Count != 1)
-            {
-                throw new Exception(string.Format("Resieved not one id of sequence (ids count = {0}).", elemList.Count));
-            }
-
-            return int.Parse(elemList[0].InnerText);
-        }
-
-        /// <summary>
-        /// Returns genbank file FileStream.
-        /// </summary>
-        /// <param name="remoteId">
-        /// Sequence remote id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
-        public static Stream GetGenBankFileStream(string remoteId)
-        {
-            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=gbwithparts&retmode=text&id=" + remoteId);
+            return GetFastaSequence(GetFastaFileStream(id));
         }
 
         /// <summary>
         /// The get file.
         /// </summary>
         /// <param name="id">
-        /// The ncbi id.
+        /// Accession id of the sequence in ncbi (remote id).
         /// </param>
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        public static Stream GetFileStream(string id)
+        public static Stream GetFastaFileStream(string id)
         {
-            return GetResponseStream(@"efetch.fcgi?db=nuccore&rettype=fasta&retmode=text&id=" + id);
+            return GetResponseStream(GetEfetchParamsString("fasta") + id);
         }
 
         /// <summary>
@@ -185,6 +199,36 @@
             throw new Exception("Sequences names are not equal. CommonName = " + commonName + 
                                 ", Species = " + species +
                                 ", Definition = " + definition);
+        }
+
+        /// <summary>
+        /// Extracts sequence from genbank file.
+        /// </summary>
+        /// <param name="id">
+        /// Accession id of the sequence in ncbi (remote id).
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        private static ISequence GetGenBankSequence(string id)
+        {
+            Stream fileStream = GetResponseStream(GetEfetchParamsString("gbwithparts") + id);
+            ISequenceParser parser = new GenBankParser();
+            return parser.ParseOne(fileStream);
+        }
+
+        /// <summary>
+        /// Creates efetch params string with given return type.
+        /// </summary>
+        /// <param name="retType">
+        /// The return type.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private static string GetEfetchParamsString(string retType)
+        {
+            return @"efetch.fcgi?db=nuccore&retmode=text&rettype=" + retType + "&id=";
         }
 
         /// <summary>
