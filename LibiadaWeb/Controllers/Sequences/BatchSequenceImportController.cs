@@ -41,14 +41,17 @@
         /// The create.
         /// </summary>
         /// <param name="accessions">
-        /// The accessions.
+        /// Ids of imported sequences in ncbi (remote ids).
+        /// </param>
+        /// <param name="importGenes">
+        /// Flag indicating if genes import is needed.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(string[] accessions)
+        public ActionResult Index(string[] accessions, bool importGenes)
         {
             return Action(() =>
             {
@@ -104,8 +107,37 @@
                                                };
 
                             dnaSequenceRepository.Create(sequence, bioSequences[i], metadata.Definition.ToLower().Contains("partial"));
-                            results[i] = "successfully imported sequence";
-                            statuses[i] = "Success";
+                            if (importGenes)
+                            {
+                                try
+                                {
+                                    using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
+                                    {
+                                        subsequenceImporter.CreateSubsequences();
+                                    }
+
+                                    var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.FeatureId == Aliases.Feature.NonCodingSequence);
+                                    var featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.FeatureId != Aliases.Feature.NonCodingSequence);
+
+                                    statuses[i] = "Success";
+                                    results[i] = "Successfully imported  sequence and " + featuresCount + " features and " + nonCodingCount + " non coding subsequences";
+                                }
+                                catch (Exception exception)
+                                {
+                                    results[i] = "successfully imported sequence but failed to import genes: " + exception.Message;
+                                    statuses[i] = "Error";
+                                    
+                                    if (exception.InnerException != null)
+                                    {
+                                        results[i] += " " + exception.InnerException.Message;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                results[i] = "successfully imported sequence";
+                                statuses[i] = "Success";
+                            }
                         }
                         catch (Exception exception)
                         {

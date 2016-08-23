@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Net;
+    using System.Threading;
 
     using Bio;
     using Bio.IO;
@@ -20,6 +21,16 @@
         /// The base url.
         /// </summary>
         private const string BaseUrl = @"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+
+        /// <summary>
+        /// Synchronization object.
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// The last request date time.
+        /// </summary>
+        private static DateTimeOffset lastRequestDateTime = DateTimeOffset.MinValue;
 
         /// <summary>
         /// Extracts features from genBank file downloaded from ncbi.
@@ -69,9 +80,13 @@
         /// </returns>
         public static ISequence[] GetGenBankSequences(string[] ids)
         {
-            Stream fileStream = GetResponseStream(GetEfetchParamsString("gbwithparts") + string.Join(",", ids));
             ISequenceParser parser = new GenBankParser();
-            return parser.Parse(fileStream).ToArray();
+            string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
+            Stream fileStream = GetResponseStream(url);
+            ISequence[] result = parser.Parse(fileStream).ToArray();
+            fileStream.Dispose();
+
+            return result;
         }
 
         /// <summary>
@@ -111,23 +126,8 @@
         {
             var fastaParser = new FastAParser();
             var result = fastaParser.ParseOne(fastaFileStream);
-            fastaFileStream.Close();
             fastaFileStream.Dispose();
             return result;
-        }
-
-        /// <summary>
-        /// Downloads sequence as fasta file from ncbi.
-        /// </summary>
-        /// <param name="id">
-        /// Accession id of the sequence in ncbi (remote id).
-        /// </param>
-        /// <returns>
-        /// The <see cref="ISequence"/>.
-        /// </returns>
-        public static ISequence GetFastaSequence(string id)
-        {
-            return GetFastaSequence(GetFastaFileStream(id));
         }
 
         /// <summary>
@@ -196,7 +196,7 @@
                 return species + " | " + definition;
             }
 
-            throw new Exception("Sequences names are not equal. CommonName = " + commonName + 
+            throw new Exception("Sequences names are not equal. CommonName = " + commonName +
                                 ", Species = " + species +
                                 ", Definition = " + definition);
         }
@@ -248,14 +248,25 @@
             var resultUrl = BaseUrl + url;
             var downloader = new WebClient();
             var memoryStream = new MemoryStream();
-            using (var stream = downloader.OpenRead(resultUrl))
+
+            lock (SyncRoot)
             {
-                if (stream == null)
+                if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 500))
                 {
-                    throw new Exception("Response stream was null.");
+                    Thread.Sleep(500);
                 }
 
-                stream.CopyTo(memoryStream);
+                using (var stream = downloader.OpenRead(resultUrl))
+                {
+                    if (stream == null)
+                    {
+                        throw new Exception("Response stream was null.");
+                    }
+
+                    stream.CopyTo(memoryStream);
+                }
+
+                lastRequestDateTime = DateTimeOffset.Now;
             }
 
             memoryStream.Position = 0;

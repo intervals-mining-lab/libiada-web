@@ -45,6 +45,7 @@
         {
             var input = new byte[stream.Length];
             stream.Read(input, 0, (int)stream.Length);
+            stream.Dispose();
             return Encoding.UTF8.GetString(input);
         }
     }

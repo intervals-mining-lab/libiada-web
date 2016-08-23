@@ -170,7 +170,7 @@
                     }
                 }
 
-                if (location.Operator == LocationOperator.Order || location.Operator == LocationOperator.Bond)
+                if (location.Operator != LocationOperator.None && location.Operator != LocationOperator.Join && location.Operator != LocationOperator.Complement)
                 {
                     throw new Exception("Unknown operator: " + location.Operator);
                 }
@@ -179,7 +179,7 @@
                 {
                     var subLocationOperator = location.SubLocations[0].Operator;
 
-                    if (subLocationOperator == LocationOperator.Order || subLocationOperator == LocationOperator.Bond)
+                    if (subLocationOperator != LocationOperator.None && subLocationOperator != LocationOperator.Join && subLocationOperator != LocationOperator.Complement)
                     {
                         throw new Exception("Unknown operator: " + subLocationOperator);
                     }

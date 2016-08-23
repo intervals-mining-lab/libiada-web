@@ -19,7 +19,7 @@
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-success" ng-click="parseIds()" >Add sequences</button>
+                <button type="button" class="btn btn-success" ng-click="parseIds()">Add sequences</button>
             </div>
         </div>
         <br/>
@@ -32,7 +32,7 @@
         <div ng-repeat="accession in accessions">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="hidden" name="accessions" ng-value="accession.value" />
+                    <input type="hidden" name="accessions" ng-value="accession.value"/>
                     <div ng-bind="accession.value"></div>
                 </div>
             </div>
@@ -41,7 +41,16 @@
                     <button type="button" class="btn btn-danger" ng-click="deleteId(accession)">Delete accession</button>
                 </div>
             </div>
-            <br />
+            <br/>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <label>
+                    <input type="checkbox" name="importGenes" value="true" />
+                    <input type="hidden" name="importGenes" value="false" />
+                    Also import genes
+                </label>
+            </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
