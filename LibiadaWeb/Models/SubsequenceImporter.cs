@@ -170,19 +170,9 @@
                     }
                 }
 
-                if (location.Operator != LocationOperator.None && location.Operator != LocationOperator.Join && location.Operator != LocationOperator.Complement)
-                {
-                    throw new Exception("Unknown operator: " + location.Operator);
-                }
-
                 if (location.SubLocations.Count > 0)
                 {
                     var subLocationOperator = location.SubLocations[0].Operator;
-
-                    if (subLocationOperator != LocationOperator.None && subLocationOperator != LocationOperator.Join && subLocationOperator != LocationOperator.Complement)
-                    {
-                        throw new Exception("Unknown operator: " + subLocationOperator);
-                    }
 
                     foreach (var subLocation in location.SubLocations)
                     {
