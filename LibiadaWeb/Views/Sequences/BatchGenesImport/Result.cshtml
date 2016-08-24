@@ -10,6 +10,9 @@
         <thead>
             <tr>
                 <th>
+                    #
+                </th>
+                <th>
                     Sequence
                 </th>
                 <th>
@@ -22,11 +25,13 @@
             {
                 <tr class="@Helpers.GetCssClassForImportResult(ViewBag.status[i])">
                     <td>
+                        @(i + 1)
+                    </td>
+                    <td>
                         @ViewBag.matterNames[i]
                     </td>
                     <td>
                         @ViewBag.results[i]
-                        <br />
                     </td>
                 </tr>
             }
