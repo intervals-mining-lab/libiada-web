@@ -18,6 +18,7 @@ namespace LibiadaWeb
         public LibiadaWebEntities()
             : base("name=LibiadaWebEntities")
         {
+    		Database.CommandTimeout = 1000000;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
