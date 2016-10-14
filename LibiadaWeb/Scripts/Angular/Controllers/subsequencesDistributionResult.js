@@ -124,7 +124,6 @@
             }
 
             return true;
-
         }
 
         // shows tooltip for dot or group of dots
