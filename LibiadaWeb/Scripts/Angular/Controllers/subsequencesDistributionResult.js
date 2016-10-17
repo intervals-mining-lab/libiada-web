@@ -127,30 +127,31 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(d, tooltip, svg) {
+        function showTooltip(selectedDots, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
 
             var tooltipHtml = [];
 
-            tooltip.selectedPoint = d;
+            tooltip.clickedDots = selectedDots;
+            var point = selectedDots.data()[0];
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
                     if ($scope.dotVisible(dot)) {
-                        if (dot.matterId === d.matterId && yValue(dot) === yValue(d)) { // if dots are in the same position
+                        if (dot.matterId === point.matterId && yValue(dot) === yValue(point)) { // if dots are in the same position
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else if ($scope.highlight) { // if similar dot are highlighted
                             for (var i = 0; i < $scope.characteristicComparers.length; i++) {
                                 var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                                var dValue = d.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
+                                var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
                                 if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
                                     return false;
                                 }
                             }
 
-                            var tooltipColor = $scope.dotsSimilar(d, dot) ? "text-success" : "text-danger";
+                            var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
                             tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
 
                             return true;
@@ -163,13 +164,16 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
+            var matrix = selectedDots[0].parentNode.getScreenCTM()
+                .translate($scope.xMap(point), $scope.yMap(point));
+
             tooltip.style("background", "#000")
                 .style("color", "#fff")
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (d3.event.pageX + 18) + "px")
-                .style("top", (d3.event.pageY + 18) + "px");
+                .style("left", (window.pageXOffset + matrix.e + 18) + "px")
+                .style("top", (window.pageYOffset + matrix.f + 18) + "px");
         }
 
         // constructs string representing tooltip text (inner html)
@@ -256,15 +260,15 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x 
-            var xScale = d3.scale.linear().range([0, width]); // value -> display
-            var xMap = function (d) { return xScale($scope.xValue(d)); }; // data -> display
-            var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+            $scope.xScale = d3.scale.linear().range([0, width]); // value -> display
+            $scope.xMap = function (d) { return $scope.xScale($scope.xValue(d)); }; // data -> display
+            var xAxis = d3.svg.axis().scale($scope.xScale).orient("bottom");
             xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
 
             // setup y
-            var yScale = d3.scale.linear().range([height, 0]); // value -> display
-            var yMap = function (d) { return yScale($scope.yValue(d)); }; // data -> display
-            var yAxis = d3.svg.axis().scale(yScale).orient("left");
+            $scope.yScale = d3.scale.linear().range([height, 0]); // value -> display
+            $scope.yMap = function (d) { return $scope.yScale($scope.yValue(d)); }; // data -> display
+            var yAxis = d3.svg.axis().scale($scope.yScale).orient("left");
             yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
 
             // setup fill color
@@ -293,8 +297,8 @@
             var yMargin = (yMax - yMin) * 0.05;
 
             // don't want dots overlapping axis, so adding buffer to data domain
-            xScale.domain([xMin - xMargin, xMax + xMargin]);
-            yScale.domain([yMin - yMargin, yMax + yMargin]);
+            $scope.xScale.domain([xMin - xMargin, xMax + xMargin]);
+            $scope.yScale.domain([yMin - yMargin, yMax + yMargin]);
 
             // x-axis
             svg.append("g")
@@ -330,8 +334,8 @@
                 .attr("class", "dot")
                 .attr("rx", $scope.dotRadius)
                 .attr("ry", $scope.dotRadius)
-                .attr("cx", xMap)
-                .attr("cy", yMap)
+                .attr("cx", $scope.xMap)
+                .attr("cy", $scope.yMap)
                 .style("fill-opacity", 0.6)
                 .style("fill", function (d) { return color(cValue(d)); })
                 .style("stroke", function (d) { return color(cValue(d)); })
@@ -388,25 +392,25 @@
                 if (clickedDots.empty()) {
                     $scope.clearTooltip(tooltip);
                 } else {
-                    var points = clickedDots.data();
-                    $scope.showTooltip(points[0], tooltip, svg);
+                    $scope.showTooltip(clickedDots, tooltip, svg);
                 }
             });
 
             // tooltip show on key up or key down
             d3.select("body")
                 .on("keydown", function () {
-                    if (tooltip.selectedPoint) {
+                    if (tooltip.clickedDots) {
+                        var clickedpoint = tooltip.clickedDots.data()[0];
                         var keyCode = d3.event.keyCode;
                         if (isKeyUpOrDown(keyCode)) {
                             var nextPoint;
-                            var indexOfPoint = $scope.visiblePoints.indexOf(tooltip.selectedPoint);
+                            var indexOfPoint = $scope.visiblePoints.indexOf(clickedpoint);
                             $scope.clearTooltip(tooltip);
 
                             switch (keyCode) {
                                 case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-                                        if ($scope.visiblePoints[i].matterId === tooltip.selectedPoint.matterId) {
+                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId) {
                                             nextPoint = $scope.visiblePoints[i];
                                             break;
                                         }
@@ -414,7 +418,7 @@
                                     break;
                                 case 38: // up
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
-                                        if ($scope.visiblePoints[j].matterId === tooltip.selectedPoint.matterId) {
+                                        if ($scope.visiblePoints[j].matterId === clickedpoint.matterId) {
                                             nextPoint = $scope.visiblePoints[j];
                                             break;
                                         }
@@ -423,7 +427,10 @@
                             }
 
                             if (nextPoint) {
-                                return $scope.showTooltip(nextPoint, tooltip, svg);
+                                var clickedDots = svg.selectAll(".dot").filter(function (d) {
+                                    return nextPoint.matterId === d.matterId && yValue(nextPoint) === yValue(d);
+                                });
+                                return $scope.showTooltip(clickedDots, tooltip, svg);
                             }
                         }
                     }
