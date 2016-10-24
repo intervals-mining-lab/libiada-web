@@ -21,6 +21,7 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -279,6 +280,7 @@
     <Compile Include="Controllers\Sequences\GenesImportController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TaskManagerController.cs" />
+    <Compile Include="Controllers\TaskManagerWebApiController.cs" />
     <Compile Include="DataSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
