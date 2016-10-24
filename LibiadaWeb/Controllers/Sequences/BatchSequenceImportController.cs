@@ -94,13 +94,15 @@
                                              ", Definition=" + metadata.Definition +
                                              ", Saved matter name=" + savedMatterNames[i];
 
+
+
                             var matter = new Matter { Name = savedMatterNames[i], Nature = Nature.Genetic };
 
                             // TODO: detect feature from metadata
                             var sequence = new CommonSequence
                                                {
                                                    Matter = matter,
-                                                   FeatureId = Aliases.Feature.FullGenome,
+                                                   FeatureId = NcbiHelper.ExtractSequenceFeature(metadata),
                                                    NotationId = Aliases.Notation.Nucleotide,
                                                    RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
                                                    RemoteId = metadata.Version.CompoundAccession
