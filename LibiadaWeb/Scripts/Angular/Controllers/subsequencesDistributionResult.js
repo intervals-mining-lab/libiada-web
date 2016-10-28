@@ -4,6 +4,7 @@
     function subsequencesDistributionResult($scope, $http) {
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
+        $scope.loading = true;
         $http({
             url: "/api/TaskManagerWebApi/" + $scope.taskId,
             method: "GET"
@@ -17,6 +18,7 @@
 
             $scope.fillPoints();
             $scope.addCharacteristicComparer();
+            $scope.loading = false;
         }).error(function (data) {
             alert("Failed loading genes map data");
         });
