@@ -283,7 +283,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public override ActionResult Result()
+        public override ActionResult Result(string taskId)
         {
             try
             {

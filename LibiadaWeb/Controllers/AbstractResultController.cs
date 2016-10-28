@@ -40,7 +40,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public virtual ActionResult Result()
+        public virtual ActionResult Result(string taskId)
         {
             try
             {
@@ -66,6 +66,7 @@
                 ViewBag.ErrorMessage = e.Message;
             }
 
+            ViewBag.taskId = taskId;
             return View();
         }
 

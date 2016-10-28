@@ -83,7 +83,7 @@
                     case TaskState.Completed:
                     case TaskState.Error:
                         TempData["Result"] = task.Result;
-                        return RedirectToAction("Result", task.ControllerName);
+                        return RedirectToAction("Result", task.ControllerName, new { id });
                     default:
                         TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
                         return RedirectToAction("Index");

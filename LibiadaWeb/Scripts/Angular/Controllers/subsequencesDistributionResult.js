@@ -2,8 +2,10 @@
     "use strict";
 
     function subsequencesDistributionResult($scope, $http) {
+        var location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
         $http({
-            url: "/api/TaskManagerWebApi/" + 0,
+            url: "/api/TaskManagerWebApi/" + $scope.taskId,
             method: "GET"
         }).success(function (data) {
             MapModelFromJson($scope, JSON.parse(data));
@@ -12,7 +14,7 @@
             $scope.hight = 800 + $scope.legendHeight;
             $scope.width = 800;
             $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
-            // как загружать Angular из Ajax и JSON woop
+
             $scope.fillPoints();
             $scope.addCharacteristicComparer();
         }).error(function (data) {
