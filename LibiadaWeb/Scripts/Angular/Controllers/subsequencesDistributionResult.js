@@ -3,7 +3,7 @@
 
     function subsequencesDistributionResult($scope, $http) {
         $http({
-            url: "/libiadaweb/api/TaskManagerWebApi/" + 0,
+            url: "/api/TaskManagerWebApi/" + 0,
             method: "GET"
         }).success(function (data) {
             MapModelFromJson($scope, JSON.parse(data));
