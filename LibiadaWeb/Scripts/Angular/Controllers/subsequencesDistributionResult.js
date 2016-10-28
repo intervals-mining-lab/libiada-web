@@ -1,8 +1,23 @@
 ﻿function SubsequencesDistributionResultController(data) {
     "use strict";
 
-    function subsequencesDistributionResult($scope) {
-        MapModelFromJson($scope, data);
+    function subsequencesDistributionResult($scope, $http) {
+        $http({
+            url: "/libiadaweb/api/TaskManagerWebApi/" + 0,
+            method: "GET"
+        }).success(function (data) {
+            MapModelFromJson($scope, JSON.parse(data));
+
+            $scope.legendHeight = $scope.result.length * 20;
+            $scope.hight = 800 + $scope.legendHeight;
+            $scope.width = 800;
+            $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+            // как загружать Angular из Ajax и JSON woop
+            $scope.fillPoints();
+            $scope.addCharacteristicComparer();
+        }).error(function (data) {
+            alert("Failed loading genes map data");
+        });
 
         function addCharacteristicComparer() {
             $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
@@ -461,19 +476,14 @@
         $scope.addCharacteristicComparer = addCharacteristicComparer;
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
 
-        $scope.legendHeight = $scope.result.length * 20;
-        $scope.hight = 800 + $scope.legendHeight;
-        $scope.width = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.points = [];
         $scope.visiblePoints = [];
         $scope.matters = [];
-        $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
         $scope.characteristicComparers = [];
         $scope.productFilter = "";
-        $scope.fillPoints();
     }
 
-    angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", subsequencesDistributionResult]);
+    angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);
 }
