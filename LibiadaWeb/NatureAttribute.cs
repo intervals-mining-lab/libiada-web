@@ -16,7 +16,7 @@
         /// </param>
         public NatureAttribute(Nature value)
         {
-            this.Value = value;
+            Value = value;
         }
 
         /// <summary>

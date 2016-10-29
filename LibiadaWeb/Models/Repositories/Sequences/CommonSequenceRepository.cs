@@ -1,10 +1,12 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using LibiadaCore.Core;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The sequence repository.
@@ -76,21 +78,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The get alphabet.
-        /// </summary>
-        /// <param name="sequenceId">
-        /// The sequence id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Alphabet"/>.
-        /// </returns>
-        public Alphabet GetAlphabet(long sequenceId)
-        {
-            List<long> elements = DbHelper.GetElementIds(Db, sequenceId);
-            return ElementRepository.ToLibiadaAlphabet(elements);
-        }
-
-        /// <summary>
         /// The to libiada BaseChain.
         /// </summary>
         /// <param name="sequenceId">
@@ -101,7 +88,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public BaseChain ToLibiadaBaseChain(long sequenceId)
         {
-            return new BaseChain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId));
+            return new BaseChain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
@@ -115,7 +102,50 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public Chain ToLibiadaChain(long sequenceId)
         {
-            return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId));
+            return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
+        }
+
+        public Chain[][] GetChains(
+            long[] matterIds,
+            int[] notationIds,
+            int[] languageIds,
+            int?[] translatorIds)
+        {
+            var chains = new Chain[matterIds.Length][];
+            var commonSequenceRepository = new CommonSequenceRepository(Db);
+            var notationsRepository = new NotationRepository(Db);
+
+            for (int i = 0; i < matterIds.Length; i++)
+            {
+                var matterId = matterIds[i];
+                chains[i] = new Chain[notationIds.Length];
+
+                for (int j = 0; j < notationIds.Length; j++)
+                {
+                    Notation notation = notationsRepository.Notations.Single(n => n.Id == notationIds[j]);
+
+                    long sequenceId;
+                    if (notation.Nature == Nature.Literature)
+                    {
+                        int languageId = languageIds[j];
+                        int? translatorId = translatorIds[j];
+
+                        sequenceId = Db.LiteratureSequence.Single(l =>
+                                    l.MatterId == matterId && l.NotationId == notation.Id
+                                    && l.LanguageId == languageId
+                                    && ((translatorId == null && l.TranslatorId == null)
+                                        || (translatorId == l.TranslatorId))).Id;
+                    }
+                    else
+                    {
+                        sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notation.Id).Id;
+                    }
+
+                    chains[i][j] = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                }
+            }
+
+            return chains;
         }
 
         /// <summary>
@@ -123,6 +153,21 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
+        }
+
+        /// <summary>
+        /// The get alphabet.
+        /// </summary>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Alphabet"/>.
+        /// </returns>
+        private Alphabet GetAlphabet(long sequenceId)
+        {
+            List<long> elements = DbHelper.GetElementIds(Db, sequenceId);
+            return ElementRepository.ToLibiadaAlphabet(elements);
         }
     }
 }

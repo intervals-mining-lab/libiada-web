@@ -156,7 +156,7 @@
                     clusters[i] = i + 1;
                     foreach (long matterId in cluster)
                     {
-                        mattersCharacteristics[n++] = new { matterName = matters[matterId].Name, cluster = clusters[i], characteristics = allCharacteristics[matterIds.ToList().IndexOf(matterId)] };
+                        mattersCharacteristics[n++] = new { MatterName = matters[matterId].Name, cluster = clusters[i], Characteristics = allCharacteristics[matterIds.ToList().IndexOf(matterId)] };
                     }
                 }
 

@@ -12,7 +12,7 @@
                 }
             } else {
                 for (var k = 0; k < $scope.characteristics.length; k++) {
-                    $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
+                    $scope.legend.push({ name: $scope.characteristics[k].MatterName, visible: true });
                 }
             }
         }
@@ -27,10 +27,10 @@
                 var characteristic = $scope.characteristics[i];
                 $scope.points.push({
                     id: i,
-                    name: characteristic.matterName,
-                    x: characteristic.characteristics[first],
-                    y: characteristic.characteristics[second],
-                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.matterName
+                    name: characteristic.MatterName,
+                    x: characteristic.Characteristics[first],
+                    y: characteristic.Characteristics[second],
+                    cluster: characteristic.cluster ? characteristic.cluster : characteristic.MatterName
                 });
             }
         }
@@ -43,8 +43,8 @@
 
 
             var pointSharacteristics = [];
-            for (var i = 0; i < $scope.characteristics[d.id].characteristics.length; i++) {
-                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].characteristics[i]);
+            for (var i = 0; i < $scope.characteristics[d.id].Characteristics.length; i++) {
+                pointSharacteristics.push($scope.characteristicsList[i].Text + ": " + $scope.characteristics[d.id].Characteristics[i]);
             }
 
             tooltipContent.push(pointSharacteristics.join("<br/>"));

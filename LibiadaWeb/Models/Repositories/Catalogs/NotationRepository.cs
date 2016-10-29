@@ -11,7 +11,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The notations.
         /// </summary>
-        private readonly Notation[] notations;
+        public readonly Notation[] Notations;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NotationRepository"/> class.
@@ -21,7 +21,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </param>
         public NotationRepository(LibiadaWebEntities db)
         {
-            notations = db.Notation.ToArray();
+            Notations = db.Notation.ToArray();
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature()
         {
-            return notations.Select(n => new
+            return Notations.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -52,7 +52,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(int selectedNotation)
         {
-            return notations.Select(n => new
+            return Notations.Select(n => new
             {
                 Value = n.Id, 
                 Text = n.Name, 
@@ -72,7 +72,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> notationIds)
         {
-            return notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
+            return Notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
             {
                 Value = n.Id,
                 Text = n.Name,
@@ -95,7 +95,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<object> GetSelectListWithNature(List<int> notationIds, int selectedNotation)
         {
-            return notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
+            return Notations.Where(n => notationIds.Contains(n.Id)).Select(n => new
             {
                 Value = n.Id,
                 Text = n.Name,
