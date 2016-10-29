@@ -181,7 +181,7 @@
             if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
             {
                 var joinedSequence = bioSequence.ConvertToString();
-                
+
                 for (int j = 0; j < position.Length; j++)
                 {
                     joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
@@ -192,7 +192,7 @@
             else
             {
                 resultSequence = bioSequence.GetReverseComplementedSequence().ConvertToString();
-                
+
                 for (int j = 0; j < position.Length; j++)
                 {
                     resultSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).GetReverseComplementedSequence().ConvertToString();

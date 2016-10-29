@@ -59,9 +59,9 @@
                 return signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
 
-            private set 
-            { 
-                signInManager = value; 
+            private set
+            {
+                signInManager = value;
             }
         }
 
@@ -252,7 +252,7 @@
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId<int>(), phoneNumber);
-            
+
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }

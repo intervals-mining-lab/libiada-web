@@ -94,8 +94,6 @@
                                              ", Definition=" + metadata.Definition +
                                              ", Saved matter name=" + savedMatterNames[i];
 
-
-
                             var matter = new Matter { Name = savedMatterNames[i], Nature = Nature.Genetic };
 
                             // TODO: detect feature from metadata
@@ -128,7 +126,7 @@
                                 {
                                     results[i] = "successfully imported sequence but failed to import genes: " + exception.Message;
                                     statuses[i] = "Error";
-                                    
+
                                     if (exception.InnerException != null)
                                     {
                                         results[i] += " " + exception.InnerException.Message;

@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
@@ -51,21 +49,7 @@
             }
             else
             {
-                var characteristicIds = new List<int>
-                                            {
-                                                Aliases.CharacteristicType.ATSkew, 
-                                                Aliases.CharacteristicType.AlphabetCardinality, 
-                                                Aliases.CharacteristicType.AverageRemoteness, 
-                                                Aliases.CharacteristicType.GCRatio, 
-                                                Aliases.CharacteristicType.GCSkew, 
-                                                Aliases.CharacteristicType.GCToATRatio, 
-                                                Aliases.CharacteristicType.IdentificationInformation, 
-                                                Aliases.CharacteristicType.Length, 
-                                                Aliases.CharacteristicType.MKSkew, 
-                                                Aliases.CharacteristicType.RYSkew, 
-                                                Aliases.CharacteristicType.SWSkew
-                                            };
-                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
             }
 
             ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate"));
@@ -116,12 +100,12 @@
         {
             return Action(() =>
                 {
-                    Dictionary<string, object> result; 
+                    Dictionary<string, object> result;
 
                 using (var db = new LibiadaWebEntities())
                 {
                     double[][] characteristics;
-                    
+
                     var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                     var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
                     var commonSequenceRepository = new CommonSequenceRepository(db);
@@ -132,7 +116,7 @@
                     var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                     var characteristicNames = new string[characteristicTypeLinkIds.Length];
                     var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
-                    
+
                     for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                     {
                         links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
@@ -172,7 +156,6 @@
                                      { "characteristicsList", characteristicsList }
                                  };
                 }
-                
 
                 return new Dictionary<string, object>
                            {
@@ -180,7 +163,5 @@
                            };
             });
         }
-
-        
     }
 }

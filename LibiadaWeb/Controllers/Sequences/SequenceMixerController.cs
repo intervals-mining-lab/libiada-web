@@ -116,7 +116,7 @@
             CommonSequence dataBaseSequence;
             if (matter.Nature == Nature.Literature)
             {
-                long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
+                long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                     && l.NotationId == notationId
                                                                     && l.LanguageId == languageId
                                                                     && ((translatorId == null && l.TranslatorId == null)

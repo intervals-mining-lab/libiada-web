@@ -42,7 +42,7 @@
             {
                 return characteristicTypeLinks.ToArray();
             }
-        } 
+        }
 
         /// <summary>
         /// The get libiada link.

@@ -12,7 +12,7 @@ namespace LibiadaWeb
     /// <summary>
     /// The application sign in manager.
     /// </summary>
-    public class ApplicationSignInManager : SignInManager<ApplicationUser, int> 
+    public class ApplicationSignInManager : SignInManager<ApplicationUser, int>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationSignInManager"/> class.

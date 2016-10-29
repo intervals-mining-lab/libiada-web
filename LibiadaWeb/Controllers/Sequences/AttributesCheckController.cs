@@ -97,7 +97,7 @@
 
                     return new Dictionary<string, object>
                                      {
-                                         { "attributes", attributes }, 
+                                         { "attributes", attributes },
                                          { "matterNames", matterNames }
                                      };
                 });

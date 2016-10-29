@@ -115,13 +115,13 @@
                                         .Select(s => new { s.Id, MatterName = s.Matter.Name, s.MatterId, s.RemoteId })
                                         .ToDictionary(s => s.Id);
                 var parentSequenceIds = parentSequences.Keys.ToArray();
-                
+
                 var parentDbCharacteristics = db.Characteristic
                                                 .Where(c => c.CharacteristicTypeLinkId == characteristicTypeLinkId && parentSequenceIds.Contains(c.SequenceId))
                                                 .ToArray()
                                                 .GroupBy(c => c.SequenceId)
                                                 .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
-                
+
                 var sequenceData = new SequenceData[parentSequenceIds.Length];
 
                 for (int i = 0; i < parentSequenceIds.Length; i++)
@@ -135,7 +135,7 @@
                     {
                         sequenceDbCharacteristics = new Dictionary<int, double>();
                     }
-                    
+
                     if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkId, out sequenceCharacteristicValue))
                     {
                         Chain sequence = commonSequenceRepository.ToLibiadaChain(parentSequenceId);
@@ -167,7 +167,7 @@
                                                          .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
                     var libiadaSubsequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceId);
-                    
+
                     var subsequenceCalculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                     var subsequenceLinks = new Link[characteristicTypeLinkIds.Length];
                     for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -176,7 +176,6 @@
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
                         subsequenceCalculators[k] = CalculatorsFactory.CreateFullCalculator(className);
                     }
-                    
 
                     for (int j = 0; j < dbSubsequences.Length; j++)
                     {
@@ -215,7 +214,7 @@
                     var parent = parentSequences[parentSequenceId];
                     subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();
                     sequenceData[i] = new SequenceData(parent.MatterId, parent.MatterName, parent.RemoteId, sequenceCharacteristicValue, subsequencesData);
-                    
+
                     // trying to save calculated characteristics to database
                     characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
                 }
@@ -224,7 +223,7 @@
                 sequenceData = sequenceData.OrderBy(r => r.Characteristic).ToArray();
 
                 var sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, Aliases.Notation.Nucleotide);
-                
+
                 var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
                 var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int i = 0; i < characteristicTypeLinkIds.Length; i++)

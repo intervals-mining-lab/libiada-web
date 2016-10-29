@@ -89,7 +89,7 @@
 
                 return new Dictionary<string, object>
                                      {
-                                         { "matterName", matterName }, 
+                                         { "matterName", matterName },
                                          { "genes", sequenceSubsequences }
                                      };
             });

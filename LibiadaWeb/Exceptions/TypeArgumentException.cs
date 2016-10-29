@@ -9,7 +9,7 @@
     public class TypeArgumentException : Exception
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class. 
+        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class.
         /// Constructs a new instance of TypeArgumentException with no message.
         /// </summary>
         public TypeArgumentException()
@@ -17,19 +17,18 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class. 
+        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class.
         /// Constructs a new instance of TypeArgumentException with the given message.
         /// </summary>
         /// <param name="message">
         /// Message for the exception.
         /// </param>
-        public TypeArgumentException(string message)
-            : base(message)
+        public TypeArgumentException(string message) : base(message)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class. 
+        /// Initializes a new instance of the <see cref="TypeArgumentException"/> class.
         /// Constructs a new instance of TypeArgumentException with the given message and inner exception.
         /// </summary>
         /// <param name="message">
@@ -38,8 +37,7 @@
         /// <param name="inner">
         /// Inner exception.
         /// </param>
-        public TypeArgumentException(string message, Exception inner)
-            : base(message, inner)
+        public TypeArgumentException(string message, Exception inner) : base(message, inner)
         {
         }
     }

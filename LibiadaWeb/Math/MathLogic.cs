@@ -25,6 +25,6 @@
             }
 
             return first != null && first.Equals(second);
-        } 
+        }
     }
 }

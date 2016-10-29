@@ -1,12 +1,92 @@
 ﻿namespace LibiadaWeb.Models
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
 
     /// <summary>
     /// The aliases.
     /// </summary>
     public static class Aliases
     {
+        /// <summary>
+        /// The user available characteristics.
+        /// </summary>
+        public static readonly ReadOnlyCollection<CharacteristicType> UserAvailableCharacteristics = new ReadOnlyCollection<CharacteristicType>(new List<CharacteristicType>
+                                                                                                                                          {
+                                                                                                                                            CharacteristicType.ATSkew,
+                                                                                                                                            CharacteristicType.AlphabetCardinality,
+                                                                                                                                            CharacteristicType.AverageRemoteness,
+                                                                                                                                            CharacteristicType.GCRatio,
+                                                                                                                                            CharacteristicType.GCSkew,
+                                                                                                                                            CharacteristicType.GCToATRatio,
+                                                                                                                                            CharacteristicType.IdentificationInformation,
+                                                                                                                                            CharacteristicType.Length,
+                                                                                                                                            CharacteristicType.MKSkew,
+                                                                                                                                            CharacteristicType.RYSkew,
+                                                                                                                                            CharacteristicType.SWSkew
+                                                                                                                                          });
+
+        /// <summary>
+        /// The characteristic type.
+        /// </summary>
+        public enum CharacteristicType : int
+        {
+            /// <summary>
+            /// The alphabet cardinality.
+            /// </summary>
+            AlphabetCardinality = 1,
+
+            /// <summary>
+            /// The average remoteness.
+            /// </summary>
+            AverageRemoteness = 3,
+
+            /// <summary>
+            /// The identification information.
+            /// </summary>
+            IdentificationInformation = 10,
+
+            /// <summary>
+            /// The length.
+            /// </summary>
+            Length = 12,
+
+            /// <summary>
+            /// The GC ratio.
+            /// </summary>
+            GCRatio = 33,
+
+            /// <summary>
+            /// The GC skew.
+            /// </summary>
+            GCSkew = 34,
+
+            /// <summary>
+            /// The AT skew.
+            /// </summary>
+            ATSkew = 35,
+
+            /// <summary>
+            /// The GC to AT ratio.
+            /// </summary>
+            GCToATRatio = 36,
+
+            /// <summary>
+            /// The MK skew.
+            /// </summary>
+            MKSkew = 37,
+
+            /// <summary>
+            /// The RY skew.
+            /// </summary>
+            RYSkew = 38,
+
+            /// <summary>
+            /// The SW skew.
+            /// </summary>
+            SWSkew = 39
+        }
+
         /// <summary>
         /// The accidental.
         /// </summary>
@@ -613,67 +693,6 @@
             /// The remote db ncbi.
             /// </summary>
             public const int RemoteDbNcbi = 1;
-        }
-
-        /// <summary>
-        /// The characteristic type.
-        /// </summary>
-        public static class CharacteristicType
-        {
-            /// <summary>
-            /// The alphabet cardinality.
-            /// </summary>
-            public const int AlphabetCardinality = 1;
-
-            /// <summary>
-            /// The average remoteness.
-            /// </summary>
-            public const int AverageRemoteness = 3;
-
-            /// <summary>
-            /// The identification information.
-            /// </summary>
-            public const int IdentificationInformation = 10;
-
-            /// <summary>
-            /// The length.
-            /// </summary>
-            public const int Length = 12;
-
-            /// <summary>
-            /// The GC ratio.
-            /// </summary>
-            public const int GCRatio = 33;
-
-            /// <summary>
-            /// The GC skew.
-            /// </summary>
-            public const int GCSkew = 34;
-
-            /// <summary>
-            /// The AT skew.
-            /// </summary>
-            public const int ATSkew = 35;
-
-            /// <summary>
-            /// The GC to AT ratio.
-            /// </summary>
-            public const int GCToATRatio = 36;
-
-            /// <summary>
-            /// The MK skew.
-            /// </summary>
-            public const int MKSkew = 37;
-
-            /// <summary>
-            /// The RY skew.
-            /// </summary>
-            public const int RYSkew = 38;
-
-            /// <summary>
-            /// The SW skew.
-            /// </summary>
-            public const int SWSkew = 39;
         }
     }
 }

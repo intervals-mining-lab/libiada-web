@@ -48,7 +48,7 @@
         public ActionResult Index()
         {
             var data = new Dictionary<string, object>();
-              
+
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
@@ -145,7 +145,7 @@
 
                 var result = new Dictionary<string, object>
                 {
-                    { "names", names },    
+                    { "names", names },
                     { "sequences", sequences },
                     { "transformationsList", transformations },
                     { "iterationsCount", iterationsCount }

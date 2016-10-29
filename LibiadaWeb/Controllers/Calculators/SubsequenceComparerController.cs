@@ -132,11 +132,11 @@
                                 {
                                     similarSubsequences.Add(new IntPair(k, l));
 
-                                    //if (excludeType == "Exclude")
-                                    //{
-                                    //    allSubsequencesCharacteristics[i][k] = double.NaN;
-                                    //    allSubsequencesCharacteristics[j][l] = double.NaN;
-                                    //}
+                                    // if (excludeType == "Exclude")
+                                    // {
+                                    //     allSubsequencesCharacteristics[i][k] = double.NaN;
+                                    //     allSubsequencesCharacteristics[j][l] = double.NaN;
+                                    // }
                                 }
                             }
                         }
@@ -193,8 +193,8 @@
             for (int j = 0; j < sequences.Length; j++)
             {
                 if (!dbCharacteristics.TryGetValue(subsequences[j].Id, out values[j])
-                    //&& newCharacteristics.All(c => c.SequenceId != subsequences[j].SequenceId)
-                    )
+                    // && newCharacteristics.All(c => c.SequenceId != subsequences[j].SequenceId)
+                   )
                 {
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);

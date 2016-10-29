@@ -113,7 +113,7 @@
         /// Attribute type.
         /// </typeparam>
         /// <returns>
-        /// The <see cref="TA"/>.
+        /// The <see cref="TAttribute"/>.
         /// </returns>
         public static TAttribute GetAttribute<T, TAttribute>(this T value)
             where T : struct, IComparable, IFormattable, IConvertible

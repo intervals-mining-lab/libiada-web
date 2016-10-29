@@ -68,50 +68,50 @@
             {
                 new NpgsqlParameter
                 {
-                    ParameterName = "id", 
-                    NpgsqlDbType = NpgsqlDbType.Bigint, 
+                    ParameterName = "id",
+                    NpgsqlDbType = NpgsqlDbType.Bigint,
                     Value = commonSequence.Id
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "notation_id", 
-                    NpgsqlDbType = NpgsqlDbType.Integer, 
+                    ParameterName = "notation_id",
+                    NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = commonSequence.NotationId
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "matter_id", 
-                    NpgsqlDbType = NpgsqlDbType.Bigint, 
+                    ParameterName = "matter_id",
+                    NpgsqlDbType = NpgsqlDbType.Bigint,
                     Value = commonSequence.MatterId
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "feature_id", 
-                    NpgsqlDbType = NpgsqlDbType.Integer, 
+                    ParameterName = "feature_id",
+                    NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = commonSequence.FeatureId
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "alphabet", 
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint, 
+                    ParameterName = "alphabet",
+                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
                     Value = alphabet
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "building", 
-                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer, 
+                    ParameterName = "building",
+                    NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Integer,
                     Value = building
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "remote_id", 
-                    NpgsqlDbType = NpgsqlDbType.Varchar, 
+                    ParameterName = "remote_id",
+                    NpgsqlDbType = NpgsqlDbType.Varchar,
                     Value = (object)commonSequence.RemoteId ?? DBNull.Value
-                }, 
+                },
                 new NpgsqlParameter
                 {
-                    ParameterName = "remote_db_id", 
-                    NpgsqlDbType = NpgsqlDbType.Integer, 
+                    ParameterName = "remote_db_id",
+                    NpgsqlDbType = NpgsqlDbType.Integer,
                     Value = (object)commonSequence.RemoteDbId ?? DBNull.Value
                 }
             };

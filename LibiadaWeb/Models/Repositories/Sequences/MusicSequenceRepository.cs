@@ -54,7 +54,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
-            
+
             var chain = ConvertCongenericScoreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
 
             MatterRepository.CreateMatterFromSequence(sequence);
@@ -80,22 +80,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var parameters = FillParams(commonSequence, alphabet, building);
 
             const string Query = @"INSERT INTO music_chain (
-                                        id, 
+                                        id,
                                         notation_id,
                                         matter_id,
-                                        feature_id, 
-                                        alphabet, 
-                                        building, 
-                                        remote_id, 
+                                        feature_id,
+                                        alphabet,
+                                        building,
+                                        remote_id,
                                         remote_db_id
                                     ) VALUES (
-                                        @id, 
+                                        @id,
                                         @notation_id,
                                         @matter_id,
                                         @feature_id,
-                                        @alphabet, 
-                                        @building, 
-                                        @remote_id, 
+                                        @alphabet,
+                                        @building,
+                                        @remote_id,
                                         @remote_db_id
                                     );";
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
@@ -104,7 +104,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <summary>
         /// The dispose.
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
             Db.Dispose();
         }

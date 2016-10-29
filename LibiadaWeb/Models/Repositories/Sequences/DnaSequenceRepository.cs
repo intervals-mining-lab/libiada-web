@@ -90,41 +90,41 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public void Create(CommonSequence sequence, string fastaHeader, bool partial, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
-            
+
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "fasta_header", 
-                NpgsqlDbType = NpgsqlDbType.Varchar, 
+                ParameterName = "fasta_header",
+                NpgsqlDbType = NpgsqlDbType.Varchar,
                 Value = fastaHeader
             });
 
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "partial", 
-                NpgsqlDbType = NpgsqlDbType.Boolean, 
+                ParameterName = "partial",
+                NpgsqlDbType = NpgsqlDbType.Boolean,
                 Value = partial
             });
 
             const string Query = @"INSERT INTO dna_chain (
-                                        id, 
+                                        id,
                                         notation_id,
-                                        matter_id, 
+                                        matter_id,
                                         feature_id,
-                                        fasta_header, 
-                                        alphabet, 
-                                        building, 
-                                        remote_id, 
+                                        fasta_header,
+                                        alphabet,
+                                        building,
+                                        remote_id,
                                         remote_db_id,
                                         partial
                                     ) VALUES (
-                                        @id, 
+                                        @id,
                                         @notation_id,
                                         @matter_id,
                                         @feature_id,
-                                        @fasta_header, 
-                                        @alphabet, 
-                                        @building, 
-                                        @remote_id, 
+                                        @fasta_header,
+                                        @alphabet,
+                                        @building,
+                                        @remote_id,
                                         @remote_db_id,
                                         @partial
                                     );";
@@ -170,8 +170,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return new CommonSequence
             {
                 Id = source.Id,
-                NotationId = source.NotationId, 
-                MatterId = source.MatterId, 
+                NotationId = source.NotationId,
+                MatterId = source.MatterId,
                 FeatureId = source.FeatureId
             };
         }

@@ -49,21 +49,7 @@
             }
             else
             {
-                var characteristicIds = new List<int>
-                                            {
-                                                Aliases.CharacteristicType.ATSkew, 
-                                                Aliases.CharacteristicType.AlphabetCardinality, 
-                                                Aliases.CharacteristicType.AverageRemoteness, 
-                                                Aliases.CharacteristicType.GCRatio, 
-                                                Aliases.CharacteristicType.GCSkew, 
-                                                Aliases.CharacteristicType.GCToATRatio, 
-                                                Aliases.CharacteristicType.IdentificationInformation, 
-                                                Aliases.CharacteristicType.Length, 
-                                                Aliases.CharacteristicType.MKSkew, 
-                                                Aliases.CharacteristicType.RYSkew, 
-                                                Aliases.CharacteristicType.SWSkew
-                                            };
-                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
             }
 
             var data = new Dictionary<string, object>
@@ -71,13 +57,13 @@
                     { "characteristicTypes", viewDataHelper.GetCharacteristicTypes(filter) }
                 };
 
-            var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
+            var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
-            
+
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
-            
+
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }
@@ -112,12 +98,12 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
-            int[] transformationLinkIds, 
+            int[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
             int[] characteristicTypeLinkIds,
-            string[] customSequences, 
-            bool localFile, 
+            string[] customSequences,
+            bool localFile,
             HttpPostedFileBase[] file)
         {
             return Action(() =>
@@ -161,7 +147,7 @@
                                 }
                                 else
                                 {
-                                    sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[w]);
+                                    sequence = HighOrderFactory.Create(sequence, (Link)transformationLinkIds[w]);
                                 }
                             }
                         }
@@ -190,7 +176,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
+                    var link = ((Link)transformationLinkIds[i]).GetDisplayValue();
                     transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
                 }
 

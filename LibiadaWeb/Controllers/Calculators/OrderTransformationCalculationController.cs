@@ -45,34 +45,20 @@
             }
             else
             {
-                var characteristicIds = new List<int>
-                                            {
-                                                Aliases.CharacteristicType.ATSkew, 
-                                                Aliases.CharacteristicType.AlphabetCardinality, 
-                                                Aliases.CharacteristicType.AverageRemoteness, 
-                                                Aliases.CharacteristicType.GCRatio, 
-                                                Aliases.CharacteristicType.GCSkew, 
-                                                Aliases.CharacteristicType.GCToATRatio, 
-                                                Aliases.CharacteristicType.IdentificationInformation, 
-                                                Aliases.CharacteristicType.Length, 
-                                                Aliases.CharacteristicType.MKSkew, 
-                                                Aliases.CharacteristicType.RYSkew, 
-                                                Aliases.CharacteristicType.SWSkew
-                                            };
-                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
             }
 
             var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate");
-            
+
             var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
-            
+
             var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
             data.Add("operations", operations);
-            
+
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();
         }
@@ -110,8 +96,8 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
-            long[] matterIds, 
-            int[] transformationLinkIds, 
+            long[] matterIds,
+            int[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
             int[] characteristicTypeLinkIds,

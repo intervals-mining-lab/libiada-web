@@ -79,7 +79,7 @@
             {
                 return HttpNotFound();
             }
-            
+
             ViewBag.Nature = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
             return View(matter);
         }

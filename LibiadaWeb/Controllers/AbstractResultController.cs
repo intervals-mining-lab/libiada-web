@@ -37,6 +37,9 @@
         /// <summary>
         /// The result.
         /// </summary>
+        /// <param name="taskId">
+        /// The task Id.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -52,7 +55,7 @@
 
                 foreach (var key in result.Keys)
                 {
-                    ViewData[key] = result[key];
+                    ViewData[key] = key == "data" && controllerName == "SubsequencesDistribution" ? "{}" : result[key];
                 }
 
                 TempData.Keep();

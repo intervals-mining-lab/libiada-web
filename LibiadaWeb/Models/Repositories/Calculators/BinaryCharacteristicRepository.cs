@@ -6,13 +6,6 @@ namespace LibiadaWeb.Models.Repositories.Calculators
     public class BinaryCharacteristicRepository : IBinaryCharacteristicRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
-        /// </summary>
-        public BinaryCharacteristicRepository()
-        {
-        }
-
-        /// <summary>
         /// The create binary characteristic.
         /// </summary>
         /// <param name="sequenceId">
@@ -38,9 +31,9 @@ namespace LibiadaWeb.Models.Repositories.Calculators
             var characteristic = new BinaryCharacteristic
             {
                 SequenceId = sequenceId,
-                CharacteristicTypeLinkId = characteristicTypeLinkId, 
-                FirstElementId = firstElementId, 
-                SecondElementId = secondElementId, 
+                CharacteristicTypeLinkId = characteristicTypeLinkId,
+                FirstElementId = firstElementId,
+                SecondElementId = secondElementId,
                 Value = value
             };
             return characteristic;
@@ -49,7 +42,7 @@ namespace LibiadaWeb.Models.Repositories.Calculators
         /// <summary>
         /// The dispose.
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
         }
     }

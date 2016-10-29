@@ -45,7 +45,7 @@
                 data.Add("nature", (byte)Nature.Genetic);
                 ViewBag.data = JsonConvert.SerializeObject(data);
             }
-            
+
             return View();
         }
 
@@ -105,7 +105,7 @@
 
                     return new Dictionary<string, object>
                            {
-                               { "matterNames", matterNames }, 
+                               { "matterNames", matterNames },
                                { "results", results },
                                { "status", statuses }
                            };

@@ -179,15 +179,15 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>() 
+            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>()
                                              : new[] { Link.NotApplied, Link.Start, Link.Cycle };
 
             var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
 
             var linksData = links.Select(l => new
                                                 {
-                                                    Value = (int)l, 
-                                                    Text = l.GetDisplayValue(), 
+                                                    Value = (int)l,
+                                                    Text = l.GetDisplayValue(),
                                                     CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.LinkId == (int)l).Select(ctl => ctl.Id)
                                                 });
 

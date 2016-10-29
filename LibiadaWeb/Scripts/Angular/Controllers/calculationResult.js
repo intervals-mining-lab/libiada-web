@@ -220,7 +220,7 @@
                         .attr("visibility", function (dot) {
                             return d.visible ? "visible" : "hidden";
                         });
-            });;
+            });
 
             // draw legend colored rectangles
             legend.append("rect")

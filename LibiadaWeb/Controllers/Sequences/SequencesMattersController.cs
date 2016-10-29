@@ -118,13 +118,13 @@
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
-                    { "matters", matterRepository.GetMatterSelectList() }, 
-                    { "natures", natures }, 
-                    { "notations", notations }, 
-                    { "features", features }, 
-                    { "languages", new SelectList(Db.Language, "id", "name") }, 
-                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() }, 
-                    { "translators", translators }, 
+                    { "matters", matterRepository.GetMatterSelectList() },
+                    { "natures", natures },
+                    { "notations", notations },
+                    { "features", features },
+                    { "languages", new SelectList(Db.Language, "id", "name") },
+                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
+                    { "translators", translators },
                     { "natureLiterature", (byte)Nature.Literature }
                 });
 
@@ -280,6 +280,9 @@
         /// <summary>
         /// The result.
         /// </summary>
+        /// <param name="taskId">
+        /// The task Id.
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>

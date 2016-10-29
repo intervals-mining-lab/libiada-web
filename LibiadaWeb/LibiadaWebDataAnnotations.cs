@@ -209,7 +209,7 @@
     /// <summary>
     /// The element data annotations.
     /// </summary>
-    public class ElementDataAnnotations 
+    public class ElementDataAnnotations
     {
         /// <summary>
         /// Gets or sets the notationId.

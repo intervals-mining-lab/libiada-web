@@ -91,11 +91,11 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
-            long[] matterIds, 
-            int[] characteristicTypeLinkIds, 
-            int[] notationIds, 
-            int[] languageIds, 
-            int?[] translatorIds, 
+            long[] matterIds,
+            int[] characteristicTypeLinkIds,
+            int[] notationIds,
+            int[] languageIds,
+            int?[] translatorIds,
             bool sort,
             bool theoretical)
         {
@@ -132,10 +132,10 @@
                             int? translatorId = translatorIds[i];
 
                             isLiteratureSequence = true;
-                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId 
+                            sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                       && l.NotationId == notationId
                                                                       && l.LanguageId == languageId
-                                                                      && ((translatorId == null && l.TranslatorId == null) 
+                                                                      && ((translatorId == null && l.TranslatorId == null)
                                                                       || (translatorId == l.TranslatorId))).Id;
                         }
                         else
@@ -161,8 +161,8 @@
 
                                 CongenericChain tempChain = chain.CongenericChain(j);
 
-                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId 
-                                                                       && b.CharacteristicTypeLinkId == characteristicTypeLinkId 
+                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId
+                                                                       && b.CharacteristicTypeLinkId == characteristicTypeLinkId
                                                                        && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
@@ -184,8 +184,8 @@
                         {
                             long elementId = sequenceElements[d];
 
-                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId 
-                                                                                         && c.CharacteristicTypeLinkId == characteristicTypeLinkId 
+                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId
+                                                                                         && c.CharacteristicTypeLinkId == characteristicTypeLinkId
                                                                                          && c.ElementId == elementId).Value;
 
                             characteristics.Last().Last().Add(new KeyValuePair<int, double>(d, characteristic));

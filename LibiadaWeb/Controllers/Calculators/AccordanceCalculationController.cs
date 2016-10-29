@@ -109,10 +109,10 @@
 
                 var characteristics = new List<List<double>>();
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
-                var result = new Dictionary<string, object> 
+                var result = new Dictionary<string, object>
                                  {
-                                     { "characteristics", characteristics }, 
-                                     { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() }, 
+                                     { "characteristics", characteristics },
+                                     { "matterNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToList() },
                                      { "characteristicName", characteristicName },
                                      { "calculationType", calculationType }
                                  };
@@ -123,7 +123,7 @@
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.NotationId == notationId && l.LanguageId == languageId && 
+                                l.NotationId == notationId && l.LanguageId == languageId &&
                                 MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else

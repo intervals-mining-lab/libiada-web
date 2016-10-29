@@ -13,7 +13,6 @@
     using Bio.IO.GenBank;
 
     using LibiadaWeb.Models;
-    
 
     /// <summary>
     /// The ncbi helper.
@@ -204,6 +203,15 @@
                                 ", Definition = " + definition);
         }
 
+        /// <summary>
+        /// Extracts sequence feature.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
         public static int ExtractSequenceFeature(GenBankMetadata metadata)
         {
             return metadata.Definition.ToLower().Contains("mitochondrion") ? Aliases.Feature.MitochondrionGenome : Aliases.Feature.FullGenome;

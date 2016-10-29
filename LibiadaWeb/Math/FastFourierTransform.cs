@@ -56,7 +56,7 @@
         /// Array of signal values. array size should be power of 2.
         /// </param>
         /// <returns>
-        /// Spectrum of the signal. 
+        /// Spectrum of the signal.
         /// </returns>
         public static Complex[] CalculateFastFourierTransform(Complex[] x)
         {

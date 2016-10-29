@@ -226,7 +226,7 @@
             Link link)
         {
             var newCharacteristics = new List<BinaryCharacteristic>();
-            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
+            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId
                                                                     && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                                                            .ToArray();
             int calculatedCount = databaseCharacteristics.Length;
@@ -274,19 +274,12 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        private void FrequencyCharacteristic(
-            int characteristicTypeLinkId,
-            int frequencyCount,
-            Chain chain,
-            long sequenceId,
-            IBinaryCalculator calculator,
-            Link link)
+        private void FrequencyCharacteristic(int characteristicTypeLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
             var newCharacteristics = new List<BinaryCharacteristic>();
-            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId 
-                                                                    && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
-                                                           .ToArray(); 
+            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId
+                                                                    && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
 
             // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();

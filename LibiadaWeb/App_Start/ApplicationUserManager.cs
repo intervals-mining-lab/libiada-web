@@ -35,10 +35,10 @@
         /// <returns>
         /// The <see cref="ApplicationUserManager"/>.
         /// </returns>
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
+        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new LibiadaUserStore(context.Get<ApplicationDbContext>()));
-            
+
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser, int>(manager)
                                         {

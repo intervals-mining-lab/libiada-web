@@ -8,7 +8,7 @@
         /// <summary>
         /// The matter id.
         /// </summary>
-        public readonly long MatterId; 
+        public readonly long MatterId;
 
         /// <summary>
         /// The matter name.

@@ -7,7 +7,6 @@
     using System.Web.Mvc;
 
     using Bio.Extensions;
-    using Bio.Util;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
@@ -38,8 +37,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController()
-            : base("Custom sequence calculation")
+        public CustomSequenceCalculationController() : base("Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
@@ -62,21 +60,7 @@
             }
             else
             {
-                var characteristicIds = new List<int>
-                                            {
-                                                Aliases.CharacteristicType.ATSkew, 
-                                                Aliases.CharacteristicType.AlphabetCardinality, 
-                                                Aliases.CharacteristicType.AverageRemoteness, 
-                                                Aliases.CharacteristicType.GCRatio, 
-                                                Aliases.CharacteristicType.GCSkew, 
-                                                Aliases.CharacteristicType.GCToATRatio, 
-                                                Aliases.CharacteristicType.IdentificationInformation, 
-                                                Aliases.CharacteristicType.Length, 
-                                                Aliases.CharacteristicType.MKSkew, 
-                                                Aliases.CharacteristicType.RYSkew, 
-                                                Aliases.CharacteristicType.SWSkew
-                                            };
-                filter = c => c.FullSequenceApplicable && characteristicIds.Contains(c.Id);
+                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
             }
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>

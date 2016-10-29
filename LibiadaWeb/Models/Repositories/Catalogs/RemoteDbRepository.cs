@@ -34,9 +34,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return remoteDbs.Select(n => new
             {
-                Value = n.Id, 
-                Text = n.Name, 
-                Selected = false, 
+                Value = n.Id,
+                Text = n.Name,
+                Selected = false,
                 Nature = n.Nature
             });
         }
@@ -54,9 +54,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return remoteDbs.Select(n => new
             {
-                Value = n.Id, 
-                Text = n.Name, 
-                Selected = n.Id == selectedDb, 
+                Value = n.Id,
+                Text = n.Name,
+                Selected = n.Id == selectedDb,
                 Nature = n.Nature
             });
         }
@@ -64,7 +64,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The dispose.
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
         }
     }

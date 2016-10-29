@@ -80,10 +80,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             return db.Matter.OrderBy(m => m.Name).Select(m => new
             {
-                Value = m.Id, 
-                Text = m.Name, 
-                Selected = selectedMatters.Contains(m.Id), 
-                Nature = m.Nature, 
+                Value = m.Id,
+                Text = m.Name,
+                Selected = selectedMatters.Contains(m.Id),
+                Nature = m.Nature,
                 Description = m.Description,
                 Created = m.Created.ToString(),
                 Modified = m.Modified.ToString()

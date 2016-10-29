@@ -12,7 +12,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The features.
         /// </summary>
-        private readonly List<Feature> features; 
+        private readonly List<Feature> features;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FeatureRepository"/> class.
@@ -39,7 +39,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <summary>
         /// The dispose.
         /// </summary>
-        public void Dispose() 
+        public void Dispose()
         {
         }
 
@@ -157,9 +157,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return features.Where(p => featureIds.Contains(p.Id)).Select(p => new
             {
-                Value = p.Id, 
-                Text = p.Name, 
-                Selected = selectedFeatures.Contains(p.Id), 
+                Value = p.Id,
+                Text = p.Name,
+                Selected = selectedFeatures.Contains(p.Id),
                 Nature = p.Nature
             });
         }

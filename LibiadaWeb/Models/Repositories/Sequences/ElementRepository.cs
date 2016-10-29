@@ -149,7 +149,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The <see cref="T:long[]"/>.
         /// </returns>
         /// <exception cref="Exception">
-        /// Thrown if alphabet element is not found in db. 
+        /// Thrown if alphabet element is not found in db.
         /// </exception>
         public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
         {

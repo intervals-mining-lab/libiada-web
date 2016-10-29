@@ -88,22 +88,22 @@
             var parameters = FillParams(sequence, alphabet, building);
 
             const string Query = @"INSERT INTO data_chain (
-                                        id, 
+                                        id,
                                         notation_id,
-                                        matter_id, 
+                                        matter_id,
                                         feature_id,
-                                        alphabet, 
-                                        building, 
-                                        remote_id, 
+                                        alphabet,
+                                        building,
+                                        remote_id,
                                         remote_db_id
                                     ) VALUES (
-                                        @id, 
+                                        @id,
                                         @notation_id,
                                         @matter_id,
                                         @feature_id,
-                                        @alphabet, 
-                                        @building, 
-                                        @remote_id, 
+                                        @alphabet,
+                                        @building,
+                                        @remote_id,
                                         @remote_db_id
                                     );";
 

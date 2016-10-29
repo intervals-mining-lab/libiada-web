@@ -25,7 +25,7 @@
             for (int i = 0; i < characteristics[0].Length; i++)
             {
                 var currentCharacteristic = characteristics.Select(c => c[i]).ToArray();
-                transposedResult[i] = CalculateAutocorrelation(currentCharacteristic);          
+                transposedResult[i] = CalculateAutocorrelation(currentCharacteristic);
             }
 
             var result = new double[transposedResult[0].Length][];
@@ -131,7 +131,7 @@
         /// The <see cref="double"/>.
         /// </returns>
         /// <exception cref="Exception">
-        /// Thrown if input arrays has different length. 
+        /// Thrown if input arrays has different length.
         /// </exception>
         public static double GetCorrelation(double[] x, double[] y)
         {

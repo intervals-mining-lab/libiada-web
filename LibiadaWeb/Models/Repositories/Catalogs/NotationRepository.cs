@@ -34,9 +34,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return Notations.Select(n => new
             {
-                Value = n.Id, 
-                Text = n.Name, 
-                Selected = false, 
+                Value = n.Id,
+                Text = n.Name,
+                Selected = false,
                 Nature = n.Nature
             });
         }
@@ -54,9 +54,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return Notations.Select(n => new
             {
-                Value = n.Id, 
-                Text = n.Name, 
-                Selected = n.Id == selectedNotation, 
+                Value = n.Id,
+                Text = n.Name,
+                Selected = n.Id == selectedNotation,
                 Nature = n.Nature
             });
         }

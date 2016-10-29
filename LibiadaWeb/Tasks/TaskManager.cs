@@ -26,7 +26,7 @@
         /// The created tasks counter.
         /// </summary>
         private static int taskCounter;
-        
+
         /// <summary>
         /// The add task.
         /// </summary>
@@ -39,7 +39,7 @@
             {
                 Tasks.Add(task);
             }
-            
+
             ManageTasks();
         }
 
@@ -217,7 +217,7 @@
                     method = task.Action;
                     task.TaskData.Started = DateTime.Now;
                 }
-                
+
                 var result = method();
                 lock (task)
                 {

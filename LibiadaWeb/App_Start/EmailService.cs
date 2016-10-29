@@ -26,7 +26,7 @@
         {
             var configurationFile = WebConfigurationManager.OpenWebConfiguration("~/web.config");
             var mailSettings = configurationFile.GetSectionGroup("system.net/mailSettings") as MailSettingsSectionGroup;
-            
+
             if (mailSettings == null)
             {
                 throw new Exception("Mail Settings not found");

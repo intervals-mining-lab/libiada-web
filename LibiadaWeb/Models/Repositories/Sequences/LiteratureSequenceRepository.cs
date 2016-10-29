@@ -97,44 +97,44 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "original", 
-                NpgsqlDbType = NpgsqlDbType.Boolean, 
+                ParameterName = "original",
+                NpgsqlDbType = NpgsqlDbType.Boolean,
                 Value = original
             });
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "language_id", 
-                NpgsqlDbType = NpgsqlDbType.Integer, 
+                ParameterName = "language_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
                 Value = languageId
             });
 
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "translator_id", 
-                NpgsqlDbType = NpgsqlDbType.Integer, 
+                ParameterName = "translator_id",
+                NpgsqlDbType = NpgsqlDbType.Integer,
                 Value = (object)translatorId ?? DBNull.Value
             });
 
             const string Query = @"INSERT INTO literature_chain (
-                                        id, 
+                                        id,
                                         notation_id,
                                         matter_id,
                                         feature_id,
-                                        alphabet, 
-                                        building, 
-                                        remote_id, 
+                                        alphabet,
+                                        building,
+                                        remote_id,
                                         remote_db_id,
                                         original,
                                         language_id,
                                         translator_id
                                     ) VALUES (
-                                        @id, 
+                                        @id,
                                         @notation_id,
                                         @matter_id,
                                         @feature_id,
-                                        @alphabet, 
-                                        @building, 
-                                        @remote_id, 
+                                        @alphabet,
+                                        @building,
+                                        @remote_id,
                                         @remote_db_id,
                                         @original,
                                         @language_id,

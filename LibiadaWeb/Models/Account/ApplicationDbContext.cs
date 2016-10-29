@@ -5,7 +5,7 @@ namespace LibiadaWeb.Models.Account
     /// <summary>
     /// The application db context.
     /// </summary>
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, LibiadaRole, int, LibiadaUserLogin, LibiadaUserRole, LibiadaUserClaim> 
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, LibiadaRole, int, LibiadaUserLogin, LibiadaUserRole, LibiadaUserClaim>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationDbContext"/> class.

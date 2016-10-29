@@ -40,22 +40,22 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var parameters = FillParams(sequence, alphabet, building);
 
             const string Query = @"INSERT INTO chain (
-                                        id, 
+                                        id,
                                         notation_id,
-                                        matter_id, 
+                                        matter_id,
                                         feature_id,
-                                        alphabet, 
-                                        building, 
-                                        remote_id, 
+                                        alphabet,
+                                        building,
+                                        remote_id,
                                         remote_db_id
                                     ) VALUES (
-                                        @id, 
+                                        @id,
                                         @notation_id,
                                         @matter_id,
                                         @feature_id,
-                                        @alphabet, 
-                                        @building, 
-                                        @remote_id, 
+                                        @alphabet,
+                                        @building,
+                                        @remote_id,
                                         @remote_db_id
                                     );";
 
@@ -105,11 +105,25 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
-        public Chain[][] GetChains(
-            long[] matterIds,
-            int[] notationIds,
-            int[] languageIds,
-            int?[] translatorIds)
+        /// <summary>
+        /// Extracts sequences from database.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <param name="notationIds">
+        /// The notation ids.
+        /// </param>
+        /// <param name="languageIds">
+        /// The language ids.
+        /// </param>
+        /// <param name="translatorIds">
+        /// The translator ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:Chain[][]"/>.
+        /// </returns>
+        public Chain[][] GetChains(long[] matterIds, int[] notationIds, int[] languageIds, int?[] translatorIds)
         {
             var chains = new Chain[matterIds.Length][];
             var commonSequenceRepository = new CommonSequenceRepository(Db);

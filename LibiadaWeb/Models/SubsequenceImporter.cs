@@ -134,7 +134,7 @@
         /// </summary>
         /// <exception cref="Exception">
         /// Thrown if subsequences are not importable.
-        /// Thrown if feature contains no leaf location or  
+        /// Thrown if feature contains no leaf location or 
         /// if source length not equals to parent sequence length or 
         /// if feature length is less than 1.
         /// </exception>

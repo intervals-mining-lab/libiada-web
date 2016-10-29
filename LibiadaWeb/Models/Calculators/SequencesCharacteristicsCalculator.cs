@@ -13,8 +13,32 @@
 
     using LibiadaWeb.Models.Repositories.Calculators;
 
+    /// <summary>
+    /// The sequences characteristics calculator.
+    /// </summary>
     public static class SequencesCharacteristicsCalculator
     {
+        /// <summary>
+        /// Calculation method.
+        /// </summary>
+        /// <param name="chains">
+        /// The chains.
+        /// </param>
+        /// <param name="calculators">
+        /// The calculators.
+        /// </param>
+        /// <param name="links">
+        /// The links.
+        /// </param>
+        /// <param name="characteristicTypeLinkIds">
+        /// The characteristic type link ids.
+        /// </param>
+        /// <param name="db">
+        /// The db connection.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double[][]"/>.
+        /// </returns>
         public static double[][] Calculate(Chain[][] chains, IFullCalculator[] calculators, Link[] links, int[] characteristicTypeLinkIds, LibiadaWebEntities db)
         {
             var newCharacteristics = new List<Characteristic>();
@@ -35,7 +59,6 @@
 
                 for (int j = 0; j < calculators.Length; j++)
                 {
-
                     long sequenceId = chains[i][j].Id;
                     chains[i][j].FillIntervalManagers();
 
@@ -66,6 +89,30 @@
             return characteristics;
         }
 
+        /// <summary>
+        /// Calculation method.
+        /// </summary>
+        /// <param name="chains">
+        /// The chains.
+        /// </param>
+        /// <param name="calculators">
+        /// The calculators.
+        /// </param>
+        /// <param name="links">
+        /// The links.
+        /// </param>
+        /// <param name="rotate">
+        /// The rotate flag.
+        /// </param>
+        /// <param name="complementary">
+        /// The complementary flag.
+        /// </param>
+        /// <param name="rotationLength">
+        /// The rotation length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double[][]"/>.
+        /// </returns>
         public static double[][] Calculate(Chain[][] chains, IFullCalculator[] calculators, Link[] links, bool rotate, bool complementary, uint? rotationLength)
         {
             var characteristics = new double[chains.Length][];
