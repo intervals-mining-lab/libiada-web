@@ -4,6 +4,8 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     using System.Collections.Generic;
     using System.Linq;
 
+    using Bio.IO.GenBank;
+
     /// <summary>
     /// The feature repository.
     /// </summary>
@@ -179,6 +181,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> featureIds, int selectedFeature)
         {
             return GetSelectListWithNature(featureIds, new List<int> { selectedFeature });
+        }
+
+        /// <summary>
+        /// Extracts sequence feature.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public int ExtractSequenceFeature(GenBankMetadata metadata)
+        {
+            return metadata.Definition.ToLower().Contains("mitochondrion") ? Aliases.Feature.MitochondrionGenome : Aliases.Feature.FullGenome;
         }
     }
 }

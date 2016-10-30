@@ -54,7 +54,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Sequence is empty or invalid (probably ncbi is not responding).");
             }
 
-            string stringSequence = fastaSequence.ConvertToString();
+            string stringSequence = fastaSequence.ConvertToString().ToUpper();
 
             var chain = new BaseChain(stringSequence);
 

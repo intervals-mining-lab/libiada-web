@@ -12,8 +12,6 @@
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
-    using LibiadaWeb.Models;
-
     /// <summary>
     /// The ncbi helper.
     /// </summary>
@@ -201,20 +199,6 @@
             throw new Exception("Sequences names are not equal. CommonName = " + commonName +
                                 ", Species = " + species +
                                 ", Definition = " + definition);
-        }
-
-        /// <summary>
-        /// Extracts sequence feature.
-        /// </summary>
-        /// <param name="metadata">
-        /// The metadata.
-        /// </param>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public static int ExtractSequenceFeature(GenBankMetadata metadata)
-        {
-            return metadata.Definition.ToLower().Contains("mitochondrion") ? Aliases.Feature.MitochondrionGenome : Aliases.Feature.FullGenome;
         }
 
         /// <summary>

@@ -8,6 +8,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -62,6 +63,8 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
+                    var featureRepository = new FeatureRepository(db);
+
                     var existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                     var dnaSequenceRepository = new DnaSequenceRepository(db);
                     var bioSequences = NcbiHelper.GetGenBankSequences(accessions);
@@ -94,13 +97,19 @@
                                              ", Definition=" + metadata.Definition +
                                              ", Saved matter name=" + savedMatterNames[i];
 
-                            var matter = new Matter { Name = savedMatterNames[i], Nature = Nature.Genetic };
+                            var sequenceFeature = featureRepository.ExtractSequenceFeature(metadata);
 
-                            // TODO: detect feature from metadata
+                            var matter = new Matter
+                                             {
+                                                 Name = savedMatterNames[i],
+                                                 Nature = Nature.Genetic,
+                                                 Description = featureRepository.GetFeatureById(sequenceFeature).Name
+                                             };
+
                             var sequence = new CommonSequence
                                                {
                                                    Matter = matter,
-                                                   FeatureId = NcbiHelper.ExtractSequenceFeature(metadata),
+                                                   FeatureId = sequenceFeature,
                                                    NotationId = Aliases.Notation.Nucleotide,
                                                    RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
                                                    RemoteId = metadata.Version.CompoundAccession
