@@ -27,7 +27,7 @@
         {
             var task = TaskManager.GetTask(id);
 
-            if (task.TaskData.TaskState == TaskState.Completed)
+            if (task.TaskData.TaskState != TaskState.Completed)
             {
                 throw new Exception("Task state is not 'complete'");
             }
