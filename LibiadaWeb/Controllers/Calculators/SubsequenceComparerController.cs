@@ -98,9 +98,10 @@
         {
             return Action(() =>
             {
-                var allSubsequencesCharacteristics = new List<double[]>();
+                var allSubsequencesCharacteristics = new List<KeyValuePair<string, double>[]>();
                 int mattersCount = matterIds.Length;
                 int[] subsequencesCount = new int[mattersCount];
+                string[] matterNames = db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToArray();
 
                 for (int i = 0; i < mattersCount; i++)
                 {
@@ -109,23 +110,30 @@
                     Subsequence[] sequenceSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
                     var subsequences = subsequenceExtractor.ExtractChains(sequenceSubsequences, parentSequenceId);
                     subsequencesCount[i] = subsequences.Length;
-                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences).OrderBy(c => c).ToArray());
+                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences).OrderBy(c => c.Value).ToArray());
                 }
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
-                var similarities = new double[mattersCount, mattersCount];
-                var firstSequenceSimilarities = new double[mattersCount, mattersCount];
-                var secondSequenceSimilarities = new double[mattersCount, mattersCount];
+                var similarities = new MvcHtmlString[mattersCount, mattersCount];
+                //var firstSequenceSimilarities = new double[mattersCount, mattersCount];
+                //var secondSequenceSimilarities = new double[mattersCount, mattersCount];
+
+                var equalElements = new List<MvcHtmlString>();
+                int comparisonNumber = 0;
 
                 for (int i = 0; i < allSubsequencesCharacteristics.Count; i++)
                 {
                     for (int j = 0; j < allSubsequencesCharacteristics.Count; j++)
                     {
-                        var similarSubsequences = new List<IntPair>();
+                        comparisonNumber++;
+                        int similarSubsequences = 0;
+
+                        double similarSequencesCharacteristicValue = 0;
+                        double similarFirstSequencesCharacteristicValue = 0;
+                        double similarSecondSequencesCharacteristicValue = 0;
 
                         int secondArrayStartPosition = 0;
-                        
 
                         for (int k = 0; k < allSubsequencesCharacteristics[i].Length; k++)
                         {
@@ -137,14 +145,26 @@
                                 //     allSubsequencesCharacteristics[j][l] = double.NaN;
                                 // }
 
-                                if (Math.Abs(allSubsequencesCharacteristics[i][k] - allSubsequencesCharacteristics[j][l]) <= difference)
+                                if (Math.Abs(allSubsequencesCharacteristics[i][k].Value - allSubsequencesCharacteristics[j][l].Value) <= difference)
                                 {
-                                    similarSubsequences.Add(new IntPair(k, l));
+                                    if (i != j)
+                                    {
+                                        equalElements.Add(new MvcHtmlString(string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>",
+                                            matterNames[i], matterNames[j], "<br/>", 
+                                            allSubsequencesCharacteristics[i][k].Key, allSubsequencesCharacteristics[i][k].Value,
+                                            allSubsequencesCharacteristics[j][l].Key, allSubsequencesCharacteristics[j][l].Value)));
+                                    }
+                                    
+                                    similarSubsequences++;
+                                    similarSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value + allSubsequencesCharacteristics[j][l].Value;
+                                    similarFirstSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value;
+                                    similarSecondSequencesCharacteristicValue += allSubsequencesCharacteristics[j][l].Value;
+
                                     secondArrayStartPosition++;
                                     break;
                                 }
 
-                                if (allSubsequencesCharacteristics[j][l] < allSubsequencesCharacteristics[i][k])
+                                if (allSubsequencesCharacteristics[j][l].Value < allSubsequencesCharacteristics[i][k].Value)
                                 {
                                     secondArrayStartPosition++;
                                     break;
@@ -152,11 +172,13 @@
                             }
                         }
 
-                        similarities[i, j] = similarSubsequences.Count * 200d / (subsequencesCount[i] + subsequencesCount[j]);
+                        similarities[i, j] = new MvcHtmlString(similarSubsequences * 200d / (subsequencesCount[i] + subsequencesCount[j]) + "%" + " <br/> "
+                            + Math.Abs(similarFirstSequencesCharacteristicValue - similarSecondSequencesCharacteristicValue) / similarSequencesCharacteristicValue +  " <br/> " +
+                        + similarSequencesCharacteristicValue / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value)));
 
-                        firstSequenceSimilarities[i, j] = similarSubsequences.Count * 100d / subsequencesCount[i];
+                        //firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
 
-                        secondSequenceSimilarities[i, j] = similarSubsequences.Count * 100d / subsequencesCount[j];
+                        //secondSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[j];
                     }
                 }
 
@@ -164,11 +186,12 @@
 
                 return new Dictionary<string, object>
                 {
-                    { "mattersNames", db.Matter.Where(m => matterIds.Contains(m.Id)).Select(m => m.Name).ToArray() },
+                    { "mattersNames", matterNames },
                     { "characteristicName", characteristicName },
                     { "similarities", similarities },
-                    { "firstSequenceSimilarities", firstSequenceSimilarities },
-                    { "secondSequenceSimilarities", secondSequenceSimilarities }
+                    //{ "firstSequenceSimilarities", firstSequenceSimilarities },
+                    //{ "secondSequenceSimilarities", secondSequenceSimilarities },
+                    {"equalElements", equalElements }
                 };
             });
         }
@@ -188,9 +211,9 @@
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        private double[] CalculateCharacteristic(int characteristicTypeLinkId, Chain[] sequences, Subsequence[] subsequences)
+        private KeyValuePair<string, double>[] CalculateCharacteristic(int characteristicTypeLinkId, Chain[] sequences, Subsequence[] subsequences)
         {
-            double[] values = new double[sequences.Length];
+            var values = new KeyValuePair<string, double>[sequences.Length];
             var newCharacteristics = new List<Characteristic>();
 
             var subsequenceIds = subsequences.Select(s => s.Id).ToList();
@@ -203,23 +226,29 @@
 
             for (int j = 0; j < sequences.Length; j++)
             {
-                if (!dbCharacteristics.TryGetValue(subsequences[j].Id, out values[j])
+                double currentValue;
+                if (!dbCharacteristics.TryGetValue(subsequences[j].Id, out currentValue)
                     // && newCharacteristics.All(c => c.SequenceId != subsequences[j].SequenceId)
-                   )
+                    )
                 {
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                    string className =
+                        characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                     IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
                     var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
-                    values[j] = calculator.Calculate(sequences[j], link);
+                    values[j] = new KeyValuePair<string, double>(subsequences[j].DnaSequence.ToString(), calculator.Calculate(sequences[j], link));
                     var currentCharacteristic = new Characteristic
                     {
                         SequenceId = subsequences[j].Id,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
-                        Value = values[j]
+                        Value = values[j].Value
                     };
 
                     newCharacteristics.Add(currentCharacteristic);
+                }
+                else
+                {
+                    values[j] = new KeyValuePair<string, double>("RemoteId = " + subsequences[j].RemoteId + "; " + "Attribute = " + string.Join(", ", subsequences[j].SequenceAttribute.Select(a => a.Attribute.Name)), currentValue);
                 }
             }
 

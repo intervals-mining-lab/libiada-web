@@ -40,4 +40,17 @@
             }
         </tbody>
     </table>
+
+    <table class="table table-bordered table-hover">
+        <tbody>
+            @for (int i = 0; i < ViewBag.equalElements.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @ViewBag.equalElements[i]
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
