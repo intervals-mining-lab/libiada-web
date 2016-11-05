@@ -109,7 +109,7 @@
                     Subsequence[] sequenceSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
                     var subsequences = subsequenceExtractor.ExtractChains(sequenceSubsequences, parentSequenceId);
                     subsequencesCount[i] = subsequences.Length;
-                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences));
+                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences).OrderBy(c => c).ToArray());
                 }
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
@@ -124,19 +124,30 @@
                     {
                         var similarSubsequences = new List<IntPair>();
 
+                        int secondArrayStartPosition = 0;
+                        
+
                         for (int k = 0; k < allSubsequencesCharacteristics[i].Length; k++)
                         {
-                            for (int l = 0; l < allSubsequencesCharacteristics[j].Length; l++)
+                            for (int l = secondArrayStartPosition; l < allSubsequencesCharacteristics[j].Length; l++)
                             {
+                                // if (excludeType == "Exclude")
+                                // {
+                                //     allSubsequencesCharacteristics[i][k] = double.NaN;
+                                //     allSubsequencesCharacteristics[j][l] = double.NaN;
+                                // }
+
                                 if (Math.Abs(allSubsequencesCharacteristics[i][k] - allSubsequencesCharacteristics[j][l]) <= difference)
                                 {
                                     similarSubsequences.Add(new IntPair(k, l));
+                                    secondArrayStartPosition++;
+                                    break;
+                                }
 
-                                    // if (excludeType == "Exclude")
-                                    // {
-                                    //     allSubsequencesCharacteristics[i][k] = double.NaN;
-                                    //     allSubsequencesCharacteristics[j][l] = double.NaN;
-                                    // }
+                                if (allSubsequencesCharacteristics[j][l] < allSubsequencesCharacteristics[i][k])
+                                {
+                                    secondArrayStartPosition++;
+                                    break;
                                 }
                             }
                         }
@@ -182,7 +193,7 @@
             double[] values = new double[sequences.Length];
             var newCharacteristics = new List<Characteristic>();
 
-            var subsequenceIds = subsequences.Select(s => s.SequenceId).ToList();
+            var subsequenceIds = subsequences.Select(s => s.Id).ToList();
 
             Dictionary<long, double> dbCharacteristics = db.Characteristic
                                               .Where(c => characteristicTypeLinkId == c.CharacteristicTypeLinkId && subsequenceIds.Contains(c.SequenceId))
