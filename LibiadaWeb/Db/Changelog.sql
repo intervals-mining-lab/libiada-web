@@ -1214,6 +1214,9 @@ INSERT INTO feature (name, description, nature_id, type) VALUES ('Primer bind', 
 ALTER TABLE chain DROP COLUMN piece_position;
 ALTER TABLE data_chain DROP COLUMN piece_position;
 
+-- 06.11.2016
+-- Added new feature
 
+INSERT INTO feature (name, description, nature_id, complete) VALUES ('Plastid', 'Plastid genome', 1, true);
 
 COMMIT;

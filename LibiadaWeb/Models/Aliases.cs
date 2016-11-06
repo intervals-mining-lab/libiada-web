@@ -682,6 +682,11 @@
             /// Primer bind site.
             /// </summary>
             public const int PrimerBind = 36;
+
+            /// <summary>
+            /// The plastid.
+            /// </summary>
+            public const int Plastid = 37;
         }
 
         /// <summary>
