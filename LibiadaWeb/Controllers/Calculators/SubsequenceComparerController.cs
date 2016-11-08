@@ -10,7 +10,6 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using Newtonsoft.Json;
 
@@ -80,6 +79,12 @@
         /// <param name="excludeType">
         /// The exclude type
         /// </param>
+        /// <param name="characteristicValueFrom">
+        /// Minimum value for calculating characteristic
+        /// </param>
+        /// <param name="characteristicValueTo">
+        /// Maximum value for calculating characteristic
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -94,7 +99,9 @@
             int notationId,
             int[] featureIds,
             string maxDifference,
-            string excludeType)
+            string excludeType,
+            double characteristicValueFrom,
+            double characteristicValueTo)
         {
             return Action(() =>
             {
@@ -110,7 +117,9 @@
                     Subsequence[] sequenceSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
                     var subsequences = subsequenceExtractor.ExtractChains(sequenceSubsequences, parentSequenceId);
                     subsequencesCount[i] = subsequences.Length;
-                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences).OrderBy(c => c.Value).ToArray());
+                    allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences)
+                        .Where(c => (characteristicValueFrom == 0 && characteristicValueTo == 0) || c.Value >= characteristicValueFrom && c.Value <= characteristicValueTo)
+                       .OrderBy(c => c.Value).ToArray());
                 }
 
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
