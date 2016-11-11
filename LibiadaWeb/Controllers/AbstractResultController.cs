@@ -55,7 +55,7 @@
 
                 foreach (var key in result.Keys)
                 {
-                    ViewData[key] = key == "data" && ( controllerName == "SubsequencesDistribution" || controllerName ==  "Calculation" ) ? "{}" : result[key];
+                    ViewData[key] = key == "data" && ( controllerName == "SubsequencesDistribution" || controllerName ==  "Calculation" || controllerName == "LocalCalculation") ? "{}" : result[key];
                 }
 
                 TempData.Keep();

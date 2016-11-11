@@ -9,70 +9,72 @@
     @Html.Partial("_AngularControllerInitializer", "LocalCalculationResultController")
 
     <div ng-app="LocalCalculationResult" ng-controller="LocalCalculationResultCtrl">
-        <div ng-repeat="chainsCharacteristics in characteristics">
-            <h3>Matter {{chainsCharacteristics.matterName}}</h3>
-            <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
-                <thead>
-                <tr>
-                    <th>
-                        Fragment name
-                    </th>
-                    <th>
-                        Start
-                    </th>
-                    <th>
-                        Length
-                    </th>
-                    <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName"/>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
-                    <td ng-bind="fragmentsData.Name"/>
-                    <td ng-bind="fragmentsData.Start"/>
-                    <td ng-bind="fragmentsData.Length"/>
-                    <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value"/>
-                </tr>
-                </tbody>
-            </table>
-            <br/>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="lineChart" ng-model="lineChart" value="false" />
-                    Draw linechart 
-                </label>
+        <div ng-disabled="loading">
+            <div ng-repeat="chainsCharacteristics in characteristics">
+                <h3>Matter {{chainsCharacteristics.matterName}}</h3>
+                <table st-table="characteristics" class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                        <tr>
+                            <th>
+                                Fragment name
+                            </th>
+                            <th>
+                                Start
+                            </th>
+                            <th>
+                                Length
+                            </th>
+                            <th ng-repeat="characteristicName in characteristicNames" ng-bind="characteristicName" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="fragmentsData in chainsCharacteristics.fragmentsData">
+                            <td ng-bind="fragmentsData.Name" />
+                            <td ng-bind="fragmentsData.Start" />
+                            <td ng-bind="fragmentsData.Length" />
+                            <td ng-repeat="value in fragmentsData.Characteristics" ng-bind="value" />
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="checkbox" name="lineChart" ng-model="lineChart" value="false" />
+                        Draw linechart
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group" ng-hide="lineChart">
-            <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
-            <div class="col-md-10">
-                <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+            <div class="form-group">
+                <label class="control-label col-md-2" for="firstCharacteristic">First characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="First characteristic" ng-model="firstCharacteristic" ng-options="c.Text for c in characteristicsList" id="firstCharacteristic"></select>
+                </div>
             </div>
-        </div>
-        <br />
-        <div class="form-group">
-            <label class="control-label col-md-2" for="hight">Hight:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="hight" id="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
+            <div class="form-group" ng-hide="lineChart">
+                <label class="control-label col-md-2" for="secondCharacteristic">Second characteristic:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Second characteristic" ng-model="secondCharacteristic" ng-options="c.Text for c in characteristicsList" id="secondCharacteristic"></select>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="width">Width:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+            <br />
+            <div class="form-group">
+                <label class="control-label col-md-2" for="hight">Hight:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="hight" id="hight" type="number" min="{{500 + legendHeight}}" step="20" ng-model="hight" />
+                </div>
             </div>
-        </div>
-        <br />
-        <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
-        <div id="chart">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="width">Width:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="width" id="width" type="number" min="{{400}}" step="20" ng-model="width" />
+                </div>
+            </div>
+            <br />
+            <input type="button" class="btn btn-default" ng-click="draw()" value="Draw" />
+            <div id="chart">
+            </div>
         </div>
     </div>
     <br />
