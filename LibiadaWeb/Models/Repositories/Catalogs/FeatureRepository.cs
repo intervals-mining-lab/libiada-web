@@ -194,7 +194,27 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public int ExtractSequenceFeature(GenBankMetadata metadata)
         {
-            return metadata.Definition.ToLower().Contains("mitochondrion") ? Aliases.Feature.MitochondrionGenome : Aliases.Feature.FullGenome;
+            string name = metadata.Definition.ToLower();
+            if(name.Contains("mitochondrion"))
+            {
+                return Aliases.Feature.MitochondrionGenome;
+            }
+            else if (name.Contains("chloroplast"))
+            {
+                return Aliases.Feature.ChloroplastGenome;
+            }
+            else if (name.Contains("plasmid"))
+            {
+                return Aliases.Feature.Plasmid;
+            }
+            else if (name.Contains("plastid"))
+            {
+                return Aliases.Feature.Plastid;
+            }
+            else
+            {
+                return Aliases.Feature.FullGenome;
+            }
         }
     }
 }
