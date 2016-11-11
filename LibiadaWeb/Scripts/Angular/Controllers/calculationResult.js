@@ -1,8 +1,28 @@
 ﻿function CalculationResultController(data) {
     "use strict";
 
-    function calculationResult($scope) {
-        MapModelFromJson($scope, data);
+    function calculationResult($scope, $http) {
+        var location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
+        $scope.loading = true;
+        $http({
+            url: "/api/TaskManagerWebApi/" + $scope.taskId,
+            method: "GET"
+        }).success(function (data) {
+            MapModelFromJson($scope, JSON.parse(data));
+
+            $scope.fillLegend();
+
+            $scope.firstCharacteristic = $scope.characteristicsList[0];
+            $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+
+            $scope.legendHeight = $scope.legend.length * 20;
+            $scope.hight = 800 + $scope.legendHeight;
+
+            $scope.loading = false;
+        }).error(function (data) {
+            alert("Failed loading characteristic data");
+        });
 
         function fillLegend() {
             $scope.legend = [];
@@ -248,17 +268,10 @@
         $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
 
-        $scope.fillLegend();
-
-        $scope.firstCharacteristic = $scope.characteristicsList[0];
-        $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
-
-        $scope.legendHeight = $scope.legend.length * 20;
-        $scope.hight = 800 + $scope.legendHeight;
         $scope.width = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
     }
 
-    angular.module("CalculationResult", []).controller("CalculationResultCtrl", ["$scope", calculationResult]);
+    angular.module("CalculationResult", []).controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
 }
