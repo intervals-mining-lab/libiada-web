@@ -250,6 +250,7 @@
     <Compile Include="Controllers\Calculators\BuildingsSimilarityController.cs" />
     <Compile Include="Controllers\Calculators\ChartsController.cs" />
     <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\FilteredSubsequenceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -696,6 +697,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\FilteredSubsequenceCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

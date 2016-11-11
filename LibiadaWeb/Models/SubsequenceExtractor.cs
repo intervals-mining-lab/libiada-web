@@ -86,6 +86,31 @@
                                         .ToArray();
         }
 
+        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<int> featureIds, string[] filters)
+        {
+            var allSubseqences = db.Subsequence.Where(s => s.SequenceId == sequenceId && featureIds.Contains(s.FeatureId))
+                                        .Include(s => s.Position)
+                                        .Include(s => s.SequenceAttribute)
+                                        .ToArray();
+            var tempResult = new List<Subsequence>[filters.Length];
+            for (int i = 0; i < filters.Length; i++)
+            {
+                tempResult[i] = new List<Subsequence>();
+                for (int j = 0; j < allSubseqences.Length; j++)
+                {
+                    if (allSubseqences[j].SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Product))
+                    {
+                        string value = allSubseqences[j].SequenceAttribute.Single(sa => sa.AttributeId == Aliases.Attribute.Product).Value;
+                        if (value.Contains(filters[i]))
+                        {
+                            tempResult[i].Add(allSubseqences[j]);
+                        }
+                    }
+                }
+            }
+            return tempResult.SelectMany(i => i).Distinct().ToArray();
+        }
+
         /// <summary>
         /// Extracts subsequence without joins (additional positions).
         /// </summary>
