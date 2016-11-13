@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models
+namespace LibiadaWeb.Models
 {
     /// <summary>
     /// The fragment data of local characteristics (sliding window).

@@ -343,7 +343,8 @@
     </Compile>
     <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
-    <Compile Include="Models\FragmentData.cs" />
+    <Compile Include="Models\Calculators\FragmentData.cs" />
+    <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Nature.cs" />

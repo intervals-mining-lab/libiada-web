@@ -195,7 +195,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         public int ExtractSequenceFeature(GenBankMetadata metadata)
         {
             string name = metadata.Definition.ToLower();
-            if(name.Contains("mitochondrion"))
+            if (name.Contains("mitochondrion"))
             {
                 return Aliases.Feature.MitochondrionGenome;
             }
