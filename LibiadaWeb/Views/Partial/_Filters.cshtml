@@ -1,0 +1,22 @@
+﻿<br />
+<div ng-repeat="filter in filters">
+    <div class="form-group">
+        <label class="control-label col-md-2" for="filters">Filter subsequences by product:</label>
+        <div class="col-md-10">
+            <input class="form-control" ng-model="filter.value" ng-keyup="applyFilter(filter)" type="text" id="filters" name="filters" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="button" class="btn btn-danger" ng-click="deleteFilter(filter)" ng-disabled="filters.length <= 1">Delete filter</button>
+        </div>
+    </div>
+    <br />
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <button type="button" class="btn btn-success" ng-init="addFilter()" ng-click="addFilter()">Add filter</button>
+    </div>
+</div>
+<hr />
+<br />

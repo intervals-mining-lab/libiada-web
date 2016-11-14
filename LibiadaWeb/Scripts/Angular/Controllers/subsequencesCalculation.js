@@ -28,10 +28,24 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         }
 
+        function addFilter() {
+            $scope.filters.push({ value: "" });
+        }
+
+        function deleteFilter(filter) {
+            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+        }
+
+        function applyFilter(filter) {
+        }
+
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
+        $scope.addFilter = addFilter;
+        $scope.deleteFilter = deleteFilter;
+        $scope.applyFilter = applyFilter;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
@@ -41,6 +55,7 @@
 
         $scope.selectedMatters = 0;
         $scope.characteristics = [];
+        $scope.filters = [];
         $scope.hideNotation = true;
     }
 

@@ -31,6 +31,46 @@
             $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
         }
 
+        function addFilter() {
+            $scope.filters.push({ value: "" });
+        }
+
+        function deleteFilter(filter) {
+            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+        }
+
+        // filters dots by subsequences product
+        function applyFilter(filter) {
+            if (filter.value.length < 3) {
+                for (var k = 0; k < $scope.points.length; k++) {
+                    if (!$scope.points[k].filterVisible) {
+                        $scope.points[k].filterVisible = true;
+                        if ($scope.dotVisible($scope.points[k])) {
+                            $scope.visiblePoints.push($scope.points[k]);
+                        }
+                    }
+                }
+
+                d3.selectAll(".dot")
+                    .filter(function (dot) { return $scope.dotVisible(dot) })
+                    .attr("visibility", "visible");
+            } else {
+                d3.selectAll(".dot")
+                    .attr("visibility",
+                        function (d) {
+                            d.filterVisible = d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf(filter.value.toUpperCase()) !== -1;
+                            return $scope.dotVisible(d) ? "visible" : "hidden";
+                        });
+
+                $scope.visiblePoints = [];
+                for (var i = 0; i < $scope.points.length; i++) {
+                    if ($scope.dotVisible($scope.points[i])) {
+                        $scope.visiblePoints.push($scope.points[i]);
+                    }
+                }
+            }
+        }
+
         // initializes data for genes map 
         function fillPoints() {
             var id = 0;
@@ -61,38 +101,6 @@
                     $scope.points.push(point);
                     $scope.visiblePoints.push(point);
                     id++;
-                }
-            }
-        }
-
-        // filters dots by subsequences product
-        function filterByProduct() {
-            if ($scope.productFilter === "") {
-                for (var k = 0; k < $scope.points.length; k++) {
-                    if (!$scope.points[k].filterVisible) {
-                        $scope.points[k].filterVisible = true;
-                        if ($scope.dotVisible($scope.points[k])) {
-                            $scope.visiblePoints.push($scope.points[k]);
-                        }
-                    }
-                }
-
-                d3.selectAll(".dot")
-                    .filter(function (dot) { return $scope.dotVisible(dot) })
-                    .attr("visibility", "visible");
-            } else {
-                d3.selectAll(".dot")
-                    .attr("visibility",
-                        function (d) {
-                            d.filterVisible = d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf($scope.productFilter.toUpperCase()) !== -1;
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
-
-                $scope.visiblePoints = [];
-                for (var i = 0; i < $scope.points.length; i++) {
-                    if ($scope.dotVisible($scope.points[i])) {
-                        $scope.visiblePoints.push($scope.points[i]);
-                    }
                 }
             }
         }
@@ -468,7 +476,6 @@
         $scope.drawGenesMap = drawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
-        $scope.filterByProduct = filterByProduct;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
@@ -479,6 +486,9 @@
         $scope.yValue = yValue;
         $scope.addCharacteristicComparer = addCharacteristicComparer;
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
+        $scope.addFilter = addFilter;
+        $scope.deleteFilter = deleteFilter;
+        $scope.applyFilter = applyFilter;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -486,6 +496,7 @@
         $scope.visiblePoints = [];
         $scope.matters = [];
         $scope.characteristicComparers = [];
+        $scope.filters = [];
         $scope.productFilter = "";
     }
 

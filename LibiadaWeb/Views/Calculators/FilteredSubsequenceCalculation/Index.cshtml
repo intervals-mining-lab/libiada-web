@@ -14,17 +14,7 @@
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
         @Html.Partial("_MattersTable")
         @Html.Partial("_FeaturesSelect")
-        <div class="form-group">
-            <label class="control-label col-md-2" for="filters">Filter subsequences by product:</label>
-            <div class="col-md-10">
-                <input class="form-control" ng-model="filters" type="text" id="filters" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="button" class="btn btn-default" value="Filter" />
-            </div>
-        </div>
+        @Html.Partial("_Filters")
         @Html.Partial("_Characteristics")
         @Html.Partial("_MattersSubmit")
     </div>

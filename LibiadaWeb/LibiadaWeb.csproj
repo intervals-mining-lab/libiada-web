@@ -692,13 +692,15 @@
     <Content Include="Views\Partial\_CustomSequences.cshtml" />
     <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
     <Content Include="Views\Calculators\SubsequenceComparer\Result.cshtml" />
+    <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Index.cshtml" />
+    <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Result.cshtml" />
+    <Content Include="Views\Partial\_Filters.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\FilteredSubsequenceCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -92,23 +92,24 @@
                                         .Include(s => s.Position)
                                         .Include(s => s.SequenceAttribute)
                                         .ToArray();
-            var tempResult = new List<Subsequence>[filters.Length];
-            for (int i = 0; i < filters.Length; i++)
+            var tempResult = new List<Subsequence>();
+            for (int i = 0; i < allSubseqences.Length; i++)
             {
-                tempResult[i] = new List<Subsequence>();
-                for (int j = 0; j < allSubseqences.Length; j++)
+                for (int j = 0; j < filters.Length; j++)
                 {
-                    if (allSubseqences[j].SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Product))
+                    if (allSubseqences[i].SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Product))
                     {
-                        string value = allSubseqences[j].SequenceAttribute.Single(sa => sa.AttributeId == Aliases.Attribute.Product).Value;
-                        if (value.Contains(filters[i]))
+                        string value = allSubseqences[i].SequenceAttribute.Single(sa => sa.AttributeId == Aliases.Attribute.Product).Value;
+                        if (value.Contains(filters[j]))
                         {
-                            tempResult[i].Add(allSubseqences[j]);
+                            tempResult.Add(allSubseqences[i]);
+                            break;
                         }
                     }
                 }
             }
-            return tempResult.SelectMany(i => i).Distinct().ToArray();
+
+            return tempResult.ToArray();
         }
 
         /// <summary>
