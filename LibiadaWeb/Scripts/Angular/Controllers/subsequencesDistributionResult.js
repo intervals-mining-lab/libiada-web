@@ -216,7 +216,7 @@
                 tooltipContent.push(peptideGenbankLink);
             }
 
-            tooltipContent.push($scope.featuresNames[d.featureId]);
+            tooltipContent.push($scope.features[d.featureId].Text);
 
             var attributes = [];
 

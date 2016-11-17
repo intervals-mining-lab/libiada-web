@@ -33,25 +33,24 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
-        /// <param name="db">
-        /// The db connection.
-        /// </param>
         /// <returns>
-        /// The <see cref="double[][]"/>.
+        /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, IFullCalculator[] calculators, Link[] links, int[] characteristicTypeLinkIds, LibiadaWebEntities db)
+        public static double[][] Calculate(Chain[][] chains, IFullCalculator[] calculators, Link[] links, int[] characteristicTypeLinkIds)
         {
             var newCharacteristics = new List<Characteristic>();
-            var characteristicRepository = new CharacteristicRepository(db);
             var characteristics = new double[chains.Length][];
-
             var sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
 
-            var dbCharacteristics = db.Characteristic
+            Dictionary<long, Dictionary<int, double>> dbCharacteristics;
+            using (var db = new LibiadaWebEntities())
+            {
+                dbCharacteristics = db.Characteristic
                                               .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && sequenceIds.Contains(c.SequenceId))
                                               .ToArray()
                                               .GroupBy(c => c.SequenceId)
                                               .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
+            }
 
             for (int i = 0; i < chains.Length; i++)
             {
@@ -84,7 +83,76 @@
             }
 
             // trying to save calculated characteristics to database
-            characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+            using (var db = new LibiadaWebEntities())
+            {
+                var characteristicRepository = new CharacteristicRepository(db);
+                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+            }
+
+            return characteristics;
+        }
+
+        /// <summary>
+        /// Calculation method.
+        /// </summary>
+        /// <param name="chains">
+        /// The chains.
+        /// </param>
+        /// <param name="calculator">
+        /// The calculator.
+        /// </param>
+        /// <param name="link">
+        /// The link.
+        /// </param>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:double[]"/>.
+        /// </returns>
+        public static double[] Calculate(Chain[] chains, IFullCalculator calculator, Link link, int characteristicTypeLinkId)
+        {
+            var newCharacteristics = new List<Characteristic>();
+            var characteristics = new double[chains.Length];
+            var sequenceIds = chains.Select(c => c.Id);
+
+            Dictionary<long, double> dbCharacteristics;
+            using (var db = new LibiadaWebEntities())
+            {
+                dbCharacteristics = db.Characteristic
+                                              .Where(c => characteristicTypeLinkId == c.CharacteristicTypeLinkId && sequenceIds.Contains(c.SequenceId))
+                                              .ToArray()
+                                              .GroupBy(c => c.SequenceId)
+                                              .ToDictionary(c => c.Key, c => c.Single().Value);
+            }
+
+            for (int i = 0; i < chains.Length; i++)
+            {
+                chains[i].FillIntervalManagers();
+
+                long sequenceId = chains[i].Id;
+
+                if (!dbCharacteristics.TryGetValue(sequenceId, out characteristics[i]))
+                {
+                    characteristics[i] = calculator.Calculate(chains[i], link);
+                    var currentCharacteristic = new Characteristic
+                    {
+                        SequenceId = sequenceId,
+                        CharacteristicTypeLinkId = characteristicTypeLinkId,
+                        Value = characteristics[i]
+                    };
+
+                    newCharacteristics.Add(currentCharacteristic);
+                }
+            }
+
+
+            // trying to save calculated characteristics to database
+            using (var db = new LibiadaWebEntities())
+            {
+                var characteristicRepository = new CharacteristicRepository(db);
+                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+            }
 
             return characteristics;
         }
@@ -111,7 +179,7 @@
         /// The rotation length.
         /// </param>
         /// <returns>
-        /// The <see cref="double[][]"/>.
+        /// The <see cref="T:double[][]"/>.
         /// </returns>
         public static double[][] Calculate(Chain[][] chains, IFullCalculator[] calculators, Link[] links, bool rotate, bool complementary, uint? rotationLength)
         {

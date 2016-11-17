@@ -27,7 +27,8 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Characteristics calculation")
+        public CalculationController()
+            : base("Characteristics calculation")
         {
         }
 
@@ -100,68 +101,69 @@
         {
             return Action(() =>
                 {
-                    Dictionary<string, object> result;
-
-                using (var db = new LibiadaWebEntities())
-                {
-                    double[][] characteristics;
-
                     var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-                    var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    var chains = commonSequenceRepository.GetChains(matterIds, notationIds, languageIds, translatorIds);
-
-                    var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-                    var links = new Link[characteristicTypeLinkIds.Length];
-                    var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                     var characteristicNames = new string[characteristicTypeLinkIds.Length];
                     var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                    var links = new Link[characteristicTypeLinkIds.Length];
+                    var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
+                    Dictionary<long, string> mattersNames;
+                    double[][] characteristics;
+                    Chain[][] chains;
 
-                    for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                    using (var db = new LibiadaWebEntities())
                     {
-                        links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                        calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
-                        characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
-                        characteristicsList[k] = new SelectListItem
+                        mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+
+                        var commonSequenceRepository = new CommonSequenceRepository(db);
+                        chains = commonSequenceRepository.GetChains(matterIds, notationIds, languageIds, translatorIds);
+
+                        var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                        for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
-                            Value = k.ToString(),
-                            Text = characteristicNames[k],
-                            Selected = false
-                        };
+                            links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
+                            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
+                            calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
+                            characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
+                            characteristicsList[k] = new SelectListItem
+                            {
+                                Value = k.ToString(),
+                                Text = characteristicNames[k],
+                                Selected = false
+                            };
+                        }
                     }
 
                     if (!rotate && !complementary)
                     {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, characteristicTypeLinkIds, db);
+                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, characteristicTypeLinkIds);
                     }
                     else
                     {
                         characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, rotate, complementary, rotationLength);
                     }
 
+
                     for (int i = 0; i < matterIds.Length; i++)
                     {
-                        sequencesCharacteristics[i] = new SequenceCharacteristics()
+                        sequencesCharacteristics[i] = new SequenceCharacteristics
                         {
-                            MatterName = matters[matterIds[i]].Name,
+                            MatterName = mattersNames[matterIds[i]],
                             Characteristics = characteristics[i]
                         };
                     }
 
-                    result = new Dictionary<string, object>
-                                 {
-                                     { "characteristics", sequencesCharacteristics },
-                                     { "characteristicNames", characteristicNames },
-                                     { "characteristicsList", characteristicsList }
-                                 };
-                }
+                    var result = new Dictionary<string, object>
+                                            {
+                                                    { "characteristics", sequencesCharacteristics },
+                                                    { "characteristicNames", characteristicNames },
+                                                    { "characteristicsList", characteristicsList }
+                                            };
 
-                return new Dictionary<string, object>
+                    return new Dictionary<string, object>
                            {
                                { "data", JsonConvert.SerializeObject(result) }
                            };
-            });
+                });
         }
     }
 }

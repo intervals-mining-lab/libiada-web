@@ -46,7 +46,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </exception>
         public void Create(CommonSequence sequence, ISequence fastaSequence, bool partial)
         {
-            // TODO: fix it fir batch import or remove fasta headers completely
+            // TODO: fix it for batch import or remove fasta headers completely
             string fastaHeader = ">" + fastaSequence.ID;
 
             if (fastaHeader.Contains("Resource temporarily unavailable"))

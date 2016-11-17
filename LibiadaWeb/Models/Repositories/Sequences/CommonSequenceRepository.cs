@@ -126,7 +126,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Chain[][] GetChains(long[] matterIds, int[] notationIds, int[] languageIds, int?[] translatorIds)
         {
             var chains = new Chain[matterIds.Length][];
-            var commonSequenceRepository = new CommonSequenceRepository(Db);
             var notationsRepository = new NotationRepository(Db);
 
             for (int i = 0; i < matterIds.Length; i++)
@@ -155,8 +154,31 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notation.Id).Id;
                     }
 
-                    chains[i][j] = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                    chains[i][j] = ToLibiadaChain(sequenceId);
                 }
+            }
+
+            return chains;
+        }
+
+        /// <summary>
+        /// Extracts nucleotide sequences from database.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:Chain[]"/>.
+        /// </returns>
+        public Chain[] GetNucleotideChains(long[] matterIds)
+        {
+            var chains = new Chain[matterIds.Length];
+
+            for (int i = 0; i < matterIds.Length; i++)
+            {
+                var matterId = matterIds[i];
+                var sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
+                chains[i] = ToLibiadaChain(sequenceId);
             }
 
             return chains;

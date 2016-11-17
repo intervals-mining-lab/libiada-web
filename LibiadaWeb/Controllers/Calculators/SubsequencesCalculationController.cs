@@ -104,15 +104,15 @@
                 }
 
                 // cycle through matters; first level of characteristics array
-                for (int m = 0; m < parentSequenceIds.Length; m++)
+                for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
-                    var subsequenceData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                    var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicTypeLinkIds,
                             featureIds,
-                            parentSequenceIds[m],
+                            parentSequenceIds[i],
                             calculators,
                             links);
-                    characteristics.Add(matterNames[m], subsequenceData);
+                    characteristics.Add(matterNames[i], subsequencesData);
                 }
 
                 return new Dictionary<string, object>
