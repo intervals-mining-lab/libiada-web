@@ -27,6 +27,8 @@
         /// </summary>
         private static int taskCounter;
 
+        private static readonly TasksManagerHub hub = new TasksManagerHub();
+
         /// <summary>
         /// The add task.
         /// </summary>
@@ -38,6 +40,7 @@
             lock (Tasks)
             {
                 Tasks.Add(task);
+                hub.Send(TaskEvent.addTask, task.TaskData);
             }
 
             ManageTasks();
@@ -80,6 +83,8 @@
 
                         tasks.Remove(task);
                         Tasks.Remove(task);
+
+                        hub.Send(TaskEvent.deleteTask, task.TaskData);
                     }
                 }
             }
@@ -106,6 +111,7 @@
                         }
 
                         Tasks.Remove(task);
+                        hub.Send(TaskEvent.deleteTask, task.TaskData);
                     }
                 }
             }
@@ -216,6 +222,7 @@
                 {
                     method = task.Action;
                     task.TaskData.Started = DateTime.Now;
+                    hub.Send(TaskEvent.changeStatus, task.TaskData);
                 }
 
                 var result = method();
@@ -225,6 +232,7 @@
                     task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
                     task.Result = result;
                     task.TaskData.TaskState = TaskState.Completed;
+                    hub.Send(TaskEvent.changeStatus, task.TaskData);
                 }
             }
             catch (Exception e)
@@ -249,6 +257,7 @@
                                           { "ErrorMessage", errorMessage },
                                           { "StackTrace", stackTrace }
                                       };
+                    hub.Send(TaskEvent.changeStatus, task.TaskData);
                 }
             }
 
