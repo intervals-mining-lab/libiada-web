@@ -444,7 +444,8 @@
                             switch (keyCode) {
                                 case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId) {
+                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId 
+                                           && yValue($scope.visiblePoints[i]) !== yValue(clickedpoint)) {
                                             nextPoint = $scope.visiblePoints[i];
                                             break;
                                         }
@@ -452,7 +453,8 @@
                                     break;
                                 case 38: // up
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
-                                        if ($scope.visiblePoints[j].matterId === clickedpoint.matterId) {
+                                        if ($scope.visiblePoints[j].matterId === clickedpoint.matterId
+                                            && yValue($scope.visiblePoints[j]) !== yValue(clickedpoint)) {
                                             nextPoint = $scope.visiblePoints[j];
                                             break;
                                         }
