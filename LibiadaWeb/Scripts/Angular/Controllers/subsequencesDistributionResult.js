@@ -23,52 +23,54 @@
             alert("Failed loading genes map data");
         });
 
+        // adds new characteristics value based filter
         function addCharacteristicComparer() {
             $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
         }
 
+        // deletes given characteristics filter 
         function deleteCharacteristicComparer(characteristicComparer) {
             $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
         }
 
-        function addFilter() {
-            $scope.filters.push({ value: "" });
-        }
-
-        function deleteFilter(filter) {
-            $scope.filters.splice($scope.filters.indexOf(filter), 1);
-        }
-
-        // filters dots by subsequences product
-        function applyFilter(filter) {
-            if (filter.value.length < 3) {
-                for (var k = 0; k < $scope.points.length; k++) {
-                    if (!$scope.points[k].filterVisible) {
-                        $scope.points[k].filterVisible = true;
-                        if ($scope.dotVisible($scope.points[k])) {
-                            $scope.visiblePoints.push($scope.points[k]);
-                        }
-                    }
+        // fills array of currently visible points
+        function fillVisiblePoints() {
+            $scope.visiblePoints = [];
+            for (var i = 0; i < $scope.points.length; i++) {
+                if ($scope.dotVisible($scope.points[i])) {
+                    $scope.visiblePoints.push($scope.points[i]);
                 }
+            }
+        }
 
-                d3.selectAll(".dot")
-                    .filter(function (dot) { return $scope.dotVisible(dot) })
-                    .attr("visibility", "visible");
-            } else {
+        // adds and applies new filter
+        function addFilter() {
+            if ($scope.newFilter.length > 0) {
+                $scope.filters.push({ value: $scope.newFilter });
+
                 d3.selectAll(".dot")
                     .attr("visibility",
                         function (d) {
-                            d.filterVisible = d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf(filter.value.toUpperCase()) !== -1;
+                            d.filtersVisible.push(d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
                             return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
 
-                $scope.visiblePoints = [];
-                for (var i = 0; i < $scope.points.length; i++) {
-                    if ($scope.dotVisible($scope.points[i])) {
-                        $scope.visiblePoints.push($scope.points[i]);
-                    }
-                }
+                $scope.fillVisiblePoints();
+                $scope.newFilter = "";
             }
+            // todo: add error message if filter is empty
+        }
+
+        // deletes given filter
+        function deleteFilter(filter) {
+            d3.selectAll(".dot")
+                    .attr("visibility",
+                        function (d) {
+                            d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                            return $scope.dotVisible(d) ? "visible" : "hidden";
+                        });
+            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+            $scope.fillVisiblePoints();
         }
 
         // initializes data for genes map 
@@ -96,7 +98,7 @@
                         subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
                         featureVisible: true,
                         matterVisible: true,
-                        filterVisible: true
+                        filtersVisible: []
                     };
                     $scope.points.push(point);
                     $scope.visiblePoints.push(point);
@@ -132,9 +134,14 @@
 
         // checks if dot is visible
         function dotVisible(dot) {
-            return dot.featureVisible && dot.matterVisible && dot.filterVisible;
+            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function(element) {
+                return element;
+            }); 
+            
+            return dot.featureVisible && dot.matterVisible && filterVisible;
         }
 
+        // determines if dots are similar by product
         function dotsSimilar(d, dot) {
             if (d.featureId !== dot.featureId) {
                 return false;
@@ -476,6 +483,7 @@
         $scope.drawGenesMap = drawGenesMap;
         $scope.dotVisible = dotVisible;
         $scope.dotsSimilar = dotsSimilar;
+        $scope.fillVisiblePoints = fillVisiblePoints;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
         $scope.fillPointTooltip = fillPointTooltip;
@@ -488,7 +496,6 @@
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
-        $scope.applyFilter = applyFilter;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
