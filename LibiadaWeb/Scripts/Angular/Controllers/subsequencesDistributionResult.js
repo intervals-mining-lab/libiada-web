@@ -2,6 +2,9 @@
     "use strict";
 
     function subsequencesDistributionResult($scope, $http) {
+        var loadingModalWindow = $("#loadingDialog");
+        loadingModalWindow.modal("show");
+
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
@@ -19,6 +22,7 @@
             $scope.fillPoints();
             $scope.addCharacteristicComparer();
             $scope.loading = false;
+            loadingModalWindow.modal("hide");
         }).error(function (data) {
             alert("Failed loading genes map data");
         });

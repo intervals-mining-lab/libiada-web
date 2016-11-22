@@ -8,7 +8,8 @@
 {
     @Html.Partial("_AngularControllerInitializer", "SubsequencesDistributionResultController")
     <div class="form-horizontal" ng-app="SubsequencesDistributionResult" ng-controller="SubsequencesDistributionResultCtrl">
-        <div ng-disabled="loading">
+        @Html.Partial("_ModalLoadingWindow", "Loading genes map data")
+        <div ng-disabled="loading" ng-cloack>
             <div class="form-group">
                 <label class="control-label col-md-2" for="subsequenceCharacteristic">Second characteristic:</label>
                 <div class="col-md-10">
@@ -79,11 +80,9 @@
                 </div>
             </div>
             @Html.Partial("_Filters")
-          
             <div id="chart">
             </div>
         </div>
-
     </div>
 
     @section Scripts {
