@@ -128,7 +128,7 @@
                 // var firstSequenceSimilarities = new double[mattersCount, mattersCount];
                 // var secondSequenceSimilarities = new double[mattersCount, mattersCount];
 
-                var equalElements = new List<MvcHtmlString>();
+                var equalElements = new List<KeyValuePair<double, MvcHtmlString>>();
                 int comparisonNumber = 0;
 
                 for (int i = 0; i < allSubsequencesCharacteristics.Count; i++)
@@ -164,13 +164,12 @@
                                 {
                                     if (i != j)
                                     {
-                                        equalElements.Add(
-                                            new MvcHtmlString(
+                                        equalElements.Add(new KeyValuePair<double, MvcHtmlString>(difference, new MvcHtmlString(
                                             string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>, Difference = {7}",
                                             matterNames[i], matterNames[j], "<br/>",
                                             allSubsequencesCharacteristics[i][k].Key, first,
                                             allSubsequencesCharacteristics[j][l].Key, second,
-                                            Math.Abs(second - first))));
+                                            Math.Abs(second - first)))));
                                     }
 
                                     differenceSum += difference;
@@ -191,11 +190,11 @@
                             }
                         }
 
-                        double formula1 = similarSubsequences * 200d / (subsequencesCount[i] + subsequencesCount[j]);
-                        double formula2 = (differenceSum / similarSubsequences) * formula1;
+                        double formula1 = similarSubsequences * 2d / (subsequencesCount[i] + subsequencesCount[j]);
+                        double formula2 = (differenceSum / similarSubsequences) * 1 / formula1;
                         double formula3 = similarSequencesCharacteristicValue * 100d / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value));
 
-                        similarities[i, j] = new MvcHtmlString(Math.Round(formula1, 3) + "%" + " <br/> " + Math.Round(formula2, 3) + " <br/> " + Math.Round(formula3, 3) + "%");
+                        similarities[i, j] = new MvcHtmlString(Math.Round(formula1 * 100d, 3) + "%" + " <br/> " + Math.Round(formula2, 3) + " <br/> " + Math.Round(formula3, 3) + "%");
 
                         // firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
 
@@ -212,7 +211,7 @@
                     { "similarities", similarities },
                     // { "firstSequenceSimilarities", firstSequenceSimilarities },
                     // { "secondSequenceSimilarities", secondSequenceSimilarities },
-                    {"equalElements", equalElements }
+                    {"equalElements", equalElements.OrderBy(e => e.Key).ToList() }
                 };
             });
         }
