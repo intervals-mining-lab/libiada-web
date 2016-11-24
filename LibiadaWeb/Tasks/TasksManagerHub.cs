@@ -1,16 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Microsoft.AspNet.SignalR;
-using LibiadaWeb.Models;
-using LibiadaWeb.Helpers;
-
-namespace LibiadaWeb.Tasks
+﻿namespace LibiadaWeb.Tasks
 {
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Helpers;
+
+    using Microsoft.AspNet.SignalR;
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+
+    /// <summary>
+    /// SignalR messages hub class.
+    /// </summary>
     public class TasksManagerHub : Hub
     {
-        public void Send(TaskEvent taskEvent, TaskData task) 
+        /// <summary>
+        /// Send web socket message to all clients.
+        /// </summary>
+        /// <param name="taskEvent">
+        /// Task event.
+        /// </param>
+        /// <param name="task">
+        /// Task itself.
+        /// </param>
+        public void Send(TaskEvent taskEvent, TaskData task)
         {
             // Clients.All.broadcastMessage(name, message);
             lock (task)

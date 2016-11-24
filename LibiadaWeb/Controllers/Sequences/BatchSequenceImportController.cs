@@ -83,7 +83,6 @@
                         try
                         {
                             var metadata = NcbiHelper.GetMetadata(bioSequences[i]);
-
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
                                 results[i] = "Sequence already exists";

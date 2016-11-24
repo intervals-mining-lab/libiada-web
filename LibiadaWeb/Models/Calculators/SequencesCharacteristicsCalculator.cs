@@ -146,7 +146,6 @@
                 }
             }
 
-
             // trying to save calculated characteristics to database
             using (var db = new LibiadaWebEntities())
             {

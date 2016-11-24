@@ -142,7 +142,6 @@
                         characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, rotate, complementary, rotationLength);
                     }
 
-
                     for (int i = 0; i < matterIds.Length; i++)
                     {
                         sequencesCharacteristics[i] = new SequenceCharacteristics

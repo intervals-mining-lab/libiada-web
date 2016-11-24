@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Data.Entity;
 
@@ -19,10 +13,19 @@ namespace LibiadaWeb.Controllers.Calculators
 
     using Newtonsoft.Json;
 
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+
+    /// <summary>
+    /// Cjntroller for filtered subsequences calculation.
+    /// </summary>
     public class FilteredSubsequenceCalculationController : AbstractResultController
     {
        /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequencesCalculationController"/> class.
+        /// Initializes a new instance of the <see cref="FilteredSubsequenceCalculationController"/> class.
         /// </summary>
         public FilteredSubsequenceCalculationController() : base("Subsequences characteristics calculation")
         {
@@ -56,6 +59,10 @@ namespace LibiadaWeb.Controllers.Calculators
         /// </param>
         /// <param name="featureIds">
         /// The feature ids.
+        /// </param>
+        /// <param name="filters">
+        /// Filters for the subsequences.
+        /// Filters are applied in "OR" logic (if subseqence corresponds to any filter it is added to calculation).
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -102,7 +109,6 @@ namespace LibiadaWeb.Controllers.Calculators
                         links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                     }
                 }
-
 
                 // cycle through matters; first level of characteristics array
                 for (int m = 0; m < parentSequenceIds.Length; m++)

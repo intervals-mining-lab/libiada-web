@@ -125,8 +125,8 @@
                 double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
 
                 var similarities = new MvcHtmlString[mattersCount, mattersCount];
-                //var firstSequenceSimilarities = new double[mattersCount, mattersCount];
-                //var secondSequenceSimilarities = new double[mattersCount, mattersCount];
+                // var firstSequenceSimilarities = new double[mattersCount, mattersCount];
+                // var secondSequenceSimilarities = new double[mattersCount, mattersCount];
 
                 var equalElements = new List<MvcHtmlString>();
                 int comparisonNumber = 0;
@@ -158,12 +158,14 @@
                                 {
                                     if (i != j)
                                     {
-                                        equalElements.Add(new MvcHtmlString(string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>",
-                                            matterNames[i], matterNames[j], "<br/>", 
+                                        equalElements.Add(
+                                            new MvcHtmlString(
+                                            string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>",
+                                            matterNames[i], matterNames[j], "<br/>",
                                             allSubsequencesCharacteristics[i][k].Key, allSubsequencesCharacteristics[i][k].Value,
                                             allSubsequencesCharacteristics[j][l].Key, allSubsequencesCharacteristics[j][l].Value)));
                                     }
-                                    
+
                                     similarSubsequences++;
                                     similarSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value + allSubsequencesCharacteristics[j][l].Value;
                                     similarFirstSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value;
@@ -185,9 +187,9 @@
                             + Math.Abs(similarFirstSequencesCharacteristicValue - similarSecondSequencesCharacteristicValue) / similarSequencesCharacteristicValue +  " <br/> " +
                         + similarSequencesCharacteristicValue / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value)));
 
-                        //firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
+                        // firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
 
-                        //secondSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[j];
+                        // secondSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[j];
                     }
                 }
 
@@ -198,8 +200,8 @@
                     { "mattersNames", matterNames },
                     { "characteristicName", characteristicName },
                     { "similarities", similarities },
-                    //{ "firstSequenceSimilarities", firstSequenceSimilarities },
-                    //{ "secondSequenceSimilarities", secondSequenceSimilarities },
+                    // { "firstSequenceSimilarities", firstSequenceSimilarities },
+                    // { "secondSequenceSimilarities", secondSequenceSimilarities },
                     {"equalElements", equalElements }
                 };
             });

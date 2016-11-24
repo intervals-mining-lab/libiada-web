@@ -86,6 +86,20 @@
                                         .ToArray();
         }
 
+        /// <summary>
+        /// Extracts only filtered subsequences.
+        /// </summary>
+        /// <param name="sequenceId">
+        /// Sequences id.
+        /// </param>
+        /// <param name="featureIds">
+        /// Subsequences features.
+        /// </param>
+        /// <param name="filters">
+        /// Filters for the subsequences.
+        /// Filters are applied in "OR" logic (if subseqence corresponds to any filter it is added to calculation).
+        /// </param>
+        /// <returns></returns>
         public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<int> featureIds, string[] filters)
         {
             var allSubseqences = db.Subsequence.Where(s => s.SequenceId == sequenceId && featureIds.Contains(s.FeatureId))

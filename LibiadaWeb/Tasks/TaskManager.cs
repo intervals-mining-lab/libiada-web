@@ -23,11 +23,14 @@
         private static readonly List<Task> Tasks = new List<Task>();
 
         /// <summary>
+        /// SignalR hub.
+        /// </summary>
+        private static readonly TasksManagerHub hub = new TasksManagerHub();
+
+        /// <summary>
         /// The created tasks counter.
         /// </summary>
         private static int taskCounter;
-
-        private static readonly TasksManagerHub hub = new TasksManagerHub();
 
         /// <summary>
         /// The add task.
