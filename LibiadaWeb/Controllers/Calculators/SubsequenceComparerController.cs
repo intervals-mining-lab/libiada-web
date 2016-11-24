@@ -98,7 +98,7 @@
             int characteristicTypeLinkId,
             int notationId,
             int[] featureIds,
-            string maxDifference,
+            string maxPercentageDifference,
             string excludeType,
             double characteristicValueFrom,
             double characteristicValueTo)
@@ -118,11 +118,11 @@
                     var subsequences = subsequenceExtractor.ExtractChains(sequenceSubsequences, parentSequenceId);
                     subsequencesCount[i] = subsequences.Length;
                     allSubsequencesCharacteristics.Add(CalculateCharacteristic(characteristicTypeLinkId, subsequences, sequenceSubsequences)
-                        .Where(c => (characteristicValueFrom == 0 && characteristicValueTo == 0) || c.Value >= characteristicValueFrom && c.Value <= characteristicValueTo)
+                        .Where(c => (characteristicValueFrom == 0 && characteristicValueTo == 0) || (c.Value >= characteristicValueFrom && c.Value <= characteristicValueTo))
                        .OrderBy(c => c.Value).ToArray());
                 }
 
-                double difference = double.Parse(maxDifference, CultureInfo.InvariantCulture);
+                double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture);
 
                 var similarities = new MvcHtmlString[mattersCount, mattersCount];
                 // var firstSequenceSimilarities = new double[mattersCount, mattersCount];
@@ -143,6 +143,7 @@
                         double similarSecondSequencesCharacteristicValue = 0;
 
                         int secondArrayStartPosition = 0;
+                        double differenceSum = 0;
 
                         for (int k = 0; k < allSubsequencesCharacteristics[i].Length; k++)
                         {
@@ -154,28 +155,35 @@
                                 //     allSubsequencesCharacteristics[j][l] = double.NaN;
                                 // }
 
-                                if (Math.Abs(allSubsequencesCharacteristics[i][k].Value - allSubsequencesCharacteristics[j][l].Value) <= difference)
+                                double first = allSubsequencesCharacteristics[i][k].Value;
+                                double second = allSubsequencesCharacteristics[j][l].Value;
+
+                                double difference = Math.Abs(first - second) / ((first + second) / 2);
+
+                                if (difference <= percentageDifference)
                                 {
                                     if (i != j)
                                     {
                                         equalElements.Add(
                                             new MvcHtmlString(
-                                            string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>",
+                                            string.Format("{0} with {1} {2} <b>{0}</b> {3}; <b>Characteristic = {4}</b> {2} <b>{1}</b> {2} {5}; <b>Characteristic = {6}</b>, Difference = {7}",
                                             matterNames[i], matterNames[j], "<br/>",
-                                            allSubsequencesCharacteristics[i][k].Key, allSubsequencesCharacteristics[i][k].Value,
-                                            allSubsequencesCharacteristics[j][l].Key, allSubsequencesCharacteristics[j][l].Value)));
+                                            allSubsequencesCharacteristics[i][k].Key, first,
+                                            allSubsequencesCharacteristics[j][l].Key, second,
+                                            Math.Abs(second - first))));
                                     }
 
+                                    differenceSum += difference;
                                     similarSubsequences++;
-                                    similarSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value + allSubsequencesCharacteristics[j][l].Value;
-                                    similarFirstSequencesCharacteristicValue += allSubsequencesCharacteristics[i][k].Value;
-                                    similarSecondSequencesCharacteristicValue += allSubsequencesCharacteristics[j][l].Value;
+                                    similarSequencesCharacteristicValue += first + second;
+                                    similarFirstSequencesCharacteristicValue += first;
+                                    similarSecondSequencesCharacteristicValue += second;
 
                                     secondArrayStartPosition++;
                                     break;
                                 }
 
-                                if (allSubsequencesCharacteristics[j][l].Value < allSubsequencesCharacteristics[i][k].Value)
+                                if (second < first)
                                 {
                                     secondArrayStartPosition++;
                                     break;
@@ -183,9 +191,11 @@
                             }
                         }
 
-                        similarities[i, j] = new MvcHtmlString(similarSubsequences * 200d / (subsequencesCount[i] + subsequencesCount[j]) + "%" + " <br/> "
-                            + Math.Abs(similarFirstSequencesCharacteristicValue - similarSecondSequencesCharacteristicValue) / similarSequencesCharacteristicValue +  " <br/> " +
-                        + similarSequencesCharacteristicValue / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value)));
+                        double formula1 = similarSubsequences * 200d / (subsequencesCount[i] + subsequencesCount[j]);
+                        double formula2 = (differenceSum / similarSubsequences) * formula1;
+                        double formula3 = similarSequencesCharacteristicValue * 100d / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value));
+
+                        similarities[i, j] = new MvcHtmlString(Math.Round(formula1, 3) + "%" + " <br/> " + Math.Round(formula2, 3) + " <br/> " + Math.Round(formula3, 3) + "%");
 
                         // firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
 

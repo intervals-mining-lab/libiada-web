@@ -41,6 +41,20 @@
         </tbody>
     </table>
 
+    <hr />
+
+    <div class="form-group">
+        <label>
+            1. (similarCount1 + similarCount2) * 2 * 100% / (count1 + count2)
+            <br/>
+            2. (differenceSum / (similarCount1 + similarCount2)) * (1)
+            <br/>
+            3. similarSequencesCharacteristicValueSum * 100% / allSequencesCharacteristicValueSum
+        </label>
+    </div>
+
+    <hr />
+
     <table class="table table-bordered table-hover">
         <tbody>
             @for (int i = 0; i < ViewBag.equalElements.Count; i++)
