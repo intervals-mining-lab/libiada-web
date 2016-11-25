@@ -16,10 +16,9 @@ namespace LibiadaWeb
     {
         public long Id { get; set; }
         public long SequenceId { get; set; }
-        public int AttributeId { get; set; }
+        public Attribute Attribute { get; set; }
         public string Value { get; set; }
     
-        public virtual Attribute Attribute { get; set; }
         public virtual DnaSequence DnaSequence { get; set; }
         public virtual Subsequence Subsequence { get; set; }
     }

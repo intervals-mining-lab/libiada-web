@@ -37,8 +37,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceComparerController"/> class.
         /// </summary>
-        public SubsequenceComparerController()
-            : base("Subsequence comparer")
+        public SubsequenceComparerController() : base("Subsequence comparer")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
@@ -268,7 +267,7 @@
                 }
                 else
                 {
-                    values[j] = new KeyValuePair<string, double>("RemoteId = " + subsequences[j].RemoteId + "; " + "Attribute = " + string.Join(", ", subsequences[j].SequenceAttribute.Select(a => a.Attribute.Name)), currentValue);
+                    values[j] = new KeyValuePair<string, double>("RemoteId = " + subsequences[j].RemoteId + "; " + "Attribute = " + string.Join(", ", subsequences[j].SequenceAttribute.Select(a => a.Attribute.GetDisplayValue())), currentValue);
                 }
             }
 

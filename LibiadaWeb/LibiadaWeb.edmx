@@ -648,19 +648,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_chain_attribute_attribute">
-          <End Role="attribute" Type="Self.attribute" Multiplicity="1" />
-          <End Role="chain_attribute" Type="Self.chain_attribute" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="attribute">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="chain_attribute">
-              <PropertyRef Name="attribute_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_dna_chain_feature">
           <End Role="feature" Type="Self.feature" Multiplicity="1" />
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
@@ -1448,7 +1435,6 @@
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
           <EntitySet Name="notation" EntityType="Self.notation" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="attribute" EntityType="Self.attribute" store:Type="Tables" Schema="public"/>
           <EntitySet Name="feature" EntityType="Self.feature" store:Type="Tables" Schema="public"/>
           <EntitySet Name="remote_db" EntityType="Self.remote_db" store:Type="Tables" Schema="public"/>
           <EntitySet Name="fmotiv" EntityType="Self.fmotiv" store:Type="Tables" Schema="public"/>
@@ -1549,11 +1535,6 @@
 
           <AssociationSet Name="fk_chain_attribute_subsequence" Association="Self.fk_chain_attribute_subsequence">
             <End Role="subsequence" EntitySet="subsequence" />
-            <End Role="chain_attribute" EntitySet="chain_attribute" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_chain_attribute_attribute" Association="Self.fk_chain_attribute_attribute">
-            <End Role="attribute" EntitySet="attribute" />
             <End Role="chain_attribute" EntitySet="chain_attribute" />
           </AssociationSet>
 
@@ -2028,22 +2009,11 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
-          <Property Name="AttributeId" Type="Int32" Nullable="false" />
+          <Property Name="Attribute" Type="LibiadaWebModel.Attribute" Nullable="false" />
           <Property Name="Value" Type="String" Unicode="true" FixedLength="false" Nullable="false" />
 
-          <NavigationProperty Name="Attribute" Relationship="Self.fk_chain_attribute_attribute" FromRole="SequenceAttribute" ToRole="Attribute" />
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="SequenceAttribute" ToRole="DnaSequence" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_chain_attribute_subsequence" FromRole="SequenceAttribute" ToRole="Subsequence" />
-        </EntityType>
-
-        <EntityType Name="Attribute">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
-
-          <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_attribute" FromRole="Attribute" ToRole="SequenceAttribute" />
         </EntityType>
 
         <EntityType Name="Feature">
@@ -2649,19 +2619,6 @@
             </Principal>
             <Dependent Role="SequenceAttribute">
               <PropertyRef Name="SequenceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_chain_attribute_attribute">
-          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
-          <End Role="SequenceAttribute" Type="Self.SequenceAttribute" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Attribute">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SequenceAttribute">
-              <PropertyRef Name="AttributeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3351,7 +3308,6 @@
           <EntitySet Name="Matter" EntityType="Self.Matter" />
           <EntitySet Name="Notation" EntityType="Self.Notation" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
-          <EntitySet Name="Attribute" EntityType="Self.Attribute" />
           <EntitySet Name="Feature" EntityType="Self.Feature" />
           <EntitySet Name="Translator" EntityType="Self.Translator" />
           <EntitySet Name="RemoteDb" EntityType="Self.RemoteDb" />
@@ -3450,11 +3406,6 @@
 
           <AssociationSet Name="fk_chain_attribute_subsequence" Association="Self.fk_chain_attribute_subsequence">
             <End Role="Subsequence" EntitySet="Subsequence" />
-            <End Role="SequenceAttribute" EntitySet="SequenceAttribute" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_chain_attribute_attribute" Association="Self.fk_chain_attribute_attribute">
-            <End Role="Attribute" EntitySet="Attribute" />
             <End Role="SequenceAttribute" EntitySet="SequenceAttribute" />
           </AssociationSet>
 
@@ -3754,7 +3705,9 @@
           </AssociationSet>
 
         </EntityContainer>
+        
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -3986,17 +3939,8 @@
               <MappingFragment StoreEntitySet="chain_attribute">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
-                <ScalarProperty Name="AttributeId" ColumnName="attribute_id" />
+                <ScalarProperty Name="Attribute" ColumnName="attribute_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Attribute">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Attribute">
-              <MappingFragment StoreEntitySet="attribute">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

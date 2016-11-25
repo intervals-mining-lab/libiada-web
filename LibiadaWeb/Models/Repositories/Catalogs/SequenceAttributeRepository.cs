@@ -5,6 +5,8 @@
     using System.Data.Entity;
     using System.Linq;
 
+    using LibiadaWeb.Helpers;
+
     /// <summary>
     /// The sequence attribute.
     /// </summary>
@@ -29,7 +31,7 @@
         public SequenceAttributeRepository(LibiadaWebEntities db)
         {
             this.db = db;
-            attributeRepository = new AttributeRepository(db);
+            attributeRepository = new AttributeRepository();
         }
 
         /// <summary>
@@ -55,7 +57,7 @@
                                        .Select(sa => new
                                                      {
                                                          sa.SequenceId,
-                                                         Key = sa.Attribute.Name,
+                                                         Key = sa.Attribute.GetDisplayValue(),
                                                          sa.Value
                                                      })
                                        .ToArray()
@@ -135,11 +137,11 @@
         /// </returns>
         private SequenceAttribute CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
         {
-            var attributeId = attributeRepository.GetAttributeByName(attributeName).Id;
+            var attribute = attributeRepository.GetAttributeByName(attributeName);
 
             var subsequenceAttribute = new SequenceAttribute
             {
-                AttributeId = attributeId,
+                Attribute = attribute,
                 SequenceId = sequenceId,
                 Value = attributeValue
             };
@@ -150,8 +152,8 @@
         /// <summary>
         /// The create sequence attribute.
         /// </summary>
-        /// <param name="attributeId">
-        /// The attribute id.
+        /// <param name="attribute">
+        /// The attribute type.
         /// </param>
         /// <param name="attributeValue">
         /// The attribute value.
@@ -162,11 +164,11 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(int attributeId, string attributeValue, long sequenceId)
+        private SequenceAttribute CreateSequenceAttribute(LibiadaWeb.Attribute attribute, string attributeValue, long sequenceId)
         {
             var subsequenceAttribute = new SequenceAttribute
             {
-                AttributeId = attributeId,
+                Attribute = attribute,
                 SequenceId = sequenceId,
                 Value = attributeValue
             };
@@ -177,8 +179,8 @@
         /// <summary>
         /// The create sequence attribute.
         /// </summary>
-        /// <param name="attributeId">
-        /// The attribute id.
+        /// <param name="attribute">
+        /// The attribute type.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
@@ -186,9 +188,9 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(int attributeId, long sequenceId)
+        private SequenceAttribute CreateSequenceAttribute(LibiadaWeb.Attribute attribute, long sequenceId)
         {
-            return CreateSequenceAttribute(attributeId, string.Empty, sequenceId);
+            return CreateSequenceAttribute(attribute, string.Empty, sequenceId);
         }
 
         /// <summary>
@@ -225,17 +227,17 @@
             var result = new List<SequenceAttribute>();
             if (complement)
             {
-                result.Add(CreateSequenceAttribute(Aliases.Attribute.Complement, subsequence.Id));
+                result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.Complement, subsequence.Id));
 
                 if (complementJoin)
                 {
-                    result.Add(CreateSequenceAttribute(Aliases.Attribute.ComplementJoin, subsequence.Id));
+                    result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.ComplementJoin, subsequence.Id));
                 }
             }
 
             if (subsequence.Partial)
             {
-                result.Add(CreateSequenceAttribute(Aliases.Attribute.Partial, subsequence.Id));
+                result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.Partial, subsequence.Id));
             }
 
             return result;

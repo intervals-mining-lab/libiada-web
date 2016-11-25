@@ -229,9 +229,7 @@
     <Compile Include="App_Start\SmsService.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Attribute.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Attribute.cs" />
     <Compile Include="BinaryCharacteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

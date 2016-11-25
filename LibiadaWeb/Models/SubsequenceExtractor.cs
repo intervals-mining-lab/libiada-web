@@ -111,9 +111,9 @@
             {
                 for (int j = 0; j < filters.Length; j++)
                 {
-                    if (allSubseqences[i].SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Product))
+                    if (allSubseqences[i].SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
                     {
-                        string value = allSubseqences[i].SequenceAttribute.Single(sa => sa.AttributeId == Aliases.Attribute.Product).Value;
+                        string value = allSubseqences[i].SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
                         if (value.Contains(filters[j]))
                         {
                             tempResult.Add(allSubseqences[i]);
@@ -142,7 +142,7 @@
         {
             ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
-            if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
+            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == LibiadaWeb.Attribute.Complement))
             {
                 bioSequence = bioSequence.GetReverseComplementedSequence();
             }
@@ -164,7 +164,7 @@
         /// </returns>
         private Chain ExtractJoinedSubsequence(Sequence sourceSequence, Subsequence subsequence)
         {
-            if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.Complement))
+            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
             {
                 return ExtractJoinedSubsequenceWithComplement(sourceSequence, subsequence);
             }
@@ -218,7 +218,7 @@
             var position = subsequence.Position.ToArray();
             string resultSequence;
 
-            if (subsequence.SequenceAttribute.Any(sa => sa.AttributeId == Aliases.Attribute.ComplementJoin))
+            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
             {
                 var joinedSequence = bioSequence.ConvertToString();
 

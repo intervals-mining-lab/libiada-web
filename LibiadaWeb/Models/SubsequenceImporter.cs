@@ -31,11 +31,6 @@
         private readonly SequenceAttributeRepository sequenceAttributeRepository;
 
         /// <summary>
-        /// The attribute repository.
-        /// </summary>
-        private readonly AttributeRepository attributeRepository;
-
-        /// <summary>
         /// The sequence id.
         /// </summary>
         private readonly long sequenceId;
@@ -85,7 +80,6 @@
             this.sequenceId = sequenceId;
             featureRepository = new FeatureRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
-            attributeRepository = new AttributeRepository(db);
 
             using (var commonSequenceRepository = new CommonSequenceRepository(db))
             {
@@ -269,8 +263,8 @@
                     featureId = featureRepository.GetFeatureIdByName(feature.Key);
                 }
 
-                if (feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudo)) ||
-                    feature.Qualifiers.ContainsKey(attributeRepository.GetAttributeNameById(Aliases.Attribute.Pseudogene)))
+                if (feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudo.GetDisplayValue()) ||
+                    feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudogene.GetDisplayValue()))
                 {
                     featureId = Aliases.Feature.PseudoGen;
                 }

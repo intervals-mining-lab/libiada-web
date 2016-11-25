@@ -43,7 +43,6 @@ namespace LibiadaWeb
         public virtual DbSet<Matter> Matter { get; set; }
         public virtual DbSet<Notation> Notation { get; set; }
         public virtual DbSet<SequenceAttribute> SequenceAttribute { get; set; }
-        public virtual DbSet<Attribute> Attribute { get; set; }
         public virtual DbSet<Feature> Feature { get; set; }
         public virtual DbSet<Translator> Translator { get; set; }
         public virtual DbSet<RemoteDb> RemoteDb { get; set; }

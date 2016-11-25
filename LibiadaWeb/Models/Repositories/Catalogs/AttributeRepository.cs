@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using LibiadaWeb;
+    using LibiadaWeb.Helpers;
 
     using Attribute = LibiadaWeb.Attribute;
 
@@ -26,13 +26,10 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributeRepository"/> class.
         /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        public AttributeRepository(LibiadaWebEntities db)
+        public AttributeRepository()
         {
-            attributes = db.Attribute.ToArray();
-            attributesDictionary = attributes.ToDictionary(a => a.Name);
+            attributes = EnumExtensions.ToArray<Attribute>();
+            attributesDictionary = attributes.ToList().ToDictionary(a => a.GetDisplayValue());
         }
 
         /// <summary>
@@ -74,9 +71,9 @@
         /// </exception>
         public string GetAttributeNameById(int id)
         {
-            if (attributes.Any(a => a.Id == id))
+            if (attributes.Any(a => (byte)a == id))
             {
-                return attributes.Single(a => a.Id == id).Name;
+                return attributes.Single(a => (byte)a == id).GetDisplayValue();
             }
             else
             {
