@@ -4,8 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Clusterizator;
-    using Clusterizator.Krab;
+    using Clusterizator.kMeans;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
@@ -13,7 +12,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
-    using Math;
 
     using Models.Repositories.Catalogs;
 
@@ -101,31 +99,31 @@
             int[] notationIds,
             int[] languageIds,
             int clustersCount,
-            double equipotencyWeight,
-            double normalizedDistanceWeight,
-            double distanceWeight)
+            double? equipotencyWeight,
+            double? normalizedDistanceWeight,
+            double? distanceWeight)
         {
             return Action(() =>
             {
                 var characteristicNames = new List<string>();
                 var mattersCharacteristics = new object[matterIds.Length];
-                var allCharacteristics = new List<List<double>>();
+                var characteristics = new double[matterIds.Length][];
                 var clusters = new long[clustersCount];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 for (int j = 0; j < matterIds.Length; j++)
                 {
                     var matterId = matterIds[j];
-                    var characteristics = new List<double>();
-                    for (int i = 0; i < notationIds.Length; i++)
+                    characteristics[j] = new double[characteristicTypeLinkIds.Length];
+                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
                         long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.NotationId == notationIds[i]).Id;
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
                         if (db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                         {
-                            characteristics.Add(db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value);
+                            characteristics[j][i] = db.Characteristic.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
                         }
                         else
                         {
@@ -134,11 +132,9 @@
                             var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                             IFullCalculator calculator = CalculatorsFactory.CreateFullCalculator(className);
-                            characteristics.Add(calculator.Calculate(tempChain, link));
+                            characteristics[j][i] = calculator.Calculate(tempChain, link);
                         }
                     }
-
-                    allCharacteristics.Add(characteristics);
                 }
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -146,18 +142,15 @@
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
                 }
 
-                DataTable data = DataTableFiller.FillDataTable(matterIds.ToArray(), characteristicNames.ToArray(), allCharacteristics);
-                var clusterizator = new KrabClusterization(data, equipotencyWeight, normalizedDistanceWeight, distanceWeight);
-                ClusterizationResult clusterizationResult = clusterizator.Cluster(clustersCount);
-                int n = 0;
-                for (int i = 0; i < clusterizationResult.Clusters.Count; i++)
+                var clusterizator = new KMeansClusterization();
+                int[] clusterizationResult = clusterizator.Cluster(clustersCount , characteristics);
+                for (int i = 0; i < clusterizationResult.Length; i++)
                 {
-                    var cluster = ((Cluster)clusterizationResult.Clusters[i]).Items;
-                    clusters[i] = i + 1;
-                    foreach (long matterId in cluster)
-                    {
-                        mattersCharacteristics[n++] = new { MatterName = matters[matterId].Name, cluster = clusters[i], Characteristics = allCharacteristics[matterIds.ToList().IndexOf(matterId)] };
-                    }
+                    mattersCharacteristics[i] = new { 
+                        MatterName = matters[matterIds[i]], 
+                        cluster = clusters[i], 
+                        Characteristics = characteristics[i] 
+                    };
                 }
 
                 var characteristicsList = new List<SelectListItem>();
