@@ -1,0 +1,21 @@
+﻿/* описание кнопки «Вверх» */
+#buttonScrollUp {
+height: 50%;
+top:0px;
+text-align: center;
+}
+ 
+/* описание кнопки «Вниз» */
+#buttonScrollDown {
+height: 50%;
+bottom: 0px;
+text-align: center;
+}
+ 
+/* описание столбца фонового цвета для обеих кнопок */
+#scrollUpDown {
+position: fixed;
+height: 100%;
+width: 30px;
+font-size:2em;
+}

@@ -92,9 +92,13 @@
                         "~/Scripts/Angular/Directives/tableParse.js",
                         "~/Scripts/Angular/Controllers/charts.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
+                        "~/Scripts/scrollJumper.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
-                        "~/Content/site.css"));
+                        "~/Content/site.css",
+                        "~/Content/scrollupdown.css"));
 
             bundles.Add(new StyleBundle("~/Content/slider").Include(
                         "~/Content/themes/JQAllRange/iThing.css"));

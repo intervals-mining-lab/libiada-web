@@ -10,6 +10,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scrollJumper")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </head>
@@ -32,6 +33,10 @@
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
+    </div>
+    <div id="scrollUpDown" class="pull-left">
+        <div id="buttonScrollUp"><span class="glyphicon glyphicon-circle-arrow-up text-primary"></span></div>
+        <div id="buttonScrollDown"><span class="glyphicon glyphicon-circle-arrow-down text-primary"></span></div>
     </div>
     <div class="container body-content">
         @RenderBody()
