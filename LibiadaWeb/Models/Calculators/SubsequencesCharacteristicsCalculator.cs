@@ -8,6 +8,7 @@
 
     using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences characteristics calculator.
@@ -40,17 +41,20 @@
             int[] featureIds,
             long parentSequenceId,
             IFullCalculator[] calculators,
-            Link[] links)
+            Link[] links,
+            List<AttributeValue> attributeValues,
+            string[] filters = null)
         {
             // creating local context to avoid memory overflow due to possibly big cache of characteristics
             using (var context = new LibiadaWebEntities())
             {
                 var subsequenceExtractor = new SubsequenceExtractor(context);
                 var sequenceAttributeRepository = new SequenceAttributeRepository(context);
+                var attributeRepository = new AttributeRepository();
                 var newCharacteristics = new List<Characteristic>();
 
                 // extracting data from database
-                var dbSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+                var dbSubsequences = filters == null ? subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds) : subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds, filters);
                 var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
                 var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
@@ -91,13 +95,24 @@
                         }
                     }
 
-                    Dictionary<string, string> attributes;
+                    AttributeValue[] attributes;
                     if (!dbSubsequencesAttributes.TryGetValue(dbSubsequences[i].Id, out attributes))
                     {
-                        attributes = new Dictionary<string, string>();
+                        attributes = new AttributeValue[0];
                     }
 
-                    subsequenceData[i] = new SubsequenceData(dbSubsequences[i], values, attributes);
+                    var attributeIndexes = new int[attributes.Length];
+                    for (int j = 0; j < attributes.Length; j++)
+                    {
+                        if (!attributeValues.Contains(attributes[j]))
+                        {
+                            attributeValues.Add(attributes[j]);
+                        }
+
+                        attributeIndexes[j] = attributeValues.IndexOf(attributes[j]);
+                    }
+
+                    subsequenceData[i] = new SubsequenceData(dbSubsequences[i], values, attributeIndexes);
                 }
 
                 // trying to save calculated characteristics to database

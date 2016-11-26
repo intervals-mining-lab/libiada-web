@@ -6,7 +6,7 @@
     /// <summary>
     /// The genes data.
     /// </summary>
-    public class SubsequenceData
+    public struct SubsequenceData
     {
         /// <summary>
         /// The starts.
@@ -24,9 +24,9 @@
         public readonly int FeatureId;
 
         /// <summary>
-        /// The attributes.
+        /// The attributes ids array.
         /// </summary>
-        public readonly Dictionary<string, string> Attributes;
+        public readonly int[] Attributes;
 
         /// <summary>
         /// The partial flag.
@@ -55,10 +55,10 @@
         /// <param name="attributes">
         /// Attributes of the given subsequence in form of dictionary.
         /// </param>
-        public SubsequenceData(Subsequence subsequence, double[] characteristics, Dictionary<string, string> attributes)
+        public SubsequenceData(Subsequence subsequence, double[] characteristics, int[] attributes)
         {
             CharacteristicsValues = characteristics;
-            Attributes = attributes ?? new Dictionary<string, string>();
+            Attributes = attributes ?? new int[0];
             FeatureId = subsequence.FeatureId;
             RemoteId = subsequence.RemoteId;
             Partial = subsequence.Partial;

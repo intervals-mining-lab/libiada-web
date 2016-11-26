@@ -47,6 +47,13 @@
             }
         }
 
+        // returns product attribute index if any
+        function getProductAttributeId(dot) {
+            return dot.attributes.find(function (a) {
+                return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
+            });
+        }
+
         // adds and applies new filter
         function addFilter() {
             if ($scope.newFilter.length > 0) {
@@ -55,7 +62,8 @@
                 d3.selectAll(".dot")
                     .attr("visibility",
                         function (d) {
-                            d.filtersVisible.push(d.attributes["product"] && d.attributes["product"].toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
+                            var productId = getProductAttributeId(d);
+                            d.filtersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
                             return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
 
@@ -155,7 +163,9 @@
                 case 4: // CDS
                 case 5: // RRNA
                 case 6: // TRNA
-                    if (d.attributes["product"] !== dot.attributes["product"]) {
+                    var firstProductId = getProductAttributeId(d);
+                    var secondProductId = getProductAttributeId(dot);
+                    if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
                         return false;
                     }
                     break;
@@ -230,9 +240,9 @@
             tooltipContent.push($scope.features[d.featureId].Text);
 
             var attributes = [];
-
-            for (var key in d.attributes) {
-                attributes.push(key + (d.attributes[key] === "" ? "" : " = " + d.attributes[key]));
+            for (var i = 0; i < d.attributes.length; i++) {
+                var attributeValue = $scope.attributeValues[d.attributes[i]];
+                attributes.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
             }
 
             tooltipContent.push(attributes.join("<br/>"));
@@ -502,6 +512,7 @@
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
+        $scope.getProductAttributeId = getProductAttributeId;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;

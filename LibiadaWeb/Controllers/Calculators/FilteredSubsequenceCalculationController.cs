@@ -18,6 +18,7 @@
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// Cjntroller for filtered subsequences calculation.
@@ -75,6 +76,7 @@
             {
                 Dictionary<int, string> features;
 
+                var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);
                 var matterNames = new string[matterIds.Length];
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
@@ -111,70 +113,19 @@
                 }
 
                 // cycle through matters; first level of characteristics array
-                for (int m = 0; m < parentSequenceIds.Length; m++)
+                for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
-                    // creating local context to avoid memory overflow due to possibly big cache of characteristics
-                    using (var context = new LibiadaWebEntities())
-                    {
-                        var subsequenceExtractor = new SubsequenceExtractor(context);
-                        var sequenceAttributeRepository = new SequenceAttributeRepository(context);
-                        var newCharacteristics = new List<Characteristic>();
-
-                        // extracting data from database
-                        var dbSubsequences = subsequenceExtractor.GetSubsequences(parentSequenceIds[m], featureIds, filters);
-                        var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
-                        var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
-
-                        var dbCharacteristics = context.Characteristic
-                                              .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId))
-                                              .ToArray()
-                                              .GroupBy(c => c.SequenceId)
-                                              .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
-
-                        // converting to libiada sequences
-                        var sequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceIds[m]);
-                        characteristics.Add(matterNames[m], new SubsequenceData[sequences.Length]);
-                        for (int j = 0; j < sequences.Length; j++)
-                        {
-                            var values = new double[characteristicTypeLinkIds.Length];
-                            Dictionary<int, double> sequenceDbCharacteristics;
-                            if (!dbCharacteristics.TryGetValue(dbSubsequences[j].Id, out sequenceDbCharacteristics))
-                            {
-                                sequenceDbCharacteristics = new Dictionary<int, double>();
-                            }
-
-                            // cycle through characteristics and notations; second level of characteristics array
-                            for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
-                            {
-                                int characteristicTypeLinkId = characteristicTypeLinkIds[i];
-
-                                if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkId, out values[i]))
-                                {
-                                    values[i] = calculators[i].Calculate(sequences[j], links[i]);
-                                    var currentCharacteristic = new Characteristic
-                                    {
-                                        SequenceId = dbSubsequences[j].Id,
-                                        CharacteristicTypeLinkId = characteristicTypeLinkId,
-                                        Value = values[i]
-                                    };
-
-                                    newCharacteristics.Add(currentCharacteristic);
-                                }
-                            }
-
-                            Dictionary<string, string> attributes;
-                            if (!dbSubsequencesAttributes.TryGetValue(dbSubsequences[j].Id, out attributes))
-                            {
-                                attributes = new Dictionary<string, string>();
-                            }
-
-                            characteristics[matterNames[m]][j] = new SubsequenceData(dbSubsequences[j], values, attributes);
-                        }
-
-                        // trying to save calculated characteristics to database
-                        var characteristicRepository = new CharacteristicRepository(context);
-                        characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
-                    }
+                    // all subsequence calculations
+                    var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                        characteristicTypeLinkIds,
+                        featureIds,
+                        parentSequenceIds[i],
+                        calculators,
+                        links,
+                        attributeValues,
+                        filters);
+                    subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();
+                    characteristics[matterNames[i]] = subsequencesData;
                 }
 
                 return new Dictionary<string, object>
@@ -182,7 +133,9 @@
                                 { "characteristics", characteristics },
                                 { "matterNames", matterNames },
                                 { "characteristicNames", characteristicNames },
-                                { "features", features }
+                                { "features", features },
+                                { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                { "attributeValues", attributeValues.Select(sa => new { attribute = (byte)sa.AttributeId, value = sa.Value }) }
                             };
             });
         }

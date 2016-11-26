@@ -16,6 +16,7 @@
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences distribution controller.
@@ -77,6 +78,7 @@
                     var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                     var links = new Link[characteristicTypeLinkIds.Length];
                     var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                    var attributeValues = new List<AttributeValue>();
                     IEnumerable<SelectListItem> featuresSelectList;
                     Chain[] chains;
                     long[] parentSequenceIds;
@@ -137,7 +139,8 @@
                             featureIds,
                             parentSequenceIds[i],
                             calculators,
-                            links);
+                            links,
+                            attributeValues);
                         subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();
                         sequenceData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
                     }
@@ -152,7 +155,9 @@
                                      { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                                      { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
-                                     { "features", featuresSelectList.ToDictionary(f => f.Value) }
+                                     { "features", featuresSelectList.ToDictionary(f => f.Value) },
+                                     { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                     { "attributeValues", attributeValues.Select(sa => new { attribute = (byte)sa.AttributeId, value = sa.Value }) }
                                  };
 
                     return new Dictionary<string, object>

@@ -6,6 +6,7 @@
     using System.Linq;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The sequence attribute.
@@ -50,19 +51,19 @@
         /// <returns>
         /// The <see cref="T:Dictionary{Int64, String[]}"/>.
         /// </returns>
-        public Dictionary<long, Dictionary<string, string>> GetAttributes(IEnumerable<long> subsequenceIds)
+        public Dictionary<long, AttributeValue[]> GetAttributes(IEnumerable<long> subsequenceIds)
         {
             return db.SequenceAttribute.Where(sa => subsequenceIds.Contains(sa.SequenceId))
                                        .Include(sa => sa.Attribute)
                                        .Select(sa => new
                                                      {
                                                          sa.SequenceId,
-                                                         Key = sa.Attribute.GetDisplayValue(),
+                                                         sa.Attribute,
                                                          sa.Value
                                                      })
                                        .ToArray()
                                        .GroupBy(sa => sa.SequenceId)
-                                       .ToDictionary(sa => sa.Key, sa => sa.GroupBy(s => s.Key).ToDictionary(s => s.Key, s => s.Select(v => v.Value).Aggregate((n, c) => n + " " + c)));
+                                       .ToDictionary(sa => sa.Key, sa => sa.Select(av => new AttributeValue((byte)av.Attribute, av.Value)).ToArray());
         }
 
         /// <summary>

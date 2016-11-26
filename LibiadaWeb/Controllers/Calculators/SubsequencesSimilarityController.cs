@@ -16,6 +16,7 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences similarity controller.
@@ -117,13 +118,13 @@
                 var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
                 var firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
-                var firstSequenceAttributes = new List<Dictionary<string, string>>();
+                var firstSequenceAttributes = new List<AttributeValue[]>();
                 foreach (var subsequence in firstSequenceSubsequences)
                 {
-                    Dictionary<string, string> attributes;
+                    AttributeValue[] attributes;
                     if (!firstDbSubsequencesAttributes.TryGetValue(subsequence.Id, out attributes))
                     {
-                        attributes = new Dictionary<string, string>();
+                        attributes = new AttributeValue[0];
                     }
 
                     firstSequenceAttributes.Add(attributes);
@@ -135,13 +136,13 @@
                 var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
                 var secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
-                var secondSequenceAttributes = new List<Dictionary<string, string>>();
+                var secondSequenceAttributes = new List<AttributeValue[]>();
                 foreach (var subsequence in secondSequenceSubsequences)
                 {
-                    Dictionary<string, string> attributes;
+                    AttributeValue[] attributes;
                     if (!secondDbSubsequencesAttributes.TryGetValue(subsequence.Id, out attributes))
                     {
-                        attributes = new Dictionary<string, string>();
+                        attributes = new AttributeValue[0];
                     }
 
                     secondSequenceAttributes.Add(attributes);

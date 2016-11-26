@@ -349,9 +349,10 @@
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Calculators\SequenceCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
+    <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
-    <Compile Include="Models\Calculators\FragmentData.cs" />
+    <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
@@ -403,11 +404,11 @@
     <Compile Include="Models\Account\VerifyCodeViewModel.cs" />
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
-    <Compile Include="Models\Calculators\CharacteristicData.cs" />
-    <Compile Include="Models\Calculators\CharacteristicLinkData.cs" />
-    <Compile Include="Models\Calculators\SubsequenceData.cs" />
-    <Compile Include="Models\Calculators\SequenceData.cs" />
-    <Compile Include="Models\Calculators\IntPair.cs" />
+    <Compile Include="Models\CalculatorsData\CharacteristicData.cs" />
+    <Compile Include="Models\CalculatorsData\CharacteristicLinkData.cs" />
+    <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
+    <Compile Include="Models\CalculatorsData\SequenceData.cs" />
+    <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Calculators\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />

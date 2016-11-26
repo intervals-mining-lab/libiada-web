@@ -15,6 +15,7 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences calculation controller.
@@ -68,6 +69,7 @@
             return Action(() =>
             {
                 Dictionary<int, string> features;
+                var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);
 
                 long[] parentSequenceIds;
@@ -111,7 +113,8 @@
                             featureIds,
                             parentSequenceIds[i],
                             calculators,
-                            links);
+                            links,
+                            attributeValues);
                     characteristics.Add(matterNames[i], subsequencesData);
                 }
 
