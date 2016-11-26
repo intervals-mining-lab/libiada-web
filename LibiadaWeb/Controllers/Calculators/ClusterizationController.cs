@@ -108,7 +108,6 @@
                 var characteristicNames = new List<string>();
                 var mattersCharacteristics = new object[matterIds.Length];
                 var characteristics = new double[matterIds.Length][];
-                var clusters = new long[clustersCount];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
                 var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
@@ -148,7 +147,7 @@
                 {
                     mattersCharacteristics[i] = new { 
                         MatterName = matters[matterIds[i]], 
-                        cluster = clusters[i], 
+                        cluster = clusterizationResult[i] + 1, 
                         Characteristics = characteristics[i] 
                     };
                 }
@@ -169,7 +168,7 @@
                     { "characteristicNames", characteristicNames },
                     { "characteristics", mattersCharacteristics },
                     { "characteristicsList", characteristicsList },
-                    { "clusters", clusters }
+                    { "clustersCount", clustersCount }
                 };
 
                 return new Dictionary<string, object>

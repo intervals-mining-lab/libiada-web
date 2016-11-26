@@ -26,9 +26,9 @@
 
         function fillLegend() {
             $scope.legend = [];
-            if ($scope.clusters) {
-                for (var j = 0; j < $scope.clusters.length; j++) {
-                    $scope.legend.push({ name: $scope.clusters[j], visible: true });
+            if ($scope.clustersCount) {
+                for (var j = 0; j < $scope.clustersCount; j++) {
+                    $scope.legend.push({ name: j + 1, visible: true });
                 }
             } else {
                 for (var k = 0; k < $scope.characteristics.length; k++) {
