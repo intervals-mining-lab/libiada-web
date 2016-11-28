@@ -68,7 +68,7 @@
                     <big><span ng-class="calculateStatusGlyphicon(task.TaskState)" title="{{task.TaskStateName}}" aria-hidden="true"></span></big>
                 </td>
                 <td>
-                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}" target="_blank">View result</a>
+                    <a ng-if="task.TaskState == 'Completed' || task.TaskState == 'Error'" ng-href="TaskManager/RedirectToResult/{{task.Id}}" target="_blank" rel="noopener">View result</a>
                 </td>
                 <td>
                     @using (Html.BeginForm("Delete", "TaskManager", FormMethod.Post))
