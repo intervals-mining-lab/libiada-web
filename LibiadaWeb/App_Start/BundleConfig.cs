@@ -82,6 +82,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistribution.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesComparerResultController").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesComparerResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionResultController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 

@@ -14,10 +14,10 @@
     using Newtonsoft.Json;
 
     /// <summary>
-    /// The subsequence comparer controller.
+    /// The subsequences comparer controller.
     /// </summary>
     [Authorize(Roles = "Admin")]
-    public class SubsequenceComparerController : AbstractResultController
+    public class SubsequencesComparerController : AbstractResultController
     {
         /// <summary>
         /// The db.
@@ -35,9 +35,9 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceComparerController"/> class.
+        /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequenceComparerController() : base("Subsequence comparer")
+        public SubsequencesComparerController() : base("Subsequences comparer")
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
@@ -123,7 +123,7 @@
 
                 double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture);
 
-                var similarities = new MvcHtmlString[mattersCount, mattersCount];
+                var similarities = new object[mattersCount, mattersCount];
                 // var firstSequenceSimilarities = new double[mattersCount, mattersCount];
                 // var secondSequenceSimilarities = new double[mattersCount, mattersCount];
 
@@ -193,7 +193,12 @@
                         double formula2 = (differenceSum / similarSubsequences) * 1 / formula1;
                         double formula3 = similarSequencesCharacteristicValue * 100d / (allSubsequencesCharacteristics[i].Sum(c => c.Value) + allSubsequencesCharacteristics[j].Sum(c => c.Value));
 
-                        similarities[i, j] = new MvcHtmlString(Math.Round(formula1 * 100d, 3) + "%" + " <br/> " + Math.Round(formula2, 3) + " <br/> " + Math.Round(formula3, 3) + "%");
+                        similarities[i, j] = new
+                        {
+                            formula1 = Math.Round(formula1 * 100d, 3),
+                            formula2 = Math.Round(formula2, 3),
+                            formula3 = Math.Round(formula3, 3)
+                        };
 
                         // firstSequenceSimilarities[i, j] = similarSubsequences * 100d / subsequencesCount[i];
 
@@ -203,7 +208,7 @@
 
                 var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
 
-                return new Dictionary<string, object>
+                var result = new Dictionary<string, object>
                 {
                     { "mattersNames", matterNames },
                     { "characteristicName", characteristicName },
@@ -212,6 +217,11 @@
                     // { "secondSequenceSimilarities", secondSequenceSimilarities },
                     {"equalElements", equalElements.OrderBy(e => e.Key).ToList() }
                 };
+
+                return new Dictionary<string, object>
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
 

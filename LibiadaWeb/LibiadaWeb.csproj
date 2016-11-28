@@ -15,7 +15,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -264,7 +264,7 @@
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
-    <Compile Include="Controllers\Calculators\SubsequenceComparerController.cs" />
+    <Compile Include="Controllers\Calculators\SubsequencesComparerController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesSimilarityController.cs" />
@@ -550,6 +550,7 @@
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesDistribution.js" />
     <Content Include="Scripts\Angular\Controllers\genesImport.js" />
     <Content Include="Scripts\Angular\Controllers\calculation.js" />
@@ -699,14 +700,14 @@
     <Content Include="App_Code\Helpers.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Index.cshtml" />
     <Content Include="Views\Sequences\BatchSequenceImport\Result.cshtml" />
-    <Content Include="Views\Calculators\SubsequenceComparer\Index.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesComparer\Index.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Result.cshtml" />
     <Content Include="Views\Calculators\CustomSequenceOrderTransformationCalculation\Index.cshtml" />
     <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Index.cshtml" />
     <Content Include="Views\Sequences\CustomSequenceOrderTransformer\Result.cshtml" />
     <Content Include="Views\Partial\_CustomSequences.cshtml" />
     <Content Include="Views\Partial\_CharacteristicsWithoutNotation.cshtml" />
-    <Content Include="Views\Calculators\SubsequenceComparer\Result.cshtml" />
+    <Content Include="Views\Calculators\SubsequencesComparer\Result.cshtml" />
     <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Index.cshtml" />
     <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_Filters.cshtml" />

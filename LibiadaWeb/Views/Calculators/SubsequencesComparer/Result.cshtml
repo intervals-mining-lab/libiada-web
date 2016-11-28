@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Subsequences comparer";
+}
+
+@if (ViewBag.Error == null)
+{
+    <h2>@ViewBag.Title</h2>
+
+    @Html.Partial("_AngularControllerInitializer", "SubsequencesComparerResultController")
+    <div class="form-horizontal" ng-app="SubsequencesComparerResult" ng-controller="SubsequencesComparerResultCtrl">
+
+        <div ng-bind="characteristicName"></div>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Matter name
+                    </th>
+                    <th ng-repeat="mattersName in mattersNames" ng-bind="mattersName" />
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="similarity in similarities">
+                    <td ng-bind="mattersNames[$index]" />
+                    <td ng-repeat="value in similarity">
+                        {{value.formula1}}%
+                        <br/>
+                        {{value.formula2}}
+                        <br />
+                        {{value.formula3}}%
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr />
+
+        <div class="form-group">
+            <label>
+                1. (similarCount1 + similarCount2) * 2 * 100% / (count1 + count2)
+                <br />
+                2. (differenceSum / (similarCount1 + similarCount2)) * (1)
+                <br />
+                3. similarSequencesCharacteristicValueSum * 100% / allSequencesCharacteristicValueSum
+            </label>
+        </div>
+
+        <hr />
+
+        <table class="table table-bordered table-hover">
+            <tbody>
+                <tr ng-repeat="equalElement in equalElements">
+                    <td ng-bind="equalElement"/>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}
