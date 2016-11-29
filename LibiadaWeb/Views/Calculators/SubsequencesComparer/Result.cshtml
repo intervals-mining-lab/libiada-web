@@ -25,7 +25,7 @@
                     <td ng-bind="mattersNames[$index]" />
                     <td ng-repeat="value in similarity">
                         {{value.formula1}}%
-                        <br/>
+                        <br />
                         {{value.formula2}}
                         <br />
                         {{value.formula3}}%
@@ -51,7 +51,27 @@
         <table class="table table-bordered table-hover">
             <tbody>
                 <tr ng-repeat="equalElement in equalElements">
-                    <td ng-bind="equalElement"/>
+                    <td>
+                        First sequence: <b> {{mattersNames[equalElement.FirstMatterId]}} </b>
+                        <br />
+                        Length = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Lengths[0]}}
+                        <div ng-repeat="attributeId in characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        Second sequence: <b> {{mattersNames[equalElement.SecondMatterId]}} </b>
+                        <br />
+                        Length = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Lengths[0]}}
+                        <div ng-repeat="attributeId in characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}}</i>
+                    </td>
                 </tr>
             </tbody>
         </table>

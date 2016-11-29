@@ -351,6 +351,7 @@
     </Compile>
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
+    <Compile Include="Models\CalculatorsData\SubsequenceComparisonData.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
