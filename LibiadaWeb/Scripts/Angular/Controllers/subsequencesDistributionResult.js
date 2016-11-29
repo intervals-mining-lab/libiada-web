@@ -97,7 +97,6 @@
                     var point = {
                         id: id,
                         matterId: sequenceData.MatterId,
-                        name: sequenceData.MatterName,
                         sequenceRemoteId: sequenceData.RemoteId,
                         attributes: subsequenceData.Attributes,
                         partial: subsequenceData.partial,
@@ -228,8 +227,8 @@
         function fillPointTooltip(d) {
             var tooltipContent = [];
             var genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-
-            var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + d.name + "</a>" : d.name;
+            var name = $scope.matters.find(function(m) { return m.id === d.matterId; }).name;
+            var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + name + "</a>" : name;
             tooltipContent.push(header);
 
             if (d.subsequenceRemoteId) {
