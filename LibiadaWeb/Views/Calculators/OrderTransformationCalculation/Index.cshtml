@@ -12,15 +12,10 @@
     <div class="form-horizontal" ng-controller="OrderTransformerCtrl" ng-app="OrderTransformer">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.Partial("_CustomSequences")
+        @Html.Partial("_NatureSelect")
+        @Html.Partial("_MattersTable")
         @Html.Partial("_OrderTransformations")
         @Html.Partial("_Characteristics")
-        <hr />
-        <br />
-        <div class="form-group">
-            <div class="col-md-10">
-                <input type="submit" value="Calculate" class="btn btn-default" />
-            </div>
-        </div>
+        @Html.Partial("_MattersSubmit")
     </div>
 }
