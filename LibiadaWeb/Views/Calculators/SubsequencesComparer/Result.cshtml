@@ -52,32 +52,39 @@
 
         <table class="table table-bordered table-striped">
             <tbody ng-repeat="equalElement in equalElements">
-            <tr>
-                <td ng-show="elementVisible(equalElement)" class="table-active">
-                    First sequence: <b> {{mattersNames[equalElement.FirstMatterId]}} </b>
-                    <br/>
-                    Length = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Lengths[0]}}
-                    <div ng-repeat="attributeId in characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes">
-                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                    </div>
-                    <i> Characteristic value = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
-                    <br/>
-                    <br/>
-                    Second sequence: <b> {{mattersNames[equalElement.SecondMatterId]}} </b>
-                    <br/>
-                    Length = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Lengths[0]}}
-                    <div ng-repeat="attributeId in characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes">
-                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                    </div>
-                    <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
-                    <br/>
-                    <br/>
-                    <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}}</i>
-                </td>
-            </tr>
-            <tr>
-                <td/>
-            </tr>
+                <tr ng-show="elementVisible(equalElement)">
+                    <td class="table-active">
+                        <b> {{$index + 1}}. </b>
+                        <br />
+                        First sequence: <b> {{mattersNames[equalElement.FirstMatterId]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].FeatureId]}}
+                        <br />
+                        Length = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Lengths[0]}}
+                        <div ng-repeat="attributeId in characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+
+                        Second sequence: <b> {{mattersNames[equalElement.SecondMatterId]}} </b>
+                        <br />
+                        Feature: {{features[characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].FeatureId]}}
+                        <br />
+                        Length = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Lengths[0]}}
+                        <div ng-repeat="attributeId in characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes">
+                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                        </div>
+                        <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
+                        <br />
+                        <br />
+                        <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}}</i>
+                    </td>
+                </tr>
+                <tr ng-show="elementVisible(equalElement)">
+                    <td/>
+                </tr>
             </tbody>
         </table>
     </div>
