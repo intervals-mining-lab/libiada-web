@@ -8,6 +8,7 @@
 
     @Html.Partial("_AngularControllerInitializer", "SubsequencesComparerResultController")
     <div class="form-horizontal" ng-app="SubsequencesComparerResult" ng-controller="SubsequencesComparerResultCtrl">
+        @Html.Partial("_ModalLoadingWindow", "Loading data")
 
         <div ng-bind="characteristicName"></div>
 

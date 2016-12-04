@@ -2,6 +2,9 @@
     "use strict";
 
     function subsequencesComparerResult($scope, $http) {
+        var loadingModalWindow = $("#loadingDialog");
+        loadingModalWindow.modal("show");
+
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
@@ -16,6 +19,7 @@
             }
 
             $scope.loading = false;
+            loadingModalWindow.modal("hide");
         }).error(function (data) {
             alert("Failed loading characteristic data");
         });
