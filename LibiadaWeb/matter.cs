@@ -28,6 +28,8 @@ namespace LibiadaWeb
         public long Id { get; set; }
         public string Name { get; set; }
         public Nature Nature { get; set; }
+        public SequenceType SequenceType { get; set; }
+        public Group Group { get; set; }
         public string Description { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }

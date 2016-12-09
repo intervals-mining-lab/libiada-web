@@ -1219,4 +1219,36 @@ ALTER TABLE data_chain DROP COLUMN piece_position;
 
 INSERT INTO feature (name, description, nature_id, complete) VALUES ('Plastid', 'Plastid genome', 1, true);
 
+-- 09.12.2016
+-- Added sequence type column to matter table.
+
+ALTER TABLE matter ADD COLUMN sequence_type smallint;
+COMMENT ON COLUMN matter.sequence_type IS 'Reference to SequrnceType enum.';
+
+UPDATE matter SET sequence_type = CASE 
+	WHEN nature_id IN (2, 3, 4) THEN nature_id
+	WHEN nature_id = 1 AND (description LIKE '%Plasmid%'  OR description LIKE '%plasmid%') THEN 5
+	WHEN nature_id = 1 AND (description LIKE '%Mitochondrion%'  OR description LIKE '%mitochondrion%' OR description LIKE '%mitochondrial%' OR description LIKE '%Mitochondrial%') THEN 6
+	WHEN nature_id = 1 AND (description LIKE '%Chloroplast%'  OR description LIKE '%chloroplast%') THEN 7
+    WHEN nature_id = 1 AND description LIKE '%16S%' THEN 8
+    WHEN nature_id = 1 AND description LIKE '%18S%' THEN 9
+	ELSE 1
+END;
+
+ALTER TABLE matter ALTER COLUMN sequence_type SET NOT NULL;
+
+
+ALTER TABLE matter ADD COLUMN group smallint;
+COMMENT ON COLUMN matter.group IS 'Reference to Group enum.';
+
+UPDATE matter SET group = CASE 
+	WHEN nature_id IN (2, 3, 4) THEN nature_id
+	WHEN nature_id = 1 AND (name LIKE '%virus%'  OR name LIKE '%Virus%') THEN 5
+    WHEN nature_id = 1 AND description LIKE '%18S%' THEN 6
+	ELSE 1
+END;
+
+ALTER TABLE matter ALTER COLUMN group SET NOT NULL;
+
+
 COMMIT;
