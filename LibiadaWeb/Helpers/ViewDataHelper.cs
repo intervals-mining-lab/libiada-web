@@ -10,6 +10,7 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -84,22 +85,36 @@
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<object> notations;
+            IEnumerable<SelectListItemWithNature> sequenceTypes;
+            IEnumerable<SelectListItemWithNature> groups;
 
             if (UserHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                groups = EnumExtensions.ToArray<Group>()
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
             }
             else
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                groups = EnumExtensions.ToArray<Group>()
+                    .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
             }
 
             data.Add("natures",  natures);
             data.Add("notations", notations);
             data.Add("languages", new SelectList(db.Language, "id", "name"));
             data.Add("translators", translators);
+            data.Add("sequenceTypes", sequenceTypes);
+            data.Add("groups", groups);
 
             return data;
         }
@@ -156,11 +171,19 @@
 
             var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+            var groups = EnumExtensions.ToArray<Group>()
+                .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
+                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
 
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
             data.Add("nature", (byte)Nature.Genetic);
             data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
+            data.Add("sequenceTypes", sequenceTypes);
+            data.Add("groups", groups);
 
             return data;
         }
@@ -179,8 +202,7 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>()
-                                             : new[] { Link.NotApplied, Link.Start, Link.Cycle };
+            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>() : new[] { Link.NotApplied, Link.Start, Link.Cycle };
 
             var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
 

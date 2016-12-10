@@ -355,6 +355,7 @@
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\SelectListItemWithNature.cs" />
     <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Nature.cs" />

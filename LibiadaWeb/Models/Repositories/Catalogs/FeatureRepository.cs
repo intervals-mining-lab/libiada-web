@@ -110,7 +110,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature()
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature()
         {
             return GetSelectListWithNature(new int[0]);
         }
@@ -124,7 +124,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(int selectedFeature)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(int selectedFeature)
         {
             return GetSelectListWithNature(new[] { selectedFeature });
         }
@@ -138,7 +138,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(IEnumerable<int> selectedFeatures)
         {
             return GetSelectListWithNature(features.Select(f => f.Id), selectedFeatures);
         }
@@ -155,14 +155,14 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> featureIds, IEnumerable<int> selectedFeatures)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(IEnumerable<int> featureIds, IEnumerable<int> selectedFeatures)
         {
-            return features.Where(p => featureIds.Contains(p.Id)).Select(p => new
+            return features.Where(p => featureIds.Contains(p.Id)).Select(p => new SelectListItemWithNature
             {
-                Value = p.Id,
+                Value = p.Id.ToString(),
                 Text = p.Name,
                 Selected = selectedFeatures.Contains(p.Id),
-                Nature = p.Nature
+                Nature = (byte)p.Nature
             });
         }
 
@@ -178,7 +178,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(IEnumerable<int> featureIds, int selectedFeature)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(IEnumerable<int> featureIds, int selectedFeature)
         {
             return GetSelectListWithNature(featureIds, new List<int> { selectedFeature });
         }

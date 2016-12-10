@@ -1238,17 +1238,17 @@ END;
 ALTER TABLE matter ALTER COLUMN sequence_type SET NOT NULL;
 
 
-ALTER TABLE matter ADD COLUMN group smallint;
+ALTER TABLE matter ADD COLUMN "group" smallint;
 COMMENT ON COLUMN matter.group IS 'Reference to Group enum.';
 
-UPDATE matter SET group = CASE 
+UPDATE matter SET "group" = CASE 
 	WHEN nature_id IN (2, 3, 4) THEN nature_id
 	WHEN nature_id = 1 AND (name LIKE '%virus%'  OR name LIKE '%Virus%') THEN 5
     WHEN nature_id = 1 AND description LIKE '%18S%' THEN 6
 	ELSE 1
 END;
 
-ALTER TABLE matter ALTER COLUMN group SET NOT NULL;
+ALTER TABLE matter ALTER COLUMN "group" SET NOT NULL;
 
 
 COMMIT;

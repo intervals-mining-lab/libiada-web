@@ -12,11 +12,11 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
-    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences distribution controller.
@@ -157,7 +157,7 @@
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
                                      { "features", featuresSelectList.ToDictionary(f => f.Value) },
                                      { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                                     { "attributeValues", attributeValues.Select(sa => new { attribute = (byte)sa.AttributeId, value = sa.Value }) }
+                                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                                  };
 
                     return new Dictionary<string, object>

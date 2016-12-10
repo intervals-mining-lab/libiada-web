@@ -5,6 +5,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.ObjectModel;
     using System.Linq;
 
+    using LibiadaWeb.Helpers;
+
     /// <summary>
     /// The matter repository.
     /// </summary>
@@ -83,10 +85,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Value = m.Id,
                 Text = m.Name,
                 Selected = selectedMatters.Contains(m.Id),
-                Nature = m.Nature,
-                Description = m.Description,
                 Created = m.Created.ToString(),
-                Modified = m.Modified.ToString()
+                Modified = m.Modified.ToString(),
+                SequenceType = m.SequenceType.GetDisplayValue(),
+                Group = m.Group.GetDisplayValue(),
+                m.Nature,
+                m.Description
             });
         }
 
@@ -106,10 +110,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Value = m.Id,
                 Text = m.Name,
                 Selected = false,
-                Nature = m.Nature,
-                Description = m.Description,
                 Created = m.Created.ToString(),
-                Modified = m.Modified.ToString()
+                Modified = m.Modified.ToString(),
+                SequenceType = m.SequenceType.GetDisplayValue(),
+                Group = m.Group.GetDisplayValue(),
+                m.Nature,
+                m.Description
             });
         }
 

@@ -30,14 +30,14 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature()
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature()
         {
-            return remoteDbs.Select(n => new
+            return remoteDbs.Select(n => new SelectListItemWithNature
             {
-                Value = n.Id,
+                Value = n.Id.ToString(),
                 Text = n.Name,
                 Selected = false,
-                Nature = n.Nature
+                Nature = (byte)n.Nature
             });
         }
 
@@ -50,14 +50,14 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<object> GetSelectListWithNature(int selectedDb)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(int selectedDb)
         {
-            return remoteDbs.Select(n => new
+            return remoteDbs.Select(n => new SelectListItemWithNature
             {
-                Value = n.Id,
+                Value = n.Id.ToString(),
                 Text = n.Name,
                 Selected = n.Id == selectedDb,
-                Nature = n.Nature
+                Nature = (byte)n.Nature
             });
         }
 

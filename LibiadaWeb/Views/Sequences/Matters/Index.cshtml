@@ -27,6 +27,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Nature)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SequenceType)
+        </th>
         @if (UserHelper.IsAdmin())
         {
             <th></th>
@@ -49,6 +55,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nature)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Group)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SequenceType)
             </td>
             @if (UserHelper.IsAdmin())
             {

@@ -14,6 +14,17 @@
             <input type="text" class="form-control" placeholder="Filter by description" ng-model="searchDescription"/>
         </th>
         <th>
+            <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }">
+                <option value="">-- All groups --</option>
+            </select>
+            
+        </th>
+        <th>
+            <select class="form-control" ng-model="sequenceType" ng-options="s.Value as s.Text for s in sequenceTypes | filter:{ Nature: nature }">
+                <option value="">-- All sequence types --</option>
+            </select>
+        </th>
+        <th>
         </th>
         <th>
         </th>
@@ -29,6 +40,12 @@
             @(Html.DisplayNameFor(model => model.Description))
         </th>
         <th>
+            @(Html.DisplayNameFor(model => model.Group))
+        </th>
+        <th>
+            @(Html.DisplayNameFor(model => model.SequenceType))
+        </th>
+        <th>
             @(Html.DisplayNameFor(model => model.Created))
         </th>
         <th>
@@ -37,7 +54,9 @@
     </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{ Nature: nature }" ng-show="([matter] | filter:{ Text: searchMatter} | filter: { Description: searchDescription }).length > 0" ng-cloak>
+        <tr ng-repeat="matter in matters | filter:{ Nature: nature }"
+            ng-show="([matter] | filter:{ Text: searchMatter} | filter: { Description: searchDescription } | filter: { Group: group || '' } | filter: { SequenceType: sequenceType || '' }).length > 0"
+            ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>
@@ -48,6 +67,8 @@
                 </label>
             </td>
             <td ng-bind="matter.Description" />
+            <td ng-bind="matter.Group" />
+            <td ng-bind="matter.SequenceType" />
             <td ng-bind="matter.Created" />
             <td ng-bind="matter.Modified" />
         </tr>
