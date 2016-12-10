@@ -25,22 +25,10 @@
     public class SubsequencesComparerController : AbstractResultController
     {
         /// <summary>
-        /// The subsequence extractor.
-        /// </summary>
-        //private readonly SubsequenceExtractor subsequenceExtractor;
-
-        /// <summary>
-        /// The characteristic type repository.
-        /// </summary>
-        //private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
         public SubsequencesComparerController() : base("Subsequences comparer")
         {
-            //subsequenceExtractor = new SubsequenceExtractor(db);
-            //characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -69,17 +57,11 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
-        /// The notation id.
-        /// </param>
         /// <param name="featureIds">
         /// The feature ids.
         /// </param>
-        /// <param name="maxDifference">
+        /// <param name="maxPercentageDifference">
         /// The precision.
-        /// </param>
-        /// <param name="excludeType">
-        /// The exclude type
         /// </param>
         /// <param name="characteristicValueFrom">
         /// Minimum value for calculating characteristic
@@ -187,18 +169,12 @@
                         {
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
                             {
-                                // if (excludeType == "Exclude")
-                                // {
-                                //     allSubsequencesCharacteristics[i][k] = double.NaN;
-                                //     allSubsequencesCharacteristics[j][l] = double.NaN;
-                                // }
-
                                 double first = characteristics[i][k].CharacteristicsValues[0];
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
                                 double difference = Math.Abs(first - second) / ((first + second) / 2);
 
-                                if (difference <= percentageDifference)
+                                if (difference <= percentageDifference / 100)
                                 {
                                     if (i != j)
                                     {

@@ -80,7 +80,7 @@
                         <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
                         <br />
                         <br />
-                        <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}}</i>
+                        <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>
                     </td>
                 </tr>
                 <tr ng-show="elementVisible(equalElement)">
