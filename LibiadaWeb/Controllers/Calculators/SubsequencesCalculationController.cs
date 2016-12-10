@@ -41,7 +41,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(1, int.MaxValue, "Calculate"));
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(1, int.MaxValue, "Calculate"));
             }
 
             return View();

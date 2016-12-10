@@ -41,7 +41,7 @@
                                     || c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToArray();
 
                 var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.FillMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
+                var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
                 data.Add("nature", (byte)Nature.Genetic);
                 ViewBag.data = JsonConvert.SerializeObject(data);
             }

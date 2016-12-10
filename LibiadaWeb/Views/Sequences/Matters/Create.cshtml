@@ -69,9 +69,27 @@
             </div>
         </div>
         <div class="form-group">
+            @Html.LabelFor(model => model.Matter.Group, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"></select>
+                <input type="hidden" name="Group" ng-value="group" />
+                @Html.ValidationMessageFor(model => model.Matter.Group, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Matter.SequenceType, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select class="form-control" ng-model="sequenceType" ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"></select>
+                <input type="hidden" name="SequenceType" ng-value="sequenceType" />
+                @Html.ValidationMessageFor(model => model.Matter.SequenceType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
             @Html.LabelFor(model => model.RemoteDbId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbs | filter: { Nature: nature }"></select>
+                <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbs | filter: { Nature: nature }">
+                    <option value="">None</option>
+                </select>
                 <input type="hidden" name="RemoteDbId" ng-value="remoteDbId" />
                 @Html.ValidationMessageFor(model => model.RemoteDbId, "", new { @class = "text-danger" })
             </div>
@@ -116,7 +134,9 @@
                 <div class="form-group" ng-hide="original">
                     <label class="control-label col-md-2" for="translatorId">Translator:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translatorId"></select>
+                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translatorId">
+                            <option value="">None</option>
+                        </select>
                         <input type="hidden" name="translatorId" ng-value="translatorId" />
                         @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
                     </div>

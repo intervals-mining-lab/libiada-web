@@ -54,7 +54,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var viewDataHelper = new ViewDataHelper(db);
-                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.GetSubsequencesViewData(2, int.MaxValue, "Compare"));
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillSubsequencesViewData(2, int.MaxValue, "Compare"));
             }
 
             return View();

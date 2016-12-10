@@ -61,7 +61,7 @@
             var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId).ToArray();
 
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
+            var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
             data.Add("nature", (byte)Nature.Genetic);
             ViewBag.data = JsonConvert.SerializeObject(data);
             return View();

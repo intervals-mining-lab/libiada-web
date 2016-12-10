@@ -7,12 +7,8 @@
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web.Mvc;
-    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Account;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -53,26 +49,6 @@
         private readonly DataSequenceRepository dataSequenceRepository;
 
         /// <summary>
-        /// The feature repository.
-        /// </summary>
-        private readonly FeatureRepository featureRepository;
-
-        /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
-        /// The remote db repository.
-        /// </summary>
-        private readonly RemoteDbRepository remoteDbRepository;
-
-        /// <summary>
-        /// The matter repository.
-        /// </summary>
-        private readonly MatterRepository matterRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
         protected SequencesMattersController() : base("Sequence upload")
@@ -82,10 +58,6 @@
             literatureSequenceRepository = new LiteratureSequenceRepository(Db);
             musicSequenceRepository = new MusicSequenceRepository(Db);
             dataSequenceRepository = new DataSequenceRepository(Db);
-            featureRepository = new FeatureRepository(Db);
-            notationRepository = new NotationRepository(Db);
-            remoteDbRepository = new RemoteDbRepository(Db);
-            matterRepository = new MatterRepository(Db);
         }
 
         /// <summary>
@@ -96,37 +68,8 @@
         /// </returns>
         public ActionResult Create()
         {
-            var translators = new SelectList(Db.Translator, "id", "name").ToList();
-            translators.Add(new SelectListItem { Value = null, Text = "Нет" });
-
-            IEnumerable<object> notations;
-            IEnumerable<object> features;
-            IEnumerable<SelectListItem> natures;
-
-            if (UserHelper.IsAdmin())
-            {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = notationRepository.GetSelectListWithNature();
-                features = featureRepository.GetSelectListWithNature();
-            }
-            else
-            {
-                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
-                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
-                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
-            }
-
-            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
-                {
-                    { "matters", matterRepository.GetMatterSelectList() },
-                    { "natures", natures },
-                    { "notations", notations },
-                    { "features", features },
-                    { "languages", new SelectList(Db.Language, "id", "name") },
-                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
-                    { "translators", translators },
-                    { "natureLiterature", (byte)Nature.Literature }
-                });
+            var viewDataHelper = new ViewDataHelper(Db);
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationData());
 
             return View();
         }
@@ -175,87 +118,45 @@
             {
                 try
                 {
-                    string errorMessage = string.Empty;
-                    if (ModelState.IsValid)
+                    if (!ModelState.IsValid)
                     {
-                        Stream sequenceStream;
-                        var nature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
-                        if (nature == Nature.Genetic && !localFile)
-                        {
-                            sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
-                        }
-                        else
-                        {
-                            sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
-                        }
-
-                        switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature)
-                        {
-                            case Nature.Genetic:
-                                var bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                                dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
-                                break;
-                            case Nature.Music:
-                                musicSequenceRepository.Create(commonSequence, sequenceStream);
-                                break;
-                            case Nature.Literature:
-                                literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
-                                break;
-                            case Nature.MeasurementData:
-                                dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
-                                break;
-                            default:
-                                throw new Exception("Unknown nature.");
-                        }
-
-                        return new Dictionary<string, object>
-                        {
-                            { "matterName", commonSequence.Matter.Name }
-                        };
+                        throw new Exception("Model state is invalid");
                     }
 
-                    var translators = new SelectList(Db.Translator, "id", "name").ToList();
-                    translators.Add(new SelectListItem { Value = null, Text = "Нет" });
-
-                    var remoteDbs = commonSequence.RemoteDbId.HasValue
-                        ? remoteDbRepository.GetSelectListWithNature(commonSequence.RemoteDbId.Value)
-                        : remoteDbRepository.GetSelectListWithNature();
-
-                    var sequenceNature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
-
-                    IEnumerable<SelectListItem> natures;
-                    IEnumerable<object> notations;
-                    IEnumerable<object> features;
-
-                    if (UserHelper.IsAdmin())
+                    Stream sequenceStream;
+                    var nature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
+                    if (nature == Nature.Genetic && !localFile)
                     {
-                        natures = EnumHelper.GetSelectList(typeof(Nature), sequenceNature);
-                        notations = notationRepository.GetSelectListWithNature(commonSequence.NotationId);
-                        features = featureRepository.GetSelectListWithNature();
+                        sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
                     }
                     else
                     {
-                        natures = new List<Nature> { Nature.Genetic }.ToSelectList(sequenceNature);
-                        notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide }, commonSequence.NotationId);
-                        features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA }, commonSequence.FeatureId);
+                        sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
 
-                    var result = new Dictionary<string, object>
+                    switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature)
                     {
-                        { "ErrorMessage", errorMessage },
-                        { "matters", matterRepository.GetMatterSelectList(commonSequence.MatterId) },
-                        { "natures", natures },
-                        { "notations", notations },
-                        { "features", features },
-                        { "languages", new SelectList(Db.Language, "id", "name", languageId) },
-                        { "remoteDbs", remoteDbs },
-                        { "nature", (byte)sequenceNature },
-                        { "translators", translators },
-                        { "natureLiterature", (byte)Nature.Literature },
-                        { "commonSequence", commonSequence }
-                    };
+                        case Nature.Genetic:
+                            var bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                            dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
+                            break;
+                        case Nature.Music:
+                            musicSequenceRepository.Create(commonSequence, sequenceStream);
+                            break;
+                        case Nature.Literature:
+                            literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
+                            break;
+                        case Nature.MeasurementData:
+                            dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
+                            break;
+                        default:
+                            throw new Exception("Unknown nature.");
+                    }
 
-                    return result;
+                    return new Dictionary<string, object>
+                        {
+                            { "matterName", commonSequence.Matter.Name }
+                        };
                 }
                 catch (Exception)
                 {

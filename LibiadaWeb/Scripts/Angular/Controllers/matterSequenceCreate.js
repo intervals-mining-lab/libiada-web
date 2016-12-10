@@ -5,7 +5,7 @@
         MapModelFromJson($scope, data);
 
         function filterByNature() {
-            var arraysForFiltration = ["notations", "features", "remoteDbs", "matters"];
+            var arraysForFiltration = ["notations", "features", "remoteDbs", "matters", "groups", "sequenceTypes"];
 
             arraysForFiltration.forEach(function (arrayName) {
                 if (angular.isDefined($scope[arrayName])) {
@@ -15,6 +15,8 @@
 
             $scope.notationId = $scope.notationsFiltered[0].Value;
             $scope.featureId = $scope.featuresFiltered[0].Value;
+            $scope.group = $scope.groupsFiltered[0].Value;
+            $scope.sequenceType = $scope.sequenceTypesFiltered[0].Value;
             if (angular.isDefined($scope.mattersFiltered) && angular.isDefined($scope.mattersFiltered[0])) {
                 $scope.matterId = $scope.mattersFiltered[0].Value;
             }

@@ -9,7 +9,6 @@
 
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
-    using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -47,6 +46,11 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
+        /// The remote db repository.
+        /// </summary>
+        private readonly RemoteDbRepository remoteDbRepository;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
@@ -59,6 +63,7 @@
             notationRepository = new NotationRepository(db);
             featureRepository = new FeatureRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -79,9 +84,8 @@
         public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Insert(0, new SelectListItem { Value = null, Text = "Not applied" });
 
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
+            var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<object> notations;
@@ -146,7 +150,7 @@
         }
 
         /// <summary>
-        /// The get subsequences calculation data.
+        /// Fills subsequences calculation data dictionary.
         /// </summary>
         /// <param name="minimumSelectedMatters">
         /// The minimum Selected Matters.
@@ -160,14 +164,14 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
+        public Dictionary<string, object> FillSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
             var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
 
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = FillMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
+            var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
             var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
@@ -189,7 +193,7 @@
         }
 
         /// <summary>
-        /// The get characteristic types.
+        /// Gets characteristics types.
         /// </summary>
         /// <param name="filter">
         /// The filter.
@@ -240,7 +244,7 @@
         }
 
         /// <summary>
-        /// The fill matters data.
+        /// Fills matters data dictionary.
         /// </summary>
         /// <param name="minimumSelectedMatters">
         /// The minimum selected matters.
@@ -257,7 +261,7 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillMattersData(int minimumSelectedMatters, int maximumSelectedMatters, Func<Matter, bool> filter, string submitName)
+        public Dictionary<string, object> GetMattersData(int minimumSelectedMatters, int maximumSelectedMatters, Func<Matter, bool> filter, string submitName)
         {
             var radiobuttonsForMatters = maximumSelectedMatters == 1 && minimumSelectedMatters == 1;
 
@@ -269,6 +273,59 @@
                     { "radiobuttonsForMatters", radiobuttonsForMatters },
                     { "submitName", submitName }
                 };
+        }
+
+        /// <summary>
+        /// Fills matter creation data.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillMatterCreationData()
+        {
+            var translators = new SelectList(db.Translator, "id", "name").ToList();
+
+            IEnumerable<object> notations;
+            IEnumerable<object> features;
+            IEnumerable<SelectListItem> natures;
+            IEnumerable<SelectListItemWithNature> sequenceTypes;
+            IEnumerable<SelectListItemWithNature> groups;
+
+            if (UserHelper.IsAdmin())
+            {
+                natures = EnumHelper.GetSelectList(typeof(Nature));
+                notations = notationRepository.GetSelectListWithNature();
+                features = featureRepository.GetSelectListWithNature();
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                groups = EnumExtensions.ToArray<Group>()
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+            }
+            else
+            {
+                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
+                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                groups = EnumExtensions.ToArray<Group>()
+                    .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+            }
+
+            return new Dictionary<string, object>
+                           {
+                                   { "matters", matterRepository.GetMatterSelectList() },
+                                   { "natures", natures },
+                                   { "notations", notations },
+                                   { "features", features },
+                                   { "languages", new SelectList(db.Language, "id", "name") },
+                                   { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
+                                   { "translators", translators },
+                                   { "sequenceTypes", sequenceTypes },
+                                   { "groups", groups }
+                           };
         }
     }
 }
