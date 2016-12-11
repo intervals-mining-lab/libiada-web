@@ -18,6 +18,7 @@
     /// <summary>
     /// The custom sequence order transformer controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class CustomSequenceOrderTransformerController : AbstractResultController
     {
         /// <summary>

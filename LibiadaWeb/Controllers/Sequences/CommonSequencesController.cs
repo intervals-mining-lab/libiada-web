@@ -8,7 +8,7 @@
     /// <summary>
     /// The common sequences controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CommonSequencesController : SequencesMattersController
     {
         /// <summary>

@@ -21,6 +21,7 @@
     /// <summary>
     /// The order transformation calculation controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class OrderTransformationCalculationController : AbstractResultController
     {
         /// <summary>

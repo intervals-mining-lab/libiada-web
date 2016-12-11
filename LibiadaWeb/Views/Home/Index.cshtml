@@ -40,6 +40,8 @@
             <br />
             @Html.ActionLink("Calculation of integral characteristics of custom sequences", "Index", "CustomSequenceCalculation")
             <br />
+            @Html.ActionLink("Genes map (Subsequences distribution)", "Index", "SubsequencesDistribution")
+            <br />
             @if (UserHelper.IsAdmin())
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
@@ -49,8 +51,6 @@
                 @Html.ActionLink("Alignment of sequences", "Index", "SequencesAlignment")
                 <br />
                 @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
-                <br />
-                @Html.ActionLink("Genes map (Subsequences distribution)", "Index", "SubsequencesDistribution")
                 <br />
                 @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
                 <br />
@@ -67,7 +67,6 @@
                 @Html.ActionLink("Custom sequences order transformation (high order) characteristics calculation", "Index", "CustomSequenceOrderTransformationCalculation")
                 <br />
                 @Html.ActionLink("Order comparison", "Index", "BuildingsSimilarity")
-                
                 <br />
                 @Html.ActionLink("Data visualization", "Index", "Charts")
             }

@@ -21,7 +21,7 @@
     /// <summary>
     /// The subsequences distribution controller.
     /// </summary>
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SubsequencesDistributionController : AbstractResultController
     {
         /// <summary>

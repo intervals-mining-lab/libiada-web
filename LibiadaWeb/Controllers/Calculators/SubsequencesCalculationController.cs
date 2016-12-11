@@ -12,10 +12,10 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
-    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences calculation controller.

@@ -5,6 +5,7 @@
     /// <summary>
     /// The charts controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class ChartsController : Controller
     {
         /// <summary>

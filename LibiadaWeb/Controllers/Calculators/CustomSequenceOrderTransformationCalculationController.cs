@@ -22,6 +22,7 @@
     /// <summary>
     /// The custom sequence order transformation calculation controller.
     /// </summary>
+    [Authorize(Roles = "Admin")]
     public class CustomSequenceOrderTransformationCalculationController : AbstractResultController
     {
         /// <summary>
