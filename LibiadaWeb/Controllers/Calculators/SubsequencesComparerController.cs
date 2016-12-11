@@ -144,7 +144,7 @@
                     characteristics[i] = subsequencesData;
                 }
 
-                double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture);
+                double decimalDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
 
                 var similarities = new object[mattersCount, mattersCount];
 
@@ -156,7 +156,6 @@
                     for (int j = 0; j < characteristics.Length; j++)
                     {
                         comparisonNumber++;
-                        int similarSubsequencesCount = 0;
 
                         double similarSequencesCharacteristicValue = 0;
                         double similarFirstSequencesCharacteristicValue = 0;
@@ -165,6 +164,10 @@
                         int secondArrayStartPosition = 0;
                         double differenceSum = 0;
 
+                        int equalElementsCountFromFirst = 0;
+                        Dictionary<int, int> equalElementsCountFromSecond = new Dictionary<int, int>();
+                        bool equalFound = false;
+
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
@@ -172,10 +175,24 @@
                                 double first = characteristics[i][k].CharacteristicsValues[0];
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
-                                double difference = Math.Abs(first - second) / ((first + second) / 2);
+                                double difference = calculateAverageDifference(first, second);
+                                bool nextElementInSecondArrayIsEqual = false;
 
-                                if (difference <= percentageDifference / 100)
+                                if (l < characteristics[j].Length - 1)
                                 {
+                                    nextElementInSecondArrayIsEqual = calculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) < decimalDifference;
+                                }
+
+                                if (difference <= decimalDifference)
+                                {
+                                    equalFound = true;
+
+                                    if (!equalElementsCountFromSecond.ContainsKey(l))
+                                    {
+                                        equalElementsCountFromSecond.Add(l, 1);
+                                        differenceSum += difference;
+                                    }
+
                                     if (i != j)
                                     {
                                         equalElements.Add(new SubsequenceComparisonData
@@ -187,27 +204,33 @@
                                             SecondSubsequenceId = l,
                                         });
                                     }
-
-                                    differenceSum += difference;
-                                    similarSubsequencesCount++;
+                                    
                                     similarSequencesCharacteristicValue += first + second;
                                     similarFirstSequencesCharacteristicValue += first;
                                     similarSecondSequencesCharacteristicValue += second;
 
-                                    secondArrayStartPosition++;
-                                    break;
+                                    if (!nextElementInSecondArrayIsEqual)
+                                    {
+                                        break;
+                                    }
                                 }
-
-                                if (second < first)
+                                else if (second < first)
                                 {
                                     secondArrayStartPosition++;
-                                    break;
                                 }
+                            }
+
+                            if (equalFound)
+                            {
+                                equalElementsCountFromFirst++;
                             }
                         }
 
-                        double formula1 = similarSubsequencesCount * 2d / (subsequencesCount[i] + subsequencesCount[j]);
-                        double formula2 = (differenceSum / similarSubsequencesCount) / formula1;
+                        double differenceSecondFinal = equalElementsCountFromSecond.Sum(s => s.Value);
+                        double differenceFinal = equalElementsCountFromFirst < differenceSecondFinal ? equalElementsCountFromFirst * 2d : differenceSecondFinal * 2d;
+
+                        double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
+                        double formula2 = (differenceSum / (equalElementsCountFromFirst + differenceSecondFinal)) / formula1;
                         double formula3 = similarSequencesCharacteristicValue * 100d / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
 
                         similarities[i, j] = new
@@ -236,6 +259,11 @@
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });
+        }
+
+        private double calculateAverageDifference(double first, double second)
+        {
+            return Math.Abs(first - second) / ((first + second) / 2);
         }
     }
 }
