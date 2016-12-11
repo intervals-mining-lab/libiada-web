@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
     using System.Net;
@@ -7,7 +8,11 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The matters controller.
@@ -80,7 +85,29 @@
                 return HttpNotFound();
             }
 
-            ViewBag.Nature = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
+            var groups = EnumExtensions.ToArray<Group>()
+                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = ((byte)g).ToString(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = ((byte)st).ToString(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+
+            ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
+                                                           {
+                                                                   { "natures", EnumHelper.GetSelectList(typeof(Nature), matter.Nature) },
+                                                                   { "groups", groups },
+                                                                   { "sequenceTypes", sequenceTypes },
+                                                                   { "matter", new
+                                                                                   {
+                                                                                       matter.Id,
+                                                                                       matter.Name,
+                                                                                       matter.Description,
+                                                                                       Nature = ((byte)matter.Nature).ToString(),
+                                                                                       Group = ((byte)matter.Group).ToString(),
+                                                                                       SequenceType = ((byte)matter.SequenceType).ToString()
+                                                                                   }
+                                                                    }
+                                                           });
+
+
             return View(matter);
         }
 
@@ -95,7 +122,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,Description")] Matter matter)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,Description,Group,SequenceType")] Matter matter)
         {
             if (ModelState.IsValid)
             {

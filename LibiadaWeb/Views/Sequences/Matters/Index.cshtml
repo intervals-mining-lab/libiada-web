@@ -1,4 +1,5 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
+@using LibiadaWeb.Models.Account
 @model IEnumerable<Matter>
 
 @{
@@ -54,13 +55,13 @@
                 @Html.DisplayFor(modelItem => item.Modified)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nature)
+                @item.Nature.GetDisplayValue()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Group)
+                @item.Group.GetDisplayValue()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SequenceType)
+                @item.SequenceType.GetDisplayValue()
             </td>
             @if (UserHelper.IsAdmin())
             {

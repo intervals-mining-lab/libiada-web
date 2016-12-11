@@ -548,7 +548,8 @@
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\charts.js" />
-    <Content Include="Scripts\Angular\Controllers\LocalCalculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
+    <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />

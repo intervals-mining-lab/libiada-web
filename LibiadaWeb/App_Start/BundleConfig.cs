@@ -67,6 +67,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/LocalCalculationResultController").Include(
                         "~/Scripts/Angular/Controllers/localCalculationResult.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/MatterEditController").Include(
+                        "~/Scripts/Angular/Controllers/matterEdit.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
