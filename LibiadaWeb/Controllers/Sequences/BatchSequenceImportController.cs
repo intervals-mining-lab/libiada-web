@@ -102,7 +102,9 @@
                                              {
                                                  Name = savedMatterNames[i],
                                                  Nature = Nature.Genetic,
-                                                 Description = featureRepository.GetFeatureById(sequenceFeature).Name
+                                                 Description = featureRepository.GetFeatureById(sequenceFeature).Name,
+                                                 Group = GroupRepository.ExtractSequenceGroup(savedMatterNames[i]),
+                                                 SequenceType = SequenceTypeRepsitory.ExtractSequenceGroup(savedMatterNames[i])
                                              };
 
                             var sequence = new CommonSequence

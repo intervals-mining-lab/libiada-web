@@ -65,7 +65,7 @@
         ChloroplastGenome = 7,
 
         /// <summary>
-        /// The rrn a 16 s.
+        /// The rRNA 16s.
         /// </summary>
         [Display(Name = "16S ribosomal RNA")]
         [Description("")]
@@ -73,7 +73,7 @@
         RRNA16S = 8,
 
         /// <summary>
-        /// The rrn a 18 s.
+        /// The rRNA 18s.
         /// </summary>
         [Display(Name = "18S ribosomal RNA")]
         [Description("")]
@@ -81,11 +81,19 @@
         RRNA18S = 9,
 
         /// <summary>
-        /// The mitochondrion 16 srrna.
+        /// The mitochondrion 16s rRNA.
         /// </summary>
         [Display(Name = "Mitochondrion 16S ribosomal RNA")]
         [Description("")]
         [Nature(Nature.Genetic)]
-        Mitochondrion16SRRNA = 10
+        Mitochondrion16SRRNA = 10,
+
+        /// <summary>
+        /// Complete plastid genome.
+        /// </summary>
+        [Display(Name = "Plastid")]
+        [Description("")]
+        [Nature(Nature.Genetic)]
+        Plastid = 11
     }
 }

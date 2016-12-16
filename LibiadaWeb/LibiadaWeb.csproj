@@ -355,6 +355,8 @@
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
+    <Compile Include="Models\Repositories\Catalogs\GroupRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\SequenceTypeRepsitory.cs" />
     <Compile Include="Models\SelectListItemWithNature.cs" />
     <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
