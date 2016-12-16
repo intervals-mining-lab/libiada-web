@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var scrollerUp = false;
+    var scrolledUp = false;
     var scrolledDown = false;
     var savedPosition = 0;
 
@@ -8,7 +8,7 @@
         if (scrolledDown) {
             $('html, body').animate({ scrollTop: savedPosition }, 800);
             scrolledDown = false;
-            scrollerUp = false;
+            scrolledUp = false;
         } else {
             savedPosition = window.pageYOffset || document.documentElement.scrollTop;
             $('html, body').animate({ scrollTop: $('body').height() }, 800);
@@ -19,14 +19,14 @@
     );
     $('#buttonScrollUp').click(
     function (e) {
-        if (scrollerUp) {
+        if (scrolledUp) {
             $('html, body').animate({ scrollTop: savedPosition }, 800);
             scrolledDown = false;
-            scrollerUp = false;
+            scrolledUp = false;
         } else {
             savedPosition = window.pageYOffset || document.documentElement.scrollTop;
             $('html, body').animate({ scrollTop: '0px' }, 800);
-            scrollerUp = true;
+            scrolledUp = true;
         }
         
     }
