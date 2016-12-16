@@ -1,21 +1,34 @@
 ﻿$(function () {
-    var $elem = $('#scrollUpDown');
-
-    $(window).bind('scrollstart', function () {
-        $('#buttonScrollUp,#buttonScrollDown').stop().animate({ 'opacity': '0.2' });
-    });
-    $(window).bind('scrollstop', function () {
-        $('#buttonScrollUp,#buttonScrollDown').stop().animate({ 'opacity': '1' });
-    });
+    var scrollerUp = false;
+    var scrolledDown = false;
+    var savedPosition = 0;
 
     $('#buttonScrollDown').click(
     function (e) {
-        $('html, body').animate({ scrollTop: $('body').height() }, 800);
+        if (scrolledDown) {
+            $('html, body').animate({ scrollTop: savedPosition }, 800);
+            scrolledDown = false;
+            scrollerUp = false;
+        } else {
+            savedPosition = window.pageYOffset || document.documentElement.scrollTop;
+            $('html, body').animate({ scrollTop: $('body').height() }, 800);
+            scrolledDown = true;
+        }
+        
     }
     );
     $('#buttonScrollUp').click(
     function (e) {
-        $('html, body').animate({ scrollTop: '0px' }, 800);
+        if (scrollerUp) {
+            $('html, body').animate({ scrollTop: savedPosition }, 800);
+            scrolledDown = false;
+            scrollerUp = false;
+        } else {
+            savedPosition = window.pageYOffset || document.documentElement.scrollTop;
+            $('html, body').animate({ scrollTop: '0px' }, 800);
+            scrollerUp = true;
+        }
+        
     }
     );
 });

@@ -84,4 +84,8 @@ input[type="checkbox"].input-validation-error {
   font-family: monospace;
 }
 
+.arrow-button {
+    fill: #337ab7;
+}
+
 
