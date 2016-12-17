@@ -5,7 +5,7 @@
 }
 
 @Html.Partial("_AngularControllerInitializer", "TaskManagerController")
-
+<script src="~/signalr/hubs"></script>
 <h2>@ViewBag.Title</h2>
 
 <div ng-app="TaskManager" ng-controller="TaskManagerCtrl">

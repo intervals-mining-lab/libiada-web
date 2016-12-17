@@ -22,7 +22,11 @@ namespace LibiadaWeb
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
-            app.MapSignalR("/TaskManagerWS", new HubConfiguration());
+
+            app.MapSignalR();
+
+            // Requiring auth for all signalR hubs
+            GlobalHost.HubPipeline.RequireAuthentication();
         }
     }
 }
