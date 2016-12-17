@@ -92,6 +92,7 @@
                         "~/Scripts/Angular/Controllers/subsequencesDistributionResult.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/TaskManagerController").Include(
+                        "~/Scripts/jquery.signalR-{version}.js",
                         "~/Scripts/Angular/Controllers/taskManager.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/ChartsController").Include(
@@ -104,10 +105,7 @@
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",
                         "~/Content/site.css",
-                        "~/Content/scrollupdown.css"));
-
-            bundles.Add(new StyleBundle("~/Content/slider").Include(
-                        "~/Content/themes/JQAllRange/iThing.css"));
+                        "~/Content/scrollUpDown.css"));
 
             // BundleTable.EnableOptimizations = true;
         }

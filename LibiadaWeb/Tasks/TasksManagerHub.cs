@@ -1,14 +1,11 @@
 ﻿namespace LibiadaWeb.Tasks
 {
-    using LibiadaWeb.Models;
+    using System;
+
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models;
 
     using Microsoft.AspNet.SignalR;
-
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
 
     /// <summary>
     /// SignalR messages hub class.
@@ -24,9 +21,10 @@
         /// <param name="task">
         /// Task itself.
         /// </param>
-        public void Send(TaskEvent taskEvent, TaskData task)
+        public static void Send(TaskEvent taskEvent, TaskData task)
         {
-            // Clients.All.broadcastMessage(name, message);
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<TasksManagerHub>();
+
             lock (task)
             {
                 var result = new
@@ -42,9 +40,16 @@
                     task.UserId,
                     task.UserName
                 };
-                var context = GlobalHost.ConnectionManager.GetHubContext<TasksManagerHub>();
-                context.Clients.All.TaskEvent(taskEvent.ToString(), result);
+
+                hubContext.Clients.All.TaskEvent(taskEvent.ToString(), result);
             }
+        }
+
+        /// <summary>
+        /// Called by clients on connect.
+        /// </summary>
+        public void GetAllTasks()
+        {
         }
     }
 }
