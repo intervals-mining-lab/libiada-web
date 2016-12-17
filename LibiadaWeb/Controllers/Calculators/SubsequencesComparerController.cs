@@ -169,6 +169,8 @@
                         Dictionary<int, int> equalElementsCountFromSecond = new Dictionary<int, int>();
                         bool equalFound = false;
 
+                        int equalPairsCount = 0;
+
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
@@ -181,12 +183,13 @@
 
                                 if (l < characteristics[j].Length - 1)
                                 {
-                                    nextElementInSecondArrayIsEqual = calculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) < decimalDifference;
+                                    nextElementInSecondArrayIsEqual = calculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
                                 }
 
                                 if (difference <= decimalDifference)
                                 {
                                     equalFound = true;
+                                    equalPairsCount++;
 
                                     if (!equalElementsCountFromSecond.ContainsKey(l))
                                     {
@@ -231,7 +234,13 @@
                         double differenceFinal = equalElementsCountFromFirst < differenceSecondFinal ? equalElementsCountFromFirst * 2d : differenceSecondFinal * 2d;
 
                         double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
-                        double formula2 = (differenceSum / (equalElementsCountFromFirst + differenceSecondFinal)) / formula1;
+
+                        double formula2 = 0;
+                        if (equalPairsCount != 0 && formula1 != 0)
+                        {
+                            formula2 = (differenceSum / equalPairsCount) / formula1;
+                        }
+
                         double formula3 = similarSequencesCharacteristicValue * 100d / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
 
                         similarities[i, j] = new
