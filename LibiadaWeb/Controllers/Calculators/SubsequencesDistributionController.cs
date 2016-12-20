@@ -141,12 +141,10 @@
                             calculators,
                             links,
                             attributeValues);
-                        subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();
                         sequenceData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
                     }
 
                     // sorting organisms by their characteristic
-                    // TODO: move it to client
                     sequenceData = sequenceData.OrderBy(r => r.Characteristic).ToArray();
 
                     var resultData = new Dictionary<string, object>

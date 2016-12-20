@@ -288,7 +288,15 @@
         function drawGenesMap() {
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
-            d3.select("svg").remove();
+            d3.select(".genes-map-svg").remove();
+
+            // sorting points by selected characteristic
+            $scope.points.sort(function (first, second) {
+                return $scope.yValue(second) - $scope.yValue(first);
+            });
+            $scope.visiblePoints.sort(function (first, second) {
+                return $scope.yValue(second) - $scope.yValue(first);
+            });
 
             // all organisms are visible after redrawing
             $scope.points.forEach(function (point) {
@@ -326,6 +334,7 @@
             var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.hight)
+                .attr("class", "genes-map-svg")
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
