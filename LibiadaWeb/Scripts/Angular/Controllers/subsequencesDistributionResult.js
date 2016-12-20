@@ -2,30 +2,18 @@
     "use strict";
 
     function subsequencesDistributionResult($scope, $http) {
-        var loadingModalWindow = $("#loadingDialog");
-        loadingModalWindow.modal("show");
 
-        var location = window.location.href.split("/");
-        $scope.taskId = location[location.length - 1];
-        $scope.loading = true;
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
+        // shows modal window with progressbar and given text
+        function showModalLoadingWindow(headerText) {
+            $scope.loadingScreenHeader = headerText;
+            $scope.loadingModalWindow.modal("show");
+            $scope.loading = true;
+        }
 
-            $scope.legendHeight = $scope.result.length * 20;
-            $scope.hight = 800 + $scope.legendHeight;
-            $scope.width = 800;
-            $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
-
-            $scope.fillPoints();
-            $scope.addCharacteristicComparer();
+        function hideModalLoadingWindow() {
             $scope.loading = false;
-            loadingModalWindow.modal("hide");
-        }).error(function (data) {
-            alert("Failed loading genes map data");
-        });
+            $scope.loadingModalWindow.modal("hide");
+        }
 
         // adds new characteristics value based filter
         function addCharacteristicComparer() {
@@ -121,26 +109,20 @@
         // filters dots by subsequences feature
         function filterByFeature(feature) {
             d3.selectAll(".dot")
-                .filter(function (dot) { return dot.featureId === feature.Value; })
+                .filter(function (dot) {
+                    return dot.featureId === parseInt(feature.Value);
+                })
                 .attr("visibility", function (d) {
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
-
-            if (feature.Selected) { // adding new visible poins
-                for (var i = 0; i < $scope.points.length; i++) {
-                    if ($scope.points[i].featureId === feature.Value) {
-                        $scope.visiblePoints.push($scope.points[i]);
-                    }
-                }
-            } else { // removing not visible points
-                for (var j = 0; j < $scope.visiblePoints.length; j++) {
-                    if ($scope.visiblePoints[j].featureId === feature.Value) {
-                        $scope.visiblePoints.splice($scope.visiblePoints.indexOf($scope.visiblePoints[j]), 1);
-                        j--;
-                    }
+           
+            for (var i = 0; i < $scope.points.length; i++) {
+                if ($scope.points[i].featureId === parseInt(feature.Value)) {
+                    $scope.points[i].featureVisible = feature.Selected;
                 }
             }
+            $scope.fillVisiblePoints();
         }
 
         // checks if dot is visible
@@ -286,6 +268,7 @@
 
         // main drawing method
         function drawGenesMap() {
+            $scope.showModalLoadingWindow("Drawing...");
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
             d3.select(".genes-map-svg").remove();
@@ -500,6 +483,7 @@
                     e.preventDefault();
                 }
             }, false);
+            $scope.hideModalLoadingWindow();
         }
 
         $scope.setCheckBoxesState = SetCheckBoxesState;
@@ -521,6 +505,8 @@
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
         $scope.getProductAttributeId = getProductAttributeId;
+        $scope.showModalLoadingWindow = showModalLoadingWindow;
+        $scope.hideModalLoadingWindow = hideModalLoadingWindow;
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
@@ -530,6 +516,30 @@
         $scope.characteristicComparers = [];
         $scope.filters = [];
         $scope.productFilter = "";
+        $scope.loadingModalWindow = $("#loadingDialog");
+
+        $scope.showModalLoadingWindow("Loading genes map data");
+
+        var location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
+
+        $http({
+            url: "/api/TaskManagerWebApi/" + $scope.taskId,
+            method: "GET"
+        }).success(function (data) {
+            MapModelFromJson($scope, JSON.parse(data));
+
+            $scope.legendHeight = $scope.result.length * 20;
+            $scope.hight = 800 + $scope.legendHeight;
+            $scope.width = 800;
+            $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+
+            $scope.fillPoints();
+            $scope.addCharacteristicComparer();
+            $scope.hideModalLoadingWindow();
+        }).error(function (data) {
+            alert("Failed loading genes map data");
+        });
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);

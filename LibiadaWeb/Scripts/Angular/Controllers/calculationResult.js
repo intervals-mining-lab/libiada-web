@@ -2,9 +2,14 @@
     "use strict";
 
     function calculationResult($scope, $http) {
+        var loadingModalWindow = $("#loadingDialog");
+        $scope.loadingScreenHeader = "Loading data";
+        loadingModalWindow.modal("show");
+        $scope.loading = true;
+
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
-        $scope.loading = true;
+
         $http({
             url: "/api/TaskManagerWebApi/" + $scope.taskId,
             method: "GET"
@@ -20,6 +25,7 @@
             $scope.hight = 800 + $scope.legendHeight;
 
             $scope.loading = false;
+            loadingModalWindow.modal("hide");
         }).error(function (data) {
             alert("Failed loading characteristic data");
         });
