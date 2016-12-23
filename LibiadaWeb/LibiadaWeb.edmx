@@ -43,7 +43,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -103,8 +102,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
-          <Property Name="fasta_header" Type="varchar" MaxLength="255" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -176,7 +173,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="translator_id" Type="int4" />
           <Property Name="original" Type="bool" Nullable="false" />
           <Property Name="language_id" Type="int4" Nullable="false" />
@@ -260,7 +256,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
@@ -300,7 +295,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
@@ -321,7 +315,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -336,7 +329,6 @@
           <Property Name="notation_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -499,19 +491,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_chain_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="chain" Type="Self.chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="chain">
-              <PropertyRef Name="feature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_characteristic_group">
           <End Role="characteristic_group" Type="Self.characteristic_group" Multiplicity="0..1" />
           <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="*" />
@@ -642,19 +621,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_dna_chain_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="dna_chain">
-              <PropertyRef Name="feature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_subsequence_dna_chain">
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
           <End Role="subsequence" Type="Self.subsequence" Multiplicity="*" />
@@ -742,19 +708,6 @@
             </Principal>
             <Dependent Role="literature_chain">
               <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="literature_chain">
-              <PropertyRef Name="feature_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1032,19 +985,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fmotiv_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="fmotiv">
-              <PropertyRef Name="feature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_fmotiv">
           <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1136,19 +1076,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_music_chain_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="music_chain">
-              <PropertyRef Name="feature_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_music_chain">
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1210,19 +1137,6 @@
             </Principal>
             <Dependent Role="data_chain">
               <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_data_chain_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="data_chain" Type="Self.data_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="data_chain">
-              <PropertyRef Name="feature_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1477,11 +1391,6 @@
             <End Role="chain" EntitySet="chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_chain_feature" Association="Self.fk_chain_feature">
-            <End Role="feature" EntitySet="feature" />
-            <End Role="chain" EntitySet="chain" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_characteristic_group" Association="Self.fk_characteristic_group">
             <End Role="characteristic_group" EntitySet="characteristic_group" />
             <End Role="characteristic_type" EntitySet="characteristic_type" />
@@ -1532,11 +1441,6 @@
             <End Role="chain_attribute" EntitySet="chain_attribute" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_dna_chain_feature" Association="Self.fk_dna_chain_feature">
-            <End Role="feature" EntitySet="feature" />
-            <End Role="dna_chain" EntitySet="dna_chain" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="dna_chain" EntitySet="dna_chain" />
             <End Role="subsequence" EntitySet="subsequence" />
@@ -1569,11 +1473,6 @@
 
           <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
             <End Role="notation" EntitySet="notation" />
-            <End Role="literature_chain" EntitySet="literature_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_feature" Association="Self.fk_literature_chain_feature">
-            <End Role="feature" EntitySet="feature" />
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
@@ -1627,11 +1526,6 @@
             <End Role="fmotiv" EntitySet="fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fmotiv_feature" Association="Self.fk_fmotiv_feature">
-            <End Role="feature" EntitySet="feature" />
-            <End Role="fmotiv" EntitySet="fmotiv" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_congeneric_characteristic_element" Association="Self.fk_congeneric_characteristic_element">
             <End Role="element" EntitySet="element" />
             <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
@@ -1652,11 +1546,6 @@
             <End Role="music_chain" EntitySet="music_chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_music_chain_feature" Association="Self.fk_music_chain_feature">
-            <End Role="feature" EntitySet="feature" />
-            <End Role="music_chain" EntitySet="music_chain" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_data_chain_matter" Association="Self.fk_data_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="data_chain" EntitySet="data_chain" />
@@ -1664,11 +1553,6 @@
 
           <AssociationSet Name="fk_data_chain_notation" Association="Self.fk_data_chain_notation">
             <End Role="notation" EntitySet="notation" />
-            <End Role="data_chain" EntitySet="data_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_data_chain_feature" Association="Self.fk_data_chain_feature">
-            <End Role="feature" EntitySet="feature" />
             <End Role="data_chain" EntitySet="data_chain" />
           </AssociationSet>
 
@@ -1765,14 +1649,12 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_chain_matter" FromRole="CommonSequence" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_chain_notation" FromRole="CommonSequence" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_chain_feature" FromRole="CommonSequence" ToRole="Feature" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_chain" FromRole="CommonSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_chain" FromRole="CommonSequence" ToRole="Characteristic" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_chain_remote_db" FromRole="CommonSequence" ToRole="RemoteDb" />
@@ -1838,10 +1720,8 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="FastaHeader" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
@@ -1849,7 +1729,6 @@
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_dna_chain" FromRole="DnaSequence" ToRole="Characteristic" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_dna_chain_matter" FromRole="DnaSequence" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_dna_chain_notation" FromRole="DnaSequence" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_dna_chain_feature" FromRole="DnaSequence" ToRole="Feature" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_dna_chain_remote_db" FromRole="DnaSequence" ToRole="RemoteDb" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="DnaSequence" ToRole="Subsequence" />
           <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="DnaSequence" ToRole="SequenceAttribute" />
@@ -1937,7 +1816,6 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="TranslatorId" Type="Int32"  />
           <Property Name="Original" Type="Boolean" Nullable="false" />
           <Property Name="LanguageId" Type="Int32" Nullable="false" />
@@ -1952,7 +1830,6 @@
           <NavigationProperty Name="Language" Relationship="Self.fk_literature_chain_language" FromRole="LiteratureSequence" ToRole="Language" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_literature_chain_matter" FromRole="LiteratureSequence" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_literature_chain_notation" FromRole="LiteratureSequence" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_literature_chain_feature" FromRole="LiteratureSequence" ToRole="Feature" />
           <NavigationProperty Name="Translator" Relationship="Self.fk_literature_chain_translator" FromRole="LiteratureSequence" ToRole="Translator" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_literature_chain_remote_db" FromRole="LiteratureSequence" ToRole="RemoteDb" />
         </EntityType>
@@ -2023,13 +1900,6 @@
           <Property Name="Type" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Complete" Type="Boolean" Nullable="false" />
 
-          <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_feature" FromRole="Feature" ToRole="CommonSequence" />
-          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_feature" FromRole="Feature" ToRole="DnaSequence" />
-          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_feature" FromRole="Feature" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_feature" FromRole="Feature" ToRole="Fmotiv" />
-          <NavigationProperty Name="Measure" Relationship="Self.fk_measure_feature" FromRole="Feature" ToRole="Measure" />
-          <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_feature" FromRole="Feature" ToRole="MusicSequence" />
-          <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_feature" FromRole="Feature" ToRole="DataSequence" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_feature" FromRole="Feature" ToRole="Subsequence" />
         </EntityType>
 
@@ -2069,7 +1939,6 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -2079,7 +1948,6 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_fmotiv_matter" FromRole="Fmotiv" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_fmotiv_notation" FromRole="Fmotiv" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_fmotiv_feature" FromRole="Fmotiv" ToRole="Feature" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_fmotiv" FromRole="Fmotiv" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_fmotiv" FromRole="Fmotiv" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_fmotiv" FromRole="Fmotiv" ToRole="Characteristic" />
@@ -2120,7 +1988,6 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -2133,7 +2000,6 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_measure_matter" FromRole="Measure" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_measure_notation" FromRole="Measure" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_measure_feature" FromRole="Measure" ToRole="Feature" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_measure" FromRole="Measure" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_measure" FromRole="Measure" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_measure" FromRole="Measure" ToRole="Characteristic" />
@@ -2148,14 +2014,12 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_music_chain_matter" FromRole="MusicSequence" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_music_chain_notation" FromRole="MusicSequence" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_music_chain_feature" FromRole="MusicSequence" ToRole="Feature" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="MusicSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_music_chain" FromRole="MusicSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_music_chain" FromRole="MusicSequence" ToRole="Characteristic" />
@@ -2170,14 +2034,12 @@
           <Property Name="NotationId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_data_chain_matter" FromRole="DataSequence" ToRole="Matter" />
           <NavigationProperty Name="Notation" Relationship="Self.fk_data_chain_notation" FromRole="DataSequence" ToRole="Notation" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_data_chain_feature" FromRole="DataSequence" ToRole="Feature" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_data_chain" FromRole="DataSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_data_chain" FromRole="DataSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_data_chain" FromRole="DataSequence" ToRole="Characteristic" />
@@ -2502,19 +2364,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_chain_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CommonSequence">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_characteristic_type_link_link">
           <End Role="Link" Type="Self.Link" Multiplicity="1" />
           <End Role="CharacteristicTypeLink" Type="Self.CharacteristicTypeLink" Multiplicity="*" />
@@ -2619,19 +2468,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_dna_chain_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DnaSequence">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_subsequence_dna_chain">
           <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="1" />
           <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="*" />
@@ -2719,19 +2555,6 @@
             </Principal>
             <Dependent Role="LiteratureSequence">
               <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LiteratureSequence">
-              <PropertyRef Name="FeatureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2866,19 +2689,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fmotiv_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Fmotiv">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_fmotiv">
           <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2976,19 +2786,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_measure_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Measure">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_measure">
           <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -3060,19 +2857,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_music_chain_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MusicSequence">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_music_chain">
           <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -3140,19 +2924,6 @@
             </Principal>
             <Dependent Role="DataSequence">
               <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_data_chain_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="DataSequence" Type="Self.DataSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DataSequence">
-              <PropertyRef Name="FeatureId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3360,11 +3131,6 @@
             <End Role="CommonSequence" EntitySet="CommonSequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_chain_feature" Association="Self.fk_chain_feature">
-            <End Role="Feature" EntitySet="Feature" />
-            <End Role="CommonSequence" EntitySet="CommonSequence" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_characteristic_type_link_link" Association="Self.fk_characteristic_type_link_link">
             <End Role="Link" EntitySet="Link" />
             <End Role="CharacteristicTypeLink" EntitySet="CharacteristicTypeLink" />
@@ -3405,11 +3171,6 @@
             <End Role="SequenceAttribute" EntitySet="SequenceAttribute" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_dna_chain_feature" Association="Self.fk_dna_chain_feature">
-            <End Role="Feature" EntitySet="Feature" />
-            <End Role="DnaSequence" EntitySet="DnaSequence" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="DnaSequence" EntitySet="DnaSequence" />
             <End Role="Subsequence" EntitySet="Subsequence" />
@@ -3442,11 +3203,6 @@
 
           <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
             <End Role="Notation" EntitySet="Notation" />
-            <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_feature" Association="Self.fk_literature_chain_feature">
-            <End Role="Feature" EntitySet="Feature" />
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
           </AssociationSet>
 
@@ -3545,11 +3301,6 @@
             <End Role="Fmotiv" EntitySet="Fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fmotiv_feature" Association="Self.fk_fmotiv_feature">
-            <End Role="Feature" EntitySet="Feature" />
-            <End Role="Fmotiv" EntitySet="Fmotiv" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_fmotiv" Association="Self.fk_binary_characteristic_fmotiv">
             <End Role="Fmotiv" EntitySet="Fmotiv" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3585,11 +3336,6 @@
             <End Role="Measure" EntitySet="Measure" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_measure_feature" Association="Self.fk_measure_feature">
-            <End Role="Feature" EntitySet="Feature" />
-            <End Role="Measure" EntitySet="Measure" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_measure" Association="Self.fk_binary_characteristic_measure">
             <End Role="Measure" EntitySet="Measure" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3615,11 +3361,6 @@
             <End Role="MusicSequence" EntitySet="MusicSequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_music_chain_feature" Association="Self.fk_music_chain_feature">
-            <End Role="Feature" EntitySet="Feature" />
-            <End Role="MusicSequence" EntitySet="MusicSequence" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_music_chain" Association="Self.fk_binary_characteristic_music_chain">
             <End Role="MusicSequence" EntitySet="MusicSequence" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3642,11 +3383,6 @@
 
           <AssociationSet Name="fk_data_chain_notation" Association="Self.fk_data_chain_notation">
             <End Role="Notation" EntitySet="Notation" />
-            <End Role="DataSequence" EntitySet="DataSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_data_chain_feature" Association="Self.fk_data_chain_feature">
-            <End Role="Feature" EntitySet="Feature" />
             <End Role="DataSequence" EntitySet="DataSequence" />
           </AssociationSet>
 
@@ -3752,7 +3488,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -3817,8 +3552,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
-                <ScalarProperty Name="FastaHeader" ColumnName="fasta_header" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -3896,7 +3629,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
                 <ScalarProperty Name="Original" ColumnName="original" />
                 <ScalarProperty Name="LanguageId" ColumnName="language_id" />
@@ -3987,7 +3719,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -4030,7 +3761,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
@@ -4052,7 +3782,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -4068,7 +3797,6 @@
                 <ScalarProperty Name="NotationId" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

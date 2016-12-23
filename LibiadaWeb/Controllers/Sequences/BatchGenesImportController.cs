@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -35,10 +36,10 @@
             using (var db = new LibiadaWebEntities())
             {
                 var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-                var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
-                                && (c.FeatureId == Aliases.Feature.FullGenome
-                                    || c.FeatureId == Aliases.Feature.MitochondrionGenome
-                                    || c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToArray();
+                var matterIds = db.DnaSequence.Include(c => c.Matter).Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
+                                && (c.Matter.SequenceType == SequenceType.CompleteGenome
+                                    || c.Matter.SequenceType == SequenceType.MitochondrionGenome
+                                    || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToArray();
 
                 var viewDataHelper = new ViewDataHelper(db);
                 var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");

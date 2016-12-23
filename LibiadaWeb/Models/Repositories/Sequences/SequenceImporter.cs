@@ -86,12 +86,6 @@
                 },
                 new NpgsqlParameter
                 {
-                    ParameterName = "feature_id",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = commonSequence.FeatureId
-                },
-                new NpgsqlParameter
-                {
                     ParameterName = "alphabet",
                     NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Bigint,
                     Value = alphabet

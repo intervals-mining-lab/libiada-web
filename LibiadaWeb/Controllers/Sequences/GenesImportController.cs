@@ -35,11 +35,11 @@
         {
             var db = new LibiadaWebEntities();
             var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
+            var matterIds = db.DnaSequence.Include(c => c.Matter).Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
                                                           !genesSequenceIds.Contains(c.Id) &&
-                                                          (c.FeatureId == Aliases.Feature.FullGenome ||
-                                                           c.FeatureId == Aliases.Feature.MitochondrionGenome ||
-                                                           c.FeatureId == Aliases.Feature.Plasmid)).Select(c => c.MatterId).ToList();
+                                                          (c.Matter.SequenceType == SequenceType.CompleteGenome
+                                                        || c.Matter.SequenceType == SequenceType.MitochondrionGenome
+                                                        || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToList();
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetMattersData(1, 1, m => matterIds.Contains(m.Id), "Import");

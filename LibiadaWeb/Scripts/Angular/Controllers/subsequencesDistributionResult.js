@@ -122,6 +122,8 @@
                     $scope.points[i].featureVisible = feature.Selected;
                 }
             }
+
+            // optimize this method calls
             $scope.fillVisiblePoints();
         }
 

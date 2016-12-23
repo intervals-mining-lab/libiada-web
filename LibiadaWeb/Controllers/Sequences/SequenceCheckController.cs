@@ -100,12 +100,6 @@
 
                 string message;
 
-                if (!db.DnaSequence.Any(d => d.FastaHeader.Equals(fastaHeader)))
-                {
-                    message = "Object  with header" + fastaHeader + " doesn't exist";
-
-                    return new Dictionary<string, object> { { "message", message } };
-                }
 
                 BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 

@@ -1250,5 +1250,17 @@ END;
 
 ALTER TABLE matter ALTER COLUMN "group" SET NOT NULL;
 
+-- 23.12.2016
+-- Removing feature id and feature references from all tables except subsequnce.
+
+ALTER TABLE data_chain DROP CONSTRAINT fk_data_chain_piece_type;
+ALTER TABLE chain DROP CONSTRAINT fk_chain_piece_type;
+ALTER TABLE dna_chain DROP CONSTRAINT fk_dna_chain_piece_type;
+ALTER TABLE fmotiv DROP CONSTRAINT fk_fmotiv_piece_type;
+ALTER TABLE literature_chain DROP CONSTRAINT fk_literature_chain_piece_type;
+ALTER TABLE measure DROP CONSTRAINT fk_measure_piece_type;
+ALTER TABLE music_chain DROP CONSTRAINT fk_music_chain_piece_type;
+ALTER TABLE chain DROP COLUMN feature_id;
+ALTER TABLE dna_chain DROP COLUMN fasta_header;
 
 COMMIT;

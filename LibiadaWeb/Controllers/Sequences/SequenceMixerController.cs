@@ -151,7 +151,6 @@
             var resultsequence = new CommonSequence
                 {
                     NotationId = notationId,
-                    FeatureId = dataBaseSequence.FeatureId,
                     MatterId = resultMatter.Id
                 };
 
@@ -164,7 +163,6 @@
 
                     dnaSequenceRepository.Create(
                         resultsequence,
-                        dnaSequence.FastaHeader,
                         dnaSequence.Partial,
                         alphabet,
                         chain.Building);

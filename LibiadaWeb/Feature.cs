@@ -16,13 +16,6 @@ namespace LibiadaWeb
     {
         public Feature()
         {
-            Sequence = new HashSet<CommonSequence>();
-            DnaSequence = new HashSet<DnaSequence>();
-            LiteratureSequence = new HashSet<LiteratureSequence>();
-            Fmotiv = new HashSet<Fmotiv>();
-            Measure = new HashSet<Measure>();
-            MusicSequence = new HashSet<MusicSequence>();
-            DataSequence = new HashSet<DataSequence>();
             Subsequence = new HashSet<Subsequence>();
         }
     
@@ -33,13 +26,6 @@ namespace LibiadaWeb
         public string Type { get; set; }
         public bool Complete { get; set; }
     
-        public virtual ICollection<CommonSequence> Sequence { get; set; }
-        public virtual ICollection<DnaSequence> DnaSequence { get; set; }
-        public virtual ICollection<LiteratureSequence> LiteratureSequence { get; set; }
-        public virtual ICollection<Fmotiv> Fmotiv { get; set; }
-        public virtual ICollection<Measure> Measure { get; set; }
-        public virtual ICollection<MusicSequence> MusicSequence { get; set; }
-        public virtual ICollection<DataSequence> DataSequence { get; set; }
         public virtual ICollection<Subsequence> Subsequence { get; set; }
     }
 }

@@ -66,7 +66,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             MatterRepository.CreateMatterFromSequence(sequence);
 
             var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
-            Create(sequence, fastaHeader, partial, alphabet, chain.Building);
+            Create(sequence, partial, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -87,16 +87,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, string fastaHeader, bool partial, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
-
-            parameters.Add(new NpgsqlParameter
-            {
-                ParameterName = "fasta_header",
-                NpgsqlDbType = NpgsqlDbType.Varchar,
-                Value = fastaHeader
-            });
 
             parameters.Add(new NpgsqlParameter
             {
@@ -109,8 +102,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         id,
                                         notation_id,
                                         matter_id,
-                                        feature_id,
-                                        fasta_header,
                                         alphabet,
                                         building,
                                         remote_id,
@@ -120,8 +111,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                         @id,
                                         @notation_id,
                                         @matter_id,
-                                        @feature_id,
-                                        @fasta_header,
                                         @alphabet,
                                         @building,
                                         @remote_id,
@@ -146,7 +135,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Insert(DnaSequence sequence, long[] alphabet, int[] building)
         {
-            Create(ToCommonSequence(sequence), sequence.FastaHeader, false, alphabet, building);
+            Create(ToCommonSequence(sequence), false, alphabet, building);
         }
 
         /// <summary>
@@ -171,8 +160,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 Id = source.Id,
                 NotationId = source.NotationId,
-                MatterId = source.MatterId,
-                FeatureId = source.FeatureId
+                MatterId = source.MatterId
             };
         }
     }

@@ -110,7 +110,6 @@
                             var sequence = new CommonSequence
                                                {
                                                    Matter = matter,
-                                                   FeatureId = sequenceFeature,
                                                    NotationId = Aliases.Notation.Nucleotide,
                                                    RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
                                                    RemoteId = metadata.Version.CompoundAccession

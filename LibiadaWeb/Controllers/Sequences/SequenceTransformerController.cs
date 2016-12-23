@@ -97,8 +97,7 @@
                 var result = new DnaSequence
                     {
                         MatterId = matterId,
-                        NotationId = notationId,
-                        FeatureId = Aliases.Feature.FullGenome
+                        NotationId = notationId
                     };
 
                 long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
