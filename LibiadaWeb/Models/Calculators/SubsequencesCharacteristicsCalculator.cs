@@ -33,6 +33,12 @@
         /// <param name="links">
         /// The links.
         /// </param>
+        /// <param name="attributeValues">
+        /// Nonredundant array of all attributes.
+        /// </param>
+        /// <param name="filters">
+        /// Textual search filters for subsequences products.
+        /// </param>
         /// <returns>
         /// The <see cref="T:SubsequenceData[]"/>.
         /// </returns>

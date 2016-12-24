@@ -105,7 +105,7 @@
             var characteristicType = GetCharacteristicType(characteristicTypeLinkId).Name;
 
             var databaseLink = characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
-            var link = databaseLink.Id != Aliases.Link.NotApplied ? databaseLink.Name : string.Empty;
+            var link = databaseLink.Id == (byte)Link.NotApplied ? string.Empty : databaseLink.Name;
 
             return string.Join("  ", characteristicType, link);
         }

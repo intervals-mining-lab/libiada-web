@@ -97,20 +97,20 @@
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>()
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
             }
             else
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                    .Where(st => st.GetNature() == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>()
-                    .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                    .Where(g => g.GetNature() == Nature.Genetic)
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
             }
 
             data.Add("natures",  natures);
@@ -166,8 +166,6 @@
         /// </returns>
         public Dictionary<string, object> FillSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
-            var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
-
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
@@ -175,12 +173,13 @@
 
             var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
+            var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                    .Where(st => st.GetNature() == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
             var groups = EnumExtensions.ToArray<Group>()
-                .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
-                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                .Where(g => g.GetNature() == Nature.Genetic)
+                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
 
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
@@ -285,8 +284,7 @@
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
 
-            IEnumerable<object> notations;
-            IEnumerable<object> features;
+            IEnumerable<SelectListItemWithNature> notations;
             IEnumerable<SelectListItem> natures;
             IEnumerable<SelectListItemWithNature> sequenceTypes;
             IEnumerable<SelectListItemWithNature> groups;
@@ -295,23 +293,20 @@
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
-                features = featureRepository.GetSelectListWithNature();
+                
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>()
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
             }
             else
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
-                features = featureRepository.GetSelectListWithNature(new List<int> { Aliases.Feature.FullGenome, Aliases.Feature.RibosomalRNA, Aliases.Feature.Plasmid }, new List<int>());
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Where(st => st.GetAttribute<SequenceType, NatureAttribute>().Value == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
-                groups = EnumExtensions.ToArray<Group>()
-                    .Where(g => g.GetAttribute<Group, NatureAttribute>().Value == Nature.Genetic)
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic)
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
+                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic)
+                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
             }
 
             return new Dictionary<string, object>
@@ -319,7 +314,6 @@
                                    { "matters", matterRepository.GetMatterSelectList() },
                                    { "natures", natures },
                                    { "notations", notations },
-                                   { "features", features },
                                    { "languages", new SelectList(db.Language, "id", "name") },
                                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                                    { "translators", translators },

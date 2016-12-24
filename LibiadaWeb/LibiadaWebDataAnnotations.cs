@@ -156,12 +156,6 @@
     public class DnaSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
         /// <summary>
-        /// Gets or sets the fasta_header.
-        /// </summary>
-        [Display(Name = "FASTA file header")]
-        public string FastaHeader { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether partial.
         /// </summary>
         [Display(Name = "Sequence is partial (incomplete)")]
@@ -421,21 +415,6 @@
         /// </summary>
         [Display(Name = "Лига")]
         public int TieId { get; set; }
-    }
-
-    /// <summary>
-    /// The feature.
-    /// </summary>
-    [MetadataType(typeof(FeatureDataAnnotations))]
-    public partial class Feature
-    {
-    }
-
-    /// <summary>
-    /// The feature data annotations.
-    /// </summary>
-    public class FeatureDataAnnotations : NotationDataAnnotations
-    {
     }
 
     /// <summary>

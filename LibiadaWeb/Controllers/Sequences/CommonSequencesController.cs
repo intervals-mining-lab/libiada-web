@@ -89,7 +89,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,FeatureId,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
         {
             if (ModelState.IsValid)
             {

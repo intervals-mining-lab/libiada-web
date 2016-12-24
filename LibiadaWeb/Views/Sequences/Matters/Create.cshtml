@@ -61,14 +61,6 @@
         </div>
         @Html.Partial("_LocalFile")
         <div class="form-group">
-            @Html.LabelFor(model => model.FeatureId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="featureId" ng-options="f.Value as f.Text for f in features | filter:{ Nature: nature }" ng-change="featureChanged(featureId)" ng-init="featureChanged(featureId)"></select>
-                <input type="hidden" name="FeatureId" ng-value="featureId" />
-                @Html.ValidationMessageFor(model => model.FeatureId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
             @Html.LabelFor(model => model.Matter.Group, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"></select>

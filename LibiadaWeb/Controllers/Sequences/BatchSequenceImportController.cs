@@ -63,8 +63,6 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    var featureRepository = new FeatureRepository(db);
-
                     var existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                     var dnaSequenceRepository = new DnaSequenceRepository(db);
                     var bioSequences = NcbiHelper.GetGenBankSequences(accessions);
@@ -96,13 +94,10 @@
                                              ", Definition=" + metadata.Definition +
                                              ", Saved matter name=" + savedMatterNames[i];
 
-                            var sequenceFeature = featureRepository.ExtractSequenceFeature(metadata);
-
                             var matter = new Matter
                                              {
                                                  Name = savedMatterNames[i],
                                                  Nature = Nature.Genetic,
-                                                 Description = featureRepository.GetFeatureById(sequenceFeature).Name,
                                                  Group = GroupRepository.ExtractSequenceGroup(savedMatterNames[i]),
                                                  SequenceType = SequenceTypeRepsitory.ExtractSequenceGroup(savedMatterNames[i])
                                              };

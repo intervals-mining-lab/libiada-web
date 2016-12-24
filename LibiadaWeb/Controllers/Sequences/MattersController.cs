@@ -86,9 +86,9 @@
             }
 
             var groups = EnumExtensions.ToArray<Group>()
-                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = ((byte)g).ToString(), Nature = (byte)g.GetAttribute<Group, NatureAttribute>().Value });
+                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = ((byte)g).ToString(), Nature = (byte)g.GetNature() });
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = ((byte)st).ToString(), Nature = (byte)st.GetAttribute<SequenceType, NatureAttribute>().Value });
+                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = ((byte)st).ToString(), Nature = (byte)st.GetNature() });
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                                                            {

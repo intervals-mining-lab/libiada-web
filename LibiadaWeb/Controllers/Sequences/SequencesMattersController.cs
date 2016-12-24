@@ -104,7 +104,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "Id,NotationId,FeatureId,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
+            [Bind(Include = "Id,NotationId,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
             int? languageId,
             bool? original,

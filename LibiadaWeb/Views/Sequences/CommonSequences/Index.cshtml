@@ -30,9 +30,6 @@
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.FeatureId)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.RemoteDbId)
         </th>
         <th></th>
@@ -58,9 +55,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Feature.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.RemoteDb.Name)

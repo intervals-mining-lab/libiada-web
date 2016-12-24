@@ -140,52 +140,6 @@
         }
 
         /// <summary>
-        /// The link.
-        /// </summary>
-        public static class Link
-        {
-            /// <summary>
-            /// Link is not applied.
-            /// </summary>
-            public const int NotApplied = 0;
-
-            /// <summary>
-            /// No link.
-            /// </summary>
-            public const int None = 1;
-
-            /// <summary>
-            /// The link to start.
-            /// </summary>
-            public const int Start = 2;
-
-            /// <summary>
-            /// The link to end.
-            /// </summary>
-            public const int End = 3;
-
-            /// <summary>
-            /// Start and end link.
-            /// </summary>
-            public const int StartEnd = 4;
-
-            /// <summary>
-            /// Cycle link.
-            /// </summary>
-            public const int Cycle = 5;
-
-            /// <summary>
-            /// The cycle start link.
-            /// </summary>
-            public const int CycleStart = 6;
-
-            /// <summary>
-            /// The cycle end link.
-            /// </summary>
-            public const int CycleEnd = 7;
-        }
-
-        /// <summary>
         /// The notation.
         /// </summary>
         public static class Notation
