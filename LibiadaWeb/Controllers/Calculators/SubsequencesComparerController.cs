@@ -169,12 +169,12 @@
 
                         int equalElementsCountFromFirst = 0;
                         var equalElementsCountFromSecond = new Dictionary<int, int>();
-                        bool equalFound = false;
-
+                        
                         int equalPairsCount = 0;
 
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
+							bool equalFound = false;
                             double first = characteristics[i][k].CharacteristicsValues[0];
 
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
