@@ -2,7 +2,7 @@
 {
     using System;
 
-    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Models;
 
     using Microsoft.AspNet.SignalR;

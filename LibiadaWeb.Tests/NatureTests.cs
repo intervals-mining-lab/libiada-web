@@ -3,7 +3,7 @@
     using System.Linq;
 
     using LibiadaWeb;
-    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Extensions;
 
     using NUnit.Framework;
 

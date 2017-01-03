@@ -11,6 +11,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;

@@ -9,6 +9,7 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Core.SimpleTypes;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Models.Repositories.Calculators;

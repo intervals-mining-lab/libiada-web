@@ -5,7 +5,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Extensions;
 
     /// <summary>
     /// The matter repository.

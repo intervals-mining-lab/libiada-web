@@ -53,8 +53,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="Helpers\EnumExtensionsTests.cs" />
-    <Compile Include="Helpers\StringExtensionsTests.cs" />
+    <Compile Include="Extensions\EnumExtensionsTests.cs" />
     <Compile Include="NatureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

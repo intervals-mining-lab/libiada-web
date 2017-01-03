@@ -8,16 +8,15 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
-    using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
 
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
+
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>

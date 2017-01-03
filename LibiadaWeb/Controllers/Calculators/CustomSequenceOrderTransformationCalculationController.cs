@@ -12,6 +12,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Misc;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;

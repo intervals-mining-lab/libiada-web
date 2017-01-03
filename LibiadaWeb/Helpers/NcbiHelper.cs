@@ -12,6 +12,8 @@
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
+    using LibiadaCore.Extensions;
+
     /// <summary>
     /// The ncbi helper.
     /// </summary>

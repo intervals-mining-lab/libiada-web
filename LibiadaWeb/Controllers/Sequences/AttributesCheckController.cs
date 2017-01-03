@@ -6,8 +6,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
 
     using Newtonsoft.Json;
 

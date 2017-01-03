@@ -6,6 +6,7 @@
 
     using Bio.IO.GenBank;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
