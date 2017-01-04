@@ -54,8 +54,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Extensions\EnumExtensionsTests.cs" />
+    <Compile Include="GroupTests.cs" />
     <Compile Include="NatureTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SequenceTypeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

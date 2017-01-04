@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models
+﻿namespace LibiadaWeb.Models.CalculatorsData
 {
     using System.Web.Mvc;
 

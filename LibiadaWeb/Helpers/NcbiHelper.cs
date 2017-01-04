@@ -146,62 +146,6 @@
             return GetResponseStream(GetEfetchParamsString("fasta") + id);
         }
 
-        /// <summary>
-        /// Extracts supposed sequence name from metadata.
-        /// </summary>
-        /// <param name="metadata">
-        /// The metadata.
-        /// </param>
-        /// <returns>
-        /// Supposed name as <see cref="string"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if all name fields are contradictory.
-        /// </exception>
-        public static string ExtractSequenceName(GenBankMetadata metadata)
-        {
-            string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
-            string commonName = metadata.Source.CommonName;
-            string definition = metadata.Definition.TrimEnd(", complete genome.")
-                                                   .TrimEnd(", complete sequence.")
-                                                   .TrimEnd(", complete CDS.")
-                                                   .TrimEnd(", complete cds.")
-                                                   .TrimEnd(", genome.");
-
-            if (commonName.Contains(species))
-            {
-                if (definition.Contains(commonName))
-                {
-                    return definition;
-                }
-
-                if (commonName.Contains(definition))
-                {
-                    return commonName;
-                }
-
-                return commonName + " | " + definition;
-            }
-
-            if (species.Contains(commonName))
-            {
-                if (definition.Contains(species))
-                {
-                    return definition;
-                }
-
-                if (species.Contains(definition))
-                {
-                    return species;
-                }
-
-                return species + " | " + definition;
-            }
-
-            throw new Exception("Sequences names are not equal. CommonName = " + commonName +
-                                ", Species = " + species +
-                                ", Definition = " + definition);
-        }
 
         /// <summary>
         /// Extracts sequence from genbank file.

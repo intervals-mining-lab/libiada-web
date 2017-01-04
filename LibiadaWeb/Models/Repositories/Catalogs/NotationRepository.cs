@@ -3,6 +3,8 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     using System.Collections.Generic;
     using System.Linq;
 
+    using LibiadaWeb.Models.CalculatorsData;
+
     /// <summary>
     /// The notation repository.
     /// </summary>

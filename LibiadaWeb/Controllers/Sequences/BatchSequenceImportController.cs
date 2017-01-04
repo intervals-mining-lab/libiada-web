@@ -8,7 +8,6 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -57,12 +56,13 @@
             return Action(() =>
             {
                 var matterNames = new string[accessions.Length];
-                var savedMatterNames = new string[accessions.Length];
+                var savedMattersNames = new string[accessions.Length];
                 var results = new string[accessions.Length];
                 var statuses = new string[accessions.Length];
 
                 using (var db = new LibiadaWebEntities())
                 {
+                    var matterRepository = new MatterRepository(db);
                     var existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                     var dnaSequenceRepository = new DnaSequenceRepository(db);
                     var bioSequences = NcbiHelper.GetGenBankSequences(accessions);
@@ -88,19 +88,13 @@
                                 continue;
                             }
 
-                            savedMatterNames[i] = NcbiHelper.ExtractSequenceName(metadata) + " | " + metadata.Version.CompoundAccession;
+                            var matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+
+                            savedMattersNames[i] = matter.Name;
                             matterNames[i] = "Common name=" + metadata.Source.CommonName +
                                              ", Species=" + metadata.Source.Organism.Species +
                                              ", Definition=" + metadata.Definition +
-                                             ", Saved matter name=" + savedMatterNames[i];
-
-                            var matter = new Matter
-                                             {
-                                                 Name = savedMatterNames[i],
-                                                 Nature = Nature.Genetic,
-                                                 Group = GroupRepository.ExtractSequenceGroup(savedMatterNames[i]),
-                                                 SequenceType = SequenceTypeRepsitory.ExtractSequenceGroup(savedMatterNames[i])
-                                             };
+                                             ", Saved matter name=" + savedMattersNames[i];
 
                             var sequence = new CommonSequence
                                                {
@@ -151,7 +145,7 @@
                     }
 
                     // removing matters for whitch adding of sequence failed
-                    var orphanMatters = db.Matter.Include(m => m.Sequence).Where(m => savedMatterNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
+                    var orphanMatters = db.Matter.Include(m => m.Sequence).Where(m => savedMattersNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
 
                     if (orphanMatters.Length > 0)
                     {

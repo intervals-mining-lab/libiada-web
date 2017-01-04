@@ -41,26 +41,26 @@
         CompleteNumericSequence = 4,
 
         /// <summary>
-        /// The plasmid.
+        /// Complete plasmid sequence.
         /// </summary>
         [Display(Name = "Plasmid")]
-        [Description("")]
+        [Description("Complete plasmid sequence")]
         [Nature(Nature.Genetic)]
         Plasmid = 5,
 
         /// <summary>
-        /// The mitochondrion genome.
+        /// Complete mitochondrion genome.
         /// </summary>
         [Display(Name = "Mitochondrion genome")]
-        [Description("")]
+        [Description("Complete mitochondrion genome")]
         [Nature(Nature.Genetic)]
         MitochondrionGenome = 6,
 
         /// <summary>
-        /// The chloroplast genome.
+        /// Complete chloroplast genome.
         /// </summary>
         [Display(Name = "Chloroplast genome")]
-        [Description("")]
+        [Description("Complete chloroplast genome")]
         [Nature(Nature.Genetic)]
         ChloroplastGenome = 7,
 
@@ -84,7 +84,7 @@
         /// The mitochondrion 16s rRNA.
         /// </summary>
         [Display(Name = "Mitochondrion 16S ribosomal RNA")]
-        [Description("")]
+        [Description("16S ribosomal RNA from mitochondrion genome")]
         [Nature(Nature.Genetic)]
         Mitochondrion16SRRNA = 10,
 
@@ -92,7 +92,7 @@
         /// Complete plastid genome.
         /// </summary>
         [Display(Name = "Plastid")]
-        [Description("")]
+        [Description("Complete plastid genome")]
         [Nature(Nature.Genetic)]
         Plastid = 11
     }
