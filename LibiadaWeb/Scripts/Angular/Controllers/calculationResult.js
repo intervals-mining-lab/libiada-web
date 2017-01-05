@@ -130,7 +130,7 @@
 
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
-            d3.select("svg").remove();
+            d3.select(".chart-svg").remove();
 
             // chart size and margin settings
             var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
@@ -159,6 +159,7 @@
             var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.hight)
+                .attr("class", "chart-svg")
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
