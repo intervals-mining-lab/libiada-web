@@ -8,7 +8,6 @@
     using LibiadaCore.Misc.DataTransformers;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -58,7 +57,7 @@
         /// </returns>
         public ActionResult Index()
         {
-            var matterIds = db.DnaSequence.Where(d => d.NotationId == Aliases.Notation.Nucleotide).Select(d => d.MatterId).ToArray();
+            var matterIds = db.DnaSequence.Where(d => d.Notation == Notation.Nucleotides).Select(d => d.MatterId).ToArray();
 
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Transform");
@@ -83,11 +82,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(IEnumerable<long> matterIds, string transformType)
         {
-            int notationId = transformType.Equals("toAmino") ? Aliases.Notation.AminoAcid : Aliases.Notation.Triplet;
+            Notation notation = transformType.Equals("toAmino") ? Notation.AminoAcids : Notation.Triplets;
 
             foreach (var matterId in matterIds)
             {
-                var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
+                var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
                 Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
                 BaseChain transformedChain = transformType.Equals("toAmino")
@@ -97,10 +96,10 @@
                 var result = new DnaSequence
                     {
                         MatterId = matterId,
-                        NotationId = notationId
+                        Notation = notation
                     };
 
-                long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notationId, false);
+                long[] alphabet = elementRepository.ToDbElements(transformedChain.Alphabet, notation, false);
                 dnaSequenceRepository.Insert(result, alphabet, transformedChain.Building);
             }
 

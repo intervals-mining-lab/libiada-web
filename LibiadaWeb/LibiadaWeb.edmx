@@ -40,7 +40,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -67,7 +67,7 @@
           </Key>
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
-          <Property Name="link_id" Type="int4" Nullable="false" />
+          <Property Name="link_id" Type="int2" Nullable="false" />
         </EntityType>
 
         <EntityType Name="characteristic_group">
@@ -99,7 +99,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -142,7 +142,7 @@
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
@@ -156,21 +156,12 @@
           <Property Name="description" Type="text" />
         </EntityType>
 
-        <EntityType Name="link">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
         <EntityType Name="literature_chain">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="translator_id" Type="int4" />
@@ -188,22 +179,12 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="nature_id" Type="int4" Nullable="false" />
+          <Property Name="nature_id" Type="int2" Nullable="false" />
           <Property Name="sequence_type" Type="int2" Nullable="false" />
           <Property Name="group" Type="int2" Nullable="false" />
           <Property Name="description" Type="text" />
           <Property Name="created" Type="timestamptz" />
           <Property Name="modified" Type="timestamptz"/>
-        </EntityType>
-
-        <EntityType Name="notation">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-          <Property Name="nature_id" Type="int4" Nullable="false" />
         </EntityType>
 
         <EntityType Name="chain_attribute">
@@ -223,7 +204,7 @@
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="description" Type="text" />
-          <Property Name="nature_id" Type="int4" Nullable="false" />
+          <Property Name="nature_id" Type="int2" Nullable="false" />
           <Property Name="complete" Type="bool" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="255" />
         </EntityType>
@@ -245,7 +226,7 @@
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="description" Type="text" />
           <Property Name="url" Type="varchar" MaxLength="255" />
-          <Property Name="nature_id" Type="int4" Nullable="false" />
+          <Property Name="nature_id" Type="int2" Nullable="false" />
         </EntityType>
 
         <EntityType Name="fmotiv">
@@ -253,7 +234,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
@@ -292,7 +273,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
@@ -312,7 +293,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -326,7 +307,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -343,7 +324,7 @@
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="notation_id" Type="int4" Nullable="false" />
+          <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="numerator" Type="int4" Nullable="false" />
           <Property Name="denominator" Type="int4" Nullable="false" />
@@ -478,19 +459,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_chain_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="chain" Type="Self.chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="chain">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_characteristic_group">
           <End Role="characteristic_group" Type="Self.characteristic_group" Multiplicity="0..1" />
           <End Role="characteristic_type" Type="Self.characteristic_type" Multiplicity="*" />
@@ -500,19 +468,6 @@
             </Principal>
             <Dependent Role="characteristic_type">
               <PropertyRef Name="characteristic_group_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_characteristic_type_link_link">
-          <End Role="link" Type="Self.link" Multiplicity="1" />
-          <End Role="characteristic_type_link" Type="Self.characteristic_type_link" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="link">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="characteristic_type_link">
-              <PropertyRef Name="link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -582,19 +537,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_dna_chain_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="dna_chain">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_chain_attribute_dna_chain">
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
           <End Role="chain_attribute" Type="Self.chain_attribute" Multiplicity="*" />
@@ -660,19 +602,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_element_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="element" Type="Self.element" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="element">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_literature_chain_language">
           <End Role="language" Type="Self.language" Multiplicity="1" />
           <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
@@ -695,19 +624,6 @@
             </Principal>
             <Dependent Role="literature_chain">
               <PropertyRef Name="matter_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="literature_chain">
-              <PropertyRef Name="notation_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -972,19 +888,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fmotiv_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="fmotiv">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_fmotiv">
           <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1063,19 +966,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_music_chain_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="music_chain">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_music_chain">
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1128,19 +1018,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_data_chain_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="data_chain" Type="Self.data_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="data_chain">
-              <PropertyRef Name="notation_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_data_chain">
           <End Role="data_chain" Type="Self.data_chain" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1176,19 +1053,6 @@
             </Principal>
             <Dependent Role="characteristic">
               <PropertyRef Name="chain_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_note_notation">
-          <End Role="notation" Type="Self.notation" Multiplicity="1" />
-          <End Role="note" Type="Self.note" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="notation">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="note">
-              <PropertyRef Name="notation_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1338,10 +1202,8 @@
           <EntitySet Name="position" EntityType="Self.position" store:Type="Tables" Schema="public"/>
           <EntitySet Name="element" EntityType="Self.element" store:Type="Tables" Schema="public"/>
           <EntitySet Name="language" EntityType="Self.language" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="link" EntityType="Self.link" store:Type="Tables" Schema="public"/>
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="notation" EntityType="Self.notation" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
           <EntitySet Name="feature" EntityType="Self.feature" store:Type="Tables" Schema="public"/>
           <EntitySet Name="remote_db" EntityType="Self.remote_db" store:Type="Tables" Schema="public"/>
@@ -1386,19 +1248,9 @@
             <End Role="chain" EntitySet="chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_chain_notation" Association="Self.fk_chain_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="chain" EntitySet="chain" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_characteristic_group" Association="Self.fk_characteristic_group">
             <End Role="characteristic_group" EntitySet="characteristic_group" />
             <End Role="characteristic_type" EntitySet="characteristic_type" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_characteristic_type_link_link" Association="Self.fk_characteristic_type_link_link">
-            <End Role="link" EntitySet="link" />
-            <End Role="characteristic_type_link" EntitySet="characteristic_type_link" />
           </AssociationSet>
 
           <AssociationSet Name="fk_characteristic_type_link_characteristic_type" Association="Self.fk_characteristic_type_link_characteristic_type">
@@ -1423,11 +1275,6 @@
 
           <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
             <End Role="matter" EntitySet="matter" />
-            <End Role="dna_chain" EntitySet="dna_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_dna_chain_notation" Association="Self.fk_dna_chain_notation">
-            <End Role="notation" EntitySet="notation" />
             <End Role="dna_chain" EntitySet="dna_chain" />
           </AssociationSet>
 
@@ -1456,11 +1303,6 @@
             <End Role="position" EntitySet="position" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_element_notation" Association="Self.fk_element_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="element" EntitySet="element" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
             <End Role="language" EntitySet="language" />
             <End Role="literature_chain" EntitySet="literature_chain" />
@@ -1468,11 +1310,6 @@
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="matter" EntitySet="matter" />
-            <End Role="literature_chain" EntitySet="literature_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
-            <End Role="notation" EntitySet="notation" />
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
@@ -1521,11 +1358,6 @@
             <End Role="fmotiv" EntitySet="fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fmotiv_notation" Association="Self.fk_fmotiv_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="fmotiv" EntitySet="fmotiv" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_congeneric_characteristic_element" Association="Self.fk_congeneric_characteristic_element">
             <End Role="element" EntitySet="element" />
             <End Role="congeneric_characteristic" EntitySet="congeneric_characteristic" />
@@ -1541,24 +1373,9 @@
             <End Role="music_chain" EntitySet="music_chain" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_music_chain_notation" Association="Self.fk_music_chain_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="music_chain" EntitySet="music_chain" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_data_chain_matter" Association="Self.fk_data_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="data_chain" EntitySet="data_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_data_chain_notation" Association="Self.fk_data_chain_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="data_chain" EntitySet="data_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_note_notation" Association="Self.fk_note_notation">
-            <End Role="notation" EntitySet="notation" />
-            <End Role="note" EntitySet="note" />
           </AssociationSet>
           
           <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
@@ -1646,7 +1463,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
@@ -1654,7 +1471,6 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_chain_matter" FromRole="CommonSequence" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_chain_notation" FromRole="CommonSequence" ToRole="Notation" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_chain" FromRole="CommonSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_chain" FromRole="CommonSequence" ToRole="Characteristic" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_chain_remote_db" FromRole="CommonSequence" ToRole="RemoteDb" />
@@ -1680,8 +1496,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="CharacteristicTypeId" Type="Int32" Nullable="false" />
-          <Property Name="LinkId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Link" Relationship="Self.fk_characteristic_type_link_link" FromRole="CharacteristicTypeLink" ToRole="Link" />
+          <Property Name="Link" Type="LibiadaWebModel.Link" Nullable="false" />
           <NavigationProperty Name="CharacteristicType" Relationship="Self.fk_characteristic_type_link_characteristic_type" FromRole="CharacteristicTypeLink" ToRole="CharacteristicType" />
         </EntityType>
 
@@ -1717,7 +1532,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
@@ -1728,7 +1543,6 @@
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_dna_chain" FromRole="DnaSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_dna_chain" FromRole="DnaSequence" ToRole="Characteristic" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_dna_chain_matter" FromRole="DnaSequence" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_dna_chain_notation" FromRole="DnaSequence" ToRole="Notation" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_dna_chain_remote_db" FromRole="DnaSequence" ToRole="RemoteDb" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="DnaSequence" ToRole="Subsequence" />
           <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="DnaSequence" ToRole="SequenceAttribute" />
@@ -1774,7 +1588,7 @@
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
 
@@ -1782,7 +1596,6 @@
           <NavigationProperty Name="SecondElementBinaryCharacteristic" Relationship="Self.fk_binary_characteristic_second_element" FromRole="Element" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="FirstElementAccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_first_element" FromRole="Element" ToRole="AccordanceCharacteristic" />
           <NavigationProperty Name="SecondElementAccordanceCharacteristic" Relationship="Self.fk_accordance_characteristic_second_element" FromRole="Element" ToRole="AccordanceCharacteristic" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_element_notation" FromRole="Element" ToRole="Notation" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_element" FromRole="Element" ToRole="CongenericCharacteristic" />
         </EntityType>
 
@@ -1797,23 +1610,12 @@
           <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_language" FromRole="Language" ToRole="LiteratureSequence" />
         </EntityType>
 
-        <EntityType Name="Link">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-
-          <NavigationProperty Name="CharacteristicTypeLink" Relationship="Self.fk_characteristic_type_link_link" FromRole="Link" ToRole="CharacteristicTypeLink" />
-        </EntityType>
-
         <EntityType Name="LiteratureSequence">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="TranslatorId" Type="Int32"  />
@@ -1829,7 +1631,6 @@
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="Characteristic" />
           <NavigationProperty Name="Language" Relationship="Self.fk_literature_chain_language" FromRole="LiteratureSequence" ToRole="Language" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_literature_chain_matter" FromRole="LiteratureSequence" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_literature_chain_notation" FromRole="LiteratureSequence" ToRole="Notation" />
           <NavigationProperty Name="Translator" Relationship="Self.fk_literature_chain_translator" FromRole="LiteratureSequence" ToRole="Translator" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_literature_chain_remote_db" FromRole="LiteratureSequence" ToRole="RemoteDb" />
         </EntityType>
@@ -1854,26 +1655,6 @@
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_matter" FromRole="Matter" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
-        </EntityType>
-
-        <EntityType Name="Notation">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
-
-          <NavigationProperty Name="Sequence" Relationship="Self.fk_chain_notation" FromRole="Notation" ToRole="CommonSequence" />
-          <NavigationProperty Name="DnaSequence" Relationship="Self.fk_dna_chain_notation" FromRole="Notation" ToRole="DnaSequence" />
-          <NavigationProperty Name="Element" Relationship="Self.fk_element_notation" FromRole="Notation" ToRole="Element" />
-          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_notation" FromRole="Notation" ToRole="LiteratureSequence" />
-          <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_notation" FromRole="Notation" ToRole="Fmotiv" />
-          <NavigationProperty Name="Measure" Relationship="Self.fk_measure_notation" FromRole="Notation" ToRole="Measure" />
-          <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_notation" FromRole="Notation" ToRole="MusicSequence" />
-          <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_notation" FromRole="Notation" ToRole="DataSequence" />
-          <NavigationProperty Name="Note" Relationship="Self.fk_note_notation" FromRole="Notation" ToRole="Note" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -1936,7 +1717,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1947,7 +1728,6 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_fmotiv_matter" FromRole="Fmotiv" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_fmotiv_notation" FromRole="Fmotiv" ToRole="Notation" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_fmotiv" FromRole="Fmotiv" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_fmotiv" FromRole="Fmotiv" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_fmotiv" FromRole="Fmotiv" ToRole="Characteristic" />
@@ -1985,7 +1765,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
@@ -1999,7 +1779,6 @@
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_measure_matter" FromRole="Measure" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_measure_notation" FromRole="Measure" ToRole="Notation" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_measure" FromRole="Measure" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_measure" FromRole="Measure" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_measure" FromRole="Measure" ToRole="Characteristic" />
@@ -2011,7 +1790,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
@@ -2019,7 +1798,6 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_music_chain_matter" FromRole="MusicSequence" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_music_chain_notation" FromRole="MusicSequence" ToRole="Notation" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_music_chain" FromRole="MusicSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_music_chain" FromRole="MusicSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_music_chain" FromRole="MusicSequence" ToRole="Characteristic" />
@@ -2031,7 +1809,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="None"/>
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
@@ -2039,7 +1817,6 @@
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_data_chain_matter" FromRole="DataSequence" ToRole="Matter" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_data_chain_notation" FromRole="DataSequence" ToRole="Notation" />
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_data_chain" FromRole="DataSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_data_chain" FromRole="DataSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_data_chain" FromRole="DataSequence" ToRole="Characteristic" />
@@ -2054,7 +1831,7 @@
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="NotationId" Type="Int32" Nullable="false" />
+          <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Numerator" Type="Int32" Nullable="false" />
           <Property Name="Denominator" Type="Int32" Nullable="false" />
@@ -2064,7 +1841,6 @@
           <Property Name="Priority" Type="Int32" />
           <Property Name="TieId" Type="Int32" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <NavigationProperty Name="Notation" Relationship="Self.fk_note_notation" FromRole="Note" ToRole="Notation" />
           <NavigationProperty Name="Tie" Relationship="Self.fk_note_tie" FromRole="Note" ToRole="Tie" />
           <NavigationProperty Name="Pitch" Relationship="Self.note_pitch" FromRole="Note" ToRole="Pitch" />
         </EntityType>
@@ -2351,32 +2127,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_chain_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CommonSequence">
-              <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_characteristic_type_link_link">
-          <End Role="Link" Type="Self.Link" Multiplicity="1" />
-          <End Role="CharacteristicTypeLink" Type="Self.CharacteristicTypeLink" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Link">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CharacteristicTypeLink">
-              <PropertyRef Name="LinkId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_characteristic_type_link_characteristic_type">
           <End Role="CharacteristicType" Type="Self.CharacteristicType" Multiplicity="1" />
           <End Role="CharacteristicTypeLink" Type="Self.CharacteristicTypeLink" Multiplicity="*" />
@@ -2425,19 +2175,6 @@
             </Principal>
             <Dependent Role="DnaSequence">
               <PropertyRef Name="MatterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_dna_chain_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="DnaSequence" Type="Self.DnaSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DnaSequence">
-              <PropertyRef Name="NotationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2507,19 +2244,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_element_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="Element" Type="Self.Element" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Element">
-              <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_literature_chain_language">
           <End Role="Language" Type="Self.Language" Multiplicity="1" />
           <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
@@ -2542,19 +2266,6 @@
             </Principal>
             <Dependent Role="LiteratureSequence">
               <PropertyRef Name="MatterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LiteratureSequence">
-              <PropertyRef Name="NotationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2675,20 +2386,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
-        <Association Name="fk_fmotiv_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Fmotiv">
-              <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
+        
         <Association Name="fk_binary_characteristic_fmotiv">
           <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2773,19 +2471,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_measure_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="Measure" Type="Self.Measure" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Measure">
-              <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_measure">
           <End Role="Measure" Type="Self.Measure" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2840,19 +2525,6 @@
             </Principal>
             <Dependent Role="MusicSequence">
               <PropertyRef Name="MatterId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_music_chain_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="MusicSequence" Type="Self.MusicSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MusicSequence">
-              <PropertyRef Name="NotationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2915,19 +2587,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_data_chain_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="DataSequence" Type="Self.DataSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DataSequence">
-              <PropertyRef Name="NotationId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_binary_characteristic_data_chain">
           <End Role="DataSequence" Type="Self.DataSequence" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -2969,19 +2628,6 @@
             </Principal>
             <Dependent Role="Characteristic">
               <PropertyRef Name="SequenceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_note_notation">
-          <End Role="Notation" Type="Self.Notation" Multiplicity="1" />
-          <End Role="Note" Type="Self.Note" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Notation">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Note">
-              <PropertyRef Name="NotationId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -3070,10 +2716,8 @@
           <EntitySet Name="Position" EntityType="Self.Position" />
           <EntitySet Name="Element" EntityType="Self.Element" />
           <EntitySet Name="Language" EntityType="Self.Language" />
-          <EntitySet Name="Link" EntityType="Self.Link" />
           <EntitySet Name="LiteratureSequence" EntityType="Self.LiteratureSequence" />
           <EntitySet Name="Matter" EntityType="Self.Matter" />
-          <EntitySet Name="Notation" EntityType="Self.Notation" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
           <EntitySet Name="Feature" EntityType="Self.Feature" />
           <EntitySet Name="Translator" EntityType="Self.Translator" />
@@ -3126,16 +2770,6 @@
             <End Role="CommonSequence" EntitySet="CommonSequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_chain_notation" Association="Self.fk_chain_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="CommonSequence" EntitySet="CommonSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_characteristic_type_link_link" Association="Self.fk_characteristic_type_link_link">
-            <End Role="Link" EntitySet="Link" />
-            <End Role="CharacteristicTypeLink" EntitySet="CharacteristicTypeLink" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_characteristic_type_link_characteristic_type" Association="Self.fk_characteristic_type_link_characteristic_type">
             <End Role="CharacteristicType" EntitySet="CharacteristicType" />
             <End Role="CharacteristicTypeLink" EntitySet="CharacteristicTypeLink" />
@@ -3153,11 +2787,6 @@
 
           <AssociationSet Name="fk_dna_chain_matter" Association="Self.fk_dna_chain_matter">
             <End Role="Matter" EntitySet="Matter" />
-            <End Role="DnaSequence" EntitySet="DnaSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_dna_chain_notation" Association="Self.fk_dna_chain_notation">
-            <End Role="Notation" EntitySet="Notation" />
             <End Role="DnaSequence" EntitySet="DnaSequence" />
           </AssociationSet>
 
@@ -3186,11 +2815,6 @@
             <End Role="Position" EntitySet="Position" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_element_notation" Association="Self.fk_element_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="Element" EntitySet="Element" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
             <End Role="Language" EntitySet="Language" />
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
@@ -3198,11 +2822,6 @@
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="Matter" EntitySet="Matter" />
-            <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_notation" Association="Self.fk_literature_chain_notation">
-            <End Role="Notation" EntitySet="Notation" />
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
           </AssociationSet>
 
@@ -3296,11 +2915,6 @@
             <End Role="Fmotiv" EntitySet="Fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fmotiv_notation" Association="Self.fk_fmotiv_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="Fmotiv" EntitySet="Fmotiv" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_fmotiv" Association="Self.fk_binary_characteristic_fmotiv">
             <End Role="Fmotiv" EntitySet="Fmotiv" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3331,11 +2945,6 @@
             <End Role="Measure" EntitySet="Measure" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_measure_notation" Association="Self.fk_measure_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="Measure" EntitySet="Measure" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_measure" Association="Self.fk_binary_characteristic_measure">
             <End Role="Measure" EntitySet="Measure" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3353,11 +2962,6 @@
 
           <AssociationSet Name="fk_music_chain_matter" Association="Self.fk_music_chain_matter">
             <End Role="Matter" EntitySet="Matter" />
-            <End Role="MusicSequence" EntitySet="MusicSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_music_chain_notation" Association="Self.fk_music_chain_notation">
-            <End Role="Notation" EntitySet="Notation" />
             <End Role="MusicSequence" EntitySet="MusicSequence" />
           </AssociationSet>
 
@@ -3381,11 +2985,6 @@
             <End Role="DataSequence" EntitySet="DataSequence" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_data_chain_notation" Association="Self.fk_data_chain_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="DataSequence" EntitySet="DataSequence" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_binary_characteristic_data_chain" Association="Self.fk_binary_characteristic_data_chain">
             <End Role="DataSequence" EntitySet="DataSequence" />
             <End Role="BinaryCharacteristic" EntitySet="BinaryCharacteristic" />
@@ -3399,11 +2998,6 @@
           <AssociationSet Name="fk_characteristic_data_chain" Association="Self.fk_characteristic_data_chain">
             <End Role="DataSequence" EntitySet="DataSequence" />
             <End Role="Characteristic" EntitySet="Characteristic" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_note_notation" Association="Self.fk_note_notation">
-            <End Role="Notation" EntitySet="Notation" />
-            <End Role="Note" EntitySet="Note" />
           </AssociationSet>
 
           <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
@@ -3439,6 +3033,8 @@
         </EntityContainer>
         
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceType" UnderlyingType="Byte" a:ExternalTypeName="SequenceType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -3485,7 +3081,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.CommonSequence">
               <MappingFragment StoreEntitySet="chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
@@ -3514,7 +3110,7 @@
               <MappingFragment StoreEntitySet="characteristic_type_link">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
-                <ScalarProperty Name="LinkId" ColumnName="link_id" />
+                <ScalarProperty Name="Link" ColumnName="link_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3549,7 +3145,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.DnaSequence">
               <MappingFragment StoreEntitySet="dna_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
@@ -3595,7 +3191,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -3612,21 +3208,11 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="Link">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Link">
-              <MappingFragment StoreEntitySet="link">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
           <EntitySetMapping Name="LiteratureSequence">
             <EntityTypeMapping TypeName="LibiadaWebModel.LiteratureSequence">
               <MappingFragment StoreEntitySet="literature_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
@@ -3651,17 +3237,6 @@
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Notation">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Notation">
-              <MappingFragment StoreEntitySet="notation">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="Nature" ColumnName="nature_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3716,7 +3291,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.Fmotiv">
               <MappingFragment StoreEntitySet="fmotiv">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
@@ -3758,7 +3333,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.Measure">
               <MappingFragment StoreEntitySet="measure">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
@@ -3779,7 +3354,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.MusicSequence">
               <MappingFragment StoreEntitySet="music_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
@@ -3794,7 +3369,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.DataSequence">
               <MappingFragment StoreEntitySet="data_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
@@ -3812,7 +3387,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="NotationId" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Numerator" ColumnName="numerator" />
                 <ScalarProperty Name="Denominator" ColumnName="denominator" />

@@ -58,14 +58,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             var chain = new BaseChain(stringSequence);
 
-            if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.NotationId))
+            if (!ElementRepository.ElementsInDb(chain.Alphabet, sequence.Notation))
             {
                 throw new Exception("At least one element of new sequence is invalid (not A, C, T, G or U).");
             }
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, false);
+            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
             Create(sequence, partial, alphabet, chain.Building);
         }
 
@@ -159,7 +159,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return new CommonSequence
             {
                 Id = source.Id,
-                NotationId = source.NotationId,
+                Notation = source.Notation,
                 MatterId = source.MatterId
             };
         }

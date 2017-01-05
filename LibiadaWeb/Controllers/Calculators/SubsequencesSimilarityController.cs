@@ -77,7 +77,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="featureIds">
@@ -100,7 +100,7 @@
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,
-            int notationId,
+            Notation notation,
             int[] featureIds,
             string maxDifference,
             string excludeType)
@@ -113,7 +113,7 @@
                 }
 
                 var firstMatterId = matterIds[0];
-                var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, featureIds);
                 var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
@@ -131,7 +131,7 @@
                 }
 
                 var secondMatterId = matterIds[1];
-                var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
+                var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, featureIds);
                 var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
@@ -169,7 +169,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
 
                 var similarity = similarSubsequences.Count * 200d / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
 

@@ -83,7 +83,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <param name="languageIds">
@@ -103,7 +103,7 @@
             int[] transformationIds,
             int iterationsCount,
             int[] characteristicTypeLinkIds,
-            int[] notationIds,
+            Notation[] notations,
             int[] languageIds,
             int?[] translatorIds)
         {
@@ -120,9 +120,9 @@
                 {
                     var matterId = matterIds[i];
                     var characteristics = new List<double>();
-                    for (int k = 0; k < notationIds.Length; k++)
+                    for (int k = 0; k < notations.Length; k++)
                     {
-                        int notationId = notationIds[k];
+                        var notation = notations[k];
                         long sequenceId;
                         if (matters[matterId].Nature == Nature.Literature)
                         {
@@ -130,7 +130,7 @@
                             int? translatorId = translatorIds[k];
 
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                                                           l.NotationId == notationId
+                                                                           l.Notation == notation
                                                                            && l.LanguageId == languageId
                                                                            &&
                                                                            ((translatorId == null &&
@@ -139,7 +139,7 @@
                         }
                         else
                         {
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
 
                         var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
@@ -172,7 +172,7 @@
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                 }
 
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];

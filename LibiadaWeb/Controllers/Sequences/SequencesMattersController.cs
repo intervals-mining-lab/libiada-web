@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -104,7 +105,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "Id,NotationId,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
+            [Bind(Include = "Id,Notation,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
             int? languageId,
             bool? original,
@@ -124,7 +125,7 @@
                     }
 
                     Stream sequenceStream;
-                    var nature = Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature;
+                    var nature = commonSequence.Notation.GetNature();
                     if (nature == Nature.Genetic && !localFile)
                     {
                         sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
@@ -134,7 +135,7 @@
                         sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
 
-                    switch (Db.Notation.Single(m => m.Id == commonSequence.NotationId).Nature)
+                    switch (nature)
                     {
                         case Nature.Genetic:
                             var bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);

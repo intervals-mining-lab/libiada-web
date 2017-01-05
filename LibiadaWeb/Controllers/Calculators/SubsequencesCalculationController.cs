@@ -84,7 +84,7 @@
                     features = featureRepository.Features.ToDictionary(f => f.Id, f => f.Name);
 
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
-                                            .Where(s => s.NotationId == Aliases.Notation.Nucleotide && matterIds.Contains(s.MatterId))
+                                            .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                             .Select(s => new { s.Id, MatterName = s.Matter.Name })
                                             .ToDictionary(s => s.Id);
                     parentSequenceIds = parentSequences.Keys.ToArray();

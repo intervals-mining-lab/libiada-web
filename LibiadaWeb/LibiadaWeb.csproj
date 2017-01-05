@@ -341,9 +341,6 @@
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
     <Compile Include="LibiadaWebDataAnnotations.cs" />
-    <Compile Include="Link.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -354,13 +351,13 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
-    <Compile Include="Models\SubsequenceComparer.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="Nature.cs" />
     <Compile Include="Models\OutputFormats.cs" />
     <Compile Include="Models\Repositories\Calculators\CharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Calculators\ICharacteristicRepository.cs" />
     <Compile Include="NatureAttribute.cs" />
+    <Compile Include="Notation.cs" />
     <Compile Include="SequenceType.cs" />
     <Compile Include="Tasks\Task.cs" />
     <Compile Include="Tasks\TaskData.cs" />
@@ -441,9 +438,6 @@
     <Compile Include="Models\Repositories\Sequences\IElementRepository.cs" />
     <Compile Include="Models\SubsequenceExtractor.cs" />
     <Compile Include="MusicSequence.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Notation.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Note.cs">

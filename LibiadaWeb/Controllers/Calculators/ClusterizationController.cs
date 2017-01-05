@@ -70,7 +70,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <param name="languageIds">
@@ -96,7 +96,7 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int[] notationIds,
+            Notation[] notations,
             int[] languageIds,
             int clustersCount,
             double? equipotencyWeight,
@@ -117,7 +117,8 @@
                     characteristics[j] = new double[characteristicTypeLinkIds.Length];
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.NotationId == notationIds[i]).Id;
+                        var notation = notations[i];
+                        long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.Notation == notation).Id;
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
                         if (db.Characteristic.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
@@ -138,7 +139,7 @@
 
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]));
                 }
 
                 var clusterizator = new KMeansClusterization();

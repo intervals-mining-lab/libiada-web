@@ -16,9 +16,8 @@ namespace LibiadaWeb
     {
         public int Id { get; set; }
         public int CharacteristicTypeId { get; set; }
-        public int LinkId { get; set; }
+        public LibiadaCore.Core.Link Link { get; set; }
     
-        public virtual Link Link { get; set; }
         public virtual CharacteristicType CharacteristicType { get; set; }
     }
 }

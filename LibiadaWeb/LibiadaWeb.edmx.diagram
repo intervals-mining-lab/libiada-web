@@ -111,9 +111,9 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_characteristic_data_chain" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_note_notation" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_pitch_accidental" ManuallyRouted="true" >
-          <edmx:ConnectorPoint PointX="2" PointY="22.240049401225058" />
-          <edmx:ConnectorPoint PointX="3.0604386724122006" PointY="22.240049401225058" />
-          <edmx:ConnectorPoint PointX="3.0604386724122006" PointY="20.941793619791671" />
+          <edmx:ConnectorPoint PointX="2" PointY="21.876152846153843" />
+          <edmx:ConnectorPoint PointX="3.0957517294144115" PointY="21.876152846153843" />
+          <edmx:ConnectorPoint PointX="3.0957517294144115" PointY="20.941793619791671" />
         </edmx:AssociationConnector>
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_fmotiv_fmotiv_type" ManuallyRouted="false" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_pitch_note_symbol" ManuallyRouted="false" />

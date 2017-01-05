@@ -19,7 +19,7 @@
         <div class="form-group">
             <div class="col-md-10">
                 <select class="form-control" title="Notation" ng-model="notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }"></select>
-                <input type="hidden" name="notationId" ng-value="notation.Value" />
+                <input type="hidden" name="notation" ng-value="notation.Value" />
             </div>
         </div>
         @Html.Partial("_CharacteristicNatureParams")

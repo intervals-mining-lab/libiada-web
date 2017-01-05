@@ -65,7 +65,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notations ids.
         /// </param>
         /// <param name="languageIds">
@@ -91,7 +91,7 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int[] notationIds,
+            Notation[] notations,
             int[] languageIds,
             int?[] translatorIds,
             bool rotate,
@@ -114,7 +114,7 @@
                         mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                         var commonSequenceRepository = new CommonSequenceRepository(db);
-                        chains = commonSequenceRepository.GetChains(matterIds, notationIds, languageIds, translatorIds);
+                        chains = commonSequenceRepository.GetChains(matterIds, notations, languageIds, translatorIds);
 
                         var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
@@ -122,7 +122,7 @@
                             links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
                             string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
                             calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
-                            characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
+                            characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                             characteristicsList[k] = new SelectListItem
                             {
                                 Value = k.ToString(),

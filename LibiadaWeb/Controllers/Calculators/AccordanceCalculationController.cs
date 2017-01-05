@@ -69,7 +69,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="languageId">
@@ -95,7 +95,7 @@
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,
-            int notationId,
+            Notation notation,
             int? languageId,
             int? translatorId,
             string calculationType)
@@ -108,7 +108,7 @@
                 }
 
                 var characteristics = new List<List<double>>();
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
@@ -123,12 +123,12 @@
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.NotationId == notationId && l.LanguageId == languageId &&
+                                l.Notation == notation && l.LanguageId == languageId &&
                                 MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else
                 {
-                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 }
 
                 Chain firstChain = commonSequenceRepository.ToLibiadaChain(firstSequenceId);
@@ -138,12 +138,12 @@
                 if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
-                                l.NotationId == notationId && l.LanguageId == languageId
+                                l.Notation == notation && l.LanguageId == languageId
                                 && MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else
                 {
-                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
+                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
                 Chain secondChain = commonSequenceRepository.ToLibiadaChain(secondSequenceId);

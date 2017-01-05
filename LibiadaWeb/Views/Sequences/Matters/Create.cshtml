@@ -30,18 +30,18 @@
                 </div>
             </div>
             <div class="form-group">
-                @Html.LabelFor(model => model.NotationId, new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.Notation, new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select class="form-control" ng-model="notationId" ng-options="n.Value as n.Text for n in notations | filter:{ Nature: nature }"></select>
-                    <input type="hidden" name="NotationId" ng-value="notationId" />
-                    @Html.ValidationMessageFor(model => model.NotationId, "", new { @class = "text-danger" })
+                    <input type="hidden" name="Notation" ng-value="notationId" />
+                    @Html.ValidationMessageFor(model => model.Notation, "", new { @class = "text-danger" })
                 </div>
             </div>
         }
         else
         {
             <div ng-hide="true" ng-init="filterByNature()"></div>
-            <input type="hidden" name="NotationId" ng-value="notationId" />
+            <input type="hidden" name="Notation" ng-value="notationId" />
             <input type="hidden" name="Matter.Nature" ng-value="nature" />
         }
 

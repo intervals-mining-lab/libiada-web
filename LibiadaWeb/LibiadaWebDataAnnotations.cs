@@ -45,19 +45,13 @@
         /// Gets or sets the notation id.
         /// </summary>
         [Display(Name = "Notation of elements in sequence")]
-        public long NotationId { get; set; }
+        public Notation Notation { get; set; }
 
         /// <summary>
         /// Gets or sets the matter id.
         /// </summary>
         [Display(Name = "Matter of sequence")]
         public long MatterId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the feature id.
-        /// </summary>
-        [Display(Name = "Feature")]
-        public int FeatureId { get; set; }
 
         /// <summary>
         /// Gets or sets the remote db id.
@@ -118,12 +112,6 @@
         public string ClassName { get; set; }
 
         /// <summary>
-        /// Gets or sets the linkable.
-        /// </summary>
-        [Display(Name = "Characteristic is linkable")]
-        public int Linkable { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether applicable to full sequence.
         /// </summary>
         [Display(Name = "Applicable to full sequence")]
@@ -175,41 +163,6 @@
     /// </summary>
     public class DataSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
-    }
-
-    /// <summary>
-    /// The subsequence.
-    /// </summary>
-    [MetadataType(typeof(SubsequenceDataAnnotations))]
-    public partial class Subsequence
-    {
-    }
-
-    /// <summary>
-    /// The subsequence data annotations.
-    /// </summary>
-    public class SubsequenceDataAnnotations
-    {
-    }
-
-    /// <summary>
-    /// The element.
-    /// </summary>
-    [MetadataType(typeof(ElementDataAnnotations))]
-    public partial class Element
-    {
-    }
-
-    /// <summary>
-    /// The element data annotations.
-    /// </summary>
-    public class ElementDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the notationId.
-        /// </summary>
-        [Display(Name = "Notation")]
-        public long NotationId { get; set; }
     }
 
     /// <summary>
@@ -285,21 +238,6 @@
     }
 
     /// <summary>
-    /// The matter.
-    /// </summary>
-    [MetadataType(typeof(MatterDataAnnotations))]
-    public partial class Matter
-    {
-    }
-
-    /// <summary>
-    /// The matter data annotations.
-    /// </summary>
-    public class MatterDataAnnotations
-    {
-    }
-
-    /// <summary>
     /// The measure.
     /// </summary>
     [MetadataType(typeof(MeasureDataAnnotations))]
@@ -353,21 +291,6 @@
     }
 
     /// <summary>
-    /// The notation.
-    /// </summary>
-    [MetadataType(typeof(NotationDataAnnotations))]
-    public partial class Notation
-    {
-    }
-
-    /// <summary>
-    /// The notation data annotations.
-    /// </summary>
-    public class NotationDataAnnotations
-    {
-    }
-
-    /// <summary>
     /// The note.
     /// </summary>
     [MetadataType(typeof(NoteDataAnnotations))]
@@ -378,7 +301,7 @@
     /// <summary>
     /// The note data annotations.
     /// </summary>
-    public class NoteDataAnnotations : ElementDataAnnotations
+    public class NoteDataAnnotations
     {
         /// <summary>
         /// Gets or sets the numerator.

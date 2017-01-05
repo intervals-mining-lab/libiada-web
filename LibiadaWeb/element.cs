@@ -27,7 +27,7 @@ namespace LibiadaWeb
         public string Value { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
-        public int NotationId { get; set; }
+        public Notation Notation { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     
@@ -35,7 +35,6 @@ namespace LibiadaWeb
         public virtual ICollection<BinaryCharacteristic> SecondElementBinaryCharacteristic { get; set; }
         public virtual ICollection<AccordanceCharacteristic> FirstElementAccordanceCharacteristic { get; set; }
         public virtual ICollection<AccordanceCharacteristic> SecondElementAccordanceCharacteristic { get; set; }
-        public virtual Notation Notation { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
     }
 }

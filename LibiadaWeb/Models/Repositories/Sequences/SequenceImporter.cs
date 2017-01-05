@@ -76,7 +76,7 @@
                 {
                     ParameterName = "notation_id",
                     NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = commonSequence.NotationId
+                    Value = commonSequence.Notation
                 },
                 new NpgsqlParameter
                 {

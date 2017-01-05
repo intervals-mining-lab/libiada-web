@@ -3,6 +3,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     using System.Collections.Generic;
     using System.Linq;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
@@ -11,22 +12,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
     public class NotationRepository : INotationRepository
     {
         /// <summary>
-        /// The notations.
-        /// </summary>
-        public readonly Notation[] Notations;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NotationRepository"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        public NotationRepository(LibiadaWebEntities db)
-        {
-            Notations = db.Notation.ToArray();
-        }
-
-        /// <summary>
         /// The get select list with nature.
         /// </summary>
         /// <returns>
@@ -34,12 +19,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public IEnumerable<SelectListItemWithNature> GetSelectListWithNature()
         {
-            return Notations.Select(n => new SelectListItemWithNature
+            return EnumExtensions.ToArray<Notation>().Select(n => new SelectListItemWithNature
             {
-                Value = n.Id.ToString(),
-                Text = n.Name,
+                Value = ((byte)n).ToString(),
+                Text = n.GetDisplayValue(),
                 Selected = false,
-                Nature = (byte)n.Nature
+                Nature = (byte)n.GetNature()
             });
         }
 
@@ -52,41 +37,41 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(int selectedNotation)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(Notation selectedNotation)
         {
-            return Notations.Select(n => new SelectListItemWithNature
+            return EnumExtensions.ToArray<Notation>().Select(n => new SelectListItemWithNature
             {
-                Value = n.Id.ToString(),
-                Text = n.Name,
-                Selected = n.Id == selectedNotation,
-                Nature = (byte)n.Nature
+                Value = ((byte)n).ToString(),
+                Text = n.GetDisplayValue(),
+                Selected = n == selectedNotation,
+                Nature = (byte)n.GetNature()
             });
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(List<int> notationIds)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(List<Notation> notations)
         {
-            return Notations.Where(n => notationIds.Contains(n.Id)).Select(n => new SelectListItemWithNature
+            return notations.Select(n => new SelectListItemWithNature
             {
-                Value = n.Id.ToString(),
-                Text = n.Name,
+                Value = ((byte)n).ToString(),
+                Text = n.GetDisplayValue(),
                 Selected = false,
-                Nature = (byte)n.Nature
+                Nature = (byte)n.GetNature()
             });
         }
 
         /// <summary>
         /// The get select list with nature.
         /// </summary>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <param name="selectedNotation">
@@ -95,14 +80,14 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="IEnumerable{Object}"/>.
         /// </returns>
-        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(List<int> notationIds, int selectedNotation)
+        public IEnumerable<SelectListItemWithNature> GetSelectListWithNature(List<Notation> notations, Notation selectedNotation)
         {
-            return Notations.Where(n => notationIds.Contains(n.Id)).Select(n => new SelectListItemWithNature
+            return notations.Select(n => new SelectListItemWithNature
             {
-                Value = n.Id.ToString(),
-                Text = n.Name,
-                Selected = n.Id == selectedNotation,
-                Nature = (byte)n.Nature
+                Value = ((byte)n).ToString(),
+                Text = n.GetDisplayValue(),
+                Selected = n == selectedNotation,
+                Nature = (byte)n.GetNature()
             });
         }
 

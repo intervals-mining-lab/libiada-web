@@ -70,7 +70,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <param name="languageIds">
@@ -93,7 +93,7 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int[] notationIds,
+            Notation[] notations,
             int[] languageIds,
             int?[] translatorIds,
             bool sort,
@@ -122,7 +122,7 @@
                     // cycle through characteristics and notations; second level of characteristics array
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        int notationId = notationIds[i];
+                        var notation = notations[i];
 
                         long sequenceId;
 
@@ -133,14 +133,14 @@
 
                             isLiteratureSequence = true;
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                      && l.NotationId == notationId
+                                                                      && l.Notation == notation
                                                                       && l.LanguageId == languageId
                                                                       && ((translatorId == null && l.TranslatorId == null)
                                                                       || (translatorId == l.TranslatorId))).Id;
                         }
                         else
                         {
-                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                            sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
 
                         Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
@@ -236,7 +236,7 @@
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationIds[k]);
+                    string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                     if (isLiteratureSequence)
                     {
                         int languageId = languageIds[k];

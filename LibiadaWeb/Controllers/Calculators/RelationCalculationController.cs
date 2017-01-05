@@ -11,6 +11,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -77,7 +78,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="languageId">
@@ -106,7 +107,7 @@
         public ActionResult Index(
             long matterId,
             int characteristicTypeLinkId,
-            int notationId,
+            Notation notation,
             int? languageId,
             int? translatorId,
             int filterSize,
@@ -126,14 +127,14 @@
                 if (db.Matter.Single(m => m.Id == matterId).Nature == Nature.Literature)
                 {
                     sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
-                                l.NotationId == notationId
+                                l.Notation == notation
                                 && l.LanguageId == languageId
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }
                 else
                 {
-                    sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+                    sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                 }
 
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
@@ -182,7 +183,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -195,7 +196,7 @@
                     { "elements", elements },
                     { "characteristicName", characteristicName },
                     { "matterName", db.CommonSequence.Single(m => m.Id == sequenceId).Matter.Name },
-                    { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.Name }
+                    { "notationName", db.CommonSequence.Single(c => c.Id == sequenceId).Notation.GetDisplayValue() }
                 };
             });
         }

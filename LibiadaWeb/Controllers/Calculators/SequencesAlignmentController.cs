@@ -73,7 +73,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="featureIds">
@@ -100,7 +100,7 @@
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,
-            int notationId,
+            Notation notation,
             int[] featureIds,
             string validationType,
             bool cyclicShift,
@@ -116,8 +116,8 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notationId, featureIds);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notationId, featureIds);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notation, featureIds);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notation, featureIds);
 
                 if (sort)
                 {
@@ -151,7 +151,7 @@
                 List<double> distances = new List<double>();
                 var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notationId);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -213,7 +213,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="featureIds">
@@ -222,11 +222,11 @@
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, int notationId, int[] featureIds)
+        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, Notation notation, int[] featureIds)
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<Characteristic>();
-            var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId).Id;
+            var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
 
             Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
 

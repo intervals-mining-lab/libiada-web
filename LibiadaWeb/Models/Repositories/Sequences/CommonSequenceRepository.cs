@@ -5,6 +5,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaCore.Core;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
@@ -109,7 +110,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="notationIds">
+        /// <param name="notations">
         /// The notation ids.
         /// </param>
         /// <param name="languageIds">
@@ -121,35 +122,35 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="T:Chain[][]"/>.
         /// </returns>
-        public Chain[][] GetChains(long[] matterIds, int[] notationIds, int[] languageIds, int?[] translatorIds)
+        public Chain[][] GetChains(long[] matterIds, Notation[] notations, int[] languageIds, int?[] translatorIds)
         {
             var chains = new Chain[matterIds.Length][];
-            var notationsRepository = new NotationRepository(Db);
+            var notationsRepository = new NotationRepository();
 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 var matterId = matterIds[i];
-                chains[i] = new Chain[notationIds.Length];
+                chains[i] = new Chain[notations.Length];
 
-                for (int j = 0; j < notationIds.Length; j++)
+                for (int j = 0; j < notations.Length; j++)
                 {
-                    Notation notation = notationsRepository.Notations.Single(n => n.Id == notationIds[j]);
+                    Notation notation = notations[j];
 
                     long sequenceId;
-                    if (notation.Nature == Nature.Literature)
+                    if (notation.GetNature() == Nature.Literature)
                     {
                         int languageId = languageIds[j];
                         int? translatorId = translatorIds[j];
 
                         sequenceId = Db.LiteratureSequence.Single(l =>
-                                    l.MatterId == matterId && l.NotationId == notation.Id
+                                    l.MatterId == matterId && l.Notation == notation
                                     && l.LanguageId == languageId
                                     && ((translatorId == null && l.TranslatorId == null)
                                         || (translatorId == l.TranslatorId))).Id;
                     }
                     else
                     {
-                        sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notation.Id).Id;
+                        sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                     }
 
                     chains[i][j] = ToLibiadaChain(sequenceId);
@@ -175,7 +176,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             for (int i = 0; i < matterIds.Length; i++)
             {
                 var matterId = matterIds[i];
-                var sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == Aliases.Notation.Nucleotide).Id;
+                var sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
                 chains[i] = ToLibiadaChain(sequenceId);
             }
 

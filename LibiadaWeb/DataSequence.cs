@@ -22,7 +22,7 @@ namespace LibiadaWeb
         }
     
         public long Id { get; set; }
-        public int NotationId { get; set; }
+        public Notation Notation { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
@@ -31,7 +31,6 @@ namespace LibiadaWeb
         public string Description { get; set; }
     
         public virtual Matter Matter { get; set; }
-        public virtual Notation Notation { get; set; }
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }

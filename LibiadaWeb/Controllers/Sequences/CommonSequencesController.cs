@@ -5,6 +5,8 @@
     using System.Threading.Tasks;
     using System.Web.Mvc;
 
+    using LibiadaWeb.Extensions;
+
     /// <summary>
     /// The common sequences controller.
     /// </summary>
@@ -72,8 +74,9 @@
                 return HttpNotFound();
             }
 
+
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.NotationId = new SelectList(Db.Notation, "Id", "Name", commonSequence.NotationId);
+            ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
             ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
             return View(commonSequence);
         }
@@ -89,7 +92,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,NotationId,MatterId,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Notation,MatterId,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +102,7 @@
             }
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.NotationId = new SelectList(Db.Notation, "Id", "Name", commonSequence.NotationId);
+            ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
             ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
             return View(commonSequence);
         }

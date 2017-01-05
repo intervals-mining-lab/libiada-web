@@ -44,7 +44,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             get
             {
-                return lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.Notation.StaticNotations.Contains(e.NotationId)).ToArray());
+                return lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
             }
         }
 
@@ -62,17 +62,17 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="alphabet">
         /// The alphabet.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public bool ElementsInDb(Alphabet alphabet, int notationId)
+        public bool ElementsInDb(Alphabet alphabet, Notation notation)
         {
             var elements = from IBaseObject element in alphabet select element.ToString();
 
-            int existingElementsCount = db.Element.Count(e => elements.Contains(e.Value) && e.NotationId == notationId);
+            int existingElementsCount = db.Element.Count(e => elements.Contains(e.Value) && e.Notation == notation);
 
             return alphabet.Cardinality == existingElementsCount;
         }
@@ -121,7 +121,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         TieId = (int)note.Tie,
                         Priority = note.Priority,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
-                        NotationId = Aliases.Notation.Notes
+                        Notation = Notation.Notes
                     };
                     newNotes.Add(newNote);
                     result[i] = newNote.Id;
@@ -139,7 +139,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="alphabet">
         /// The alphabet.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="createElements">
@@ -151,13 +151,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <exception cref="Exception">
         /// Thrown if alphabet element is not found in db.
         /// </exception>
-        public long[] ToDbElements(Alphabet alphabet, int notationId, bool createElements)
+        public long[] ToDbElements(Alphabet alphabet, Notation notation, bool createElements)
         {
-            if (!ElementsInDb(alphabet, notationId))
+            if (!ElementsInDb(alphabet, notation))
             {
                 if (createElements)
                 {
-                    CreateLackingElements(alphabet, notationId);
+                    CreateLackingElements(alphabet, notation);
                 }
                 else
                 {
@@ -165,13 +165,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 }
             }
 
-            var staticNotation = Aliases.Notation.StaticNotations.Contains(notationId);
+            var staticNotation = Aliases.StaticNotations.Contains(notation);
 
             var stringElements = alphabet.Select(element => element.ToString()).ToList();
 
             var elements = staticNotation ?
-                            CachedElements.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList() :
-                            db.Element.Where(e => e.NotationId == notationId && stringElements.Contains(e.Value)).ToList();
+                            CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList() :
+                            db.Element.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList();
 
             return (from stringElement in stringElements
                     join element in elements
@@ -309,15 +309,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="libiadaAlphabet">
         /// The libiada alphabet.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
-        private void CreateLackingElements(Alphabet libiadaAlphabet, int notationId)
+        private void CreateLackingElements(Alphabet libiadaAlphabet, Notation notation)
         {
             var newElements = new List<Element>();
             List<string> elements = (from IBaseObject element in libiadaAlphabet select element.ToString()).ToList();
 
-            var existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.NotationId == notationId).Select(e => e.Value);
+            var existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.Notation == notation).Select(e => e.Value);
 
             var notExistingElements = elements.Where(e => !existingElements.Contains(e)).ToList();
 
@@ -327,7 +327,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     Value = element,
                     Name = element,
-                    NotationId = notationId
+                    Notation = notation
                 };
                 newElements.Add(newElement);
             }

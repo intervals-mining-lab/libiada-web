@@ -67,7 +67,7 @@
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.NotationId, true);
+            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
             Create(sequence, alphabet, chain.Building);
         }
 

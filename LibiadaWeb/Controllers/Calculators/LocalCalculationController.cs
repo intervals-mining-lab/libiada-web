@@ -9,6 +9,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Misc.Iterators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -78,7 +79,7 @@
         /// <param name="translatorId">
         /// The translators id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="length">
@@ -109,7 +110,7 @@
             int[] characteristicTypeLinkIds,
             int? languageId,
             int? translatorId,
-            int notationId,
+            Notation notation,
             int length,
             int step,
             bool delta,
@@ -141,14 +142,14 @@
                     {
                         case Nature.Literature:
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                        && l.NotationId == notationId
+                                                                        && l.Notation == notation
                                                                         && l.LanguageId == languageId
                                                                         && l.TranslatorId == translatorId).Id;
                             break;
                         default:
-                            var id = notationId;
+                            var id = notation;
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
-                                                                    && c.NotationId == id).Id;
+                                                                    && c.Notation == id).Id;
                             break;
                     }
 
@@ -232,7 +233,7 @@
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notationId);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notation);
                     characteristicsList[k] = new SelectListItem
                     {
                         Value = k.ToString(),
@@ -241,12 +242,10 @@
                     };
                 }
 
-                string notationName = db.Notation.Single(n => n.Id == notationId).Name;
-
                 var result = new Dictionary<string, object>
                 {
                     { "characteristics", mattersCharacteristics },
-                    { "notationName", notationName },
+                    { "notationName", notation.GetDisplayValue() },
                     { "starts", starts },
                     { "partNames", partNames },
                     { "lengthes", lengthes },

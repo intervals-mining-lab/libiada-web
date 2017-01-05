@@ -61,7 +61,7 @@
         {
             this.db = db;
             matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository(db);
+            notationRepository = new NotationRepository();
             featureRepository = new FeatureRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
             remoteDbRepository = new RemoteDbRepository(db);
@@ -105,7 +105,7 @@
             else
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
-                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+                notations = notationRepository.GetSelectListWithNature(new List<Notation> { Notation.Nucleotides });
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>()
                     .Where(st => st.GetNature() == Nature.Genetic)
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
@@ -172,7 +172,7 @@
 
             var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
-            var geneticNotations = db.Notation.Where(n => n.Nature == Nature.Genetic).Select(n => n.Id).ToList();
+            var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
             var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
@@ -204,7 +204,7 @@
         public List<CharacteristicData> GetCharacteristicTypes(Func<CharacteristicType, bool> filter)
         {
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
-                .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.LinkId).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
+                .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.Link).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
             var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>() : new[] { Link.NotApplied, Link.Start, Link.Cycle };
 
@@ -214,7 +214,7 @@
                                                 {
                                                     Value = (int)l,
                                                     Text = l.GetDisplayValue(),
-                                                    CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.LinkId == (int)l).Select(ctl => ctl.Id)
+                                                    CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.Link == l).Select(ctl => ctl.Id)
                                                 });
 
             foreach (var characteristicType in characteristicTypes)
@@ -303,7 +303,7 @@
             else
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
-                notations = notationRepository.GetSelectListWithNature(new List<int> { Aliases.Notation.Nucleotide });
+                notations = notationRepository.GetSelectListWithNature(new List<Notation> { Notation.Nucleotides });
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic)
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic)

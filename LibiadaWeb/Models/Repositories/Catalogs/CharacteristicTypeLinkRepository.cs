@@ -4,6 +4,8 @@
     using System.Data.Entity;
     using System.Linq;
 
+    using LibiadaWeb.Extensions;
+
     using Link = LibiadaCore.Core.Link;
 
     /// <summary>
@@ -17,11 +19,6 @@
         private readonly List<CharacteristicTypeLink> characteristicTypeLinks;
 
         /// <summary>
-        /// All notations.
-        /// </summary>
-        private readonly List<Notation> notations;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicTypeLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
@@ -29,8 +26,7 @@
         /// </param>
         public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
         {
-            characteristicTypeLinks = db.CharacteristicTypeLink.Include(ctl => ctl.CharacteristicType).Include(ctl => ctl.Link).ToList();
-            notations = db.Notation.ToList();
+            characteristicTypeLinks = db.CharacteristicTypeLink.Include(ctl => ctl.CharacteristicType).ToList();
         }
 
         /// <summary>
@@ -55,7 +51,7 @@
         /// </returns>
         public Link GetLibiadaLink(int characteristicTypeLinkId)
         {
-            return (Link)characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).LinkId;
+            return (Link)characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
         }
 
         /// <summary>
@@ -78,17 +74,15 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetCharacteristicName(int characteristicTypeLinkId, int notationId)
+        public string GetCharacteristicName(int characteristicTypeLinkId, Notation notation)
         {
-            var notation = notations.Single(n => n.Id == notationId).Name;
-
-            return string.Join("  ", GetCharacteristicName(characteristicTypeLinkId), notation);
+            return string.Join("  ", GetCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
@@ -105,7 +99,7 @@
             var characteristicType = GetCharacteristicType(characteristicTypeLinkId).Name;
 
             var databaseLink = characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
-            var link = databaseLink.Id == (byte)Link.NotApplied ? string.Empty : databaseLink.Name;
+            var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
         }

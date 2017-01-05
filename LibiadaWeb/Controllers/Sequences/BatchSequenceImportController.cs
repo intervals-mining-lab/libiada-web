@@ -99,7 +99,7 @@
                             var sequence = new CommonSequence
                                                {
                                                    Matter = matter,
-                                                   NotationId = Aliases.Notation.Nucleotide,
+                                                   Notation = Notation.Nucleotides,
                                                    RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
                                                    RemoteId = metadata.Version.CompoundAccession
                                                };

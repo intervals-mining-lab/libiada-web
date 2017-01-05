@@ -139,66 +139,17 @@
             public const int German = 3;
         }
 
-        /// <summary>
-        /// The notation.
-        /// </summary>
-        public static class Notation
-        {
-            /// <summary>
-            /// Nucleotide notation.
-            /// </summary>
-            public const int Nucleotide = 1;
-
-            /// <summary>
-            /// The notation triplet.
-            /// </summary>
-            public const int Triplet = 2;
-
-            /// <summary>
-            /// Amino acid notation.
-            /// </summary>
-            public const int AminoAcid = 3;
-
-            /// <summary>
-            /// Segmented dna notation.
-            /// </summary>
-            public const int Segmented = 4;
-
-            /// <summary>
-            /// Words notation.
-            /// </summary>
-            public const int Words = 5;
-
-            /// <summary>
-            /// Fmotives notation.
-            /// </summary>
-            public const int Fmotives = 6;
-
-            /// <summary>
-            /// Measures notation.
-            /// </summary>
-            public const int Measures = 7;
-
-            /// <summary>
-            /// Notes notation.
-            /// </summary>
-            public const int Notes = 8;
-
-            /// <summary>
-            /// Letters The notation.
-            /// </summary>
-            public const int Letters = 9;
-
-            /// <summary>
-            /// The integer values.
-            /// </summary>
-            public const int IntegerValues = 10;
 
             /// <summary>
             /// Notations elements of which will not change.
             /// </summary>
-            public static readonly List<int> StaticNotations = new List<int> { Nucleotide, Triplet, AminoAcid, Letters };
-        }
+            public static readonly List<Notation> StaticNotations = new List<Notation> 
+            { 
+                Notation.Nucleotides, 
+                Notation.Triplets, 
+                Notation.AminoAcids, 
+                Notation.Letters 
+            };
 
         /// <summary>
         /// The note symbol.

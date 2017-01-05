@@ -23,7 +23,7 @@ namespace LibiadaWeb
         public string Value { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
-        public int NotationId { get; set; }
+        public Notation Notation { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public int Numerator { get; set; }
         public int Denominator { get; set; }
@@ -34,7 +34,6 @@ namespace LibiadaWeb
         public int TieId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     
-        public virtual Notation Notation { get; set; }
         public virtual Tie Tie { get; set; }
         public virtual ICollection<Pitch> Pitch { get; set; }
     }

@@ -90,7 +90,7 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="languageId">
@@ -110,14 +110,14 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, int notationId, int? languageId, int? translatorId, int scrambling)
+        public ActionResult Index(long matterId, Notation notation, int? languageId, int? translatorId, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
             if (matter.Nature == Nature.Literature)
             {
                 long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                    && l.NotationId == notationId
+                                                                    && l.Notation == notation
                                                                     && l.LanguageId == languageId
                                                                     && ((translatorId == null && l.TranslatorId == null)
                                                                         || (translatorId == l.TranslatorId))).Id;
@@ -125,7 +125,7 @@
             }
             else
             {
-                dataBaseSequence = db.CommonSequence.Single(c => c.MatterId == matterId && c.NotationId == notationId);
+                dataBaseSequence = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation);
             }
 
             BaseChain chain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
@@ -150,11 +150,11 @@
 
             var resultsequence = new CommonSequence
                 {
-                    NotationId = notationId,
+                    Notation = notation,
                     MatterId = resultMatter.Id
                 };
 
-            long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, dataBaseSequence.NotationId, false);
+            long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, dataBaseSequence.Notation, false);
 
             switch (matter.Nature)
             {

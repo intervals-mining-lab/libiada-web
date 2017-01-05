@@ -63,7 +63,7 @@
         /// <param name="congeneric">
         /// The congeneric.
         /// </param>
-        /// <param name="notationId">
+        /// <param name="notation">
         /// The notation id.
         /// </param>
         /// <param name="languageId">
@@ -80,7 +80,7 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, int length, bool congeneric, int notationId, int? languageId, int? translatorId)
+        public ActionResult Index(long[] matterIds, int length, bool congeneric, Notation notation, int? languageId, int? translatorId)
         {
             return Action(() =>
             {
@@ -96,14 +96,14 @@
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.NotationId == notationId
+                                l.Notation == notation
                                 && l.LanguageId == languageId
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }
                 else
                 {
-                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.NotationId == notationId).Id;
+                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 }
 
                 Chain firstLibiadaChain = sequenceRepository.ToLibiadaChain(firstSequenceId);
@@ -112,14 +112,14 @@
                 if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
-                                l.NotationId == notationId
+                                l.Notation == notation
                                 && l.LanguageId == languageId
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }
                 else
                 {
-                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.NotationId == notationId).Id;
+                    secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
                 Chain secondLibiadaChain = sequenceRepository.ToLibiadaChain(secondSequenceId);
