@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb
+﻿namespace LibiadaWeb.Attributes
 {
     using System;
 
@@ -6,7 +6,7 @@
     /// The nature attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.All)]
-    public class NatureAttribute : System.Attribute
+    public sealed class NatureAttribute : System.Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NatureAttribute"/> class.
@@ -16,7 +16,7 @@
         /// </param>
         public NatureAttribute(Nature value)
         {
-            Value = value;
+            this.Value = value;
         }
 
         /// <summary>

@@ -270,14 +270,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 var pitch = pitches[i];
                 var noteSymbol = pitch.Step.ToString();
-                var accidental = pitch.Alter.ToString();
 
                 if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
                 {
                     var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
                     result[i] = databasePitch.Id;
 
-                    if (pitch.Alter.ToString() != databasePitch.Accidental.Name
+                    if (pitch.Alter != (sbyte)databasePitch.Accidental
                         || pitch.Step.ToString() != databasePitch.NoteSymbol.Name
                         || pitch.Octave != databasePitch.Octave)
                     {
@@ -288,7 +287,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     var newPitch = new LibiadaWeb.Pitch
                     {
-                        AccidentalId = db.Accidental.Single(a => a.Name == accidental).Id,
+                        Accidental = (Accidental)pitch.Alter,
                         NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
                         Octave = pitch.Octave,
                         Midinumber = pitch.MidiNumber

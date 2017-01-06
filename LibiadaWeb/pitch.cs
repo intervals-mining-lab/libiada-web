@@ -23,11 +23,10 @@ namespace LibiadaWeb
         public int Octave { get; set; }
         public int Midinumber { get; set; }
         public Nullable<int> InstrumentId { get; set; }
-        public int AccidentalId { get; set; }
+        public Accidental Accidental { get; set; }
         public int NoteSymbolId { get; set; }
     
         public virtual Instrument Instrument { get; set; }
-        public virtual Accidental Accidental { get; set; }
         public virtual NoteSymbol NoteSymbol { get; set; }
         public virtual ICollection<Note> Note { get; set; }
     }

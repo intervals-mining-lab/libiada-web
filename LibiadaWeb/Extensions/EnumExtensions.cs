@@ -9,6 +9,8 @@
 
     using LibiadaCore.Exceptions;
 
+    using LibiadaWeb.Attributes;
+
     /// <summary>
     /// The enum helper.
     /// </summary>

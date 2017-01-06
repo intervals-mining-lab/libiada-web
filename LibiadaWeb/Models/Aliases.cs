@@ -88,37 +88,6 @@
         }
 
         /// <summary>
-        /// The accidental.
-        /// </summary>
-        public static class Accidental
-        {
-            /// <summary>
-            /// Double flat accidental.
-            /// </summary>
-            public const int DoubleFlat = 1;
-
-            /// <summary>
-            /// Flat accidental.
-            /// </summary>
-            public const int Flat = 2;
-
-            /// <summary>
-            /// Bekar accidental.
-            /// </summary>
-            public const int Bekar = 3;
-
-            /// <summary>
-            /// Sharp accidental.
-            /// </summary>
-            public const int Sharp = 4;
-
-            /// <summary>
-            /// Double sharp accidental.
-            /// </summary>
-            public const int DoubleSharp = 5;
-        }
-
-        /// <summary>
         /// The language.
         /// </summary>
         public static class Language
@@ -140,16 +109,16 @@
         }
 
 
-            /// <summary>
-            /// Notations elements of which will not change.
-            /// </summary>
-            public static readonly List<Notation> StaticNotations = new List<Notation> 
-            { 
-                Notation.Nucleotides, 
-                Notation.Triplets, 
-                Notation.AminoAcids, 
-                Notation.Letters 
-            };
+        /// <summary>
+        /// Notations elements of which will not change.
+        /// </summary>
+        public static readonly List<Notation> StaticNotations = new List<Notation> 
+        { 
+            Notation.Nucleotides, 
+            Notation.Triplets, 
+            Notation.AminoAcids, 
+            Notation.Letters 
+        };
 
         /// <summary>
         /// The note symbol.

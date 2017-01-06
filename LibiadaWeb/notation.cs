@@ -3,6 +3,8 @@
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
+    using LibiadaWeb.Attributes;
+
     public enum Notation : byte
     {
         /// <summary>

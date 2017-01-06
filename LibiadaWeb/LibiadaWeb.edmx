@@ -344,7 +344,7 @@
           <Property Name="octave" Type="int4" Nullable="false" />
           <Property Name="midinumber" Type="int4" Nullable="false" />
           <Property Name="instrument_id" Type="int4" Nullable="true" />
-          <Property Name="accidental_id" Type="int4" Nullable="false" />
+          <Property Name="accidental_id" Type="int2" Nullable="false" />
           <Property Name="note_symbol_id" Type="int4" Nullable="false" />
         </EntityType>
 
@@ -355,15 +355,6 @@
           </Key>
           <Property Name="note_id" Type="int8" Nullable="false" />
           <Property Name="pitch_id" Type="int4" Nullable="false" />
-        </EntityType>
-
-        <EntityType Name="accidental">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
         </EntityType>
 
         <EntityType Name="fmotiv_type">
@@ -1096,19 +1087,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_pitch_accidental">
-          <End Role="accidental" Type="Self.accidental" Multiplicity="1" />
-          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="accidental">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="pitch">
-              <PropertyRef Name="accidental_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_note_pitch_note">
           <End Role="note" Type="Self.note" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1216,7 +1194,6 @@
           <EntitySet Name="note" EntityType="Self.note" store:Type="Tables" Schema="public"/>
           <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
-          <EntitySet Name="accidental" EntityType="Self.accidental" store:Type="Tables" Schema="public"/>
           <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_symbol" EntityType="Self.note_symbol" store:Type="Tables" Schema="public"/>
           <EntitySet Name="tie" EntityType="Self.tie" store:Type="Tables" Schema="public"/>
@@ -1376,11 +1353,6 @@
           <AssociationSet Name="fk_data_chain_matter" Association="Self.fk_data_chain_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="data_chain" EntitySet="data_chain" />
-          </AssociationSet>
-          
-          <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
-            <End Role="accidental" EntitySet="accidental" />
-            <End Role="pitch" EntitySet="pitch" />
           </AssociationSet>
 
           <AssociationSet Name="fk_note_pitch_note" Association="Self.fk_note_pitch_note">
@@ -1853,22 +1825,11 @@
           <Property Name="Octave" Type="Int32" Nullable="false" />
           <Property Name="Midinumber" Type="Int32" Nullable="false" />
           <Property Name="InstrumentId" Type="Int32" Nullable="true" />
-          <Property Name="AccidentalId" Type="Int32" Nullable="false" />
+          <Property Name="Accidental" Type="LibiadaWebModel.Accidental" Nullable="false" />
           <Property Name="NoteSymbolId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="Self.fk_pitch_instrument" FromRole="Pitch" ToRole="Instrument" />
-          <NavigationProperty Name="Accidental" Relationship="Self.fk_pitch_accidental" FromRole="Pitch" ToRole="Accidental" />
           <NavigationProperty Name="NoteSymbol" Relationship="Self.fk_pitch_note_symbol" FromRole="Pitch" ToRole="NoteSymbol" />
           <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />
-        </EntityType>
-
-        <EntityType Name="Accidental">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Pitch" Relationship="Self.fk_pitch_accidental" FromRole="Accidental" ToRole="Pitch" />
         </EntityType>
 
         <EntityType Name="FmotivType">
@@ -2632,19 +2593,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_pitch_accidental">
-          <End Role="Accidental" Type="Self.Accidental" Multiplicity="1" />
-          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Accidental">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Pitch">
-              <PropertyRef Name="AccidentalId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_fmotiv_fmotiv_type">
           <End Role="FmotivType" Type="Self.FmotivType" Multiplicity="1" />
           <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
@@ -2730,7 +2678,6 @@
           <EntitySet Name="DataSequence" EntityType="Self.DataSequence" />
           <EntitySet Name="Note" EntityType="Self.Note" />
           <EntitySet Name="Pitch" EntityType="Self.Pitch" />
-          <EntitySet Name="Accidental" EntityType="Self.Accidental" />
           <EntitySet Name="FmotivType" EntityType="Self.FmotivType" />
           <EntitySet Name="NoteSymbol" EntityType="Self.NoteSymbol" />
           <EntitySet Name="Tie" EntityType="Self.Tie" />
@@ -3000,11 +2947,6 @@
             <End Role="Characteristic" EntitySet="Characteristic" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_pitch_accidental" Association="Self.fk_pitch_accidental">
-            <End Role="Accidental" EntitySet="Accidental" />
-            <End Role="Pitch" EntitySet="Pitch" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
             <End Role="FmotivType" EntitySet="FmotivType" />
             <End Role="Fmotiv" EntitySet="Fmotiv" />
@@ -3033,6 +2975,7 @@
         </EntityContainer>
         
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceType" UnderlyingType="Byte" a:ExternalTypeName="SequenceType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -3408,18 +3351,8 @@
                 <ScalarProperty Name="Octave" ColumnName="octave" />
                 <ScalarProperty Name="Midinumber" ColumnName="midinumber" />
                 <ScalarProperty Name="InstrumentId" ColumnName="instrument_id" />
-                <ScalarProperty Name="AccidentalId" ColumnName="accidental_id" />
+                <ScalarProperty Name="Accidental" ColumnName="accidental_id" />
                 <ScalarProperty Name="NoteSymbolId" ColumnName="note_symbol_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Accidental">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Accidental">
-              <MappingFragment StoreEntitySet="accidental">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
