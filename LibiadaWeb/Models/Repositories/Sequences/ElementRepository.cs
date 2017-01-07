@@ -276,7 +276,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
                     result[i] = databasePitch.Id;
 
-                    if (pitch.Alter != (sbyte)databasePitch.Accidental
+                    if (pitch.Alter != databasePitch.Accidental
                         || pitch.Step.ToString() != databasePitch.NoteSymbol.Name
                         || pitch.Octave != databasePitch.Octave)
                     {
