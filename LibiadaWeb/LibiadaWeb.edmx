@@ -332,7 +332,7 @@
           <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
           <Property Name="priority" Type="int4" />
-          <Property Name="tie_id" Type="int4" Nullable="false" />
+          <Property Name="tie_id" Type="int2" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
@@ -374,17 +374,7 @@
           <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="description" Type="text" />
         </EntityType>
-
-        <EntityType Name="tie">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
-
+        
         <Association Name="fk_binary_characteristic_first_element">
           <End Role="element" Type="Self.element" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -1141,19 +1131,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_note_tie">
-          <End Role="tie" Type="Self.tie" Multiplicity="1" />
-          <End Role="note" Type="Self.note" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tie">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="note">
-              <PropertyRef Name="tie_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_pitch_instrument">
           <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
           <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
@@ -1196,7 +1173,6 @@
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
           <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_symbol" EntityType="Self.note_symbol" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="tie" EntityType="Self.tie" store:Type="Tables" Schema="public"/>
           <EntitySet Name="translator" EntityType="Self.translator" store:Type="Tables" Schema="public"/>
 
 
@@ -1373,11 +1349,6 @@
           <AssociationSet Name="fk_pitch_note_symbol" Association="Self.fk_pitch_note_symbol">
             <End Role="note_symbol" EntitySet="note_symbol" />
             <End Role="pitch" EntitySet="pitch" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_note_tie" Association="Self.fk_note_tie">
-            <End Role="tie" EntitySet="tie" />
-            <End Role="note" EntitySet="note" />
           </AssociationSet>
 
           <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
@@ -1811,9 +1782,8 @@
           <Property Name="Odenominator" Type="Int32" Nullable="false" />
           <Property Name="Triplet" Type="Boolean" Nullable="false" />
           <Property Name="Priority" Type="Int32" />
-          <Property Name="TieId" Type="Int32" Nullable="false" />
+          <Property Name="Tie" Type="LibiadaWebModel.Tie" Nullable="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <NavigationProperty Name="Tie" Relationship="Self.fk_note_tie" FromRole="Note" ToRole="Tie" />
           <NavigationProperty Name="Pitch" Relationship="Self.note_pitch" FromRole="Note" ToRole="Pitch" />
         </EntityType>
 
@@ -1850,16 +1820,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Pitch" Relationship="Self.fk_pitch_note_symbol" FromRole="NoteSymbol" ToRole="Pitch" />
-        </EntityType>
-
-        <EntityType Name="Tie">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Note" Relationship="Self.fk_note_tie" FromRole="Tie" ToRole="Note" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2619,19 +2579,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_note_tie">
-          <End Role="Tie" Type="Self.Tie" Multiplicity="1" />
-          <End Role="Note" Type="Self.Note" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tie">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Note">
-              <PropertyRef Name="TieId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_pitch_instrument">
           <End Role="Instrument" Type="Self.Instrument" Multiplicity="0..1" />
           <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
@@ -2680,7 +2627,6 @@
           <EntitySet Name="Pitch" EntityType="Self.Pitch" />
           <EntitySet Name="FmotivType" EntityType="Self.FmotivType" />
           <EntitySet Name="NoteSymbol" EntityType="Self.NoteSymbol" />
-          <EntitySet Name="Tie" EntityType="Self.Tie" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -2957,11 +2903,6 @@
             <End Role="Pitch" EntitySet="Pitch" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_note_tie" Association="Self.fk_note_tie">
-            <End Role="Tie" EntitySet="Tie" />
-            <End Role="Note" EntitySet="Note" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
             <End Role="Instrument" EntitySet="Instrument" />
             <End Role="Pitch" EntitySet="Pitch" />
@@ -2973,11 +2914,12 @@
           </AssociationSet>
 
         </EntityContainer>
-        
+
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceType" UnderlyingType="Byte" a:ExternalTypeName="SequenceType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -3338,7 +3280,7 @@
                 <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
                 <ScalarProperty Name="Priority" ColumnName="priority" />
-                <ScalarProperty Name="TieId" ColumnName="tie_id" />
+                <ScalarProperty Name="Tie" ColumnName="tie_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -3370,16 +3312,6 @@
           <EntitySetMapping Name="NoteSymbol">
             <EntityTypeMapping TypeName="LibiadaWebModel.NoteSymbol">
               <MappingFragment StoreEntitySet="note_symbol">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Tie">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Tie">
-              <MappingFragment StoreEntitySet="tie">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
