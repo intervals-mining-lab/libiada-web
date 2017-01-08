@@ -27,7 +27,7 @@ namespace LibiadaWeb
         public long MatterId { get; set; }
         public Nullable<int> TranslatorId { get; set; }
         public bool Original { get; set; }
-        public int LanguageId { get; set; }
+        public Language Language { get; set; }
         public Nullable<int> RemoteDbId { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
@@ -36,7 +36,6 @@ namespace LibiadaWeb
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
-        public virtual Language Language { get; set; }
         public virtual Matter Matter { get; set; }
         public virtual Translator Translator { get; set; }
         public virtual RemoteDb RemoteDb { get; set; }

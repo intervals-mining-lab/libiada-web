@@ -72,7 +72,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -96,7 +96,7 @@
             long[] matterIds,
             int characteristicTypeLinkId,
             Notation notation,
-            int? languageId,
+            Language? language,
             int? translatorId,
             string calculationType)
         {
@@ -123,7 +123,7 @@
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.Notation == notation && l.LanguageId == languageId &&
+                                l.Notation == notation && l.Language == language &&
                                 MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else
@@ -138,7 +138,7 @@
                 if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
-                                l.Notation == notation && l.LanguageId == languageId
+                                l.Notation == notation && l.Language == language
                                 && MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
                 }
                 else

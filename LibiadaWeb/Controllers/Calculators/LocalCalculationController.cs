@@ -73,7 +73,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -108,7 +108,7 @@
         public ActionResult Index(
             long[] matterIds,
             int[] characteristicTypeLinkIds,
-            int? languageId,
+            Language? language,
             int? translatorId,
             Notation notation,
             int length,
@@ -143,7 +143,7 @@
                         case Nature.Literature:
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                         && l.Notation == notation
-                                                                        && l.LanguageId == languageId
+                                                                        && l.Language == language
                                                                         && l.TranslatorId == translatorId).Id;
                             break;
                         default:

@@ -81,7 +81,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -108,7 +108,7 @@
             long matterId,
             int characteristicTypeLinkId,
             Notation notation,
-            int? languageId,
+            Language? language,
             int? translatorId,
             int filterSize,
             bool filter,
@@ -128,7 +128,7 @@
                 {
                     sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
                                 l.Notation == notation
-                                && l.LanguageId == languageId
+                                && l.Language == language
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }

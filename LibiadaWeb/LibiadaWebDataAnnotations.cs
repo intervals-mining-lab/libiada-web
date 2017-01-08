@@ -222,7 +222,7 @@
         /// Gets or sets the language id.
         /// </summary>
         [Display(Name = "Language of literary work")]
-        public int LanguageId { get; set; }
+        public Language LanguageId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether literary work is in original language (not in translation).

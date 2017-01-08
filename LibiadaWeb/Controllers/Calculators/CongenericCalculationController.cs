@@ -11,6 +11,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Models.Repositories.Catalogs;
@@ -73,7 +74,7 @@
         /// <param name="notations">
         /// The notation ids.
         /// </param>
-        /// <param name="languageIds">
+        /// <param name="languages">
         /// The language ids.
         /// </param>
         /// <param name="translatorIds">
@@ -94,7 +95,7 @@
             long[] matterIds,
             int[] characteristicTypeLinkIds,
             Notation[] notations,
-            int[] languageIds,
+            Language[] languages,
             int?[] translatorIds,
             bool sort,
             bool theoretical)
@@ -128,13 +129,13 @@
 
                         if (db.Matter.Single(m => m.Id == matterId).Nature == Nature.Literature)
                         {
-                            int languageId = languageIds[i];
+                            Language language = languages[i];
                             int? translatorId = translatorIds[i];
 
                             isLiteratureSequence = true;
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                       && l.Notation == notation
-                                                                      && l.LanguageId == languageId
+                                                                      && l.Language == language
                                                                       && ((translatorId == null && l.TranslatorId == null)
                                                                       || (translatorId == l.TranslatorId))).Id;
                         }
@@ -239,9 +240,8 @@
                     string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                     if (isLiteratureSequence)
                     {
-                        int languageId = languageIds[k];
-                        string language = db.Language.Single(l => l.Id == languageId).Name;
-                        characteristicNames.Add(characteristicType + " " + language);
+                        Language language = languages[k];
+                        characteristicNames.Add(characteristicType + " " + language.GetDisplayValue());
                     }
                     else
                     {

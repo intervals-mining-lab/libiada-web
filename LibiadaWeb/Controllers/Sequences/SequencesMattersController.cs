@@ -84,7 +84,7 @@
         /// <param name="localFile">
         /// The local file.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="original">
@@ -107,7 +107,7 @@
         public ActionResult Create(
             [Bind(Include = "Id,Notation,RemoteDbId,RemoteId,Description,Matter")] CommonSequence commonSequence,
             bool localFile,
-            int? languageId,
+            Language? language,
             bool? original,
             int? translatorId,
             bool? partial,
@@ -145,7 +145,7 @@
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
-                            literatureSequenceRepository.Create(commonSequence, sequenceStream, languageId ?? 0, original ?? false, translatorId);
+                            literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? false, translatorId);
                             break;
                         case Nature.MeasurementData:
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);

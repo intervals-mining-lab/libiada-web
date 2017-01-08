@@ -37,7 +37,6 @@ namespace LibiadaWeb
         public virtual DbSet<Subsequence> Subsequence { get; set; }
         public virtual DbSet<Position> Position { get; set; }
         public virtual DbSet<Element> Element { get; set; }
-        public virtual DbSet<Language> Language { get; set; }
         public virtual DbSet<LiteratureSequence> LiteratureSequence { get; set; }
         public virtual DbSet<Matter> Matter { get; set; }
         public virtual DbSet<SequenceAttribute> SequenceAttribute { get; set; }

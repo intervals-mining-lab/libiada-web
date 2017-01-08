@@ -107,11 +107,11 @@
             </div>
             <div ng-switch-when="@((byte)Nature.Literature)">
                 <div class="form-group">
-                    <label class="control-label col-md-2" for="languageId">Language of literary work:</label>
+                    <label class="control-label col-md-2" for="language">Language of literary work:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages" id="languageId"></select>
-                        <input type="hidden" name="languageId" ng-value="languageId" />
-                        @Html.ValidationMessage("languageId", "", new { @class = "text-danger" })
+                        <select class="form-control" ng-model="languageId" ng-options="l.Value as l.Text for l in languages" id="language"></select>
+                        <input type="hidden" name="language" ng-value="languageId" />
+                        @Html.ValidationMessage("language", "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">

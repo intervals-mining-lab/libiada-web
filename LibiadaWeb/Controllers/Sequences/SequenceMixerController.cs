@@ -93,7 +93,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -110,7 +110,7 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, Notation notation, int? languageId, int? translatorId, int scrambling)
+        public ActionResult Index(long matterId, Notation notation, Language? language, int? translatorId, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
@@ -118,7 +118,7 @@
             {
                 long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                     && l.Notation == notation
-                                                                    && l.LanguageId == languageId
+                                                                    && l.Language == language
                                                                     && ((translatorId == null && l.TranslatorId == null)
                                                                         || (translatorId == l.TranslatorId))).Id;
                 dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
@@ -177,7 +177,7 @@
                     literatureSequenceRepository.Create(
                         resultsequence,
                         literatureSequence.Original,
-                        literatureSequence.LanguageId,
+                        literatureSequence.Language,
                         literatureSequence.TranslatorId,
                         alphabet,
                         chain.Building);

@@ -312,9 +312,7 @@
     <Compile Include="Instrument.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Language.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Language.cs" />
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

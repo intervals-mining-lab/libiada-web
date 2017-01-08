@@ -147,15 +147,6 @@
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
-        <EntityType Name="language">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
         <EntityType Name="literature_chain">
           <Key>
             <PropertyRef Name="id" />
@@ -166,7 +157,7 @@
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="translator_id" Type="int4" />
           <Property Name="original" Type="bool" Nullable="false" />
-          <Property Name="language_id" Type="int4" Nullable="false" />
+          <Property Name="language_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int4" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -579,19 +570,6 @@
             </Principal>
             <Dependent Role="position">
               <PropertyRef Name="subsequence_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_language">
-          <End Role="language" Type="Self.language" Multiplicity="1" />
-          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="language">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="literature_chain">
-              <PropertyRef Name="language_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1156,7 +1134,6 @@
           <EntitySet Name="subsequence" EntityType="Self.subsequence" store:Type="Tables" Schema="public"/>
           <EntitySet Name="position" EntityType="Self.position" store:Type="Tables" Schema="public"/>
           <EntitySet Name="element" EntityType="Self.element" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="language" EntityType="Self.language" store:Type="Tables" Schema="public"/>
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
@@ -1254,11 +1231,6 @@
           <AssociationSet Name="fk_position_subsequence" Association="Self.fk_position_subsequence">
             <End Role="subsequence" EntitySet="subsequence" />
             <End Role="position" EntitySet="position" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
-            <End Role="language" EntitySet="language" />
-            <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
@@ -1542,17 +1514,6 @@
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_element" FromRole="Element" ToRole="CongenericCharacteristic" />
         </EntityType>
 
-        <EntityType Name="Language">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-
-          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_language" FromRole="Language" ToRole="LiteratureSequence" />
-        </EntityType>
-
         <EntityType Name="LiteratureSequence">
           <Key>
             <PropertyRef Name="Id" />
@@ -1563,7 +1524,7 @@
           <Property Name="MatterId" Type="Int64" Nullable="false" />
           <Property Name="TranslatorId" Type="Int32"  />
           <Property Name="Original" Type="Boolean" Nullable="false" />
-          <Property Name="LanguageId" Type="Int32" Nullable="false" />
+          <Property Name="Language" Type="LibiadaWebModel.Language" Nullable="false" />
           <Property Name="RemoteDbId" Type="Int32" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -1572,7 +1533,6 @@
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="Characteristic" />
-          <NavigationProperty Name="Language" Relationship="Self.fk_literature_chain_language" FromRole="LiteratureSequence" ToRole="Language" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_literature_chain_matter" FromRole="LiteratureSequence" ToRole="Matter" />
           <NavigationProperty Name="Translator" Relationship="Self.fk_literature_chain_translator" FromRole="LiteratureSequence" ToRole="Translator" />
           <NavigationProperty Name="RemoteDb" Relationship="Self.fk_literature_chain_remote_db" FromRole="LiteratureSequence" ToRole="RemoteDb" />
@@ -2164,20 +2124,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
-        <Association Name="fk_literature_chain_language">
-          <End Role="Language" Type="Self.Language" Multiplicity="1" />
-          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Language">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LiteratureSequence">
-              <PropertyRef Name="LanguageId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
+        
         <Association Name="fk_literature_chain_matter">
           <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
           <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
@@ -2610,7 +2557,6 @@
           <EntitySet Name="Subsequence" EntityType="Self.Subsequence" />
           <EntitySet Name="Position" EntityType="Self.Position" />
           <EntitySet Name="Element" EntityType="Self.Element" />
-          <EntitySet Name="Language" EntityType="Self.Language" />
           <EntitySet Name="LiteratureSequence" EntityType="Self.LiteratureSequence" />
           <EntitySet Name="Matter" EntityType="Self.Matter" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
@@ -2706,11 +2652,6 @@
           <AssociationSet Name="fk_position_subsequence" Association="Self.fk_position_subsequence">
             <End Role="Subsequence" EntitySet="Subsequence" />
             <End Role="Position" EntitySet="Position" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_language" Association="Self.fk_literature_chain_language">
-            <End Role="Language" EntitySet="Language" />
-            <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
           </AssociationSet>
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
@@ -2916,6 +2857,7 @@
         </EntityContainer>
 
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Language" UnderlyingType="Byte" a:ExternalTypeName="Language" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -3083,16 +3025,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="Language">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Language">
-              <MappingFragment StoreEntitySet="language">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
           <EntitySetMapping Name="LiteratureSequence">
             <EntityTypeMapping TypeName="LibiadaWebModel.LiteratureSequence">
               <MappingFragment StoreEntitySet="literature_chain">
@@ -3102,7 +3034,7 @@
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
                 <ScalarProperty Name="Original" ColumnName="original" />
-                <ScalarProperty Name="LanguageId" ColumnName="language_id" />
+                <ScalarProperty Name="Language" ColumnName="language_id" />
                 <ScalarProperty Name="RemoteDbId" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />

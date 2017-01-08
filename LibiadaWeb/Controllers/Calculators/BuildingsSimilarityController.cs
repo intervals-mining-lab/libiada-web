@@ -66,7 +66,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -80,7 +80,7 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, int length, bool congeneric, Notation notation, int? languageId, int? translatorId)
+        public ActionResult Index(long[] matterIds, int length, bool congeneric, Notation notation, Language? language, int? translatorId)
         {
             return Action(() =>
             {
@@ -97,7 +97,7 @@
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
                                 l.Notation == notation
-                                && l.LanguageId == languageId
+                                && l.Language == language
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }
@@ -113,7 +113,7 @@
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
                                 l.Notation == notation
-                                && l.LanguageId == languageId
+                                && l.Language == language
                                 && ((translatorId == null && l.TranslatorId == null)
                                                 || (translatorId == l.TranslatorId))).Id;
                 }

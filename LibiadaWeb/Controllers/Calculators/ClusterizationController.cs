@@ -73,7 +73,7 @@
         /// <param name="notations">
         /// The notation ids.
         /// </param>
-        /// <param name="languageIds">
+        /// <param name="languages">
         /// The language ids.
         /// </param>
         /// <param name="clustersCount">
@@ -97,7 +97,7 @@
             long[] matterIds,
             int[] characteristicTypeLinkIds,
             Notation[] notations,
-            int[] languageIds,
+            Language[] languages,
             int clustersCount,
             double? equipotencyWeight,
             double? normalizedDistanceWeight,

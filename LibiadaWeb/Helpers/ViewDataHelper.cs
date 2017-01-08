@@ -85,7 +85,7 @@
         public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
-
+            translators.Add(new SelectListItem { Value = null, Text = "None", Selected = true });
             var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
@@ -116,7 +116,7 @@
 
             data.Add("natures",  natures);
             data.Add("notations", notations);
-            data.Add("languages", new SelectList(db.Language, "id", "name"));
+            data.Add("languages", EnumExtensions.ToSelectList<Language>());
             data.Add("translators", translators);
             data.Add("sequenceTypes", sequenceTypes);
             data.Add("groups", groups);
@@ -284,6 +284,7 @@
         public Dictionary<string, object> FillMatterCreationData()
         {
             var translators = new SelectList(db.Translator, "id", "name").ToList();
+            translators.Add(new SelectListItem { Value = null, Text = "None", Selected = true });
 
             IEnumerable<SelectListItemWithNature> notations;
             IEnumerable<SelectListItem> natures;
@@ -315,7 +316,7 @@
                                    { "matters", matterRepository.GetMatterSelectList() },
                                    { "natures", natures },
                                    { "notations", notations },
-                                   { "languages", new SelectList(db.Language, "id", "name") },
+                                   { "languages", EnumExtensions.ToSelectList<Language>() },
                                    { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
                                    { "translators", translators },
                                    { "sequenceTypes", sequenceTypes },

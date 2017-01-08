@@ -68,7 +68,7 @@
         /// <param name="notations">
         /// The notations ids.
         /// </param>
-        /// <param name="languageIds">
+        /// <param name="languages">
         /// The languages ids.
         /// </param>
         /// <param name="translatorIds">
@@ -92,7 +92,7 @@
             long[] matterIds,
             int[] characteristicTypeLinkIds,
             Notation[] notations,
-            int[] languageIds,
+            Language[] languages,
             int?[] translatorIds,
             bool rotate,
             bool complementary,
@@ -114,7 +114,7 @@
                         mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                         var commonSequenceRepository = new CommonSequenceRepository(db);
-                        chains = commonSequenceRepository.GetChains(matterIds, notations, languageIds, translatorIds);
+                        chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translatorIds);
 
                         var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)

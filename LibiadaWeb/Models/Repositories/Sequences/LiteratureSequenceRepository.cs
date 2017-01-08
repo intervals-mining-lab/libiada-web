@@ -36,7 +36,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequenceStream">
         /// The sequence stream.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="original">
@@ -45,7 +45,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translatorId">
         /// The translator id.
         /// </param>
-        public void Create(CommonSequence commonSequence, Stream sequenceStream, int languageId, bool original, int? translatorId)
+        public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, int? translatorId)
         {
             var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             string[] text = stringSequence.Split('\n');
@@ -67,7 +67,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             MatterRepository.CreateMatterFromSequence(commonSequence);
 
             var alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
-            Create(commonSequence, original, languageId, translatorId, alphabet, chain.Building);
+            Create(commonSequence, original, language, translatorId, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="original">
         /// The original.
         /// </param>
-        /// <param name="languageId">
+        /// <param name="language">
         /// The language id.
         /// </param>
         /// <param name="translatorId">
@@ -91,7 +91,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, bool original, int languageId, int? translatorId, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, bool original, Language language, int? translatorId, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
 
@@ -105,7 +105,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 ParameterName = "language_id",
                 NpgsqlDbType = NpgsqlDbType.Integer,
-                Value = languageId
+                Value = language
             });
 
             parameters.Add(new NpgsqlParameter
