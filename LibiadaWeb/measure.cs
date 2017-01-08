@@ -32,7 +32,7 @@ namespace LibiadaWeb
         public int Beatbase { get; set; }
         public Nullable<int> TicksPerBeat { get; set; }
         public int Fifths { get; set; }
-        public Nullable<int> RemoteDbId { get; set; }
+        public Nullable<RemoteDb> RemoteDb { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
     
@@ -40,6 +40,5 @@ namespace LibiadaWeb
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
-        public virtual RemoteDb RemoteDb { get; set; }
     }
 }

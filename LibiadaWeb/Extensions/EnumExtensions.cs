@@ -253,7 +253,7 @@
         /// <remarks>
         /// Works only with byte enums.
         /// </remarks>
-        public static SelectList ToSelectList<T>(this IEnumerable<T> values, T selected) where T : struct, IComparable, IFormattable, IConvertible
+        public static SelectList ToSelectList<T>(this IEnumerable<T> values, T? selected) where T : struct, IComparable, IFormattable, IConvertible
         {
             Type type = typeof(T);
 

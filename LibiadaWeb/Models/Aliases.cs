@@ -87,27 +87,6 @@
             SWSkew = 39
         }
 
-        /// <summary>
-        /// The language.
-        /// </summary>
-        public static class Language
-        {
-            /// <summary>
-            /// Russian language.
-            /// </summary>
-            public const int Russian = 1;
-
-            /// <summary>
-            /// English language.
-            /// </summary>
-            public const int English = 2;
-
-            /// <summary>
-            /// German language.
-            /// </summary>
-            public const int German = 3;
-        }
-
 
         /// <summary>
         /// Notations elements of which will not change.

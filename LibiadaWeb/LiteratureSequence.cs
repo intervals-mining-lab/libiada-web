@@ -28,7 +28,7 @@ namespace LibiadaWeb
         public Nullable<int> TranslatorId { get; set; }
         public bool Original { get; set; }
         public Language Language { get; set; }
-        public Nullable<int> RemoteDbId { get; set; }
+        public Nullable<RemoteDb> RemoteDb { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
         public string Description { get; set; }
@@ -38,6 +38,5 @@ namespace LibiadaWeb
         public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual Matter Matter { get; set; }
         public virtual Translator Translator { get; set; }
-        public virtual RemoteDb RemoteDb { get; set; }
     }
 }

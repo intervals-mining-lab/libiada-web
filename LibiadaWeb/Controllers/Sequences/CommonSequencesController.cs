@@ -77,7 +77,7 @@
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
             ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
-            ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
+            ViewBag.RemoteDb = EnumExtensions.ToArray<RemoteDb>().ToSelectList(commonSequence.RemoteDb);
             return View(commonSequence);
         }
 
@@ -92,7 +92,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Notation,MatterId,RemoteDbId,RemoteId,Description")] CommonSequence commonSequence)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Notation,MatterId,RemoteDb,RemoteId,Description")] CommonSequence commonSequence)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +103,7 @@
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
             ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
-            ViewBag.RemoteDbId = new SelectList(Db.RemoteDb, "Id", "Name", commonSequence.RemoteDbId);
+            ViewBag.RemoteDb = EnumExtensions.ToArray<RemoteDb>().ToSelectList(commonSequence.RemoteDb);
             return View(commonSequence);
         }
 

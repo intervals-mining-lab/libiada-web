@@ -106,7 +106,7 @@
                 {
                     ParameterName = "remote_db_id",
                     NpgsqlDbType = NpgsqlDbType.Integer,
-                    Value = (object)commonSequence.RemoteDbId ?? DBNull.Value
+                    Value = (object)commonSequence.RemoteDb ?? DBNull.Value
                 }
             };
             return parameters;

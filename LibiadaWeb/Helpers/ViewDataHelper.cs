@@ -8,7 +8,6 @@
     using System.Web.Mvc.Html;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -47,11 +46,6 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// The remote db repository.
-        /// </summary>
-        private readonly RemoteDbRepository remoteDbRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
@@ -64,7 +58,6 @@
             notationRepository = new NotationRepository();
             featureRepository = new FeatureRepository(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-            remoteDbRepository = new RemoteDbRepository(db);
         }
 
         /// <summary>
@@ -286,16 +279,24 @@
             var translators = new SelectList(db.Translator, "id", "name").ToList();
             translators.Add(new SelectListItem { Value = null, Text = "None", Selected = true });
 
-            IEnumerable<SelectListItemWithNature> notations;
             IEnumerable<SelectListItem> natures;
+            IEnumerable<SelectListItemWithNature> notations;
             IEnumerable<SelectListItemWithNature> sequenceTypes;
             IEnumerable<SelectListItemWithNature> groups;
+            IEnumerable<SelectListItemWithNature> remoteDbs;
+
 
             if (UserHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = notationRepository.GetSelectListWithNature();
-                
+                remoteDbs = EnumExtensions.ToArray<RemoteDb>().Select(rd => new SelectListItemWithNature
+                {
+                    Value = ((byte)rd).ToString(),
+                    Text = rd.GetDisplayValue(),
+                    Selected = false,
+                    Nature = (byte)rd.GetNature()
+                });
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>()
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>()
@@ -305,6 +306,13 @@
             {
                 natures = new List<Nature> { Nature.Genetic }.ToSelectList();
                 notations = notationRepository.GetSelectListWithNature(new List<Notation> { Notation.Nucleotides });
+                remoteDbs = EnumExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic).Select(rd => new SelectListItemWithNature
+                {
+                    Value = ((byte)rd).ToString(),
+                    Text = rd.GetDisplayValue(),
+                    Selected = false,
+                    Nature = (byte)rd.GetNature()
+                });
                 sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic)
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
                 groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic)
@@ -317,7 +325,7 @@
                                    { "natures", natures },
                                    { "notations", notations },
                                    { "languages", EnumExtensions.ToSelectList<Language>() },
-                                   { "remoteDbs", remoteDbRepository.GetSelectListWithNature() },
+                                   { "remoteDbs", remoteDbs },
                                    { "translators", translators },
                                    { "sequenceTypes", sequenceTypes },
                                    { "groups", groups }

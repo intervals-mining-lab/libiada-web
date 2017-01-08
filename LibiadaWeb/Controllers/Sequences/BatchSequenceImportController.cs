@@ -100,7 +100,7 @@
                                                {
                                                    Matter = matter,
                                                    Notation = Notation.Nucleotides,
-                                                   RemoteDbId = Aliases.RemoteDb.RemoteDbNcbi,
+                                                   RemoteDb = RemoteDb.GenBank,
                                                    RemoteId = metadata.Version.CompoundAccession
                                                };
 

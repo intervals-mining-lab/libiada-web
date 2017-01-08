@@ -54,12 +54,6 @@
         public long MatterId { get; set; }
 
         /// <summary>
-        /// Gets or sets the remote db id.
-        /// </summary>
-        [Display(Name = "Remote database")]
-        public int RemoteDbId { get; set; }
-
-        /// <summary>
         /// Gets or sets the remote id.
         /// </summary>
         [Display(Name = "Id in remote database")]
@@ -382,25 +376,5 @@
         /// </summary>
         [Display(Name = "Обозначение ноты")]
         public int NoteSymbolId { get; set; }
-    }
-
-    /// <summary>
-    /// The remote db.
-    /// </summary>
-    [MetadataType(typeof(RemoteDbDataAnnotations))]
-    public partial class RemoteDb
-    {
-    }
-
-    /// <summary>
-    /// The remote db data annotations.
-    /// </summary>
-    public class RemoteDbDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the url.
-        /// </summary>
-        [Display(Name = "url address")]
-        public string Url { get; set; }
     }
 }

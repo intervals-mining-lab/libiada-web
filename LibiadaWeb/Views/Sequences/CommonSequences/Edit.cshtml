@@ -42,10 +42,10 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.RemoteDbId, "RemoteDbId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.RemoteDb, "RemoteDbId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("RemoteDbId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RemoteDbId, "", new { @class = "text-danger" })
+                @Html.DropDownList("RemoteDb", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RemoteDb, "", new { @class = "text-danger" })
             </div>
         </div>
 

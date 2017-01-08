@@ -373,9 +373,7 @@
     <Compile Include="Position.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="RemoteDb.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="RemoteDb.cs" />
     <Compile Include="SequenceAttribute.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -432,11 +430,9 @@
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\INotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IFeatureRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\IRemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttribute.cs" />
     <Compile Include="Models\Repositories\Catalogs\NotationRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\RemoteDbRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\DataSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ISubsequenceRepository.cs" />
