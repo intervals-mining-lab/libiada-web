@@ -24,10 +24,9 @@ namespace LibiadaWeb
         public int Midinumber { get; set; }
         public Nullable<int> InstrumentId { get; set; }
         public LibiadaMusic.ScoreModel.Accidental Accidental { get; set; }
-        public int NoteSymbolId { get; set; }
+        public LibiadaMusic.ScoreModel.NoteSymbol NoteSymbol { get; set; }
     
         public virtual Instrument Instrument { get; set; }
-        public virtual NoteSymbol NoteSymbol { get; set; }
         public virtual ICollection<Note> Note { get; set; }
     }
 }

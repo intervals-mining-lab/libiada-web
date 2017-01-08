@@ -269,15 +269,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             for (int i = 0; i < pitches.Count; i++)
             {
                 var pitch = pitches[i];
-                var noteSymbol = pitch.Step.ToString();
 
                 if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
                 {
-                    var databasePitch = db.Pitch.Include(p => p.NoteSymbol).Include(p => p.Accidental).Single(p => p.Midinumber == pitch.MidiNumber);
+                    var databasePitch = db.Pitch.Single(p => p.Midinumber == pitch.MidiNumber);
                     result[i] = databasePitch.Id;
 
                     if (pitch.Alter != databasePitch.Accidental
-                        || pitch.Step.ToString() != databasePitch.NoteSymbol.Name
+                        || pitch.Step != databasePitch.NoteSymbol
                         || pitch.Octave != databasePitch.Octave)
                     {
                         throw new Exception("Found in db pitch not equals to local pitch.");
@@ -287,8 +286,8 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 {
                     var newPitch = new LibiadaWeb.Pitch
                     {
-                        Accidental = (Accidental)pitch.Alter,
-                        NoteSymbolId = db.NoteSymbol.Single(n => n.Name == noteSymbol).Id,
+                        Accidental = pitch.Alter,
+                        NoteSymbol = pitch.Step,
                         Octave = pitch.Octave,
                         Midinumber = pitch.MidiNumber
                     };

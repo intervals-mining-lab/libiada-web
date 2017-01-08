@@ -11,7 +11,7 @@
     public enum RemoteDb : byte
     {
         /// <summary>
-        /// 
+        /// GenBank / NCBI
         /// </summary>
         [Display(Name = "GenBank / NCBI")]
         [Description("National center for biotechnological information")]

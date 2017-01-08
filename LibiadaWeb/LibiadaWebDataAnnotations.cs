@@ -374,7 +374,7 @@
         /// <summary>
         /// Gets or sets the note symbol id.
         /// </summary>
-        [Display(Name = "Обозначение ноты")]
-        public int NoteSymbolId { get; set; }
+        [Display(Name = "Note Symbol")]
+        public int NoteSymbol { get; set; }
     }
 }

@@ -100,47 +100,6 @@
         };
 
         /// <summary>
-        /// The note symbol.
-        /// </summary>
-        public static class NoteSymbol
-        {
-            /// <summary>
-            /// The note symbol A.
-            /// </summary>
-            public const int A = 1;
-
-            /// <summary>
-            /// The note symbol B.
-            /// </summary>
-            public const int B = 2;
-
-            /// <summary>
-            /// The note symbol C.
-            /// </summary>
-            public const int C = 3;
-
-            /// <summary>
-            /// The note symbol D.
-            /// </summary>
-            public const int D = 4;
-
-            /// <summary>
-            /// The note symbol E.
-            /// </summary>
-            public const int E = 5;
-
-            /// <summary>
-            /// The note symbol F.
-            /// </summary>
-            public const int F = 6;
-
-            /// <summary>
-            /// The note symbol G.
-            /// </summary>
-            public const int G = 7;
-        }
-
-        /// <summary>
         /// The feature.
         /// </summary>
         public static class Feature
@@ -329,17 +288,6 @@
             /// The plastid.
             /// </summary>
             public const int Plastid = 37;
-        }
-
-        /// <summary>
-        /// The remote db.
-        /// </summary>
-        public static class RemoteDb
-        {
-            /// <summary>
-            /// The remote db ncbi.
-            /// </summary>
-            public const int RemoteDbNcbi = 1;
         }
     }
 }

@@ -51,6 +51,5 @@ namespace LibiadaWeb
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<Pitch> Pitch { get; set; }
         public virtual DbSet<FmotivType> FmotivType { get; set; }
-        public virtual DbSet<NoteSymbol> NoteSymbol { get; set; }
     }
 }

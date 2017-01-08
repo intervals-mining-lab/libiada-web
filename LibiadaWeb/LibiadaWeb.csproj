@@ -364,9 +364,6 @@
     <Compile Include="Note.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="NoteSymbol.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Pitch.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

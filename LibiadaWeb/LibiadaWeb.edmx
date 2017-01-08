@@ -325,7 +325,7 @@
           <Property Name="midinumber" Type="int4" Nullable="false" />
           <Property Name="instrument_id" Type="int4" Nullable="true" />
           <Property Name="accidental_id" Type="int2" Nullable="false" />
-          <Property Name="note_symbol_id" Type="int4" Nullable="false" />
+          <Property Name="note_symbol_id" Type="int2" Nullable="false" />
         </EntityType>
 
         <EntityType Name="note_pitch">
@@ -338,15 +338,6 @@
         </EntityType>
 
         <EntityType Name="fmotiv_type">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
-        <EntityType Name="note_symbol">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -993,20 +984,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-
-        <Association Name="fk_pitch_note_symbol">
-          <End Role="note_symbol" Type="Self.note_symbol" Multiplicity="1" />
-          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="note_symbol">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="pitch">
-              <PropertyRef Name="note_symbol_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
+        
         <Association Name="fk_pitch_instrument">
           <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
           <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
@@ -1046,7 +1024,6 @@
           <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
           <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="note_symbol" EntityType="Self.note_symbol" store:Type="Tables" Schema="public"/>
           <EntitySet Name="translator" EntityType="Self.translator" store:Type="Tables" Schema="public"/>
 
 
@@ -1178,11 +1155,6 @@
           <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
             <End Role="fmotiv_type" EntitySet="fmotiv_type" />
             <End Role="fmotiv" EntitySet="fmotiv" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_pitch_note_symbol" Association="Self.fk_pitch_note_symbol">
-            <End Role="note_symbol" EntitySet="note_symbol" />
-            <End Role="pitch" EntitySet="pitch" />
           </AssociationSet>
 
           <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
@@ -1593,9 +1565,8 @@
           <Property Name="Midinumber" Type="Int32" Nullable="false" />
           <Property Name="InstrumentId" Type="Int32" Nullable="true" />
           <Property Name="Accidental" Type="LibiadaWebModel.Accidental" Nullable="false" />
-          <Property Name="NoteSymbolId" Type="Int32" Nullable="false" />
+          <Property Name="NoteSymbol" Type="LibiadaWebModel.NoteSymbol" Nullable="false" />
           <NavigationProperty Name="Instrument" Relationship="Self.fk_pitch_instrument" FromRole="Pitch" ToRole="Instrument" />
-          <NavigationProperty Name="NoteSymbol" Relationship="Self.fk_pitch_note_symbol" FromRole="Pitch" ToRole="NoteSymbol" />
           <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />
         </EntityType>
 
@@ -1607,16 +1578,6 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_fmotiv_type" FromRole="FmotivType" ToRole="Fmotiv" />
-        </EntityType>
-
-        <EntityType Name="NoteSymbol">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Pitch" Relationship="Self.fk_pitch_note_symbol" FromRole="NoteSymbol" ToRole="Pitch" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2259,19 +2220,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_pitch_note_symbol">
-          <End Role="NoteSymbol" Type="Self.NoteSymbol" Multiplicity="1" />
-          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NoteSymbol">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Pitch">
-              <PropertyRef Name="NoteSymbolId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_pitch_instrument">
           <End Role="Instrument" Type="Self.Instrument" Multiplicity="0..1" />
           <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
@@ -2317,7 +2265,6 @@
           <EntitySet Name="Note" EntityType="Self.Note" />
           <EntitySet Name="Pitch" EntityType="Self.Pitch" />
           <EntitySet Name="FmotivType" EntityType="Self.FmotivType" />
-          <EntitySet Name="NoteSymbol" EntityType="Self.NoteSymbol" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -2549,11 +2496,6 @@
             <End Role="Fmotiv" EntitySet="Fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_pitch_note_symbol" Association="Self.fk_pitch_note_symbol">
-            <End Role="NoteSymbol" EntitySet="NoteSymbol" />
-            <End Role="Pitch" EntitySet="Pitch" />
-          </AssociationSet>
-
           <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
             <End Role="Instrument" EntitySet="Instrument" />
             <End Role="Pitch" EntitySet="Pitch" />
@@ -2569,13 +2511,14 @@
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Language" UnderlyingType="Byte" a:ExternalTypeName="Language" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="RemoteDb" UnderlyingType="Byte" a:ExternalTypeName="RemoteDb" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceType" UnderlyingType="Byte" a:ExternalTypeName="SequenceType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
       </Schema>
     </edmx:ConceptualModels>
@@ -2925,7 +2868,7 @@
                 <ScalarProperty Name="Midinumber" ColumnName="midinumber" />
                 <ScalarProperty Name="InstrumentId" ColumnName="instrument_id" />
                 <ScalarProperty Name="Accidental" ColumnName="accidental_id" />
-                <ScalarProperty Name="NoteSymbolId" ColumnName="note_symbol_id" />
+                <ScalarProperty Name="NoteSymbol" ColumnName="note_symbol_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2933,16 +2876,6 @@
           <EntitySetMapping Name="FmotivType">
             <EntityTypeMapping TypeName="LibiadaWebModel.FmotivType">
               <MappingFragment StoreEntitySet="fmotiv_type">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="NoteSymbol">
-            <EntityTypeMapping TypeName="LibiadaWebModel.NoteSymbol">
-              <MappingFragment StoreEntitySet="note_symbol">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
                 <ScalarProperty Name="Description" ColumnName="description" />
