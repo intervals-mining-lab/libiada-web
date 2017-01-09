@@ -4,6 +4,7 @@
     using System.Net;
     using System.Threading.Tasks;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using LibiadaWeb.Extensions;
 
@@ -76,8 +77,8 @@
 
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
-            ViewBag.RemoteDb = EnumExtensions.ToArray<RemoteDb>().ToSelectList(commonSequence.RemoteDb);
+            ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
+            ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
             return View(commonSequence);
         }
 
@@ -102,8 +103,8 @@
             }
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumExtensions.ToArray<Notation>().ToSelectList(commonSequence.Notation);
-            ViewBag.RemoteDb = EnumExtensions.ToArray<RemoteDb>().ToSelectList(commonSequence.RemoteDb);
+            ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
+            ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
             return View(commonSequence);
         }
 

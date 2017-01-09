@@ -76,7 +76,7 @@
         /// <param name="language">
         /// The language id.
         /// </param>
-        /// <param name="translatorId">
+        /// <param name="translator">
         /// The translators id.
         /// </param>
         /// <param name="notation">
@@ -109,7 +109,7 @@
             long[] matterIds,
             int[] characteristicTypeLinkIds,
             Language? language,
-            int? translatorId,
+            Translator? translator,
             Notation notation,
             int length,
             int step,
@@ -144,7 +144,7 @@
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                         && l.Notation == notation
                                                                         && l.Language == language
-                                                                        && l.TranslatorId == translatorId).Id;
+                                                                        && l.Translator == translator).Id;
                             break;
                         default:
                             var id = notation;

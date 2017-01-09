@@ -226,9 +226,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="IEnumerable{SelectListItem}"/>.
         /// </returns>
-        public IEnumerable<SelectListItem> GetSelectListItems(
-            IEnumerable<Element> allElements,
-            IEnumerable<Element> selectedElements)
+        public IEnumerable<SelectListItem> GetSelectListItems(IEnumerable<Element> allElements, IEnumerable<Element> selectedElements)
         {
             HashSet<long> elementIds = selectedElements != null
                                      ? new HashSet<long>(selectedElements.Select(c => c.Id))

@@ -450,9 +450,7 @@
     <Compile Include="Models\SubsequenceExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Translator.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ConnectionStrings.config">

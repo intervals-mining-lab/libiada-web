@@ -77,7 +77,7 @@
         /// <param name="languages">
         /// The language ids.
         /// </param>
-        /// <param name="translatorIds">
+        /// <param name="translators">
         /// The translator ids.
         /// </param>
         /// <param name="sort">
@@ -96,7 +96,7 @@
             int[] characteristicTypeLinkIds,
             Notation[] notations,
             Language[] languages,
-            int?[] translatorIds,
+            Translator?[] translators,
             bool sort,
             bool theoretical)
         {
@@ -130,14 +130,14 @@
                         if (db.Matter.Single(m => m.Id == matterId).Nature == Nature.Literature)
                         {
                             Language language = languages[i];
-                            int? translatorId = translatorIds[i];
+                            Translator? translator = translators[i];
 
                             isLiteratureSequence = true;
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                       && l.Notation == notation
                                                                       && l.Language == language
-                                                                      && ((translatorId == null && l.TranslatorId == null)
-                                                                      || (translatorId == l.TranslatorId))).Id;
+                                                                      && ((translator == null && l.Translator == null)
+                                                                      || (translator == l.Translator))).Id;
                         }
                         else
                         {

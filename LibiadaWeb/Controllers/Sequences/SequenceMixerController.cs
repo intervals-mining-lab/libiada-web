@@ -96,7 +96,7 @@
         /// <param name="language">
         /// The language id.
         /// </param>
-        /// <param name="translatorId">
+        /// <param name="translator">
         /// The translator id.
         /// </param>
         /// <param name="scrambling">
@@ -110,7 +110,7 @@
         /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, Notation notation, Language? language, int? translatorId, int scrambling)
+        public ActionResult Index(long matterId, Notation notation, Language? language, Translator? translator, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
             CommonSequence dataBaseSequence;
@@ -119,8 +119,8 @@
                 long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                     && l.Notation == notation
                                                                     && l.Language == language
-                                                                    && ((translatorId == null && l.TranslatorId == null)
-                                                                        || (translatorId == l.TranslatorId))).Id;
+                                                                    && ((translator == null && l.Translator == null)
+                                                                        || (translator == l.Translator))).Id;
                 dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
             }
             else
@@ -178,7 +178,7 @@
                         resultsequence,
                         literatureSequence.Original,
                         literatureSequence.Language,
-                        literatureSequence.TranslatorId,
+                        literatureSequence.Translator,
                         alphabet,
                         chain.Building);
                     break;

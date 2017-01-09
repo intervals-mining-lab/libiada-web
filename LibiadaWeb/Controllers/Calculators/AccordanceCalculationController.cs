@@ -75,7 +75,7 @@
         /// <param name="language">
         /// The language id.
         /// </param>
-        /// <param name="translatorId">
+        /// <param name="translator">
         /// The translator id.
         /// </param>
         /// <param name="calculationType">
@@ -97,7 +97,7 @@
             int characteristicTypeLinkId,
             Notation notation,
             Language? language,
-            int? translatorId,
+            Translator? translator,
             string calculationType)
         {
             return Action(() =>
@@ -124,7 +124,7 @@
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
                                 l.Notation == notation && l.Language == language &&
-                                MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
+                                MathLogic.NullableCompare(translator, l.Translator)).Id;
                 }
                 else
                 {
@@ -139,7 +139,7 @@
                 {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
                                 l.Notation == notation && l.Language == language
-                                && MathLogic.NullableCompare(translatorId, l.TranslatorId)).Id;
+                                && MathLogic.NullableCompare(translator, l.Translator)).Id;
                 }
                 else
                 {

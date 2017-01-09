@@ -124,13 +124,13 @@
                     </div>
                 </div>
                 <div class="form-group" ng-hide="original">
-                    <label class="control-label col-md-2" for="translatorId">Translator:</label>
+                    <label class="control-label col-md-2" for="translator">Translator:</label>
                     <div class="col-md-10">
-                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translatorId">
+                        <select class="form-control" ng-model="translatorId" ng-options="t.Value as t.Text for t in translators" id="translator">
                             <option value="">None</option>
                         </select>
-                        <input type="hidden" name="translatorId" ng-value="translatorId" />
-                        @Html.ValidationMessage("translatorId", "", new { @class = "text-danger" })
+                        <input type="hidden" name="translator" ng-value="translatorId" />
+                        @Html.ValidationMessage("translator", "", new { @class = "text-danger" })
                     </div>
                 </div>
             </div>

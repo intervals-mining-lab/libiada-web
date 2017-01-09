@@ -216,19 +216,13 @@
         /// Gets or sets the language id.
         /// </summary>
         [Display(Name = "Language of literary work")]
-        public Language LanguageId { get; set; }
+        public Language Language { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether literary work is in original language (not in translation).
         /// </summary>
         [Display(Name = "Literary work is in original language (not in translation)")]
         public bool Original { get; set; }
-
-        /// <summary>
-        /// Gets or sets the translator id.
-        /// </summary>
-        [Display(Name = "Translator")]
-        public int TranslatorId { get; set; }
     }
 
     /// <summary>

@@ -77,8 +77,6 @@
         /// </returns>
         public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Add(new SelectListItem { Value = null, Text = "None", Selected = true });
             var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
@@ -109,8 +107,8 @@
 
             data.Add("natures",  natures);
             data.Add("notations", notations);
-            data.Add("languages", EnumExtensions.ToSelectList<Language>());
-            data.Add("translators", translators);
+            data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
+            data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
             data.Add("sequenceTypes", sequenceTypes);
             data.Add("groups", groups);
 
@@ -276,9 +274,6 @@
         /// </returns>
         public Dictionary<string, object> FillMatterCreationData()
         {
-            var translators = new SelectList(db.Translator, "id", "name").ToList();
-            translators.Add(new SelectListItem { Value = null, Text = "None", Selected = true });
-
             IEnumerable<SelectListItem> natures;
             IEnumerable<SelectListItemWithNature> notations;
             IEnumerable<SelectListItemWithNature> sequenceTypes;
@@ -324,9 +319,9 @@
                                    { "matters", matterRepository.GetMatterSelectList() },
                                    { "natures", natures },
                                    { "notations", notations },
-                                   { "languages", EnumExtensions.ToSelectList<Language>() },
+                                   { "languages", EnumHelper.GetSelectList(typeof(Language)) },
                                    { "remoteDbs", remoteDbs },
-                                   { "translators", translators },
+                                   { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
                                    { "sequenceTypes", sequenceTypes },
                                    { "groups", groups }
                            };

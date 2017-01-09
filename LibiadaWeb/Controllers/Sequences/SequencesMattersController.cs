@@ -90,7 +90,7 @@
         /// <param name="original">
         /// The original.
         /// </param>
-        /// <param name="translatorId">
+        /// <param name="translator">
         /// The translator id.
         /// </param>
         /// <param name="partial">
@@ -109,7 +109,7 @@
             bool localFile,
             Language? language,
             bool? original,
-            int? translatorId,
+            Translator? translator,
             bool? partial,
             int? precision)
         {
@@ -145,7 +145,7 @@
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
-                            literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? false, translatorId);
+                            literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? false, translator);
                             break;
                         case Nature.MeasurementData:
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);

@@ -25,7 +25,7 @@ namespace LibiadaWeb
         public Notation Notation { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
-        public Nullable<int> TranslatorId { get; set; }
+        public Nullable<Translator> Translator { get; set; }
         public bool Original { get; set; }
         public Language Language { get; set; }
         public Nullable<RemoteDb> RemoteDb { get; set; }
@@ -37,6 +37,5 @@ namespace LibiadaWeb
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
         public virtual Matter Matter { get; set; }
-        public virtual Translator Translator { get; set; }
     }
 }

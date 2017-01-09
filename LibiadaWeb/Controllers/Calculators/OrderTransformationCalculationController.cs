@@ -89,7 +89,7 @@
         /// <param name="languages">
         /// The language ids.
         /// </param>
-        /// <param name="translatorIds">
+        /// <param name="translators">
         /// The translator ids.
         /// </param>
         /// <returns>
@@ -105,7 +105,7 @@
             int[] characteristicTypeLinkIds,
             Notation[] notations,
             Language[] languages,
-            int?[] translatorIds)
+            Translator?[] translators)
         {
             return Action(() =>
             {
@@ -127,15 +127,15 @@
                         if (matters[matterId].Nature == Nature.Literature)
                         {
                             Language language = languages[k];
-                            int? translatorId = translatorIds[k];
+                            Translator? translator = translators[k];
 
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
                                                                            l.Notation == notation
                                                                            && l.Language == language
                                                                            &&
-                                                                           ((translatorId == null &&
-                                                                             l.TranslatorId == null)
-                                                                            || (translatorId == l.TranslatorId))).Id;
+                                                                           ((translator == null &&
+                                                                             l.Translator == null)
+                                                                            || (translator == l.Translator))).Id;
                         }
                         else
                         {

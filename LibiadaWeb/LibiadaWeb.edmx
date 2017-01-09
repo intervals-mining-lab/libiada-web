@@ -155,7 +155,7 @@
           <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="translator_id" Type="int4" />
+          <Property Name="translator_id" Type="int2" />
           <Property Name="original" Type="bool" Nullable="false" />
           <Property Name="language_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -198,15 +198,6 @@
           <Property Name="nature_id" Type="int2" Nullable="false" />
           <Property Name="complete" Type="bool" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="255" />
-        </EntityType>
-
-        <EntityType Name="translator">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
         </EntityType>
 
         <EntityType Name="fmotiv">
@@ -563,19 +554,6 @@
             </Principal>
             <Dependent Role="literature_chain">
               <PropertyRef Name="matter_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_literature_chain_translator">
-          <End Role="translator" Type="Self.translator" Multiplicity="0..1" />
-          <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="translator">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="literature_chain">
-              <PropertyRef Name="translator_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1024,7 +1002,6 @@
           <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
           <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="translator" EntityType="Self.translator" store:Type="Tables" Schema="public"/>
 
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
@@ -1109,11 +1086,6 @@
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="matter" EntitySet="matter" />
-            <End Role="literature_chain" EntitySet="literature_chain" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_translator" Association="Self.fk_literature_chain_translator">
-            <End Role="translator" EntitySet="translator" />
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
@@ -1354,7 +1326,7 @@
           <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="TranslatorId" Type="Int32"  />
+          <Property Name="Translator" Type="LibiadaWebModel.Translator" />
           <Property Name="Original" Type="Boolean" Nullable="false" />
           <Property Name="Language" Type="LibiadaWebModel.Language" Nullable="false" />
           <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
@@ -1366,7 +1338,6 @@
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_literature_chain" FromRole="LiteratureSequence" ToRole="Characteristic" />
           <NavigationProperty Name="Matter" Relationship="Self.fk_literature_chain_matter" FromRole="LiteratureSequence" ToRole="Matter" />
-          <NavigationProperty Name="Translator" Relationship="Self.fk_literature_chain_translator" FromRole="LiteratureSequence" ToRole="Translator" />
         </EntityType>
 
         <EntityType Name="Matter">
@@ -1416,16 +1387,6 @@
           <Property Name="Complete" Type="Boolean" Nullable="false" />
 
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_feature" FromRole="Feature" ToRole="Subsequence" />
-        </EntityType>
-
-        <EntityType Name="Translator">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="LiteratureSequence" Relationship="Self.fk_literature_chain_translator" FromRole="Translator" ToRole="LiteratureSequence" />
         </EntityType>
 
         <EntityType Name="Fmotiv">
@@ -1936,19 +1897,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_literature_chain_translator">
-          <End Role="Translator" Type="Self.Translator" Multiplicity="0..1" />
-          <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Translator">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="LiteratureSequence">
-              <PropertyRef Name="TranslatorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_fmotiv_matter">
           <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
           <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
@@ -2255,7 +2203,6 @@
           <EntitySet Name="Matter" EntityType="Self.Matter" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
           <EntitySet Name="Feature" EntityType="Self.Feature" />
-          <EntitySet Name="Translator" EntityType="Self.Translator" />
           <EntitySet Name="Fmotiv" EntityType="Self.Fmotiv" />
           <EntitySet Name="CongenericCharacteristic" EntityType="Self.CongenericCharacteristic" />
           <EntitySet Name="Instrument" EntityType="Self.Instrument" />
@@ -2348,11 +2295,6 @@
 
           <AssociationSet Name="fk_literature_chain_matter" Association="Self.fk_literature_chain_matter">
             <End Role="Matter" EntitySet="Matter" />
-            <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_literature_chain_translator" Association="Self.fk_literature_chain_translator">
-            <End Role="Translator" EntitySet="Translator" />
             <End Role="LiteratureSequence" EntitySet="LiteratureSequence" />
           </AssociationSet>
 
@@ -2509,6 +2451,7 @@
         </EntityContainer>
 
         <EnumType Name="Nature" UnderlyingType="Byte" a:ExternalTypeName="Nature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Translator" UnderlyingType="Byte" a:ExternalTypeName="Translator" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Language" UnderlyingType="Byte" a:ExternalTypeName="Language" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="RemoteDb" UnderlyingType="Byte" a:ExternalTypeName="RemoteDb" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -2686,7 +2629,7 @@
                 <ScalarProperty Name="Notation" ColumnName="notation_id" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="TranslatorId" ColumnName="translator_id" />
+                <ScalarProperty Name="Translator" ColumnName="translator_id" />
                 <ScalarProperty Name="Original" ColumnName="original" />
                 <ScalarProperty Name="Language" ColumnName="language_id" />
                 <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
@@ -2732,16 +2675,6 @@
                 <ScalarProperty Name="Nature" ColumnName="nature_id" />
                 <ScalarProperty Name="Type" ColumnName="type" />
                 <ScalarProperty Name="Complete" ColumnName="complete" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Translator">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Translator">
-              <MappingFragment StoreEntitySet="translator">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

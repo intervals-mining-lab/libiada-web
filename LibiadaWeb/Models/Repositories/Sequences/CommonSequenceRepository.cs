@@ -116,13 +116,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="languages">
         /// The language ids.
         /// </param>
-        /// <param name="translatorIds">
+        /// <param name="translators">
         /// The translator ids.
         /// </param>
         /// <returns>
         /// The <see cref="T:Chain[][]"/>.
         /// </returns>
-        public Chain[][] GetChains(long[] matterIds, Notation[] notations, Language[] languages, int?[] translatorIds)
+        public Chain[][] GetChains(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
         {
             var chains = new Chain[matterIds.Length][];
             var notationsRepository = new NotationRepository();
@@ -140,13 +140,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     if (notation.GetNature() == Nature.Literature)
                     {
                         Language language = languages[j];
-                        int? translatorId = translatorIds[j];
+                        Translator? translator = translators[j];
 
                         sequenceId = Db.LiteratureSequence.Single(l =>
                                     l.MatterId == matterId && l.Notation == notation
                                     && l.Language == language
-                                    && ((translatorId == null && l.TranslatorId == null)
-                                        || (translatorId == l.TranslatorId))).Id;
+                                    && ((translator == null && l.Translator == null)
+                                        || (translator == l.Translator))).Id;
                     }
                     else
                     {
