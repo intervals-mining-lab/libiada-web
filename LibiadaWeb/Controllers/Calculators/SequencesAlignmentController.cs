@@ -8,6 +8,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -48,7 +49,7 @@
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-            featureRepository = new FeatureRepository(db);
+            featureRepository = new FeatureRepository();
         }
 
         /// <summary>
@@ -76,7 +77,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <param name="validationType">
@@ -101,7 +102,7 @@
             long[] matterIds,
             int characteristicTypeLinkId,
             Notation notation,
-            int[] featureIds,
+            Feature[] features,
             string validationType,
             bool cyclicShift,
             bool sort)
@@ -116,8 +117,8 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notation, featureIds);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notation, featureIds);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notation, features);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notation, features);
 
                 if (sort)
                 {
@@ -158,7 +159,7 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "features", featureRepository.GetFeaturesById(featureIds).Select(p => p.Name).ToList() },
+                    { "features", features.Select(p => p.GetDisplayValue()).ToList() },
                     { "optimalRotation", optimalRotation },
                     { "distances", distances },
                     { "validationType", validationType },
@@ -216,19 +217,19 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, Notation notation, int[] featureIds)
+        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, Notation notation, Feature[] features)
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<Characteristic>();
             var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
 
-            Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds);
+            Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, features);
 
             var sequences = subsequenceExtractor.ExtractChains(subsequences, parentSequenceId);
 

@@ -1,6 +1,5 @@
-﻿namespace LibiadaWeb.Models.Calculators
+﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     /// <summary>
@@ -21,7 +20,7 @@
         /// <summary>
         /// The feature id.
         /// </summary>
-        public readonly int FeatureId;
+        public readonly byte FeatureId;
 
         /// <summary>
         /// The attributes ids array.
@@ -44,7 +43,7 @@
         public readonly double[] CharacteristicsValues;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SubsequenceData"/> class.
+        /// Initializes a new instance of the <see cref="SubsequenceData"/> struct.
         /// </summary>
         /// <param name="subsequence">
         /// The subsequence.
@@ -59,7 +58,7 @@
         {
             CharacteristicsValues = characteristics;
             Attributes = attributes ?? new int[0];
-            FeatureId = subsequence.FeatureId;
+            FeatureId = (byte)subsequence.Feature;
             RemoteId = subsequence.RemoteId;
             Partial = subsequence.Partial;
 

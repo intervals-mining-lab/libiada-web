@@ -5,6 +5,9 @@
 
     using LibiadaWeb.Attributes;
 
+    /// <summary>
+    /// The notation.
+    /// </summary>
     public enum Notation : byte
     {
         /// <summary>
@@ -12,7 +15,7 @@
         /// </summary>
         [Display(Name = "Nucleotides")]
         [Description("Basic elements of nucleic acids")]
-        [Nature(Nature.Genetic)]    
+        [Nature(Nature.Genetic)]
         Nucleotides = 1,
 
         /// <summary>
@@ -28,7 +31,7 @@
         /// </summary>
         [Display(Name = "Amino acids")]
         [Description("Basic components of peptides")]
-        [Nature(Nature.Genetic)] 
+        [Nature(Nature.Genetic)]
         AminoAcids = 3,
 
         /// <summary>
@@ -36,7 +39,7 @@
         /// </summary>
         [Display(Name = "Genetic words")]
         [Description("Result of segmentation - joined sequence of nucleotides")]
-        [Nature(Nature.Genetic)] 
+        [Nature(Nature.Genetic)]
         GeneticWords = 4,
 
         /// <summary>

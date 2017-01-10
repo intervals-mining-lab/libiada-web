@@ -13,7 +13,6 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -59,7 +58,7 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <param name="maxPercentageDifference">
@@ -82,14 +81,13 @@
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,
-            int[] featureIds,
+            Feature[] features,
             string maxPercentageDifference,
             double characteristicValueFrom,
             double characteristicValueTo)
         {
             return Action(() =>
             {
-                Dictionary<int, string> features;
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new SubsequenceData[matterIds.Length][];
                 string characteristicName;
@@ -104,9 +102,6 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    var featureRepository = new FeatureRepository(db);
-                    features = featureRepository.Features.ToDictionary(f => f.Id, f => f.Name);
-
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                             .Select(s => new { s.Id, MatterName = s.Matter.Name })
@@ -131,7 +126,7 @@
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             new[] { characteristicTypeLinkId },
-                            featureIds,
+                            features,
                             parentSequenceIds[i],
                             new[] { calculator },
                             new[] { link },
@@ -140,8 +135,8 @@
                     subsequencesCount[i] = subsequencesData.Length;
 
                     subsequencesData = subsequencesData.Where(c => (characteristicValueFrom == 0 && characteristicValueTo == 0)
-                        || (c.CharacteristicsValues[0] >= characteristicValueFrom && c.CharacteristicsValues[0] <= characteristicValueTo)).
-                        OrderBy(c => c.CharacteristicsValues[0]).ToArray();
+                        || (c.CharacteristicsValues[0] >= characteristicValueFrom && c.CharacteristicsValues[0] <= characteristicValueTo))
+                        .OrderBy(c => c.CharacteristicsValues[0]).ToArray();
 
                     characteristics[i] = subsequencesData;
                 }
@@ -170,24 +165,24 @@
 
                         int equalElementsCountFromFirst = 0;
                         var equalElementsCountFromSecond = new Dictionary<int, int>();
-                        
+
                         int equalPairsCount = 0;
 
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
-							bool equalFound = false;
+                            bool equalFound = false;
                             double first = characteristics[i][k].CharacteristicsValues[0];
 
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
                             {
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
-                                double difference = calculateAverageDifference(first, second);
+                                double difference = CalculateAverageDifference(first, second);
                                 bool nextElementInSecondArrayIsEqual = false;
 
                                 if (l < characteristics[j].Length - 1)
                                 {
-                                    nextElementInSecondArrayIsEqual = calculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
+                                    nextElementInSecondArrayIsEqual = CalculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
                                 }
 
                                 if (difference <= decimalDifference)
@@ -217,7 +212,7 @@
                                             SecondSubsequenceId = l,
                                         });
                                     }
-                                                                        
+
                                     similarFirstSequencesCharacteristicValue += first;
                                     similarSecondSequencesCharacteristicValue += second;
 
@@ -254,7 +249,8 @@
                         double similarSequencesCharacteristicValue = similarSequencesCharacteristicValueFirst < similarSequencesCharacteristicValueSecondFinal ?
                                             similarSequencesCharacteristicValueFirst * 2d : similarSequencesCharacteristicValueSecondFinal * 2d;
 
-                        double formula3 = similarSequencesCharacteristicValue * 100d / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
+                        double formula3 = similarSequencesCharacteristicValue * 100d /
+                                        (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
 
                         similarities[i, j] = new
                         {
@@ -272,7 +268,7 @@
                     { "similarities", similarities },
                     { "characteristics", characteristics },
                     { "equalElements", equalElements.OrderBy(e => e.Difference).ToList() },
-                    { "features", features },
+                    { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) }
                 };
@@ -284,7 +280,19 @@
             });
         }
 
-        private double calculateAverageDifference(double first, double second)
+        /// <summary>
+        /// Calculates average difference.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// The <see cref="double"/>.
+        /// </returns>
+        private double CalculateAverageDifference(double first, double second)
         {
             return Math.Abs(first - second) / ((first + second) / 2);
         }

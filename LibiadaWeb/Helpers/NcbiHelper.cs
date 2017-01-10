@@ -146,7 +146,6 @@
             return GetResponseStream(GetEfetchParamsString("fasta") + id);
         }
 
-
         /// <summary>
         /// Extracts sequence from genbank file.
         /// </summary>

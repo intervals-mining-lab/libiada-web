@@ -61,7 +61,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// Subsequences characteristics types and links ids.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <returns>
@@ -69,7 +69,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, int characteristicTypeLinkId, int[] characteristicTypeLinkIds, int[] featureIds)
+        public ActionResult Index(long[] matterIds, int characteristicTypeLinkId, int[] characteristicTypeLinkIds, Feature[] features)
         {
             return Action(() =>
                 {
@@ -89,8 +89,7 @@
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        var featureRepository = new FeatureRepository(db);
-                        featuresSelectList = featureRepository.GetFeaturesById(featureIds).Select(f => new SelectListItem { Value = f.Id.ToString(), Text = f.Name, Selected = true });
+                        featuresSelectList = features.Select(f => new SelectListItem { Value = ((byte)f).ToString(), Text = f.GetDisplayValue(), Selected = true });
 
                         var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                                 .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
@@ -137,7 +136,7 @@
                         // all subsequence calculations
                         var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicTypeLinkIds,
-                            featureIds,
+                            features,
                             parentSequenceIds[i],
                             calculators,
                             links,

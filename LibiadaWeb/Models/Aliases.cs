@@ -27,6 +27,17 @@
                                                                                                                                           });
 
         /// <summary>
+        /// Notations elements of which will not change.
+        /// </summary>
+        public static readonly List<Notation> StaticNotations = new List<Notation>
+        {
+            Notation.Nucleotides,
+            Notation.Triplets,
+            Notation.AminoAcids,
+            Notation.Letters
+        };
+
+        /// <summary>
         /// The characteristic type.
         /// </summary>
         public enum CharacteristicType : int
@@ -85,209 +96,6 @@
             /// The SW skew.
             /// </summary>
             SWSkew = 39
-        }
-
-
-        /// <summary>
-        /// Notations elements of which will not change.
-        /// </summary>
-        public static readonly List<Notation> StaticNotations = new List<Notation> 
-        { 
-            Notation.Nucleotides, 
-            Notation.Triplets, 
-            Notation.AminoAcids, 
-            Notation.Letters 
-        };
-
-        /// <summary>
-        /// The feature.
-        /// </summary>
-        public static class Feature
-        {
-            /// <summary>
-            /// The feature full genome.
-            /// </summary>
-            public const int FullGenome = 1;
-
-            /// <summary>
-            /// The feature full text.
-            /// </summary>
-            public const int FullText = 2;
-
-            /// <summary>
-            /// The feature full song.
-            /// </summary>
-            public const int FullSong = 3;
-
-            /// <summary>
-            /// The feature coding sequence.
-            /// </summary>
-            public const int CodingSequence = 4;
-
-            /// <summary>
-            /// The Ribosomal RNA feature.
-            /// </summary>
-            public const int RibosomalRNA = 5;
-
-            /// <summary>
-            /// The Transfer RNA feature.
-            /// </summary>
-            public const int TransferRNA = 6;
-
-            /// <summary>
-            /// The feature Non-coding RNA.
-            /// </summary>
-            public const int NoncodingRNA = 7;
-
-            /// <summary>
-            /// The feature Transfer-messenger RNA.
-            /// </summary>
-            public const int TransferMessengerRNA = 8;
-
-            /// <summary>
-            /// The feature pseudo gen.
-            /// </summary>
-            public const int PseudoGen = 9;
-
-            /// <summary>
-            /// The feature plasmid.
-            /// </summary>
-            public const int Plasmid = 10;
-
-            /// <summary>
-            /// The feature mitochondrion genome.
-            /// </summary>
-            public const int MitochondrionGenome = 11;
-
-            /// <summary>
-            /// The feature mitochondrion ribosomal rna.
-            /// </summary>
-            public const int MitochondrionRibosomalRNA = 12;
-
-            /// <summary>
-            /// The feature repeat region.
-            /// </summary>
-            public const int RepeatRegion = 13;
-
-            /// <summary>
-            /// The feature non coding sequence.
-            /// </summary>
-            public const int NonCodingSequence = 14;
-
-            /// <summary>
-            /// The feature chloroplast genome.
-            /// </summary>
-            public const int ChloroplastGenome = 15;
-
-            /// <summary>
-            /// The feature Miscellaneous other RNA.
-            /// </summary>
-            public const int MiscellaneousOtherRNA = 16;
-
-            /// <summary>
-            /// The complete numeric sequence feature.
-            /// </summary>
-            public const int CompleteNumericSequence = 17;
-
-            /// <summary>
-            /// The miscellaneous feature.
-            /// </summary>
-            public const int MiscellaneousFeature = 18;
-
-            /// <summary>
-            /// The Messenger RNA feature.
-            /// </summary>
-            public const int MessengerRNA = 19;
-
-            /// <summary>
-            /// The regulatory feature.
-            /// </summary>
-            public const int Regulatory = 20;
-
-            /// <summary>
-            /// The sequence tagged site.
-            /// </summary>
-            public const int SequenceTaggedSite = 21;
-
-            /// <summary>
-            /// The origin of replication.
-            /// </summary>
-            public const int OriginOfReplication = 22;
-
-            /// <summary>
-            /// The signal peptide coding sequence.
-            /// </summary>
-            public const int SignalPeptideCodingSequence = 23;
-
-            /// <summary>
-            /// The miscellaneous binding.
-            /// </summary>
-            public const int MiscellaneousBinding = 24;
-
-            /// <summary>
-            /// The stem loop.
-            /// </summary>
-            public const int StemLoop = 25;
-
-            /// <summary>
-            /// The displacement loop.
-            /// </summary>
-            public const int DisplacementLoop = 26;
-
-            /// <summary>
-            /// The diversity segment.
-            /// </summary>
-            public const int DiversitySegment = 27;
-
-            /// <summary>
-            /// The mobile element.
-            /// </summary>
-            public const int MobileElement = 28;
-
-            /// <summary>
-            /// The variation.
-            /// </summary>
-            public const int Variation = 29;
-
-            /// <summary>
-            /// The protein bind.
-            /// </summary>
-            public const int ProteinBind = 30;
-
-            /// <summary>
-            /// The mature peptid.
-            /// </summary>
-            public const int MaturePeptid = 31;
-
-            /// <summary>
-            /// The miscellaneous difference.
-            /// </summary>
-            public const int MiscellaneousDifference = 32;
-
-            /// <summary>
-            /// The non coding gene.
-            /// </summary>
-            public const int Gene = 33;
-
-            /// <summary>
-            /// 3'UTR end.
-            /// </summary>
-            public const int ThreeEnd = 34;
-
-            /// <summary>
-            /// 5'UTR end.
-            /// </summary>
-            public const int FiveEnd = 35;
-
-            /// <summary>
-            /// Primer bind site.
-            /// </summary>
-            public const int PrimerBind = 36;
-
-            /// <summary>
-            /// The plastid.
-            /// </summary>
-            public const int Plastid = 37;
         }
     }
 }

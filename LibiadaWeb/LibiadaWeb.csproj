@@ -229,6 +229,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attribute.cs" />
+    <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
     <Compile Include="BinaryCharacteristic.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -296,9 +297,7 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Extensions\EnumExtensions.cs" />
-    <Compile Include="Feature.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Feature.cs" />
     <Compile Include="Fmotiv.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>

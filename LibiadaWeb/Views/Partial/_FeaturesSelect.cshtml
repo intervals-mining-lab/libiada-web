@@ -1,12 +1,12 @@
 ﻿@model Subsequence
 
 <br />
-@Html.LabelFor(model => model.FeatureId, new { @class = "control-label col-md-2" })
+@Html.LabelFor(model => model.Feature, new { @class = "control-label col-md-2" })
 <div ng-repeat="feature in features">
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <label>
-                <input type="checkbox" name="featureIds" ng-value="feature.Value" checked ng-model="feature.Selected" ng-change="filterByFeature(feature)" />
+                <input type="checkbox" name="features" ng-value="feature.Value" checked ng-model="feature.Selected" ng-change="filterByFeature(feature)" />
                 {{feature.Text}}
             </label>
         </div>

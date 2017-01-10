@@ -9,6 +9,7 @@
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
@@ -56,7 +57,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <returns>
@@ -64,11 +65,10 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, int[] characteristicTypeLinkIds, int[] featureIds)
+        public ActionResult Index(long[] matterIds, int[] characteristicTypeLinkIds, Feature[] features)
         {
             return Action(() =>
             {
-                Dictionary<int, string> features;
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);
 
@@ -77,12 +77,10 @@
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                 var links = new Link[characteristicTypeLinkIds.Length];
+                var featureRepository = new FeatureRepository();
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    var featureRepository = new FeatureRepository(db);
-                    features = featureRepository.Features.ToDictionary(f => f.Id, f => f.Name);
-
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                             .Select(s => new { s.Id, MatterName = s.Matter.Name })
@@ -110,7 +108,7 @@
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicTypeLinkIds,
-                            featureIds,
+                            features,
                             parentSequenceIds[i],
                             calculators,
                             links,
@@ -123,7 +121,7 @@
                                 { "characteristics", characteristics },
                                 { "matterNames", matterNames },
                                 { "characteristicNames", characteristicNames },
-                                { "features", features }
+                                { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) }
                             };
             });
         }

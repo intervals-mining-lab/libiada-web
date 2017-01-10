@@ -137,6 +137,15 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return GetMatterSelectList(db.Matter.Where(filter));
         }
 
+        /// <summary>
+        /// Creates matter from genBank metadata.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Matter"/>.
+        /// </returns>
         public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
         {
             var matter = new Matter
@@ -144,7 +153,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                  Name = ExtractMatterName(metadata) + " | " + metadata.Version.CompoundAccession,
                                  Nature = Nature.Genetic
                              };
-            
+
             FillGropAndSequenceType(matter);
 
             return matter;
@@ -207,6 +216,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                 ", Definition = " + definition);
         }
 
+        /// <summary>
+        /// Fills grop and sequence type params i matter.
+        /// </summary>
+        /// <param name="matter">
+        /// The matter.
+        /// </param>
         public void FillGropAndSequenceType(Matter matter)
         {
             var name = matter.Name.ToLower();

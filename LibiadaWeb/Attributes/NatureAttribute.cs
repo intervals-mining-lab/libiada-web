@@ -5,7 +5,7 @@
     /// <summary>
     /// The nature attribute.
     /// </summary>
-    [AttributeUsage(AttributeTargets.All)]
+    [AttributeUsage(AttributeTargets.Field)]
     public sealed class NatureAttribute : System.Attribute
     {
         /// <summary>

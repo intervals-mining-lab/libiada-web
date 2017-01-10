@@ -6,8 +6,6 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
-    using LibiadaWeb.Extensions;
-
     /// <summary>
     /// The common sequences controller.
     /// </summary>
@@ -74,7 +72,6 @@
             {
                 return HttpNotFound();
             }
-
 
             ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
             ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);

@@ -72,15 +72,15 @@
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <returns>
         /// The <see cref="List{Subsequence}"/>.
         /// </returns>
-        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<int> featureIds)
+        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<Feature> features)
         {
-            return db.Subsequence.Where(s => s.SequenceId == sequenceId && featureIds.Contains(s.FeatureId))
+            return db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                         .Include(s => s.Position)
                                         .Include(s => s.SequenceAttribute)
                                         .ToArray();
@@ -92,31 +92,33 @@
         /// <param name="sequenceId">
         /// Sequences id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// Subsequences features.
         /// </param>
         /// <param name="filters">
         /// Filters for the subsequences.
-        /// Filters are applied in "OR" logic (if subseqence corresponds to any filter it is added to calculation).
+        /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
         /// </param>
-        /// <returns></returns>
-        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<int> featureIds, string[] filters)
+        /// <returns>
+        /// Array of subsequences.
+        /// </returns>
+        public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<Feature> features, string[] filters)
         {
-            var allSubseqences = db.Subsequence.Where(s => s.SequenceId == sequenceId && featureIds.Contains(s.FeatureId))
+            var allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                         .Include(s => s.Position)
                                         .Include(s => s.SequenceAttribute)
                                         .ToArray();
             var tempResult = new List<Subsequence>();
-            for (int i = 0; i < allSubseqences.Length; i++)
+            for (int i = 0; i < allSubsequences.Length; i++)
             {
                 for (int j = 0; j < filters.Length; j++)
                 {
-                    if (allSubseqences[i].SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
+                    if (allSubsequences[i].SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
                     {
-                        string value = allSubseqences[i].SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
+                        string value = allSubsequences[i].SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
                         if (value.Contains(filters[j]))
                         {
-                            tempResult.Add(allSubseqences[i]);
+                            tempResult.Add(allSubsequences[i]);
                             break;
                         }
                     }
@@ -142,7 +144,7 @@
         {
             ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
 
-            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == LibiadaWeb.Attribute.Complement))
+            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Complement))
             {
                 bioSequence = bioSequence.GetReverseComplementedSequence();
             }

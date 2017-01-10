@@ -26,12 +26,11 @@ namespace LibiadaWeb
         public long SequenceId { get; set; }
         public int Start { get; set; }
         public int Length { get; set; }
-        public int FeatureId { get; set; }
+        public Feature Feature { get; set; }
         public string RemoteId { get; set; }
         public bool Partial { get; set; }
     
         public virtual DnaSequence DnaSequence { get; set; }
-        public virtual Feature Feature { get; set; }
         public virtual ICollection<SequenceAttribute> SequenceAttribute { get; set; }
         public virtual ICollection<Position> Position { get; set; }
     }

@@ -80,7 +80,7 @@
         /// <param name="notation">
         /// The notation id.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <param name="maxDifference">
@@ -101,7 +101,7 @@
             long[] matterIds,
             int characteristicTypeLinkId,
             Notation notation,
-            int[] featureIds,
+            Feature[] features,
             string maxDifference,
             string excludeType)
         {
@@ -114,7 +114,7 @@
 
                 var firstMatterId = matterIds[0];
                 var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, featureIds);
+                Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, features);
                 var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences, firstParentSequenceId);
                 var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
                 var firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
@@ -132,7 +132,7 @@
 
                 var secondMatterId = matterIds[1];
                 var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
-                Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, featureIds);
+                Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, features);
                 var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences, secondParentSequenceId);
                 var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
                 var secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));

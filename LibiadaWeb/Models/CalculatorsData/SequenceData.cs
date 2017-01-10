@@ -1,5 +1,7 @@
 ﻿namespace LibiadaWeb.Models.Calculators
 {
+    using LibiadaWeb.Models.CalculatorsData;
+
     /// <summary>
     /// The sequence characteristics.
     /// </summary>

@@ -143,13 +143,14 @@
                 }
 
                 var clusterizator = new KMeansClusterization();
-                int[] clusterizationResult = clusterizator.Cluster(clustersCount , characteristics);
+                int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
                 for (int i = 0; i < clusterizationResult.Length; i++)
                 {
-                    mattersCharacteristics[i] = new { 
-                        MatterName = matters[matterIds[i]], 
-                        cluster = clusterizationResult[i] + 1, 
-                        Characteristics = characteristics[i] 
+                    mattersCharacteristics[i] = new
+                    {
+                        MatterName = matters[matterIds[i]],
+                        cluster = clusterizationResult[i] + 1,
+                        Characteristics = characteristics[i]
                     };
                 }
 

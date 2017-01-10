@@ -119,7 +119,7 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="start" Type="int4" Nullable="false" />
           <Property Name="length" Type="int4" Nullable="false" />
-          <Property Name="feature_id" Type="int4" Nullable="false" />
+          <Property Name="feature_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="partial" Type="bool" Nullable="false" />
         </EntityType>
@@ -186,18 +186,6 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="attribute_id" Type="int4" Nullable="false" />
           <Property Name="value" Type="text" Nullable="false" />
-        </EntityType>
-
-        <EntityType Name="feature">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-          <Property Name="nature_id" Type="int2" Nullable="false" />
-          <Property Name="complete" Type="bool" Nullable="false" />
-          <Property Name="type" Type="varchar" MaxLength="255" />
         </EntityType>
 
         <EntityType Name="fmotiv">
@@ -515,19 +503,6 @@
             </Principal>
             <Dependent Role="subsequence">
               <PropertyRef Name="chain_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
-        <Association Name="fk_subsequence_feature">
-          <End Role="feature" Type="Self.feature" Multiplicity="1" />
-          <End Role="subsequence" Type="Self.subsequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="feature">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="subsequence">
-              <PropertyRef Name="feature_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -991,7 +966,6 @@
           <EntitySet Name="literature_chain" EntityType="Self.literature_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="matter" EntityType="Self.matter" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="feature" EntityType="Self.feature" store:Type="Tables" Schema="public"/>
           <EntitySet Name="fmotiv" EntityType="Self.fmotiv" store:Type="Tables" Schema="public"/>
           <EntitySet Name="congeneric_characteristic" EntityType="Self.congeneric_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="instrument" EntityType="Self.instrument" store:Type="Tables" Schema="public"/>
@@ -1071,11 +1045,6 @@
 
           <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="dna_chain" EntitySet="dna_chain" />
-            <End Role="subsequence" EntitySet="subsequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_subsequence_feature" Association="Self.fk_subsequence_feature">
-            <End Role="feature" EntitySet="feature" />
             <End Role="subsequence" EntitySet="subsequence" />
           </AssociationSet>
 
@@ -1277,12 +1246,11 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="Start" Type="Int32" Nullable="false" />
           <Property Name="Length" Type="Int32" Nullable="false" />
-          <Property Name="FeatureId" Type="Int32" Nullable="false" />
+          <Property Name="Feature" Type="LibiadaWebModel.Feature" Nullable="false" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Partial" Type="Boolean" Nullable="false" />
 
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_subsequence_dna_chain" FromRole="Subsequence" ToRole="DnaSequence" />
-          <NavigationProperty Name="Feature" Relationship="Self.fk_subsequence_feature" FromRole="Subsequence" ToRole="Feature" />
           <NavigationProperty Name="SequenceAttribute" Relationship="Self.fk_chain_attribute_subsequence" FromRole="Subsequence" ToRole="SequenceAttribute" />
           <NavigationProperty Name="Position" Relationship="Self.fk_position_subsequence" FromRole="Subsequence" ToRole="Position" />
         </EntityType>
@@ -1374,21 +1342,7 @@
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="SequenceAttribute" ToRole="DnaSequence" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_chain_attribute_subsequence" FromRole="SequenceAttribute" ToRole="Subsequence" />
         </EntityType>
-
-        <EntityType Name="Feature">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
-          <Property Name="Type" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="Complete" Type="Boolean" Nullable="false" />
-
-          <NavigationProperty Name="Subsequence" Relationship="Self.fk_subsequence_feature" FromRole="Feature" ToRole="Subsequence" />
-        </EntityType>
-
+        
         <EntityType Name="Fmotiv">
           <Key>
             <PropertyRef Name="Id" />
@@ -1858,19 +1812,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_subsequence_feature">
-          <End Role="Feature" Type="Self.Feature" Multiplicity="1" />
-          <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Feature">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Subsequence">
-              <PropertyRef Name="FeatureId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="fk_position_subsequence">
           <End Role="Subsequence" Type="Self.Subsequence" Multiplicity="1" />
           <End Role="Position" Type="Self.Position" Multiplicity="*" />
@@ -2202,7 +2143,6 @@
           <EntitySet Name="LiteratureSequence" EntityType="Self.LiteratureSequence" />
           <EntitySet Name="Matter" EntityType="Self.Matter" />
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
-          <EntitySet Name="Feature" EntityType="Self.Feature" />
           <EntitySet Name="Fmotiv" EntityType="Self.Fmotiv" />
           <EntitySet Name="CongenericCharacteristic" EntityType="Self.CongenericCharacteristic" />
           <EntitySet Name="Instrument" EntityType="Self.Instrument" />
@@ -2280,11 +2220,6 @@
 
           <AssociationSet Name="fk_subsequence_dna_chain" Association="Self.fk_subsequence_dna_chain">
             <End Role="DnaSequence" EntitySet="DnaSequence" />
-            <End Role="Subsequence" EntitySet="Subsequence" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_subsequence_feature" Association="Self.fk_subsequence_feature">
-            <End Role="Feature" EntitySet="Feature" />
             <End Role="Subsequence" EntitySet="Subsequence" />
           </AssociationSet>
 
@@ -2455,6 +2390,7 @@
         <EnumType Name="Language" UnderlyingType="Byte" a:ExternalTypeName="Language" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="RemoteDb" UnderlyingType="Byte" a:ExternalTypeName="RemoteDb" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Notation" UnderlyingType="Byte" a:ExternalTypeName="Notation" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Feature" UnderlyingType="Byte" a:ExternalTypeName="Feature" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="SequenceType" UnderlyingType="Byte" a:ExternalTypeName="SequenceType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -2590,7 +2526,7 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="Start" ColumnName="start" />
                 <ScalarProperty Name="Length" ColumnName="length" />
-                <ScalarProperty Name="FeatureId" ColumnName="feature_id" />
+                <ScalarProperty Name="Feature" ColumnName="feature_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
               </MappingFragment>
@@ -2662,19 +2598,6 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="Attribute" ColumnName="attribute_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="Feature">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Feature">
-              <MappingFragment StoreEntitySet="feature">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-                <ScalarProperty Name="Nature" ColumnName="nature_id" />
-                <ScalarProperty Name="Type" ColumnName="type" />
-                <ScalarProperty Name="Complete" ColumnName="complete" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

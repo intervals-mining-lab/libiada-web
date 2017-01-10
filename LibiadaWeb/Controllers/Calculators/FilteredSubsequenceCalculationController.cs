@@ -1,25 +1,23 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
 
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
 
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web.Mvc;
-
-    using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models.CalculatorsData;
-
     /// <summary>
-    /// Cjntroller for filtered subsequences calculation.
+    /// Controller for filtered subsequences calculation.
     /// </summary>
     public class FilteredSubsequenceCalculationController : AbstractResultController
     {
@@ -56,24 +54,22 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type and link ids.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The feature ids.
         /// </param>
         /// <param name="filters">
         /// Filters for the subsequences.
-        /// Filters are applied in "OR" logic (if subseqence corresponds to any filter it is added to calculation).
+        /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, int[] characteristicTypeLinkIds, int[] featureIds, string[] filters)
+        public ActionResult Index(long[] matterIds, int[] characteristicTypeLinkIds, Feature[] features, string[] filters)
         {
             return Action(() =>
             {
-                Dictionary<int, string> features;
-
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);
                 var matterNames = new string[matterIds.Length];
@@ -85,9 +81,6 @@
 
                 using (var db = new LibiadaWebEntities())
                 {
-                    var featureRepository = new FeatureRepository(db);
-                    features = featureRepository.Features.ToDictionary(f => f.Id, f => f.Name);
-
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                             .Select(s => new { s.Id, MatterName = s.Matter.Name })
@@ -116,7 +109,7 @@
                     // all subsequence calculations
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                         characteristicTypeLinkIds,
-                        featureIds,
+                        features,
                         parentSequenceIds[i],
                         calculators,
                         links,
@@ -131,9 +124,9 @@
                                 { "characteristics", characteristics },
                                 { "matterNames", matterNames },
                                 { "characteristicNames", characteristicNames },
-                                { "features", features },
-                                { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                                { "attributeValues", attributeValues.Select(sa => new { attribute = (byte)sa.AttributeId, value = sa.Value }) }
+                                { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
+                                { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                             };
             });
         }

@@ -56,7 +56,7 @@
             this.db = db;
             matterRepository = new MatterRepository(db);
             notationRepository = new NotationRepository();
-            featureRepository = new FeatureRepository(db);
+            featureRepository = new FeatureRepository();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
@@ -165,7 +165,7 @@
 
             var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
-            var featureIds = featureRepository.Features.Where(f => f.Nature == Nature.Genetic && !f.Complete).Select(f => f.Id);
+            var features = featureRepository.Features.Where(f => f.GetNature() == Nature.Genetic);
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
                     .Where(st => st.GetNature() == Nature.Genetic)
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
@@ -176,7 +176,7 @@
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
             data.Add("nature", (byte)Nature.Genetic);
-            data.Add("features", featureRepository.GetSelectListWithNature(featureIds, featureIds));
+            data.Add("features", featureRepository.GetSelectListWithNature(features, features));
             data.Add("sequenceTypes", sequenceTypes);
             data.Add("groups", groups);
 
@@ -279,7 +279,6 @@
             IEnumerable<SelectListItemWithNature> sequenceTypes;
             IEnumerable<SelectListItemWithNature> groups;
             IEnumerable<SelectListItemWithNature> remoteDbs;
-
 
             if (UserHelper.IsAdmin())
             {

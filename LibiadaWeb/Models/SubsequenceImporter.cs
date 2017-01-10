@@ -6,6 +6,7 @@
 
     using Bio.IO.GenBank;
 
+    using LibiadaWeb.Attributes;
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -79,7 +80,7 @@
         {
             this.features = features;
             this.sequenceId = sequenceId;
-            featureRepository = new FeatureRepository(db);
+            featureRepository = new FeatureRepository();
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
             using (var commonSequenceRepository = new CommonSequenceRepository(db))
@@ -88,7 +89,7 @@
                 parentLength = parentSequence.GetLength();
             }
 
-            gene = featureRepository.GetFeatureById(Aliases.Feature.Gene).Type;
+            gene = Feature.Gene.GetAttribute<Feature, GenBankFeatureNameAttribute>().Value;
             sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)
@@ -248,7 +249,7 @@
                 var feature = features[i];
                 var location = feature.Location;
                 var leafLocations = location.GetLeafLocations();
-                int featureId;
+                Feature subsequenceFeature;
 
                 if (feature.Key == gene)
                 {
@@ -257,17 +258,17 @@
                         continue;
                     }
 
-                    featureId = Aliases.Feature.Gene;
+                    subsequenceFeature = Feature.Gene;
                 }
                 else
                 {
-                    featureId = featureRepository.GetFeatureIdByName(feature.Key);
+                    subsequenceFeature = featureRepository.GetFeatureByName(feature.Key);
                 }
 
                 if (feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudo.GetDisplayValue()) ||
                     feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudogene.GetDisplayValue()))
                 {
-                    featureId = Aliases.Feature.PseudoGen;
+                    subsequenceFeature = Feature.PseudoGen;
                 }
 
                 bool partial = CheckPartial(leafLocations);
@@ -287,7 +288,7 @@
                 var subsequence = new Subsequence
                 {
                     Id = DbHelper.GetNewElementId(db),
-                    FeatureId = featureId,
+                    Feature = subsequenceFeature,
                     Partial = partial,
                     SequenceId = sequenceId,
                     Start = start,
@@ -348,7 +349,7 @@
                 result.Add(new Subsequence
                 {
                     Id = DbHelper.GetNewElementId(db),
-                    FeatureId = Aliases.Feature.NonCodingSequence,
+                    Feature = Feature.NonCodingSequence,
                     Partial = false,
                     SequenceId = sequenceId,
                     Start = starts[i],

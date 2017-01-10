@@ -2,6 +2,9 @@
 {
     using System.ComponentModel.DataAnnotations;
 
+    /// <summary>
+    /// The attribute.
+    /// </summary>
     public enum Attribute : byte
     {
         /// <summary>

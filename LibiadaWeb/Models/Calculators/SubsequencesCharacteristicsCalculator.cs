@@ -6,9 +6,9 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators;
 
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
     /// The subsequences characteristics calculator.
@@ -21,7 +21,7 @@
         /// <param name="characteristicTypeLinkIds">
         /// The characteristic type link ids.
         /// </param>
-        /// <param name="featureIds">
+        /// <param name="features">
         /// The features ids.
         /// </param>
         /// <param name="parentSequenceId">
@@ -44,7 +44,7 @@
         /// </returns>
         public static SubsequenceData[] CalculateSubsequencesCharacteristics(
             int[] characteristicTypeLinkIds,
-            int[] featureIds,
+            Feature[] features,
             long parentSequenceId,
             IFullCalculator[] calculators,
             Link[] links,
@@ -56,11 +56,10 @@
             {
                 var subsequenceExtractor = new SubsequenceExtractor(context);
                 var sequenceAttributeRepository = new SequenceAttributeRepository(context);
-                var attributeRepository = new AttributeRepository();
                 var newCharacteristics = new List<Characteristic>();
 
                 // extracting data from database
-                var dbSubsequences = filters == null ? subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds) : subsequenceExtractor.GetSubsequences(parentSequenceId, featureIds, filters);
+                var dbSubsequences = filters == null ? subsequenceExtractor.GetSubsequences(parentSequenceId, features) : subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
                 var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
                 var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 

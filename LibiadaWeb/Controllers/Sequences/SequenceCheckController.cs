@@ -100,7 +100,6 @@
 
                 string message;
 
-
                 BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
 
                 if (dataBaseChain.Equals(chain))

@@ -75,9 +75,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="sequence">
         /// The sequence.
         /// </param>
-        /// <param name="fastaHeader">
-        /// The fasta header.
-        /// </param>
         /// <param name="partial">
         /// The partial.
         /// </param>

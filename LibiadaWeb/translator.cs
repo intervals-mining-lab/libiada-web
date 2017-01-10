@@ -14,12 +14,14 @@
         [Display(Name = "Google Translate")]
         [Description("http://translate.google.ru/")]
         GoogleTranslate = 1,
+
         /// <summary>
         /// PROMT translator.
         /// </summary>
         [Display(Name = "PROMT (translate.ru)")]
         [Description("http://www.translate.ru/")]
         Promt = 2,
+
         /// <summary>
         /// InterTran translator.
         /// </summary>
