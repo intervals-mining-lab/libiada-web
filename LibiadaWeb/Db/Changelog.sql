@@ -1263,4 +1263,10 @@ ALTER TABLE music_chain DROP CONSTRAINT fk_music_chain_piece_type;
 ALTER TABLE chain DROP COLUMN feature_id;
 ALTER TABLE dna_chain DROP COLUMN fasta_header;
 
+-- 10.01.2017
+-- Removing redundant features used for cemplete sequences.
+-- And removing redundant column "complete". 
+DELETE FROM feature WHERE id IN (1,2,3,10,11,12,15,17,37);
+ALTER TABLE feature DROP COLUMN complete;
+
 COMMIT;
