@@ -166,6 +166,8 @@
             var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToList();
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
             var features = featureRepository.Features.Where(f => f.GetNature() == Nature.Genetic);
+            IEnumerable<Feature> selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
+
             var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
                     .Where(st => st.GetNature() == Nature.Genetic)
                     .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
@@ -176,7 +178,7 @@
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
             data.Add("nature", (byte)Nature.Genetic);
-            data.Add("features", featureRepository.GetSelectListWithNature(features, features));
+            data.Add("features", featureRepository.GetSelectListWithNature(features, selectedFeatures));
             data.Add("sequenceTypes", sequenceTypes);
             data.Add("groups", groups);
 

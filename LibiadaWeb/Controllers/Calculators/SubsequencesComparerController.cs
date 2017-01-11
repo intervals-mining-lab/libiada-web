@@ -146,19 +146,13 @@
                 var similarities = new object[mattersCount, mattersCount];
 
                 var equalElements = new List<SubsequenceComparisonData>();
-                int comparisonNumber = 0;
 
                 for (int i = 0; i < characteristics.Length; i++)
                 {
                     for (int j = 0; j < characteristics.Length; j++)
                     {
-                        comparisonNumber++;
-
                         double similarSequencesCharacteristicValueFirst = 0;
                         var similarSequencesCharacteristicValueSecond = new Dictionary<int, double>();
-
-                        double similarFirstSequencesCharacteristicValue = 0;
-                        double similarSecondSequencesCharacteristicValue = 0;
 
                         int secondArrayStartPosition = 0;
                         double differenceSum = 0;
@@ -212,9 +206,6 @@
                                             SecondSubsequenceId = l,
                                         });
                                     }
-
-                                    similarFirstSequencesCharacteristicValue += first;
-                                    similarSecondSequencesCharacteristicValue += second;
 
                                     if (!nextElementInSecondArrayIsEqual)
                                     {
