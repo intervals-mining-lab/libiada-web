@@ -143,9 +143,9 @@
             }
 
             switch (d.featureId) {
-                case 4: // CDS
-                case 5: // RRNA
-                case 6: // TRNA
+                case 1: // CDS
+                case 2: // RRNA
+                case 3: // TRNA
                     var firstProductId = getProductAttributeId(d);
                     var secondProductId = getProductAttributeId(dot);
                     if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {

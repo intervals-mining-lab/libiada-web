@@ -1269,4 +1269,39 @@ ALTER TABLE dna_chain DROP COLUMN fasta_header;
 DELETE FROM feature WHERE id IN (1,2,3,10,11,12,15,17,37);
 ALTER TABLE feature DROP COLUMN complete;
 
+-- 11.01.2017
+-- Updating feature ids.
+ALTER TABLE subsequence DROP CONSTRAINT fk_subsequence_feature;
+ALTER TABLE subsequence ADD CONSTRAINT fk_subsequence_feature FOREIGN KEY (feature_id) REFERENCES feature (id) ON UPDATE CASCADE ON DELETE NO ACTION;
+
+UPDATE feature SET id = 0 WHERE id = 14;
+UPDATE feature SET id = 1 WHERE id = 4;
+UPDATE feature SET id = 2 WHERE id = 5;
+UPDATE feature SET id = 3 WHERE id = 6;
+UPDATE feature SET id = 4 WHERE id = 7;
+UPDATE feature SET id = 5 WHERE id = 8;
+UPDATE feature SET id = 6 WHERE id = 9;
+UPDATE feature SET id = 7 WHERE id = 13;
+UPDATE feature SET id = 8 WHERE id = 16;
+UPDATE feature SET id = 9 WHERE id = 18;
+UPDATE feature SET id = 10 WHERE id = 19;
+UPDATE feature SET id = 11 WHERE id = 20;
+UPDATE feature SET id = 12 WHERE id = 21;
+UPDATE feature SET id = 13 WHERE id = 22;
+UPDATE feature SET id = 14 WHERE id = 23;
+UPDATE feature SET id = 15 WHERE id = 24;
+UPDATE feature SET id = 16 WHERE id = 25;
+UPDATE feature SET id = 17 WHERE id = 26;
+UPDATE feature SET id = 18 WHERE id = 27;
+UPDATE feature SET id = 19 WHERE id = 28;
+UPDATE feature SET id = 20 WHERE id = 29;
+UPDATE feature SET id = 21 WHERE id = 30;
+UPDATE feature SET id = 22 WHERE id = 31;
+UPDATE feature SET id = 23 WHERE id = 32;
+UPDATE feature SET id = 24 WHERE id = 33;
+UPDATE feature SET id = 25 WHERE id = 34;
+UPDATE feature SET id = 26 WHERE id = 35;
+UPDATE feature SET id = 27 WHERE id = 36;
+
+
 COMMIT;
