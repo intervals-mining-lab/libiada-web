@@ -1304,9 +1304,19 @@ UPDATE feature SET id = 26 WHERE id = 35;
 UPDATE feature SET id = 27 WHERE id = 36;
 
 -- 11.01.2017
--- Added new default instrument.
+-- Added new default instrument and translator.
 
-INSERT INTO instrument (id,name,description) VALUES(0,'Any or unknown', 'Any or unknown instrument');
+INSERT INTO instrument (id,name,description) VALUES(0, 'Any or unknown', 'Any or unknown instrument');
+INSERT INTO translator (id,name,description) VALUES(0, 'None or manual', 'No translator is applied (text is original) or text translated manualy');
+
+ALTER TABLE literature_chain DROP CONSTRAINT chk_original_translator;
+ALTER TABLE literature_chain ADD CONSTRAINT chk_original_translator CHECK (original AND translator_id = 0 OR NOT original);
+UPDATE literature_chain SET translator_id = 0 WHERE translator_id IS NULL;
+
+ALTER TABLE literature_chain ALTER COLUMN translator_id SET DEFAULT 0;
+ALTER TABLE literature_chain ALTER COLUMN translator_id SET NOT NULL;
+ALTER TABLE pitch ALTER COLUMN instrument_id SET DEFAULT 0;
+ALTER TABLE pitch ALTER COLUMN instrument_id SET NOT NULL;
 
 
 COMMIT;

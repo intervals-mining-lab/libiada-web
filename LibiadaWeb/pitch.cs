@@ -22,7 +22,7 @@ namespace LibiadaWeb
         public int Id { get; set; }
         public int Octave { get; set; }
         public int Midinumber { get; set; }
-        public Nullable<LibiadaMusic.ScoreModel.Instrument> Instrument { get; set; }
+        public LibiadaMusic.ScoreModel.Instrument Instrument { get; set; }
         public LibiadaMusic.ScoreModel.Accidental Accidental { get; set; }
         public LibiadaMusic.ScoreModel.NoteSymbol NoteSymbol { get; set; }
     

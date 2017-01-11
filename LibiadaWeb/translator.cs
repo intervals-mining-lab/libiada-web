@@ -9,6 +9,13 @@
     public enum Translator : byte
     {
         /// <summary>
+        /// No translator or translated manually.
+        /// </summary>
+        [Display(Name = "None or manual")]
+        [Description("No translator is applied (text is original) or text translated manualy")]
+        NoneOrManual = 0,
+
+        /// <summary>
         /// Google translate translator.
         /// </summary>
         [Display(Name = "Google Translate")]

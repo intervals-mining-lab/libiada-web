@@ -155,7 +155,7 @@
           <Property Name="notation_id" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="translator_id" Type="int2" />
+          <Property Name="translator_id" Type="int2" Nullable="false" />
           <Property Name="original" Type="bool" Nullable="false" />
           <Property Name="language_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
@@ -293,7 +293,7 @@
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="octave" Type="int4" Nullable="false" />
           <Property Name="midinumber" Type="int4" Nullable="false" />
-          <Property Name="instrument_id" Type="int2" Nullable="true" />
+          <Property Name="instrument_id" Type="int2" Nullable="false" />
           <Property Name="accidental_id" Type="int2" Nullable="false" />
           <Property Name="note_symbol_id" Type="int2" Nullable="false" />
         </EntityType>
@@ -1266,7 +1266,7 @@
           <Property Name="Notation" Type="LibiadaWebModel.Notation" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="MatterId" Type="Int64" Nullable="false" />
-          <Property Name="Translator" Type="LibiadaWebModel.Translator" />
+          <Property Name="Translator" Type="LibiadaWebModel.Translator" Nullable="false" />
           <Property Name="Original" Type="Boolean" Nullable="false" />
           <Property Name="Language" Type="LibiadaWebModel.Language" Nullable="false" />
           <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
@@ -1440,7 +1440,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Octave" Type="Int32" Nullable="false" />
           <Property Name="Midinumber" Type="Int32" Nullable="false" />
-          <Property Name="Instrument" Type="LibiadaWebModel.Instrument" Nullable="true" />
+          <Property Name="Instrument" Type="LibiadaWebModel.Instrument" Nullable="false" />
           <Property Name="Accidental" Type="LibiadaWebModel.Accidental" Nullable="false" />
           <Property Name="NoteSymbol" Type="LibiadaWebModel.NoteSymbol" Nullable="false" />
           <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />

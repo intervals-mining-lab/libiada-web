@@ -25,7 +25,7 @@ namespace LibiadaWeb
         public Notation Notation { get; set; }
         public System.DateTimeOffset Created { get; set; }
         public long MatterId { get; set; }
-        public Nullable<Translator> Translator { get; set; }
+        public Translator Translator { get; set; }
         public bool Original { get; set; }
         public Language Language { get; set; }
         public Nullable<RemoteDb> RemoteDb { get; set; }
