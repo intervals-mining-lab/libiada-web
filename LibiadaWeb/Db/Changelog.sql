@@ -1303,5 +1303,10 @@ UPDATE feature SET id = 25 WHERE id = 34;
 UPDATE feature SET id = 26 WHERE id = 35;
 UPDATE feature SET id = 27 WHERE id = 36;
 
+-- 11.01.2017
+-- Added new default instrument.
+
+INSERT INTO instrument (id,name,description) VALUES(0,'Any or unknown', 'Any or unknown instrument');
+
 
 COMMIT;

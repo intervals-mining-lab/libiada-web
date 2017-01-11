@@ -320,12 +320,6 @@
         /// </summary>
         [Display(Name = "Триоль")]
         public bool Triplet { get; set; }
-
-        /// <summary>
-        /// Gets or sets the tie id.
-        /// </summary>
-        [Display(Name = "Лига")]
-        public int TieId { get; set; }
     }
 
     /// <summary>
@@ -352,18 +346,6 @@
         /// </summary>
         [Display(Name = "Уникальный номер ноты по миди стандарту")]
         public int Midinumber { get; set; }
-
-        /// <summary>
-        /// Gets or sets the instrument id.
-        /// </summary>
-        [Display(Name = "Instrument")]
-        public int InstrumentId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the accidental id.
-        /// </summary>
-        [Display(Name = "Знак альтерации")]
-        public int AccidentalId { get; set; }
 
         /// <summary>
         /// Gets or sets the note symbol id.

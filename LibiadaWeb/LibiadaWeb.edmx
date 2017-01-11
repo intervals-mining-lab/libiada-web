@@ -218,15 +218,6 @@
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
-        <EntityType Name="instrument">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
-        </EntityType>
-
         <EntityType Name="measure">
           <Key>
             <PropertyRef Name="id" />
@@ -302,7 +293,7 @@
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="octave" Type="int4" Nullable="false" />
           <Property Name="midinumber" Type="int4" Nullable="false" />
-          <Property Name="instrument_id" Type="int4" Nullable="true" />
+          <Property Name="instrument_id" Type="int2" Nullable="true" />
           <Property Name="accidental_id" Type="int2" Nullable="false" />
           <Property Name="note_symbol_id" Type="int2" Nullable="false" />
         </EntityType>
@@ -937,19 +928,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
-        <Association Name="fk_pitch_instrument">
-          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
-          <End Role="pitch" Type="Self.pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="instrument">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="pitch">
-              <PropertyRef Name="instrument_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
 
         <EntityContainer Name="LibiadaWebModelStoreContainer">
           <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" store:Type="Tables" Schema="public"/>
@@ -968,7 +946,6 @@
           <EntitySet Name="chain_attribute" EntityType="Self.chain_attribute" store:Type="Tables" Schema="public"/>
           <EntitySet Name="fmotiv" EntityType="Self.fmotiv" store:Type="Tables" Schema="public"/>
           <EntitySet Name="congeneric_characteristic" EntityType="Self.congeneric_characteristic" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="instrument" EntityType="Self.instrument" store:Type="Tables" Schema="public"/>
           <EntitySet Name="measure" EntityType="Self.measure" store:Type="Tables" Schema="public"/>
           <EntitySet Name="music_chain" EntityType="Self.music_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="data_chain" EntityType="Self.data_chain" store:Type="Tables" Schema="public"/>
@@ -1096,11 +1073,6 @@
           <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
             <End Role="fmotiv_type" EntitySet="fmotiv_type" />
             <End Role="fmotiv" EntitySet="fmotiv" />
-          </AssociationSet>
-
-          <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
-            <End Role="instrument" EntitySet="instrument" />
-            <End Role="pitch" EntitySet="pitch" />
           </AssociationSet>
 
         </EntityContainer>
@@ -1380,16 +1352,6 @@
           <NavigationProperty Name="Element" Relationship="Self.fk_congeneric_characteristic_element" FromRole="CongenericCharacteristic" ToRole="Element" />
         </EntityType>
 
-        <EntityType Name="Instrument">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Pitch" Relationship="Self.fk_pitch_instrument" FromRole="Instrument" ToRole="Pitch" />
-        </EntityType>
-
         <EntityType Name="Measure">
           <Key>
             <PropertyRef Name="Id" />
@@ -1478,10 +1440,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="Octave" Type="Int32" Nullable="false" />
           <Property Name="Midinumber" Type="Int32" Nullable="false" />
-          <Property Name="InstrumentId" Type="Int32" Nullable="true" />
+          <Property Name="Instrument" Type="LibiadaWebModel.Instrument" Nullable="true" />
           <Property Name="Accidental" Type="LibiadaWebModel.Accidental" Nullable="false" />
           <Property Name="NoteSymbol" Type="LibiadaWebModel.NoteSymbol" Nullable="false" />
-          <NavigationProperty Name="Instrument" Relationship="Self.fk_pitch_instrument" FromRole="Pitch" ToRole="Instrument" />
           <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />
         </EntityType>
 
@@ -2109,19 +2070,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_pitch_instrument">
-          <End Role="Instrument" Type="Self.Instrument" Multiplicity="0..1" />
-          <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Instrument">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Pitch">
-              <PropertyRef Name="InstrumentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="note_pitch">
           <End Role="Note" Type="Self.Note" Multiplicity="*" />
           <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
@@ -2145,7 +2093,6 @@
           <EntitySet Name="SequenceAttribute" EntityType="Self.SequenceAttribute" />
           <EntitySet Name="Fmotiv" EntityType="Self.Fmotiv" />
           <EntitySet Name="CongenericCharacteristic" EntityType="Self.CongenericCharacteristic" />
-          <EntitySet Name="Instrument" EntityType="Self.Instrument" />
           <EntitySet Name="Measure" EntityType="Self.Measure" />
           <EntitySet Name="MusicSequence" EntityType="Self.MusicSequence" />
           <EntitySet Name="DataSequence" EntityType="Self.DataSequence" />
@@ -2373,11 +2320,6 @@
             <End Role="Fmotiv" EntitySet="Fmotiv" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_pitch_instrument" Association="Self.fk_pitch_instrument">
-            <End Role="Instrument" EntitySet="Instrument" />
-            <End Role="Pitch" EntitySet="Pitch" />
-          </AssociationSet>
-
           <AssociationSet Name="note_pitch" Association="Self.note_pitch">
             <End Role="Note" EntitySet="Note" />
             <End Role="Pitch" EntitySet="Pitch" />
@@ -2395,6 +2337,7 @@
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Instrument" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -2634,16 +2577,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="Instrument">
-            <EntityTypeMapping TypeName="LibiadaWebModel.Instrument">
-              <MappingFragment StoreEntitySet="instrument">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
           <EntitySetMapping Name="Measure">
             <EntityTypeMapping TypeName="LibiadaWebModel.Measure">
               <MappingFragment StoreEntitySet="measure">
@@ -2722,7 +2655,7 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Octave" ColumnName="octave" />
                 <ScalarProperty Name="Midinumber" ColumnName="midinumber" />
-                <ScalarProperty Name="InstrumentId" ColumnName="instrument_id" />
+                <ScalarProperty Name="Instrument" ColumnName="instrument_id" />
                 <ScalarProperty Name="Accidental" ColumnName="accidental_id" />
                 <ScalarProperty Name="NoteSymbol" ColumnName="note_symbol_id" />
               </MappingFragment>
