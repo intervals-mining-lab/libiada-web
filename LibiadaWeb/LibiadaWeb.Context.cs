@@ -47,6 +47,5 @@ namespace LibiadaWeb
         public virtual DbSet<DataSequence> DataSequence { get; set; }
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<Pitch> Pitch { get; set; }
-        public virtual DbSet<FmotivType> FmotivType { get; set; }
     }
 }

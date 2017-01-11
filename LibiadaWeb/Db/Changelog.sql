@@ -1318,5 +1318,14 @@ ALTER TABLE literature_chain ALTER COLUMN translator_id SET NOT NULL;
 ALTER TABLE pitch ALTER COLUMN instrument_id SET DEFAULT 0;
 ALTER TABLE pitch ALTER COLUMN instrument_id SET NOT NULL;
 
+-- 11.01.2017
+-- Added fmotiv types.
+
+INSERT INTO fmotiv_type (id,name,description) VALUES(1, 'Complete minimal measure', '');
+INSERT INTO fmotiv_type (id,name,description) VALUES(2, 'Partial minimal measure', '');
+INSERT INTO fmotiv_type (id,name,description) VALUES(3, 'Increasing sequence', '');
+INSERT INTO fmotiv_type (id,name,description) VALUES(4, 'Complete minimal metrorhythmic group', 'One of two subtypes of minimal metrorhythmic group with complete minimal measure at the begining');
+INSERT INTO fmotiv_type (id,name,description) VALUES(5, 'Partial minimal metrorhythmic group', 'One of two subtypes of minimal metrorhythmic group with partial minimal measure at the begining');
+
 
 COMMIT;

@@ -199,7 +199,7 @@
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="fmotiv_type_id" Type="int4" Nullable="false" />
+          <Property Name="fmotiv_type_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
@@ -305,15 +305,6 @@
           </Key>
           <Property Name="note_id" Type="int8" Nullable="false" />
           <Property Name="pitch_id" Type="int4" Nullable="false" />
-        </EntityType>
-
-        <EntityType Name="fmotiv_type">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" Nullable="false" MaxLength="100" />
-          <Property Name="description" Type="text" />
         </EntityType>
         
         <Association Name="fk_binary_characteristic_first_element">
@@ -916,19 +907,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fmotiv_fmotiv_type">
-          <End Role="fmotiv_type" Type="Self.fmotiv_type" Multiplicity="1" />
-          <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="fmotiv_type">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="fmotiv">
-              <PropertyRef Name="fmotiv_type_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <EntityContainer Name="LibiadaWebModelStoreContainer">
           <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="accordance_characteristic" EntityType="Self.accordance_characteristic" store:Type="Tables" Schema="public"/>
@@ -952,7 +930,6 @@
           <EntitySet Name="note" EntityType="Self.note" store:Type="Tables" Schema="public"/>
           <EntitySet Name="pitch" EntityType="Self.pitch" store:Type="Tables" Schema="public"/>
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" store:Type="Tables" Schema="public" />
-          <EntitySet Name="fmotiv_type" EntityType="Self.fmotiv_type" store:Type="Tables" Schema="public"/>
 
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
@@ -1069,12 +1046,7 @@
             <End Role="pitch" EntitySet="pitch" />
             <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
-
-          <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
-            <End Role="fmotiv_type" EntitySet="fmotiv_type" />
-            <End Role="fmotiv" EntitySet="fmotiv" />
-          </AssociationSet>
-
+          
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -1326,7 +1298,7 @@
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="FmotivTypeId" Type="Int32" Nullable="false" />
+          <Property Name="FmotivType" Type="LibiadaWebModel.FmotivType" Nullable="false" />
           <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -1334,7 +1306,6 @@
           <NavigationProperty Name="BinaryCharacteristic" Relationship="Self.fk_binary_characteristic_fmotiv" FromRole="Fmotiv" ToRole="BinaryCharacteristic" />
           <NavigationProperty Name="CongenericCharacteristic" Relationship="Self.fk_congeneric_characteristic_fmotiv" FromRole="Fmotiv" ToRole="CongenericCharacteristic" />
           <NavigationProperty Name="Characteristic" Relationship="Self.fk_characteristic_fmotiv" FromRole="Fmotiv" ToRole="Characteristic" />
-          <NavigationProperty Name="FmotivType" Relationship="Self.fk_fmotiv_fmotiv_type" FromRole="Fmotiv" ToRole="FmotivType" />
         </EntityType>
 
         <EntityType Name="CongenericCharacteristic">
@@ -1444,16 +1415,6 @@
           <Property Name="Accidental" Type="LibiadaWebModel.Accidental" Nullable="false" />
           <Property Name="NoteSymbol" Type="LibiadaWebModel.NoteSymbol" Nullable="false" />
           <NavigationProperty Name="Note" Relationship="Self.note_pitch" FromRole="Pitch" ToRole="Note" />
-        </EntityType>
-
-        <EntityType Name="FmotivType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
-          <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Fmotiv" Relationship="Self.fk_fmotiv_fmotiv_type" FromRole="FmotivType" ToRole="Fmotiv" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2057,19 +2018,6 @@
           </ReferentialConstraint>
         </Association>
 
-        <Association Name="fk_fmotiv_fmotiv_type">
-          <End Role="FmotivType" Type="Self.FmotivType" Multiplicity="1" />
-          <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FmotivType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Fmotiv">
-              <PropertyRef Name="FmotivTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-
         <Association Name="note_pitch">
           <End Role="Note" Type="Self.Note" Multiplicity="*" />
           <End Role="Pitch" Type="Self.Pitch" Multiplicity="*" />
@@ -2098,7 +2046,6 @@
           <EntitySet Name="DataSequence" EntityType="Self.DataSequence" />
           <EntitySet Name="Note" EntityType="Self.Note" />
           <EntitySet Name="Pitch" EntityType="Self.Pitch" />
-          <EntitySet Name="FmotivType" EntityType="Self.FmotivType" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -2315,11 +2262,6 @@
             <End Role="Characteristic" EntitySet="Characteristic" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_fmotiv_fmotiv_type" Association="Self.fk_fmotiv_fmotiv_type">
-            <End Role="FmotivType" EntitySet="FmotivType" />
-            <End Role="Fmotiv" EntitySet="Fmotiv" />
-          </AssociationSet>
-
           <AssociationSet Name="note_pitch" Association="Self.note_pitch">
             <End Role="Note" EntitySet="Note" />
             <End Role="Pitch" EntitySet="Pitch" />
@@ -2337,6 +2279,7 @@
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="FmotivType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.FmotivType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Instrument" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -2555,7 +2498,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="FmotivTypeId" ColumnName="fmotiv_type_id" />
+                <ScalarProperty Name="FmotivType" ColumnName="fmotiv_type_id" />
                 <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
@@ -2658,16 +2601,6 @@
                 <ScalarProperty Name="Instrument" ColumnName="instrument_id" />
                 <ScalarProperty Name="Accidental" ColumnName="accidental_id" />
                 <ScalarProperty Name="NoteSymbol" ColumnName="note_symbol_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="FmotivType">
-            <EntityTypeMapping TypeName="LibiadaWebModel.FmotivType">
-              <MappingFragment StoreEntitySet="fmotiv_type">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Description" ColumnName="description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

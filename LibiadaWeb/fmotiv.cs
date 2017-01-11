@@ -28,7 +28,7 @@ namespace LibiadaWeb
         public string Value { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
-        public int FmotivTypeId { get; set; }
+        public LibiadaMusic.ScoreModel.FmotivType FmotivType { get; set; }
         public Nullable<RemoteDb> RemoteDb { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
@@ -37,6 +37,5 @@ namespace LibiadaWeb
         public virtual ICollection<BinaryCharacteristic> BinaryCharacteristic { get; set; }
         public virtual ICollection<CongenericCharacteristic> CongenericCharacteristic { get; set; }
         public virtual ICollection<Characteristic> Characteristic { get; set; }
-        public virtual FmotivType FmotivType { get; set; }
     }
 }
