@@ -10,6 +10,11 @@
     public class GenBankFeatureNameAttribute : Attribute
     {
         /// <summary>
+        /// Gets the genBank name of the feature.
+        /// </summary>
+        public readonly string Value;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenBankFeatureNameAttribute"/> class.
         /// </summary>
         /// <param name="value">
@@ -19,10 +24,5 @@
         {
             Value = value;
         }
-
-        /// <summary>
-        /// Gets the genBank name of the feature.
-        /// </summary>
-        public string Value { get; private set; }
     }
 }

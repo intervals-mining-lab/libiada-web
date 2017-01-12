@@ -9,6 +9,11 @@
     public sealed class NatureAttribute : System.Attribute
     {
         /// <summary>
+        /// Nature attribute value.
+        /// </summary>
+        public readonly Nature Value;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="NatureAttribute"/> class.
         /// </summary>
         /// <param name="value">
@@ -18,10 +23,5 @@
         {
             this.Value = value;
         }
-
-        /// <summary>
-        /// Gets nature attribute value.
-        /// </summary>
-        public Nature Value { get; private set; }
     }
 }
