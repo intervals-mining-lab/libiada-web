@@ -14,7 +14,7 @@
         /// The bacteria.
         /// </summary>
         [Display(Name = "Bacteria")]
-        [Description("")]
+        [Description("Subgroup of procariotes")]
         [Nature(Nature.Genetic)]
         Bacteria = 1,
 
@@ -22,7 +22,7 @@
         /// The classical music.
         /// </summary>
         [Display(Name = "Classical music")]
-        [Description("")]
+        [Description("Or any?")]
         [Nature(Nature.Music)]
         ClassicalMusic = 2,
 
@@ -30,7 +30,7 @@
         /// The classical literature.
         /// </summary>
         [Display(Name = "Classical literature")]
-        [Description("")]
+        [Description("Not poetry")]
         [Nature(Nature.Literature)]
         ClassicalLiterature = 3,
 
@@ -38,7 +38,7 @@
         /// The classical literature.
         /// </summary>
         [Display(Name = "Observation data")]
-        [Description("")]
+        [Description("Numerical data")]
         [Nature(Nature.MeasurementData)]
         ObservationData = 4,
 
@@ -46,7 +46,7 @@
         /// The virus.
         /// </summary>
         [Display(Name = "Virus")]
-        [Description("")]
+        [Description("Virus, viroid or bacteriophage")]
         [Nature(Nature.Genetic)]
         Virus = 5,
 
@@ -54,7 +54,7 @@
         /// The eucariote.
         /// </summary>
         [Display(Name = "Eucariote")]
-        [Description("")]
+        [Description("Eucariote")]
         [Nature(Nature.Genetic)]
         Eucariote = 6
     }

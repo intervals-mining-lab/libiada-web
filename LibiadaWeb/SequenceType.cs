@@ -70,7 +70,7 @@
         /// The rRNA 16s.
         /// </summary>
         [Display(Name = "16S ribosomal RNA")]
-        [Description("")]
+        [Description("16S ribosomal RNA of procariote")]
         [Nature(Nature.Genetic)]
         RRNA16S = 8,
 
@@ -78,7 +78,7 @@
         /// The rRNA 18s.
         /// </summary>
         [Display(Name = "18S ribosomal RNA")]
-        [Description("")]
+        [Description("18S ribosomal RNA of eucariote")]
         [Nature(Nature.Genetic)]
         RRNA18S = 9,
 

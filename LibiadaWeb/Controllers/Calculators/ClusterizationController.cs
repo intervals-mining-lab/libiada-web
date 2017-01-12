@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Clusterizator.kMeans;
+    using Clusterizator.KMeans;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
