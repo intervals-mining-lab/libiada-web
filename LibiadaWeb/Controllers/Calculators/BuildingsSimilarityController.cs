@@ -98,8 +98,7 @@
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
                                 l.Notation == notation
                                 && l.Language == language
-                                && ((translator == null && l.Translator == null)
-                                                || (translator == l.Translator))).Id;
+                                && translator == l.Translator).Id;
                 }
                 else
                 {
@@ -114,8 +113,7 @@
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
                                 l.Notation == notation
                                 && l.Language == language
-                                && ((translator == null && l.Translator == null)
-                                                || (translator == l.Translator))).Id;
+                                && translator == l.Translator).Id;
                 }
                 else
                 {

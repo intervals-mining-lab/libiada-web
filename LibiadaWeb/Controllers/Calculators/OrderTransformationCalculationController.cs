@@ -5,8 +5,10 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Extensions;
@@ -54,11 +56,14 @@
             var viewDataHelper = new ViewDataHelper(db);
             var data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate");
 
-            var transformationLinks = new[] { LibiadaCore.Core.Link.Start, LibiadaCore.Core.Link.End, LibiadaCore.Core.Link.CycleStart, LibiadaCore.Core.Link.CycleEnd };
-            transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
+            var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
+            var operations = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
+                new SelectListItem { Text = "Higher order", Value = 2.ToString() }
+            };
             data.Add("operations", operations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
@@ -99,7 +104,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] transformationLinkIds,
+            Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
             int[] characteristicTypeLinkIds,
@@ -132,10 +137,7 @@
                             sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId &&
                                                                            l.Notation == notation
                                                                            && l.Language == language
-                                                                           &&
-                                                                           ((translator == null &&
-                                                                             l.Translator == null)
-                                                                            || (translator == l.Translator))).Id;
+                                                                           && translator == l.Translator).Id;
                         }
                         else
                         {
@@ -147,14 +149,8 @@
                         {
                             for (int j = 0; j < transformationIds.Length; j++)
                             {
-                                if (transformationIds[j] == 1)
-                                {
-                                    sequence = DissimilarChainFactory.Create(sequence);
-                                }
-                                else
-                                {
-                                    sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[j]);
-                                }
+                                sequence = transformationIds[j] == 1 ? DissimilarChainFactory.Create(sequence)
+                                                                     : HighOrderFactory.Create(sequence, transformationLinkIds[j]);
                             }
                         }
 
@@ -189,8 +185,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>

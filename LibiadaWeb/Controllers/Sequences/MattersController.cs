@@ -8,9 +8,10 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.Account;
-    using LibiadaWeb.Models.CalculatorsData;
 
     using Newtonsoft.Json;
 
@@ -85,10 +86,8 @@
                 return HttpNotFound();
             }
 
-            var groups = EnumExtensions.ToArray<Group>()
-                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = ((byte)g).ToString(), Nature = (byte)g.GetNature() });
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = ((byte)st).ToString(), Nature = (byte)st.GetNature() });
+            var groups = ArrayExtensions.ToArray<Group>().ToSelectListWithNature();
+            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().ToSelectListWithNature();
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                                                            {

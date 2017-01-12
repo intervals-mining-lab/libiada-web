@@ -46,10 +46,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </exception>
         public void Create(CommonSequence sequence, ISequence fastaSequence, bool partial)
         {
-            // TODO: fix it for batch import or remove fasta headers completely
-            string fastaHeader = ">" + fastaSequence.ID;
-
-            if (fastaHeader.Contains("Resource temporarily unavailable"))
+            if (fastaSequence.ID.Contains("Resource temporarily unavailable"))
             {
                 throw new Exception("Sequence is empty or invalid (probably ncbi is not responding).");
             }

@@ -2,13 +2,21 @@
 {
     using System.Linq;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
 
     using NUnit.Framework;
 
+    /// <summary>
+    /// The group tests.
+    /// </summary>
     [TestFixture(TestOf = typeof(Group))]
     public class GroupTests
     {
+        /// <summary>
+        /// The groups count.
+        /// </summary>
         private const int GroupsCount = 6;
 
         /// <summary>
@@ -17,7 +25,7 @@
         [Test]
         public void GroupCountTest()
         {
-            var actualCount = EnumExtensions.ToArray<Group>().Length;
+            var actualCount = ArrayExtensions.ToArray<Group>().Length;
             Assert.AreEqual(GroupsCount, actualCount);
         }
 
@@ -27,7 +35,7 @@
         [Test]
         public void GroupValuesTest()
         {
-            var groups = EnumExtensions.ToArray<Group>();
+            var groups = ArrayExtensions.ToArray<Group>();
 
             for (int i = 1; i <= GroupsCount; i++)
             {
@@ -38,6 +46,12 @@
         /// <summary>
         /// Tests names of groups.
         /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
         [TestCase((Group)1, "Bacteria")]
         [TestCase((Group)2, "ClassicalMusic")]
         [TestCase((Group)3, "ClassicalLiterature")]
@@ -64,6 +78,9 @@
         /// <summary>
         /// Tests that all groups have description.
         /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         [Test]
         public void GroupHasDescriptionTest([Values]Group group)
         {
@@ -73,10 +90,13 @@
         /// <summary>
         /// Tests that all groups have valid nature attribute.
         /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         [Test]
         public void GroupHasNatureTest([Values]Group group)
         {
-            var natures = EnumExtensions.ToArray<Nature>();
+            var natures = ArrayExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(group.GetNature()));
         }
 
@@ -86,7 +106,7 @@
         [Test]
         public void GroupValuesUniqueTest()
         {
-            var groups = EnumExtensions.ToArray<Group>();
+            var groups = ArrayExtensions.ToArray<Group>();
             var groupValues = groups.Cast<byte>();
             Assert.That(groupValues, Is.Unique);
         }

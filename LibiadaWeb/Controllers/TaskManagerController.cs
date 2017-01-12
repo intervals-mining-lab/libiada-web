@@ -7,7 +7,8 @@
     using System.Threading;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Extensions;
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 

@@ -7,9 +7,9 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc.Iterators;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;

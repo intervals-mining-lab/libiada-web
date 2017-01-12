@@ -7,6 +7,8 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.CalculatorsData;
@@ -31,16 +33,6 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The notation repository.
-        /// </summary>
-        private readonly NotationRepository notationRepository;
-
-        /// <summary>
-        /// The feature repository.
-        /// </summary>
-        private readonly FeatureRepository featureRepository;
-
-        /// <summary>
         /// The characteristic type link repository.
         /// </summary>
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
@@ -55,9 +47,51 @@
         {
             this.db = db;
             matterRepository = new MatterRepository(db);
-            notationRepository = new NotationRepository();
-            featureRepository = new FeatureRepository();
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+        }
+
+        /// <summary>
+        /// Fills matter creation data.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillMatterCreationData()
+        {
+            IEnumerable<SelectListItem> natures;
+            IEnumerable<Notation> notations;
+            IEnumerable<SequenceType> sequenceTypes;
+            IEnumerable<Group> groups;
+            IEnumerable<RemoteDb> remoteDbs;
+
+            if (UserHelper.IsAdmin())
+            {
+                natures = EnumHelper.GetSelectList(typeof(Nature));
+                notations = ArrayExtensions.ToArray<Notation>();
+                remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+                groups = ArrayExtensions.ToArray<Group>();
+            }
+            else
+            {
+                natures = new[] { Nature.Genetic }.ToSelectList();
+                notations = new[] { Notation.Nucleotides };
+                remoteDbs = ArrayExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic);
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            }
+
+            return new Dictionary<string, object>
+                           {
+                                   { "matters", matterRepository.GetMatterSelectList() },
+                                   { "natures", natures },
+                                   { "notations", notations.ToSelectListWithNature() },
+                                   { "languages", EnumHelper.GetSelectList(typeof(Language)) },
+                                   { "remoteDbs", remoteDbs.ToSelectListWithNature() },
+                                   { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
+                                   { "sequenceTypes", sequenceTypes.ToSelectListWithNature(true) },
+                                   { "groups", groups.ToSelectListWithNature(true) }
+                           };
         }
 
         /// <summary>
@@ -80,37 +114,31 @@
             var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
-            IEnumerable<object> notations;
-            IEnumerable<SelectListItemWithNature> sequenceTypes;
-            IEnumerable<SelectListItemWithNature> groups;
+            IEnumerable<Notation> notations;
+            IEnumerable<SequenceType> sequenceTypes;
+            IEnumerable<Group> groups;
 
             if (UserHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = notationRepository.GetSelectListWithNature();
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
-                groups = EnumExtensions.ToArray<Group>()
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
+                notations = ArrayExtensions.ToArray<Notation>();
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+                groups = ArrayExtensions.ToArray<Group>();
             }
             else
             {
-                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
-                notations = notationRepository.GetSelectListWithNature(new List<Notation> { Notation.Nucleotides });
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Where(st => st.GetNature() == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
-                groups = EnumExtensions.ToArray<Group>()
-                    .Where(g => g.GetNature() == Nature.Genetic)
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
+                natures = new[] { Nature.Genetic }.ToSelectList();
+                notations = new[] { Notation.Nucleotides };
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
 
             data.Add("natures",  natures);
-            data.Add("notations", notations);
+            data.Add("notations", notations.ToSelectListWithNature());
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
-            data.Add("sequenceTypes", sequenceTypes);
-            data.Add("groups", groups);
+            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
+            data.Add("groups", groups.ToSelectListWithNature(true));
 
             return data;
         }
@@ -163,24 +191,19 @@
 
             var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
-            var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic).ToList();
+            var geneticNotations = ArrayExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
+            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+            var groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic);
+            var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
             var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
-            var features = featureRepository.Features.Where(f => f.GetNature() == Nature.Genetic);
-            IEnumerable<Feature> selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Where(st => st.GetNature() == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
-            var groups = EnumExtensions.ToArray<Group>()
-                .Where(g => g.GetNature() == Nature.Genetic)
-                .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
 
             data.Add("characteristicTypes", characteristicTypes);
-            data.Add("notations", notationRepository.GetSelectListWithNature(geneticNotations));
+            data.Add("notations", geneticNotations.ToSelectListWithNature());
             data.Add("nature", (byte)Nature.Genetic);
-            data.Add("features", featureRepository.GetSelectListWithNature(features, selectedFeatures));
-            data.Add("sequenceTypes", sequenceTypes);
-            data.Add("groups", groups);
+            data.Add("features", features.ToSelectListWithNature(selectedFeatures));
+            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
+            data.Add("groups", groups.ToSelectListWithNature(true));
 
             return data;
         }
@@ -199,7 +222,7 @@
             var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
                 .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.Link).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
 
-            var links = UserHelper.IsAdmin() ? EnumExtensions.ToArray<Link>() : new[] { Link.NotApplied, Link.Start, Link.Cycle };
+            var links = UserHelper.IsAdmin() ? ArrayExtensions.ToArray<Link>() : new[] { Link.NotApplied, Link.Start, Link.Cycle };
 
             var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
 
@@ -266,66 +289,6 @@
                     { "radiobuttonsForMatters", radiobuttonsForMatters },
                     { "submitName", submitName }
                 };
-        }
-
-        /// <summary>
-        /// Fills matter creation data.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="Dictionary{String, Object}"/>.
-        /// </returns>
-        public Dictionary<string, object> FillMatterCreationData()
-        {
-            IEnumerable<SelectListItem> natures;
-            IEnumerable<SelectListItemWithNature> notations;
-            IEnumerable<SelectListItemWithNature> sequenceTypes;
-            IEnumerable<SelectListItemWithNature> groups;
-            IEnumerable<SelectListItemWithNature> remoteDbs;
-
-            if (UserHelper.IsAdmin())
-            {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = notationRepository.GetSelectListWithNature();
-                remoteDbs = EnumExtensions.ToArray<RemoteDb>().Select(rd => new SelectListItemWithNature
-                {
-                    Value = ((byte)rd).ToString(),
-                    Text = rd.GetDisplayValue(),
-                    Selected = false,
-                    Nature = (byte)rd.GetNature()
-                });
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>()
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
-                groups = EnumExtensions.ToArray<Group>()
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
-            }
-            else
-            {
-                natures = new List<Nature> { Nature.Genetic }.ToSelectList();
-                notations = notationRepository.GetSelectListWithNature(new List<Notation> { Notation.Nucleotides });
-                remoteDbs = EnumExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic).Select(rd => new SelectListItemWithNature
-                {
-                    Value = ((byte)rd).ToString(),
-                    Text = rd.GetDisplayValue(),
-                    Selected = false,
-                    Nature = (byte)rd.GetNature()
-                });
-                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic)
-                    .Select(st => new SelectListItemWithNature { Text = st.GetDisplayValue(), Value = st.GetDisplayValue(), Nature = (byte)st.GetNature() });
-                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic)
-                    .Select(g => new SelectListItemWithNature { Text = g.GetDisplayValue(), Value = g.GetDisplayValue(), Nature = (byte)g.GetNature() });
-            }
-
-            return new Dictionary<string, object>
-                           {
-                                   { "matters", matterRepository.GetMatterSelectList() },
-                                   { "natures", natures },
-                                   { "notations", notations },
-                                   { "languages", EnumHelper.GetSelectList(typeof(Language)) },
-                                   { "remoteDbs", remoteDbs },
-                                   { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
-                                   { "sequenceTypes", sequenceTypes },
-                                   { "groups", groups }
-                           };
         }
     }
 }

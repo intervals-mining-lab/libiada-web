@@ -7,7 +7,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The sequence repository.
@@ -125,7 +124,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Chain[][] GetChains(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
         {
             var chains = new Chain[matterIds.Length][];
-            var notationsRepository = new NotationRepository();
 
             for (int i = 0; i < matterIds.Length; i++)
             {
@@ -140,13 +138,12 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     if (notation.GetNature() == Nature.Literature)
                     {
                         Language language = languages[j];
-                        Translator? translator = translators[j];
+                        Translator translator = translators[j] ?? Translator.NoneOrManual;
 
-                        sequenceId = Db.LiteratureSequence.Single(l =>
-                                    l.MatterId == matterId && l.Notation == notation
-                                    && l.Language == language
-                                    && ((translator == null && l.Translator == null)
-                                        || (translator == l.Translator))).Id;
+                        sequenceId = Db.LiteratureSequence.Single(l => l.MatterId == matterId
+                                                                    && l.Notation == notation
+                                                                    && l.Language == language
+                                                                    && l.Translator == translator).Id;
                     }
                     else
                     {

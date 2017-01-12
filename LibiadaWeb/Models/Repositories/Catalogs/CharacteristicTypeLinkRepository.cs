@@ -4,9 +4,8 @@
     using System.Data.Entity;
     using System.Linq;
 
-    using LibiadaWeb.Extensions;
-
-    using Link = LibiadaCore.Core.Link;
+    using LibiadaCore.Core;
+    using LibiadaCore.Extensions;
 
     /// <summary>
     /// The characteristic type link repository.
@@ -51,7 +50,7 @@
         /// </returns>
         public Link GetLibiadaLink(int characteristicTypeLinkId)
         {
-            return (Link)characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
+            return characteristicTypeLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
         }
 
         /// <summary>

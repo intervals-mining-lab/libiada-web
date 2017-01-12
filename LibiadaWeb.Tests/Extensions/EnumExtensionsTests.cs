@@ -30,17 +30,5 @@
             /// </summary>
             Third = 3
         }
-
-        /// <summary>
-        /// Tests ToArray method.
-        /// </summary>
-        [Test]
-        public void ToArrayTest()
-        {
-            var actual = EnumExtensions.ToArray<TestEnum>();
-            var expected = new[] { TestEnum.First, TestEnum.Second, TestEnum.Third };
-
-            Assert.AreEqual(expected, actual);
-        }
     }
 }

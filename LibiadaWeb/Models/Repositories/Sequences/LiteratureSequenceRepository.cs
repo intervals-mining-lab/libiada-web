@@ -1,6 +1,5 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
-    using System;
     using System.IO;
 
     using LibiadaCore.Core;
@@ -45,7 +44,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="translator">
         /// The translator id.
         /// </param>
-        public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator? translator)
+        public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator)
         {
             var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             string[] text = stringSequence.Split('\n');
@@ -91,7 +90,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="building">
         /// The building.
         /// </param>
-        public void Create(CommonSequence sequence, bool original, Language language, Translator? translator, long[] alphabet, int[] building)
+        public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] building)
         {
             var parameters = FillParams(sequence, alphabet, building);
 
@@ -112,7 +111,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             {
                 ParameterName = "translator_id",
                 NpgsqlDbType = NpgsqlDbType.Integer,
-                Value = (object)translator ?? DBNull.Value
+                Value = translator
             });
 
             const string Query = @"INSERT INTO literature_chain (

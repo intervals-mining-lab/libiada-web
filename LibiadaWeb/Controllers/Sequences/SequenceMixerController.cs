@@ -113,22 +113,20 @@
         public ActionResult Index(long matterId, Notation notation, Language? language, Translator? translator, int scrambling)
         {
             Matter matter = db.Matter.Single(m => m.Id == matterId);
-            CommonSequence dataBaseSequence;
+            long sequenceId;
             if (matter.Nature == Nature.Literature)
             {
-                long sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
+                sequenceId = db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                     && l.Notation == notation
                                                                     && l.Language == language
-                                                                    && ((translator == null && l.Translator == null)
-                                                                        || (translator == l.Translator))).Id;
-                dataBaseSequence = db.CommonSequence.Single(c => c.Id == sequenceId);
+                                                                    && l.Translator == translator).Id;
             }
             else
             {
-                dataBaseSequence = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation);
+                sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
             }
 
-            BaseChain chain = sequenceRepository.ToLibiadaBaseChain(dataBaseSequence.Id);
+            BaseChain chain = sequenceRepository.ToLibiadaBaseChain(sequenceId);
             for (int i = 0; i < scrambling; i++)
             {
                 int firstIndex = randomGenerator.Next(chain.GetLength());
@@ -148,42 +146,31 @@
             db.Matter.Add(resultMatter);
             db.SaveChanges();
 
-            var resultsequence = new CommonSequence
+            var result = new CommonSequence
                 {
                     Notation = notation,
                     MatterId = resultMatter.Id
                 };
 
-            long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, dataBaseSequence.Notation, false);
+            long[] alphabet = elementRepository.ToDbElements(chain.Alphabet, notation, false);
 
             switch (matter.Nature)
             {
                 case Nature.Genetic:
-                    DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == dataBaseSequence.Id);
+                    DnaSequence dnaSequence = db.DnaSequence.Single(c => c.Id == sequenceId);
 
-                    dnaSequenceRepository.Create(
-                        resultsequence,
-                        dnaSequence.Partial,
-                        alphabet,
-                        chain.Building);
+                    dnaSequenceRepository.Create(result, dnaSequence.Partial, alphabet, chain.Building);
                     break;
                 case Nature.Music:
-                    musicSequenceRepository.Create(resultsequence, alphabet, chain.Building);
+                    musicSequenceRepository.Create(result, alphabet, chain.Building);
                     break;
                 case Nature.Literature:
+                    LiteratureSequence sequence = db.LiteratureSequence.Single(c => c.Id == sequenceId);
 
-                    LiteratureSequence literatureSequence = db.LiteratureSequence.Single(c => c.Id == dataBaseSequence.Id);
-
-                    literatureSequenceRepository.Create(
-                        resultsequence,
-                        literatureSequence.Original,
-                        literatureSequence.Language,
-                        literatureSequence.Translator,
-                        alphabet,
-                        chain.Building);
+                    literatureSequenceRepository.Create(result, sequence.Original, sequence.Language, sequence.Translator, alphabet, chain.Building);
                     break;
                 case Nature.MeasurementData:
-                    dataSequenceRepository.Create(resultsequence, alphabet, chain.Building);
+                    dataSequenceRepository.Create(result, alphabet, chain.Building);
                     break;
                 default:
                     throw new Exception("Unknown sequence nature.");

@@ -6,8 +6,9 @@
 
     using Bio.IO.GenBank;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Attributes;
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -21,11 +22,6 @@
         /// The database context.
         /// </summary>
         private readonly LibiadaWebEntities db = new LibiadaWebEntities();
-
-        /// <summary>
-        /// The feature repository.
-        /// </summary>
-        private readonly FeatureRepository featureRepository;
 
         /// <summary>
         /// The attribute repository.
@@ -80,7 +76,6 @@
         {
             this.features = features;
             this.sequenceId = sequenceId;
-            featureRepository = new FeatureRepository();
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
             using (var commonSequenceRepository = new CommonSequenceRepository(db))
@@ -152,7 +147,7 @@
                     throw new Exception("Sequence seems to be chimeric as it is several 'source' records in file. Second source location = " + leafLocations[0].StartData);
                 }
 
-                if (!featureRepository.FeatureExists(feature.Key))
+                if (!FeatureRepository.FeatureExists(feature.Key))
                 {
                     throw new Exception("Unknown feature. Feature name = " + feature.Key);
                 }
@@ -262,7 +257,7 @@
                 }
                 else
                 {
-                    subsequenceFeature = featureRepository.GetFeatureByName(feature.Key);
+                    subsequenceFeature = FeatureRepository.GetFeatureByName(feature.Key);
                 }
 
                 if (feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudo.GetDisplayValue()) ||

@@ -10,8 +10,8 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -261,7 +261,7 @@
                     { "equalElements", equalElements.OrderBy(e => e.Difference).ToList() },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
-                    { "attributes", EnumExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) }
+                    { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) }
                 };
 
                 return new Dictionary<string, object>

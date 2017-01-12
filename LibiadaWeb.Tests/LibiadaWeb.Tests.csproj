@@ -64,6 +64,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj">
+      <Project>{af8df9bb-b796-457e-91ab-e41674beb92b}</Project>
+      <Name>LibiadaCore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibiadaWeb\LibiadaWeb.csproj">
       <Project>{47fad378-f2bc-4470-ae1a-f497d698600c}</Project>
       <Name>LibiadaWeb</Name>

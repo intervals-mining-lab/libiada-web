@@ -9,8 +9,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
-
     /// <summary>
     /// The matter repository.
     /// </summary>
@@ -57,45 +55,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public IEnumerable<object> GetMatterSelectList()
         {
             return GetMatterSelectList(m => true);
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <param name="selectedMatter">
-        /// The selected matter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList(long selectedMatter)
-        {
-            return GetMatterSelectList(new List<long> { selectedMatter });
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <param name="selectedMatters">
-        /// The selected matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList(IEnumerable<long> selectedMatters)
-        {
-            return db.Matter.OrderBy(m => m.Name).Select(m => new
-            {
-                Value = m.Id,
-                Text = m.Name,
-                Selected = selectedMatters.Contains(m.Id),
-                Created = m.Created.ToString(),
-                Modified = m.Modified.ToString(),
-                SequenceType = m.SequenceType.GetDisplayValue(),
-                Group = m.Group.GetDisplayValue(),
-                m.Nature,
-                m.Description
-            });
         }
 
         /// <summary>

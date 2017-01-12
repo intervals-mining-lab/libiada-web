@@ -2,8 +2,9 @@
 {
     using System.Linq;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb;
-    using LibiadaWeb.Extensions;
 
     using NUnit.Framework;
 
@@ -13,6 +14,9 @@
     [TestFixture(TestOf = typeof(Nature))]
     public class NatureTests
     {
+        /// <summary>
+        /// The natures count.
+        /// </summary>
         private const int NaturesCount = 4;
 
         /// <summary>
@@ -21,7 +25,7 @@
         [Test]
         public void NatureCountTest()
         {
-            var actualCount = EnumExtensions.ToArray<Nature>().Length;
+            var actualCount = ArrayExtensions.ToArray<Nature>().Length;
             Assert.AreEqual(NaturesCount, actualCount);
         }
 
@@ -31,7 +35,7 @@
         [Test]
         public void NatureValuesTest()
         {
-            var natures = EnumExtensions.ToArray<Nature>();
+            var natures = ArrayExtensions.ToArray<Nature>();
             for (int i = 1; i <= NaturesCount; i++)
             {
                 Assert.IsTrue(natures.Contains((Nature)i));
@@ -41,6 +45,12 @@
         /// <summary>
         /// Tests names of natures.
         /// </summary>
+        /// <param name="nature">
+        /// The nature.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
         [TestCase((Nature)1, "Genetic")]
         [TestCase((Nature)2, "Music")]
         [TestCase((Nature)3, "Literature")]
@@ -65,6 +75,9 @@
         /// <summary>
         /// Tests that all natures have description.
         /// </summary>
+        /// <param name="nature">
+        /// The nature.
+        /// </param>
         [Test]
         public void NatureHasDescriptionTest([Values]Nature nature)
         {
@@ -77,7 +90,7 @@
         [Test]
         public void NatureValuesUniqueTest()
         {
-            var natures = EnumExtensions.ToArray<Nature>();
+            var natures = ArrayExtensions.ToArray<Nature>();
             var natureValues = natures.Cast<byte>();
             Assert.That(natureValues, Is.Unique);
         }

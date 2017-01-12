@@ -8,11 +8,11 @@
     using Bio.Extensions;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
 
@@ -23,22 +23,10 @@
     public class CustomSequenceOrderTransformerController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
         /// </summary>
         public CustomSequenceOrderTransformerController() : base("Custom sequences order transformation")
         {
-            db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -55,7 +43,11 @@
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
+            var operations = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
+                new SelectListItem { Text = "Higher order", Value = 2.ToString() }
+            };
             data.Add("operations", operations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
@@ -89,7 +81,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
-            int[] transformationLinkIds,
+            Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
             string[] customSequences,
@@ -126,14 +118,8 @@
                     {
                         for (int i = 0; i < transformationIds.Length; i++)
                         {
-                            if (transformationIds[i] == 1)
-                            {
-                                sequence = DissimilarChainFactory.Create(sequence);
-                            }
-                            else
-                            {
-                                sequence = HighOrderFactory.Create(sequence, (Link)transformationLinkIds[i]);
-                            }
+                            sequence = transformationIds[i] == 1 ? DissimilarChainFactory.Create(sequence)
+                                                                 : HighOrderFactory.Create(sequence, transformationLinkIds[i]);
                         }
                     }
                 }
@@ -141,8 +127,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = ((Link)transformationLinkIds[i]).GetDisplayValue();
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>

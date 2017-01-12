@@ -8,10 +8,9 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -77,7 +76,6 @@
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                 var links = new Link[characteristicTypeLinkIds.Length];
-                var featureRepository = new FeatureRepository();
 
                 using (var db = new LibiadaWebEntities())
                 {

@@ -145,7 +145,7 @@
                             musicSequenceRepository.Create(commonSequence, sequenceStream);
                             break;
                         case Nature.Literature:
-                            literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? false, translator);
+                            literatureSequenceRepository.Create(commonSequence, sequenceStream, language ?? Language.Russian, original ?? true, translator ?? Translator.NoneOrManual);
                             break;
                         case Nature.MeasurementData:
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);

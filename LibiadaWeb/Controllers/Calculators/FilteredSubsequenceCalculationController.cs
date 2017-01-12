@@ -7,8 +7,8 @@
 
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -125,7 +125,7 @@
                                 { "matterNames", matterNames },
                                 { "characteristicNames", characteristicNames },
                                 { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
-                                { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                { "attributes", ArrayExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                 { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                             };
             });

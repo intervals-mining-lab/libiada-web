@@ -10,7 +10,6 @@
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Math;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -122,9 +121,10 @@
                 long firstSequenceId;
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
                 {
-                    firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId &&
-                                l.Notation == notation && l.Language == language &&
-                                MathLogic.NullableCompare(translator, l.Translator)).Id;
+                    firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
+                                                                     && l.Notation == notation
+                                                                     && l.Language == language
+                                                                     && l.Translator == translator).Id;
                 }
                 else
                 {
@@ -137,9 +137,10 @@
                 long secondSequenceId;
                 if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
                 {
-                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId &&
-                                l.Notation == notation && l.Language == language
-                                && MathLogic.NullableCompare(translator, l.Translator)).Id;
+                    secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
+                                                                      && l.Notation == notation
+                                                                      && l.Language == language
+                                                                      && l.Translator == translator).Id;
                 }
                 else
                 {

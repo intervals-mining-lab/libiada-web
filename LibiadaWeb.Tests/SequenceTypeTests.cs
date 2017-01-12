@@ -2,13 +2,21 @@
 {
     using System.Linq;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
 
     using NUnit.Framework;
 
+    /// <summary>
+    /// The sequence type tests.
+    /// </summary>
     [TestFixture(TestOf = typeof(SequenceType))]
     public class SequenceTypeTests
     {
+        /// <summary>
+        /// The sequence types count.
+        /// </summary>
         private const int SequenceTypesCount = 11;
 
         /// <summary>
@@ -17,7 +25,7 @@
         [Test]
         public void SequenceTypeCountTest()
         {
-            var actualCount = EnumExtensions.ToArray<SequenceType>().Length;
+            var actualCount = ArrayExtensions.ToArray<SequenceType>().Length;
             Assert.AreEqual(SequenceTypesCount, actualCount);
         }
 
@@ -27,7 +35,7 @@
         [Test]
         public void SequenceTypeValuesTest()
         {
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
 
             for (int i = 1; i <= SequenceTypesCount; i++)
             {
@@ -38,6 +46,12 @@
         /// <summary>
         /// Tests names of sequence types.
         /// </summary>
+        /// <param name="sequenceType">
+        /// The sequence Type.
+        /// </param>
+        /// <param name="name">
+        /// The name.
+        /// </param>
         [TestCase((SequenceType)1, "CompleteGenome")]
         [TestCase((SequenceType)2, "CompleteMusicalComposition")]
         [TestCase((SequenceType)3, "CompleteText")]
@@ -69,6 +83,9 @@
         /// <summary>
         /// Tests that all sequence types have description.
         /// </summary>
+        /// <param name="sequenceType">
+        /// The sequence Type.
+        /// </param>
         [Test]
         public void SequenceTypeHasDescriptionTest([Values]SequenceType sequenceType)
         {
@@ -78,10 +95,13 @@
         /// <summary>
         /// Tests that all sequence types have valid nature attribute.
         /// </summary>
+        /// <param name="sequenceType">
+        /// The sequence Type.
+        /// </param>
         [Test]
         public void SequenceTypeHasNatureTest([Values]SequenceType sequenceType)
         {
-            var natures = EnumExtensions.ToArray<Nature>();
+            var natures = ArrayExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(sequenceType.GetNature()));
         }
 
@@ -91,7 +111,7 @@
         [Test]
         public void SequenceTypeValuesUniqueTest()
         {
-            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
             var sequenceTypeValues = sequenceTypes.Cast<byte>();
             Assert.That(sequenceTypeValues, Is.Unique);
         }

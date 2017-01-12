@@ -10,6 +10,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Extensions;
@@ -63,7 +64,11 @@
             transformationLinks = transformationLinks.OrderBy(n => (int)n).ToArray();
             data.Add("transformationLinks", transformationLinks.ToSelectList());
 
-            var operations = new List<SelectListItem> { new SelectListItem { Text = "Dissimilar", Value = 1.ToString() }, new SelectListItem { Text = "Higher order", Value = 2.ToString() } };
+            var operations = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Dissimilar", Value = 1.ToString() },
+                new SelectListItem { Text = "Higher order", Value = 2.ToString() }
+            };
             data.Add("operations", operations);
 
             ViewBag.data = JsonConvert.SerializeObject(data);
@@ -100,7 +105,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(
-            int[] transformationLinkIds,
+            Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
             int[] characteristicTypeLinkIds,
@@ -143,14 +148,8 @@
                         {
                             for (int w = 0; w < transformationIds.Length; w++)
                             {
-                                if (transformationIds[w] == 1)
-                                {
-                                    sequence = DissimilarChainFactory.Create(sequence);
-                                }
-                                else
-                                {
-                                    sequence = HighOrderFactory.Create(sequence, (Link)transformationLinkIds[w]);
-                                }
+                                sequence = transformationIds[w] == 1 ? DissimilarChainFactory.Create(sequence)
+                                                                     : HighOrderFactory.Create(sequence, transformationLinkIds[w]);
                             }
                         }
 
@@ -178,8 +177,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = ((Link)transformationLinkIds[i]).GetDisplayValue();
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>

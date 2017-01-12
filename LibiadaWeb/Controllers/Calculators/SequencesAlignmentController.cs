@@ -7,8 +7,8 @@
 
     using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -37,11 +37,6 @@
         private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
-        /// The feature repository.
-        /// </summary>
-        private readonly FeatureRepository featureRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
         public SequencesAlignmentController() : base("Sequences alignment")
@@ -49,7 +44,6 @@
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
             characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-            featureRepository = new FeatureRepository();
         }
 
         /// <summary>

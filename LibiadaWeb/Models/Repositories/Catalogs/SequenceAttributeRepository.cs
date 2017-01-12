@@ -5,7 +5,6 @@
     using System.Data.Entity;
     using System.Linq;
 
-    using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.CalculatorsData;
 
     /// <summary>
@@ -49,7 +48,7 @@
         /// The subsequences ids.
         /// </param>
         /// <returns>
-        /// The <see cref="T:Dictionary{Int64, String[]}"/>.
+        /// The <see cref="T:Dictionary{Int64, AttributeValue[]}"/>.
         /// </returns>
         public Dictionary<long, AttributeValue[]> GetAttributes(IEnumerable<long> subsequenceIds)
         {
@@ -205,7 +204,7 @@
         /// </returns>
         private string CleanAttributeValue(string attributeValue)
         {
-            return attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ");
+            return attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ").Replace("  ", " ");
         }
 
         /// <summary>

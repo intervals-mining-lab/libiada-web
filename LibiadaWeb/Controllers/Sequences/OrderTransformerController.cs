@@ -5,6 +5,7 @@
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
     using LibiadaWeb.Extensions;
@@ -80,7 +81,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long matterId, int[] transformationLinkIds, int[] transformationIds, int iterationsCount)
+        public ActionResult Index(long matterId, Link[] transformationLinkIds, int[] transformationIds, int iterationsCount)
         {
             return Action(() =>
             {
@@ -90,22 +91,15 @@
                 {
                     for (int i = 0; i < transformationIds.Length; i++)
                     {
-                        if (transformationIds[i] == 1)
-                        {
-                            sequence = DissimilarChainFactory.Create(sequence);
-                        }
-                        else
-                        {
-                            sequence = HighOrderFactory.Create(sequence, (LibiadaCore.Core.Link)transformationLinkIds[i]);
-                        }
+                        sequence = transformationIds[i] == 1 ? DissimilarChainFactory.Create(sequence)
+                                                             : HighOrderFactory.Create(sequence, transformationLinkIds[i]);
                     }
                 }
 
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    var link = ((LibiadaCore.Core.Link)transformationLinkIds[i]).GetDisplayValue();
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + link);
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
                 }
 
                 var result = new Dictionary<string, object>
