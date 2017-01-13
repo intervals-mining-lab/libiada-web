@@ -184,7 +184,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="attribute_id" Type="int4" Nullable="false" />
+          <Property Name="attribute_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="text" Nullable="false" />
         </EntityType>
 

@@ -1327,5 +1327,39 @@ INSERT INTO fmotiv_type (id,name,description) VALUES(3, 'Increasing sequence', '
 INSERT INTO fmotiv_type (id,name,description) VALUES(4, 'Complete minimal metrorhythmic group', 'One of two subtypes of minimal metrorhythmic group with complete minimal measure at the begining');
 INSERT INTO fmotiv_type (id,name,description) VALUES(5, 'Partial minimal metrorhythmic group', 'One of two subtypes of minimal metrorhythmic group with partial minimal measure at the begining');
 
+-- 13.01.2017
+-- Changing types of static table's ids to smallint.
+
+ALTER TABLE data_chain DROP COLUMN feature_id;
+
+ALTER TABLE translator ALTER COLUMN id TYPE smallint;
+ALTER TABLE tie ALTER COLUMN id TYPE smallint;
+ALTER TABLE remote_db ALTER COLUMN id TYPE smallint;
+ALTER TABLE note_symbol ALTER COLUMN id TYPE smallint;
+ALTER TABLE notation ALTER COLUMN id TYPE smallint;
+ALTER TABLE nature ALTER COLUMN id TYPE smallint;
+ALTER TABLE link ALTER COLUMN id TYPE smallint;
+ALTER TABLE "language" ALTER COLUMN id TYPE smallint;
+ALTER TABLE instrument ALTER COLUMN id TYPE smallint;
+ALTER TABLE fmotiv_type ALTER COLUMN id TYPE smallint;
+ALTER TABLE attribute ALTER COLUMN id TYPE smallint;
+ALTER TABLE accidental ALTER COLUMN id TYPE smallint;
+
+ALTER TABLE subsequence ALTER COLUMN feature_id TYPE smallint;
+ALTER TABLE pitch ALTER COLUMN instrument_id TYPE smallint;
+ALTER TABLE pitch ALTER COLUMN accidental_id TYPE smallint;
+ALTER TABLE pitch ALTER COLUMN note_symbol_id TYPE smallint;
+ALTER TABLE note ALTER COLUMN tie_id TYPE smallint;
+ALTER TABLE notation ALTER COLUMN nature_id TYPE smallint;
+ALTER TABLE matter ALTER COLUMN nature_id TYPE smallint;
+ALTER TABLE literature_chain ALTER COLUMN language_id TYPE smallint;
+ALTER TABLE literature_chain ALTER COLUMN translator_id TYPE smallint;
+ALTER TABLE fmotiv ALTER COLUMN fmotiv_type_id TYPE smallint;
+ALTER TABLE feature ALTER COLUMN nature_id TYPE smallint;
+ALTER TABLE element ALTER COLUMN notation_id TYPE smallint;
+ALTER TABLE characteristic_type_link ALTER COLUMN link_id TYPE smallint;
+ALTER TABLE chain_attribute ALTER COLUMN attribute_id TYPE smallint;
+ALTER TABLE chain ALTER COLUMN notation_id TYPE smallint;
+ALTER TABLE chain ALTER COLUMN remote_db_id TYPE smallint;
 
 COMMIT;
