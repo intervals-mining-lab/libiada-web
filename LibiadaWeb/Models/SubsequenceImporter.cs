@@ -8,7 +8,6 @@
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Attributes;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -84,7 +83,7 @@
                 parentLength = parentSequence.GetLength();
             }
 
-            gene = Feature.Gene.GetAttribute<Feature, GenBankFeatureNameAttribute>().Value;
+            gene = Feature.Gene.GetGenBankName();
             sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)

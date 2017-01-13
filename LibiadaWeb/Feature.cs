@@ -1,7 +1,11 @@
 ﻿namespace LibiadaWeb
 {
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
+
+    using LibiadaCore.Exceptions;
+    using LibiadaCore.Extensions;
 
     using LibiadaWeb.Attributes;
 
@@ -261,5 +265,25 @@
         [Nature(Nature.Genetic)]
         [GenBankFeatureName("primer_bind")]
         PrimerBind = 27
+    }
+
+    /// <summary>
+    /// Feature extension methods.
+    /// </summary>
+    public static class FeatureExtensions
+    {
+        /// <summary>
+        /// Gets genBank feature name.
+        /// </summary>
+        /// <param name="value">
+        /// Feature value.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public static string GetGenBankName(this Feature value)
+        {
+            return value.GetAttribute<Feature, GenBankFeatureNameAttribute>().Value;
+        }
     }
 }

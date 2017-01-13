@@ -21,7 +21,12 @@
         /// </param>
         public NatureAttribute(Nature value)
         {
-            this.Value = value;
+            if (!Enum.IsDefined(typeof(Nature), value))
+            {
+                throw new ArgumentException("Nature attribute value is not valid nature", "value");
+            }
+
+            Value = value;
         }
     }
 }
