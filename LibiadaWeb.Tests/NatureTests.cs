@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    /// The nature enum tests.
+    /// Nature enum tests.
     /// </summary>
     [TestFixture(TestOf = typeof(Nature))]
     public class NatureTests

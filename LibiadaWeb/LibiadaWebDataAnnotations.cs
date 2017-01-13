@@ -176,7 +176,7 @@
         /// Gets or sets the fmotiv_type_id.
         /// </summary>
         [Display(Name = "Fmotif type")]
-        public int FmotivTypeId { get; set; }
+        public int FmotivType { get; set; }
     }
 
     /// <summary>
@@ -212,12 +212,6 @@
     /// </summary>
     public class LiteratureSequenceDataAnnotations : CommonSequenceDataAnnotations
     {
-        /// <summary>
-        /// Gets or sets the language id.
-        /// </summary>
-        [Display(Name = "Language of literary work")]
-        public Language Language { get; set; }
-
         /// <summary>
         /// Gets or sets a value indicating whether literary work is in original language (not in translation).
         /// </summary>

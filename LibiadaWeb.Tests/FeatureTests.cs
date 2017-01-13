@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    /// The feature tests.
+    /// Feature enum tests.
     /// </summary>
     [TestFixture(TestOf = typeof(Feature))]
     public class FeatureTests

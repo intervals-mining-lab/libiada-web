@@ -7,7 +7,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    /// The attribute tests.
+    /// Attribute enum tests.
     /// </summary>
     [TestFixture(TestOf = typeof(Attribute))]
     public class AttributeTests

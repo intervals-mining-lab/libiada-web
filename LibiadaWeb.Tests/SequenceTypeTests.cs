@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    /// The sequence type tests.
+    /// Sequence type enum tests.
     /// </summary>
     [TestFixture(TestOf = typeof(SequenceType))]
     public class SequenceTypeTests

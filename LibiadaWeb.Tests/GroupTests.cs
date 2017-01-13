@@ -9,7 +9,7 @@
     using NUnit.Framework;
 
     /// <summary>
-    /// The group tests.
+    /// Group enum tests.
     /// </summary>
     [TestFixture(TestOf = typeof(Group))]
     public class GroupTests
