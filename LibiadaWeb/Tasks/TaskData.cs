@@ -84,7 +84,8 @@
         /// </returns>
         public TaskData Clone()
         {
-            return Mapper.Map<TaskData, TaskData>(this);
+            Mapper.Initialize(cfg => cfg.CreateMap<TaskData, TaskData>());
+            return Mapper.Map<TaskData>(this);
         }
     }
 }
