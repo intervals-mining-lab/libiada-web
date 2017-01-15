@@ -64,7 +64,7 @@
             @Html.LabelFor(model => model.Matter.Group, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }"></select>
-                <input type="hidden" name="Group" ng-value="group" />
+                <input type="hidden" name="Matter.Group" ng-value="group" />
                 @Html.ValidationMessageFor(model => model.Matter.Group, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -72,7 +72,7 @@
             @Html.LabelFor(model => model.Matter.SequenceType, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <select class="form-control" ng-model="sequenceType" ng-options="g.Value as g.Text for g in sequenceTypes | filter:{ Nature: nature }"></select>
-                <input type="hidden" name="SequenceType" ng-value="sequenceType" />
+                <input type="hidden" name="Matter.SequenceType" ng-value="sequenceType" />
                 @Html.ValidationMessageFor(model => model.Matter.SequenceType, "", new { @class = "text-danger" })
             </div>
         </div>
