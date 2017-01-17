@@ -103,14 +103,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "language_id",
-                NpgsqlDbType = NpgsqlDbType.Integer,
+                NpgsqlDbType = NpgsqlDbType.Smallint,
                 Value = language
             });
 
             parameters.Add(new NpgsqlParameter
             {
                 ParameterName = "translator_id",
-                NpgsqlDbType = NpgsqlDbType.Integer,
+                NpgsqlDbType = NpgsqlDbType.Smallint,
                 Value = translator
             });
 

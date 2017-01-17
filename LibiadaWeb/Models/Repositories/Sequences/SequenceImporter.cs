@@ -75,7 +75,7 @@
                 new NpgsqlParameter
                 {
                     ParameterName = "notation_id",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
                     Value = commonSequence.Notation
                 },
                 new NpgsqlParameter
@@ -105,7 +105,7 @@
                 new NpgsqlParameter
                 {
                     ParameterName = "remote_db_id",
-                    NpgsqlDbType = NpgsqlDbType.Integer,
+                    NpgsqlDbType = NpgsqlDbType.Smallint,
                     Value = (object)commonSequence.RemoteDb ?? DBNull.Value
                 }
             };

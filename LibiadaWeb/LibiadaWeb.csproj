@@ -279,6 +279,7 @@
     <Compile Include="Controllers\Sequences\MattersController.cs" />
     <Compile Include="Controllers\Sequences\OrderTransformerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceCheckController.cs" />
+    <Compile Include="Controllers\Sequences\SequenceCleanerControllerController.cs" />
     <Compile Include="Controllers\Sequences\SequenceElementsController.cs" />
     <Compile Include="Controllers\Sequences\SequenceMixerController.cs" />
     <Compile Include="Controllers\Sequences\SequencesMattersController.cs" />
@@ -695,6 +696,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Sequences\SequenceCleanerController\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
