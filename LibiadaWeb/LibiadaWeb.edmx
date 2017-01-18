@@ -169,7 +169,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="text" Nullable="false" />
           <Property Name="nature_id" Type="int2" Nullable="false" />
           <Property Name="sequence_type" Type="int2" Nullable="false" />
           <Property Name="group" Type="int2" Nullable="false" />
@@ -306,7 +306,7 @@
           <Property Name="note_id" Type="int8" Nullable="false" />
           <Property Name="pitch_id" Type="int4" Nullable="false" />
         </EntityType>
-        
+
         <Association Name="fk_binary_characteristic_first_element">
           <End Role="element" Type="Self.element" Multiplicity="1" />
           <End Role="binary_characteristic" Type="Self.binary_characteristic" Multiplicity="*" />
@@ -893,7 +893,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+
         <Association Name="fk_note_pitch_pitch">
           <End Role="pitch" Type="Self.pitch" Multiplicity="1" />
           <End Role="note_pitch" Type="Self.note_pitch" Multiplicity="*" />
@@ -1041,12 +1041,12 @@
             <End Role="note" EntitySet="note" />
             <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
-          
+
           <AssociationSet Name="fk_note_pitch_pitch" Association="Self.fk_note_pitch_pitch">
             <End Role="pitch" EntitySet="pitch" />
             <End Role="note_pitch" EntitySet="note_pitch" />
           </AssociationSet>
-          
+
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
@@ -1257,7 +1257,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Name" Type="String" Unicode="true" FixedLength="false" Nullable="false" />
           <Property Name="Nature" Type="LibiadaWebModel.Nature" Nullable="false" />
           <Property Name="SequenceType" Type="LibiadaWebModel.SequenceType" Nullable="false" />
           <Property Name="Group" Type="LibiadaWebModel.Group" Nullable="false" />
@@ -1286,7 +1286,7 @@
           <NavigationProperty Name="DnaSequence" Relationship="Self.fk_chain_attribute_dna_chain" FromRole="SequenceAttribute" ToRole="DnaSequence" />
           <NavigationProperty Name="Subsequence" Relationship="Self.fk_chain_attribute_subsequence" FromRole="SequenceAttribute" ToRole="Subsequence" />
         </EntityType>
-        
+
         <EntityType Name="Fmotiv">
           <Key>
             <PropertyRef Name="Id" />
@@ -1746,7 +1746,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+
         <Association Name="fk_literature_chain_matter">
           <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
           <End Role="LiteratureSequence" Type="Self.LiteratureSequence" Multiplicity="*" />
@@ -1772,7 +1772,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+
         <Association Name="fk_binary_characteristic_fmotiv">
           <End Role="Fmotiv" Type="Self.Fmotiv" Multiplicity="1">
             <OnDelete Action="Cascade" />
