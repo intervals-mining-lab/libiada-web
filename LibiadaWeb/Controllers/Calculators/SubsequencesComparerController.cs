@@ -261,7 +261,8 @@
                     { "equalElements", equalElements.OrderBy(e => e.Difference).ToList() },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
-                    { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) }
+                    { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                    { "maxPercentageDifference", maxPercentageDifference }
                 };
 
                 return new Dictionary<string, object>

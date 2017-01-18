@@ -3,6 +3,7 @@
 
     function subsequencesComparerResult($scope, $http) {
         var loadingModalWindow = $("#loadingDialog");
+        $scope.loadingScreenHeader = "Loading data";
         loadingModalWindow.modal("show");
 
         var location = window.location.href.split("/");
