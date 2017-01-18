@@ -1362,4 +1362,9 @@ ALTER TABLE chain_attribute ALTER COLUMN attribute_id TYPE smallint;
 ALTER TABLE chain ALTER COLUMN notation_id TYPE smallint;
 ALTER TABLE chain ALTER COLUMN remote_db_id TYPE smallint;
 
+-- 18.01.2017
+-- Change matter name type to varchar without limit.
+
+ALTER TABLE matter ALTER COLUMN name TYPE text;
+
 COMMIT;
