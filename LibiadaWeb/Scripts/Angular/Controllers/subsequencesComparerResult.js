@@ -77,12 +77,26 @@
             });
         }
 
+        function showEqualPairs(firstMatterId, secondMatterId) {
+            var loadingModalWindow = $("#loadingDialog");
+            $scope.loadingScreenHeader = "Loading data";
+            loadingModalWindow.modal("show");
+
+            $scope.equalElementsToShow = $scope.equalElements.filter(function (element) {
+                return element.FirstMatterId === firstMatterId && element.SecondMatterId === secondMatterId;
+            });
+
+            loadingModalWindow.modal("hide");
+        }
+
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
         $scope.getFirstProductAttributeId = getFirstProductAttributeId;
         $scope.getSecondProductAttributeId = getSecondProductAttributeId;
         $scope.elementVisible = elementVisible;
+        $scope.showEqualPairs = showEqualPairs;
 
+        $scope.equalElementsToShow = [];
         $scope.filters = [];
     }
 

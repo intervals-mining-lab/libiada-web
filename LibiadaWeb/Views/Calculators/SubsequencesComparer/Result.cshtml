@@ -24,7 +24,7 @@
             <tbody>
                 <tr ng-repeat="similarity in similarities">
                     <td ng-bind="mattersNames[$index]" />
-                    <td ng-repeat="value in similarity">
+                    <td ng-repeat="value in similarity" ng-click="showEqualPairs($parent.$index, $index)">
                         {{value.formula1}}%
                         <br />
                         {{value.formula2}}
@@ -56,7 +56,7 @@
         @Html.Partial("_Filters", "SubsequencesComparerResultController")
 
         <table class="table table-bordered table-striped">
-            <tbody ng-repeat="equalElement in equalElements">
+            <tbody ng-repeat="equalElement in equalElementsToShow">
                 <tr ng-show="elementVisible(equalElement)">
                     <td class="table-active">
                         <b> {{$index + 1}}. </b>
