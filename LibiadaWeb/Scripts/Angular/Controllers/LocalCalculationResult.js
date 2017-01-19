@@ -1,4 +1,4 @@
-﻿function LocalCalculationResultController(data) {
+﻿function LocalCalculationResultController() {
     "use strict";
 
     function localCalculationResult($scope, $http) {
@@ -133,7 +133,7 @@
             var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
-            // setup x 
+            // setup x
             var xValue = function (d) { return $scope.lineChart ? d.id : d.x; }; // data -> value
             var xScale = d3.scale.linear().range([0, width]); // value -> display
             var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
@@ -230,7 +230,7 @@
                         .attr('fill', 'none');
                 });
 
-            } 
+            }
                 // draw dots
                 svg.selectAll(".dot")
                     .data($scope.points)
@@ -246,11 +246,11 @@
                     .style("fill", elementColor)
                     .style("stroke", elementColor)
                     .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
-            
+
             // draw legend
             var legend = svg.selectAll(".legend")
                 .data($scope.legend)
-                .enter() 
+                .enter()
                 .append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })

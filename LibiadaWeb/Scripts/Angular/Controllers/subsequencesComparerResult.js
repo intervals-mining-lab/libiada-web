@@ -85,8 +85,12 @@
 
         $scope.filters = [];
     }
-    
-    angular.module("SubsequencesComparerResult", []).filter('makePositive', function () {
+
+    function makePositive() {
         return function (num) { return Math.abs(num); }
-    }).controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
+    }
+
+    angular.module("SubsequencesComparerResult", [])
+        .filter('makePositive', makePositive)
+        .controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
 }

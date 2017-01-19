@@ -526,6 +526,7 @@
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
     <Content Include="Scripts\Angular\Controllers\customCalculation.js" />
+    <Content Include="Scripts\Angular\Controllers\subsequencesCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesComparerResult.js" />
     <Content Include="Scripts\Angular\Controllers\subsequencesDistribution.js" />
     <Content Include="Scripts\Angular\Controllers\genesImport.js" />

@@ -1,4 +1,4 @@
-﻿function SubsequencesDistributionResultController(data) {
+﻿function SubsequencesDistributionResultController() {
     "use strict";
 
     function subsequencesDistributionResult($scope, $http) {
@@ -20,7 +20,7 @@
             $scope.characteristicComparers.push({ characteristic: $scope.subsequencesCharacteristicsList[0], precision: 0 });
         }
 
-        // deletes given characteristics filter 
+        // deletes given characteristics filter
         function deleteCharacteristicComparer(characteristicComparer) {
             $scope.characteristicComparers.splice($scope.characteristicComparers.indexOf(characteristicComparer), 1);
         }
@@ -73,7 +73,7 @@
             $scope.fillVisiblePoints();
         }
 
-        // initializes data for genes map 
+        // initializes data for genes map
         function fillPoints() {
             var id = 0;
             for (var i = 0; i < $scope.result.length; i++) {
@@ -116,7 +116,7 @@
                     d.featureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
-           
+
             for (var i = 0; i < $scope.points.length; i++) {
                 if ($scope.points[i].featureId === parseInt(feature.Value)) {
                     $scope.points[i].featureVisible = feature.Selected;
@@ -131,8 +131,8 @@
         function dotVisible(dot) {
             var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function(element) {
                 return element;
-            }); 
-            
+            });
+
             return dot.featureVisible && dot.matterVisible && filterVisible;
         }
 
@@ -299,7 +299,7 @@
             var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
-            // setup x 
+            // setup x
             $scope.xScale = d3.scale.linear().range([0, width]); // value -> display
             $scope.xMap = function (d) { return $scope.xScale($scope.xValue(d)); }; // data -> display
             var xAxis = d3.svg.axis().scale($scope.xScale).orient("bottom");
@@ -451,7 +451,7 @@
                             switch (keyCode) {
                                 case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId 
+                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId
                                            && yValue($scope.visiblePoints[i]) !== yValue(clickedpoint)) {
                                             nextPoint = $scope.visiblePoints[i];
                                             break;
