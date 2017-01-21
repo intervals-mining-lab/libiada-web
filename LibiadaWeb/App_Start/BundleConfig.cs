@@ -36,7 +36,7 @@
                         "~/Scripts/angular.js",
                         "~/Scripts/smart-table.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/d3.js").Include(
+            bundles.Add(new ScriptBundle("~/bundles/d3js").Include(
                         "~/Scripts/d3/d3.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
