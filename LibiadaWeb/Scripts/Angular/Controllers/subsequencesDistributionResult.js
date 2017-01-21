@@ -10,6 +10,7 @@
             $scope.loading = true;
         }
 
+        // hides modal window
         function hideModalLoadingWindow() {
             $scope.loading = false;
             $scope.loadingModalWindow.modal("hide");
@@ -170,7 +171,7 @@
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
                     if ($scope.dotVisible(dot)) {
-                        if (dot.matterId === point.matterId && yValue(dot) === yValue(point)) { // if dots are in the same position
+                        if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
                             tooltipHtml.push($scope.fillPointTooltip(dot));
                             return true;
                         } else if ($scope.highlight) { // if similar dot are highlighted
@@ -203,8 +204,8 @@
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
-                .style("left", (window.pageXOffset + matrix.e + 18) + "px")
-                .style("top", (window.pageYOffset + matrix.f + 18) + "px");
+                .style("left", (window.pageXOffset + matrix.e + 15) + "px")
+                .style("top", (window.pageYOffset + matrix.f + 15) + "px");
         }
 
         // constructs string representing tooltip text (inner html)
@@ -241,11 +242,12 @@
                                       d.positions.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
             tooltipContent.push("Length: " + d.lengths.join(", "));
-            tooltipContent.push("(" + d.x + ", " + yValue(d) + ")");
+            tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
 
             return tooltipContent.join("</br>");
         }
 
+        // clears tooltip and unselects dots
         function clearTooltip(tooltip) {
             if (tooltip) {
                 tooltip.html("").style("opacity", 0);
@@ -299,29 +301,37 @@
             var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
+            // setup x
             // calculating margins for dots
             var xMin = d3.min($scope.points, $scope.xValue);
             var xMax = d3.max($scope.points, $scope.xValue);
             var xMargin = (xMax - xMin) * 0.05;
 
-            // setup x
-            $scope.xScale = d3.scaleLinear().range([0, width]); // value -> display
-            $scope.xDomain = $scope.xScale.domain([xMin - xMargin, xMax + xMargin]);
-            $scope.xMap = function (d) { return $scope.xScale($scope.xValue(d)); }; // data -> display
-            var xAxis = d3.axisBottom().scale($scope.xDomain);
-            xAxis.tickSizeInner(-height).tickSizeOuter(0).tickPadding(10);
+            var xScale = d3.scaleLinear()
+                .domain([xMin - xMargin, xMax + xMargin])
+                .range([0, width]);
+            var xAxis = d3.axisBottom(xScale)
+                .tickSizeInner(-height)
+                .tickSizeOuter(0)
+                .tickPadding(10);
 
+            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
+
+            // setup y
             // calculating margins for dots
             var yMax = d3.max($scope.points, $scope.yValue);
             var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
-            // setup y
-            $scope.yScale = d3.scaleLinear().range([height, 0]); // value -> display
-            $scope.yDomain = $scope.yScale.domain([yMin - yMargin, yMax + yMargin]);
-            $scope.yMap = function (d) { return $scope.yScale($scope.yValue(d)); }; // data -> display
-            var yAxis = d3.axisLeft().scale($scope.yScale);
-            yAxis.tickSizeInner(-width).tickSizeOuter(0).tickPadding(10);
+            var yScale = d3.scaleLinear()
+                .domain([yMin - yMargin, yMax + yMargin])
+                .range([height, 0]);
+            var yAxis = d3.axisLeft(yScale)
+                .tickSizeInner(-width)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
             var cValue = function (d) { return d.matterId; };
@@ -451,7 +461,7 @@
                                 case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
                                         if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
-                                           && yValue($scope.visiblePoints[i]) !== yValue(selectedPoint)) {
+                                           && $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
                                             nextPoint = $scope.visiblePoints[i];
                                             break;
                                         }
@@ -460,7 +470,7 @@
                                 case 38: // up
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
                                         if ($scope.visiblePoints[j].matterId === selectedPoint.matterId
-                                            && yValue($scope.visiblePoints[j]) !== yValue(selectedPoint)) {
+                                            && $scope.yValue($scope.visiblePoints[j]) !== $scope.yValue(selectedPoint)) {
                                             nextPoint = $scope.visiblePoints[j];
                                             break;
                                         }
@@ -470,7 +480,7 @@
 
                             if (nextPoint) {
                                 var selectedPoints = svg.selectAll(".dot").filter(function (d) {
-                                    return nextPoint.matterId === d.matterId && yValue(nextPoint) === yValue(d);
+                                    return nextPoint.matterId === d.matterId && $scope.yValue(nextPoint) === $scope.yValue(d);
                                 }).data();
                                 return $scope.showTooltip(selectedPoints, tooltip, svg);
                             }
@@ -499,8 +509,8 @@
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
         $scope.isKeyUpOrDown = isKeyUpOrDown;
-        $scope.xValue = xValue;
         $scope.yValue = yValue;
+        $scope.xValue = xValue;
         $scope.addCharacteristicComparer = addCharacteristicComparer;
         $scope.deleteCharacteristicComparer = deleteCharacteristicComparer;
         $scope.addFilter = addFilter;

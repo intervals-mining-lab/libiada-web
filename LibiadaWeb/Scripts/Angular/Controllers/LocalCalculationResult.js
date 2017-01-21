@@ -30,7 +30,6 @@
             for (var k = 0; k < $scope.characteristics.length; k++) {
                 $scope.legend.push({ name: $scope.characteristics[k].matterName, visible: true });
             }
-
         }
 
         // initializes data for chart
@@ -52,7 +51,6 @@
                         cluster: characteristic.matterName
                     });
                 }
-
             }
         }
 
@@ -74,7 +72,8 @@
             return tooltipContent.join("</br>");
         }
 
-        function showTooltip(d, tooltip, newSelectedDot, svg) {
+        // shows tooltip for dot or group of dots
+        function showTooltip(d, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
@@ -106,6 +105,7 @@
             tooltip.hideTooltip = false;
         }
 
+        // clears tooltip and unselects dots
         function clearTooltip(tooltip) {
             if (tooltip) {
                 if (tooltip.hideTooltip) {
@@ -121,6 +121,14 @@
             }
         }
 
+        function xValue(d) {
+             return $scope.lineChart ? d.id : d.x;
+        }
+
+        function yValue(d) {
+             return $scope.lineChart ? d.x : d.y;
+        }
+
         function draw() {
             $scope.fillPoints();
 
@@ -134,34 +142,40 @@
             var height = $scope.hight - margin.top - margin.bottom;
 
             // setup x
-            var xValue = function (d) { return $scope.lineChart ? d.id : d.x; }; // data -> value
-            var xScale = d3.scale.linear().range([0, width]); // value -> display
-            var xMap = function (d) { return xScale(xValue(d)); }; // data -> display
-            var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-            xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
+            // calculating margins for dots
+            var xMin = d3.min($scope.points, $scope.xValue);
+            var xMax = d3.max($scope.points, $scope.xValue);
+            var xMargin = (xMax - xMin) * 0.05;
+
+            var xScale = d3.scaleLinear()
+                .domain([xMin - xMargin, xMax + xMargin])
+                .range([0, width]);
+            var xAxis = d3.axisBottom(xScale)
+                .tickSizeInner(-height)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+            $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
 
             // setup y
-            var yValue = function (d) { return $scope.lineChart ? d.x : d.y; }; // data -> value
-            var yScale = d3.scale.linear().range([height, 0]); // value -> display
-            var yMap = function (d) { return yScale(yValue(d)); }; // data -> display
-            var yAxis = d3.svg.axis().scale(yScale).orient("left");
-            yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
-
             // calculating margins for dots
-            var xMin = d3.min($scope.points, xValue);
-            var xMax = d3.max($scope.points, xValue);
-            var xMargin = (xMax - xMin) * 0.05;
-            var yMax = d3.max($scope.points, yValue);
-            var yMin = d3.min($scope.points, yValue);
+            var yMax = d3.max($scope.points, $scope.yValue);
+            var yMin = d3.min($scope.points, $scope.yValue);
             var yMargin = (yMax - yMin) * 0.05;
 
-            // don't want dots overlapping axis, so add in buffer to data domain
-            xScale.domain([xMin - xMargin, xMax + xMargin]);
-            yScale.domain([yMin - yMargin, yMax + yMargin]);
+            var yScale = d3.scaleLinear()
+                .domain([yMin - yMargin, yMax + yMargin])
+                .range([height, 0]);
+            var yAxis = d3.axisLeft(yScale)
+                .tickSizeInner(-width)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+            $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
             var cValue = function (d) { return d.cluster; };
-            var color = d3.scale.category20();
+            var color = d3.scaleOrdinal(d3.schemeCategory20);
             var elementColor = function(d) { return color(cValue(d)); };
 
             // add the graph canvas to the body of the webpage
@@ -210,9 +224,9 @@
                 .style("font-size", "12pt");
 
             if ($scope.lineChart) {
-                var line = d3.svg.line()
-                    .x(xMap)
-                    .y(yMap);
+                var line = d3.line()
+                    .x($scope.xMap)
+                    .y($scope.yMap);
 
                 // Nest the entries by symbol
                 var dataNest = d3.nest()
@@ -239,13 +253,13 @@
                     .attr("class", "dot")
                     .attr("rx", $scope.dotRadius)
                     .attr("ry", $scope.dotRadius)
-                    .attr("cx", xMap)
-                    .attr("cy", yMap)
+                    .attr("cx", $scope.xMap)
+                    .attr("cy", $scope.yMap)
                     .style("fill-opacity", 0.6)
                     .style("opacity", $scope.lineChart ? 0 : 1)
                     .style("fill", elementColor)
                     .style("stroke", elementColor)
-                    .on("click", function(d) { return $scope.showTooltip(d, tooltip, d3.select(this), svg); });
+                    .on("click", function(d) { return $scope.showTooltip(d, tooltip, svg); });
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -300,6 +314,8 @@
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
         $scope.fillLegend = fillLegend;
+        $scope.yValue = yValue;
+        $scope.xValue = xValue;
 
         $scope.width = 800;
         $scope.dotRadius = 4;
