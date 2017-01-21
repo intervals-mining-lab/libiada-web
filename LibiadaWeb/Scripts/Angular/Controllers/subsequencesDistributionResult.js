@@ -158,15 +158,15 @@
         }
 
         // shows tooltip for dot or group of dots
-        function showTooltip(selectedDots, tooltip, svg) {
+        function showTooltip(selectedPoints, tooltip, svg) {
             $scope.clearTooltip(tooltip);
 
             tooltip.style("opacity", 0.9);
 
             var tooltipHtml = [];
 
-            tooltip.clickedDots = selectedDots;
-            var point = selectedDots.data()[0];
+            tooltip.selectedPoints = selectedPoints;
+            var point = selectedPoints[0];
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
                     if ($scope.dotVisible(dot)) {
@@ -195,7 +195,7 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            var matrix = selectedDots[0].parentNode.getScreenCTM()
+            var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
                 .translate($scope.xMap(point), $scope.yMap(point));
 
             tooltip.style("background", "#000")
@@ -299,21 +299,33 @@
             var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
+            // calculating margins for dots
+            var xMin = d3.min($scope.points, $scope.xValue);
+            var xMax = d3.max($scope.points, $scope.xValue);
+            var xMargin = (xMax - xMin) * 0.05;
+
             // setup x
-            $scope.xScale = d3.scale.linear().range([0, width]); // value -> display
+            $scope.xScale = d3.scaleLinear().range([0, width]); // value -> display
+            $scope.xDomain = $scope.xScale.domain([xMin - xMargin, xMax + xMargin]);
             $scope.xMap = function (d) { return $scope.xScale($scope.xValue(d)); }; // data -> display
-            var xAxis = d3.svg.axis().scale($scope.xScale).orient("bottom");
-            xAxis.innerTickSize(-height).outerTickSize(0).tickPadding(10);
+            var xAxis = d3.axisBottom().scale($scope.xDomain);
+            xAxis.tickSizeInner(-height).tickSizeOuter(0).tickPadding(10);
+
+            // calculating margins for dots
+            var yMax = d3.max($scope.points, $scope.yValue);
+            var yMin = d3.min($scope.points, $scope.yValue);
+            var yMargin = (yMax - yMin) * 0.05;
 
             // setup y
-            $scope.yScale = d3.scale.linear().range([height, 0]); // value -> display
+            $scope.yScale = d3.scaleLinear().range([height, 0]); // value -> display
+            $scope.yDomain = $scope.yScale.domain([yMin - yMargin, yMax + yMargin]);
             $scope.yMap = function (d) { return $scope.yScale($scope.yValue(d)); }; // data -> display
-            var yAxis = d3.svg.axis().scale($scope.yScale).orient("left");
-            yAxis.innerTickSize(-width).outerTickSize(0).tickPadding(10);
+            var yAxis = d3.axisLeft().scale($scope.yScale);
+            yAxis.tickSizeInner(-width).tickSizeOuter(0).tickPadding(10);
 
             // setup fill color
             var cValue = function (d) { return d.matterId; };
-            var color = d3.scale.category20();
+            var color = d3.scaleOrdinal(d3.schemeCategory20);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -327,19 +339,6 @@
             var tooltip = d3.select("#chart").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
-
-
-            // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
-            var xMargin = (xMax - xMin) * 0.05;
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
-            var yMargin = (yMax - yMin) * 0.05;
-
-            // don't want dots overlapping axis, so adding buffer to data domain
-            $scope.xScale.domain([xMin - xMargin, xMax + xMargin]);
-            $scope.yScale.domain([yMin - yMargin, yMax + yMargin]);
 
             // x-axis
             svg.append("g")
@@ -426,33 +425,33 @@
 
             // tooltip event bind
             d3.select("body").on("click", function () {
-                var clickedDots = svg.selectAll(".dot").filter(function () {
+                var selectedPoints = svg.selectAll(".dot").filter(function () {
                     return this === d3.event.target;
-                });
+                }).data();
 
-                if (clickedDots.empty()) {
+                if (selectedPoints.length === 0) {
                     $scope.clearTooltip(tooltip);
                 } else {
-                    $scope.showTooltip(clickedDots, tooltip, svg);
+                    $scope.showTooltip(selectedPoints, tooltip, svg);
                 }
             });
 
             // tooltip show on key up or key down
             d3.select("body")
                 .on("keydown", function () {
-                    if (tooltip.clickedDots) {
-                        var clickedpoint = tooltip.clickedDots.data()[0];
+                    if (tooltip.selectedPoints) {
+                        var selectedPoint = tooltip.selectedPoints[0];
                         var keyCode = d3.event.keyCode;
                         if (isKeyUpOrDown(keyCode)) {
                             var nextPoint;
-                            var indexOfPoint = $scope.visiblePoints.indexOf(clickedpoint);
+                            var indexOfPoint = $scope.visiblePoints.indexOf(selectedPoint);
                             $scope.clearTooltip(tooltip);
 
                             switch (keyCode) {
                                 case 40: // down
                                     for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-                                        if ($scope.visiblePoints[i].matterId === clickedpoint.matterId
-                                           && yValue($scope.visiblePoints[i]) !== yValue(clickedpoint)) {
+                                        if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
+                                           && yValue($scope.visiblePoints[i]) !== yValue(selectedPoint)) {
                                             nextPoint = $scope.visiblePoints[i];
                                             break;
                                         }
@@ -460,8 +459,8 @@
                                     break;
                                 case 38: // up
                                     for (var j = indexOfPoint - 1; j >= 0; j--) {
-                                        if ($scope.visiblePoints[j].matterId === clickedpoint.matterId
-                                            && yValue($scope.visiblePoints[j]) !== yValue(clickedpoint)) {
+                                        if ($scope.visiblePoints[j].matterId === selectedPoint.matterId
+                                            && yValue($scope.visiblePoints[j]) !== yValue(selectedPoint)) {
                                             nextPoint = $scope.visiblePoints[j];
                                             break;
                                         }
@@ -470,10 +469,10 @@
                             }
 
                             if (nextPoint) {
-                                var clickedDots = svg.selectAll(".dot").filter(function (d) {
+                                var selectedPoints = svg.selectAll(".dot").filter(function (d) {
                                     return nextPoint.matterId === d.matterId && yValue(nextPoint) === yValue(d);
-                                });
-                                return $scope.showTooltip(clickedDots, tooltip, svg);
+                                }).data();
+                                return $scope.showTooltip(selectedPoints, tooltip, svg);
                             }
                         }
                     }
