@@ -10,7 +10,7 @@
 
     <div ng-app="CalculationResult" ng-controller="CalculationResultCtrl">
         @Html.Partial("_ModalLoadingWindow")
-        
+
         <table class="table table-bordered table-hover" ng-cloak>
             <tbody>
             <tr ng-repeat="t in transformationsList">
@@ -52,7 +52,7 @@
             </div>
         </div>
         <br/>
-        <input type="button" class="btn btn-default" ng-click="prepareDataAndDraw()" value="Draw"/>
+        <input type="button" class="btn btn-default" ng-click="draw()" value="Draw"/>
         <div id="chart">
         </div>
     </div>
@@ -60,5 +60,5 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/dcjs")
+    @Scripts.Render("~/bundles/d3.js")
 }

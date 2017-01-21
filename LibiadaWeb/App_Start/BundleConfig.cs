@@ -36,7 +36,7 @@
                         "~/Scripts/angular.js",
                         "~/Scripts/smart-table.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/dcjs").Include(
+            bundles.Add(new ScriptBundle("~/bundles/d3.js").Include(
                         "~/Scripts/d3/d3.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/slider").Include(
@@ -81,6 +81,9 @@
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesCalculation.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesCalculationResultController").Include(
+                        "~/Scripts/Angular/Controllers/subsequencesCalculationResult.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/SubsequencesDistributionController").Include(
                         "~/Scripts/Angular/Controllers/subsequencesDistribution.js"));

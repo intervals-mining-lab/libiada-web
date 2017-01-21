@@ -1,14 +1,14 @@
 ﻿angular.module('Charts', ['Directives.TableParse'])
     .controller('ChartsCtrl', ['$scope', function ($scope) {
 
-        var draw = function () {
+        function draw() {
             var margin = { top: 30, right: 20, bottom: 30, left: 200 },
                     width = 800 - margin.left - margin.right,
                     height = 600 - margin.top - margin.bottom;
 
             // Set the ranges
-            var x = d3.scale.linear().range([0, width]);
-            var y = d3.scale.linear().range([height, 0]);
+            var x = d3.scaleLinear().range([0, width]);
+            var y = d3.scaleLinear().range([height, 0]);
 
             // Define the axes
             var xAxis = d3.svg.axis().scale(x)
@@ -88,6 +88,8 @@
                 .attr("class", "y axis")
                 .call(yAxis);
         };
+
+        $scope.draw = draw;
 
         $scope.rawPaste = '';
         $scope.parsedPaste = [];

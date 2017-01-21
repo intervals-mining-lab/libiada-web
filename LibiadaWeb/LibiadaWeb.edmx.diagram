@@ -3,13 +3,13 @@
   <edmx:Designer>
     <edmx:Diagrams>
       <edmx:Diagram DiagramId="eac4ed14a17c421fa3feaade14594258" Name="Diagram1">
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.BinaryCharacteristic" Width="2" PointX="13.5" PointY="30.75" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.BinaryCharacteristic" Width="2" PointX="14.375" PointY="30.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.AccordanceCharacteristic" Width="2" PointX="13.5" PointY="40.125" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CommonSequence" Width="1.75" PointX="5.25" PointY="37.375" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Characteristic" Width="1.875" PointX="16.125" PointY="39.125" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicTypeLink" Width="1.875" PointX="11.25" PointY="18.875" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicGroup" Width="1.875" PointX="11.125" PointY="16.625" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicType" Width="2.375" PointX="8.125" PointY="17" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicTypeLink" Width="1.875" PointX="12.5" PointY="24.875" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicGroup" Width="1.875" PointX="11.125" PointY="22.5" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicType" Width="2.375" PointX="8.125" PointY="22.875" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.DnaSequence" Width="1.625" PointX="8.875" PointY="33.875" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Subsequence" Width="1.5" PointX="20.25" PointY="33.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Position" Width="1.5" PointX="20.25" PointY="37.5" IsExpanded="true" />
@@ -25,7 +25,7 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Translator" Width="1.5" PointX="0.5" PointY="47.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.RemoteDb" Width="1.75" PointX="7.375" PointY="42.875" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Fmotiv" Width="1.5" PointX="12.375" PointY="45.5" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristic" Width="2" PointX="16.5" PointY="31" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristic" Width="2" PointX="18" PointY="31.75" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Instrument" Width="1.5" PointX="6" PointY="18.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Measure" Width="1.5" PointX="8.25" PointY="27.75" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.MusicSequence" Width="1.875" PointX="10.875" PointY="40.25" IsExpanded="true" />
