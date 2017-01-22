@@ -10,6 +10,7 @@
     using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
@@ -79,7 +80,6 @@
                     var links = new Link[characteristicTypeLinkIds.Length];
                     var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                     var attributeValues = new List<AttributeValue>();
-                    IEnumerable<SelectListItem> featuresSelectList;
                     Chain[] chains;
                     long[] parentSequenceIds;
                     string sequenceCharacteristicName;
@@ -88,8 +88,6 @@
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        featuresSelectList = features.Select(f => new SelectListItem { Value = ((byte)f).ToString(), Text = f.GetDisplayValue(), Selected = true });
-
                         var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                                 .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                                 .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
@@ -128,9 +126,9 @@
 
                     var characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculator, link, characteristicTypeLinkId);
 
-                    var sequenceData = new SequenceData[parentSequenceIds.Length];
+                    var sequenceData = new SequenceData[matterIds.Length];
 
-                    for (int i = 0; i < parentSequenceIds.Length; i++)
+                    for (int i = 0; i < matterIds.Length; i++)
                     {
                         // all subsequence calculations
                         var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
@@ -152,7 +150,7 @@
                                      { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                                      { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
-                                     { "features", featuresSelectList.ToDictionary(f => f.Value) },
+                                     { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
                                      { "attributes", ArrayExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                      { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                                  };

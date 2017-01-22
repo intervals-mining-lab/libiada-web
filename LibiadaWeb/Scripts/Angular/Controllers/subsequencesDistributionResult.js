@@ -158,6 +158,17 @@
             return true;
         }
 
+        // gets attributes text for given subsequence
+        function getAttributesText(attributes) {
+            var attributesText = [];
+            for (var i = 0; i < attributes.length; i++) {
+                var attributeValue = $scope.attributeValues[attributes[i]];
+                attributesText.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
+            }
+
+            return attributesText.join("<br/>");
+        }
+
         // shows tooltip for dot or group of dots
         function showTooltip(selectedPoints, tooltip, svg) {
             $scope.clearTooltip(tooltip);
@@ -222,14 +233,7 @@
             }
 
             tooltipContent.push($scope.features[d.featureId].Text);
-
-            var attributes = [];
-            for (var i = 0; i < d.attributes.length; i++) {
-                var attributeValue = $scope.attributeValues[d.attributes[i]];
-                attributes.push($scope.attributes[attributeValue.attribute] + (attributeValue.value === "" ? "" : " = " + attributeValue.value));
-            }
-
-            tooltipContent.push(attributes.join("<br/>"));
+            tooltipContent.push($scope.getAttributesText(d.attributes));
 
             if (d.partial) {
                 tooltipContent.push("partial");
@@ -288,12 +292,7 @@
             // all organisms are visible after redrawing
             $scope.points.forEach(function (point) {
                 point.matterVisible = true;
-                for (var i = 0; i < $scope.features.length; i++) {
-                    if ($scope.features[i].Value === point.featureId) {
-                        point.featureVisible = $scope.features[i].Selected;
-                        break;
-                    }
-                }
+                point.featureVisible = $scope.features[point.featureId].Selected;
             });
 
             // chart size and margin settings
@@ -505,6 +504,7 @@
         $scope.fillVisiblePoints = fillVisiblePoints;
         $scope.filterByFeature = filterByFeature;
         $scope.fillPoints = fillPoints;
+        $scope.getAttributesText = getAttributesText;
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;

@@ -6,63 +6,43 @@
 
 @if (ViewBag.Error == null)
 {
-    for (int i = 0; i < ViewBag.matterNames.Length; i++)
-    {
-        @ViewBag.matterNames[i]
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        Feature
-                    </th>
-                    <th>
-                        Subsequence attributes
-                    </th>
-                    <th>
-                        Subsequence position
-                    </th>
-                    @foreach (var characteristicName in ViewBag.characteristicNames)
-                    {
-                        <th>
-                            @characteristicName
-                        </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var subsequenceData in ViewBag.characteristics[ViewBag.matterNames[i]])
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.features[subsequenceData.FeatureId]
-                        </td>
-                        <td>
-                            @foreach (var attribute in subsequenceData.Attributes)
-                            {
-                                @attribute
-                                <br />
-                            }
-                        </td>
-                        <td>
-                            @foreach (var start in subsequenceData.Starts)
-                            {
-                                @start
-                                <br />
-                            }
-                        </td>
-                        @foreach (var characteristic in subsequenceData.CharacteristicsValues)
-                        {
-                            <td>
-                                @characteristic
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+    @Html.Partial("_AngularControllerInitializer", "SubsequencesCalculationResultController")
+    <div class="form-horizontal" ng-app="SubsequencesCalculationResult" ng-controller="SubsequencesCalculationResultCtrl">
+        @Html.Partial("_ModalLoadingWindow")
 
+        @Html.Partial("_Filters")
+        <div ng-repeat="sequenceData in sequencesData">
+            <h3 ng-bind="sequenceData.MatterName"></h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Feature
+                        </th>
+                        <th>
+                            Subsequence attributes
+                        </th>
+                        <th>
+                            Subsequence position
+                        </th>
+                        <th ng-repeat="characteristicName in subsequencesCharacteristicsNames" ng-bind="characteristicName" />
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="subsequenceData in sequenceData.SubsequencesData">
+                        <td ng-bind="features[subsequenceData.FeatureId]" />
+                        <td ng-bind-html="getAttributesText(subsequenceData.Attributes)" />
+                        <td>
+                            <div ng-repeat="start in subsequenceData.Starts">Start: {{start}} Length:{{subsequenceData.Lengths[$index]}}</div>
+                        </td>
+                        <td ng-repeat="characteristicValue in subsequenceData.CharacteristicsValues" ng-bind="characteristicValue" />
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+        </div>
+    </div>
     @section Scripts {
-        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/d3js")
     }
 }

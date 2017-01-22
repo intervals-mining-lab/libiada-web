@@ -54,7 +54,6 @@
             }
         }
 
-
         // constructs string representing tooltip text (inner html)
         function fillPointTooltip(d) {
             var tooltipContent = [];

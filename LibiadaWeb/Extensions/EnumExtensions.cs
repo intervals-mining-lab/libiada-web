@@ -39,11 +39,15 @@
         /// <param name="values">
         /// The values.
         /// </param>
+        /// <param name="useDisplayValueAsValue">
+        /// If true all values of select list are display values of enum values.
+        /// Otherwise uses byte enum value.
+        /// </param>
         /// <typeparam name="T">
         /// Enum type.
         /// </typeparam>
         /// <returns>
-        /// The <see cref="SelectList"/>.
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
         /// </returns>
         /// <exception cref="TypeArgumentException">
         /// Thrown if type argument is not enum.
@@ -51,7 +55,8 @@
         /// <remarks>
         /// Works only with byte enums.
         /// </remarks>
-        public static SelectList ToSelectList<T>(this IEnumerable<T> values) where T : struct, IComparable, IFormattable, IConvertible
+        public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, bool useDisplayValueAsValue = false)
+            where T : struct, IComparable, IFormattable, IConvertible
         {
             Type type = typeof(T);
 
@@ -60,7 +65,55 @@
                 throw new TypeArgumentException("Type argument must be enum.");
             }
 
-            return new SelectList(values.Select(e => new { id = Convert.ToByte(e), name = e.GetDisplayValue() }), "id", "name");
+            return values.Select(e => new SelectListItem
+                {
+                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                    Text = e.GetDisplayValue(),
+                    Selected = false
+                });
+        }
+
+        /// <summary>
+        /// Converts array of enum values into SelectList.
+        /// </summary>
+        /// <param name="values">
+        /// The values.
+        /// </param>
+        /// <param name="selectedValues">
+        /// The selected Values.
+        /// </param>
+        /// <param name="useDisplayValueAsValue">
+        /// If true all values of select list are display values of enum values.
+        /// Otherwise uses byte enum value.
+        /// </param>
+        /// <typeparam name="T">
+        /// Enum type.
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="IEnumerable{SelectListItem}"/>.
+        /// </returns>
+        /// <exception cref="TypeArgumentException">
+        /// Thrown if type argument is not enum.
+        /// </exception>
+        /// <remarks>
+        /// Works only with byte enums.
+        /// </remarks>
+        public static IEnumerable<SelectListItem> ToSelectList<T>(this IEnumerable<T> values, IEnumerable<T> selectedValues, bool useDisplayValueAsValue = false)
+            where T : struct, IComparable, IFormattable, IConvertible
+        {
+            Type type = typeof(T);
+
+            if (!type.IsEnum)
+            {
+                throw new TypeArgumentException("Type argument must be enum.");
+            }
+
+            return values.Select(e => new SelectListItem
+                {
+                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                    Text = e.GetDisplayValue(),
+                    Selected = selectedValues.Contains(e)
+                });
         }
 
         /// <summary>
@@ -96,12 +149,12 @@
             }
 
             return values.Select(e => new SelectListItemWithNature
-            {
-                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                Text = e.GetDisplayValue(),
-                Selected = false,
-                Nature = (byte)e.GetNature()
-            });
+                {
+                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                    Text = e.GetDisplayValue(),
+                    Selected = false,
+                    Nature = (byte)e.GetNature()
+                });
         }
 
         /// <summary>
@@ -140,12 +193,12 @@
             }
 
             return values.Select(e => new SelectListItemWithNature
-            {
-                Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
-                Text = e.GetDisplayValue(),
-                Selected = selectedValues.Contains(e),
-                Nature = (byte)e.GetNature()
-            });
+                {
+                    Value = useDisplayValueAsValue ? e.GetDisplayValue() : Convert.ToByte(e).ToString(),
+                    Text = e.GetDisplayValue(),
+                    Selected = selectedValues.Contains(e),
+                    Nature = (byte)e.GetNature()
+                });
         }
     }
 }
