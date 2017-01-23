@@ -20,11 +20,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B45027
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaMusic.Tests", "..\libiada-core\LibiadaMusic.Tests\LibiadaMusic.Tests.csproj", "{AB9ED1C2-F46D-4FCB-9BD2-44B44E4CCA42}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaCore.Tests", "..\libiada-core\LibiadaCore.Tests\LibiadaCore.Tests.csproj", "{934D10F1-0F12-4046-B9D6-4ECE76EB8672}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clusterizator.Tests", "..\libiada-core\Clusterizator.Tests\Clusterizator.Tests.csproj", "{260B03D7-580C-45F4-BBF3-2F345F8B81EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaMusic.Tests", "..\libiada-core\LibiadaMusic.Tests\LibiadaMusic.Tests.csproj", "{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +52,6 @@ Global
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB9ED1C2-F46D-4FCB-9BD2-44B44E4CCA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB9ED1C2-F46D-4FCB-9BD2-44B44E4CCA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB9ED1C2-F46D-4FCB-9BD2-44B44E4CCA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB9ED1C2-F46D-4FCB-9BD2-44B44E4CCA42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,6 +60,10 @@ Global
 		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
