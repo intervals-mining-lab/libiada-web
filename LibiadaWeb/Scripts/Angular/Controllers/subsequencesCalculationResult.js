@@ -346,7 +346,7 @@
                 .attr("x", width)
                 .attr("y", -6)
                 .style("text-anchor", "end")
-                .text($scope.sequenceCharacteristicName)
+                .text($scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
 
             // y-axis
@@ -359,8 +359,30 @@
                 .attr("y", 6)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text($scope.subsequenceCharacteristic.Text)
+                .text($scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
+
+            if ($scope.lineChart) {
+                var line = d3.line()
+                    .x($scope.xMap)
+                    .y($scope.yMap);
+
+                // Nest the entries by symbol
+                var dataNest = d3.nest()
+                    .key(function (d) { return d.id })
+                    .entries($scope.points);
+
+                // Loop through each symbol / key
+                dataNest.forEach(function (d) {
+                    svg.append("path")
+                        .datum(d.values)
+                        .attr("class", "line")
+                        .attr("d", line)
+                        .attr('stroke', function (d) { return color(cValue(d[0])); })
+                        .attr('stroke-width', 1)
+                        .attr('fill', 'none');
+                });
+            }
 
             // draw dots
             svg.selectAll(".dot")
@@ -479,6 +501,10 @@
             $scope.legendHeight = $scope.sequencesData.length * 20;
             $scope.hight = 800 + $scope.legendHeight;
             $scope.width = 800;
+
+            $scope.firstCharacteristic = $scope.subsequencesCharacteristicsList[0];
+            $scope.secondCharacteristic = $scope.subsequencesCharacteristicsList.length > 1 ? $scope.subsequencesCharacteristicsList[1] : $scope.subsequencesCharacteristicsList[0];
+
            // $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
            // $scope.fillPoints();

@@ -242,7 +242,6 @@
                         .attr('stroke-width', 1)
                         .attr('fill', 'none');
                 });
-
             }
                 // draw dots
                 svg.selectAll(".dot")
