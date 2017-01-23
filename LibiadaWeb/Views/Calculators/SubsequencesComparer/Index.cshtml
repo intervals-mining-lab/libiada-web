@@ -1,4 +1,6 @@
-﻿@{
+﻿@using LibiadaWeb.Models.Account
+
+@{
     ViewBag.Title = "Subsequences comparer";
 }
 
@@ -16,6 +18,36 @@
         @Html.Partial("_MattersTable")
         @Html.Partial("_FeaturesSelect")
         @Html.Partial("_Characteristic")
+        
+        <div class="form-group">
+            <label class="control-label col-md-2" for="subsequencesCharacteristic">Subsequences characteristic:</label>
+            <div class="col-md-10">
+                <select class="form-control" title="Subsequences characteristic" ng-model="subsequencesCharacteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(subsequencesCharacteristic)" id="subsequencesCharacteristic"></select>
+                <input type="hidden" name="subsequencesCharacteristicId" ng-value="subsequencesCharacteristic.characteristicType.Value" />
+            </div>
+        </div>
+        <div class="form-group" ng-show="isLinkable(subsequencesCharacteristic)">
+            <label class="control-label col-md-2" for="subsequencesCharacteristicLink">Link:</label>
+            <div class="col-md-10">
+                <select class="form-control" title="Link" ng-model="subsequencesCharacteristic.link" ng-options="l.Text for l in subsequencesCharacteristic.characteristicType.CharacteristicLinks" id="subsequencesCharacteristicLink"></select>
+                <input type="hidden" name="subsequencesCharacteristicLinkId" ng-value="subsequencesCharacteristic.link.Value" />
+                <input type="hidden" name="subsequencesCharacteristicTypeLinkId" ng-value="subsequencesCharacteristic.link.CharacteristicTypeLinkId" />
+            </div>
+        </div>
+        @if (UserHelper.IsAdmin())
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2" for="subsequencesCharacteristicNotation">Notation:</label>
+                <div class="col-md-10">
+                    <select class="form-control" title="Notation" ng-model="subsequencesCharacteristic.notation" ng-options="n.Text for n in notations | filter:{ Nature: nature }" id="subsequencesCharacteristicNotation"></select>
+                </div>
+            </div>
+        }
+        
+        <input type="hidden" name="subsequencesCharacteristicNotation" ng-value="subsequencesCharacteristic.notation.Value" />
+        
+        <hr />
+
         <div class="form-group">
             <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
             <div class="col-md-10">

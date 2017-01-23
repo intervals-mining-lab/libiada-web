@@ -35,6 +35,12 @@
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notations[0]
         };
+
+        $scope.subsequencesCharacteristic = {
+            characteristicType: $scope.characteristicTypes[0],
+            link: $scope.characteristicTypes[0].CharacteristicLinks[0],
+            notation: $scope.notations[0]
+        };
     }
 
     angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);

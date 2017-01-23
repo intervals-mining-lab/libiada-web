@@ -9,8 +9,13 @@
     @Html.Partial("_AngularControllerInitializer", "SubsequencesComparerResultController")
     <div class="form-horizontal" ng-app="SubsequencesComparerResult" ng-controller="SubsequencesComparerResultCtrl">
         @Html.Partial("_ModalLoadingWindow")
+        <div>
+            Sequences characteristic: <b>{{sequenceCharacteristicName}}</b>
+        </div>
 
-        <div ng-bind="characteristicName"></div>
+        <div>
+            Subsequences characteristic: <b>{{characteristicName}}</b>
+        </div>
 
         <table class="table table-bordered table-hover">
             <thead>

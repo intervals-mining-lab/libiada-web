@@ -18,6 +18,7 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using Models.Repositories.Sequences;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -58,6 +59,9 @@
         /// <param name="characteristicTypeLinkId">
         /// The characteristic type and link id.
         /// </param>
+        /// <param name="subsequencesCharacteristicTypeLinkId">
+        /// The subsequences characteristic type link id.
+        /// </param>
         /// <param name="features">
         /// The feature ids.
         /// </param>
@@ -81,6 +85,7 @@
         public ActionResult Index(
             long[] matterIds,
             int characteristicTypeLinkId,
+            int subsequencesCharacteristicTypeLinkId,
             Feature[] features,
             string maxPercentageDifference,
             double characteristicValueFrom,
@@ -94,42 +99,67 @@
 
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
-                IFullCalculator calculator;
-                Link link;
+                IFullCalculator subsequencesCalculator;
+                Link subsequencesLink;
+
+                string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
                 int[] subsequencesCount = new int[mattersCount];
 
                 using (var db = new LibiadaWebEntities())
                 {
+                    // Sequences characteristic
+                    var commonSequenceRepository = new CommonSequenceRepository(db);
+                    var chains = commonSequenceRepository.GetNucleotideChains(matterIds);
+
+                    var sequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
+
+                    var sequencesCalculator = CalculatorsFactory.CreateFullCalculator(sequencesCharacteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName);
+                    var sequencesLink = sequencesCharacteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+
+                    // Sequences characterstic
+                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, sequencesCalculator, sequencesLink, characteristicTypeLinkId);
+
+                    var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];
+
+                    for (int i = 0; i < completeGenomesCharacteristics.Length; i++)
+                    {
+                        matterCharacteristics[i] = new KeyValuePair<long, double>(matterIds[i], completeGenomesCharacteristics[i]);
+                    }
+
+                    matterIds = matterCharacteristics.OrderBy(mc => mc.Value).Select(mc => mc.Key).ToArray();
+
+                    // Subsequences characteristics
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                            .Select(s => new { s.Id, MatterName = s.Matter.Name })
+                                            .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
                                             .ToDictionary(s => s.Id);
-                    parentSequenceIds = parentSequences.Keys.ToArray();
+                    parentSequenceIds = parentSequences.OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId)).Select(ps => ps.Key).ToArray();
 
                     for (int n = 0; n < parentSequenceIds.Length; n++)
                     {
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                    var subsequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
 
-                    characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                    calculator = CalculatorsFactory.CreateFullCalculator(className);
-                    link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicTypeLinkId);
+                    string className = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicType(subsequencesCharacteristicTypeLinkId).ClassName;
+                    subsequencesCalculator = CalculatorsFactory.CreateFullCalculator(className);
+                    subsequencesLink = subsequencesCharacteristicTypeLinkRepository.GetLibiadaLink(subsequencesCharacteristicTypeLinkId);
                 }
-
+                
                 // cycle through matters; first level of characteristics array
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                            new[] { characteristicTypeLinkId },
+                            new[] { subsequencesCharacteristicTypeLinkId },
                             features,
                             parentSequenceIds[i],
-                            new[] { calculator },
-                            new[] { link },
+                            new[] { subsequencesCalculator },
+                            new[] { subsequencesLink },
                             attributeValues);
 
                     subsequencesCount[i] = subsequencesData.Length;
@@ -262,7 +292,8 @@
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
-                    { "maxPercentageDifference", maxPercentageDifference }
+                    { "maxPercentageDifference", maxPercentageDifference },
+                    { "sequenceCharacteristicName", sequenceCharacteristicName }
                 };
 
                 return new Dictionary<string, object>
