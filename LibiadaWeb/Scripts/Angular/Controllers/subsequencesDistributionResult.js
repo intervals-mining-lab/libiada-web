@@ -88,7 +88,7 @@
                         matterId: sequenceData.MatterId,
                         sequenceRemoteId: sequenceData.RemoteId,
                         attributes: subsequenceData.Attributes,
-                        partial: subsequenceData.partial,
+                        partial: subsequenceData.Partial,
                         featureId: subsequenceData.FeatureId,
                         positions: subsequenceData.Starts,
                         lengths: subsequenceData.Lengths,

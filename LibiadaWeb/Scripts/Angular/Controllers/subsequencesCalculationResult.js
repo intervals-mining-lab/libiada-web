@@ -19,9 +19,11 @@
         // fills array of currently visible points
         function fillVisiblePoints() {
             $scope.visiblePoints = [];
-            for (var i = 0; i < $scope.points.length; i++) {
-                if ($scope.dotVisible($scope.points[i])) {
-                    $scope.visiblePoints.push($scope.points[i]);
+            for (var i = 0; i < $scope.sequencesData.length; i++) {
+                for (var j = 0; j < $scope.sequencesData[i].SubsequencesData.length; j++) {
+                    if ($scope.dotVisible($scope.sequencesData[i].SubsequencesData[j])) {
+                        $scope.visiblePoints.push($scope.sequencesData[i].SubsequencesData[j]);
+                    }
                 }
             }
         }
@@ -39,7 +41,7 @@
 
         // returns product attribute index if any
         function getProductAttributeId(dot) {
-            return dot.attributes.find(function (a) {
+            return dot.Attributes.find(function (a) {
                 return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
             });
         }
@@ -53,7 +55,7 @@
                     .attr("visibility",
                         function (d) {
                             var productId = getProductAttributeId(d);
-                            d.filtersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
+                            d.FiltersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
                             return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
 
@@ -68,7 +70,7 @@
             d3.selectAll(".dot")
                     .attr("visibility",
                         function (d) {
-                            d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                            d.FiltersVisible.splice($scope.filters.indexOf(filter), 1);
                             return $scope.dotVisible(d) ? "visible" : "hidden";
                         });
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
@@ -77,33 +79,16 @@
 
         // initializes data for genes map
         function fillPoints() {
-            var id = 0;
-            for (var i = 0; i < $scope.result.length; i++) {
-                var sequenceData = $scope.result[i];
-                $scope.matters.push({ id: sequenceData.MatterId, name: sequenceData.MatterName, visible: true });
+            for (var i = 0; i < $scope.sequencesData.length; i++) {
+                $scope.sequencesData[i].Visible = true;
 
-                for (var j = 0; j < sequenceData.SubsequencesData.length; j++) {
-                    var subsequenceData = sequenceData.SubsequencesData[j];
-                    var point = {
-                        id: id,
-                        matterId: sequenceData.MatterId,
-                        sequenceRemoteId: sequenceData.RemoteId,
-                        attributes: subsequenceData.Attributes,
-                        partial: subsequenceData.partial,
-                        featureId: subsequenceData.FeatureId,
-                        positions: subsequenceData.Starts,
-                        lengths: subsequenceData.Lengths,
-                        subsequenceRemoteId: subsequenceData.RemoteId,
-                        numericX: i + 1,
-                        x: sequenceData.Characteristic,
-                        subsequenceCharacteristics: subsequenceData.CharacteristicsValues,
-                        featureVisible: true,
-                        matterVisible: true,
-                        filtersVisible: []
-                    };
-                    $scope.points.push(point);
-                    $scope.visiblePoints.push(point);
-                    id++;
+                for (var j = 0; j < $scope.sequencesData[i].SubsequencesData.length; j++) {
+                    var subsequenceData = $scope.sequencesData[i].SubsequencesData[j];
+                    subsequenceData.Matter = $scope.sequencesData[i];
+                    subsequenceData.FeatureVisible = true;
+                    subsequenceData.MatterVisible = true;
+                    subsequenceData.FiltersVisible = [];
+                    subsequenceData.Rank = j + 1;
                 }
             }
         }
@@ -112,16 +97,18 @@
         function filterByFeature(feature) {
             d3.selectAll(".dot")
                 .filter(function (dot) {
-                    return dot.featureId === parseInt(feature.Value);
+                    return dot.FeatureId === parseInt(feature.Value);
                 })
                 .attr("visibility", function (d) {
-                    d.featureVisible = feature.Selected;
+                    d.FeatureVisible = feature.Selected;
                     return $scope.dotVisible(d) ? "visible" : "hidden";
                 });
 
-            for (var i = 0; i < $scope.points.length; i++) {
-                if ($scope.points[i].featureId === parseInt(feature.Value)) {
-                    $scope.points[i].featureVisible = feature.Selected;
+            for (var i = 0; i < $scope.sequencesData.length; i++) {
+                for (var j = 0; j < $scope.sequencesData[i].SubsequencesData.length; j++) {
+                    if ($scope.sequencesData[i].SubsequencesData[j].FeatureId === parseInt(feature.Value)) {
+                        $scope.sequencesData[i].SubsequencesData[j].FeatureVisible = feature.Selected;
+                    }
                 }
             }
 
@@ -131,20 +118,20 @@
 
         // checks if dot is visible
         function dotVisible(dot) {
-            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function (element) {
+            var filterVisible = dot.FiltersVisible.length === 0 || dot.FiltersVisible.some(function (element) {
                 return element;
             });
 
-            return dot.featureVisible && dot.matterVisible && filterVisible;
+            return dot.FeatureVisible && dot.MatterVisible && filterVisible;
         }
 
         // determines if dots are similar by product
         function dotsSimilar(d, dot) {
-            if (d.featureId !== dot.featureId) {
+            if (d.FeatureId !== dot.FeatureId) {
                 return false;
             }
 
-            switch (d.featureId) {
+            switch (d.FeatureId) {
                 case 1: // CDS
                 case 2: // RRNA
                 case 3: // TRNA
@@ -172,21 +159,8 @@
             tooltip.selectedDots = svg.selectAll(".dot")
                 .filter(function (dot) {
                     if ($scope.dotVisible(dot)) {
-                        if (dot.matterId === point.matterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
+                        if (dot.MatterId === point.MatterId && $scope.yValue(dot) === $scope.yValue(point)) { // if dots are in the same position
                             tooltipHtml.push($scope.fillPointTooltip(dot));
-                            return true;
-                        } else if ($scope.highlight) { // if similar dot are highlighted
-                            for (var i = 0; i < $scope.characteristicComparers.length; i++) {
-                                var dotValue = dot.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                                var dValue = point.subsequenceCharacteristics[$scope.characteristicComparers[i].characteristic.Value];
-                                if (Math.abs(dotValue - dValue) > $scope.characteristicComparers[i].precision) { // if dValue is out of range for any comparer
-                                    return false;
-                                }
-                            }
-
-                            var tooltipColor = $scope.dotsSimilar(point, dot) ? "text-success" : "text-danger";
-                            tooltipHtml.push("<span class='" + tooltipColor + "'>" + $scope.fillPointTooltip(dot) + "</span>");
-
                             return true;
                         }
                     }
@@ -213,31 +187,32 @@
         function fillPointTooltip(d) {
             var tooltipContent = [];
             var genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-            var name = $scope.matters.find(function (m) { return m.id === d.matterId; }).name;
-            var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + name + "</a>" : name;
+
+            var header = d.Matter.RemoteId ? genBankLink + d.Matter.RemoteId + "'>" + d.Matter.MatterName + "</a>" : d.Matter.MatterName;
             tooltipContent.push(header);
 
-            if (d.subsequenceRemoteId) {
-                var peptideGenbankLink = genBankLink + d.subsequenceRemoteId + "'>Peptide ncbi page</a>";
+            if (d.RemoteId) {
+                var peptideGenbankLink = genBankLink + d.RemoteId + "'>Peptide ncbi page</a>";
                 tooltipContent.push(peptideGenbankLink);
             }
 
-            tooltipContent.push($scope.features[d.featureId].Text);
+            tooltipContent.push($scope.features[d.FeatureId].Text);
 
-            tooltipContent.push($scope.getAttributesText(d));
+            tooltipContent.push($scope.getAttributesText(d.Attributes));
 
-            if (d.partial) {
+            if (d.Partial) {
                 tooltipContent.push("partial");
             }
 
-            var start = d.positions[0] + 1;
-            var end = d.positions[0] + d.lengths[0];
-            var positionGenbankLink = d.sequenceRemoteId ?
-                                      genBankLink + d.sequenceRemoteId + "?from=" + start + "&to=" + end + "'>" + d.positions.join(", ") + "</a>" :
-                                      d.positions.join(", ");
+            var start = d.Starts[0] + 1;
+            var end = d.Starts[0] + d.Lengths[0];
+            var positionGenbankLink = d.Matter.RemoteId ?
+                                      genBankLink + d.Matter.RemoteId + "?from=" + start + "&to=" + end + "'>" + d.Starts.join(", ") + "</a>" :
+                                      d.Starts.join(", ");
             tooltipContent.push("Position: " + positionGenbankLink);
-            tooltipContent.push("Length: " + d.lengths.join(", "));
-            tooltipContent.push("(" + d.x + ", " + $scope.yValue(d) + ")");
+            tooltipContent.push("Length: " + d.Lengths.join(", "));
+            // TODO: show all characteristics
+            tooltipContent.push("(" + $scope.xValue(d) + ", " + $scope.yValue(d) + ")");
 
             return tooltipContent.join("</br>");
         }
@@ -254,11 +229,11 @@
         }
 
         function xValue(d) {
-            return $scope.lineChart ? d.id : d.x;
+            return $scope.lineChart ? d.Rank : d.CharacteristicsValues[+$scope.firstCharacteristic.Value];
         }
 
         function yValue(d) {
-            return $scope.lineChart ? d.x : d.y;
+            return $scope.lineChart ? d.CharacteristicsValues[+$scope.firstCharacteristic.Value] : d.CharacteristicsValues[+$scope.secondCharacteristic.Value];
         }
 
         // main drawing method
@@ -266,20 +241,32 @@
             $scope.showModalLoadingWindow("Drawing...");
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
-            d3.select(".genes-map-svg").remove();
+            d3.select(".chart-svg").remove();
 
             // sorting points by selected characteristic
-            $scope.points.sort(function (first, second) {
-                return $scope.yValue(second) - $scope.yValue(first);
-            });
-            $scope.visiblePoints.sort(function (first, second) {
-                return $scope.yValue(second) - $scope.yValue(first);
-            });
+            if ($scope.lineChart) {
+                for (var i = 0; i < $scope.sequencesData.length; i++) {
+                    $scope.sequencesData[i].SubsequencesData.sort(function (first, second) {
+                        return $scope.yValue(second) - $scope.yValue(first);
+                    });
+
+                    for (var j = 0; j < $scope.sequencesData[i].SubsequencesData.length; j++) {
+                        $scope.sequencesData[i].SubsequencesData[j].Rank = j + 1;
+                    }
+                }
+            }
+
+            //$scope.visiblePoints.sort(function (first, second) {
+            //    return $scope.yValue(second) - $scope.yValue(first);
+            //});
 
             // all organisms are visible after redrawing
-            $scope.points.forEach(function (point) {
-                point.matterVisible = true;
-                point.featureVisible = $scope.features[point.featureId].Selected;
+            $scope.sequencesData.forEach(function (matter) {
+                matter.Visible = true;
+                matter.SubsequencesData.forEach(function (point) {
+                    point.MatterVisible = true;
+                    //point.FeatureVisible = $scope.features[point.featureId].Selected;
+                });
             });
 
             // chart size and margin settings
@@ -287,10 +274,23 @@
             var width = $scope.width - margin.left - margin.right;
             var height = $scope.hight - margin.top - margin.bottom;
 
+            // calculating margins for dots
+            var xMinArray = [];
+            var xMaxArray = [];
+            var yMaxArray = [];
+            var yMinArray = [];
+
+            $scope.sequencesData.forEach(function (matter) {
+                xMinArray.push(d3.min(matter.SubsequencesData, $scope.xValue));
+                xMaxArray.push(d3.max(matter.SubsequencesData, $scope.xValue));
+                yMinArray.push(d3.min(matter.SubsequencesData, $scope.yValue));
+                yMaxArray.push(d3.max(matter.SubsequencesData, $scope.yValue));
+            });
+
             // setup x
             // calculating margins for dots
-            var xMin = d3.min($scope.points, $scope.xValue);
-            var xMax = d3.max($scope.points, $scope.xValue);
+            var xMin = d3.min(xMinArray);
+            var xMax = d3.max(xMaxArray);
             var xMargin = (xMax - xMin) * 0.05;
 
             var xScale = d3.scaleLinear()
@@ -304,9 +304,8 @@
             $scope.xMap = function (d) { return xScale($scope.xValue(d)); };
 
             // setup y
-            // calculating margins for dots
-            var yMax = d3.max($scope.points, $scope.yValue);
-            var yMin = d3.min($scope.points, $scope.yValue);
+            var yMin = d3.min(yMinArray);
+            var yMax = d3.max(yMaxArray);
             var yMargin = (yMax - yMin) * 0.05;
 
             var yScale = d3.scaleLinear()
@@ -320,14 +319,14 @@
             $scope.yMap = function (d) { return yScale($scope.yValue(d)); };
 
             // setup fill color
-            var cValue = function (d) { return d.matterId; };
+            var cValue = function (d) { return d.Matter.MatterId; };
             var color = d3.scaleOrdinal(d3.schemeCategory20);
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
                 .attr("height", $scope.hight)
-                .attr("class", "genes-map-svg")
+                .attr("class", "chart-svg")
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -362,31 +361,33 @@
                 .text($scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
+            var mattersGroups = d3.selectAll("g")
+                .data($scope.sequencesData);
+            mattersGroups
+                .enter()
+                .append("g");
+
             if ($scope.lineChart) {
                 var line = d3.line()
                     .x($scope.xMap)
                     .y($scope.yMap);
 
-                // Nest the entries by symbol
-                var dataNest = d3.nest()
-                    .key(function (d) { return d.id })
-                    .entries($scope.points);
-
-                // Loop through each symbol / key
-                dataNest.forEach(function (d) {
-                    svg.append("path")
-                        .datum(d.values)
-                        .attr("class", "line")
-                        .attr("d", line)
-                        .attr('stroke', function (d) { return color(cValue(d[0])); })
-                        .attr('stroke-width', 1)
-                        .attr('fill', 'none');
-                });
+                mattersGroups.selectAll("path")
+                    .data(function (d) { return d.SubsequencesData; })
+                    .enter()
+                    .append("path")
+                    .attr("class", "line")
+                    .attr("d", line)
+                    .attr('stroke', function (d) { return color(cValue(d)); })
+                    .attr('stroke-width', 1)
+                    .attr('fill', 'none');
             }
 
             // draw dots
-            svg.selectAll(".dot")
-                .data($scope.points)
+            mattersGroups.selectAll(".dot")
+                .data(function (d) {
+                    return d.SubsequencesData;
+                })
                 .enter()
                 .append("ellipse")
                 .attr("class", "dot")
@@ -403,22 +404,24 @@
 
             // draw legend
             var legend = svg.selectAll(".legend")
-                .data($scope.matters)
+                .data($scope.sequencesData)
                 .enter().append("g")
                 .attr("class", "legend")
                 .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
                 .on("click", function (d) {
-                    d.visible = !d.visible;
+                    d.Visible = !d.Visible;
                     var legendEntry = d3.select(this);
                     legendEntry.select("text")
-                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                        .style("opacity", function () { return d.Visible ? 1 : 0.5; });
                     legendEntry.select("rect")
-                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+                        .style("fill-opacity", function () { return d.Visible ? 1 : 0; });
 
-                    svg.selectAll(".dot")
-                        .filter(function (dot) { return dot.matterId === d.id; })
+                    mattersGroups.filter(function (matter) {
+                        return matter.MatterId === d.MatterId;
+                    })
+                        .selectAll(".dot")
                         .attr("visibility", function (dot) {
-                            dot.matterVisible = d.visible;
+                            dot.MatterVisible = d.Visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";
                         });
                 });
@@ -427,8 +430,8 @@
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
-                .style("fill", function (d) { return color(d.id); })
-                .style("stroke", function (d) { return color(d.id); })
+                .style("fill", function (d) { return color(d.MatterId); })
+                .style("stroke", function (d) { return color(d.MatterId); })
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
@@ -438,12 +441,12 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function (d) { return d.name; })
+                .text(function (d) { return d.MatterName; })
                 .style("font-size", "9pt");
 
             // tooltip event bind
             d3.select("body").on("click", function () {
-                var selectedPoints = svg.selectAll(".dot").filter(function () {
+                var selectedPoints = mattersGroups.selectAll(".dot").filter(function () {
                     return this === d3.event.target;
                 }).data();
 
@@ -479,9 +482,7 @@
 
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
-        $scope.points = [];
         $scope.visiblePoints = [];
-        $scope.matters = [];
         $scope.characteristicComparers = [];
         $scope.filters = [];
         $scope.productFilter = "";
@@ -505,10 +506,8 @@
             $scope.firstCharacteristic = $scope.subsequencesCharacteristicsList[0];
             $scope.secondCharacteristic = $scope.subsequencesCharacteristicsList.length > 1 ? $scope.subsequencesCharacteristicsList[1] : $scope.subsequencesCharacteristicsList[0];
 
-           // $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+            $scope.fillPoints();
 
-           // $scope.fillPoints();
-           // $scope.addCharacteristicComparer();
             $scope.hideModalLoadingWindow();
         }).error(function (data) {
             alert("Failed loading genes map data");
