@@ -2,28 +2,19 @@
     "use strict";
 
     function subsequencesComparerResult($scope, $http) {
-        var loadingModalWindow = $("#loadingDialog");
-        $scope.loadingScreenHeader = "Loading data";
-        loadingModalWindow.modal("show");
 
-        var location = window.location.href.split("/");
-        $scope.taskId = location[location.length - 1];
-        $scope.loading = true;
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
+        // shows modal window with progressbar and given text
+        function showModalLoadingWindow(headerText) {
+            $scope.loadingScreenHeader = headerText;
+            $scope.loadingModalWindow.modal("show");
+            $scope.loading = true;
+        }
 
-            for (var i = 0; i < $scope.equalElements.length; i++) {
-                $scope.equalElements[i].filtersVisible = [];
-            }
-
+        // hides modal window
+        function hideModalLoadingWindow() {
             $scope.loading = false;
-            loadingModalWindow.modal("hide");
-        }).error(function (data) {
-            alert("Failed loading characteristic data");
-        });
+            $scope.loadingModalWindow.modal("hide");
+        }
 
         // adds and applies new filter
         function addFilter() {
@@ -77,16 +68,15 @@
             });
         }
 
+        // shows list of equal elements only for given pair of matters
         function showEqualPairs(firstMatterId, secondMatterId) {
-            var loadingModalWindow = $("#loadingDialog");
-            $scope.loadingScreenHeader = "Loading data";
-            loadingModalWindow.modal("show");
+            $scope.showModalLoadingWindow("Filtering...");
 
             $scope.equalElementsToShow = $scope.equalElements.filter(function (element) {
                 return element.FirstMatterId === firstMatterId && element.SecondMatterId === secondMatterId;
             });
 
-            loadingModalWindow.modal("hide");
+            $scope.hideModalLoadingWindow();
         }
 
         $scope.addFilter = addFilter;
@@ -95,6 +85,29 @@
         $scope.getSecondProductAttributeId = getSecondProductAttributeId;
         $scope.elementVisible = elementVisible;
         $scope.showEqualPairs = showEqualPairs;
+        $scope.showModalLoadingWindow = showModalLoadingWindow;
+        $scope.hideModalLoadingWindow = hideModalLoadingWindow;
+        $scope.loadingModalWindow = $("#loadingDialog");
+
+        $scope.showModalLoadingWindow("Loading data");
+
+        var location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
+        $scope.loading = true;
+        $http({
+            url: "/api/TaskManagerWebApi/" + $scope.taskId,
+            method: "GET"
+        }).success(function (data) {
+            MapModelFromJson($scope, JSON.parse(data));
+
+            for (var i = 0; i < $scope.equalElements.length; i++) {
+                $scope.equalElements[i].filtersVisible = [];
+            }
+
+            $scope.hideModalLoadingWindow();
+        }).error(function (data) {
+            alert("Failed loading characteristic data");
+        });
 
         $scope.equalElementsToShow = [];
         $scope.filters = [];
