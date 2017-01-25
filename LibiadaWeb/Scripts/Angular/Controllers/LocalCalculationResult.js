@@ -200,25 +200,27 @@
             svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
-                .call(xAxis)
-                .append("text")
+                .call(xAxis);
+
+            svg.append("text")
                 .attr("class", "label")
-                .attr("x", width)
-                .attr("y", -6)
-                .style("text-anchor", "end")
+                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .style("text-anchor", "middle")
                 .text($scope.lineChart ? "Fragment №" : $scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
 
             // y-axis
             svg.append("g")
                 .attr("class", "y axis")
-                .call(yAxis)
-                .append("text")
+                .call(yAxis);
+
+            svg.append("text")
                 .attr("class", "label")
                 .attr("transform", "rotate(-90)")
-                .attr("y", 6)
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
-                .style("text-anchor", "end")
+                .style("text-anchor", "middle")
                 .text($scope.lineChart ? $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
