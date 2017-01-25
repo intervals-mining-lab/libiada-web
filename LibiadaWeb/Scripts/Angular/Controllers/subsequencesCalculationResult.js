@@ -363,18 +363,18 @@
                 .text($scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
-            var mattersGroups = d3.selectAll("g")
-                .data($scope.sequencesData);
-            mattersGroups
+            var mattersData = svg.selectAll(".matter")
+                .data($scope.sequencesData)
                 .enter()
-                .append("g");
+                .append("g")
+                .attr("class", "matter");
 
             if ($scope.lineChart) {
                 var line = d3.line()
                     .x($scope.xMap)
                     .y($scope.yMap);
 
-                mattersGroups.selectAll("path")
+                mattersData.selectAll("path")
                     .data(function (d) { return d.SubsequencesData; })
                     .enter()
                     .append("path")
@@ -386,7 +386,7 @@
             }
 
             // draw dots
-            mattersGroups.selectAll(".dot")
+            mattersData.selectAll(".dot")
                 .data(function (d) {
                     return d.SubsequencesData;
                 })
@@ -418,7 +418,7 @@
                     legendEntry.select("rect")
                         .style("fill-opacity", function () { return d.Visible ? 1 : 0; });
 
-                    mattersGroups.filter(function (matter) {
+                    mattersData.filter(function (matter) {
                         return matter.MatterId === d.MatterId;
                     })
                         .selectAll(".dot")
@@ -448,7 +448,7 @@
 
             // tooltip event bind
             d3.select("body").on("click", function () {
-                var selectedPoints = mattersGroups.selectAll(".dot").filter(function () {
+                var selectedPoints = mattersData.selectAll(".dot").filter(function () {
                     return this === d3.event.target;
                 }).data();
 
