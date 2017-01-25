@@ -374,15 +374,23 @@
                     .x($scope.xMap)
                     .y($scope.yMap);
 
-                mattersData.selectAll("path")
-                    .data(function (d) { return d.SubsequencesData; })
-                    .enter()
-                    .append("path")
-                    .attr("class", "line")
-                    .attr("d", line)
-                    .attr('stroke', function (d) { return color(cValue(d)); })
-                    .attr('stroke-width', 1)
-                    .attr('fill', 'none');
+                $scope.sequencesData.forEach(function (matter) {
+                    // Nest the entries by symbol
+                    var dataNest = d3.nest()
+                        .key(function (d) { return d.Matter.MatterId })
+                        .entries(matter.SubsequencesData);
+
+                    // Loop through each symbol / key
+                    dataNest.forEach(function (d) {
+                        svg.append("path")
+                            .datum(d.values)
+                            .attr("class", "line")
+                            .attr("d", line)
+                            .attr('stroke', function (d) { return color(cValue(d[0])); })
+                            .attr('stroke-width', 1)
+                            .attr('fill', 'none');
+                    });
+                });
             }
 
             // draw dots
@@ -426,6 +434,12 @@
                             dot.MatterVisible = d.Visible;
                             return $scope.dotVisible(dot) ? "visible" : "hidden";
                         });
+
+                    svg.selectAll(".line")
+                       .filter(function (line) { return line[0].Matter.MatterId === d.MatterId; })
+                       .attr("visibility", function (line) {
+                           return d.visible ? "visible" : "hidden";
+                       });
                 });
 
             // draw legend colored rectangles
