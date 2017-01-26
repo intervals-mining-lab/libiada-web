@@ -21,16 +21,16 @@
             <tbody>
             <tr>
                 <td/>
-                <td ng-repeat="mattersName in mattersNames" ng-bind="mattersName" />
+                <td ng-repeat="matterName in mattersNames" title="{{matterName}}">{{$index + 1}}</td>
             </tr>
             <tr ng-repeat="similarity in similarities">
-                <td ng-bind="mattersNames[$index]"/>
+                <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
                 <td ng-repeat="value in similarity" ng-click="showEqualPairs($parent.$index, $index)" ng-style="getHighlightColor(value.formula1)">
-                    {{value.formula1 * 100}}%
+                    {{(value.formula1 * 100).toFixed(3)}}%
                     <br/>
-                    {{value.formula2}}
+                    {{(value.formula2).toFixed(5)}}
                     <br/>
-                    {{value.formula3 * 100}}%
+                    {{(value.formula3 * 100).toFixed(3)}}%
                 </td>
             </tr>
             </tbody>
@@ -51,6 +51,10 @@
                 3. Отношение суммы значений характеристик для совпавших элементов к сумме значений всех характеристик.
             </label>
         </div>
+        
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
+        </ul>
 
         <hr />
 
