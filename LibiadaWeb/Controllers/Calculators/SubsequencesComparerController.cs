@@ -270,14 +270,15 @@
                         double similarSequencesCharacteristicValue = similarSequencesCharacteristicValueFirst < similarSequencesCharacteristicValueSecondFinal ?
                                             similarSequencesCharacteristicValueFirst * 2d : similarSequencesCharacteristicValueSecondFinal * 2d;
 
-                        double formula3 = similarSequencesCharacteristicValue * 100d /
-                                        (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
+                        double formula3 = similarSequencesCharacteristicValue / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
+
+                        const int digits = 5;
 
                         similarities[i, j] = new
                         {
-                            formula1 = Math.Round(formula1 * 100d, 3),
-                            formula2 = Math.Round(formula2, 3),
-                            formula3 = Math.Round(formula3, 3)
+                            formula1 = Math.Round(formula1, digits),
+                            formula2 = Math.Round(formula2, digits),
+                            formula3 = Math.Round(formula3, digits)
                         };
                     }
                 }

@@ -18,25 +18,21 @@
         </div>
 
         <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>
-                        Matter name
-                    </th>
-                    <th ng-repeat="mattersName in mattersNames" ng-bind="mattersName" />
-                </tr>
-            </thead>
             <tbody>
-                <tr ng-repeat="similarity in similarities">
-                    <td ng-bind="mattersNames[$index]" />
-                    <td ng-repeat="value in similarity" ng-click="showEqualPairs($parent.$index, $index)">
-                        {{value.formula1}}%
-                        <br />
-                        {{value.formula2}}
-                        <br />
-                        {{value.formula3}}%
-                    </td>
-                </tr>
+            <tr>
+                <td/>
+                <td ng-repeat="mattersName in mattersNames" ng-bind="mattersName" />
+            </tr>
+            <tr ng-repeat="similarity in similarities">
+                <td ng-bind="mattersNames[$index]"/>
+                <td ng-repeat="value in similarity" ng-click="showEqualPairs($parent.$index, $index)" ng-style="getHighlightColor(value.formula1)">
+                    {{value.formula1 * 100}}%
+                    <br/>
+                    {{value.formula2}}
+                    <br/>
+                    {{value.formula3 * 100}}%
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -62,37 +58,41 @@
 
         <table class="table table-bordered table-striped" ng-repeat="equalElement in equalElementsToShow" ng-show="elementVisible(equalElement)">
             <tbody>
-                <tr>
-                    <td>
-                        <b> {{$index + 1}}. </b>
-                        <br />
-                        First sequence: <b> {{mattersNames[equalElement.FirstMatterId]}} </b>
-                        <br />
-                        Feature: {{features[characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].FeatureId]}}
-                        <br />
-                        Length = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Lengths[0]}}
-                        <div ng-repeat="attributeId in characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes">
-                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                        </div>
-                        <i> Characteristic value = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
-                        <br />
-                        <br />
+            <tr>
+                <td>
+                    <b> {{$index + 1}}. </b>
+                    <br />
+                    First sequence: <b> {{mattersNames[equalElement.FirstMatterId]}} </b>
+                    <br />
+                    Feature: {{features[characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].FeatureId]}}
+                    <br />
+                    Length = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Lengths[0]}}
+                    <div ng-repeat="attributeId in characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes">
+                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                    </div>
+                    <i> Characteristic value = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
+                    <br />
+                    <br />
 
-                        Second sequence: <b> {{mattersNames[equalElement.SecondMatterId]}} </b>
-                        <br />
-                        Feature: {{features[characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].FeatureId]}}
-                        <br />
-                        Length = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Lengths[0]}}
-                        <div ng-repeat="attributeId in characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes">
-                            {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
-                        </div>
-                        <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
-                        <br />
-                        <br />
-                        <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>
-                    </td>
-                </tr>
+                    Second sequence: <b> {{mattersNames[equalElement.SecondMatterId]}} </b>
+                    <br />
+                    Feature: {{features[characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].FeatureId]}}
+                    <br />
+                    Length = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Lengths[0]}}
+                    <div ng-repeat="attributeId in characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes">
+                        {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
+                    </div>
+                    <i> Characteristic value = {{characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
+                    <br />
+                    <br />
+                    <i> Difference = {{characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/d3js")
+    }
 }

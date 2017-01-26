@@ -79,6 +79,14 @@
             $scope.hideModalLoadingWindow();
         }
 
+        function getHighlightColor(value) {
+            var color = d3.scaleLinear()
+                .domain([0, 0.1, 0.5, 1])
+                .range(["lightcoral", "gold", "yellow", "limegreen"]);
+            return { 'background-color': color(value) };
+        }
+
+        $scope.getHighlightColor = getHighlightColor;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
         $scope.getFirstProductAttributeId = getFirstProductAttributeId;
