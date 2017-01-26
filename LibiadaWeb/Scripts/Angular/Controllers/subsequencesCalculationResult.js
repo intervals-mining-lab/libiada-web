@@ -345,7 +345,7 @@
                 .attr("class", "label")
                 .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
                 .style("text-anchor", "middle")
-                .text($scope.firstCharacteristic.Text)
+                .text($scope.lineChart ? "Rank" : $scope.firstCharacteristic.Text)
                 .style("font-size", "12pt");
 
             // y-axis
@@ -360,7 +360,7 @@
                 .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
-                .text($scope.secondCharacteristic.Text)
+                .text($scope.lineChart ?  $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
             var mattersData = svg.selectAll(".matter")
@@ -496,7 +496,7 @@
         $scope.showModalLoadingWindow = showModalLoadingWindow;
         $scope.hideModalLoadingWindow = hideModalLoadingWindow;
 
-        $scope.dotRadius = 4;
+        $scope.dotRadius = 3;
         $scope.selectedDotRadius = $scope.dotRadius * 3;
         $scope.visiblePoints = [];
         $scope.characteristicComparers = [];
