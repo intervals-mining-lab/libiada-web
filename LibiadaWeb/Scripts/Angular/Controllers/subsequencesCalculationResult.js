@@ -196,8 +196,7 @@
                 tooltipContent.push(peptideGenbankLink);
             }
 
-            tooltipContent.push($scope.features[d.FeatureId].Text);
-
+            tooltipContent.push($scope.features[d.FeatureId]);
             tooltipContent.push($scope.getAttributesText(d.Attributes));
 
             if (d.Partial) {
@@ -228,6 +227,10 @@
             }
         }
 
+        function isKeyLeftOrRight(keyCode) {
+            return keyCode === 37 || keyCode === 39;
+        }
+
         function xValue(d) {
             return $scope.lineChart ? d.Rank : d.CharacteristicsValues[+$scope.firstCharacteristic.Value];
         }
@@ -239,6 +242,7 @@
         // main drawing method
         function draw() {
             $scope.showModalLoadingWindow("Drawing...");
+
             // removing previous chart and tooltip if any
             d3.select(".tooltip").remove();
             d3.select(".chart-svg").remove();
@@ -255,10 +259,6 @@
                     }
                 }
             }
-
-            //$scope.visiblePoints.sort(function (first, second) {
-            //    return $scope.yValue(second) - $scope.yValue(first);
-            //});
 
             // all organisms are visible after redrawing
             $scope.sequencesData.forEach(function (matter) {
@@ -360,10 +360,10 @@
                 .attr("x", 0 - (height / 2))
                 .attr("dy", ".71em")
                 .style("text-anchor", "middle")
-                .text($scope.lineChart ?  $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
+                .text($scope.lineChart ? $scope.firstCharacteristic.Text : $scope.secondCharacteristic.Text)
                 .style("font-size", "12pt");
 
-            var mattersData = svg.selectAll(".matter")
+            var mattersGroups = svg.selectAll(".matter")
                 .data($scope.sequencesData)
                 .enter()
                 .append("g")
@@ -394,7 +394,7 @@
             }
 
             // draw dots
-            mattersData.selectAll(".dot")
+            mattersGroups.selectAll(".dot")
                 .data(function (d) {
                     return d.SubsequencesData;
                 })
@@ -426,7 +426,7 @@
                     legendEntry.select("rect")
                         .style("fill-opacity", function () { return d.Visible ? 1 : 0; });
 
-                    mattersData.filter(function (matter) {
+                    mattersGroups.filter(function (matter) {
                         return matter.MatterId === d.MatterId;
                     })
                         .selectAll(".dot")
@@ -462,7 +462,7 @@
 
             // tooltip event bind
             d3.select("body").on("click", function () {
-                var selectedPoints = mattersData.selectAll(".dot").filter(function () {
+                var selectedPoints = mattersGroups.selectAll(".dot").filter(function () {
                     return this === d3.event.target;
                 }).data();
 
@@ -472,6 +472,42 @@
                     $scope.showTooltip(selectedPoints, tooltip, svg);
                 }
             });
+
+            // tooltip show on key up or key down
+            d3.select("body")
+                .on("keydown", function () {
+                    var keyCode = d3.event.keyCode;
+                    if (tooltip.selectedPoints && $scope.isKeyLeftOrRight(keyCode)) {
+                        $scope.clearTooltip(tooltip);
+
+                        var selectedPoint = tooltip.selectedPoints[0];
+                        var subsequencesData = $scope.sequencesData
+                            .find(function(p) { return p.MatterId === selectedPoint.Matter.MatterId; })
+                            .SubsequencesData;
+
+                        var indexOfPoint = subsequencesData.indexOf(selectedPoint);
+                        switch (keyCode) {
+                            case 37: // left
+                                indexOfPoint--;
+                                break;
+                            case 39: // right
+                                indexOfPoint++;
+                                break;
+                        }
+
+                        var nextSlectedPoint = subsequencesData[indexOfPoint];
+                        if (nextSlectedPoint) {
+                            $scope.showTooltip([nextSlectedPoint], tooltip, svg);
+                        }
+                    }
+                });
+
+            // preventing scroll in key up and key down
+            window.addEventListener("keydown", function (e) {
+                if ($scope.isKeyLeftOrRight(e.keyCode)) {
+                    e.preventDefault();
+                }
+            }, false);
 
             $scope.hideModalLoadingWindow();
         }
@@ -488,6 +524,7 @@
         $scope.fillPointTooltip = fillPointTooltip;
         $scope.showTooltip = showTooltip;
         $scope.clearTooltip = clearTooltip;
+        $scope.isKeyLeftOrRight = isKeyLeftOrRight;
         $scope.yValue = yValue;
         $scope.xValue = xValue;
         $scope.addFilter = addFilter;
@@ -504,7 +541,7 @@
         $scope.productFilter = "";
         $scope.loadingModalWindow = $("#loadingDialog");
 
-        $scope.showModalLoadingWindow("Loading genes map data");
+        $scope.showModalLoadingWindow("Loading subsequences characteristics");
 
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
@@ -526,7 +563,7 @@
 
             $scope.hideModalLoadingWindow();
         }).error(function (data) {
-            alert("Failed loading genes map data");
+            alert("Failed loading subsequences characteristics");
         });
     }
 

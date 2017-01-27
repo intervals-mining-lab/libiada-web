@@ -130,7 +130,7 @@
 
         // checks if dot is visible
         function dotVisible(dot) {
-            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function(element) {
+            var filterVisible = dot.filtersVisible.length === 0 || dot.filtersVisible.some(function (element) {
                 return element;
             });
 
@@ -223,7 +223,7 @@
         function fillPointTooltip(d) {
             var tooltipContent = [];
             var genBankLink = "<a target='_blank' rel='noopener' href='https://www.ncbi.nlm.nih.gov/nuccore/";
-            var name = $scope.matters.find(function(m) { return m.id === d.matterId; }).name;
+            var name = $scope.matters.find(function (m) { return m.id === d.matterId; }).name;
             var header = d.sequenceRemoteId ? genBankLink + d.sequenceRemoteId + "'>" + name + "</a>" : name;
             tooltipContent.push(header);
 
@@ -450,51 +450,51 @@
             // tooltip show on key up or key down
             d3.select("body")
                 .on("keydown", function () {
-                    if (tooltip.selectedPoints) {
+                    var keyCode = d3.event.keyCode;
+                    if (tooltip.selectedPoints && $scope.isKeyUpOrDown(keyCode)) {
+                        var nextPoint;
                         var selectedPoint = tooltip.selectedPoints[0];
-                        var keyCode = d3.event.keyCode;
-                        if (isKeyUpOrDown(keyCode)) {
-                            var nextPoint;
-                            var indexOfPoint = $scope.visiblePoints.indexOf(selectedPoint);
-                            $scope.clearTooltip(tooltip);
+                        var indexOfPoint = $scope.visiblePoints.indexOf(selectedPoint);
+                        $scope.clearTooltip(tooltip);
 
-                            switch (keyCode) {
-                                case 40: // down
-                                    for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
-                                        if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
-                                           && $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
-                                            nextPoint = $scope.visiblePoints[i];
-                                            break;
-                                        }
+                        switch (keyCode) {
+                            case 40: // down
+                                for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
+                                    if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
+                                       && $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
+                                        nextPoint = $scope.visiblePoints[i];
+                                        break;
                                     }
-                                    break;
-                                case 38: // up
-                                    for (var j = indexOfPoint - 1; j >= 0; j--) {
-                                        if ($scope.visiblePoints[j].matterId === selectedPoint.matterId
-                                            && $scope.yValue($scope.visiblePoints[j]) !== $scope.yValue(selectedPoint)) {
-                                            nextPoint = $scope.visiblePoints[j];
-                                            break;
-                                        }
+                                }
+                                break;
+                            case 38: // up
+                                for (var j = indexOfPoint - 1; j >= 0; j--) {
+                                    if ($scope.visiblePoints[j].matterId === selectedPoint.matterId
+                                        && $scope.yValue($scope.visiblePoints[j]) !== $scope.yValue(selectedPoint)) {
+                                        nextPoint = $scope.visiblePoints[j];
+                                        break;
                                     }
-                                    break;
-                            }
+                                }
+                                break;
+                        }
 
-                            if (nextPoint) {
-                                var selectedPoints = svg.selectAll(".dot").filter(function (d) {
-                                    return nextPoint.matterId === d.matterId && $scope.yValue(nextPoint) === $scope.yValue(d);
-                                }).data();
-                                return $scope.showTooltip(selectedPoints, tooltip, svg);
-                            }
+                        if (nextPoint) {
+                            var selectedPoints = svg.selectAll(".dot").filter(function (d) {
+                                return nextPoint.matterId === d.matterId && $scope.yValue(nextPoint) === $scope.yValue(d);
+                            }).data();
+
+                            $scope.showTooltip(selectedPoints, tooltip, svg);
                         }
                     }
                 });
 
             // preventing scroll in key up and key down
             window.addEventListener("keydown", function (e) {
-                if (isKeyUpOrDown(e.keyCode)) {
+                if ($scope.isKeyUpOrDown(e.keyCode)) {
                     e.preventDefault();
                 }
             }, false);
+
             $scope.hideModalLoadingWindow();
         }
 
