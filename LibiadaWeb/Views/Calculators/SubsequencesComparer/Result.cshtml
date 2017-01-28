@@ -17,7 +17,7 @@
             Subsequences characteristic: <b>{{characteristicName}}</b>
         </div>
 
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered">
             <tbody>
             <tr>
                 <td/>
@@ -25,11 +25,14 @@
             </tr>
             <tr ng-repeat="similarity in similarities">
                 <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
-                <td ng-repeat="value in similarity" ng-click="showEqualPairs($parent.$index, $index)" ng-style="getHighlightColor(value.formula1)">
+                <td ng-repeat="value in similarity"
+                    ng-click="showEqualPairs($parent.$index, $index)"
+                    ng-style="getHighlightColor(value.formula1)"
+                    title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
                     {{(value.formula1 * 100).toFixed(3)}}%
-                    <br/>
+                    <br />
                     {{(value.formula2).toFixed(5)}}
-                    <br/>
+                    <br />
                     {{(value.formula3 * 100).toFixed(3)}}%
                 </td>
             </tr>
@@ -51,7 +54,7 @@
                 3. Отношение суммы значений характеристик для совпавших элементов к сумме значений всех характеристик.
             </label>
         </div>
-        
+
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="matterName in mattersNames"> <b> {{$index + 1}} - {{matterName}} </b> </li>
         </ul>
