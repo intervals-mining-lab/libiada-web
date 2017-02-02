@@ -318,7 +318,7 @@
         /// </returns>
         private double CalculateAverageDifference(double first, double second)
         {
-            return Math.Abs(first - second) / ((first + second) / 2);
+            return Math.Abs((first - second) / ((first + second) / 2));
         }
     }
 }
