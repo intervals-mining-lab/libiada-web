@@ -58,7 +58,7 @@
 
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
-                    { "tasks", tasks.ToDictionary(t => t.Id) }
+                    { "tasks", tasks.ToArray() }
                 });
 
             return View();
