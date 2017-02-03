@@ -34,7 +34,6 @@
             bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
                         "~/Scripts/Angular/functions.js",
                         "~/Scripts/angular.js",
-                        "~/Scripts/angular.min.js.map",
                         "~/Scripts/smart-table.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/d3js").Include(
