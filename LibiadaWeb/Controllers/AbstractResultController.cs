@@ -55,7 +55,7 @@
 
                 foreach (var key in result.Keys)
                 {
-                    ViewData[key] = key == "data" ? "{}" : result[key];
+                    ViewData[key] = key == "data" || key == "additionalData" ? "{}" : result[key];
                 }
 
                 TempData.Keep();

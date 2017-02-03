@@ -17,8 +17,9 @@
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
 
-    using Newtonsoft.Json;
     using Models.Repositories.Sequences;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The subsequences comparer controller.
@@ -150,7 +151,7 @@
                     subsequencesCalculator = CalculatorsFactory.CreateFullCalculator(className);
                     subsequencesLink = subsequencesCharacteristicTypeLinkRepository.GetLibiadaLink(subsequencesCharacteristicTypeLinkId);
                 }
-                
+
                 // cycle through matters; first level of characteristics array
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
@@ -175,12 +176,13 @@
 
                 var similarities = new object[mattersCount, mattersCount];
 
-                var equalElements = new List<SubsequenceComparisonData>();
+                var equalElements = new List<SubsequenceComparisonData>[mattersCount, mattersCount];
 
                 for (int i = 0; i < characteristics.Length; i++)
                 {
                     for (int j = 0; j < characteristics.Length; j++)
                     {
+                        equalElements[i, j] = new List<SubsequenceComparisonData>();
                         double similarSequencesCharacteristicValueFirst = 0;
                         var similarSequencesCharacteristicValueSecond = new Dictionary<int, double>();
 
@@ -227,13 +229,11 @@
 
                                     if (i != j)
                                     {
-                                        equalElements.Add(new SubsequenceComparisonData
+                                        equalElements[i, j].Add(new SubsequenceComparisonData
                                         {
                                             Difference = difference,
-                                            FirstMatterId = i,
-                                            SecondMatterId = j,
                                             FirstSubsequenceId = k,
-                                            SecondSubsequenceId = l,
+                                            SecondSubsequenceId = l
                                         });
                                     }
 
@@ -289,7 +289,6 @@
                     { "characteristicName", characteristicName },
                     { "similarities", similarities },
                     { "characteristics", characteristics },
-                    { "equalElements", equalElements.OrderBy(e => e.Difference).ToList() },
                     { "features", features.ToDictionary(f => (byte)f, f => f.GetDisplayValue()) },
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
@@ -299,6 +298,7 @@
 
                 return new Dictionary<string, object>
                            {
+                               { "additionalData", equalElements },
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });

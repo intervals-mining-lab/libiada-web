@@ -691,6 +691,7 @@
     <Content Include="Views\Calculators\FilteredSubsequenceCalculation\Result.cshtml" />
     <Content Include="Views\Partial\_Filters.cshtml" />
     <Content Include="Views\Partial\_ModalLoadingWindow.cshtml" />
+    <Content Include="Views\SequenceCleanerController\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -21,16 +21,22 @@
             if ($scope.newFilter.length > 0) {
                 $scope.filters.push({ value: $scope.newFilter });
 
-                for(var i = 0; i < $scope.equalElements.length; i++) {
-                    var firstProductId = $scope.getFirstProductAttributeId($scope.equalElements[i]);
+                for (var i = 0; i < $scope.equalElements.length; i++) {
+                    for (var j = 0; j < $scope.equalElements[i].length; j++) {
+                        if ($scope.equalElements[i][j]) {
+                            for (var k = 0; k < $scope.equalElements[i][j].length; k++) {
+                                var firstProductId = $scope.getFirstProductAttributeId($scope.equalElements[i][j][k]);
 
-                    var firstVisible = firstProductId && $scope.attributeValues[firstProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
+                                var firstVisible = firstProductId && $scope.attributeValues[firstProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
 
-                    var secondProductId = $scope.getSecondProductAttributeId($scope.equalElements[i]);
+                                var secondProductId = $scope.getSecondProductAttributeId($scope.equalElements[i][j][k]);
 
-                    var secondVisible = secondProductId && $scope.attributeValues[secondProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
+                                var secondVisible = secondProductId && $scope.attributeValues[secondProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
 
-                    $scope.equalElements[i].filtersVisible.push(firstVisible || secondVisible);
+                                $scope.equalElements[i][j][k].filtersVisible.push(firstVisible || secondVisible);
+                            }
+                        }
+                    }
                 }
 
                 $scope.newFilter = "";
@@ -48,7 +54,13 @@
         // deletes given filter
         function deleteFilter(filter) {
             for (var i = 0; i < $scope.equalElements.length; i++) {
-                $scope.equalElements[i].filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                for (var j = 0; j < $scope.equalElements[i].length; j++) {
+                    if ($scope.equalElements[i][j]) {
+                        for (var k = 0; k < $scope.equalElements[i][j].length; k++) {
+                            $scope.equalElements[i][j][k].filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                        }
+                    }
+                }
             }
 
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
@@ -56,29 +68,51 @@
 
         // returns first product attribute index if any
         function getFirstProductAttributeId(equalElement) {
-            return $scope.characteristics[equalElement.FirstMatterId][equalElement.FirstSubsequenceId].Attributes.find(function (a) {
+            return $scope.characteristics[$scope.firstMatterIndex][equalElement.FirstSubsequenceId].Attributes.find(function (a) {
                 return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
             });
         }
 
         // returns second product attribute index if any
         function getSecondProductAttributeId(equalElement) {
-            return $scope.characteristics[equalElement.SecondMatterId][equalElement.SecondSubsequenceId].Attributes.find(function (a) {
+            return $scope.characteristics[$scope.secondMatterIndex][equalElement.SecondSubsequenceId].Attributes.find(function (a) {
                 return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
             });
         }
 
         // shows list of equal elements only for given pair of matters
-        function showEqualPairs(firstMatterId, secondMatterId) {
-            $scope.showModalLoadingWindow("Filtering...");
+        function showEqualPairs(firstIndex, secondIndex) {
+            $scope.showModalLoadingWindow("Loading equal subsequences list...");
 
-            $scope.equalElementsToShow = $scope.equalElements.filter(function (element) {
-                return element.FirstMatterId === firstMatterId && element.SecondMatterId === secondMatterId;
-            });
+            $scope.firstMatterIndex = firstIndex;
+            $scope.secondMatterIndex = secondIndex;
 
-            $scope.hideModalLoadingWindow();
+            if ($scope.equalElements[firstIndex][secondIndex]) {
+                $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
+            } else {
+                $http({
+                    url: "/api/TaskManagerWebApi?taskId=" + $scope.taskId
+                    + "&firstIndex=" + firstIndex
+                    + "&secondIndex=" + secondIndex,
+                    method: "GET"
+                }).success(function (equalElements) {
+                    $scope.equalElements[firstIndex][secondIndex] = JSON.parse(equalElements);
+                    for (var k = 0; k < $scope.equalElements[firstIndex][secondIndex].length; k++) {
+                        $scope.equalElements[firstIndex][secondIndex][k].filtersVisible = [];
+                    }
+
+                    $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
+
+                    $scope.hideModalLoadingWindow();
+                }).error(function (data) {
+                    alert("Failed loading subsequences data");
+
+                    $scope.hideModalLoadingWindow();
+                });
+            }
         }
 
+        // calculates cell hihglight color using d3.js color scale
         function getHighlightColor(value) {
             var color = d3.scaleLinear()
                 .domain([0, 0.1, 0.5, 1])
@@ -108,9 +142,7 @@
         }).success(function (data) {
             MapModelFromJson($scope, JSON.parse(data));
 
-            for (var i = 0; i < $scope.equalElements.length; i++) {
-                $scope.equalElements[i].filtersVisible = [];
-            }
+            $scope.equalElements = new Array($scope.mattersNames.length).fill(new Array($scope.mattersNames.length));
 
             $scope.hideModalLoadingWindow();
         }).error(function (data) {
