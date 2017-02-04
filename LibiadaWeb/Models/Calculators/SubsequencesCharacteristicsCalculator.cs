@@ -69,7 +69,7 @@
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
                 // converting to libiada sequences
-                var sequences = subsequenceExtractor.ExtractChains(dbSubsequences, parentSequenceId);
+                var sequences = subsequenceExtractor.ExtractChains(dbSubsequences);
                 var subsequenceData = new SubsequenceData[sequences.Length];
 
                 // cycle through subsequences

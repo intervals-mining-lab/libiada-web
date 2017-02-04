@@ -50,9 +50,9 @@
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public Chain[] ExtractChains(Subsequence[] subsequences, long chainId)
+        public Chain[] ExtractChains(Subsequence[] subsequences)
         {
-            var parentChain = commonSequenceRepository.ToLibiadaBaseChain(chainId).ToString();
+            var parentChain = commonSequenceRepository.ToLibiadaBaseChain(subsequences[0].SequenceId).ToString();
             var sourceSequence = new Sequence(Alphabets.DNA, parentChain);
             var result = new Chain[subsequences.Length];
 
