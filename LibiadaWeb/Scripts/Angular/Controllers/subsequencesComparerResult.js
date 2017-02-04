@@ -24,17 +24,7 @@
                 for (var i = 0; i < $scope.equalElements.length; i++) {
                     for (var j = 0; j < $scope.equalElements[i].length; j++) {
                         if ($scope.equalElements[i][j]) {
-                            for (var k = 0; k < $scope.equalElements[i][j].length; k++) {
-                                var firstProductId = $scope.getFirstProductAttributeId($scope.equalElements[i][j][k]);
-
-                                var firstVisible = firstProductId && $scope.attributeValues[firstProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
-
-                                var secondProductId = $scope.getSecondProductAttributeId($scope.equalElements[i][j][k]);
-
-                                var secondVisible = secondProductId && $scope.attributeValues[secondProductId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1;
-
-                                $scope.equalElements[i][j][k].filtersVisible.push(firstVisible || secondVisible);
-                            }
+                            $scope.applyFilters($scope.equalElements[i][j]);
                         }
                     }
                 }
@@ -53,17 +43,34 @@
 
         // deletes given filter
         function deleteFilter(filter) {
+            var filterIndex = $scope.filters.indexOf(filter);
+            $scope.filters.splice(filterIndex, 1);
             for (var i = 0; i < $scope.equalElements.length; i++) {
                 for (var j = 0; j < $scope.equalElements[i].length; j++) {
                     if ($scope.equalElements[i][j]) {
                         for (var k = 0; k < $scope.equalElements[i][j].length; k++) {
-                            $scope.equalElements[i][j][k].filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                            $scope.equalElements[i][j][k].filtersVisible.splice(filterIndex, 1);
                         }
                     }
                 }
             }
+        }
+        // applies filters
+        function applyFilters(elements) {
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].filtersVisible = [];
+                for (var j = 0; j < $scope.filters.length; j++) {
+                    var filterValue = $scope.filters[j].value.toUpperCase();
 
-            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+                    var firstProductId = $scope.getFirstProductAttributeId(elements[i]);
+                    var firstVisible = firstProductId && $scope.attributeValues[firstProductId].value.toUpperCase().indexOf(filterValue) !== -1;
+
+                    var secondProductId = $scope.getSecondProductAttributeId(elements[i]);
+                    var secondVisible = secondProductId && $scope.attributeValues[secondProductId].value.toUpperCase().indexOf(filterValue) !== -1;
+
+                    elements[i].filtersVisible.push(firstVisible || secondVisible);
+                }
+            }
         }
 
         // returns first product attribute index if any
@@ -89,6 +96,7 @@
 
             if ($scope.equalElements[firstIndex][secondIndex]) {
                 $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
+                $scope.hideModalLoadingWindow();
             } else {
                 $http({
                     url: "/api/TaskManagerWebApi?taskId=" + $scope.taskId
@@ -97,9 +105,8 @@
                     method: "GET"
                 }).success(function (equalElements) {
                     $scope.equalElements[firstIndex][secondIndex] = JSON.parse(equalElements);
-                    for (var k = 0; k < $scope.equalElements[firstIndex][secondIndex].length; k++) {
-                        $scope.equalElements[firstIndex][secondIndex][k].filtersVisible = [];
-                    }
+
+                    $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
 
                     $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
 
@@ -129,6 +136,8 @@
         $scope.showEqualPairs = showEqualPairs;
         $scope.showModalLoadingWindow = showModalLoadingWindow;
         $scope.hideModalLoadingWindow = hideModalLoadingWindow;
+        $scope.applyFilters = applyFilters;
+
         $scope.loadingModalWindow = $("#loadingDialog");
 
         $scope.showModalLoadingWindow("Loading data");
@@ -142,7 +151,11 @@
         }).success(function (data) {
             MapModelFromJson($scope, JSON.parse(data));
 
-            $scope.equalElements = new Array($scope.mattersNames.length).fill(new Array($scope.mattersNames.length));
+            $scope.equalElements = new Array($scope.mattersNames.length);
+
+            for (var i = 0; i < $scope.mattersNames.length; i++) {
+                $scope.equalElements[i] = new Array($scope.mattersNames.length);
+            }
 
             $scope.hideModalLoadingWindow();
         }).error(function (data) {
