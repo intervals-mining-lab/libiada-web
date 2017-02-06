@@ -20,9 +20,22 @@
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         }
 
+        function addFilter() {
+            if ($scope.newFilter.length > 0) {
+                $scope.filters.push({ value: $scope.newFilter });
+                $scope.newFilter = "";
+            }
+        }
+
+        function deleteFilter(filter) {
+            $scope.filters.splice($scope.filters.indexOf(filter), 1);
+        }
+
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableMattersSelect = disableMattersSelect;
         $scope.disableSubmit = disableSubmit;
+        $scope.addFilter = addFilter;
+        $scope.deleteFilter = deleteFilter;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
@@ -41,6 +54,8 @@
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notations[0]
         };
+
+        $scope.filters = [];
     }
 
     angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);

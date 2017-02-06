@@ -257,7 +257,7 @@
     <Compile Include="Controllers\Calculators\ChartsController.cs" />
     <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\FilteredSubsequenceCalculationController.cs" />
-    <Compile Include="Controllers\Calculators\LocalCaluculationWebApiController.cs" />
+    <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />

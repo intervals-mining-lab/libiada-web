@@ -4,6 +4,7 @@
     using System.Linq;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
     using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Models.CalculatorsData;
@@ -27,12 +28,6 @@
         /// <param name="parentSequenceId">
         /// The parent sequence id.
         /// </param>
-        /// <param name="calculators">
-        /// The calculators.
-        /// </param>
-        /// <param name="links">
-        /// The links.
-        /// </param>
         /// <param name="attributeValues">
         /// Nonredundant array of all attributes.
         /// </param>
@@ -46,8 +41,6 @@
             int[] characteristicTypeLinkIds,
             Feature[] features,
             long parentSequenceId,
-            IFullCalculator[] calculators,
-            Link[] links,
             List<AttributeValue> attributeValues,
             string[] filters = null)
         {
@@ -57,6 +50,8 @@
                 var subsequenceExtractor = new SubsequenceExtractor(context);
                 var sequenceAttributeRepository = new SequenceAttributeRepository(context);
                 var newCharacteristics = new List<Characteristic>();
+                var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
+                var links = new Link[characteristicTypeLinkIds.Length];
 
                 // extracting data from database
                 var dbSubsequences = filters == null ? subsequenceExtractor.GetSubsequences(parentSequenceId, features) : subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
@@ -67,6 +62,15 @@
                         .ToArray()
                         .GroupBy(c => c.SequenceId)
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
+
+                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(context);
+                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                {
+                    var characteristicTypeLinkId = characteristicTypeLinkIds[k];
+                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                    calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
+                    links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                }
 
                 // converting to libiada sequences
                 var sequences = subsequenceExtractor.ExtractChains(dbSubsequences);

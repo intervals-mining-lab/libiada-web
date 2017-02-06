@@ -5,9 +5,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -76,14 +73,12 @@
                 var remoteIds = new string[matterIds.Length];
                 var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
                 var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
-                var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
-                var links = new Link[characteristicTypeLinkIds.Length];
 
                 using (var db = new LibiadaWebEntities())
                 {
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                            .Select(s => new { s.Id, MatterName = s.Matter.Name, RemoteId = s.RemoteId })
+                                            .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
                                             .ToDictionary(s => s.Id);
                     parentSequenceIds = parentSequences.Keys.ToArray();
 
@@ -96,9 +91,6 @@
                     var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                     for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                     {
-                        links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                        calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
                         subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k]);
                         subsequencesCharacteristicsList[k] = new SelectListItem
                         {
@@ -116,8 +108,6 @@
                             characteristicTypeLinkIds,
                             features,
                             parentSequenceIds[i],
-                            calculators,
-                            links,
                             attributeValues);
                     sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], default(double), subsequencesData);
                 }

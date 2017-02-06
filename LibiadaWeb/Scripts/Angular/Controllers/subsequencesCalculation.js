@@ -29,7 +29,10 @@
         }
 
         function addFilter() {
-            $scope.filters.push({ value: "" });
+            if ($scope.newFilter.length > 0) {
+                $scope.filters.push({ value: $scope.newFilter });
+                $scope.newFilter = "";
+            }
         }
 
         function deleteFilter(filter) {

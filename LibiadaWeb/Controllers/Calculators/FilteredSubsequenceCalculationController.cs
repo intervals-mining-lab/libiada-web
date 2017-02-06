@@ -5,8 +5,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -76,8 +74,6 @@
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
 
                 long[] parentSequenceIds;
-                var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
-                var links = new LibiadaCore.Core.Link[characteristicTypeLinkIds.Length];
 
                 using (var db = new LibiadaWebEntities())
                 {
@@ -97,9 +93,6 @@
                     {
                         var characteristicTypeLinkId = characteristicTypeLinkIds[k];
                         characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                        calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
-                        links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                     }
                 }
 
@@ -111,8 +104,6 @@
                         characteristicTypeLinkIds,
                         features,
                         parentSequenceIds[i],
-                        calculators,
-                        links,
                         attributeValues,
                         filters);
                     subsequencesData = subsequencesData.OrderByDescending(s => s.CharacteristicsValues[0]).ToArray();

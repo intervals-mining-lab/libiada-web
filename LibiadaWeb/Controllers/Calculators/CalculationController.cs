@@ -6,8 +6,6 @@
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Account;
@@ -103,8 +101,6 @@
                     var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                     var characteristicNames = new string[characteristicTypeLinkIds.Length];
                     var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
-                    var links = new Link[characteristicTypeLinkIds.Length];
-                    var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
                     Dictionary<long, string> mattersNames;
                     double[][] characteristics;
                     Chain[][] chains;
@@ -119,9 +115,6 @@
                         var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
-                            links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                            calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
                             characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                             characteristicsList[k] = new SelectListItem
                             {
@@ -134,11 +127,11 @@
 
                     if (!rotate && !complementary)
                     {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, characteristicTypeLinkIds);
+                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkIds);
                     }
                     else
                     {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, calculators, links, rotate, complementary, rotationLength);
+                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkIds, rotate, complementary, rotationLength);
                     }
 
                     for (int i = 0; i < matterIds.Length; i++)

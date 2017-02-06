@@ -1,19 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics;
-using LibiadaCore.Core.Characteristics.Calculators;
-using LibiadaCore.Misc.Iterators;
-
-using LibiadaWeb.Models;
-using LibiadaWeb.Models.Repositories.Catalogs;
-using Newtonsoft.Json;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    public class LocalCaluculationWebApiController : ApiController
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web.Http;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics;
+    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Misc.Iterators;
+
+    using LibiadaWeb.Models;
+    using LibiadaWeb.Models.Repositories.Catalogs;
+
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// The local calculation web api controller.
+    /// </summary>
+    [Authorize]
+    public class LocalCalculationWebApiController : ApiController
     {
+        /// <summary>
+        /// The get subsequence characteristic.
+        /// </summary>
+        /// <param name="subsequenceId">
+        /// The subsequence id.
+        /// </param>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="windowSize">
+        /// The window size.
+        /// </param>
+        /// <param name="step">
+        /// The step.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetSubsequenceCharacteristic(long subsequenceId, int characteristicTypeLinkId, int windowSize, int step)
         {
             Chain chain;
@@ -32,7 +56,7 @@ namespace LibiadaWeb.Controllers.Calculators
 
                 var dbSubsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
 
-                chain = subsequenceExtractor.ExtractChains(new [] {dbSubsequence}).Single();
+                chain = subsequenceExtractor.ExtractChains(new[] { dbSubsequence }).Single();
             }
 
             CutRule cutRule = new SimpleCutRule(chain.GetLength(), step, windowSize);

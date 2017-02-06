@@ -7,9 +7,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -75,6 +72,10 @@
         /// <param name="characteristicValueTo">
         /// Maximum value for calculating characteristic
         /// </param>
+        /// <param name="filters">
+        /// Filters for the subsequences.
+        /// Filters are applied in "OR" logic (if subsequence corresponds to any filter it is added to calculation).
+        /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
@@ -90,7 +91,8 @@
             Feature[] features,
             string maxPercentageDifference,
             double characteristicValueFrom,
-            double characteristicValueTo)
+            double characteristicValueTo,
+            string[] filters)
         {
             return Action(() =>
             {
@@ -100,8 +102,6 @@
 
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
-                IFullCalculator subsequencesCalculator;
-                Link subsequencesLink;
 
                 string sequenceCharacteristicName;
 
@@ -117,11 +117,8 @@
                     var sequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
 
-                    var sequencesCalculator = CalculatorsFactory.CreateFullCalculator(sequencesCharacteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName);
-                    var sequencesLink = sequencesCharacteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
-
                     // Sequences characterstic
-                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, sequencesCalculator, sequencesLink, characteristicTypeLinkId);
+                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
 
                     var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];
 
@@ -147,9 +144,6 @@
                     var subsequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
 
                     characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicTypeLinkId);
-                    string className = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicType(subsequencesCharacteristicTypeLinkId).ClassName;
-                    subsequencesCalculator = CalculatorsFactory.CreateFullCalculator(className);
-                    subsequencesLink = subsequencesCharacteristicTypeLinkRepository.GetLibiadaLink(subsequencesCharacteristicTypeLinkId);
                 }
 
                 // cycle through matters; first level of characteristics array
@@ -159,9 +153,8 @@
                             new[] { subsequencesCharacteristicTypeLinkId },
                             features,
                             parentSequenceIds[i],
-                            new[] { subsequencesCalculator },
-                            new[] { subsequencesLink },
-                            attributeValues);
+                            attributeValues,
+                            filters);
 
                     subsequencesCount[i] = subsequencesData.Length;
 
