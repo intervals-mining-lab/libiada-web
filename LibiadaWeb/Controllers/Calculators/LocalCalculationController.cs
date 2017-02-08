@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -159,7 +161,7 @@
                 foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
                 {
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                    calculators.Add(CalculatorsFactory.CreateFullCalculator(className));
+                    calculators.Add(FullCalculatorsFactory.CreateFullCalculator(className));
                     links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
                 }
 

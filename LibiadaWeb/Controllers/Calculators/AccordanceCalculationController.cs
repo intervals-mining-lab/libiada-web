@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -151,7 +153,7 @@
                 secondChain.FillIntervalManagers();
 
                 string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                IAccordanceCalculator calculator = CalculatorsFactory.CreateAccordanceCalculator(className);
+                IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateAccordanceCalculator(className);
                 var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
                 switch (calculationType)

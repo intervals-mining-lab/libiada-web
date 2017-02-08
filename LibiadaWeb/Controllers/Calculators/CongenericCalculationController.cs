@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -149,7 +151,7 @@
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                        ICongenericCalculator calculator = CalculatorsFactory.CreateCongenericCalculator(className);
+                        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCongenericCalculator(className);
                         var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
                         int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
@@ -200,14 +202,14 @@
                         if (theoretical)
                         {
                             theoreticalRanks[w].Add(new List<double>());
-                            ICongenericCalculator countCalculator = CalculatorsFactory.CreateCongenericCalculator("Count");
+                            ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCongenericCalculator("Count");
                             var counts = new List<int>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
                                 counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
                             }
 
-                            ICongenericCalculator frequencyCalculator = CalculatorsFactory.CreateCongenericCalculator("Probability");
+                            ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCongenericCalculator("Probability");
                             var frequency = new List<double>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {

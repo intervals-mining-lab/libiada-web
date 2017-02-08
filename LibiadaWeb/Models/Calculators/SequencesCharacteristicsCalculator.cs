@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Models.Calculators
+﻿using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+
+namespace LibiadaWeb.Models.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -54,7 +56,7 @@
                 {
                     links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                    calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
+                    calculators[k] = FullCalculatorsFactory.CreateFullCalculator(className);
                 }
             }
 
@@ -130,7 +132,7 @@
                 var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                 link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                 string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                calculator = CalculatorsFactory.CreateFullCalculator(className);
+                calculator = FullCalculatorsFactory.CreateFullCalculator(className);
             }
 
             for (int i = 0; i < chains.Length; i++)
@@ -197,7 +199,7 @@
                 {
                     links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
                     string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                    calculators[k] = CalculatorsFactory.CreateFullCalculator(className);
+                    calculators[k] = FullCalculatorsFactory.CreateFullCalculator(className);
                 }
             }
 

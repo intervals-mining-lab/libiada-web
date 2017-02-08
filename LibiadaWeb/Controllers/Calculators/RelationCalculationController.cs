@@ -1,4 +1,7 @@
-﻿namespace LibiadaWeb.Controllers.Calculators
+﻿using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
+using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
+
+namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -139,7 +142,7 @@
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                 string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
 
-                IBinaryCalculator calculator = CalculatorsFactory.CreateBinaryCalculator(className);
+                IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateBinaryCalculator(className);
                 var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
 
                 if (frequencyFilter)
