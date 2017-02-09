@@ -127,6 +127,11 @@
             return { 'background-color': color(value) };
         }
 
+        // calculates and displays local characteristics for given subsequences
+        function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId) {
+
+        }
+
         $scope.getHighlightColor = getHighlightColor;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
@@ -137,6 +142,10 @@
         $scope.showModalLoadingWindow = showModalLoadingWindow;
         $scope.hideModalLoadingWindow = hideModalLoadingWindow;
         $scope.applyFilters = applyFilters;
+        $scope.calculateLocalCharacteristics = calculateLocalCharacteristics;
+
+        $scope.isLinkable = IsLinkable;
+        $scope.selectLink = SelectLink;
 
         $scope.loadingModalWindow = $("#loadingDialog");
 
@@ -157,11 +166,18 @@
                 $scope.equalElements[i] = new Array($scope.mattersNames.length);
             }
 
+            $scope.characteristic = {
+                characteristicType: $scope.characteristicTypes[0],
+                link: $scope.characteristicTypes[0].CharacteristicLinks[0]
+            };
+
             $scope.hideModalLoadingWindow();
         }).error(function (data) {
             alert("Failed loading characteristic data");
         });
 
+        $scope.windowSize = 50;
+        $scope.step = 1;
         $scope.equalElementsToShow = [];
         $scope.filters = [];
     }

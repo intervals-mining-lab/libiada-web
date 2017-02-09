@@ -28,6 +28,11 @@
         /// </returns>
         public static bool IsAdmin()
         {
+            if (HttpContext.Current == null)
+            {
+                return false;
+            }
+
             return HttpContext.Current.User.IsInRole("Admin");
         }
     }

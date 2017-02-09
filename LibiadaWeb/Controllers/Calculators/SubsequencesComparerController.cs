@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -106,13 +107,15 @@
                 string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
-                int[] subsequencesCount = new int[mattersCount];
+                var subsequencesCount = new int[mattersCount];
+                List<CharacteristicData> localCharacteristicsType;
+
 
                 using (var db = new LibiadaWebEntities())
                 {
                     // Sequences characteristic
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    var chains = commonSequenceRepository.GetNucleotideChains(matterIds);
+                    Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
                     var sequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
@@ -144,6 +147,10 @@
                     var subsequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
 
                     characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicTypeLinkId);
+
+                    var viewDataHelper = new ViewDataHelper(db);
+
+                    localCharacteristicsType = viewDataHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable);
                 }
 
                 // cycle through matters; first level of characteristics array
@@ -286,7 +293,8 @@
                     { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) },
                     { "attributes", ArrayExtensions.ToArray<LibiadaWeb.Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                     { "maxPercentageDifference", maxPercentageDifference },
-                    { "sequenceCharacteristicName", sequenceCharacteristicName }
+                    { "sequenceCharacteristicName", sequenceCharacteristicName },
+                    { "characteristicTypes", localCharacteristicsType }
                 };
 
                 return new Dictionary<string, object>

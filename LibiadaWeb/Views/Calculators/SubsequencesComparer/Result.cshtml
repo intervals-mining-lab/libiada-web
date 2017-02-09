@@ -93,6 +93,50 @@
                     <br />
                     <br />
                     <i> Difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <button type="button" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#additionalActions{{$index + 1}}" aria-expanded="false" aria-controls="additionalActions{{$index + 1}}">+</button>
+                        </div>
+                        <div class="panel-collapse collapse" id="additionalActions{{$index + 1}}">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2" for="characteristic">Characteristic:</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characteristic"></select>
+                                        <input type="hidden" name="characteristicId" ng-value="characteristic.characteristicType.Value" />
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-show="isLinkable(characteristic)">
+                                    <label class="control-label col-md-2" for="link">Link:</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2" for="windowSize">Window size:</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" ng-model="windowSize" type="number" value="50" min="1" id="windowSize" />
+                                        @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2" for="step">Step size:</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" ng-model="step" type="number" value="1" min="1" id="step" />
+                                        @Html.ValidationMessage("step", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(equalElement.FirstSubsequenceId, equalElement.SecondSubsequenceId)" value="CalculateLocalCharacteristics" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                 </td>
             </tr>
             </tbody>
