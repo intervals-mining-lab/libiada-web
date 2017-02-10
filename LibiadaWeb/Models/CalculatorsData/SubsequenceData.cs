@@ -8,6 +8,11 @@
     public struct SubsequenceData
     {
         /// <summary>
+        /// The subsequence id.
+        /// </summary>
+        public readonly long Id;
+
+        /// <summary>
         /// The starts.
         /// </summary>
         public readonly int[] Starts;
@@ -58,6 +63,7 @@
         {
             CharacteristicsValues = characteristics;
             Attributes = attributes ?? new int[0];
+            Id = subsequence.Id;
             FeatureId = (byte)subsequence.Feature;
             RemoteId = subsequence.RemoteId;
             Partial = subsequence.Partial;

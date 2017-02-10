@@ -75,14 +75,14 @@
 
         // returns first product attribute index if any
         function getFirstProductAttributeId(equalElement) {
-            return $scope.characteristics[$scope.firstMatterIndex][equalElement.FirstSubsequenceId].Attributes.find(function (a) {
+            return $scope.characteristics[$scope.firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes.find(function (a) {
                 return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
             });
         }
 
         // returns second product attribute index if any
         function getSecondProductAttributeId(equalElement) {
-            return $scope.characteristics[$scope.secondMatterIndex][equalElement.SecondSubsequenceId].Attributes.find(function (a) {
+            return $scope.characteristics[$scope.secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes.find(function (a) {
                 return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
             });
         }
@@ -128,7 +128,42 @@
         }
 
         // calculates and displays local characteristics for given subsequences
-        function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId) {
+        function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
+            $scope.showModalLoadingWindow("Loading equal subsequences list...");
+
+            $http({
+                url: "/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
+                    "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
+                    "&windowSize=" + $scope.windowSize +
+                    "&step=" + $scope.step,
+                method: "GET"
+            }).success(function(firstCharacteristics) {
+                $scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics);
+
+                $http({
+                    url: "/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
+                        "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
+                        "&windowSize=" + $scope.windowSize +
+                        "&step=" + $scope.step,
+                    method: "GET"
+                }).success(function (secondCharacteristics) {
+                    $scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics);
+                    $scope.drawLocalCharacteristics(index);
+
+                    $scope.hideModalLoadingWindow();
+                }).error(function(data) {
+                    alert("Failed loading characteristics data");
+
+                    $scope.hideModalLoadingWindow();
+                });
+            }).error(function(data) {
+                alert("Failed loading local characteristics data");
+
+                $scope.hideModalLoadingWindow();
+            });
+        }
+
+        function drawLocalCharacteristics(index) {
 
         }
 
@@ -143,6 +178,7 @@
         $scope.hideModalLoadingWindow = hideModalLoadingWindow;
         $scope.applyFilters = applyFilters;
         $scope.calculateLocalCharacteristics = calculateLocalCharacteristics;
+        $scope.drawLocalCharacteristics = drawLocalCharacteristics;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;

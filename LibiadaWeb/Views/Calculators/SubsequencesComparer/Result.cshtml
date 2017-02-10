@@ -83,17 +83,18 @@
 
                     Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
                     <br />
-                    Feature: {{features[characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].FeatureId]}}
+                    Feature: {{features[characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].FeatureId]}}
                     <br />
-                    Length = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].Lengths[0]}}
-                    <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].Attributes">
+                    Length = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Lengths[0]}}
+                    <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
-                    <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
+                    <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].CharacteristicsValues[0]}} </i>
                     <br />
                     <br />
-                    @*<i> Difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>*@
-                    <i> Difference = {{equalElement.Difference * 100}}%</i>
+                    <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].CharacteristicsValues[0] | makePositive}}</i>
+                    <br />
+                    <i> Percentage difference = {{equalElement.Difference * 100}}%</i>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -130,14 +131,14 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(equalElement.FirstSubsequenceId, equalElement.SecondSubsequenceId)" value="CalculateLocalCharacteristics" />
+                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, $index)" value="CalculateLocalCharacteristics" />
                                     </div>
                                 </div>
-
+                                <div id="chart{{$index}}">
+                                </div>
                             </div>
                         </div>
                     </div>
-
                 </td>
             </tr>
             </tbody>

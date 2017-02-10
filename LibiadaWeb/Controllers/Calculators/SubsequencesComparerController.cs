@@ -204,7 +204,7 @@
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
                                 double difference = CalculateAverageDifference(first, second);
-                                
+
                                 if (difference <= decimalDifference)
                                 {
                                     equalFound = true;
@@ -226,8 +226,8 @@
                                         equalElements[i, j].Add(new SubsequenceComparisonData
                                         {
                                             Difference = difference,
-                                            FirstSubsequenceId = k,
-                                            SecondSubsequenceId = l
+                                            FirstSubsequenceIndex = k,
+                                            SecondSubsequenceIndex = l
                                         });
                                     }
 

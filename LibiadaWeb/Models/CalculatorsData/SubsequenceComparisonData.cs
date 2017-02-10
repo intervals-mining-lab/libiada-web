@@ -11,13 +11,13 @@
         public double Difference { get; set; }
 
         /// <summary>
-        /// Gets or sets the first subsequence id.
+        /// Gets or sets the first subsequence index.
         /// </summary>
-        public int FirstSubsequenceId { get; set; }
+        public int FirstSubsequenceIndex { get; set; }
 
         /// <summary>
-        /// Gets or sets the second subsequence id.
+        /// Gets or sets the second subsequence index.
         /// </summary>
-        public int SecondSubsequenceId { get; set; }
+        public int SecondSubsequenceIndex { get; set; }
     }
 }
