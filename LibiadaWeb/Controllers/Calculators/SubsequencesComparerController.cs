@@ -204,13 +204,7 @@
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
                                 double difference = CalculateAverageDifference(first, second);
-                                bool nextElementInSecondArrayIsEqual = false;
-
-                                if (l < characteristics[j].Length - 1)
-                                {
-                                    nextElementInSecondArrayIsEqual = CalculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
-                                }
-
+                                
                                 if (difference <= decimalDifference)
                                 {
                                     equalFound = true;
@@ -237,9 +231,14 @@
                                         });
                                     }
 
-                                    if (!nextElementInSecondArrayIsEqual)
+                                    if (l < characteristics[j].Length - 1)
                                     {
-                                        break;
+                                        bool nextElementInSecondArrayIsEqual = CalculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
+
+                                        if (!nextElementInSecondArrayIsEqual)
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                                 else if (second < first)
@@ -280,6 +279,8 @@
                             formula2 = Math.Round(formula2, digits),
                             formula3 = Math.Round(formula3, digits)
                         };
+
+                        equalElements[i, j] = equalElements[i, j].OrderBy(e => e.Difference).ToList();
                     }
                 }
 

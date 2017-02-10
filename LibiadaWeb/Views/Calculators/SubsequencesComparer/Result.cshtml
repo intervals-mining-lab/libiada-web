@@ -92,7 +92,8 @@
                     <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0]}} </i>
                     <br />
                     <br />
-                    <i> Difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>
+                    @*<i> Difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceId].CharacteristicsValues[0] | makePositive}}</i>*@
+                    <i> Difference = {{equalElement.Difference * 100}}%</i>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
