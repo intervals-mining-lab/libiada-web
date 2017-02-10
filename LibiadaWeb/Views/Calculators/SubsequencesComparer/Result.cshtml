@@ -71,13 +71,13 @@
                     <br />
                     First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
                     <br />
-                    Feature: {{features[characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].FeatureId]}}
+                    Feature: {{features[characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].FeatureId]}}
                     <br />
-                    Length = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].Lengths[0]}}
-                    <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].Attributes">
+                    Length = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Lengths[0]}}
+                    <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
-                    <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceId].CharacteristicsValues[0]}} </i>
+                    <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].CharacteristicsValues[0]}} </i>
                     <br />
                     <br />
 
@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, $index)" value="CalculateLocalCharacteristics" />
+                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Id, characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, $index)" value="CalculateLocalCharacteristics" />
                                     </div>
                                 </div>
                                 <div id="chart{{$index}}">

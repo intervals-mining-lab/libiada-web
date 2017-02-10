@@ -137,7 +137,7 @@
                     "&windowSize=" + $scope.windowSize +
                     "&step=" + $scope.step,
                 method: "GET"
-            }).success(function(firstCharacteristics) {
+            }).success(function (firstCharacteristics) {
                 $scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics);
 
                 $http({
@@ -148,23 +148,198 @@
                     method: "GET"
                 }).success(function (secondCharacteristics) {
                     $scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics);
-                    $scope.drawLocalCharacteristics(index);
+                    $scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
 
                     $scope.hideModalLoadingWindow();
-                }).error(function(data) {
+                }).error(function (data) {
                     alert("Failed loading characteristics data");
 
                     $scope.hideModalLoadingWindow();
                 });
-            }).error(function(data) {
+            }).error(function (data) {
                 alert("Failed loading local characteristics data");
 
                 $scope.hideModalLoadingWindow();
             });
         }
 
-        function drawLocalCharacteristics(index) {
+        function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
+            var legendData = [
+                { id: firstSubsequenceId, name: "First", visible: true, points: [] },
+                { id: secondSubsequenceId, name: "Second", visible: true, points: [] }];
 
+            for (var j = 0; j < $scope.firstSubsequenceLocalCharactristics.length; j++) {
+                legendData[0].points.push({
+                    id: firstSubsequenceId,
+                    x: j,
+                    value: +$scope.firstSubsequenceLocalCharactristics[j]
+                });
+            }
+
+            for (var k = 0; k < $scope.secondSubsequenceLocalCharactristics.length; k++) {
+                legendData[1].points.push({
+                    id: secondSubsequenceId,
+                    x: k,
+                    value: +$scope.secondSubsequenceLocalCharactristics[k]
+                });
+            }
+
+            // removing previous chart if any
+            d3.select(".chart" + index).remove();
+
+            // chart size and margin settings
+            var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
+            var width = $scope.width - margin.left - margin.right;
+            var height = $scope.hight - margin.top - margin.bottom;
+
+            // calculating margins for dots
+            var xMinArray = [];
+            var xMaxArray = [];
+            var yMaxArray = [];
+            var yMinArray = [];
+
+            legendData.forEach(function (data) {
+                xMinArray.push(d3.min(data.points, function (d) { return d.x }));
+                xMaxArray.push(d3.max(data.points, function (d) { return d.x }));
+                yMinArray.push(d3.min(data.points, function (d) { return d.value }));
+                yMaxArray.push(d3.max(data.points, function (d) { return d.value }));
+            });
+
+            // setup x
+            // calculating margins for dots
+            var xMin = d3.min(xMinArray);
+            var xMax = d3.max(xMaxArray);
+            var xMargin = (xMax - xMin) * 0.05;
+
+            var xScale = d3.scaleLinear()
+                .domain([xMin - xMargin, xMax + xMargin])
+                .range([0, width]);
+            var xAxis = d3.axisBottom(xScale)
+                .tickSizeInner(-height)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+
+            var xMap = function (d) { return xScale(d.x); };
+
+            // setup y
+            var yMin = d3.min(yMinArray);
+            var yMax = d3.max(yMaxArray);
+            var yMargin = (yMax - yMin) * 0.05;
+
+            var yScale = d3.scaleLinear()
+                .domain([yMin - yMargin, yMax + yMargin])
+                .range([height, 0]);
+            var yAxis = d3.axisLeft(yScale)
+                .tickSizeInner(-width)
+                .tickSizeOuter(0)
+                .tickPadding(10);
+
+            var yMap = function (d) { return yScale(d.value); };
+
+            // setup fill color
+            var cValue = function (d) { return d.id; };
+            var color = d3.scaleOrdinal(["red", "blue"]);
+
+            // add the graph canvas to the body of the webpage
+            var svg = d3.select("#chart" + index).append("svg")
+                .attr("width", $scope.width)
+                .attr("height", $scope.hight)
+                .attr("class", "chart" + index)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            // x-axis
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "translate(" + (width / 2) + " ," + (height + margin.top - $scope.legendHeight) + ")")
+                .style("text-anchor", "middle")
+                .text("Fragment №")
+                .style("font-size", "12pt");
+
+            // y-axis
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis);
+
+            svg.append("text")
+                .attr("class", "label")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left)
+                .attr("x", 0 - (height / 2))
+                .attr("dy", ".71em")
+                .style("text-anchor", "middle")
+                .text($scope.characteristic.characteristicType.Text)
+                .style("font-size", "12pt");
+
+            var line = d3.line()
+                .x(xMap)
+                .y(yMap);
+
+            legendData.forEach(function (data) {
+                // Nest the entries by symbol
+                var dataNest = d3.nest()
+                    .key(function (d) { return d.id })
+                    .entries(data.points);
+
+                // Loop through each symbol / key
+                dataNest.forEach(function (d) {
+                    svg.append("path")
+                        .datum(d.values)
+                        .attr("class", "line")
+                        .attr("d", line)
+                        .attr('stroke', function (d) { return color(cValue(d[0])); })
+                        .attr('stroke-width', 1)
+                        .attr('fill', 'none');
+                });
+            });
+
+            // draw legend
+            var legend = svg.selectAll(".legend")
+                .data(legendData)
+                .enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", function (d, i) { return "translate(0," + i * 20 + ")"; })
+                .on("click", function (d) {
+                    d.visible = !d.visible;
+                    var legendEntry = d3.select(this);
+                    legendEntry.select("text")
+                        .style("opacity", function () { return d.visible ? 1 : 0.5; });
+                    legendEntry.select("rect")
+                        .style("fill-opacity", function () { return d.visible ? 1 : 0; });
+
+                    svg.selectAll(".line")
+                        .filter(function(line) {
+                             return line[0].id === d.id;
+                        })
+                        .attr("visibility", function (line) {
+                            return d.visible ? "visible" : "hidden";
+                        });
+                });
+
+            // draw legend colored rectangles
+            legend.append("rect")
+                .attr("width", 15)
+                .attr("height", 15)
+                .style("fill", function (d) { return color(d.id); })
+                .style("stroke", function (d) { return color(d.id); })
+                .style("stroke-width", 4)
+                .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
+
+            // draw legend text
+            legend.append("text")
+                .attr("x", 24)
+                .attr("y", 9)
+                .attr("dy", ".35em")
+                .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
+                .text(function (d) { return d.name; })
+                .style("font-size", "9pt");
         }
 
         $scope.getHighlightColor = getHighlightColor;
@@ -216,6 +391,11 @@
         $scope.step = 1;
         $scope.equalElementsToShow = [];
         $scope.filters = [];
+        $scope.legendHeight = 40;
+        $scope.width = 1050;
+        $scope.hight = 800;
+        $scope.dotRadius = 4;
+        $scope.selectedDotRadius = $scope.dotRadius * 2;
     }
 
     function makePositive() {
