@@ -101,6 +101,7 @@
         /// </returns>
         public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<Feature> features, string[] filters)
         {
+            filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
             var result = new List<Subsequence>();
             Subsequence[] allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                         .Include(s => s.Position)
@@ -109,17 +110,40 @@
 
             foreach (Subsequence subsequence in allSubsequences)
             {
-                if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
+                if (SubsequenceAttributePassesFilters(subsequence, Attribute.Product, filters)
+                 || SubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters))
                 {
-                    string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
-                    if (filters.Any(f => value.Contains(f)))
-                    {
                         result.Add(subsequence);
-                    }
                 }
             }
 
             return result.ToArray();
+        }
+
+        /// <summary>
+        /// Checkes if subsequence attribute passes filters.
+        /// </summary>
+        /// <param name="subsequence">
+        /// The subsequence.
+        /// </param>
+        /// <param name="attribute">
+        /// The attribute.
+        /// </param>
+        /// <param name="filters">
+        /// The filters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool SubsequenceAttributePassesFilters(Subsequence subsequence, Attribute attribute, string[] filters)
+        {
+            if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == attribute))
+            {
+                string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == attribute).Value.ToLowerInvariant();
+                return filters.Any(f => value.Contains(f));
+            }
+
+            return false;
         }
 
         /// <summary>

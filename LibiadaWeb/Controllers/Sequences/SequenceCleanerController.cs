@@ -11,7 +11,8 @@
     /// <summary>
     /// The sequence cleaner controller controller.
     /// </summary>
-    public class SequenceCleanerControllerController : Controller
+    [Authorize(Roles = "Admin")]
+    public class SequenceCleanerController : Controller
     {
         /// <summary>
         /// The index.
@@ -23,22 +24,22 @@
         {
             using (var db = new LibiadaWebEntities())
             {
+                var matterRepository = new MatterRepository(db);
                 var dnaSequenceRepository = new DnaSequenceRepository(db);
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var elementRepository = new ElementRepository(db);
                 var matterIds = new long[] { 1332, 1333, 1339, 1330, 1337, 1342, 1331, 1338, 1340, 1943, 1945, 1334 };
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).ToArray();
-                var sequences = db.DnaSequence.Include(d => d.Matter).Where(d => matterIds.Contains(d.MatterId)).OrderBy(m => m.MatterId).ToArray();
+                DnaSequence[] sequences = db.DnaSequence.Include(d => d.Matter).Where(d => matterIds.Contains(d.MatterId)).ToArray();
 
-                for (int i = 0; i < matters.Length; i++)
+                for (int i = 0; i < sequences.Length; i++)
                 {
                     var newMatter = new Matter
                                         {
-                                            Name = matters[i].Name + " Cleaned of IS110",
-                                            Description = matters[i].Description,
-                                            Nature = matters[i].Nature,
-                                            Group = matters[i].Group,
-                                            SequenceType = matters[i].SequenceType
+                                            Name = sequences[i].Matter.Name + " Cleaned of IS110",
+                                            Description = sequences[i].Matter.Description,
+                                            Nature = sequences[i].Matter.Nature,
+                                            Group = sequences[i].Matter.Group,
+                                            SequenceType = sequences[i].Matter.SequenceType
                                         };
 
                     var newSequence = new CommonSequence
@@ -50,17 +51,23 @@
                                               RemoteId = sequences[i].RemoteId
                                           };
                     var chain = commonSequenceRepository.ToLibiadaChain(sequences[i].Id);
+
+                    matterRepository.CreateMatterFromSequence(newSequence);
                     dnaSequenceRepository.Create(newSequence, false, elementRepository.ToDbElements(chain.Alphabet, Notation.Nucleotides, false), chain.Building);
                     var sequenceId = sequences[i].Id;
-                    var subsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId).ToList();
+                    var subsequences = db.Subsequence.Include(s => s.Position).Include(s => s.SequenceAttribute).Where(s => s.SequenceId == sequenceId).ToList();
                     var subsequenceIds = subsequences.Select(s => s.Id);
-                    var subsequencesIdsToRemove = db.SequenceAttribute.Include(sa => sa.Subsequence).Where(sa => subsequenceIds.Contains(sa.SequenceId) && sa.Value.Contains("IS110"))
-                        .Select(sa => sa.Subsequence.Id).ToArray();
+                    var subsequencesIdsToRemove = db.SequenceAttribute
+                        .Where(sa => subsequenceIds.Contains(sa.SequenceId) && sa.Value.Contains("IS110"))
+                        .Select(sa => sa.SequenceId)
+                        .Distinct()
+                        .ToArray();
 
                     subsequences.RemoveAll(s => subsequencesIdsToRemove.Contains(s.Id));
 
                     var newSubsequences = new Subsequence[subsequences.Count];
                     var newSequenceAttributes = new List<SequenceAttribute>();
+                    var newPositions = new List<Position>();
                     for (int j = 0; j < subsequences.Count; j++)
                     {
                         newSubsequences[j] = new Subsequence
@@ -73,8 +80,8 @@
                                                      RemoteId = subsequences[j].RemoteId,
                                                      Partial = subsequences[j].Partial
                                                  };
-                        var subsequenceAttributes = subsequences[j].SequenceAttribute.ToArray();
-                        foreach (SequenceAttribute subsequenceAttribute in subsequenceAttributes)
+
+                        foreach (SequenceAttribute subsequenceAttribute in subsequences[j].SequenceAttribute.ToArray())
                         {
                             newSequenceAttributes.Add(new SequenceAttribute
                                                           {
@@ -83,10 +90,21 @@
                                                               Value = subsequenceAttribute.Value
                                                           });
                         }
+
+                        foreach (Position position in subsequences[j].Position.ToArray())
+                        {
+                            newPositions.Add(new Position
+                            {
+                                SubsequenceId = newSubsequences[j].Id,
+                                Length = position.Length,
+                                Start = position.Start
+                            });
+                        }
                     }
 
                     db.Subsequence.AddRange(newSubsequences);
                     db.SequenceAttribute.AddRange(newSequenceAttributes);
+                    db.Position.AddRange(newPositions);
                     db.SaveChanges();
                 }
             }
