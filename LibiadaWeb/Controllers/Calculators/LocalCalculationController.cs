@@ -1,14 +1,11 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaCore.Misc.Iterators;
 

@@ -1,7 +1,4 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
-using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -11,8 +8,8 @@ namespace LibiadaWeb.Controllers.Calculators
     using Helpers;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Models.Repositories.Calculators;

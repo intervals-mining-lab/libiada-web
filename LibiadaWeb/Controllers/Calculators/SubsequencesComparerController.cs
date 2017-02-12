@@ -110,7 +110,6 @@
                 var subsequencesCount = new int[mattersCount];
                 List<CharacteristicData> localCharacteristicsType;
 
-
                 using (var db = new LibiadaWebEntities())
                 {
                     // Sequences characteristic

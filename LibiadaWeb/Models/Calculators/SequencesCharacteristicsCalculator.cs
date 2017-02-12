@@ -1,6 +1,4 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-
-namespace LibiadaWeb.Models.Calculators
+﻿namespace LibiadaWeb.Models.Calculators
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -9,8 +7,7 @@ namespace LibiadaWeb.Models.Calculators
     using Bio.Extensions;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Core.SimpleTypes;
     using LibiadaCore.Extensions;
 

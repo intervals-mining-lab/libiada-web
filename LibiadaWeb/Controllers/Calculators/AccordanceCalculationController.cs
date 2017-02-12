@@ -1,6 +1,4 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +6,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;

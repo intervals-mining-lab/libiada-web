@@ -1,6 +1,4 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-
-namespace LibiadaWeb.Controllers.Calculators
+﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System;
     using System.Collections.Generic;
@@ -8,8 +6,7 @@ namespace LibiadaWeb.Controllers.Calculators
     using System.Web.Mvc;
 
     using LibiadaCore.Core;
-    using LibiadaCore.Core.Characteristics;
-    using LibiadaCore.Core.Characteristics.Calculators;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
     using LibiadaCore.Misc;
 
@@ -17,7 +14,6 @@ namespace LibiadaWeb.Controllers.Calculators
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
-
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 

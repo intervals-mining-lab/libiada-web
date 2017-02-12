@@ -44,15 +44,12 @@
         /// <param name="subsequences">
         /// The subsequences.
         /// </param>
-        /// <param name="chainId">
-        /// The sequence id.
-        /// </param>
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
         public Chain[] ExtractChains(Subsequence[] subsequences)
         {
-            var parentChain = commonSequenceRepository.ToLibiadaBaseChain(subsequences[0].SequenceId).ToString();
+            string parentChain = commonSequenceRepository.ToLibiadaBaseChain(subsequences[0].SequenceId).ToString();
             var sourceSequence = new Sequence(Alphabets.DNA, parentChain);
             var result = new Chain[subsequences.Length];
 
@@ -104,28 +101,25 @@
         /// </returns>
         public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<Feature> features, string[] filters)
         {
-            var allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
+            var result = new List<Subsequence>();
+            Subsequence[] allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
                                         .Include(s => s.Position)
                                         .Include(s => s.SequenceAttribute)
                                         .ToArray();
-            var tempResult = new List<Subsequence>();
-            for (int i = 0; i < allSubsequences.Length; i++)
+
+            foreach (Subsequence subsequence in allSubsequences)
             {
-                for (int j = 0; j < filters.Length; j++)
+                if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
                 {
-                    if (allSubsequences[i].SequenceAttribute.Any(sa => sa.Attribute == Attribute.Product))
+                    string value = subsequence.SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
+                    if (filters.Any(f => value.Contains(f)))
                     {
-                        string value = allSubsequences[i].SequenceAttribute.Single(sa => sa.Attribute == Attribute.Product).Value;
-                        if (value.Contains(filters[j]))
-                        {
-                            tempResult.Add(allSubsequences[i]);
-                            break;
-                        }
+                        result.Add(subsequence);
                     }
                 }
             }
 
-            return tempResult.ToArray();
+            return result.ToArray();
         }
 
         /// <summary>
