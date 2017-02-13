@@ -117,9 +117,9 @@
         {
             return Action(() =>
             {
-                var characteristics = new List<BinaryCharacteristic>();
+                var characteristics = new List<LibiadaWeb.BinaryCharacteristic>();
                 var elements = new List<Element>();
-                List<BinaryCharacteristic> filteredResult = null;
+                List<LibiadaWeb.BinaryCharacteristic> filteredResult = null;
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
 
@@ -224,7 +224,7 @@
             IBinaryCalculator calculator,
             Link link)
         {
-            var newCharacteristics = new List<BinaryCharacteristic>();
+            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristic>();
             var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
             int calculatedCount = databaseCharacteristics.Length;
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
@@ -274,7 +274,7 @@
         private void FrequencyCharacteristic(int characteristicTypeLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-            var newCharacteristics = new List<BinaryCharacteristic>();
+            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristic>();
             var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
 
             // calculating frequencies of elements in alphabet

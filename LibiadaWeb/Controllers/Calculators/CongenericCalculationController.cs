@@ -106,7 +106,7 @@
                 var matterNames = new List<string>();
                 var elementNames = new List<List<string>>();
                 var characteristicNames = new List<string>();
-                var newCharacteristics = new List<CongenericCharacteristic>();
+                var newCharacteristics = new List<LibiadaWeb.CongenericCharacteristic>();
 
                 bool isLiteratureSequence = false;
 
@@ -149,7 +149,7 @@
 
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCongenericCalculator(className);
-                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                        Link link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
                         int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
                         if (calculated < chain.Alphabet.Cardinality)
@@ -165,7 +165,7 @@
                                                                        && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
-                                    var currentCharacteristic = new CongenericCharacteristic
+                                    var currentCharacteristic = new LibiadaWeb.CongenericCharacteristic
                                     {
                                         SequenceId = sequenceId,
                                         CharacteristicTypeLinkId = characteristicTypeLinkId,
