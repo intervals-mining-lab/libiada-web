@@ -1367,4 +1367,51 @@ ALTER TABLE chain ALTER COLUMN remote_db_id TYPE smallint;
 
 ALTER TABLE matter ALTER COLUMN name TYPE text;
 
+-- 18.02.2017
+-- Creating new characteristic_type_link tables.
+
+CREATE TABLE accordance_characteristic_link
+(
+   id smallserial NOT NULL, 
+   accordance_characteristic smallint NOT NULL, 
+   link smallint NOT NULL, 
+   CONSTRAINT pk_accordance_characteristic_link PRIMARY KEY (id), 
+   CONSTRAINT uk_accordance_characteristic_link UNIQUE (accordance_characteristic, link), 
+   CONSTRAINT accordance_characteristic_check CHECK (accordance_characteristic::int4 <@ int4range(1,2, '[]')), 
+   CONSTRAINT accordance_characteristic_link_check CHECK (link::int4 <@ int4range(0,7, '[]'))
+);
+
+CREATE TABLE binary_characteristic_link
+(
+   id smallserial NOT NULL, 
+   binary_characteristic smallint NOT NULL, 
+   link smallint NOT NULL, 
+   CONSTRAINT pk_binary_characteristic_link PRIMARY KEY (id), 
+   CONSTRAINT uk_binary_characteristic_link UNIQUE (binary_characteristic, link), 
+   CONSTRAINT binary_characteristic_check CHECK (binary_characteristic::int4 <@ int4range(1,6, '[]')), 
+   CONSTRAINT binary_characteristic_link_check CHECK (link::int4 <@ int4range(0,7, '[]'))
+);
+
+CREATE TABLE congeneric_characteristic_link
+(
+   id smallserial NOT NULL, 
+   congeneric_characteristic smallint NOT NULL, 
+   link smallint NOT NULL, 
+   CONSTRAINT pk_congeneric_characteristic_link PRIMARY KEY (id), 
+   CONSTRAINT uk_congeneric_characteristic_link UNIQUE (congeneric_characteristic, link), 
+   CONSTRAINT congeneric_characteristic_check CHECK (congeneric_characteristic::int4 <@ int4range(1,18, '[]')), 
+   CONSTRAINT congeneric_characteristic_link_check CHECK (link::int4 <@ int4range(0,7, '[]'))
+);
+
+CREATE TABLE full_characteristic_link
+(
+   id smallserial NOT NULL, 
+   full_characteristic smallint NOT NULL, 
+   link smallint NOT NULL, 
+   CONSTRAINT pk_full_characteristic_link PRIMARY KEY (id), 
+   CONSTRAINT uk_full_characteristic_link UNIQUE (full_characteristic, link), 
+   CONSTRAINT full_characteristic_check CHECK (full_characteristic::int4 <@ int4range(1,54, '[]')), 
+   CONSTRAINT full_characteristic_link_check CHECK (link::int4 <@ int4range(0,7, '[]'))
+);
+
 COMMIT;
