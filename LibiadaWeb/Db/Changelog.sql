@@ -1414,4 +1414,42 @@ CREATE TABLE full_characteristic_link
    CONSTRAINT full_characteristic_link_check CHECK (link::int4 <@ int4range(0,7, '[]'))
 );
 
+-- 24.02.2017
+-- Creating accordance and binary characteristic_links
+
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (1,2);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (1,3);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (1,6);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (1,7);
+
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (2,2);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (2,3);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (2,6);
+INSERT INTO accordance_characteristic_link (accordance_characteristic, link) VALUES (2,7);
+
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (1,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (1,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (1,4);
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (2,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (2,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (2,4);
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (3,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (3,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (3,4);
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (4,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (4,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (4,4);
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (5,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (5,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (5,4);
+
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,2);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,3);
+INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,4);
+
 COMMIT;
