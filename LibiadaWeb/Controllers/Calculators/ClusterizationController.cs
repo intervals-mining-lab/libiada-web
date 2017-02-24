@@ -9,12 +9,15 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
+    using LibiadaCore.Extensions;
+    using Clusterizator;
 
     /// <summary>
     /// The clusterization controller.
@@ -56,7 +59,9 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 3, int.MaxValue, "Calculate"));
+            var viewData = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 3, int.MaxValue, "Calculate");
+            viewData.Add("ClusterizatorsTypes", ArrayExtensions.ToArray<ClusterizationType>().ToSelectList());
+            ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }
 

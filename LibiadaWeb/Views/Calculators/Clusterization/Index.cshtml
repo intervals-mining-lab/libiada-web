@@ -16,6 +16,14 @@
         @Html.Partial("_NatureSelect")
         @Html.Partial("_MattersTable")
         @Html.Partial("_Characteristics")
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="ClusterizationType">Clusterization type:</label>
+            <div class="col-md-10">
+                <select class="form-control" ng-model="ClusterizationType" ng-options="n.Value as n.Text for n in ClusterizatorsTypes"></select>
+                <input type="hidden" name="ClusterizationType" ng-value="ClusterizationType" />
+            </div>
+        </div>
         <div class="form-group">
             <label class="control-label col-md-2" for="clustersCount">Clusters count:</label>
             <div class="col-md-10">
