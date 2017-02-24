@@ -1539,4 +1539,271 @@ INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VAL
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,4);
 INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,5);
 
+-- 24.02.2017
+-- Creating full characteristic_links
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (1,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (2,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (2,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (2,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (2,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (2,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (3,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (3,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (3,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (3,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (3,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (4,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (4,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (4,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (4,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (4,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (5,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (6,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (6,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (6,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (6,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (6,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (7,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (7,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (7,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (7,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (7,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (8,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (8,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (8,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (8,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (8,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (9,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (9,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (9,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (9,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (9,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (10,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (10,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (10,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (10,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (10,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (11,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (11,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (11,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (11,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (11,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (12,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (12,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (12,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (12,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (12,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (13,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (13,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (13,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (13,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (13,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (14,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (14,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (14,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (14,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (14,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (15,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (15,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (15,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (15,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (15,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (16,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (16,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (16,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (16,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (16,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (17,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (17,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (17,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (17,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (17,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (18,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (18,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (18,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (18,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (18,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (19,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (19,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (19,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (19,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (19,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (20,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (21,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (22,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (23,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (23,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (23,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (23,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (23,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (24,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (24,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (24,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (24,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (24,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (25,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (26,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (26,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (26,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (26,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (26,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (27,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (27,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (27,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (27,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (27,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (28,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (28,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (28,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (28,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (28,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (29,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (29,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (29,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (29,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (29,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (30,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (30,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (30,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (30,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (30,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (31,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (31,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (31,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (31,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (31,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (32,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (33,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (34,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (35,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (35,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (35,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (35,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (35,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (36,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (36,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (36,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (36,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (36,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (37,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (37,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (37,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (37,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (37,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (38,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (38,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (38,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (38,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (38,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (39,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (40,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (41,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (41,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (41,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (41,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (41,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (42,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (43,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (43,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (43,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (43,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (43,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (44,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (44,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (44,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (44,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (44,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (45,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (45,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (45,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (45,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (45,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (46,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (46,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (46,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (46,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (46,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (47,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (47,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (47,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (47,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (47,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (48,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (48,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (48,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (48,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (48,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (49,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (49,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (49,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (49,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (49,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (50,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (51,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (52,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (52,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (52,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (52,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (52,5);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (53,0);
+
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,1);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,2);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,3);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,4);
+INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,5);
+
 COMMIT;
