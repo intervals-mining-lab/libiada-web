@@ -1452,4 +1452,91 @@ INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,2
 INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,3);
 INSERT INTO binary_characteristic_link (binary_characteristic, link) VALUES (6,4);
 
+-- 24.02.2017
+-- Creating congeneric characteristic_links
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (1,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (1,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (1,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (1,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (1,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (2,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (2,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (2,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (2,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (2,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (3,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (4,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (5,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (5,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (5,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (5,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (5,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (6,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (6,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (6,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (6,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (6,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (7,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (8,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (8,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (8,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (8,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (8,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (9,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (9,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (9,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (9,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (9,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (10,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (10,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (10,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (10,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (10,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (11,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (11,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (11,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (11,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (11,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (12,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (13,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (13,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (13,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (13,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (13,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (14,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (15,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (15,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (15,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (15,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (15,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (16,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (16,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (16,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (16,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (16,5);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (17,0);
+
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,1);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,2);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,3);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,4);
+INSERT INTO congeneric_characteristic_link (congeneric_characteristic, link) VALUES (18,5);
+
 COMMIT;
