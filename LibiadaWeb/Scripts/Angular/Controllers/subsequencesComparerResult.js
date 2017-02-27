@@ -295,7 +295,8 @@
                         .attr("d", line)
                         .attr('stroke', function (d) { return color(cValue(d[0])); })
                         .attr('stroke-width', 1)
-                        .attr('fill', 'none');
+                        .attr('fill', 'none')
+                        .attr("opacity", 0.6);
                 });
             });
 
