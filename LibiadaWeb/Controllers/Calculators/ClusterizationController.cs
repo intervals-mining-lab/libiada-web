@@ -83,6 +83,9 @@
         /// <param name="clustersCount">
         /// The clusters count.
         /// </param>
+        /// <param name="clusterizationType">
+        /// Clusterization method param
+        /// </param>
         /// <param name="equipotencyWeight">
         /// The power weight.
         /// </param>
@@ -103,9 +106,10 @@
             Notation[] notations,
             Language[] languages,
             int clustersCount,
-            double? equipotencyWeight,
-            double? normalizedDistanceWeight,
-            double? distanceWeight)
+            ClusterizationType clusterizationType,
+            double equipotencyWeight = 1,
+            double normalizedDistanceWeight = 1,
+            double distanceWeight = 1)
         {
             return Action(() =>
             {
@@ -146,7 +150,15 @@
                     characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]));
                 }
 
-                var clusterizator = new KMeansClusterization();
+                var clusterizationParams = new Dictionary<string, double>
+                {
+                    { "equipotencyWeight", equipotencyWeight },
+                    { "normalizedDistanceWeight", normalizedDistanceWeight },
+                    { "distanceWeight", distanceWeight }
+                };
+
+
+                var clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
                 int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
                 for (int i = 0; i < clusterizationResult.Length; i++)
                 {
