@@ -1,10 +1,8 @@
 ﻿namespace LibiadaWeb
 {
-    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
-    using LibiadaCore.Exceptions;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Attributes;
