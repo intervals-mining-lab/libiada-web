@@ -60,6 +60,12 @@
         // if notation is not linked to characteristic
         $scope.language = $scope.languages[0];
         $scope.translator = $scope.translators[0];
+
+        // if we are in clusterization
+        if($scope.ClusterizatorsTypes)
+        {
+            $scope.ClusterizationType = $scope.ClusterizatorsTypes[0];
+        }
     }
 
     angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
