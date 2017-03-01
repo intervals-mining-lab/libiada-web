@@ -4,10 +4,11 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Clusterizator.KMeans;
+    using Clusterizator;
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
@@ -16,8 +17,6 @@
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
-    using LibiadaCore.Extensions;
-    using Clusterizator;
 
     /// <summary>
     /// The clusterization controller.
@@ -117,15 +116,15 @@
                 var mattersCharacteristics = new object[matterIds.Length];
                 var characteristics = new double[matterIds.Length][];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
+                Dictionary<long, string> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                 for (int j = 0; j < matterIds.Length; j++)
                 {
-                    var matterId = matterIds[j];
+                    long matterId = matterIds[j];
                     characteristics[j] = new double[characteristicTypeLinkIds.Length];
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        var notation = notations[i];
+                        Notation notation = notations[i];
                         long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.Notation == notation).Id;
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[i];
@@ -157,8 +156,7 @@
                     { "distanceWeight", distanceWeight }
                 };
 
-
-                var clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
+                IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
                 int[] clusterizationResult = clusterizator.Cluster(clustersCount, characteristics);
                 for (int i = 0; i < clusterizationResult.Length; i++)
                 {

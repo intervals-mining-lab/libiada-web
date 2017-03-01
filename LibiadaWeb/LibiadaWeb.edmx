@@ -14,7 +14,7 @@
           <Property Name="binary_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-        
+
         <EntityType Name="binary_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -37,7 +37,7 @@
           <Property Name="accordance_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-        
+
         <EntityType Name="accordance_characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -75,7 +75,7 @@
           <Property Name="full_characteristic" Type="int2" Nullable="false" />
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
-        
+
         <EntityType Name="characteristic">
           <Key>
             <PropertyRef Name="id" />
@@ -771,7 +771,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+
         <Association Name="fk_music_chain_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="*" />
@@ -1731,7 +1731,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        
+
         <Association Name="fk_chain_matter">
           <End Role="Matter" Type="Self.Matter" Multiplicity="1" />
           <End Role="CommonSequence" Type="Self.CommonSequence" Multiplicity="*" />
@@ -2126,7 +2126,6 @@
           <EntitySet Name="BinaryCharacteristicLink" EntityType="Self.BinaryCharacteristicLink" />
           <EntitySet Name="FullCharacteristicLink" EntityType="Self.FullCharacteristicLink" />
           <EntitySet Name="CongenericCharacteristicLink" EntityType="Self.CongenericCharacteristicLink" />
-          
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -2376,6 +2375,46 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LibiadaWebModelStoreContainer" CdmEntityContainer="LibiadaWebEntities">
+
+          <EntitySetMapping Name="BinaryCharacteristicLink">
+            <EntityTypeMapping TypeName="LibiadaWebModel.BinaryCharacteristicLink">
+              <MappingFragment StoreEntitySet="binary_characteristic_link">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="BinaryCharacteristic" ColumnName="binary_characteristic" />
+                <ScalarProperty Name="Link" ColumnName="link" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="AccordanceCharacteristicLink">
+            <EntityTypeMapping TypeName="LibiadaWebModel.AccordanceCharacteristicLink">
+              <MappingFragment StoreEntitySet="accordance_characteristic_link">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="AccordanceCharacteristic" ColumnName="accordance_characteristic" />
+                <ScalarProperty Name="Link" ColumnName="link" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="FullCharacteristicLink">
+            <EntityTypeMapping TypeName="LibiadaWebModel.FullCharacteristicLink">
+              <MappingFragment StoreEntitySet="full_characteristic_link">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="FullCharacteristic" ColumnName="full_characteristic" />
+                <ScalarProperty Name="Link" ColumnName="link" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+
+          <EntitySetMapping Name="CongenericCharacteristicLink">
+            <EntityTypeMapping TypeName="LibiadaWebModel.CongenericCharacteristicLink">
+              <MappingFragment StoreEntitySet="congeneric_characteristic_link">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="CongenericCharacteristic" ColumnName="congeneric_characteristic" />
+                <ScalarProperty Name="Link" ColumnName="link" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
 
           <EntitySetMapping Name="BinaryCharacteristicValue">
             <EntityTypeMapping TypeName="LibiadaWebModel.BinaryCharacteristicValue">

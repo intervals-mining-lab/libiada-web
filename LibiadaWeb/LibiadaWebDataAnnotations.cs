@@ -13,7 +13,7 @@
     /// <summary>
     /// The binary characteristic data annotations.
     /// </summary>
-    public class BinaryCharacteristicDataAnnotations 
+    public class BinaryCharacteristicDataAnnotations
     {
         /// <summary>
         /// Gets or sets the first element id.
@@ -170,7 +170,7 @@
     /// <summary>
     /// The congeneric characteristic data annotations.
     /// </summary>
-    public class CongenericCharacteristicDataAnnotations 
+    public class CongenericCharacteristicDataAnnotations
     {
         /// <summary>
         /// Gets or sets the element_id.
