@@ -106,7 +106,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long matterId,
-            int characteristicTypeLinkId,
+            short characteristicTypeLinkId,
             Notation notation,
             Language? language,
             Translator? translator,
@@ -117,9 +117,9 @@
         {
             return Action(() =>
             {
-                var characteristics = new List<LibiadaWeb.BinaryCharacteristic>();
+                var characteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
                 var elements = new List<Element>();
-                List<LibiadaWeb.BinaryCharacteristic> filteredResult = null;
+                List<LibiadaWeb.BinaryCharacteristicValue> filteredResult = null;
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
 
@@ -153,7 +153,7 @@
 
                 if (filter)
                 {
-                    filteredResult = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                    filteredResult = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                         .OrderByDescending(b => b.Value)
                         .Take(filterSize).ToList();
 
@@ -171,7 +171,7 @@
                 }
                 else
                 {
-                    characteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                    characteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
                         .OrderBy(b => b.SecondElementId).ThenBy(b => b.FirstElementId).ToList();
 
                     for (int m = 0; m < Math.Sqrt(characteristics.Count); m++)
@@ -218,14 +218,14 @@
         /// The link.
         /// </param>
         private void NotFrequencyCharacteristic(
-            int characteristicTypeLinkId,
+            short characteristicTypeLinkId,
             long sequenceId,
             Chain chain,
             IBinaryCalculator calculator,
             Link link)
         {
-            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristic>();
-            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
+            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
+            var databaseCharacteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
             int calculatedCount = databaseCharacteristics.Length;
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
@@ -246,7 +246,7 @@
                 }
             }
 
-            db.BinaryCharacteristic.AddRange(newCharacteristics);
+            db.BinaryCharacteristicValue.AddRange(newCharacteristics);
             db.SaveChanges();
         }
 
@@ -271,11 +271,11 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        private void FrequencyCharacteristic(int characteristicTypeLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
+        private void FrequencyCharacteristic(short characteristicTypeLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristic>();
-            var databaseCharacteristics = db.BinaryCharacteristic.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
+            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
+            var databaseCharacteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
 
             // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();
@@ -309,7 +309,7 @@
                 }
             }
 
-            db.BinaryCharacteristic.AddRange(newCharacteristics);
+            db.BinaryCharacteristicValue.AddRange(newCharacteristics);
             db.SaveChanges();
         }
 

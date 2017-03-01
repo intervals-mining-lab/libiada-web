@@ -31,13 +31,13 @@
         /// <param name="characteristics">
         /// The characteristics.
         /// </param>
-        public void TrySaveCharacteristicsToDatabase(List<Characteristic> characteristics)
+        public void TrySaveCharacteristicsToDatabase(List<CharacteristicValue> characteristics)
         {
             if (characteristics.Count > 0)
             {
                 try
                 {
-                    db.Characteristic.AddRange(characteristics);
+                    db.CharacteristicValue.AddRange(characteristics);
                     db.SaveChanges();
                 }
                 catch (Exception exception)
@@ -46,11 +46,11 @@
                     var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
                     var characteristicsTypes = characteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
                     var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
-                    var wasteCharacteristics = db.Characteristic.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
+                    var wasteCharacteristics = db.CharacteristicValue.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
                             .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId })).Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
                     var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
 
-                    db.Characteristic.RemoveRange(wasteNewCharacteristics);
+                    db.CharacteristicValue.RemoveRange(wasteNewCharacteristics);
                     try
                     {
                         db.SaveChanges();

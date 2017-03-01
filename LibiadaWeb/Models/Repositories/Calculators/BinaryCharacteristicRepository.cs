@@ -24,11 +24,11 @@ namespace LibiadaWeb.Models.Repositories.Calculators
         /// The value.
         /// </param>
         /// <returns>
-        /// The <see cref="BinaryCharacteristic"/>.
+        /// The <see cref="BinaryCharacteristicValue"/>.
         /// </returns>
-        public BinaryCharacteristic CreateBinaryCharacteristic(long sequenceId, int characteristicTypeLinkId, long firstElementId, long secondElementId, double value)
+        public BinaryCharacteristicValue CreateBinaryCharacteristic(long sequenceId, short characteristicTypeLinkId, long firstElementId, long secondElementId, double value)
         {
-            var characteristic = new BinaryCharacteristic
+            var characteristic = new BinaryCharacteristicValue
             {
                 SequenceId = sequenceId,
                 CharacteristicTypeLinkId = characteristicTypeLinkId,

@@ -12,20 +12,10 @@ namespace LibiadaWeb
     using System;
     using System.Collections.Generic;
     
-    public partial class Pitch
+    public partial class AccordanceCharacteristicLink
     {
-        public Pitch()
-        {
-            Note = new HashSet<Note>();
-        }
-    
-        public int Id { get; set; }
-        public int Octave { get; set; }
-        public int Midinumber { get; set; }
-        public LibiadaMusic.ScoreModel.Instrument Instrument { get; set; }
-        public LibiadaMusic.ScoreModel.Accidental Accidental { get; set; }
-        public LibiadaMusic.ScoreModel.NoteSymbol NoteSymbol { get; set; }
-    
-        public virtual ICollection<Note> Note { get; set; }
+        public short Id { get; set; }
+        public LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators.AccordanceCharacteristic AccordanceCharacteristic { get; set; }
+        public LibiadaCore.Core.Link Link { get; set; }
     }
 }

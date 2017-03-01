@@ -92,7 +92,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicTypeLinkIds,
+            short[] characteristicTypeLinkIds,
             Notation[] notations,
             Language[] languages,
             Translator?[] translators,
@@ -106,7 +106,7 @@
                 var matterNames = new List<string>();
                 var elementNames = new List<List<string>>();
                 var characteristicNames = new List<string>();
-                var newCharacteristics = new List<LibiadaWeb.CongenericCharacteristic>();
+                var newCharacteristics = new List<LibiadaWeb.CongenericCharacteristicValue>();
 
                 bool isLiteratureSequence = false;
 
@@ -145,13 +145,13 @@
                         Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
                         chain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
-                        int characteristicTypeLinkId = characteristicTypeLinkIds[i];
+                        short characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
                         string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
                         ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCongenericCalculator(className);
                         Link link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-                        int calculated = db.CongenericCharacteristic.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
+                        int calculated = db.CongenericCharacteristicValue.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
                         if (calculated < chain.Alphabet.Cardinality)
                         {
                             for (int j = 0; j < chain.Alphabet.Cardinality; j++)
@@ -160,12 +160,12 @@
 
                                 CongenericChain tempChain = chain.CongenericChain(j);
 
-                                if (!db.CongenericCharacteristic.Any(b => b.SequenceId == sequenceId
+                                if (!db.CongenericCharacteristicValue.Any(b => b.SequenceId == sequenceId
                                                                        && b.CharacteristicTypeLinkId == characteristicTypeLinkId
                                                                        && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
-                                    var currentCharacteristic = new LibiadaWeb.CongenericCharacteristic
+                                    var currentCharacteristic = new LibiadaWeb.CongenericCharacteristicValue
                                     {
                                         SequenceId = sequenceId,
                                         CharacteristicTypeLinkId = characteristicTypeLinkId,
@@ -183,7 +183,7 @@
                         {
                             long elementId = sequenceElements[d];
 
-                            double characteristic = db.CongenericCharacteristic.Single(c => c.SequenceId == sequenceId
+                            double characteristic = db.CongenericCharacteristicValue.Single(c => c.SequenceId == sequenceId
                                                                                          && c.CharacteristicTypeLinkId == characteristicTypeLinkId
                                                                                          && c.ElementId == elementId).Value;
 
@@ -229,7 +229,7 @@
                     }
                 }
 
-                db.CongenericCharacteristic.AddRange(newCharacteristics);
+                db.CongenericCharacteristicValue.AddRange(newCharacteristics);
                 db.SaveChanges();
 
                 // characteristics names

@@ -87,8 +87,8 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int characteristicTypeLinkId,
-            int subsequencesCharacteristicTypeLinkId,
+            short characteristicTypeLinkId,
+            short subsequencesCharacteristicTypeLinkId,
             Feature[] features,
             string maxPercentageDifference,
             double characteristicValueFrom,

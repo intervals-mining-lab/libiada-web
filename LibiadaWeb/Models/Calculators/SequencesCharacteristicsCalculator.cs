@@ -31,18 +31,18 @@
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, int[] characteristicTypeLinkIds)
+        public static double[][] Calculate(Chain[][] chains, short[] characteristicTypeLinkIds)
         {
-            var newCharacteristics = new List<Characteristic>();
+            var newCharacteristics = new List<CharacteristicValue>();
             var characteristics = new double[chains.Length][];
             var sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
             var links = new Link[characteristicTypeLinkIds.Length];
             var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
 
-            Dictionary<long, Dictionary<int, double>> dbCharacteristics;
+            Dictionary<long, Dictionary<short, double>> dbCharacteristics;
             using (var db = new LibiadaWebEntities())
             {
-                dbCharacteristics = db.Characteristic
+                dbCharacteristics = db.CharacteristicValue
                                               .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && sequenceIds.Contains(c.SequenceId))
                                               .ToArray()
                                               .GroupBy(c => c.SequenceId)
@@ -66,16 +66,16 @@
                     long sequenceId = chains[i][j].Id;
                     chains[i][j].FillIntervalManagers();
 
-                    Dictionary<int, double> sequenceDbCharacteristics;
+                    Dictionary<short, double> sequenceDbCharacteristics;
                     if (!dbCharacteristics.TryGetValue(sequenceId, out sequenceDbCharacteristics))
                     {
-                        sequenceDbCharacteristics = new Dictionary<int, double>();
+                        sequenceDbCharacteristics = new Dictionary<short, double>();
                     }
 
                     if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkIds[j], out characteristics[i][j]))
                     {
                         characteristics[i][j] = calculators[j].Calculate(chains[i][j], links[j]);
-                        var currentCharacteristic = new Characteristic
+                        var currentCharacteristic = new CharacteristicValue
                         {
                             SequenceId = sequenceId,
                             CharacteristicTypeLinkId = characteristicTypeLinkIds[j],
@@ -109,9 +109,9 @@
         /// <returns>
         /// The <see cref="T:double[]"/>.
         /// </returns>
-        public static double[] Calculate(Chain[] chains, int characteristicTypeLinkId)
+        public static double[] Calculate(Chain[] chains, short characteristicTypeLinkId)
         {
-            var newCharacteristics = new List<Characteristic>();
+            var newCharacteristics = new List<CharacteristicValue>();
             var characteristics = new double[chains.Length];
             var sequenceIds = chains.Select(c => c.Id);
             Link link;
@@ -120,7 +120,7 @@
             Dictionary<long, double> dbCharacteristics;
             using (var db = new LibiadaWebEntities())
             {
-                dbCharacteristics = db.Characteristic
+                dbCharacteristics = db.CharacteristicValue
                                               .Where(c => characteristicTypeLinkId == c.CharacteristicTypeLinkId && sequenceIds.Contains(c.SequenceId))
                                               .ToArray()
                                               .GroupBy(c => c.SequenceId)
@@ -141,7 +141,7 @@
                 if (!dbCharacteristics.TryGetValue(sequenceId, out characteristics[i]))
                 {
                     characteristics[i] = calculator.Calculate(chains[i], link);
-                    var currentCharacteristic = new Characteristic
+                    var currentCharacteristic = new CharacteristicValue
                     {
                         SequenceId = sequenceId,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
@@ -183,7 +183,7 @@
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, int[] characteristicTypeLinkIds, bool rotate, bool complementary, uint? rotationLength)
+        public static double[][] Calculate(Chain[][] chains, short[] characteristicTypeLinkIds, bool rotate, bool complementary, uint? rotationLength)
         {
             var links = new Link[characteristicTypeLinkIds.Length];
             var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];

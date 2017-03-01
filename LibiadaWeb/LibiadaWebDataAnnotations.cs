@@ -6,14 +6,14 @@
     /// The binary characteristic.
     /// </summary>
     [MetadataType(typeof(BinaryCharacteristicDataAnnotations))]
-    public partial class BinaryCharacteristic
+    public partial class BinaryCharacteristicValue
     {
     }
 
     /// <summary>
     /// The binary characteristic data annotations.
     /// </summary>
-    public class BinaryCharacteristicDataAnnotations : CharacteristicDataAnnotations
+    public class BinaryCharacteristicDataAnnotations 
     {
         /// <summary>
         /// Gets or sets the first element id.
@@ -58,26 +58,6 @@
         /// </summary>
         [Display(Name = "Id in remote database")]
         public string RemoteId { get; set; }
-    }
-
-    /// <summary>
-    /// The characteristic.
-    /// </summary>
-    [MetadataType(typeof(CharacteristicDataAnnotations))]
-    public partial class Characteristic
-    {
-    }
-
-    /// <summary>
-    /// The characteristic data annotations.
-    /// </summary>
-    public class CharacteristicDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the sequence id.
-        /// </summary>
-        [Display(Name = "Sequence")]
-        public long SequenceId { get; set; }
     }
 
     /// <summary>
@@ -183,14 +163,14 @@
     /// The congeneric_characteristic.
     /// </summary>
     [MetadataType(typeof(CongenericCharacteristicDataAnnotations))]
-    public partial class CongenericCharacteristic
+    public partial class CongenericCharacteristicValue
     {
     }
 
     /// <summary>
     /// The congeneric characteristic data annotations.
     /// </summary>
-    public class CongenericCharacteristicDataAnnotations : CharacteristicDataAnnotations
+    public class CongenericCharacteristicDataAnnotations 
     {
         /// <summary>
         /// Gets or sets the element_id.

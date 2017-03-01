@@ -93,7 +93,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int characteristicTypeLinkId,
+            short characteristicTypeLinkId,
             Notation notation,
             Feature[] features,
             string validationType,
@@ -216,10 +216,10 @@
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(long matterId, int characteristicTypeLinkId, Notation notation, Feature[] features)
+        private List<double> CalculateCharacteristic(long matterId, short characteristicTypeLinkId, Notation notation, Feature[] features)
         {
             var characteristics = new List<double>();
-            var newCharacteristics = new List<Characteristic>();
+            var newCharacteristics = new List<CharacteristicValue>();
             var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
 
             Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, features);
@@ -234,10 +234,10 @@
             {
                 long subsequenceId = subsequences[j].Id;
 
-                if (!db.Characteristic.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                if (!db.CharacteristicValue.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
                 {
                     double value = calculator.Calculate(sequences[j], link);
-                    var currentCharacteristic = new Characteristic
+                    var currentCharacteristic = new CharacteristicValue
                     {
                         SequenceId = subsequenceId,
                         CharacteristicTypeLinkId = characteristicTypeLinkId,
@@ -247,13 +247,13 @@
                 }
             }
 
-            db.Characteristic.AddRange(newCharacteristics);
+            db.CharacteristicValue.AddRange(newCharacteristics);
             db.SaveChanges();
 
             for (int d = 0; d < sequences.Length; d++)
             {
                 long subsequenceId = subsequences[d].Id;
-                double characteristic = db.Characteristic.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                double characteristic = db.CharacteristicValue.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
 
                 characteristics.Add(characteristic);
             }

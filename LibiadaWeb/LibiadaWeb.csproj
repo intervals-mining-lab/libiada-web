@@ -215,7 +215,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccordanceCharacteristic.cs">
+    <Compile Include="AccordanceCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AccordanceCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="App_Start\ApplicationSignInManager.cs" />
@@ -230,10 +233,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
-    <Compile Include="BinaryCharacteristic.cs">
+    <Compile Include="BinaryCharacteristicLink.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Characteristic.cs">
+    <Compile Include="BinaryCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="CharacteristicGroup.cs">
@@ -245,10 +248,16 @@
     <Compile Include="CharacteristicTypeLink.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="CharacteristicValue.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="CommonSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="CongenericCharacteristic.cs">
+    <Compile Include="CongenericCharacteristicLink.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CongenericCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AbstractResultController.cs" />
@@ -301,6 +310,9 @@
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Feature.cs" />
     <Compile Include="Fmotiv.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FullCharacteristicLink.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
