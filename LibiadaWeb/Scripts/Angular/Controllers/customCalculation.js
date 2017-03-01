@@ -44,7 +44,7 @@
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
         $scope.disableSubmit = FakeDisableSubmit;
-        
+
         $scope.transformations = [];
         $scope.characteristics = [];
         $scope.customSequences = [];

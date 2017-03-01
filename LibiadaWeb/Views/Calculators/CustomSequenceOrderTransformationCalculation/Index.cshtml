@@ -13,74 +13,9 @@
         <h4>Sequence and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="checkbox" name="localFile" ng-model="localFile" value="true" />
-                    <input type="hidden" name="localFile" value="false" />
-                    Load sequence from fasta file(s)
-                </label>
-            </div>
-        </div>
-        <div class="form-group" ng-hide="localFile">
-            <div ng-repeat="customSequence in customSequences">
-                <div class="form-group">
-                    <label class="control-label col-md-2" for="customSequence">Sequence:</label>
-                    <div class="col-md-10">
-                        <textarea class="form-control" rows="1" id="customSequence" ng-model="customSequence.sequence" name="customSequences"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <button type="button" class="btn btn-danger" ng-click="deleteSequence(customSequence)" ng-disabled="customSequences.length <= 1">Delete sequence</button>
-                    </div>
-                </div>
-                <br />
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="button" class="btn btn-success" ng-init="addSequence()" ng-click="addSequence()">Add sequence</button>
-                </div>
-            </div>
-
-        </div>
-        <div class="form-group" ng-show="localFile">
-            <label class="control-label col-md-2" for="file">Sequence file(s):</label>
-            <div class="col-md-10">
-                <input type="file" name="file" id="file" multiple />
-                @Html.ValidationMessage("file", "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <hr />
-        <div ng-repeat="characteristic in characteristics">
-            <div class="form-group">
-                <label class="control-label col-md-2" for="characterisitc">Characteristic:</label>
-                <div class="col-md-10">
-                    <select class="form-control" title="Characteristic" ng-model="characteristic.characteristicType" ng-options="c.Text for c in characteristicTypes" ng-change="selectLink(characteristic)" id="characterisitc"></select>
-                    <input type="hidden" name="characteristicIds" ng-value="characteristic.characteristicType.Value" />
-                </div>
-            </div>
-            <div class="form-group" ng-show="isLinkable(characteristic)">
-                <label class="control-label col-md-2" for="link">Link:</label>
-                <div class="col-md-10">
-                    <select class="form-control" title="Link" ng-model="characteristic.link" ng-options="l.Text for l in characteristic.characteristicType.CharacteristicLinks" id="link"></select>
-                    <input type="hidden" name="linkIds" ng-value="characteristic.link.Value" />
-                    <input type="hidden" name="characteristicTypeLinkIds" ng-value="characteristic.link.CharacteristicTypeLinkId" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <button type="button" class="btn btn-danger" ng-click="deleteCharacteristic(characteristic)" ng-disabled="characteristics.length <= 1">Delete characteristic</button>
-                </div>
-            </div>
-            <br />
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <button type="button" class="btn btn-success" ng-init="addCharacteristic()" ng-click="addCharacteristic()">Add characteristic</button>
-            </div>
-        </div>
-        <hr />
+        @Html.Partial("_CustomSequences")
+        @Html.Partial("_OrderTransformations")
+        @Html.Partial("_CharacteristicsWithoutNotation")
         <br />
         <div class="form-group">
             <div class="col-md-10">
