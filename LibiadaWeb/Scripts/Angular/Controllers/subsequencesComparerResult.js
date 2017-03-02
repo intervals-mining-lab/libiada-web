@@ -88,11 +88,14 @@
         }
 
         // shows list of equal elements only for given pair of matters
-        function showEqualPairs(firstIndex, secondIndex) {
+        function showEqualPairs(firstIndex, secondIndex, similarityValue) {
             $scope.showModalLoadingWindow("Loading equal subsequences list...");
 
             $scope.firstMatterIndex = firstIndex;
             $scope.secondMatterIndex = secondIndex;
+
+            $scope.similarityValue = similarityValue;
+            $scope.similarityValueSelected = true;
 
             if ($scope.equalElements[firstIndex][secondIndex]) {
                 $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
@@ -397,6 +400,8 @@
         $scope.hight = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+        $scope.similarityValue = {};
+        $scope.similarityValueSelected = false;
     }
 
     function makePositive() {

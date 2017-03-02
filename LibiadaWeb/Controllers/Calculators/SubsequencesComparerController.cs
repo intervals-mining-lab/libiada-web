@@ -181,6 +181,12 @@
                 {
                     for (int j = 0; j < characteristics.Length; j++)
                     {
+                        int firstAbsolutelyEqualElementsCount = 0;
+                        int firstExeptableEqualElementsCount = 0;
+
+                        int secondAbsolutelyEqualElementsCount = 0;
+                        int secondExeptableEqualElementsCount = 0;
+
                         equalElements[i, j] = new List<SubsequenceComparisonData>();
                         double similarSequencesCharacteristicValueFirst = 0;
                         var similarSequencesCharacteristicValueSecond = new Dictionary<int, double>();
@@ -192,6 +198,7 @@
                         var equalElementsCountFromSecond = new Dictionary<int, int>();
 
                         int equalPairsCount = 0;
+                        double difference = 0;
 
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
@@ -202,17 +209,27 @@
                             {
                                 double second = characteristics[j][l].CharacteristicsValues[0];
 
-                                double difference = CalculateAverageDifference(first, second);
+                                difference = CalculateAverageDifference(first, second);
 
                                 if (difference <= decimalDifference)
                                 {
                                     equalFound = true;
                                     equalPairsCount++;
-
+                                    
                                     if (!equalElementsCountFromSecond.ContainsKey(l))
                                     {
                                         equalElementsCountFromSecond.Add(l, 1);
                                         differenceSum += difference;
+
+                                        // fill equal elements count for second chain
+                                        if (difference == 0)
+                                        {
+                                            secondAbsolutelyEqualElementsCount++;
+                                        }
+                                        else
+                                        {
+                                            secondExeptableEqualElementsCount++;
+                                        }
                                     }
 
                                     if (!similarSequencesCharacteristicValueSecond.ContainsKey(l))
@@ -250,6 +267,16 @@
                             {
                                 equalElementsCountFromFirst++;
                                 similarSequencesCharacteristicValueFirst += first;
+
+                                // fill equal elements count for first chain
+                                if (difference == 0)
+                                {
+                                    firstAbsolutelyEqualElementsCount++;
+                                }
+                                else
+                                {
+                                    firstExeptableEqualElementsCount++;
+                                }
                             }
                         }
 
@@ -276,7 +303,15 @@
                         {
                             formula1 = Math.Round(formula1, digits),
                             formula2 = Math.Round(formula2, digits),
-                            formula3 = Math.Round(formula3, digits)
+                            formula3 = Math.Round(formula3, digits),
+
+                            firstAbsolutelyEqualElementsCount,
+                            firstExeptableEqualElementsCount,
+                            firstNotEqualElementsCount = characteristics[i].Length - (firstAbsolutelyEqualElementsCount + firstExeptableEqualElementsCount),
+
+                            secondAbsolutelyEqualElementsCount,
+                            secondExeptableEqualElementsCount,
+                            secondNotEqualElementsCount = characteristics[j].Length - (secondAbsolutelyEqualElementsCount + secondExeptableEqualElementsCount),
                         };
 
                         equalElements[i, j] = equalElements[i, j].OrderBy(e => e.Difference).ToList();

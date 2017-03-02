@@ -26,7 +26,7 @@
             <tr ng-repeat="similarity in similarities">
                 <td title="{{mattersNames[$index]}}">{{$index + 1}}</td>
                 <td ng-repeat="value in similarity"
-                    ng-click="showEqualPairs($parent.$index, $index)"
+                    ng-click="showEqualPairs($parent.$index, $index, value)"
                     ng-style="getHighlightColor(value.formula1)"
                     title="{{mattersNames[$parent.$index]}} &#13{{mattersNames[$index]}}">
                     {{(value.formula1 * 100).toFixed(3)}}%
@@ -45,13 +45,20 @@
             <label>Maximum difference = {{maxPercentageDifference}}%</label>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-show="similarityValueSelected">
             <label>
-                1. Отношение числа совпавших значений к их общему числу.
+                Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
                 <br />
-                2. (Отношение среднего относительного отклонения к числу совпавших пар) / формула 1.
+                Number of similar subsequences from first sequence = {{similarityValue.firstExeptableEqualElementsCount}}
                 <br />
-                3. Отношение суммы значений характеристик для совпавших элементов к сумме значений всех характеристик.
+                Number of not equal subsequences from first sequence = {{similarityValue.firstNotEqualElementsCount}}
+
+                <br />
+                Number of equal subsequences from second sequence = {{similarityValue.secondAbsolutelyEqualElementsCount}}
+                <br />
+                Number of similar subsequences from second sequence = {{similarityValue.secondExeptableEqualElementsCount}}
+                <br />
+                Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
             </label>
         </div>
 
