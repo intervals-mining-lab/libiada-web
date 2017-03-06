@@ -195,14 +195,16 @@
                         double differenceSum = 0;
 
                         int equalElementsCountFromFirst = 0;
-                        var equalElementsCountFromSecond = new Dictionary<int, int>();
+                        var equalElementsCountFromSecond = new Dictionary<int, bool>();
 
                         int equalPairsCount = 0;
                         double difference = 0;
 
                         for (int k = 0; k < characteristics[i].Length; k++)
                         {
-                            bool equalFound = false;
+                            bool? equalFoundFromFirstAbsolutely = null;
+                            bool? equalFoundFromSecondAbsolutely = null;
+
                             double first = characteristics[i][k].CharacteristicsValues[0];
 
                             for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
@@ -213,22 +215,23 @@
 
                                 if (difference <= decimalDifference)
                                 {
-                                    equalFound = true;
+                                    if (!equalFoundFromFirstAbsolutely.HasValue || !equalFoundFromFirstAbsolutely.Value)
+                                    {
+                                        equalFoundFromFirstAbsolutely = difference == 0;
+                                    }
+
                                     equalPairsCount++;
                                     
                                     if (!equalElementsCountFromSecond.ContainsKey(l))
                                     {
-                                        equalElementsCountFromSecond.Add(l, 1);
+                                        equalElementsCountFromSecond.Add(l, difference == 0);
                                         differenceSum += difference;
-
-                                        // fill equal elements count for second chain
-                                        if (difference == 0)
+                                    }
+                                    else
+                                    {
+                                        if (!equalElementsCountFromSecond[l])
                                         {
-                                            secondAbsolutelyEqualElementsCount++;
-                                        }
-                                        else
-                                        {
-                                            secondExeptableEqualElementsCount++;
+                                            equalElementsCountFromSecond[l] = difference == 0;
                                         }
                                     }
 
@@ -263,13 +266,13 @@
                                 }
                             }
 
-                            if (equalFound)
+                            if (equalFoundFromFirstAbsolutely.HasValue)
                             {
                                 equalElementsCountFromFirst++;
                                 similarSequencesCharacteristicValueFirst += first;
 
                                 // fill equal elements count for first chain
-                                if (difference == 0)
+                                if (equalFoundFromFirstAbsolutely.Value)
                                 {
                                     firstAbsolutelyEqualElementsCount++;
                                 }
@@ -280,7 +283,10 @@
                             }
                         }
 
-                        double differenceSecondFinal = equalElementsCountFromSecond.Sum(s => s.Value);
+                        secondAbsolutelyEqualElementsCount = equalElementsCountFromSecond.Count(e => e.Value);
+                        secondExeptableEqualElementsCount = equalElementsCountFromSecond.Count(e => !e.Value);
+
+                        double differenceSecondFinal = equalElementsCountFromSecond.Count;
                         double differenceFinal = equalElementsCountFromFirst < differenceSecondFinal ? equalElementsCountFromFirst * 2d : differenceSecondFinal * 2d;
 
                         double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
