@@ -80,9 +80,9 @@
                     <br />
                     Feature: {{features[characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].FeatureId]}}
                     <br />
-                    Position = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Starts[0]}}
+                    Positions = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Starts.join(', ')}}
                     <br/>
-                    Length = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Lengths[0]}}
+                    Lengths = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Lengths.join(', ')}}
                     <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
@@ -94,9 +94,9 @@
                     <br />
                     Feature: {{features[characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].FeatureId]}}
                     <br />
-                    Position = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Starts[0]}}
+                    Positions = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Starts.join(', ')}}
                     <br />
-                    Length = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Lengths[0]}}
+                    Lengths = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Lengths.join(', ')}}
                     <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>

@@ -132,7 +132,7 @@
 
         // calculates and displays local characteristics for given subsequences
         function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
-            $scope.showModalLoadingWindow("Loading equal subsequences list...");
+            $scope.showModalLoadingWindow("Loading local characteristics...");
 
             $http({
                 url: "/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
