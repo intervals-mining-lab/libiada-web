@@ -262,7 +262,16 @@
         [Description("Non-covalent primer binding site for initiation of replication, transcription, or reverse transcription; includes site(s) for synthetic e.g., PCR primer elements.")]
         [Nature(Nature.Genetic)]
         [GenBankFeatureName("primer_bind")]
-        PrimerBind = 27
+        PrimerBind = 27,
+
+        /// <summary>
+        /// The intron.
+        /// </summary>
+        [Display(Name = "Intron")]
+        [Description("A segment of DNA that is transcribed, but removed from within the transcript by splicing together the sequences (exons) on either side of it.")]
+        [Nature(Nature.Genetic)]
+        [GenBankFeatureName("intron")]
+        Intron = 28
     }
 
     /// <summary>

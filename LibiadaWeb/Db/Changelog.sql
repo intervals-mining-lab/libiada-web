@@ -1806,4 +1806,10 @@ INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,3);
 INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,4);
 INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,5);
 
+-- 09.03.2017
+-- Adding new feature.
+
+INSERT INTO feature (id, name, description, nature_id, type) VALUES (28, 'Intron', 'A segment of DNA that is transcribed, but removed from within the transcript by splicing together the sequences (exons) on either side of it.', 1, 'intron');
+
+
 COMMIT;
