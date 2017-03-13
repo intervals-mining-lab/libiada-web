@@ -221,7 +221,7 @@
                                     }
 
                                     equalPairsCount++;
-                                    
+
                                     if (!equalElementsCountFromSecond.ContainsKey(l))
                                     {
                                         equalElementsCountFromSecond.Add(l, difference == 0);

@@ -169,12 +169,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Chain[] GetNucleotideChains(long[] matterIds)
         {
             var chains = new Chain[matterIds.Length];
-
+            CommonSequence[] sequences = Db.CommonSequence.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
             for (int i = 0; i < matterIds.Length; i++)
             {
-                var matterId = matterIds[i];
-                var sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
-                chains[i] = ToLibiadaChain(sequenceId);
+                chains[i] = ToLibiadaChain(sequences.Single(c => c.MatterId == matterIds[i]).Id);
             }
 
             return chains;

@@ -111,55 +111,21 @@
         /// </returns>
         public static double[] Calculate(Chain[] chains, short characteristicTypeLinkId)
         {
-            var newCharacteristics = new List<CharacteristicValue>();
-            var characteristics = new double[chains.Length];
-            var sequenceIds = chains.Select(c => c.Id);
-            Link link;
-            IFullCalculator calculator;
-
-            Dictionary<long, double> dbCharacteristics;
-            using (var db = new LibiadaWebEntities())
-            {
-                dbCharacteristics = db.CharacteristicValue
-                                              .Where(c => characteristicTypeLinkId == c.CharacteristicTypeLinkId && sequenceIds.Contains(c.SequenceId))
-                                              .ToArray()
-                                              .GroupBy(c => c.SequenceId)
-                                              .ToDictionary(c => c.Key, c => c.Single().Value);
-
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-                link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
-                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                calculator = FullCalculatorsFactory.CreateFullCalculator(className);
-            }
-
+            var twoDimensionalChains = new Chain[chains.Length][];
             for (int i = 0; i < chains.Length; i++)
             {
-                chains[i].FillIntervalManagers();
-
-                long sequenceId = chains[i].Id;
-
-                if (!dbCharacteristics.TryGetValue(sequenceId, out characteristics[i]))
-                {
-                    characteristics[i] = calculator.Calculate(chains[i], link);
-                    var currentCharacteristic = new CharacteristicValue
-                    {
-                        SequenceId = sequenceId,
-                        CharacteristicTypeLinkId = characteristicTypeLinkId,
-                        Value = characteristics[i]
-                    };
-
-                    newCharacteristics.Add(currentCharacteristic);
-                }
+                twoDimensionalChains[i] = new[] { chains[i] };
             }
 
-            // trying to save calculated characteristics to database
-            using (var db = new LibiadaWebEntities())
+            double[][] twoDimensionalResult = Calculate(twoDimensionalChains, new[] { characteristicTypeLinkId });
+
+            var result = new double[chains.Length];
+            for (int i = 0; i < twoDimensionalResult.Length; i++)
             {
-                var characteristicRepository = new CharacteristicRepository(db);
-                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+                result[i] = twoDimensionalResult[i][0];
             }
 
-            return characteristics;
+            return result;
         }
 
         /// <summary>

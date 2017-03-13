@@ -71,27 +71,29 @@
         {
             return Action(() =>
                 {
+                    matterIds = matterIds.OrderBy(m => m).ToArray();
+
                     var matterNames = new string[matterIds.Length];
+                    var parentSequenceIds = new long[matterIds.Length];
                     var remoteIds = new string[matterIds.Length];
                     var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
                     var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                     var attributeValues = new List<AttributeValue>();
                     Chain[] chains;
-                    long[] parentSequenceIds;
                     string sequenceCharacteristicName;
 
                     using (var db = new LibiadaWebEntities())
                     {
-                        var parentSequences = db.DnaSequence.Include(s => s.Matter)
+                        DnaSequence[] parentSequences = db.DnaSequence.Include(s => s.Matter)
                                                 .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
-                                                .Select(s => new { s.Id, MatterName = s.Matter.Name, s.RemoteId })
-                                                .ToDictionary(s => s.Id);
-                        parentSequenceIds = parentSequences.Keys.ToArray();
+                                                .OrderBy(s => s.MatterId)
+                                                .ToArray();
 
-                        for (int n = 0; n < parentSequenceIds.Length; n++)
+                        for (int n = 0; n < parentSequences.Length; n++)
                         {
-                            matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
-                            remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
+                            matterNames[n] = parentSequences[n].Matter.Name;
+                            remoteIds[n] = parentSequences[n].RemoteId;
+                            parentSequenceIds[n] = parentSequences[n].Id;
                         }
 
                         var commonSequenceRepository = new CommonSequenceRepository(db);
@@ -113,18 +115,19 @@
                         }
                     }
 
-                    var characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
+                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
 
                     var sequenceData = new SequenceData[matterIds.Length];
 
                     for (int i = 0; i < matterIds.Length; i++)
                     {
                         // all subsequence calculations
-                        var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                        SubsequenceData[] subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicTypeLinkIds,
                             features,
                             parentSequenceIds[i],
                             attributeValues);
+
                         sequenceData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
                     }
 
