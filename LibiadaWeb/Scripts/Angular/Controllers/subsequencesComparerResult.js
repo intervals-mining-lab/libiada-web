@@ -193,7 +193,7 @@
             // chart size and margin settings
             var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
             var width = $scope.width - margin.left - margin.right;
-            var height = $scope.hight - margin.top - margin.bottom;
+            var height = $scope.height - margin.top - margin.bottom;
 
             // calculating margins for dots
             var xMinArray = [];
@@ -247,7 +247,7 @@
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart" + index).append("svg")
                 .attr("width", $scope.width)
-                .attr("height", $scope.hight)
+                .attr("height", $scope.height)
                 .attr("class", "chart" + index)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -397,7 +397,7 @@
         $scope.filters = [];
         $scope.legendHeight = 40;
         $scope.width = 1050;
-        $scope.hight = 800;
+        $scope.height = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
         $scope.similarityValue = {};

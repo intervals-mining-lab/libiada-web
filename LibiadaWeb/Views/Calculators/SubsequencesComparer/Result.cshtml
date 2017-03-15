@@ -83,6 +83,7 @@
                     Positions = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Starts.join(', ')}}
                     <br/>
                     Lengths = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Lengths.join(', ')}}
+                    <br />
                     <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
@@ -97,6 +98,7 @@
                     Positions = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Starts.join(', ')}}
                     <br />
                     Lengths = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Lengths.join(', ')}}
+                    <br />
                     <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>

@@ -22,7 +22,7 @@
             $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
 
             $scope.legendHeight = $scope.legend.length * 20;
-            $scope.hight = 800 + $scope.legendHeight;
+            $scope.height = 800 + $scope.legendHeight;
 
             $scope.loading = false;
             loadingModalWindow.modal("hide");
@@ -145,7 +145,7 @@
             // chart size and margin settings
             var margin = { top: 30 + $scope.legendHeight, right: 30, bottom: 30, left: 60 };
             var width = $scope.width - margin.left - margin.right;
-            var height = $scope.hight - margin.top - margin.bottom;
+            var height = $scope.height - margin.top - margin.bottom;
 
             // setup x
             // calculating margins for dots
@@ -186,7 +186,7 @@
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
                 .attr("width", $scope.width)
-                .attr("height", $scope.hight)
+                .attr("height", $scope.height)
                 .attr("class", "chart-svg")
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
