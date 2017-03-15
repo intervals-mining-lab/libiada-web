@@ -137,8 +137,8 @@
             $http({
                 url: "/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
                     "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
-                    "&windowSize=" + $scope.windowSize +
-                    "&step=" + $scope.step,
+                    "&windowSize=" + $scope.slidingWindowParams.windowSize +
+                    "&step=" + $scope.slidingWindowParams.step,
                 method: "GET"
             }).success(function (firstCharacteristics) {
                 $scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics);
@@ -146,8 +146,8 @@
                 $http({
                     url: "/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
                         "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
-                        "&windowSize=" + $scope.windowSize +
-                        "&step=" + $scope.step,
+                        "&windowSize=" + $scope.slidingWindowParams.windowSize +
+                        "&step=" + $scope.slidingWindowParams.step,
                     method: "GET"
                 }).success(function (secondCharacteristics) {
                     $scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics);
@@ -391,8 +391,11 @@
             alert("Failed loading characteristic data");
         });
 
-        $scope.windowSize = 50;
-        $scope.step = 1;
+        $scope.slidingWindowParams = {
+            windowSize: 50,
+            step: 1
+        };
+
         $scope.equalElementsToShow = [];
         $scope.filters = [];
         $scope.legendHeight = 40;
