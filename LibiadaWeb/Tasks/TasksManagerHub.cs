@@ -68,10 +68,7 @@
                 t.UserName
             });
 
-            return JsonConvert.SerializeObject(new Dictionary<string, object>
-                {
-                    { "tasks", tasks.ToArray() }
-                });
+            return JsonConvert.SerializeObject(tasks.ToArray());
 
         }
     }

@@ -2,21 +2,28 @@
     "use strict";
 
     function taskManager($scope) {
-        MapModelFromJson($scope, data);
+        //MapModelFromJson($scope, data);
 
-        var chat = $.connection.tasksManagerHub;
+        var tasksHub = $.connection.tasksManagerHub;
 
-        chat.client.TaskEvent = function (data) {
+        tasksHub.client.TaskEvent = function (data) {
             alert(data);
         };
 
 
-        chat.client.onConnected = function (data) {
+        tasksHub.client.onConnected = function (data) {
             alert(data);
         }
 
         $.connection.hub.start().done(function (data) {
-            //alert(data);
+            tasksHub.server.getAllTasks().done(function (tasksJson) {
+                var tasks = JSON.parse(tasksJson);
+                for(var i = 0; i < tasks.length; i++)
+                {
+                    $scope.tasks.push(tasks[i]);
+                }
+                $scope.$apply();
+            });
         });
 
         function calculateStatusClass(status) {
@@ -41,6 +48,7 @@
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
         $scope.autoRefresh = autoRefresh;
+        $scope.tasks = [];
 
         setInterval($scope.autoRefresh, 1 * 60 * 1000);
     }
