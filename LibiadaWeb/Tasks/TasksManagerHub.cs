@@ -7,6 +7,9 @@
     using LibiadaWeb.Models;
 
     using Microsoft.AspNet.SignalR;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// SignalR messages hub class.
@@ -49,8 +52,27 @@
         /// <summary>
         /// Called by clients on connect.
         /// </summary>
-        public void GetAllTasks()
+        public string GetAllTasks()
         {
+            var tasks = TaskManager.GetTasksData().Select(t => new
+            {
+                t.Id,
+                t.DisplayName,
+                Created = t.Created.ToString(OutputFormats.DateTimeFormat),
+                Started = t.Started == null ? string.Empty : ((DateTimeOffset)t.Started).ToString(OutputFormats.DateTimeFormat),
+                Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
+                ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
+                TaskState = t.TaskState.ToString(),
+                TaskStateName = t.TaskState.GetDisplayValue(),
+                t.UserId,
+                t.UserName
+            });
+
+            return JsonConvert.SerializeObject(new Dictionary<string, object>
+                {
+                    { "tasks", tasks.ToArray() }
+                });
+
         }
     }
 }
