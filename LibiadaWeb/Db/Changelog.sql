@@ -1811,5 +1811,22 @@ INSERT INTO full_characteristic_link (full_characteristic, link) VALUES (54,5);
 
 INSERT INTO feature (id, name, description, nature_id, type) VALUES (28, 'Intron', 'A segment of DNA that is transcribed, but removed from within the transcript by splicing together the sequences (exons) on either side of it.', 1, 'intron');
 
+-- 16.03.2017
+-- Add table for tasks.
+
+CREATE TABLE task
+(
+   id bigserial NOT NULL, 
+   task_type smallint NOT NULL, 
+   description text NOT NULL, 
+   status smallint, 
+   result json, 
+   user_id integer NOT NULL, 
+   created timestamp with time zone NOT NULL, 
+   started timestamp with time zone, 
+   completed timestamp with time zone, 
+   CONSTRAINT pk_task PRIMARY KEY (id), 
+   CONSTRAINT fk_task_user FOREIGN KEY (user_id) REFERENCES dbo."AspNetUsers" ("Id") ON UPDATE NO ACTION ON DELETE NO ACTION
+);
 
 COMMIT;
