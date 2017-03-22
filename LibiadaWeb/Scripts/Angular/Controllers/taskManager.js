@@ -2,12 +2,38 @@
     "use strict";
 
     function taskManager($scope) {
-        //MapModelFromJson($scope, data);
 
         var tasksHub = $.connection.tasksManagerHub;
 
-        tasksHub.client.TaskEvent = function (data) {
-            alert(data);
+        tasksHub.client.TaskEvent = function (event, data) {
+
+            switch (event) {
+                case "addTask":
+                    $scope.tasks.push(data);
+                    break;
+                case "deleteTask":
+                    var taskToDelete = $scope.tasks.find(function (t) { return t.Id == data.Id; });
+                    $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
+                    break;
+                case "changeStatus":
+                    var taskToChange = $scope.tasks.find(function (t) { return t.Id == data.Id; });
+                    if (taskToChange) {
+                        taskToChange.Created = data.Created;
+                        taskToChange.Started = data.Started;
+                        taskToChange.Completed = data.Completed;
+                        taskToChange.ExecutionTime = data.ExecutionTime;
+                        taskToChange.TaskState = data.TaskState;
+                        taskToChange.TaskStateName = data.TaskStateName;
+                    }
+                    else {
+                        $scope.tasks.push(data);
+                    }
+                    break;
+                default: console.log("Unknown task event");
+                    break;
+            }
+
+            $scope.$apply();
         };
 
 
@@ -18,8 +44,7 @@
         $.connection.hub.start().done(function (data) {
             tasksHub.server.getAllTasks().done(function (tasksJson) {
                 var tasks = JSON.parse(tasksJson);
-                for(var i = 0; i < tasks.length; i++)
-                {
+                for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
                 }
                 $scope.$apply();
@@ -41,16 +66,9 @@
             return "glyphicon " + icon;
         }
 
-        function autoRefresh () {
-            //window.location.reload();
-        }
-
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
-        $scope.autoRefresh = autoRefresh;
         $scope.tasks = [];
-
-        setInterval($scope.autoRefresh, 1 * 60 * 1000);
     }
 
     angular.module("TaskManager", []).controller("TaskManagerCtrl", ["$scope", taskManager]);
