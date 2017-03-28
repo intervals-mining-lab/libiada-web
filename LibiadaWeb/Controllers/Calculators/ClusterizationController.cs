@@ -108,7 +108,8 @@
             ClusterizationType clusterizationType,
             double equipotencyWeight = 1,
             double normalizedDistanceWeight = 1,
-            double distanceWeight = 1)
+            double distanceWeight = 1,
+            double bandwidth = 0)
         {
             return Action(() =>
             {
@@ -153,7 +154,8 @@
                 {
                     { "equipotencyWeight", equipotencyWeight },
                     { "normalizedDistanceWeight", normalizedDistanceWeight },
-                    { "distanceWeight", distanceWeight }
+                    { "distanceWeight", distanceWeight },
+                    { "bandwidth", bandwidth }
                 };
 
                 IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);

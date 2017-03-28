@@ -54,6 +54,15 @@
                 </div>
             </div>
         </div>
+        <div ng-show="ClusterizationType.Text == 'Mean shift'">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="bandwidth">Bandwidth:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="bandwidth" type="number" value="4" min="0" id="bandwidth" />
+                    @Html.ValidationMessage("bandwidth", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
         <br />
         @Html.Partial("_MattersSubmit")
     </div>
