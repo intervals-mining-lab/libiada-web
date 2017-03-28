@@ -92,7 +92,7 @@
         <div class="form-horizontal">
             <div class="form-group">
                 <div class="col-md-offset-0 col-md-10">
-                    <input type="submit" value="Delete all tasks" class="btn btn-danger" ng-hide="tasks.length == 0" ng-cloak />
+                    <input type="submit" value="Delete all tasks" class="btn btn-danger" ng-hide="tasks.length == 0" ng-cloak onclick="return confirm('Are you sure you want to delete ALL tasks?')"/>
                 </div>
             </div>
         </div>
