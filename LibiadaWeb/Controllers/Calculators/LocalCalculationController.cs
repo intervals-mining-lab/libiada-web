@@ -157,9 +157,9 @@
 
                 foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
                 {
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                    calculators.Add(FullCalculatorsFactory.CreateFullCalculator(className));
-                    links.Add(characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId));
+                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
+                    calculators.Add(FullCalculatorsFactory.CreateCalculator(className));
+                    links.Add(characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId));
                 }
 
                 for (int i = 0; i < chains.Length; i++)
@@ -226,13 +226,13 @@
 
                 for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
                 {
-                    characteristicNames[l] = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[l]).Name;
+                    characteristicNames[l] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[l]);
                 }
 
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notation);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notation);
                     characteristicsList[k] = new SelectListItem
                     {
                         Value = k.ToString(),

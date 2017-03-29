@@ -51,9 +51,9 @@
                 var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                    calculators[k] = FullCalculatorsFactory.CreateFullCalculator(className);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
+                    FullCharacteristic className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
                 }
             }
 
@@ -160,9 +160,9 @@
                 var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                    calculators[k] = FullCalculatorsFactory.CreateFullCalculator(className);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
+                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
                 }
             }
 

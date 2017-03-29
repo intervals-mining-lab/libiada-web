@@ -137,10 +137,10 @@
                 }
 
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                var className = characteristicTypeLinkRepository.GetBinaryCharacteristicType(characteristicTypeLinkId);
 
-                IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateBinaryCalculator(className);
-                var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(className);
+                var link = characteristicTypeLinkRepository.GetLinkForBinaryCharacteristic(characteristicTypeLinkId);
 
                 if (frequencyFilter)
                 {
@@ -181,7 +181,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
+                var characteristicName = characteristicTypeLinkRepository.GetBinaryCharacteristicName(characteristicTypeLinkId, notation);
 
                 return new Dictionary<string, object>
                 {

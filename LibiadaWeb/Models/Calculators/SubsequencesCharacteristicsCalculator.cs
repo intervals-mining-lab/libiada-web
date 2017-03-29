@@ -66,9 +66,9 @@
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     var characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                    string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                    calculators[k] = FullCalculatorsFactory.CreateFullCalculator(className);
-                    links[k] = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
                 }
 
                 // converting to libiada sequences

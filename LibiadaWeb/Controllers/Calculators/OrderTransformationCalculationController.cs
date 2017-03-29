@@ -153,10 +153,10 @@
                         }
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
+                        var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+                        var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
 
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateFullCalculator(className);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
                         characteristics.Add(calculator.Calculate(sequence, link));
                     }
 
@@ -166,7 +166,7 @@
                 var characteristicNames = new string[characteristicTypeLinkIds.Length];
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                 }
 
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];

@@ -153,15 +153,15 @@
                             }
                         }
 
-                        var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkIds[k]);
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkIds[k]).ClassName;
-                        var calculator = FullCalculatorsFactory.CreateFullCalculator(className);
+                        var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
+                        var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
+                        var calculator = FullCalculatorsFactory.CreateCalculator(className);
 
                         characteristics[j, k] = calculator.Calculate(sequence, link);
                     }
                 }
 
-                var characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();
+                var characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToArray();
 
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int i = 0; i < characteristicNames.Length; i++)

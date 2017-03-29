@@ -47,9 +47,9 @@
             {
                 var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(context);
 
-                string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                calculator = FullCalculatorsFactory.CreateFullCalculator(className);
-                link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
+                calculator = FullCalculatorsFactory.CreateCalculator(className);
+                link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
 
                 var subsequenceExtractor = new SubsequenceExtractor(context);
 

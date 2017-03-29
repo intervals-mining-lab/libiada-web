@@ -92,7 +92,7 @@
                     for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                     {
                         var characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                        characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
+                        characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
                     }
                 }
 

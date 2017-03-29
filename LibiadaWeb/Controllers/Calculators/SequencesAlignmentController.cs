@@ -145,7 +145,7 @@
                 List<double> distances = new List<double>();
                 var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
-                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId, notation);
+                var characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -226,9 +226,9 @@
 
             var sequences = subsequenceExtractor.ExtractChains(subsequences);
 
-            string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-            IFullCalculator calculator = FullCalculatorsFactory.CreateFullCalculator(className);
-            var link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+            var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
+            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
+            var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
 
             for (int j = 0; j < sequences.Length; j++)
             {

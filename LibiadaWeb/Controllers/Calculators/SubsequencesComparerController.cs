@@ -117,7 +117,7 @@
                     Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
                     var sequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
-                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
+                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
 
                     // Sequences characterstic
                     double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
@@ -145,7 +145,7 @@
 
                     var subsequencesCharacteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
 
-                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicTypeLinkId);
+                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicTypeLinkId);
 
                     var viewDataHelper = new ViewDataHelper(db);
 

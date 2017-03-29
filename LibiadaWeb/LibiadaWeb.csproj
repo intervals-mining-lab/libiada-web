@@ -242,9 +242,6 @@
     <Compile Include="CharacteristicGroup.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="CharacteristicType.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="CharacteristicTypeLink.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -556,6 +553,7 @@
     <Content Include="Scripts\jQAllRangeSliders-withRuler-min.js" />
     <Content Include="LibiadaWeb.edmx.diagram">
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

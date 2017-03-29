@@ -115,7 +115,7 @@
                         var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
-                            characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
+                            characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                             characteristicsList[k] = new SelectListItem
                             {
                                 Value = k.ToString(),

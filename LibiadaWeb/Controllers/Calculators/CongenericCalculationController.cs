@@ -147,9 +147,9 @@
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         short characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        string className = characteristicTypeLinkRepository.GetCharacteristicType(characteristicTypeLinkId).ClassName;
-                        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCongenericCalculator(className);
-                        Link link = characteristicTypeLinkRepository.GetLibiadaLink(characteristicTypeLinkId);
+                        var className = characteristicTypeLinkRepository.GetCongenericCharacteristicType(characteristicTypeLinkId);
+                        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCalculator(className);
+                        Link link = characteristicTypeLinkRepository.GetLinkForCongenericCharacteristic(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
                         int calculated = db.CongenericCharacteristicValue.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
                         if (calculated < chain.Alphabet.Cardinality)
@@ -235,7 +235,7 @@
                 // characteristics names
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    string characteristicType = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
+                    string characteristicType = characteristicTypeLinkRepository.GetCongenericCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
                     if (isLiteratureSequence)
                     {
                         Language language = languages[k];

@@ -101,11 +101,11 @@
 
                         var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
 
-                        sequenceCharacteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkId);
+                        sequenceCharacteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
 
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
-                            subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicTypeLinkIds[k]);
+                            subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k]);
                             subsequencesCharacteristicsList[k] = new SelectListItem
                             {
                                 Value = k.ToString(),
