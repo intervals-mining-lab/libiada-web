@@ -38,7 +38,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
@@ -47,7 +47,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@
                 var calculators = new List<IFullCalculator>();
                 var links = new List<Link>();
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int k = 0; k < matterIds.Length; k++)
                 {
@@ -146,9 +146,8 @@
                                                                         && l.Translator == translator).Id;
                             break;
                         default:
-                            var id = notation;
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId
-                                                                    && c.Notation == id).Id;
+                                                                    && c.Notation == notation).Id;
                             break;
                     }
 
@@ -157,8 +156,8 @@
 
                 foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
                 {
-                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-                    calculators.Add(FullCalculatorsFactory.CreateCalculator(className));
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                    calculators.Add(FullCalculatorsFactory.CreateCalculator(characteristic));
                     links.Add(characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId));
                 }
 
@@ -170,7 +169,7 @@
 
                     CutRuleIterator iter = cutRule.GetIterator();
 
-                    List<Chain> fragments = new List<Chain>();
+                    var fragments = new List<Chain>();
                     partNames[i] = new List<string>();
                     starts[i] = new List<int>();
                     lengthes[i] = new List<int>();

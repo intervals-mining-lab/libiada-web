@@ -7,7 +7,6 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.AccordanceCharacteristic" Width="2" PointX="13.5" PointY="40.125" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CommonSequence" Width="1.75" PointX="5.25" PointY="37.375" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Characteristic" Width="1.875" PointX="16.125" PointY="39.125" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicTypeLink" Width="1.875" PointX="17" PointY="24.25" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicGroup" Width="1.875" PointX="11.125" PointY="22.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.DnaSequence" Width="1.625" PointX="17.125" PointY="30.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Subsequence" Width="1.5" PointX="20.25" PointY="33.625" IsExpanded="true" />
@@ -30,7 +29,7 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.MusicSequence" Width="1.875" PointX="10.875" PointY="40.25" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.DataSequence" Width="1.875" PointX="10.875" PointY="28.25" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Note" Width="1.5" PointX="2.625" PointY="22.75" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.Pitch" Width="1.5" PointX="5.375" PointY="22" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.Pitch" Width="1.5" PointX="0.5" PointY="23" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.Accidental" Width="1.5" PointX="5.375" PointY="20.5" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.FmotivType" Width="1.5" PointX="10.5" PointY="47.625" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.NoteSymbol" Width="1.5" PointX="0.5" PointY="18" IsExpanded="true" />
@@ -121,7 +120,7 @@
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.BinaryCharacteristicValue" Width="2.5" PointX="13.625" PointY="21.125" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_binary_characteristic_link" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CharacteristicValue" Width="2" PointX="6.875" PointY="24.75" />
-        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristicLink" Width="1.5" PointX="1.375" PointY="27.625" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristicLink" Width="2.375" PointX="0.875" PointY="18.25" />
         <edmx:EntityTypeShape EntityType="LibiadaWebModel.CongenericCharacteristicValue" Width="2.625" PointX="4.75" PointY="18.125" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_congeneric_characteristic_link" />
         </edmx:Diagram>

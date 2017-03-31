@@ -61,50 +61,6 @@
     }
 
     /// <summary>
-    /// The characteristic type.
-    /// </summary>
-    [MetadataType(typeof(CharacteristicTypeDataAnnotations))]
-    public partial class CharacteristicType
-    {
-    }
-
-    /// <summary>
-    /// The characteristic type data annotations.
-    /// </summary>
-    public class CharacteristicTypeDataAnnotations
-    {
-        /// <summary>
-        /// Gets or sets the characteristic group id.
-        /// </summary>
-        [Display(Name = "Group Characteristic belogs to")]
-        public int CharacteristicGroupId { get; set; }
-
-        /// <summary>
-        /// Gets or sets the class name.
-        /// </summary>
-        [Display(Name = "Calculator class name")]
-        public string ClassName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether applicable to full sequence.
-        /// </summary>
-        [Display(Name = "Applicable to full sequence")]
-        public bool FullSequenceApplicable { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether applicable to binary sequence.
-        /// </summary>
-        [Display(Name = "Applicable to binary sequence")]
-        public bool BinarySequenceApplicable { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether applicable to congeneric sequence.
-        /// </summary>
-        [Display(Name = "Applicable to congeneric sequence")]
-        public bool CongenericSequenceApplicable { get; set; }
-    }
-
-    /// <summary>
     /// The dna sequence.
     /// </summary>
     [MetadataType(typeof(DnaSequenceDataAnnotations))]

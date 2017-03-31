@@ -88,7 +88,7 @@
                         remoteIds[n] = parentSequences[parentSequenceIds[n]].RemoteId;
                     }
 
-                    var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                    var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                     for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                     {
                         subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k]);

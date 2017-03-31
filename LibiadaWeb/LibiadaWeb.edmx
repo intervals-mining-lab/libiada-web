@@ -88,15 +88,6 @@
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
-        <EntityType Name="characteristic_type_link">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="characteristic_type_id" Type="int4" Nullable="false" />
-          <Property Name="link_id" Type="int2" Nullable="false" />
-        </EntityType>
-
         <EntityType Name="characteristic_group">
           <Key>
             <PropertyRef Name="id" />
@@ -908,7 +899,6 @@
           <EntitySet Name="chain" EntityType="Self.chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="full_characteristic" EntityType="Self.full_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic_group" EntityType="Self.characteristic_group" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="characteristic_type_link" EntityType="Self.characteristic_type_link" store:Type="Tables" Schema="public"/>
           <EntitySet Name="dna_chain" EntityType="Self.dna_chain" store:Type="Tables" Schema="public"/>
           <EntitySet Name="subsequence" EntityType="Self.subsequence" store:Type="Tables" Schema="public"/>
           <EntitySet Name="position" EntityType="Self.position" store:Type="Tables" Schema="public"/>
@@ -1124,15 +1114,6 @@
           <NavigationProperty Name="Matter" Relationship="Self.fk_chain_matter" FromRole="CommonSequence" ToRole="Matter" />
           <NavigationProperty Name="BinaryCharacteristicValue" Relationship="Self.fk_binary_characteristic_chain" FromRole="CommonSequence" ToRole="BinaryCharacteristicValue" />
           <NavigationProperty Name="CharacteristicValue" Relationship="Self.fk_characteristic_chain" FromRole="CommonSequence" ToRole="CharacteristicValue" />
-        </EntityType>
-
-        <EntityType Name="CharacteristicTypeLink">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
-          <Property Name="CharacteristicTypeId" Type="Int32" Nullable="false" />
-          <Property Name="Link" Type="LibiadaWebModel.Link" Nullable="false" />
         </EntityType>
 
         <EntityType Name="FullCharacteristicLink">
@@ -2009,7 +1990,6 @@
           <EntitySet Name="CommonSequence" EntityType="Self.CommonSequence" />
           <EntitySet Name="CharacteristicValue" EntityType="Self.CharacteristicValue" />
           <EntitySet Name="CharacteristicGroup" EntityType="Self.CharacteristicGroup" />
-          <EntitySet Name="CharacteristicTypeLink" EntityType="Self.CharacteristicTypeLink" />
           <EntitySet Name="DnaSequence" EntityType="Self.DnaSequence" />
           <EntitySet Name="Subsequence" EntityType="Self.Subsequence" />
           <EntitySet Name="Position" EntityType="Self.Position" />
@@ -2378,16 +2358,6 @@
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-
-          <EntitySetMapping Name="CharacteristicTypeLink">
-            <EntityTypeMapping TypeName="LibiadaWebModel.CharacteristicTypeLink">
-              <MappingFragment StoreEntitySet="characteristic_type_link">
-                <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="CharacteristicTypeId" ColumnName="characteristic_type_id" />
-                <ScalarProperty Name="Link" ColumnName="link_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

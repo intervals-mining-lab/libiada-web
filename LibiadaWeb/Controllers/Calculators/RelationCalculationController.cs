@@ -43,7 +43,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
@@ -53,7 +53,7 @@
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
             binaryCharacteristicRepository = new BinaryCharacteristicRepository();
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -117,9 +117,9 @@
         {
             return Action(() =>
             {
-                var characteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
+                var characteristics = new List<BinaryCharacteristicValue>();
                 var elements = new List<Element>();
-                List<LibiadaWeb.BinaryCharacteristicValue> filteredResult = null;
+                List<BinaryCharacteristicValue> filteredResult = null;
                 var firstElements = new List<Element>();
                 var secondElements = new List<Element>();
 
@@ -137,10 +137,10 @@
                 }
 
                 Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
-                var className = characteristicTypeLinkRepository.GetBinaryCharacteristicType(characteristicTypeLinkId);
+                BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetBinaryCharacteristic(characteristicTypeLinkId);
 
-                IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(className);
-                var link = characteristicTypeLinkRepository.GetLinkForBinaryCharacteristic(characteristicTypeLinkId);
+                IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(binaryCharacteristic);
+                Link link = characteristicTypeLinkRepository.GetLinkForBinaryCharacteristic(characteristicTypeLinkId);
 
                 if (frequencyFilter)
                 {
@@ -181,7 +181,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetBinaryCharacteristicName(characteristicTypeLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetBinaryCharacteristicName(characteristicTypeLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -217,15 +217,12 @@
         /// <param name="link">
         /// The link.
         /// </param>
-        private void NotFrequencyCharacteristic(
-            short characteristicTypeLinkId,
-            long sequenceId,
-            Chain chain,
-            IBinaryCalculator calculator,
-            Link link)
+        private void NotFrequencyCharacteristic(short characteristicTypeLinkId, long sequenceId, Chain chain, IBinaryCalculator calculator, Link link)
         {
-            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
-            var databaseCharacteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
+            var newCharacteristics = new List<BinaryCharacteristicValue>();
+            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
+                .Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                .ToArray();
             int calculatedCount = databaseCharacteristics.Length;
             if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
             {
@@ -274,15 +271,17 @@
         private void FrequencyCharacteristic(short characteristicTypeLinkId, int frequencyCount, Chain chain, long sequenceId, IBinaryCalculator calculator, Link link)
         {
             List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-            var newCharacteristics = new List<LibiadaWeb.BinaryCharacteristicValue>();
-            var databaseCharacteristics = db.BinaryCharacteristicValue.Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId).ToArray();
+            var newCharacteristics = new List<BinaryCharacteristicValue>();
+            BinaryCharacteristicValue[] databaseCharacteristics = db.BinaryCharacteristicValue
+                .Where(b => b.SequenceId == sequenceId && b.CharacteristicTypeLinkId == characteristicTypeLinkId)
+                .ToArray();
 
             // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();
             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
-                var result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
+                double result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
                 frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
             }
 

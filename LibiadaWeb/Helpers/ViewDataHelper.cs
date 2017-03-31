@@ -235,7 +235,7 @@
         /// </returns>
         public List<CharacteristicData> GetFullCharacteristicTypes()
         {
-            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+            var characteristicTypeRepository = new CharacteristicLinkRepository(db);
 
             Link[] links;
             FullCharacteristic[] characteristics;
@@ -273,7 +273,7 @@
         /// </returns>
         public List<CharacteristicData> GetCongenericCharacteristicTypes()
         {
-            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+            var characteristicTypeRepository = new CharacteristicLinkRepository(db);
 
             Link[] links;
             CongenericCharacteristic[] characteristics;
@@ -311,7 +311,7 @@
         /// </returns>
         public List<CharacteristicData> GetAccordanceCharacteristicTypes()
         {
-            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+            var characteristicTypeRepository = new CharacteristicLinkRepository(db);
 
             Link[] links;
             AccordanceCharacteristic[] characteristics;
@@ -349,7 +349,7 @@
         /// </returns>
         public List<CharacteristicData> GetBinaryCharacteristicTypes()
         {
-            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+            var characteristicTypeRepository = new CharacteristicLinkRepository(db);
 
             Link[] links;
             BinaryCharacteristic[] characteristics;

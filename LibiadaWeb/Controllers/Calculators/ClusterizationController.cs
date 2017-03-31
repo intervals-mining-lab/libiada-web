@@ -37,7 +37,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
@@ -46,7 +46,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
+            Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
             viewData.Add("ClusterizatorsTypes", ArrayExtensions.ToArray<ClusterizationType>().ToSelectList());
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
@@ -93,6 +93,9 @@
         /// </param>
         /// <param name="distanceWeight">
         /// The distance weight.
+        /// </param>
+        /// <param name="bandwidth">
+        /// The bandwidth.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -137,9 +140,9 @@
                         {
                             Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                            var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
-                            var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-                            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
+                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                             characteristics[j][i] = calculator.Calculate(tempChain, link);
                         }
                     }

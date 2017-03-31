@@ -33,9 +33,9 @@
         /// </returns>
         public static double[][] Calculate(Chain[][] chains, short[] characteristicTypeLinkIds)
         {
+            IEnumerable<long> sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
             var newCharacteristics = new List<CharacteristicValue>();
             var characteristics = new double[chains.Length][];
-            var sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
             var links = new Link[characteristicTypeLinkIds.Length];
             var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
 
@@ -48,12 +48,12 @@
                                               .GroupBy(c => c.SequenceId)
                                               .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                    FullCharacteristic className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
-                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
                 }
             }
 
@@ -157,12 +157,12 @@
 
             using (var db = new LibiadaWebEntities())
             {
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
                     links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
-                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
                 }
             }
 
@@ -175,14 +175,14 @@
                     if (complementary)
                     {
                         var sourceSequence = new Sequence(Alphabets.DNA, chains[i][j].ToString());
-                        var complementarySequence = sourceSequence.GetReverseComplementedSequence();
+                        ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
                         chains[i][j] = new Chain(complementarySequence.ConvertToString());
                     }
 
                     if (rotate)
                     {
-                        var building = chains[i][j].Building.Rotate(rotationLength ?? 0);
-                        var newSequence = building.Select(t => new ValueInt(t)).Cast<IBaseObject>().ToList();
+                        int[] building = chains[i][j].Building.Rotate(rotationLength ?? 0);
+                        List<IBaseObject> newSequence = building.Select(t => new ValueInt(t)).ToList<IBaseObject>();
                         chains[i][j] = new Chain(newSequence);
                     }
 

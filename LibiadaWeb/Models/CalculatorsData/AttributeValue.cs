@@ -29,5 +29,64 @@
             AttributeId = attributeId;
             Value = value;
         }
+
+        /// <summary>
+        /// The == operator overload.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// True if both fields are equal and false otherwise.
+        /// </returns>
+        public static bool operator ==(AttributeValue first, AttributeValue second)
+        {
+            return first.AttributeId == second.AttributeId && first.Value.Equals(second.Value);
+        }
+
+        /// <summary>
+        /// The != operator overload.
+        /// </summary>
+        /// <param name="first">
+        /// The first.
+        /// </param>
+        /// <param name="second">
+        /// The second.
+        /// </param>
+        /// <returns>
+        /// False if both fields are equal and true otherwise.
+        /// </returns>
+        public static bool operator !=(AttributeValue first, AttributeValue second)
+        {
+            return !(first == second);
+        }
+
+        /// <summary>
+        /// The equals.
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            return obj is AttributeValue && this == (AttributeValue)obj;
+        }
+
+        /// <summary>
+        /// The get hash code.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return AttributeId.GetHashCode() ^ Value.GetHashCode();
+        }
     }
 }

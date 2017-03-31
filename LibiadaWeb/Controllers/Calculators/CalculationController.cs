@@ -99,7 +99,7 @@
                         var commonSequenceRepository = new CommonSequenceRepository(db);
                         chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translators);
 
-                        var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                        var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                         for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                         {
                             characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]);

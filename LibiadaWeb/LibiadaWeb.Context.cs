@@ -31,7 +31,6 @@ namespace LibiadaWeb
         public virtual DbSet<CommonSequence> CommonSequence { get; set; }
         public virtual DbSet<CharacteristicValue> CharacteristicValue { get; set; }
         public virtual DbSet<CharacteristicGroup> CharacteristicGroup { get; set; }
-        public virtual DbSet<CharacteristicTypeLink> CharacteristicTypeLink { get; set; }
         public virtual DbSet<DnaSequence> DnaSequence { get; set; }
         public virtual DbSet<Subsequence> Subsequence { get; set; }
         public virtual DbSet<Position> Position { get; set; }

@@ -36,7 +36,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
@@ -45,7 +45,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -106,9 +106,9 @@
                 var matterNames = new List<string>();
                 var elementNames = new List<List<string>>();
                 var characteristicNames = new List<string>();
-                var newCharacteristics = new List<LibiadaWeb.CongenericCharacteristicValue>();
+                var newCharacteristics = new List<CongenericCharacteristicValue>();
 
-                bool isLiteratureSequence = false;
+                var isLiteratureSequence = false;
 
                 // cycle through matters; first level of characteristics array
                 for (int w = 0; w < matterIds.Length; w++)
@@ -122,7 +122,7 @@
                     // cycle through characteristics and notations; second level of characteristics array
                     for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
                     {
-                        var notation = notations[i];
+                        Notation notation = notations[i];
 
                         long sequenceId;
 
@@ -147,8 +147,8 @@
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         short characteristicTypeLinkId = characteristicTypeLinkIds[i];
 
-                        var className = characteristicTypeLinkRepository.GetCongenericCharacteristicType(characteristicTypeLinkId);
-                        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCalculator(className);
+                        CongenericCharacteristic congenericCharacteristic = characteristicTypeLinkRepository.GetCongenericCharacteristic(characteristicTypeLinkId);
+                        ICongenericCalculator calculator = CongenericCalculatorsFactory.CreateCalculator(congenericCharacteristic);
                         Link link = characteristicTypeLinkRepository.GetLinkForCongenericCharacteristic(characteristicTypeLinkId);
                         List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
                         int calculated = db.CongenericCharacteristicValue.Count(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId);
@@ -165,7 +165,7 @@
                                                                        && b.ElementId == elementId))
                                 {
                                     double value = calculator.Calculate(tempChain, link);
-                                    var currentCharacteristic = new LibiadaWeb.CongenericCharacteristicValue
+                                    var currentCharacteristic = new CongenericCharacteristicValue
                                     {
                                         SequenceId = sequenceId,
                                         CharacteristicTypeLinkId = characteristicTypeLinkId,

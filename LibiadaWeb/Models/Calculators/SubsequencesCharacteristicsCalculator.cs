@@ -43,92 +43,126 @@
             List<AttributeValue> attributeValues,
             string[] filters = null)
         {
+            Chain[] sequences;
+            long[] subsequenceIds;
+            SubsequenceData[] subsequenceData;
+            Dictionary<long, AttributeValue[]> dbSubsequencesAttributes;
+            Dictionary<long, Dictionary<short, double>> dbCharacteristics;
+            var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
+            var links = new Link[characteristicTypeLinkIds.Length];
+            var newCharacteristics = new List<CharacteristicValue>();
+
             // creating local context to avoid memory overflow due to possibly big cache of characteristics
-            using (var context = new LibiadaWebEntities())
+            using (var db = new LibiadaWebEntities())
             {
-                var subsequenceExtractor = new SubsequenceExtractor(context);
-                var sequenceAttributeRepository = new SequenceAttributeRepository(context);
-                var newCharacteristics = new List<CharacteristicValue>();
-                var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
-                var links = new Link[characteristicTypeLinkIds.Length];
+                var subsequenceExtractor = new SubsequenceExtractor(db);
+                var sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
-                // extracting data from database
-                var dbSubsequences = filters == null ? subsequenceExtractor.GetSubsequences(parentSequenceId, features) : subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
-                var subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
-                var dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+                Subsequence[] dbSubsequences = filters == null ?
+                    subsequenceExtractor.GetSubsequences(parentSequenceId, features) :
+                    subsequenceExtractor.GetSubsequences(parentSequenceId, features, filters);
 
-                var dbCharacteristics = context.CharacteristicValue.Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId))
+                subsequenceData = dbSubsequences.Select(s => new SubsequenceData(s)).ToArray();
+
+                // converting to libiada sequences
+                sequences = subsequenceExtractor.ExtractChains(dbSubsequences);
+
+                subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
+                dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
+
+                dbCharacteristics = db.CharacteristicValue
+                        .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId))
                         .ToArray()
                         .GroupBy(c => c.SequenceId)
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
 
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(context);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                 for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
                 {
-                    var characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                    var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-                    calculators[k] = FullCalculatorsFactory.CreateCalculator(className);
+                    short characteristicTypeLinkId = characteristicTypeLinkIds[k];
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                    calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
                     links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
                 }
+            }
 
-                // converting to libiada sequences
-                var sequences = subsequenceExtractor.ExtractChains(dbSubsequences);
-                var subsequenceData = new SubsequenceData[sequences.Length];
-
-                // cycle through subsequences
-                for (int i = 0; i < sequences.Length; i++)
+            // cycle through subsequences
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                var values = new double[calculators.Length];
+                Dictionary<short, double> sequenceDbCharacteristics;
+                if (!dbCharacteristics.TryGetValue(subsequenceIds[i], out sequenceDbCharacteristics))
                 {
-                    var values = new double[characteristicTypeLinkIds.Length];
-                    Dictionary<short, double> sequenceDbCharacteristics;
-                    if (!dbCharacteristics.TryGetValue(dbSubsequences[i].Id, out sequenceDbCharacteristics))
-                    {
-                        sequenceDbCharacteristics = new Dictionary<short, double>();
-                    }
-
-                    // cycle through characteristics and notations
-                    for (int j = 0; j < characteristicTypeLinkIds.Length; j++)
-                    {
-                        short characteristicTypeLinkId = characteristicTypeLinkIds[j];
-                        if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkId, out values[j]))
-                        {
-                            values[j] = calculators[j].Calculate(sequences[i], links[j]);
-                            var currentCharacteristic = new CharacteristicValue
-                            {
-                                SequenceId = dbSubsequences[i].Id,
-                                CharacteristicTypeLinkId = characteristicTypeLinkId,
-                                Value = values[j]
-                            };
-
-                            newCharacteristics.Add(currentCharacteristic);
-                        }
-                    }
-
-                    AttributeValue[] attributes;
-                    if (!dbSubsequencesAttributes.TryGetValue(dbSubsequences[i].Id, out attributes))
-                    {
-                        attributes = new AttributeValue[0];
-                    }
-
-                    var attributeIndexes = new int[attributes.Length];
-                    for (int j = 0; j < attributes.Length; j++)
-                    {
-                        if (!attributeValues.Contains(attributes[j]))
-                        {
-                            attributeValues.Add(attributes[j]);
-                        }
-
-                        attributeIndexes[j] = attributeValues.IndexOf(attributes[j]);
-                    }
-
-                    subsequenceData[i] = new SubsequenceData(dbSubsequences[i], values, attributeIndexes);
+                    sequenceDbCharacteristics = new Dictionary<short, double>();
                 }
 
-                // trying to save calculated characteristics to database
-                var characteristicRepository = new CharacteristicRepository(context);
-                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+                // cycle through characteristics and notations
+                for (int j = 0; j < calculators.Length; j++)
+                {
+                    short characteristicTypeLinkId = characteristicTypeLinkIds[j];
+                    if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkId, out values[j]))
+                    {
+                        values[j] = calculators[j].Calculate(sequences[i], links[j]);
+                        var currentCharacteristic = new CharacteristicValue
+                        {
+                            SequenceId = subsequenceIds[i],
+                            CharacteristicTypeLinkId = characteristicTypeLinkId,
+                            Value = values[j]
+                        };
 
-                return subsequenceData;
+                        newCharacteristics.Add(currentCharacteristic);
+                    }
+                }
+
+                subsequenceData[i].CharacteristicsValues = values;
+
+                subsequenceData[i].Attributes = FillAttributesIndexes(attributeValues, dbSubsequencesAttributes, subsequenceIds[i]);
             }
+
+            using (var db = new LibiadaWebEntities())
+            {
+                // trying to save calculated characteristics to database
+                var characteristicRepository = new CharacteristicRepository(db);
+                characteristicRepository.TrySaveCharacteristicsToDatabase(newCharacteristics);
+            }
+
+            return subsequenceData;
+        }
+
+        /// <summary>
+        /// Gets attributes indexes.
+        /// </summary>
+        /// <param name="attributeValues">
+        /// The attribute values.
+        /// </param>
+        /// <param name="dbSubsequencesAttributes">
+        /// The db subsequences attributes.
+        /// </param>
+        /// <param name="subsequenceId">
+        /// The subsequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:int[]"/>.
+        /// </returns>
+        private static int[] FillAttributesIndexes(List<AttributeValue> attributeValues, Dictionary<long, AttributeValue[]> dbSubsequencesAttributes, long subsequenceId)
+        {
+            AttributeValue[] attributes;
+            if (!dbSubsequencesAttributes.TryGetValue(subsequenceId, out attributes))
+            {
+                attributes = new AttributeValue[0];
+            }
+
+            var attributesIndexes = new int[attributes.Length];
+            for (int j = 0; j < attributes.Length; j++)
+            {
+                if (!attributeValues.Contains(attributes[j]))
+                {
+                    attributeValues.Add(attributes[j]);
+                }
+
+                attributesIndexes[j] = attributeValues.IndexOf(attributes[j]);
+            }
+            return attributesIndexes;
         }
     }
 }

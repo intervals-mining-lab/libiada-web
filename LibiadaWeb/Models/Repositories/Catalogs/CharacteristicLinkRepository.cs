@@ -13,7 +13,7 @@
     /// <summary>
     /// The characteristic type link repository.
     /// </summary>
-    public class CharacteristicTypeLinkRepository : ICharacteristicTypeLinkRepository
+    public class CharacteristicLinkRepository : ICharacteristicTypeLinkRepository
     {
         /// <summary>
         /// The characteristic type links.
@@ -36,12 +36,12 @@
         private readonly List<BinaryCharacteristicLink> binaryCharacteristicLinks;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicTypeLinkRepository"/> class.
+        /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
+        public CharacteristicLinkRepository(LibiadaWebEntities db)
         {
             fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
             congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToList();
@@ -158,7 +158,7 @@
         /// <returns>
         /// The <see cref="CharacteristicType"/>.
         /// </returns>
-        public FullCharacteristic GetFullCharacteristicType(int characteristicTypeLinkId)
+        public FullCharacteristic GetFullCharacteristic(int characteristicTypeLinkId)
         {
             return fullCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).FullCharacteristic;
         }
@@ -172,7 +172,7 @@
         /// <returns>
         /// The <see cref="CongenericCharacteristic"/>.
         /// </returns>
-        public CongenericCharacteristic GetCongenericCharacteristicType(int characteristicTypeLinkId)
+        public CongenericCharacteristic GetCongenericCharacteristic(int characteristicTypeLinkId)
         {
             return congenericCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).CongenericCharacteristic;
         }
@@ -186,7 +186,7 @@
         /// <returns>
         /// The <see cref="AccordanceCharacteristic"/>.
         /// </returns>
-        public AccordanceCharacteristic GetAccordanceCharacteristicType(int characteristicTypeLinkId)
+        public AccordanceCharacteristic GetAccordanceCharacteristic(int characteristicTypeLinkId)
         {
             return accordanceCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).AccordanceCharacteristic;
         }
@@ -200,7 +200,7 @@
         /// <returns>
         /// The <see cref="BinaryCharacteristic"/>.
         /// </returns>
-        public BinaryCharacteristic GetBinaryCharacteristicType(int characteristicTypeLinkId)
+        public BinaryCharacteristic GetBinaryCharacteristic(int characteristicTypeLinkId)
         {
             return binaryCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).BinaryCharacteristic;
         }
@@ -284,7 +284,7 @@
         /// </returns>
         public string GetFullCharacteristicName(int characteristicTypeLinkId)
         {
-            var characteristicType = GetFullCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetFullCharacteristic(characteristicTypeLinkId).GetDisplayValue();
 
             var databaseLink = GetLinkForFullCharacteristic(characteristicTypeLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
@@ -303,7 +303,7 @@
         /// </returns>
         public string GetCongenericCharacteristicName(int characteristicTypeLinkId)
         {
-            var characteristicType = GetCongenericCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetCongenericCharacteristic(characteristicTypeLinkId).GetDisplayValue();
 
             var databaseLink = GetLinkForCongenericCharacteristic(characteristicTypeLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
@@ -322,7 +322,7 @@
         /// </returns>
         public string GetAccordanceCharacteristicName(int characteristicTypeLinkId)
         {
-            var characteristicType = GetAccordanceCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetAccordanceCharacteristic(characteristicTypeLinkId).GetDisplayValue();
 
             var databaseLink = GetLinkForAccordanceCharacteristic(characteristicTypeLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
@@ -341,7 +341,7 @@
         /// </returns>
         public string GetBinaryCharacteristicName(int characteristicTypeLinkId)
         {
-            var characteristicType = GetBinaryCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetBinaryCharacteristic(characteristicTypeLinkId).GetDisplayValue();
 
             var databaseLink = GetLinkForBinaryCharacteristic(characteristicTypeLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();

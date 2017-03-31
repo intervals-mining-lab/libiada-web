@@ -74,7 +74,6 @@
                     matterIds = matterIds.OrderBy(m => m).ToArray();
 
                     var matterNames = new string[matterIds.Length];
-                    var parentSequenceIds = new long[matterIds.Length];
                     var remoteIds = new string[matterIds.Length];
                     var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
                     var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
@@ -93,13 +92,12 @@
                         {
                             matterNames[n] = parentSequences[n].Matter.Name;
                             remoteIds[n] = parentSequences[n].RemoteId;
-                            parentSequenceIds[n] = parentSequences[n].Id;
                         }
 
                         var commonSequenceRepository = new CommonSequenceRepository(db);
                         chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
-                        var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                        var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
 
                         sequenceCharacteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
 
@@ -117,7 +115,7 @@
 
                     double[] characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
 
-                    var sequenceData = new SequenceData[matterIds.Length];
+                    var sequencesData = new SequenceData[matterIds.Length];
 
                     for (int i = 0; i < matterIds.Length; i++)
                     {
@@ -125,18 +123,18 @@
                         SubsequenceData[] subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicTypeLinkIds,
                             features,
-                            parentSequenceIds[i],
+                            chains[i].Id,
                             attributeValues);
 
-                        sequenceData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
+                        sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);
                     }
 
                     // sorting organisms by their characteristic
-                    sequenceData = sequenceData.OrderBy(r => r.Characteristic).ToArray();
+                    sequencesData = sequencesData.OrderBy(r => r.Characteristic).ToArray();
 
                     var resultData = new Dictionary<string, object>
                                  {
-                                     { "result", sequenceData },
+                                     { "result", sequencesData },
                                      { "subsequencesCharacteristicsNames", subsequencesCharacteristicsNames },
                                      { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },

@@ -100,19 +100,19 @@
             return Action(() =>
             {
                 var db = new LibiadaWebEntities();
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();
-                var matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
+                Dictionary<long, Matter> matters = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {
-                    var matterId = matterIds[i];
+                    long matterId = matterIds[i];
                     var characteristics = new List<double>();
                     for (int k = 0; k < notations.Length; k++)
                     {
-                        var notation = notations[k];
+                        Notation notation = notations[k];
                         long sequenceId;
                         if (matters[matterId].Nature == Nature.Literature)
                         {
@@ -129,7 +129,7 @@
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
 
-                        var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                        Chain sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
                         for (int l = 0; l < iterationsCount; l++)
                         {
                             for (int j = 0; j < transformationIds.Length; j++)
@@ -140,10 +140,10 @@
                         }
 
                         int characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                        var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
-                        var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
+                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
 
-                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                         characteristics.Add(calculator.Calculate(sequence, link));
                     }
 

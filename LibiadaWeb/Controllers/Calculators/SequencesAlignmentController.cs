@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
@@ -33,7 +34,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
@@ -42,7 +43,7 @@
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -220,15 +221,15 @@
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<CharacteristicValue>();
-            var parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+            long parentSequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
 
             Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, features);
 
-            var sequences = subsequenceExtractor.ExtractChains(subsequences);
+            Chain[] sequences = subsequenceExtractor.ExtractChains(subsequences);
 
-            var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
-            var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
+            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
 
             for (int j = 0; j < sequences.Length; j++)
             {

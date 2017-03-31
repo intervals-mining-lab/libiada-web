@@ -41,7 +41,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
@@ -50,7 +50,7 @@
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 
@@ -111,12 +111,12 @@
                     throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
                 }
 
-                var firstMatterId = matterIds[0];
-                var firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
+                long firstMatterId = matterIds[0];
+                long firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, features);
-                var firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences);
-                var firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
-                var firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
+                Chain[] firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences);
+                List<double> firstSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, firstSequences, firstSequenceSubsequences);
+                Dictionary<long, AttributeValue[]> firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
                 var firstSequenceAttributes = new List<AttributeValue[]>();
                 foreach (var subsequence in firstSequenceSubsequences)
                 {
@@ -129,12 +129,12 @@
                     firstSequenceAttributes.Add(attributes);
                 }
 
-                var secondMatterId = matterIds[1];
-                var secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
+                long secondMatterId = matterIds[1];
+                long secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, features);
-                var secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences);
-                var secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
-                var secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
+                Chain[] secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences);
+                List<double> secondSequenceCharacteristics = CalculateCharacteristic(characteristicTypeLinkId, secondSequences, secondSequenceSubsequences);
+                Dictionary<long, AttributeValue[]> secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
                 var secondSequenceAttributes = new List<AttributeValue[]>();
                 foreach (var subsequence in secondSequenceSubsequences)
                 {
@@ -212,9 +212,9 @@
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<CharacteristicValue>();
-            var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(className);
-            var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
+            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
 
             for (int j = 0; j < sequences.Length; j++)
             {

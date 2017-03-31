@@ -243,9 +243,6 @@
     <Compile Include="CharacteristicGroup.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="CharacteristicTypeLink.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="CharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -426,7 +423,7 @@
     <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Calculators\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\CharacteristicTypeLinkRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\CharacteristicLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />

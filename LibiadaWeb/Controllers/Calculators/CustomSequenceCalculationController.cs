@@ -1,10 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
 
+    using Bio;
     using Bio.Extensions;
 
     using LibiadaCore.Core;
@@ -29,7 +31,7 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
@@ -37,7 +39,7 @@
         public CustomSequenceCalculationController() : base("Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -90,8 +92,8 @@
                     {
                         if (localFile)
                         {
-                            var sequenceStream = FileHelper.GetFileStream(file[i]);
-                            var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                            Stream sequenceStream = FileHelper.GetFileStream(file[i]);
+                            ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                             sequences[i] = fastaSequence.ConvertToString();
                             names[i] = fastaSequence.ID;
                         }
@@ -110,15 +112,15 @@
                         {
                             var chain = new Chain(sequences[j]);
 
-                            var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                            var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
-                            var calculator = FullCalculatorsFactory.CreateCalculator(className);
+                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                            IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                             characteristics[j, k] = calculator.Calculate(chain, link);
                         }
                     }
 
-                    var characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToList();
+                    List<string> characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToList();
 
                     return new Dictionary<string, object>
                     {

@@ -1,10 +1,12 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
 
+    using Bio;
     using Bio.Extensions;
 
     using LibiadaCore.Core;
@@ -103,7 +105,7 @@
             return Action(() =>
             {
                 var db = new LibiadaWebEntities();
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
                 var names = new string[sequencesCount];
@@ -112,8 +114,8 @@
                 {
                     if (localFile)
                     {
-                        var sequenceStream = FileHelper.GetFileStream(file[i]);
-                        var fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                        Stream sequenceStream = FileHelper.GetFileStream(file[i]);
+                        ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                         sequences[i] = fastaSequence.ConvertToString();
                         names[i] = fastaSequence.ID;
                     }
@@ -140,15 +142,15 @@
                             }
                         }
 
-                        var link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                        var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkIds[k]);
-                        var calculator = FullCalculatorsFactory.CreateCalculator(className);
+                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                        IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                         characteristics[j, k] = calculator.Calculate(sequence, link);
                     }
                 }
 
-                var characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToArray();
+                string[] characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToArray();
 
                 var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
                 for (int i = 0; i < characteristicNames.Length; i++)

@@ -45,15 +45,15 @@
 
             using (var context = new LibiadaWebEntities())
             {
-                var characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(context);
+                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(context);
 
-                var className = characteristicTypeLinkRepository.GetFullCharacteristicType(characteristicTypeLinkId);
-                calculator = FullCalculatorsFactory.CreateCalculator(className);
+                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                 link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
 
                 var subsequenceExtractor = new SubsequenceExtractor(context);
 
-                var dbSubsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
+                Subsequence dbSubsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
 
                 chain = subsequenceExtractor.ExtractChains(new[] { dbSubsequence }).Single();
             }
@@ -62,7 +62,7 @@
 
             CutRuleIterator iter = cutRule.GetIterator();
 
-            List<Chain> fragments = new List<Chain>();
+            var fragments = new List<Chain>();
 
             while (iter.Next())
             {

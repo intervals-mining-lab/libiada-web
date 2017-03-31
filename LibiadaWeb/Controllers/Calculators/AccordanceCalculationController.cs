@@ -8,6 +8,7 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
 
+    using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -33,7 +34,7 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
+        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
@@ -42,7 +43,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
+            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
         }
 
         /// <summary>
@@ -102,11 +103,11 @@
             {
                 if (matterIds.Length != 2)
                 {
-                    throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
+                    throw new ArgumentException("Number of selected matters must be 2.", "matterIds");
                 }
 
                 var characteristics = new List<List<double>>();
-                var characteristicName = characteristicTypeLinkRepository.GetAccordanceCharacteristicName(characteristicTypeLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetAccordanceCharacteristicName(characteristicTypeLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
@@ -115,27 +116,16 @@
                                      { "calculationType", calculationType }
                                  };
 
-                var firstMatterId = matterIds[0];
-                var secondMatterId = matterIds[1];
+                long firstMatterId = matterIds[0];
+                long secondMatterId = matterIds[1];
                 long firstSequenceId;
-                if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
+                long secondSequenceId;
+                if (notation.GetNature() == Nature.Literature)
                 {
                     firstSequenceId = db.LiteratureSequence.Single(l => l.MatterId == firstMatterId
                                                                      && l.Notation == notation
                                                                      && l.Language == language
                                                                      && l.Translator == translator).Id;
-                }
-                else
-                {
-                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
-                }
-
-                Chain firstChain = commonSequenceRepository.ToLibiadaChain(firstSequenceId);
-                firstChain.FillIntervalManagers();
-
-                long secondSequenceId;
-                if (db.Matter.Single(m => m.Id == secondMatterId).Nature == Nature.Literature)
-                {
                     secondSequenceId = db.LiteratureSequence.Single(l => l.MatterId == secondMatterId
                                                                       && l.Notation == notation
                                                                       && l.Language == language
@@ -143,15 +133,18 @@
                 }
                 else
                 {
+                    firstSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                     secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
+                Chain firstChain = commonSequenceRepository.ToLibiadaChain(firstSequenceId);
+                firstChain.FillIntervalManagers();
                 Chain secondChain = commonSequenceRepository.ToLibiadaChain(secondSequenceId);
                 secondChain.FillIntervalManagers();
 
-                AccordanceCharacteristic className = characteristicTypeLinkRepository.GetAccordanceCharacteristicType(characteristicTypeLinkId);
-                IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(className);
-                var link = characteristicTypeLinkRepository.GetLinkForAccordanceCharacteristic(characteristicTypeLinkId);
+                AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetAccordanceCharacteristic(characteristicTypeLinkId);
+                IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
+                Link link = characteristicTypeLinkRepository.GetLinkForAccordanceCharacteristic(characteristicTypeLinkId);
 
                 switch (calculationType)
                 {
@@ -167,13 +160,13 @@
 
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
-                            var element = firstChain.Alphabet[i];
+                            IBaseObject element = firstChain.Alphabet[i];
                             alphabet.Add(element.ToString());
 
-                            var firstCongenericChain = firstChain.CongenericChain(element);
-                            var secondCongenericChain = secondChain.CongenericChain(element);
+                            CongenericChain firstCongenericChain = firstChain.CongenericChain(element);
+                            CongenericChain secondCongenericChain = secondChain.CongenericChain(element);
 
-                            var characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
+                            double characteristicValue = calculator.Calculate(firstCongenericChain, secondCongenericChain, link);
                             characteristics[0].Add(characteristicValue);
 
                             characteristicValue = calculator.Calculate(secondCongenericChain, firstCongenericChain, link);
@@ -188,7 +181,7 @@
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
                             characteristics.Add(new List<double>());
-                            var firstElement = firstChain.Alphabet[i];
+                            IBaseObject firstElement = firstChain.Alphabet[i];
                             firstAlphabet.Add(firstElement.ToString());
                             for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
                             {

@@ -208,9 +208,9 @@
         /// </returns>
         private Chain ExtractJoinedSubsequenceWithoutComplement(Sequence sourceSequence, Subsequence subsequence)
         {
-            var joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
+            string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
 
-            var position = subsequence.Position.ToArray();
+            Position[] position = subsequence.Position.ToArray();
 
             for (int j = 0; j < position.Length; j++)
             {
@@ -234,13 +234,13 @@
         /// </returns>
         private Chain ExtractJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
         {
-            var bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-            var position = subsequence.Position.ToArray();
+            ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
+            Position[] position = subsequence.Position.ToArray();
             string resultSequence;
 
             if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
             {
-                var joinedSequence = bioSequence.ConvertToString();
+                string joinedSequence = bioSequence.ConvertToString();
 
                 for (int j = 0; j < position.Length; j++)
                 {

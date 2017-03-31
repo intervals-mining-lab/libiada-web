@@ -89,8 +89,8 @@
                     throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
                 }
 
-                var firstMatterId = matterIds[0];
-                var secondMatterId = matterIds[1];
+                long firstMatterId = matterIds[0];
+                long secondMatterId = matterIds[1];
 
                 long firstSequenceId;
                 if (db.Matter.Single(m => m.Id == firstMatterId).Nature == Nature.Literature)
@@ -128,7 +128,7 @@
                 int i = 0;
                 int j = 0;
                 var firstIterator = new IteratorStart(firstLibiadaChain, length, 1);
-                bool duplicate = false;
+                var duplicate = false;
                 while (!duplicate && firstIterator.Next())
                 {
                     i++;
