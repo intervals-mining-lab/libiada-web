@@ -2,14 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
+    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -33,11 +37,6 @@
         private readonly MatterRepository matterRepository;
 
         /// <summary>
-        /// The characteristic type link repository.
-        /// </summary>
-        private readonly CharacteristicTypeLinkRepository characteristicTypeLinkRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="ViewDataHelper"/> class.
         /// </summary>
         /// <param name="db">
@@ -47,7 +46,6 @@
         {
             this.db = db;
             matterRepository = new MatterRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicTypeLinkRepository(db);
         }
 
         /// <summary>
@@ -133,7 +131,7 @@
                 groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
 
-            data.Add("natures",  natures);
+            data.Add("natures", natures);
             data.Add("notations", notations.ToSelectListWithNature());
             data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
             data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
@@ -146,8 +144,8 @@
         /// <summary>
         /// The fill calculation data.
         /// </summary>
-        /// <param name="filter">
-        /// The filter.
+        /// <param name="characteristicsType">
+        /// The characteristics category.
         /// </param>
         /// <param name="minimumSelectedMatters">
         /// The minimum Selected Matters.
@@ -161,10 +159,31 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(Func<CharacteristicType, bool> filter, int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
+        public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
-            var data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, submitName);
-            data.Add("characteristicTypes", GetCharacteristicTypes(filter));
+            Dictionary<string, object> data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, submitName);
+
+            List<CharacteristicData> characteristicTypes;
+
+            switch (characteristicsType)
+            {
+                case CharacteristicCategory.Full:
+                    characteristicTypes = GetFullCharacteristicTypes();
+                    break;
+                case CharacteristicCategory.Congeneric:
+                    characteristicTypes = GetCongenericCharacteristicTypes();
+                    break;
+                case CharacteristicCategory.Accordance:
+                    characteristicTypes = GetAccordanceCharacteristicTypes();
+                    break;
+                case CharacteristicCategory.Binary:
+                    characteristicTypes = GetBinaryCharacteristicTypes();
+                    break;
+                default:
+                    throw new ArgumentException("Unknown characteristic category");
+            }
+
+            data.Add("characteristicTypes", characteristicTypes);
 
             return data;
         }
@@ -194,9 +213,9 @@
             var geneticNotations = ArrayExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
             var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
             var groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
-            var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic);
+            var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            var characteristicTypes = GetCharacteristicTypes(c => c.FullSequenceApplicable);
+            var characteristicTypes = GetFullCharacteristicTypes();
 
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", geneticNotations.ToSelectListWithNature());
@@ -211,52 +230,153 @@
         /// <summary>
         /// Gets characteristics types.
         /// </summary>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetCharacteristicTypes(Func<CharacteristicType, bool> filter)
+        public List<CharacteristicData> GetFullCharacteristicTypes()
         {
-            var characteristicTypes = db.CharacteristicType.Include(c => c.CharacteristicTypeLink).Where(filter).OrderBy(c => c.Name)
-                .Select(c => new CharacteristicData(c.Id, c.Name, c.CharacteristicTypeLink.OrderBy(ctl => ctl.Link).Select(ctl => new CharacteristicLinkData(ctl.Id)).ToList())).ToList();
+            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
 
-            var links = UserHelper.IsAdmin() ? ArrayExtensions.ToArray<Link>() : new[] { Link.NotApplied, Link.Start, Link.Cycle };
-
-            var characteristicTypeLinks = characteristicTypeLinkRepository.CharacteristicTypeLinks;
-
-            var linksData = links.Select(l => new
-                                                {
-                                                    Value = (int)l,
-                                                    Text = l.GetDisplayValue(),
-                                                    CharacteristicTypeLink = characteristicTypeLinks.Where(ctl => ctl.Link == l).Select(ctl => ctl.Id)
-                                                });
-
-            foreach (var characteristicType in characteristicTypes)
+            Link[] links;
+            FullCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
             {
-                for (int i = 0; i < characteristicType.CharacteristicLinks.Count; i++)
-                {
-                    var characteristicLink = characteristicType.CharacteristicLinks[i];
-                    foreach (var link in linksData)
-                    {
-                        if (link.CharacteristicTypeLink.Contains(characteristicLink.CharacteristicTypeLinkId))
-                        {
-                            characteristicLink.Value = link.Value.ToString();
-                            characteristicLink.Text = link.Text;
-                            break;
-                        }
-                    }
-
-                    if (string.IsNullOrEmpty(characteristicLink.Value))
-                    {
-                        characteristicType.CharacteristicLinks.Remove(characteristicLink);
-                        i--;
-                    }
-                }
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<FullCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
             }
 
-            return characteristicTypes;
+            var result = new List<CharacteristicData>();
+
+            foreach (FullCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.FullCharacteristicLinks
+                    .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// The get congeneric characteristic types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetCongenericCharacteristicTypes()
+        {
+            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+
+            Link[] links;
+            CongenericCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<CongenericCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableCongenericCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (CongenericCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.CongenericCharacteristicLinks
+                    .Where(cl => cl.CongenericCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// The get accordance characteristic types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetAccordanceCharacteristicTypes()
+        {
+            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+
+            Link[] links;
+            AccordanceCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<AccordanceCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (AccordanceCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.AccordanceCharacteristicLinks
+                    .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// The get binary characteristic types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetBinaryCharacteristicTypes()
+        {
+            var characteristicTypeRepository = new CharacteristicTypeLinkRepository(db);
+
+            Link[] links;
+            BinaryCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<BinaryCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableBinaryCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (BinaryCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.BinaryCharacteristicLinks
+                    .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -279,14 +399,12 @@
         /// </returns>
         public Dictionary<string, object> GetMattersData(int minimumSelectedMatters, int maximumSelectedMatters, Func<Matter, bool> filter, string submitName)
         {
-            var radiobuttonsForMatters = maximumSelectedMatters == 1 && minimumSelectedMatters == 1;
-
             return new Dictionary<string, object>
                 {
                     { "minimumSelectedMatters", minimumSelectedMatters },
                     { "maximumSelectedMatters", maximumSelectedMatters },
                     { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "radiobuttonsForMatters", radiobuttonsForMatters },
+                    { "radiobuttonsForMatters", maximumSelectedMatters == 1 && minimumSelectedMatters == 1 },
                     { "submitName", submitName }
                 };
         }

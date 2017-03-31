@@ -58,7 +58,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            var viewData = viewDataHelper.FillViewData(c => c.FullSequenceApplicable, 3, int.MaxValue, "Calculate");
+            var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
             viewData.Add("ClusterizatorsTypes", ArrayExtensions.ToArray<ClusterizationType>().ToSelectList());
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();

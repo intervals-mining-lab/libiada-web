@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -12,8 +11,6 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models;
-    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
@@ -40,19 +37,9 @@
         /// </returns>
         public ActionResult Index()
         {
-            Func<CharacteristicType, bool> filter;
-            if (UserHelper.IsAdmin())
-            {
-                filter = c => c.FullSequenceApplicable;
-            }
-            else
-            {
-                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
-            }
-
             var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate");
+            Dictionary<string, object> data = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
             data.Add("transformationLinks", transformationLinks.ToSelectList());

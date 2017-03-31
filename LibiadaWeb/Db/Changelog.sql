@@ -1829,4 +1829,32 @@ CREATE TABLE task
    CONSTRAINT fk_task_user FOREIGN KEY (user_id) REFERENCES dbo."AspNetUsers" ("Id") ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
+-- 31.03.2017
+-- Delete characteristics values and update characteristics tables foreign keys.
+
+ALTER TABLE characteristic RENAME TO full_characteristic;
+
+DELETE FROM accordance_characteristic;
+DELETE FROM binary_characteristic;
+DELETE FROM congeneric_characteristic;
+DELETE FROM full_characteristic;
+
+DROP TRIGGER tgiu_accordance_characteristic_applicability ON accordance_characteristic;
+DROP TRIGGER tgiu_binary_characteristic_applicability ON binary_characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_applicability ON congeneric_characteristic;
+DROP TRIGGER tgiu_characteristic_applicability ON full_characteristic;
+
+
+ALTER TABLE accordance_characteristic DROP CONSTRAINT fk_characteristic_type_link;
+ALTER TABLE accordance_characteristic ADD CONSTRAINT fk_accordance_characteristic_link FOREIGN KEY (characteristic_type_link_id) REFERENCES accordance_characteristic_link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE binary_characteristic DROP CONSTRAINT fk_characteristic_type_link;
+ALTER TABLE binary_characteristic ADD CONSTRAINT fk_binary_characteristic_link FOREIGN KEY (characteristic_type_link_id) REFERENCES binary_characteristic_link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE congeneric_characteristic DROP CONSTRAINT fk_characteristic_type_link;
+ALTER TABLE congeneric_characteristic ADD CONSTRAINT fk_congeneric_characteristic_link FOREIGN KEY (characteristic_type_link_id) REFERENCES congeneric_characteristic_link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE full_characteristic DROP CONSTRAINT fk_characteristic_type_link;
+ALTER TABLE full_characteristic ADD CONSTRAINT fk_full_characteristic_link FOREIGN KEY (characteristic_type_link_id) REFERENCES full_characteristic_link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
 COMMIT;

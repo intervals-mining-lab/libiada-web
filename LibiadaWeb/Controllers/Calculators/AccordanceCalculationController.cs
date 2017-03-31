@@ -54,7 +54,7 @@
         public ActionResult Index()
         {
             var viewDataHelper = new ViewDataHelper(db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(c => c.AccordanceApplicable, 2, 2, "Calculate"));
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Accordance, 2, 2, "Calculate"));
             return View();
         }
 

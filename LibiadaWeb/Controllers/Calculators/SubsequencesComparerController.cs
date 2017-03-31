@@ -149,7 +149,7 @@
 
                     var viewDataHelper = new ViewDataHelper(db);
 
-                    localCharacteristicsType = viewDataHelper.GetCharacteristicTypes(c => c.FullSequenceApplicable);
+                    localCharacteristicsType = viewDataHelper.GetFullCharacteristicTypes();
                 }
 
                 // cycle through matters; first level of characteristics array

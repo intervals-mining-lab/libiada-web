@@ -76,7 +76,7 @@
           <Property Name="link" Type="int2" Nullable="false" />
         </EntityType>
 
-        <EntityType Name="characteristic">
+        <EntityType Name="full_characteristic">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -395,12 +395,12 @@
 
         <Association Name="fk_full_characteristic_link">
           <End Role="full_characteristic_link" Type="Self.full_characteristic_link" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="full_characteristic_link">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="characteristic_type_link_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -577,12 +577,12 @@
 
         <Association Name="fk_characteristic_chain">
           <End Role="chain" Type="Self.chain" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -603,12 +603,12 @@
 
         <Association Name="fk_characteristic_dna_chain">
           <End Role="dna_chain" Type="Self.dna_chain" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="dna_chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -655,12 +655,12 @@
 
         <Association Name="fk_characteristic_literature_chain">
           <End Role="literature_chain" Type="Self.literature_chain" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="literature_chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -707,12 +707,12 @@
 
         <Association Name="fk_characteristic_fmotiv">
           <End Role="fmotiv" Type="Self.fmotiv" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="fmotiv">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -772,12 +772,12 @@
 
         <Association Name="fk_characteristic_music_chain">
           <End Role="music_chain" Type="Self.music_chain" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="music_chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -824,12 +824,12 @@
 
         <Association Name="fk_characteristic_data_chain">
           <End Role="data_chain" Type="Self.data_chain" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="data_chain">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -863,12 +863,12 @@
 
         <Association Name="fk_characteristic_measure">
           <End Role="measure" Type="Self.measure" Multiplicity="1" />
-          <End Role="characteristic" Type="Self.characteristic" Multiplicity="*" />
+          <End Role="full_characteristic" Type="Self.full_characteristic" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="measure">
               <PropertyRef Name="id" />
             </Principal>
-            <Dependent Role="characteristic">
+            <Dependent Role="full_characteristic">
               <PropertyRef Name="chain_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -906,7 +906,7 @@
           <EntitySet Name="binary_characteristic" EntityType="Self.binary_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="accordance_characteristic" EntityType="Self.accordance_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="chain" EntityType="Self.chain" store:Type="Tables" Schema="public"/>
-          <EntitySet Name="characteristic" EntityType="Self.characteristic" store:Type="Tables" Schema="public"/>
+          <EntitySet Name="full_characteristic" EntityType="Self.full_characteristic" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic_group" EntityType="Self.characteristic_group" store:Type="Tables" Schema="public"/>
           <EntitySet Name="characteristic_type_link" EntityType="Self.characteristic_type_link" store:Type="Tables" Schema="public"/>
           <EntitySet Name="dna_chain" EntityType="Self.dna_chain" store:Type="Tables" Schema="public"/>
@@ -957,7 +957,7 @@
 
           <AssociationSet Name="fk_full_characteristic_link" Association="Self.fk_full_characteristic_link">
             <End Role="full_characteristic_link" EntitySet="full_characteristic_link" />
-            <End Role="characteristic" EntitySet="characteristic" />
+            <End Role="full_characteristic" EntitySet="full_characteristic" />
           </AssociationSet>
 
           <AssociationSet Name="fk_binary_characteristic_link" Association="Self.fk_binary_characteristic_link">
@@ -2355,7 +2355,7 @@
 
           <EntitySetMapping Name="CharacteristicValue">
             <EntityTypeMapping TypeName="LibiadaWebModel.CharacteristicValue">
-              <MappingFragment StoreEntitySet="characteristic">
+              <MappingFragment StoreEntitySet="full_characteristic">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />

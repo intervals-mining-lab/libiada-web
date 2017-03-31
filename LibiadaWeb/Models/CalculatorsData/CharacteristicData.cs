@@ -11,7 +11,7 @@
         /// <summary>
         /// The characteristic links.
         /// </summary>
-        public readonly List<CharacteristicLinkData> CharacteristicLinks;
+        public readonly List<LinkSelectListItem> CharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicData"/> class.
@@ -25,7 +25,7 @@
         /// <param name="characteristicLinks">
         /// The characteristic links.
         /// </param>
-        public CharacteristicData(int value, string text, List<CharacteristicLinkData> characteristicLinks)
+        public CharacteristicData(int value, string text, List<LinkSelectListItem> characteristicLinks)
         {
             Value = value.ToString();
             Text = text;

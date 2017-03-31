@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -8,10 +7,8 @@
     using LibiadaCore.Core;
 
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
-    using Models;
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
@@ -40,17 +37,7 @@
             var db = new LibiadaWebEntities();
             var viewDataHelper = new ViewDataHelper(db);
 
-            Func<CharacteristicType, bool> filter;
-            if (UserHelper.IsAdmin())
-            {
-                filter = c => c.FullSequenceApplicable;
-            }
-            else
-            {
-                filter = c => c.FullSequenceApplicable && Aliases.UserAvailableCharacteristics.Contains((Aliases.CharacteristicType)c.Id);
-            }
-
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(filter, 1, int.MaxValue, "Calculate"));
+            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate"));
             return View();
         }
 

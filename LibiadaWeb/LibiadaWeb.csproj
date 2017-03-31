@@ -239,6 +239,7 @@
     <Compile Include="BinaryCharacteristicValue.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="CharacteristicCategory.cs" />
     <Compile Include="CharacteristicGroup.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
@@ -419,7 +420,7 @@
     <Compile Include="Models\Account\VerifyPhoneNumberViewModel.cs" />
     <Compile Include="Models\Aliases.cs" />
     <Compile Include="Models\CalculatorsData\CharacteristicData.cs" />
-    <Compile Include="Models\CalculatorsData\CharacteristicLinkData.cs" />
+    <Compile Include="Models\CalculatorsData\LinkSelectListItem.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
     <Compile Include="Models\CalculatorsData\IntPair.cs" />

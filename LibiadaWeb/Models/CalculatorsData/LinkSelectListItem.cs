@@ -5,7 +5,7 @@
     /// <summary>
     /// The characteristic link data.
     /// </summary>
-    public class CharacteristicLinkData : SelectListItem
+    public class LinkSelectListItem : SelectListItem
     {
         /// <summary>
         /// The value.
@@ -13,14 +13,22 @@
         public readonly int CharacteristicTypeLinkId;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicLinkData"/> class.
+        /// Initializes a new instance of the <see cref="LinkSelectListItem"/> class.
         /// </summary>
         /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="value">
         /// The value.
         /// </param>
-        public CharacteristicLinkData(int characteristicTypeLinkId)
+        /// <param name="text">
+        /// The text.
+        /// </param>
+        public LinkSelectListItem(int characteristicTypeLinkId, string value, string text)
         {
             CharacteristicTypeLinkId = characteristicTypeLinkId;
+            Value = value;
+            Text = text;
         }
     }
 }

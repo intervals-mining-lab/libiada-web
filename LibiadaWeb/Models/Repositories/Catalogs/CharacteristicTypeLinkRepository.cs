@@ -1,15 +1,13 @@
-﻿using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
-using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-
-namespace LibiadaWeb.Models.Repositories.Catalogs
+﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     /// <summary>
@@ -21,8 +19,20 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The characteristic type links.
         /// </summary>
         private readonly List<FullCharacteristicLink> fullCharacteristicLinks;
+
+        /// <summary>
+        /// The congeneric characteristic links.
+        /// </summary>
         private readonly List<CongenericCharacteristicLink> congenericCharacteristicLinks;
+
+        /// <summary>
+        /// The accordance characteristic links.
+        /// </summary>
         private readonly List<AccordanceCharacteristicLink> accordanceCharacteristicLinks;
+
+        /// <summary>
+        /// The binary characteristic links.
+        /// </summary>
         private readonly List<BinaryCharacteristicLink> binaryCharacteristicLinks;
 
         /// <summary>
@@ -33,10 +43,10 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </param>
         public CharacteristicTypeLinkRepository(LibiadaWebEntities db)
         {
-            fullCharacteristicLinks = db.FullCharacteristicLink.Include(ctl => ctl.FullCharacteristic).ToList();
-            congenericCharacteristicLinks = db.CongenericCharacteristicLink.Include(ctl => ctl.CongenericCharacteristic).ToList();
-            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.Include(ctl => ctl.AccordanceCharacteristic).ToList();
-            binaryCharacteristicLinks = db.BinaryCharacteristicLink.Include(ctl => ctl.BinaryCharacteristic).ToList();
+            fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
+            congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToList();
+            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToList();
+            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToList();
         }
 
         /// <summary>
@@ -50,6 +60,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
         }
 
+        /// <summary>
+        /// Gets the congeneric characteristic links.
+        /// </summary>
         public IEnumerable<CongenericCharacteristicLink> CongenericCharacteristicLinks
         {
             get
@@ -58,6 +71,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
         }
 
+        /// <summary>
+        /// Gets the accordance characteristic links.
+        /// </summary>
         public IEnumerable<AccordanceCharacteristicLink> AccordanceCharacteristicLinks
         {
             get
@@ -66,6 +82,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
         }
 
+        /// <summary>
+        /// Gets the binary characteristic links.
+        /// </summary>
         public IEnumerable<BinaryCharacteristicLink> BinaryCharacteristicLinks
         {
             get
@@ -88,16 +107,43 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return fullCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
         }
 
+        /// <summary>
+        /// The get link for congeneric characteristic.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Link"/>.
+        /// </returns>
         public Link GetLinkForCongenericCharacteristic(int characteristicTypeLinkId)
         {
             return congenericCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
         }
 
+        /// <summary>
+        /// The get link for accordance characteristic.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Link"/>.
+        /// </returns>
         public Link GetLinkForAccordanceCharacteristic(int characteristicTypeLinkId)
         {
             return accordanceCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
         }
 
+        /// <summary>
+        /// The get link for binary characteristic.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Link"/>.
+        /// </returns>
         public Link GetLinkForBinaryCharacteristic(int characteristicTypeLinkId)
         {
             return binaryCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
@@ -117,16 +163,43 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return fullCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).FullCharacteristic;
         }
 
+        /// <summary>
+        /// The get congeneric characteristic type.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CongenericCharacteristic"/>.
+        /// </returns>
         public CongenericCharacteristic GetCongenericCharacteristicType(int characteristicTypeLinkId)
         {
             return congenericCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).CongenericCharacteristic;
         }
 
+        /// <summary>
+        /// The get accordance characteristic type.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AccordanceCharacteristic"/>.
+        /// </returns>
         public AccordanceCharacteristic GetAccordanceCharacteristicType(int characteristicTypeLinkId)
         {
             return accordanceCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).AccordanceCharacteristic;
         }
 
+        /// <summary>
+        /// The get binary characteristic type.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BinaryCharacteristic"/>.
+        /// </returns>
         public BinaryCharacteristic GetBinaryCharacteristicType(int characteristicTypeLinkId)
         {
             return binaryCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).BinaryCharacteristic;
@@ -149,16 +222,52 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return string.Join("  ", GetFullCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
         }
 
+        /// <summary>
+        /// The get congeneric characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="notation">
+        /// The notation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetCongenericCharacteristicName(int characteristicTypeLinkId, Notation notation)
         {
             return string.Join("  ", GetCongenericCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
         }
 
+        /// <summary>
+        /// The get accordance characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="notation">
+        /// The notation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetAccordanceCharacteristicName(int characteristicTypeLinkId, Notation notation)
         {
             return string.Join("  ", GetAccordanceCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
         }
 
+        /// <summary>
+        /// The get binary characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <param name="notation">
+        /// The notation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetBinaryCharacteristicName(int characteristicTypeLinkId, Notation notation)
         {
             return string.Join("  ", GetBinaryCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
@@ -183,6 +292,15 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return string.Join("  ", characteristicType, link);
         }
 
+        /// <summary>
+        /// The get congeneric characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetCongenericCharacteristicName(int characteristicTypeLinkId)
         {
             var characteristicType = GetCongenericCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
@@ -193,6 +311,15 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return string.Join("  ", characteristicType, link);
         }
 
+        /// <summary>
+        /// The get accordance characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetAccordanceCharacteristicName(int characteristicTypeLinkId)
         {
             var characteristicType = GetAccordanceCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
@@ -203,6 +330,15 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             return string.Join("  ", characteristicType, link);
         }
 
+        /// <summary>
+        /// The get binary characteristic name.
+        /// </summary>
+        /// <param name="characteristicTypeLinkId">
+        /// The characteristic type link id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public string GetBinaryCharacteristicName(int characteristicTypeLinkId)
         {
             var characteristicType = GetBinaryCharacteristicType(characteristicTypeLinkId).GetDisplayValue();
