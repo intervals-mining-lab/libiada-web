@@ -18,9 +18,7 @@ namespace LibiadaWeb
         public long SequenceId { get; set; }
         public short CharacteristicTypeLinkId { get; set; }
         public double Value { get; set; }
-        public System.DateTimeOffset Created { get; set; }
         public long ElementId { get; set; }
-        public System.DateTimeOffset Modified { get; set; }
     
         public virtual CongenericCharacteristicLink CongenericCharacteristicLink { get; set; }
         public virtual Element Element { get; set; }

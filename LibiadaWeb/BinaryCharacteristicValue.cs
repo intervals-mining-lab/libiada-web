@@ -18,10 +18,8 @@ namespace LibiadaWeb
         public long SequenceId { get; set; }
         public short CharacteristicTypeLinkId { get; set; }
         public double Value { get; set; }
-        public System.DateTimeOffset Created { get; set; }
         public long FirstElementId { get; set; }
         public long SecondElementId { get; set; }
-        public System.DateTimeOffset Modified { get; set; }
     
         public virtual Element FirstElement { get; set; }
         public virtual Element SecondElement { get; set; }

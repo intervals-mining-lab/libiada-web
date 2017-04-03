@@ -23,10 +23,8 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
-          <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
         <EntityType Name="accordance_characteristic_link">
@@ -47,10 +45,8 @@
           <Property Name="second_chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
-          <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
         <EntityType Name="chain">
@@ -84,8 +80,26 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="created" Type="timestamptz" Nullable="false" />
-          <Property Name="modified" Type="timestamptz" Nullable="false" />
+        </EntityType>
+
+        <EntityType Name="congeneric_characteristic_link">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int2" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="congeneric_characteristic" Type="int2" Nullable="false" />
+          <Property Name="link" Type="int2" Nullable="false" />
+        </EntityType>
+
+        <EntityType Name="congeneric_characteristic">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="chain_id" Type="int8" Nullable="false" />
+          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
+          <Property Name="value" Type="float8" Nullable="false" />
+          <Property Name="element_id" Type="int8" Nullable="false" />
         </EntityType>
 
         <EntityType Name="characteristic_group">
@@ -205,28 +219,6 @@
           <Property Name="fmotiv_type_id" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="remote_db_id" Type="int2" />
-          <Property Name="modified" Type="timestamptz" Nullable="false" />
-        </EntityType>
-
-        <EntityType Name="congeneric_characteristic_link">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int2" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="congeneric_characteristic" Type="int2" Nullable="false" />
-          <Property Name="link" Type="int2" Nullable="false" />
-        </EntityType>
-
-        <EntityType Name="congeneric_characteristic">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
-          <Property Name="value" Type="float8" Nullable="false" />
-          <Property Name="created" Type="timestamptz" Nullable="false" />
-          <Property Name="element_id" Type="int8" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
@@ -1040,10 +1032,8 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
-          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="FirstElement" Relationship="Self.fk_binary_characteristic_first_element" FromRole="BinaryCharacteristicValue" ToRole="Element" />
           <NavigationProperty Name="SecondElement" Relationship="Self.fk_binary_characteristic_second_element" FromRole="BinaryCharacteristicValue" ToRole="Element" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_binary_characteristic_chain" FromRole="BinaryCharacteristicValue" ToRole="CommonSequence" />
@@ -1059,10 +1049,8 @@
           <Property Name="SecondSequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
-          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="FirstElement" Relationship="Self.fk_accordance_characteristic_first_element" FromRole="AccordanceCharacteristicValue" ToRole="Element" />
           <NavigationProperty Name="SecondElement" Relationship="Self.fk_accordance_characteristic_second_element" FromRole="AccordanceCharacteristicValue" ToRole="Element" />
           <NavigationProperty Name="FirstSequence" Relationship="Self.fk_accordance_characteristic_first_chain" FromRole="AccordanceCharacteristicValue" ToRole="CommonSequence" />
@@ -1078,8 +1066,6 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_characteristic_chain" FromRole="CharacteristicValue" ToRole="CommonSequence" />
           <NavigationProperty Name="FullCharacteristicLink" Relationship="Self.fk_full_characteristic_link" FromRole="CharacteristicValue" ToRole="FullCharacteristicLink" />
         </EntityType>
@@ -1092,9 +1078,7 @@
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
           <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="ElementId" Type="Int64" Nullable="false" />
-          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <NavigationProperty Name="CongenericCharacteristicLink" Relationship="Self.fk_congeneric_characteristic_link" FromRole="CongenericCharacteristicValue" ToRole="CongenericCharacteristicLink" />
           <NavigationProperty Name="Element" Relationship="Self.fk_congeneric_characteristic_element" FromRole="CongenericCharacteristicValue" ToRole="Element" />
         </EntityType>
@@ -2295,10 +2279,8 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
-                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2311,10 +2293,8 @@
                 <ScalarProperty Name="SecondSequenceId" ColumnName="second_chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
-                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2326,9 +2306,7 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="ElementId" ColumnName="element_id" />
-                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2340,8 +2318,6 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
-                <ScalarProperty Name="Created" ColumnName="created" />
-                <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

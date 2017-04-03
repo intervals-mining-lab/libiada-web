@@ -1857,4 +1857,20 @@ ALTER TABLE congeneric_characteristic ADD CONSTRAINT fk_congeneric_characteristi
 ALTER TABLE full_characteristic DROP CONSTRAINT fk_characteristic_type_link;
 ALTER TABLE full_characteristic ADD CONSTRAINT fk_full_characteristic_link FOREIGN KEY (characteristic_type_link_id) REFERENCES full_characteristic_link (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
 
+-- 03.04.2017
+-- Deleting "created" and "modified" fields from characteristics values tables.
+-- Also droped tables characteristic_type and characteristic_type_link.
+
+ALTER TABLE accordance_characteristic DROP COLUMN created;
+ALTER TABLE accordance_characteristic DROP COLUMN modified;
+ALTER TABLE binary_characteristic DROP COLUMN created;
+ALTER TABLE binary_characteristic DROP COLUMN modified;
+ALTER TABLE congeneric_characteristic DROP COLUMN created;
+ALTER TABLE congeneric_characteristic DROP COLUMN modified;
+ALTER TABLE full_characteristic DROP COLUMN created;
+ALTER TABLE full_characteristic DROP COLUMN modified;
+
+DROP TABLE characteristic_type_link;
+DROP TABLE characteristic_type;
+
 COMMIT;
