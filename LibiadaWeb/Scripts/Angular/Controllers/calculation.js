@@ -43,7 +43,6 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         }
 
-
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
         $scope.filterByNature = filterByNature;
@@ -54,9 +53,11 @@
         $scope.selectLink = SelectLink;
         $scope.disableMattersSelect = FakeDisableMattersSelect;
 
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
         $scope.characteristics = [];
         $scope.nature = $scope.natures[0].Value;
+
         // if notation is not linked to characteristic
         $scope.language = $scope.languages[0];
         $scope.translator = $scope.translators[0];

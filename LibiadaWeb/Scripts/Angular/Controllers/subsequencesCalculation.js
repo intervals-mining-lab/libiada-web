@@ -56,6 +56,7 @@
         $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.filterByFeature = FakeFilterByFeature;
 
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
         $scope.characteristics = [];
         $scope.filters = [];

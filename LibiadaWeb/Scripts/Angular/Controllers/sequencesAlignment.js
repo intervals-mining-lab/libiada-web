@@ -42,7 +42,9 @@
         $scope.setCheckBoxesState = SetCheckBoxesState;
         $scope.filterByFeature = FakeFilterByFeature;
 
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
+        $scope.filters = [];
         $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
@@ -54,8 +56,6 @@
             link: $scope.characteristicTypes[0].CharacteristicLinks[0],
             notation: $scope.notations[0]
         };
-
-        $scope.filters = [];
     }
 
     angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);

@@ -63,6 +63,7 @@
 
         $scope.transformations = [];
         $scope.characteristics = [];
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
         $scope.nature = $scope.natures[0].Value;
     }

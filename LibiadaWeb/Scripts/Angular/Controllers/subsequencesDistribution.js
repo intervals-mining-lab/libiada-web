@@ -39,6 +39,7 @@
         $scope.disableMattersSelect = FakeDisableMattersSelect;
         $scope.filterByFeature = FakeFilterByFeature;
 
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
         $scope.characteristic = {
             characteristicType: $scope.characteristicTypes[0],

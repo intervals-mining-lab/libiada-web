@@ -22,7 +22,8 @@
         $scope.disableMattersSelect = FakeDisableMattersSelect;
 
         $scope.localFile = false;
-        $scope.selectedMatters = 0;   
+        $scope.flags = { showRefSeqOnly: true };
+        $scope.selectedMatters = 0;
     }
 
     angular.module("GenesImport", []).controller("GenesImportCtrl", ["$scope", genesImport]);

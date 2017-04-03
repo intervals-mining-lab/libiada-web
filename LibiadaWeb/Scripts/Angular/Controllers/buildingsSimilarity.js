@@ -30,6 +30,7 @@
         $scope.disableSubmit = disableSubmit;
 
         $scope.nature = $scope.natures[0].Value;
+        $scope.flags = { showRefSeqOnly: true };
         $scope.selectedMatters = 0;
     }
 

@@ -1,6 +1,14 @@
 ﻿@model IEnumerable<Matter>
 
 <br />
+<div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="checkbox" name="showRefSeqOnly" checked="checked" ng-model="flags.showRefSeqOnly" />
+            Show only reference sequences
+        </label>
+    </div>
+</div>
 <label class="control-label">Sequences:</label>
 <table ng-cloak class="table table-bordered table-hover">
     <thead>
@@ -17,7 +25,6 @@
             <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }">
                 <option value="">-- All groups --</option>
             </select>
-            
         </th>
         <th>
             <select class="form-control" ng-model="sequenceType" ng-options="s.Value as s.Text for s in sequenceTypes | filter:{ Nature: nature }">
@@ -55,7 +62,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="matter in matters | filter:{ Nature: nature }"
-            ng-show="([matter] | filter:{ Text: searchMatter} | filter: { Description: searchDescription } | filter: { Group: group || '' } | filter: { SequenceType: sequenceType || '' }).length > 0"
+            ng-show="([matter] | filter:{ Text: searchMatter } | filter: { Description: searchDescription } | filter: { Group: group || '' } | filter: { SequenceType: sequenceType || '' }).length > 0 && (!flags.showRefSeqOnly || nature!=@((byte)Nature.Genetic) ||  matter.Text.split('|').slice(-1)[0].indexOf('_') != -1)"
             ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
