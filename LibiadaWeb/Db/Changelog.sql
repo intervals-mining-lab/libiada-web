@@ -1901,7 +1901,7 @@ $BODY$
 //plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
 
 if (TG_OP == "UPDATE"){
-	plv8.execute('DELETE FROM full_characteristic USING chain c WHERE characteristic.chain_id = c.id;');
+	plv8.execute('DELETE FROM full_characteristic USING chain c WHERE full_characteristic.chain_id = c.id;');
 	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id;');
 	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id;');
 	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id;');
