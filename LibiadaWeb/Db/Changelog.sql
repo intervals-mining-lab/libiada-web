@@ -1873,4 +1873,64 @@ ALTER TABLE full_characteristic DROP COLUMN modified;
 DROP TABLE characteristic_type_link;
 DROP TABLE characteristic_type;
 
+-- 04.04.2017
+-- Deleting redundant triggers.
+-- And update another trigger.
+
+DROP TRIGGER tgiu_accordance_characteristic_modified ON accordance_characteristic;
+DROP TRIGGER tgiu_binary_characteristic_modified ON binary_characteristic;
+DROP TRIGGER tgiu_congeneric_characteristic_modified ON congeneric_characteristic;
+DROP TRIGGER tgiu_characteristic_modified ON full_characteristic;
+DROP FUNCTION trigger_check_applicability();
+
+DROP TRIGGER tgu_chain_characteristics ON chain;
+DROP TRIGGER tgu_data_chain_characteristics ON data_chain;
+DROP TRIGGER tgu_dna_chain_characteristics ON dna_chain;
+DROP TRIGGER tgu_fmotiv_characteristics ON fmotiv;
+DROP TRIGGER tgu_literature_chain_characteristics ON literature_chain;
+DROP TRIGGER tgu_measure_characteristics ON measure;
+DROP TRIGGER tgu_music_chain_characteristics ON music_chain;
+DROP TRIGGER tgu_subsequence_characteristics ON subsequence;
+
+DROP FUNCTION trigger_delete_chain_characteristics();
+CREATE OR REPLACE FUNCTION trigger_delete_chain_characteristics()
+  RETURNS trigger AS
+$BODY$
+//plv8.elog(NOTICE, "TG_TABLE_NAME = ", TG_TABLE_NAME);
+//plv8.elog(NOTICE, "TG_OP = ", TG_OP);
+//plv8.elog(NOTICE, "TG_ARGV = ", TG_ARGV);
+
+if (TG_OP == "UPDATE"){
+	plv8.execute('DELETE FROM full_characteristic USING chain c WHERE characteristic.chain_id = c.id;');
+	plv8.execute('DELETE FROM binary_characteristic USING chain c WHERE binary_characteristic.chain_id = c.id;');
+	plv8.execute('DELETE FROM congeneric_characteristic USING chain c WHERE congeneric_characteristic.chain_id = c.id;');
+	plv8.execute('DELETE FROM accordance_characteristic USING chain c WHERE accordance_characteristic.first_chain_id = c.id OR accordance_characteristic.second_chain_id = c.id;');
+} else{
+	plv8.elog(ERROR, 'Unknown operation: ' + TG_OP + '. This trigger only works on UPDATE operation.');
+}
+
+$BODY$
+  LANGUAGE plv8 VOLATILE
+  COST 100;
+ALTER FUNCTION trigger_delete_chain_characteristics()
+  OWNER TO postgres;
+COMMENT ON FUNCTION trigger_delete_chain_characteristics() IS 'Trigger function deleting all characteristics of sequences that has been updated.';
+
+CREATE TRIGGER tgu_subsequence_characteristics AFTER UPDATE ON subsequence FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_subsequence_characteristics ON subsequence IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_music_chain_characteristics AFTER UPDATE ON music_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_music_chain_characteristics ON music_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_measure_characteristics AFTER UPDATE ON measure FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_measure_characteristics ON measure IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_literature_chain_characteristics AFTER UPDATE ON literature_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_literature_chain_characteristics ON literature_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_fmotiv_characteristics AFTER UPDATE ON fmotiv FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_fmotiv_characteristics ON fmotiv IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_dna_chain_characteristics AFTER UPDATE ON dna_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_dna_chain_characteristics ON dna_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_data_chain_characteristics AFTER UPDATE ON data_chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_data_chain_characteristics ON data_chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+CREATE TRIGGER tgu_chain_characteristics AFTER UPDATE ON chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
+COMMENT ON TRIGGER tgu_chain_characteristics ON chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
+
 COMMIT;
