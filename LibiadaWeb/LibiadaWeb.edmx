@@ -54,11 +54,11 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -116,11 +116,11 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="partial" Type="bool" Nullable="false" />
           <Property Name="description" Type="text" />
@@ -136,7 +136,7 @@
           <Property Name="chain_id" Type="int8" Nullable="false" />
           <Property Name="start" Type="int4" Nullable="false" />
           <Property Name="length" Type="int4" Nullable="false" />
-          <Property Name="feature_id" Type="int2" Nullable="false" />
+          <Property Name="feature" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
           <Property Name="partial" Type="bool" Nullable="false" />
         </EntityType>
@@ -159,7 +159,7 @@
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
@@ -169,14 +169,14 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
-          <Property Name="translator_id" Type="int2" Nullable="false" />
+          <Property Name="translator" Type="int2" Nullable="false" />
           <Property Name="original" Type="bool" Nullable="false" />
-          <Property Name="language_id" Type="int2" Nullable="false" />
+          <Property Name="language" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -187,7 +187,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="text" Nullable="false" />
-          <Property Name="nature_id" Type="int2" Nullable="false" />
+          <Property Name="nature" Type="int2" Nullable="false" />
           <Property Name="sequence_type" Type="int2" Nullable="false" />
           <Property Name="group" Type="int2" Nullable="false" />
           <Property Name="description" Type="text" />
@@ -201,7 +201,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="attribute_id" Type="int2" Nullable="false" />
+          <Property Name="attribute" Type="int2" Nullable="false" />
           <Property Name="value" Type="text" Nullable="false" />
         </EntityType>
 
@@ -210,15 +210,15 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="fmotiv_type_id" Type="int2" Nullable="false" />
+          <Property Name="fmotiv_type" Type="int2" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
@@ -227,7 +227,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="value" Type="varchar" MaxLength="255" />
@@ -238,7 +238,7 @@
           <Property Name="ticks_per_beat" Type="int4" />
           <Property Name="fifths" Type="int4" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
@@ -247,11 +247,11 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -261,11 +261,11 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="None" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="matter_id" Type="int8" Nullable="false" />
           <Property Name="remote_id" Type="varchar" MaxLength="255" />
-          <Property Name="remote_db_id" Type="int2" />
+          <Property Name="remote_db" Type="int2" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
           <Property Name="description" Type="text" />
         </EntityType>
@@ -278,7 +278,7 @@
           <Property Name="value" Type="varchar" MaxLength="255" />
           <Property Name="description" Type="text" />
           <Property Name="name" Type="varchar" MaxLength="255" />
-          <Property Name="notation_id" Type="int2" Nullable="false" />
+          <Property Name="notation" Type="int2" Nullable="false" />
           <Property Name="created" Type="timestamptz" Nullable="false" />
           <Property Name="numerator" Type="int4" Nullable="false" />
           <Property Name="denominator" Type="int4" Nullable="false" />
@@ -286,7 +286,7 @@
           <Property Name="odenominator" Type="int4" Nullable="false" />
           <Property Name="triplet" Type="bool" Nullable="false" />
           <Property Name="priority" Type="int4" />
-          <Property Name="tie_id" Type="int2" Nullable="false" />
+          <Property Name="tie" Type="int2" Nullable="false" />
           <Property Name="modified" Type="timestamptz" Nullable="false" />
         </EntityType>
 
@@ -297,9 +297,9 @@
           <Property Name="id" Type="int4" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="octave" Type="int4" Nullable="false" />
           <Property Name="midinumber" Type="int4" Nullable="false" />
-          <Property Name="instrument_id" Type="int2" Nullable="false" />
-          <Property Name="accidental_id" Type="int2" Nullable="false" />
-          <Property Name="note_symbol_id" Type="int2" Nullable="false" />
+          <Property Name="instrument" Type="int2" Nullable="false" />
+          <Property Name="accidental" Type="int2" Nullable="false" />
+          <Property Name="note_symbol" Type="int2" Nullable="false" />
         </EntityType>
 
         <EntityType Name="note_pitch">
@@ -2327,10 +2327,10 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.CommonSequence">
               <MappingFragment StoreEntitySet="chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -2352,10 +2352,10 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.DnaSequence">
               <MappingFragment StoreEntitySet="dna_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
@@ -2373,7 +2373,7 @@
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
                 <ScalarProperty Name="Start" ColumnName="start" />
                 <ScalarProperty Name="Length" ColumnName="length" />
-                <ScalarProperty Name="Feature" ColumnName="feature_id" />
+                <ScalarProperty Name="Feature" ColumnName="feature" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Partial" ColumnName="partial" />
               </MappingFragment>
@@ -2398,7 +2398,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -2409,13 +2409,13 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.LiteratureSequence">
               <MappingFragment StoreEntitySet="literature_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="Translator" ColumnName="translator_id" />
+                <ScalarProperty Name="Translator" ColumnName="translator" />
                 <ScalarProperty Name="Original" ColumnName="original" />
-                <ScalarProperty Name="Language" ColumnName="language_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="Language" ColumnName="language" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -2428,7 +2428,7 @@
               <MappingFragment StoreEntitySet="matter">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Nature" ColumnName="nature_id" />
+                <ScalarProperty Name="Nature" ColumnName="nature" />
                 <ScalarProperty Name="SequenceType" ColumnName="sequence_type" />
                 <ScalarProperty Name="Group" ColumnName="group" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -2443,7 +2443,7 @@
               <MappingFragment StoreEntitySet="chain_attribute">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
-                <ScalarProperty Name="Attribute" ColumnName="attribute_id" />
+                <ScalarProperty Name="Attribute" ColumnName="attribute" />
                 <ScalarProperty Name="Value" ColumnName="value" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2453,14 +2453,14 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.Fmotiv">
               <MappingFragment StoreEntitySet="fmotiv">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="FmotivType" ColumnName="fmotiv_type_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="FmotivType" ColumnName="fmotiv_type" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -2471,7 +2471,7 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.Measure">
               <MappingFragment StoreEntitySet="measure">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
@@ -2481,7 +2481,7 @@
                 <ScalarProperty Name="Beatbase" ColumnName="beatbase" />
                 <ScalarProperty Name="TicksPerBeat" ColumnName="ticks_per_beat" />
                 <ScalarProperty Name="Fifths" ColumnName="fifths" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
@@ -2492,10 +2492,10 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.MusicSequence">
               <MappingFragment StoreEntitySet="music_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -2507,10 +2507,10 @@
             <EntityTypeMapping TypeName="LibiadaWebModel.DataSequence">
               <MappingFragment StoreEntitySet="data_chain">
                 <ScalarProperty Name="Id" ColumnName="id" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="MatterId" ColumnName="matter_id" />
-                <ScalarProperty Name="RemoteDb" ColumnName="remote_db_id" />
+                <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
                 <ScalarProperty Name="Description" ColumnName="description" />
@@ -2525,7 +2525,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="Notation" ColumnName="notation_id" />
+                <ScalarProperty Name="Notation" ColumnName="notation" />
                 <ScalarProperty Name="Created" ColumnName="created" />
                 <ScalarProperty Name="Numerator" ColumnName="numerator" />
                 <ScalarProperty Name="Denominator" ColumnName="denominator" />
@@ -2533,7 +2533,7 @@
                 <ScalarProperty Name="Odenominator" ColumnName="odenominator" />
                 <ScalarProperty Name="Triplet" ColumnName="triplet" />
                 <ScalarProperty Name="Priority" ColumnName="priority" />
-                <ScalarProperty Name="Tie" ColumnName="tie_id" />
+                <ScalarProperty Name="Tie" ColumnName="tie" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2545,9 +2545,9 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="Octave" ColumnName="octave" />
                 <ScalarProperty Name="Midinumber" ColumnName="midinumber" />
-                <ScalarProperty Name="Instrument" ColumnName="instrument_id" />
-                <ScalarProperty Name="Accidental" ColumnName="accidental_id" />
-                <ScalarProperty Name="NoteSymbol" ColumnName="note_symbol_id" />
+                <ScalarProperty Name="Instrument" ColumnName="instrument" />
+                <ScalarProperty Name="Accidental" ColumnName="accidental" />
+                <ScalarProperty Name="NoteSymbol" ColumnName="note_symbol" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1933,4 +1933,91 @@ COMMENT ON TRIGGER tgu_data_chain_characteristics ON data_chain IS 'Trigger dele
 CREATE TRIGGER tgu_chain_characteristics AFTER UPDATE ON chain FOR EACH STATEMENT EXECUTE PROCEDURE trigger_delete_chain_characteristics();
 COMMENT ON TRIGGER tgu_chain_characteristics ON chain IS 'Trigger deleting all characteristics of sequences that has been updated.';
 
+-- 09.04.2017
+-- Deleting static tables as they all replaced with enums.
+-- And updating references to this tables.
+
+ALTER TABLE measure NO INHERIT chain;
+ALTER TABLE fmotiv NO INHERIT chain;
+
+ALTER TABLE pitch RENAME instrument_id TO instrument;
+ALTER TABLE pitch RENAME accidental_id TO accidental;
+ALTER TABLE pitch ALTER COLUMN accidental SET DEFAULT 0;
+ALTER TABLE pitch RENAME note_symbol_id TO note_symbol;
+ALTER TABLE pitch DROP CONSTRAINT fk_pitch_accidental;
+ALTER TABLE pitch DROP CONSTRAINT fk_pitch_instrument;
+ALTER TABLE pitch DROP CONSTRAINT fk_pitch_note_symbol;
+COMMENT ON COLUMN pitch.note_symbol IS 'Note symbol.';
+COMMENT ON COLUMN pitch.instrument IS 'Instrument of pitch.';
+COMMENT ON COLUMN pitch.accidental IS 'Accidental of pitch.';
+
+ALTER TABLE note RENAME tie_id TO tie;
+ALTER TABLE note ALTER COLUMN tie SET DEFAULT 0;
+ALTER TABLE note DROP CONSTRAINT fk_note_tie;
+ALTER TABLE note DROP CONSTRAINT fk_note_notation;
+COMMENT ON COLUMN note.tie IS 'Tie type of the note.';
+
+ALTER TABLE literature_chain RENAME language_id TO language;
+ALTER TABLE literature_chain RENAME translator_id TO translator;
+ALTER TABLE literature_chain DROP CONSTRAINT fk_litarure_chain_translator;
+ALTER TABLE literature_chain DROP CONSTRAINT fk_literature_chain_language;
+ALTER TABLE literature_chain DROP CONSTRAINT fk_literature_chain_notation;
+ALTER TABLE literature_chain DROP CONSTRAINT fk_literature_chain_remote_db;
+COMMENT ON COLUMN literature_chain.language IS 'Primary language of literary work.';
+COMMENT ON COLUMN literature_chain.translator IS 'Author of translation or automated translator.';
+
+ALTER TABLE subsequence RENAME feature_id TO feature;
+ALTER TABLE subsequence DROP CONSTRAINT fk_subsequence_feature;
+
+ALTER TABLE music_chain DROP CONSTRAINT fk_music_chain_notation;
+ALTER TABLE music_chain DROP CONSTRAINT fk_music_chain_remote_db;
+
+ALTER TABLE measure DROP CONSTRAINT fk_measure_notation;
+ALTER TABLE measure DROP CONSTRAINT fk_measure_remote_db;
+
+ALTER TABLE matter RENAME nature_id TO nature;
+ALTER TABLE matter DROP CONSTRAINT fk_matter_nature;
+COMMENT ON COLUMN matter.nature IS 'Nature of the object.';
+
+ALTER TABLE fmotiv RENAME fmotiv_type_id TO fmotiv_type;
+ALTER TABLE fmotiv DROP CONSTRAINT fk_fmotiv_fmotiv_type;
+ALTER TABLE fmotiv DROP CONSTRAINT fk_fmotiv_notation;
+ALTER TABLE fmotiv DROP CONSTRAINT fk_fmotiv_remote_db;
+COMMENT ON COLUMN fmotiv.fmotiv_type IS 'Type of f motiv.';
+
+ALTER TABLE element RENAME notation_id  TO notation;
+ALTER TABLE element DROP CONSTRAINT fk_element_notation;
+COMMENT ON COLUMN element.notation IS 'Notation of the element.';
+
+ALTER TABLE dna_chain DROP CONSTRAINT fk_dna_chain_notation;
+ALTER TABLE dna_chain DROP CONSTRAINT fk_dna_chain_remote_db;
+
+ALTER TABLE data_chain DROP CONSTRAINT fk_data_chain_notation;
+ALTER TABLE data_chain DROP CONSTRAINT fk_data_chain_remote_db;
+
+ALTER TABLE chain_attribute RENAME attribute_id TO attribute;
+ALTER TABLE chain_attribute DROP CONSTRAINT fk_chain_attribute_attribute;
+
+ALTER TABLE chain RENAME notation_id TO notation;
+ALTER TABLE chain RENAME remote_db_id TO remote_db;
+ALTER TABLE chain DROP CONSTRAINT fk_chain_notation;
+ALTER TABLE chain DROP CONSTRAINT fk_chain_remote_db;
+COMMENT ON COLUMN chain.notation IS 'Notation of the sequence (words, letters, notes, nucleotides, etc.).';
+COMMENT ON COLUMN chain.remote_db IS 'Remote db from whitch sequence is downloaded.';
+
+DROP TABLE accidental;
+DROP TABLE attribute;
+DROP TABLE feature;
+DROP TABLE fmotiv_type;
+DROP TABLE instrument;
+DROP TABLE language;
+DROP TABLE link;
+DROP TABLE notation;
+DROP TABLE remote_db;
+DROP TABLE nature;
+DROP TABLE note_symbol;
+DROP TABLE tie;
+DROP TABLE translator;
+DROP TABLE characteristic_group;
+
 COMMIT;
