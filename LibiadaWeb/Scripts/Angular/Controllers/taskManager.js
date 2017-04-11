@@ -3,13 +3,15 @@
 
     function taskManager($scope) {
 
+        $scope.tasks = [];
+        $scope.flags = { reconnecting: false };
         var tasksHub = $.connection.tasksManagerHub;
 
         tasksHub.client.TaskEvent = function (event, data) {
 
             switch (event) {
                 case "addTask":
-                    $scope.tasks.push(data);
+                    $scope.tasks.push(data);       
                     break;
                 case "deleteTask":
                     var taskToDelete = $scope.tasks.find(function (t) { return t.Id == data.Id; });
@@ -25,8 +27,8 @@
                         taskToChange.TaskState = data.TaskState;
                         taskToChange.TaskStateName = data.TaskStateName;
                     }
-                    else {
-                        $scope.tasks.push(data);
+                    else { 
+                        $scope.tasks.push(data);    
                     }
                     break;
                 default: console.log("Unknown task event");
@@ -35,6 +37,27 @@
 
             $scope.$apply();
         };
+
+        $.connection.hub.stateChanged(function (change) {
+            if (change.newState === $.signalR.connectionState.connecting) {
+                $scope.flags.reconnecting = false;
+
+            }
+            if (change.newState === $.signalR.connectionState.reconnecting) {
+                $scope.flags.reconnecting = true;
+            }
+            else if (change.newState === $.signalR.connectionState.connected) {
+                $scope.flags.reconnecting = false;
+            }
+            else if (change.newState === $.signalR.connectionState.disconnected) {
+                delay(function () {
+                    if (confirm('Connection lost. Refresh page?')) {
+                        location.reload(true);
+                    }
+                }, 5000);
+            }
+            $scope.$apply();
+        });
 
 
         tasksHub.client.onConnected = function (data) {
@@ -68,7 +91,6 @@
 
         $scope.calculateStatusClass = calculateStatusClass;
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
-        $scope.tasks = [];
     }
 
     angular.module("TaskManager", []).controller("TaskManagerCtrl", ["$scope", taskManager]);
