@@ -2020,4 +2020,26 @@ DROP TABLE tie;
 DROP TABLE translator;
 DROP TABLE characteristic_group;
 
+-- 12.04.2017
+-- deleting duplicate indexes.
+
+DROP INDEX ix_chain_key;
+DROP INDEX ix_element_value_notation;
+DROP INDEX ix_element_key;
+DROP INDEX ix_element_id;
+DROP INDEX ix_characteristic_chain_characteristic_type;
+DROP INDEX ix_characteristic_id;
+DROP INDEX ix_position_id;
+DROP INDEX "ix-matter_name_nature";
+DROP INDEX ix_literature_chain_id;
+DROP INDEX ix_matter_matter_id;
+DROP INDEX ix_dna_chain_id;
+DROP INDEX ix_pitch;
+DROP INDEX ix_music_chain_id;
+DROP INDEX ix_measure_id;
+DROP INDEX ix_chain_id;
+DROP INDEX ix_fmotiv_id;
+DROP INDEX ix_note_id;
+ALTER TABLE note_pitch DROP CONSTRAINT uk_note_pitch;
+
 COMMIT;
