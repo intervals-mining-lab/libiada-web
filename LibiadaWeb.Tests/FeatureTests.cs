@@ -17,7 +17,7 @@
         /// <summary>
         /// The features count.
         /// </summary>
-        private const int FeaturesCount = 28;
+        private const int FeaturesCount = 29;
 
         /// <summary>
         /// Tests count of features.
@@ -25,7 +25,7 @@
         [Test]
         public void FeatureCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Feature>().Length;
+            int actualCount = ArrayExtensions.ToArray<Feature>().Length;
             Assert.AreEqual(FeaturesCount, actualCount);
         }
 
@@ -35,7 +35,7 @@
         [Test]
         public void FeatureValuesTest()
         {
-            var features = ArrayExtensions.ToArray<Feature>();
+            Feature[] features = ArrayExtensions.ToArray<Feature>();
 
             for (int i = 0; i < FeaturesCount; i++)
             {
@@ -83,6 +83,7 @@
         [TestCase((Feature)25, "ThreeEnd", "3'UTR")]
         [TestCase((Feature)26, "FiveEnd", "5'UTR")]
         [TestCase((Feature)27, "PrimerBind", "primer_bind")]
+        [TestCase((Feature)28, "Intron", "intron")]
         public void FeatureNameAndGenBankNameTest(Feature feature, string name, string genBankName)
         {
             Assert.AreEqual(name, feature.GetName());
@@ -122,7 +123,7 @@
         [Test]
         public void FeatureHasNatureTest([Values]Feature feature)
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            Nature[] natures = ArrayExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(feature.GetNature()));
         }
 
@@ -132,9 +133,8 @@
         [Test]
         public void FeatureValuesUniqueTest()
         {
-            var features = ArrayExtensions.ToArray<Feature>();
-            var featureValues = features.Cast<byte>();
-            Assert.That(featureValues, Is.Unique);
+            Feature[] features = ArrayExtensions.ToArray<Feature>();
+            Assert.That(features.Cast<byte>(), Is.Unique);
         }
     }
 }
