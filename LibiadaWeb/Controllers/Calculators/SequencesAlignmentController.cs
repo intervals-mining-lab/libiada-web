@@ -65,7 +65,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic id.
         /// </param>
         /// <param name="notation">
@@ -94,7 +94,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            short characteristicTypeLinkId,
+            short characteristicLinkId,
             Notation notation,
             Feature[] features,
             string validationType,
@@ -111,8 +111,8 @@
                 var firstMatterId = matterIds[0];
                 var secondMatterId = matterIds[1];
 
-                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicTypeLinkId, notation, features);
-                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicTypeLinkId, notation, features);
+                var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicLinkId, notation, features);
+                var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicLinkId, notation, features);
 
                 if (sort)
                 {
@@ -146,7 +146,7 @@
                 List<double> distances = new List<double>();
                 var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
-                var characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId, notation);
+                var characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -205,7 +205,7 @@
         /// <param name="matterId">
         /// The matter id.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
         /// <param name="notation">
@@ -217,7 +217,7 @@
         /// <returns>
         /// The <see cref="List{Double}"/>.
         /// </returns>
-        private List<double> CalculateCharacteristic(long matterId, short characteristicTypeLinkId, Notation notation, Feature[] features)
+        private List<double> CalculateCharacteristic(long matterId, short characteristicLinkId, Notation notation, Feature[] features)
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<CharacteristicValue>();
@@ -227,21 +227,21 @@
 
             Chain[] sequences = subsequenceExtractor.ExtractChains(subsequences);
 
-            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
-            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
 
             for (int j = 0; j < sequences.Length; j++)
             {
                 long subsequenceId = subsequences[j].Id;
 
-                if (!db.CharacteristicValue.Any(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                if (!db.CharacteristicValue.Any(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId))
                 {
                     double value = calculator.Calculate(sequences[j], link);
                     var currentCharacteristic = new CharacteristicValue
                     {
                         SequenceId = subsequenceId,
-                        CharacteristicTypeLinkId = characteristicTypeLinkId,
+                        CharacteristicLinkId = characteristicLinkId,
                         Value = value
                     };
                     newCharacteristics.Add(currentCharacteristic);
@@ -254,7 +254,7 @@
             for (int d = 0; d < sequences.Length; d++)
             {
                 long subsequenceId = subsequences[d].Id;
-                double characteristic = db.CharacteristicValue.Single(c => c.SequenceId == subsequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                double characteristic = db.CharacteristicValue.Single(c => c.SequenceId == subsequenceId && c.CharacteristicLinkId == characteristicLinkId).Value;
 
                 characteristics.Add(characteristic);
             }

@@ -53,10 +53,10 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// Full sequence characteristic type and link id.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// Subsequences characteristics types and links ids.
         /// </param>
         /// <param name="features">
@@ -67,7 +67,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, short characteristicTypeLinkId, short[] characteristicTypeLinkIds, Feature[] features)
+        public ActionResult Index(long[] matterIds, short characteristicLinkId, short[] characteristicLinkIds, Feature[] features)
         {
             return Action(() =>
                 {
@@ -75,8 +75,8 @@
 
                     var matterNames = new string[matterIds.Length];
                     var remoteIds = new string[matterIds.Length];
-                    var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
-                    var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                    var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
+                    var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
                     var attributeValues = new List<AttributeValue>();
                     Chain[] chains;
                     string sequenceCharacteristicName;
@@ -99,11 +99,11 @@
 
                         var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
 
-                        sequenceCharacteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
+                        sequenceCharacteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 
-                        for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                        for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k]);
+                            subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k]);
                             subsequencesCharacteristicsList[k] = new SelectListItem
                             {
                                 Value = k.ToString(),
@@ -113,7 +113,7 @@
                         }
                     }
 
-                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
+                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
 
                     var sequencesData = new SequenceData[matterIds.Length];
 
@@ -121,7 +121,7 @@
                     {
                         // all subsequence calculations
                         SubsequenceData[] subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                            characteristicTypeLinkIds,
+                            characteristicLinkIds,
                             features,
                             chains[i].Id,
                             attributeValues);

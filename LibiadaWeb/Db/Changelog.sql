@@ -2042,4 +2042,16 @@ DROP INDEX ix_fmotiv_id;
 DROP INDEX ix_note_id;
 ALTER TABLE note_pitch DROP CONSTRAINT uk_note_pitch;
 
+-- 13.04.2017
+-- Fixing characteristic_type type.
+
+ALTER TABLE full_characteristic RENAME characteristic_type_link_id TO characteristic_link_id;
+ALTER TABLE full_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
+ALTER TABLE congeneric_characteristic RENAME characteristic_type_link_id TO characteristic_link_id;
+ALTER TABLE congeneric_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
+ALTER TABLE binary_characteristic RENAME characteristic_type_link_id TO characteristic_link_id;
+ALTER TABLE binary_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
+ALTER TABLE accordance_characteristic RENAME characteristic_type_link_id TO characteristic_link_id;
+ALTER TABLE accordance_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
+
 COMMIT;

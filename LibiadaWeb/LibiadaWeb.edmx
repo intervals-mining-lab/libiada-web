@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="LibiadaWebModel.Store" Provider="Npgsql" ProviderManifestToken="9.5.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
 
         <EntityType Name="binary_characteristic_link">
           <Key>
@@ -21,7 +21,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
+          <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
@@ -43,7 +43,7 @@
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="first_chain_id" Type="int8" Nullable="false" />
           <Property Name="second_chain_id" Type="int8" Nullable="false" />
-          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
+          <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="first_element_id" Type="int8" Nullable="false" />
           <Property Name="second_element_id" Type="int8" Nullable="false" />
@@ -78,7 +78,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
+          <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
         </EntityType>
 
@@ -97,7 +97,7 @@
           </Key>
           <Property Name="id" Type="int8" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="chain_id" Type="int8" Nullable="false" />
-          <Property Name="characteristic_type_link_id" Type="int2" Nullable="false" />
+          <Property Name="characteristic_link_id" Type="int2" Nullable="false" />
           <Property Name="value" Type="float8" Nullable="false" />
           <Property Name="element_id" Type="int8" Nullable="false" />
         </EntityType>
@@ -384,7 +384,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="full_characteristic">
-              <PropertyRef Name="characteristic_type_link_id" />
+              <PropertyRef Name="characteristic_link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -397,7 +397,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="binary_characteristic">
-              <PropertyRef Name="characteristic_type_link_id" />
+              <PropertyRef Name="characteristic_link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -410,7 +410,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="accordance_characteristic">
-              <PropertyRef Name="characteristic_type_link_id" />
+              <PropertyRef Name="characteristic_link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -423,7 +423,7 @@
               <PropertyRef Name="id" />
             </Principal>
             <Dependent Role="congeneric_characteristic">
-              <PropertyRef Name="characteristic_type_link_id" />
+              <PropertyRef Name="characteristic_link_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1030,7 +1030,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
-          <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
+          <Property Name="CharacteristicLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
@@ -1047,7 +1047,7 @@
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="FirstSequenceId" Type="Int64" Nullable="false" />
           <Property Name="SecondSequenceId" Type="Int64" Nullable="false" />
-          <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
+          <Property Name="CharacteristicLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="FirstElementId" Type="Int64" Nullable="false" />
           <Property Name="SecondElementId" Type="Int64" Nullable="false" />
@@ -1064,7 +1064,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
-          <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
+          <Property Name="CharacteristicLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <NavigationProperty Name="Sequence" Relationship="Self.fk_characteristic_chain" FromRole="CharacteristicValue" ToRole="CommonSequence" />
           <NavigationProperty Name="FullCharacteristicLink" Relationship="Self.fk_full_characteristic_link" FromRole="CharacteristicValue" ToRole="FullCharacteristicLink" />
@@ -1076,7 +1076,7 @@
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity"/>
           <Property Name="SequenceId" Type="Int64" Nullable="false" />
-          <Property Name="CharacteristicTypeLinkId" Type="Int16" Nullable="false" />
+          <Property Name="CharacteristicLinkId" Type="Int16" Nullable="false" />
           <Property Name="Value" Type="Double" Nullable="false" />
           <Property Name="ElementId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="CongenericCharacteristicLink" Relationship="Self.fk_congeneric_characteristic_link" FromRole="CongenericCharacteristicValue" ToRole="CongenericCharacteristicLink" />
@@ -1556,7 +1556,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="BinaryCharacteristicValue">
-              <PropertyRef Name="CharacteristicTypeLinkId" />
+              <PropertyRef Name="CharacteristicLinkId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1595,7 +1595,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="AccordanceCharacteristicValue">
-              <PropertyRef Name="CharacteristicTypeLinkId" />
+              <PropertyRef Name="CharacteristicLinkId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1608,7 +1608,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="CongenericCharacteristicValue">
-              <PropertyRef Name="CharacteristicTypeLinkId" />
+              <PropertyRef Name="CharacteristicLinkId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1621,7 +1621,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="CharacteristicValue">
-              <PropertyRef Name="CharacteristicTypeLinkId" />
+              <PropertyRef Name="CharacteristicLinkId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2277,7 +2277,7 @@
               <MappingFragment StoreEntitySet="binary_characteristic">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
-                <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
+                <ScalarProperty Name="CharacteristicLinkId" ColumnName="characteristic_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
@@ -2291,7 +2291,7 @@
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="FirstSequenceId" ColumnName="first_chain_id" />
                 <ScalarProperty Name="SecondSequenceId" ColumnName="second_chain_id" />
-                <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
+                <ScalarProperty Name="CharacteristicLinkId" ColumnName="characteristic_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="FirstElementId" ColumnName="first_element_id" />
                 <ScalarProperty Name="SecondElementId" ColumnName="second_element_id" />
@@ -2304,7 +2304,7 @@
               <MappingFragment StoreEntitySet="congeneric_characteristic">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
-                <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
+                <ScalarProperty Name="CharacteristicLinkId" ColumnName="characteristic_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="ElementId" ColumnName="element_id" />
               </MappingFragment>
@@ -2316,7 +2316,7 @@
               <MappingFragment StoreEntitySet="full_characteristic">
                 <ScalarProperty Name="Id" ColumnName="id" />
                 <ScalarProperty Name="SequenceId" ColumnName="chain_id" />
-                <ScalarProperty Name="CharacteristicTypeLinkId" ColumnName="characteristic_type_link_id" />
+                <ScalarProperty Name="CharacteristicLinkId" ColumnName="characteristic_link_id" />
                 <ScalarProperty Name="Value" ColumnName="value" />
               </MappingFragment>
             </EntityTypeMapping>

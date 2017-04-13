@@ -44,11 +44,11 @@
                 {
                     // todo: refactor and optimize all this
                     var characteristicsSequences = characteristics.Select(c => c.SequenceId).Distinct().ToArray();
-                    var characteristicsTypes = characteristics.Select(c => c.CharacteristicTypeLinkId).Distinct().ToArray();
-                    var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId }).ToArray();
-                    var wasteCharacteristics = db.CharacteristicValue.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicTypeLinkId))
-                            .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId })).Select(c => new { c.SequenceId, c.CharacteristicTypeLinkId });
-                    var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicTypeLinkId }));
+                    var characteristicsTypes = characteristics.Select(c => c.CharacteristicLinkId).Distinct().ToArray();
+                    var characteristicsFilter = characteristics.Select(c => new { c.SequenceId, c.CharacteristicLinkId }).ToArray();
+                    var wasteCharacteristics = db.CharacteristicValue.Where(c => characteristicsSequences.Contains(c.SequenceId) && characteristicsTypes.Contains(c.CharacteristicLinkId))
+                            .ToArray().Where(c => characteristicsFilter.Contains(new { c.SequenceId, c.CharacteristicLinkId })).Select(c => new { c.SequenceId, c.CharacteristicLinkId });
+                    var wasteNewCharacteristics = characteristics.Where(c => wasteCharacteristics.Contains(new { c.SequenceId, c.CharacteristicLinkId }));
 
                     db.CharacteristicValue.RemoveRange(wasteNewCharacteristics);
                     try

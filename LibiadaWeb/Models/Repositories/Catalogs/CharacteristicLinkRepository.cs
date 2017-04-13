@@ -96,119 +96,119 @@
         /// <summary>
         /// The get libiada link.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForFullCharacteristic(int characteristicTypeLinkId)
+        public Link GetLinkForFullCharacteristic(int characteristicLinkId)
         {
-            return fullCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
+            return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
         /// The get link for congeneric characteristic.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForCongenericCharacteristic(int characteristicTypeLinkId)
+        public Link GetLinkForCongenericCharacteristic(int characteristicLinkId)
         {
-            return congenericCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
+            return congenericCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
         /// The get link for accordance characteristic.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForAccordanceCharacteristic(int characteristicTypeLinkId)
+        public Link GetLinkForAccordanceCharacteristic(int characteristicLinkId)
         {
-            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
+            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
         /// The get link for binary characteristic.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForBinaryCharacteristic(int characteristicTypeLinkId)
+        public Link GetLinkForBinaryCharacteristic(int characteristicLinkId)
         {
-            return binaryCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).Link;
+            return binaryCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
         /// The get characteristic type.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="CharacteristicType"/>.
         /// </returns>
-        public FullCharacteristic GetFullCharacteristic(int characteristicTypeLinkId)
+        public FullCharacteristic GetFullCharacteristic(int characteristicLinkId)
         {
-            return fullCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).FullCharacteristic;
+            return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).FullCharacteristic;
         }
 
         /// <summary>
         /// The get congeneric characteristic type.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="CongenericCharacteristic"/>.
         /// </returns>
-        public CongenericCharacteristic GetCongenericCharacteristic(int characteristicTypeLinkId)
+        public CongenericCharacteristic GetCongenericCharacteristic(int characteristicLinkId)
         {
-            return congenericCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).CongenericCharacteristic;
+            return congenericCharacteristicLinks.Single(c => c.Id == characteristicLinkId).CongenericCharacteristic;
         }
 
         /// <summary>
         /// The get accordance characteristic type.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="AccordanceCharacteristic"/>.
         /// </returns>
-        public AccordanceCharacteristic GetAccordanceCharacteristic(int characteristicTypeLinkId)
+        public AccordanceCharacteristic GetAccordanceCharacteristic(int characteristicLinkId)
         {
-            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).AccordanceCharacteristic;
+            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicLinkId).AccordanceCharacteristic;
         }
 
         /// <summary>
         /// The get binary characteristic type.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="BinaryCharacteristic"/>.
         /// </returns>
-        public BinaryCharacteristic GetBinaryCharacteristic(int characteristicTypeLinkId)
+        public BinaryCharacteristic GetBinaryCharacteristic(int characteristicLinkId)
         {
-            return binaryCharacteristicLinks.Single(c => c.Id == characteristicTypeLinkId).BinaryCharacteristic;
+            return binaryCharacteristicLinks.Single(c => c.Id == characteristicLinkId).BinaryCharacteristic;
         }
 
         /// <summary>
         /// The get characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
         /// <param name="notation">
@@ -217,15 +217,15 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetFullCharacteristicName(int characteristicTypeLinkId, Notation notation)
+        public string GetFullCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetFullCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetFullCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
         /// The get congeneric characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <param name="notation">
@@ -234,15 +234,15 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetCongenericCharacteristicName(int characteristicTypeLinkId, Notation notation)
+        public string GetCongenericCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetCongenericCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetCongenericCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
         /// The get accordance characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <param name="notation">
@@ -251,15 +251,15 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetAccordanceCharacteristicName(int characteristicTypeLinkId, Notation notation)
+        public string GetAccordanceCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetAccordanceCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetAccordanceCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
         /// The get binary characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <param name="notation">
@@ -268,25 +268,25 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetBinaryCharacteristicName(int characteristicTypeLinkId, Notation notation)
+        public string GetBinaryCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetBinaryCharacteristicName(characteristicTypeLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetBinaryCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
         /// The get characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetFullCharacteristicName(int characteristicTypeLinkId)
+        public string GetFullCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetFullCharacteristic(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetFullCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForFullCharacteristic(characteristicTypeLinkId);
+            var databaseLink = GetLinkForFullCharacteristic(characteristicLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
@@ -295,17 +295,17 @@
         /// <summary>
         /// The get congeneric characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetCongenericCharacteristicName(int characteristicTypeLinkId)
+        public string GetCongenericCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetCongenericCharacteristic(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetCongenericCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForCongenericCharacteristic(characteristicTypeLinkId);
+            var databaseLink = GetLinkForCongenericCharacteristic(characteristicLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
@@ -314,17 +314,17 @@
         /// <summary>
         /// The get accordance characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetAccordanceCharacteristicName(int characteristicTypeLinkId)
+        public string GetAccordanceCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetAccordanceCharacteristic(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetAccordanceCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForAccordanceCharacteristic(characteristicTypeLinkId);
+            var databaseLink = GetLinkForAccordanceCharacteristic(characteristicLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
@@ -333,17 +333,17 @@
         /// <summary>
         /// The get binary characteristic name.
         /// </summary>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetBinaryCharacteristicName(int characteristicTypeLinkId)
+        public string GetBinaryCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetBinaryCharacteristic(characteristicTypeLinkId).GetDisplayValue();
+            var characteristicType = GetBinaryCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForBinaryCharacteristic(characteristicTypeLinkId);
+            var databaseLink = GetLinkForBinaryCharacteristic(characteristicLinkId);
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);

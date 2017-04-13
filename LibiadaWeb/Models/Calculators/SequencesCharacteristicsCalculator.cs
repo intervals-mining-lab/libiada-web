@@ -25,34 +25,34 @@
         /// <param name="chains">
         /// The chains.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
         /// </param>
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, short[] characteristicTypeLinkIds)
+        public static double[][] Calculate(Chain[][] chains, short[] characteristicLinkIds)
         {
             IEnumerable<long> sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
             var newCharacteristics = new List<CharacteristicValue>();
             var characteristics = new double[chains.Length][];
-            var links = new Link[characteristicTypeLinkIds.Length];
-            var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
+            var links = new Link[characteristicLinkIds.Length];
+            var calculators = new IFullCalculator[characteristicLinkIds.Length];
 
             Dictionary<long, Dictionary<short, double>> dbCharacteristics;
             using (var db = new LibiadaWebEntities())
             {
                 dbCharacteristics = db.CharacteristicValue
-                                              .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && sequenceIds.Contains(c.SequenceId))
+                                              .Where(c => characteristicLinkIds.Contains(c.CharacteristicLinkId) && sequenceIds.Contains(c.SequenceId))
                                               .ToArray()
                                               .GroupBy(c => c.SequenceId)
-                                              .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
+                                              .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
 
                 var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
                     calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
                 }
             }
@@ -72,13 +72,13 @@
                         sequenceDbCharacteristics = new Dictionary<short, double>();
                     }
 
-                    if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkIds[j], out characteristics[i][j]))
+                    if (!sequenceDbCharacteristics.TryGetValue(characteristicLinkIds[j], out characteristics[i][j]))
                     {
                         characteristics[i][j] = calculators[j].Calculate(chains[i][j], links[j]);
                         var currentCharacteristic = new CharacteristicValue
                         {
                             SequenceId = sequenceId,
-                            CharacteristicTypeLinkId = characteristicTypeLinkIds[j],
+                            CharacteristicLinkId = characteristicLinkIds[j],
                             Value = characteristics[i][j]
                         };
 
@@ -103,13 +103,13 @@
         /// <param name="chains">
         /// The chains.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <returns>
         /// The <see cref="T:double[]"/>.
         /// </returns>
-        public static double[] Calculate(Chain[] chains, short characteristicTypeLinkId)
+        public static double[] Calculate(Chain[] chains, short characteristicLinkId)
         {
             var twoDimensionalChains = new Chain[chains.Length][];
             for (int i = 0; i < chains.Length; i++)
@@ -117,7 +117,7 @@
                 twoDimensionalChains[i] = new[] { chains[i] };
             }
 
-            double[][] twoDimensionalResult = Calculate(twoDimensionalChains, new[] { characteristicTypeLinkId });
+            double[][] twoDimensionalResult = Calculate(twoDimensionalChains, new[] { characteristicLinkId });
 
             var result = new double[chains.Length];
             for (int i = 0; i < twoDimensionalResult.Length; i++)
@@ -134,7 +134,7 @@
         /// <param name="chains">
         /// The chains.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
         /// </param>
         /// <param name="rotate">
@@ -149,19 +149,19 @@
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, short[] characteristicTypeLinkIds, bool rotate, bool complementary, uint? rotationLength)
+        public static double[][] Calculate(Chain[][] chains, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
         {
-            var links = new Link[characteristicTypeLinkIds.Length];
-            var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
+            var links = new Link[characteristicLinkIds.Length];
+            var calculators = new IFullCalculator[characteristicLinkIds.Length];
             var characteristics = new double[chains.Length][];
 
             using (var db = new LibiadaWebEntities())
             {
                 var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
                     calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
                 }
             }

@@ -49,7 +49,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="features">
@@ -64,14 +64,14 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, short[] characteristicTypeLinkIds, Feature[] features, string[] filters)
+        public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features, string[] filters)
         {
             return Action(() =>
             {
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);
                 var matterNames = new string[matterIds.Length];
-                var characteristicNames = new string[characteristicTypeLinkIds.Length];
+                var characteristicNames = new string[characteristicLinkIds.Length];
 
                 long[] parentSequenceIds;
 
@@ -89,10 +89,10 @@
                     }
 
                     var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                    for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        var characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                        characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
+                        var characteristicLinkId = characteristicLinkIds[k];
+                        characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
                     }
                 }
 
@@ -101,7 +101,7 @@
                 {
                     // all subsequence calculations
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                        characteristicTypeLinkIds,
+                        characteristicLinkIds,
                         features,
                         parentSequenceIds[i],
                         attributeValues,

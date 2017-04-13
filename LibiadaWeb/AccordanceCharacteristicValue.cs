@@ -17,7 +17,7 @@ namespace LibiadaWeb
         public long Id { get; set; }
         public long FirstSequenceId { get; set; }
         public long SecondSequenceId { get; set; }
-        public short CharacteristicTypeLinkId { get; set; }
+        public short CharacteristicLinkId { get; set; }
         public double Value { get; set; }
         public long FirstElementId { get; set; }
         public long SecondElementId { get; set; }

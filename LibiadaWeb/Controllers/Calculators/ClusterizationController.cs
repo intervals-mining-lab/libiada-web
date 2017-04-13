@@ -70,7 +70,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="notations">
@@ -104,7 +104,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicTypeLinkIds,
+            int[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
             int clustersCount,
@@ -125,32 +125,32 @@
                 for (int j = 0; j < matterIds.Length; j++)
                 {
                     long matterId = matterIds[j];
-                    characteristics[j] = new double[characteristicTypeLinkIds.Length];
-                    for (int i = 0; i < characteristicTypeLinkIds.Length; i++)
+                    characteristics[j] = new double[characteristicLinkIds.Length];
+                    for (int i = 0; i < characteristicLinkIds.Length; i++)
                     {
                         Notation notation = notations[i];
                         long sequenceId = db.Matter.Single(m => m.Id == matterId).Sequence.Single(c => c.Notation == notation).Id;
 
-                        int characteristicTypeLinkId = characteristicTypeLinkIds[i];
-                        if (db.CharacteristicValue.Any(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId))
+                        int characteristicLinkId = characteristicLinkIds[i];
+                        if (db.CharacteristicValue.Any(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId))
                         {
-                            characteristics[j][i] = db.CharacteristicValue.Single(c => c.SequenceId == sequenceId && c.CharacteristicTypeLinkId == characteristicTypeLinkId).Value;
+                            characteristics[j][i] = db.CharacteristicValue.Single(c => c.SequenceId == sequenceId && c.CharacteristicLinkId == characteristicLinkId).Value;
                         }
                         else
                         {
                             Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
 
-                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                             characteristics[j][i] = calculator.Calculate(tempChain, link);
                         }
                     }
                 }
 
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]));
                 }
 
                 var clusterizationParams = new Dictionary<string, double>

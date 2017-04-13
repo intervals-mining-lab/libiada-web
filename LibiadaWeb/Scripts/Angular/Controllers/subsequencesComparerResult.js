@@ -136,7 +136,7 @@
 
             $http({
                 url: "/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
-                    "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
+                    "&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
                     "&windowSize=" + $scope.slidingWindowParams.windowSize +
                     "&step=" + $scope.slidingWindowParams.step,
                 method: "GET"
@@ -145,7 +145,7 @@
 
                 $http({
                     url: "/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
-                        "&characteristicTypeLinkId=" + $scope.characteristic.link.CharacteristicTypeLinkId +
+                        "&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
                         "&windowSize=" + $scope.slidingWindowParams.windowSize +
                         "&step=" + $scope.slidingWindowParams.step,
                     method: "GET"

@@ -63,7 +63,7 @@
         /// <summary>
         /// The index.
         /// </summary>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
         /// </param>
         /// <param name="customSequences">
@@ -80,7 +80,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int[] characteristicTypeLinkIds, string[] customSequences, bool localFile, HttpPostedFileBase[] file)
+        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, HttpPostedFileBase[] file)
         {
             return Action(() =>
                 {
@@ -104,23 +104,23 @@
                         }
                     }
 
-                    var characteristics = new double[sequences.Length, characteristicTypeLinkIds.Length];
+                    var characteristics = new double[sequences.Length, characteristicLinkIds.Length];
 
                     for (int j = 0; j < sequences.Length; j++)
                     {
-                        for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                        for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
                             var chain = new Chain(sequences[j]);
 
-                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkIds[k]);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkIds[k]);
+                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                             characteristics[j, k] = calculator.Calculate(chain, link);
                         }
                     }
 
-                    List<string> characteristicNames = characteristicTypeLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToList();
+                    List<string> characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToList();
 
                     return new Dictionary<string, object>
                     {

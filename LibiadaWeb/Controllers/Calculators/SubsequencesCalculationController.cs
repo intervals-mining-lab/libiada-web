@@ -50,7 +50,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="features">
@@ -61,7 +61,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(long[] matterIds, short[] characteristicTypeLinkIds, Feature[] features)
+        public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features)
         {
             return Action(() =>
             {
@@ -71,8 +71,8 @@
                 long[] parentSequenceIds;
                 var matterNames = new string[matterIds.Length];
                 var remoteIds = new string[matterIds.Length];
-                var subsequencesCharacteristicsNames = new string[characteristicTypeLinkIds.Length];
-                var subsequencesCharacteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
+                var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
 
                 using (var db = new LibiadaWebEntities())
                 {
@@ -89,9 +89,9 @@
                     }
 
                     var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                    for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k]);
+                        subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k]);
                         subsequencesCharacteristicsList[k] = new SelectListItem
                         {
                             Value = k.ToString(),
@@ -105,7 +105,7 @@
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                            characteristicTypeLinkIds,
+                            characteristicLinkIds,
                             features,
                             parentSequenceIds[i],
                             attributeValues);

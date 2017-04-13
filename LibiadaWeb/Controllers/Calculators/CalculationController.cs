@@ -47,7 +47,7 @@
         /// <param name="matterIds">
         /// The matters ids.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="notations">
@@ -75,7 +75,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            short[] characteristicTypeLinkIds,
+            short[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
             Translator?[] translators,
@@ -86,8 +86,8 @@
             return Action(() =>
                 {
                     var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-                    var characteristicNames = new string[characteristicTypeLinkIds.Length];
-                    var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                    var characteristicNames = new string[characteristicLinkIds.Length];
+                    var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                     Dictionary<long, string> mattersNames;
                     double[][] characteristics;
                     Chain[][] chains;
@@ -100,9 +100,9 @@
                         chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translators);
 
                         var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                        for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                        for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
+                            characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
                             characteristicsList[k] = new SelectListItem
                             {
                                 Value = k.ToString(),
@@ -114,11 +114,11 @@
 
                     if (!rotate && !complementary)
                     {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkIds);
+                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds);
                     }
                     else
                     {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkIds, rotate, complementary, rotationLength);
+                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds, rotate, complementary, rotationLength);
                     }
 
                     for (int i = 0; i < matterIds.Length; i++)

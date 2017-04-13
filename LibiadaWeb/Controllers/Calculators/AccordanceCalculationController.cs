@@ -65,7 +65,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
         /// <param name="notation">
@@ -93,7 +93,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int characteristicTypeLinkId,
+            int characteristicLinkId,
             Notation notation,
             Language? language,
             Translator? translator,
@@ -107,7 +107,7 @@
                 }
 
                 var characteristics = new List<List<double>>();
-                string characteristicName = characteristicTypeLinkRepository.GetAccordanceCharacteristicName(characteristicTypeLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetAccordanceCharacteristicName(characteristicLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
@@ -142,9 +142,9 @@
                 Chain secondChain = commonSequenceRepository.ToLibiadaChain(secondSequenceId);
                 secondChain.FillIntervalManagers();
 
-                AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetAccordanceCharacteristic(characteristicTypeLinkId);
+                AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetAccordanceCharacteristic(characteristicLinkId);
                 IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
-                Link link = characteristicTypeLinkRepository.GetLinkForAccordanceCharacteristic(characteristicTypeLinkId);
+                Link link = characteristicTypeLinkRepository.GetLinkForAccordanceCharacteristic(characteristicLinkId);
 
                 switch (calculationType)
                 {

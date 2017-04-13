@@ -69,7 +69,7 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type and link ids.
         /// </param>
         /// <param name="language">
@@ -106,7 +106,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            int[] characteristicTypeLinkIds,
+            int[] characteristicLinkIds,
             Language? language,
             Translator? translator,
             Notation notation,
@@ -119,7 +119,7 @@
         {
             return Action(() =>
             {
-                var characteristicNames = new string[characteristicTypeLinkIds.Length];
+                var characteristicNames = new string[characteristicLinkIds.Length];
                 var partNames = new List<string>[matterIds.Length];
                 var starts = new List<int>[matterIds.Length];
                 var lengthes = new List<int>[matterIds.Length];
@@ -154,11 +154,11 @@
                     chains[k] = commonSequenceRepository.ToLibiadaChain(sequenceId);
                 }
 
-                foreach (int characteristicTypeLinkId in characteristicTypeLinkIds)
+                foreach (int characteristicLinkId in characteristicLinkIds)
                 {
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
                     calculators.Add(FullCalculatorsFactory.CreateCalculator(characteristic));
-                    links.Add(characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId));
+                    links.Add(characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId));
                 }
 
                 for (int i = 0; i < chains.Length; i++)
@@ -223,15 +223,15 @@
                     mattersCharacteristics[i] = new { matterName = matters[matterIds[i]].Name, fragmentsData, differenceData, fourierData, autocorrelationData };
                 }
 
-                for (int l = 0; l < characteristicTypeLinkIds.Length; l++)
+                for (int l = 0; l < characteristicLinkIds.Length; l++)
                 {
-                    characteristicNames[l] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[l]);
+                    characteristicNames[l] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[l]);
                 }
 
-                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notation);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notation);
                     characteristicsList[k] = new SelectListItem
                     {
                         Value = k.ToString(),

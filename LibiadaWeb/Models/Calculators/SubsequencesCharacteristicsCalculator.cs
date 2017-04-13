@@ -18,7 +18,7 @@
         /// <summary>
         /// Calculates subsequences characteristics.
         /// </summary>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
         /// </param>
         /// <param name="features">
@@ -37,7 +37,7 @@
         /// The <see cref="T:SubsequenceData[]"/>.
         /// </returns>
         public static SubsequenceData[] CalculateSubsequencesCharacteristics(
-            short[] characteristicTypeLinkIds,
+            short[] characteristicLinkIds,
             Feature[] features,
             long parentSequenceId,
             List<AttributeValue> attributeValues,
@@ -48,8 +48,8 @@
             SubsequenceData[] subsequenceData;
             Dictionary<long, AttributeValue[]> dbSubsequencesAttributes;
             Dictionary<long, Dictionary<short, double>> dbCharacteristics;
-            var calculators = new IFullCalculator[characteristicTypeLinkIds.Length];
-            var links = new Link[characteristicTypeLinkIds.Length];
+            var calculators = new IFullCalculator[characteristicLinkIds.Length];
+            var links = new Link[characteristicLinkIds.Length];
             var newCharacteristics = new List<CharacteristicValue>();
 
             // creating local context to avoid memory overflow due to possibly big cache of characteristics
@@ -71,18 +71,18 @@
                 dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);
 
                 dbCharacteristics = db.CharacteristicValue
-                        .Where(c => characteristicTypeLinkIds.Contains(c.CharacteristicTypeLinkId) && subsequenceIds.Contains(c.SequenceId))
+                        .Where(c => characteristicLinkIds.Contains(c.CharacteristicLinkId) && subsequenceIds.Contains(c.SequenceId))
                         .ToArray()
                         .GroupBy(c => c.SequenceId)
-                        .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicTypeLinkId, ct => ct.Value));
+                        .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
 
                 var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    short characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                    short characteristicLinkId = characteristicLinkIds[k];
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
                     calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
-                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
                 }
             }
 
@@ -99,14 +99,14 @@
                 // cycle through characteristics and notations
                 for (int j = 0; j < calculators.Length; j++)
                 {
-                    short characteristicTypeLinkId = characteristicTypeLinkIds[j];
-                    if (!sequenceDbCharacteristics.TryGetValue(characteristicTypeLinkId, out values[j]))
+                    short characteristicLinkId = characteristicLinkIds[j];
+                    if (!sequenceDbCharacteristics.TryGetValue(characteristicLinkId, out values[j]))
                     {
                         values[j] = calculators[j].Calculate(sequences[i], links[j]);
                         var currentCharacteristic = new CharacteristicValue
                         {
                             SequenceId = subsequenceIds[i],
-                            CharacteristicTypeLinkId = characteristicTypeLinkId,
+                            CharacteristicLinkId = characteristicLinkId,
                             Value = values[j]
                         };
 

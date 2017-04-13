@@ -55,10 +55,10 @@
         /// <param name="matterIds">
         /// The matter ids.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type and link id.
         /// </param>
-        /// <param name="subsequencesCharacteristicTypeLinkId">
+        /// <param name="subsequencesCharacteristicLinkId">
         /// The subsequences characteristic type link id.
         /// </param>
         /// <param name="features">
@@ -87,8 +87,8 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(
             long[] matterIds,
-            short characteristicTypeLinkId,
-            short subsequencesCharacteristicTypeLinkId,
+            short characteristicLinkId,
+            short subsequencesCharacteristicLinkId,
             Feature[] features,
             string maxPercentageDifference,
             double characteristicValueFrom,
@@ -117,10 +117,10 @@
                     Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
                     var sequencesCharacteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
-                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkId);
+                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 
                     // Sequences characterstic
-                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicTypeLinkId);
+                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
 
                     var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];
 
@@ -145,7 +145,7 @@
 
                     var subsequencesCharacteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
 
-                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicTypeLinkId);
+                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicLinkId);
 
                     var viewDataHelper = new ViewDataHelper(db);
 
@@ -156,7 +156,7 @@
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
-                            new[] { subsequencesCharacteristicTypeLinkId },
+                            new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
                             attributeValues,

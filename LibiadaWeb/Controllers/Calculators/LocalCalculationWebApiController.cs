@@ -25,7 +25,7 @@
         /// <param name="subsequenceId">
         /// The subsequence id.
         /// </param>
-        /// <param name="characteristicTypeLinkId">
+        /// <param name="characteristicLinkId">
         /// The characteristic type link id.
         /// </param>
         /// <param name="windowSize">
@@ -37,7 +37,7 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetSubsequenceCharacteristic(long subsequenceId, int characteristicTypeLinkId, int windowSize, int step)
+        public string GetSubsequenceCharacteristic(long subsequenceId, int characteristicLinkId, int windowSize, int step)
         {
             Chain chain;
             IFullCalculator calculator;
@@ -47,9 +47,9 @@
             {
                 var characteristicTypeLinkRepository = new CharacteristicLinkRepository(context);
 
-                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
                 calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
+                link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
 
                 var subsequenceExtractor = new SubsequenceExtractor(context);
 

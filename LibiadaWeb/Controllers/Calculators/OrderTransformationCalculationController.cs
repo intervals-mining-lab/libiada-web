@@ -70,7 +70,7 @@
         /// <param name="iterationsCount">
         /// Number of transformations iterations.
         /// </param>
-        /// <param name="characteristicTypeLinkIds">
+        /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
         /// </param>
         /// <param name="notations">
@@ -92,7 +92,7 @@
             Link[] transformationLinkIds,
             int[] transformationIds,
             int iterationsCount,
-            int[] characteristicTypeLinkIds,
+            int[] characteristicLinkIds,
             Notation[] notations,
             Language[] languages,
             Translator?[] translators)
@@ -139,9 +139,9 @@
                             }
                         }
 
-                        int characteristicTypeLinkId = characteristicTypeLinkIds[k];
-                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicTypeLinkId);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicTypeLinkId);
+                        int characteristicLinkId = characteristicLinkIds[k];
+                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
 
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                         characteristics.Add(calculator.Calculate(sequence, link));
@@ -150,13 +150,13 @@
                     mattersCharacteristics[i] = new { matterName = matters[matterId].Name, characteristics };
                 }
 
-                var characteristicNames = new string[characteristicTypeLinkIds.Length];
-                for (int k = 0; k < characteristicTypeLinkIds.Length; k++)
+                var characteristicNames = new string[characteristicLinkIds.Length];
+                for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicTypeLinkIds[k], notations[k]);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
                 }
 
-                var characteristicsList = new SelectListItem[characteristicTypeLinkIds.Length];
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 for (int i = 0; i < characteristicNames.Length; i++)
                 {
                     characteristicsList[i] = new SelectListItem
