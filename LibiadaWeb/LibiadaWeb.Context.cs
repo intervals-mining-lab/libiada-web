@@ -30,7 +30,6 @@ namespace LibiadaWeb
         public virtual DbSet<BinaryCharacteristicValue> BinaryCharacteristicValue { get; set; }
         public virtual DbSet<CommonSequence> CommonSequence { get; set; }
         public virtual DbSet<CharacteristicValue> CharacteristicValue { get; set; }
-        public virtual DbSet<CharacteristicGroup> CharacteristicGroup { get; set; }
         public virtual DbSet<DnaSequence> DnaSequence { get; set; }
         public virtual DbSet<Subsequence> Subsequence { get; set; }
         public virtual DbSet<Position> Position { get; set; }
@@ -49,5 +48,10 @@ namespace LibiadaWeb
         public virtual DbSet<BinaryCharacteristicLink> BinaryCharacteristicLink { get; set; }
         public virtual DbSet<FullCharacteristicLink> FullCharacteristicLink { get; set; }
         public virtual DbSet<CongenericCharacteristicLink> CongenericCharacteristicLink { get; set; }
+        public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<CalculationTask> CalculationTasks { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace LibiadaWeb
         public Nullable<RemoteDb> RemoteDb { get; set; }
         public string RemoteId { get; set; }
         public System.DateTimeOffset Modified { get; set; }
+        public bool major { get; set; }
     
         public virtual Matter Matter { get; set; }
         public virtual ICollection<BinaryCharacteristicValue> BinaryCharacteristicValue { get; set; }
