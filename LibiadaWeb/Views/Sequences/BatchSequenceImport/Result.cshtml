@@ -6,36 +6,41 @@
 
 @if (ViewBag.Error == null)
 {
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>
-                #
-            </th>
-            <th>
-                Sequence
-            </th>
-            <th>
-                Result
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < ViewBag.matterNames.Length; i++)
-            {
-                <tr class="@Helpers.GetCssClassForImportResult(ViewBag.status[i])">
-                    <td>
-                        @(i + 1)
-                    </td>
-                    <td>
-                        @ViewBag.matterNames[i]
-                    </td>
-                    <td>
-                        @ViewBag.results[i]
-                        <br/>
-                    </td>
+    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+
+    <div ng-app="BatchSequenceImportResult" ng-controller="BatchSequenceImportResultCtrl">
+        @Html.Partial("_ModalLoadingWindow")
+        <div ng-disabled="loading">
+            <table class="table table-bordered table-hover" ng-cloak>
+                <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Sequence name
+                    </th>
+                    <th>
+                        Group
+                    </th>
+                    <th>
+                        Sequence type
+                    </th>
+                    <th>
+                        Result
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                <tr ng-repeat="matter in result" ng-class="calculateStatusClass(matter.Status)">
+                    <td ng-bind="$index + 1"/>
+                    <td ng-bind="matter.MatterName"/>
+                    <td ng-bind="matter.Group"/>
+                    <td ng-bind="matter.SequenceType"/>
+                    <td ng-bind="matter.Result"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 }

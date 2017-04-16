@@ -359,6 +359,7 @@
     </Compile>
     <Compile Include="LibiadaWebDataAnnotations.cs" />
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
+    <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
     <Compile Include="Models\CalculatorsData\SequenceCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\SubsequenceComparisonData.cs" />
     <Compile Include="Models\Calculators\SequencesCharacteristicsCalculator.cs" />
@@ -538,6 +539,7 @@
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
+    <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
     <Content Include="Scripts\Angular\Controllers\calculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\charts.js" />
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />

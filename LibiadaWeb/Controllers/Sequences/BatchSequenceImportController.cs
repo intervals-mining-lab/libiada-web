@@ -6,8 +6,14 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Bio;
+    using Bio.IO.GenBank;
+
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
@@ -55,46 +61,46 @@
         {
             return Action(() =>
             {
-                var matterNames = new string[accessions.Length];
-                var savedMattersNames = new string[accessions.Length];
-                var results = new string[accessions.Length];
-                var statuses = new string[accessions.Length];
+                var result = new MatterImportResult[accessions.Length];
 
                 using (var db = new LibiadaWebEntities())
                 {
                     var matterRepository = new MatterRepository(db);
-                    var existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                     var dnaSequenceRepository = new DnaSequenceRepository(db);
-                    var bioSequences = NcbiHelper.GetGenBankSequences(accessions);
+                    string[] existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
+                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessions);
 
                     for (int i = 0; i < accessions.Length; i++)
                     {
+                        result[i] = new MatterImportResult();
                         string accession = accessions[i];
-                        matterNames[i] = accession;
+                        result[i].MatterName = accession;
                         if (existingAccessions.Contains(accession) || existingAccessions.Contains(accession + ".1"))
                         {
-                            results[i] = "Sequence already exists";
-                            statuses[i] = "Exist";
+                            result[i].Result = "Sequence already exists";
+                            result[i].Status = "Exist";
                             continue;
                         }
 
                         try
                         {
-                            var metadata = NcbiHelper.GetMetadata(bioSequences[i]);
+                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequences[i]);
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
-                                results[i] = "Sequence already exists";
-                                statuses[i] = "Exist";
+                                result[i].Result = "Sequence already exists";
+                                result[i].Status = "Exist";
                                 continue;
                             }
 
-                            var matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
+                            Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
-                            savedMattersNames[i] = matter.Name;
-                            matterNames[i] = "Common name=" + metadata.Source.CommonName +
+                            result[i].SequenceType = matter.SequenceType.GetDisplayValue();
+                            result[i].Group = matter.Group.GetDisplayValue();
+                            result[i].MatterName = matter.Name;
+                            result[i].AllNames = "Common name=" + metadata.Source.CommonName +
                                              ", Species=" + metadata.Source.Organism.Species +
                                              ", Definition=" + metadata.Definition +
-                                             ", Saved matter name=" + savedMattersNames[i];
+                                             ", Saved matter name=" + result[i].MatterName;
 
                             var sequence = new CommonSequence
                                                {
@@ -105,6 +111,7 @@
                                                };
 
                             dnaSequenceRepository.Create(sequence, bioSequences[i], metadata.Definition.ToLower().Contains("partial"));
+
                             if (importGenes)
                             {
                                 try
@@ -114,38 +121,43 @@
                                         subsequenceImporter.CreateSubsequences();
                                     }
 
-                                    var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature == Feature.NonCodingSequence);
-                                    var featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature != Feature.NonCodingSequence);
+                                    int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature == Feature.NonCodingSequence);
+                                    int featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature != Feature.NonCodingSequence);
 
-                                    statuses[i] = "Success";
-                                    results[i] = "Successfully imported  sequence and " + featuresCount + " features and " + nonCodingCount + " non coding subsequences";
+                                    result[i].Result = "Successfully imported sequence and " + featuresCount + " features and " + nonCodingCount + " noncoding subsequences";
+                                    result[i].Status = "Success";
                                 }
                                 catch (Exception exception)
                                 {
-                                    results[i] = "successfully imported sequence but failed to import genes: " + exception.Message;
-                                    statuses[i] = "Error";
+                                    result[i].Result = "successfully imported sequence but failed to import genes: " + exception.Message;
+                                    result[i].Status = "Error";
 
                                     if (exception.InnerException != null)
                                     {
-                                        results[i] += " " + exception.InnerException.Message;
+                                        result[i].Result += " " + exception.InnerException.Message;
                                     }
                                 }
                             }
                             else
                             {
-                                results[i] = "successfully imported sequence";
-                                statuses[i] = "Success";
+                                result[i].Result = "successfully imported sequence";
+                                result[i].Status = "Success";
                             }
                         }
                         catch (Exception exception)
                         {
-                            results[i] = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
-                            statuses[i] = "Error";
+                            result[i].Result = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
+                            result[i].Status = "Error";
                         }
                     }
 
-                    // removing matters for whitch adding of sequence failed
-                    var orphanMatters = db.Matter.Include(m => m.Sequence).Where(m => savedMattersNames.Contains(m.Name) && m.Sequence.Count == 0).ToArray();
+                    string[] names = result.Select(r => r.MatterName).ToArray();
+
+                    // removing matters for which adding of sequence failed
+                    Matter[] orphanMatters = db.Matter
+                                               .Include(m => m.Sequence)
+                                               .Where(m => names.Contains(m.Name) && m.Sequence.Count == 0)
+                                               .ToArray();
 
                     if (orphanMatters.Length > 0)
                     {
@@ -156,9 +168,11 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "matterNames", matterNames },
-                               { "results", results },
-                               { "status", statuses }
+                               { "data", JsonConvert.SerializeObject(new Dictionary<string, object>
+                                                                         {
+                                                                             { "result", result }
+                                                                         })
+                               }
                            };
             });
         }
