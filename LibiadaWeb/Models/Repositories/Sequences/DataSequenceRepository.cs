@@ -89,20 +89,20 @@
 
             const string Query = @"INSERT INTO data_chain (
                                         id,
-                                        notation_id,
+                                        notation,
                                         matter_id,
                                         alphabet,
                                         building,
                                         remote_id,
-                                        remote_db_id
+                                        remote_db
                                     ) VALUES (
                                         @id,
-                                        @notation_id,
+                                        @notation,
                                         @matter_id,
                                         @alphabet,
                                         @building,
                                         @remote_id,
-                                        @remote_db_id
+                                        @remote_db
                                     );";
 
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());

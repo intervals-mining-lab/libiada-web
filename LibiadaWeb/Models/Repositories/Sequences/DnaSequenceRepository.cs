@@ -94,21 +94,21 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             const string Query = @"INSERT INTO dna_chain (
                                         id,
-                                        notation_id,
+                                        notation,
                                         matter_id,
                                         alphabet,
                                         building,
                                         remote_id,
-                                        remote_db_id,
+                                        remote_db,
                                         partial
                                     ) VALUES (
                                         @id,
-                                        @notation_id,
+                                        @notation,
                                         @matter_id,
                                         @alphabet,
                                         @building,
                                         @remote_id,
-                                        @remote_db_id,
+                                        @remote_db,
                                         @partial
                                     );";
 

@@ -102,40 +102,40 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             });
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "language_id",
+                ParameterName = "language",
                 NpgsqlDbType = NpgsqlDbType.Smallint,
                 Value = language
             });
 
             parameters.Add(new NpgsqlParameter
             {
-                ParameterName = "translator_id",
+                ParameterName = "translator",
                 NpgsqlDbType = NpgsqlDbType.Smallint,
                 Value = translator
             });
 
             const string Query = @"INSERT INTO literature_chain (
                                         id,
-                                        notation_id,
+                                        notation,
                                         matter_id,
                                         alphabet,
                                         building,
                                         remote_id,
-                                        remote_db_id,
+                                        remote_db,
                                         original,
-                                        language_id,
-                                        translator_id
+                                        language,
+                                        translator
                                     ) VALUES (
                                         @id,
-                                        @notation_id,
+                                        @notation,
                                         @matter_id,
                                         @alphabet,
                                         @building,
                                         @remote_id,
-                                        @remote_db_id,
+                                        @remote_db,
                                         @original,
-                                        @language_id,
-                                        @translator_id
+                                        @language,
+                                        @translator
                                     );";
 
             DbHelper.ExecuteCommand(Db, Query, parameters.ToArray());
