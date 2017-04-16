@@ -6,6 +6,7 @@
 
     using Bio.IO.GenBank;
 
+    using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
@@ -60,7 +61,7 @@
         /// <summary>
         /// Gene feature type name.
         /// </summary>
-        private readonly string gene;
+        private readonly string gene = Feature.Gene.GetGenBankName();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
@@ -79,11 +80,10 @@
 
             using (var commonSequenceRepository = new CommonSequenceRepository(db))
             {
-                var parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
+                BaseChain parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
                 parentLength = parentSequence.GetLength();
             }
 
-            gene = Feature.Gene.GetGenBankName();
             sourceLength = features[0].Location.LocationEnd;
             positionsMap = new bool[parentLength];
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)
@@ -113,7 +113,7 @@
             }
             catch (Exception e)
             {
-                throw new Exception("Error occured during importability check.", e);
+                throw new Exception("Error occurred during importability check.", e);
             }
 
             CreateFeatureSubsequences();
@@ -137,9 +137,9 @@
 
             for (int i = 1; i < features.Count; i++)
             {
-                var feature = features[i];
-                var location = feature.Location;
-                var leafLocations = location.GetLeafLocations();
+                FeatureItem feature = features[i];
+                ILocation location = feature.Location;
+                List<ILocation> leafLocations = location.GetLeafLocations();
 
                 if (feature.Key == "source")
                 {
@@ -162,9 +162,9 @@
 
                 if (location.SubLocations.Count > 0)
                 {
-                    var subLocationOperator = location.SubLocations[0].Operator;
+                    LocationOperator subLocationOperator = location.SubLocations[0].Operator;
 
-                    foreach (var subLocation in location.SubLocations)
+                    foreach (ILocation subLocation in location.SubLocations)
                     {
                         if (subLocation.Operator != subLocationOperator)
                         {
@@ -240,9 +240,9 @@
 
             for (int i = 1; i < features.Count; i++)
             {
-                var feature = features[i];
-                var location = feature.Location;
-                var leafLocations = location.GetLeafLocations();
+                FeatureItem feature = features[i];
+                ILocation location = feature.Location;
+                List<ILocation> leafLocations = location.GetLeafLocations();
                 Feature subsequenceFeature;
 
                 if (feature.Key == gene)
@@ -296,10 +296,10 @@
 
                 for (int k = 1; k < leafLocations.Count; k++)
                 {
-                    var leafLocation = leafLocations[k];
-                    var leafStart = leafLocation.LocationStart - 1;
-                    var leafEnd = leafLocation.LocationEnd - 1;
-                    var leafLength = leafEnd - leafStart + 1;
+                    ILocation leafLocation = leafLocations[k];
+                    int leafStart = leafLocation.LocationStart - 1;
+                    int leafEnd = leafLocation.LocationEnd - 1;
+                    int leafLength = leafEnd - leafStart + 1;
 
                     var position = new Position
                     {
@@ -333,9 +333,9 @@
         /// </returns>
         private List<Subsequence> CreateNonCodingSubsequences()
         {
-            var positions = ExtractNonCodingSubsequencesPositions();
-            var starts = positions[0];
-            var lengths = positions[1];
+            List<int>[] positions = ExtractNonCodingSubsequencesPositions();
+            List<int> starts = positions[0];
+            List<int> lengths = positions[1];
             var result = new List<Subsequence>();
 
             for (int i = 0; i < lengths.Count; i++)

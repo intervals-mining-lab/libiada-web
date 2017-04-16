@@ -96,6 +96,14 @@
         [Display(Name = "Plastid")]
         [Description("Complete plastid genome")]
         [Nature(Nature.Genetic)]
-        Plastid = 11
+        Plastid = 11,
+
+        /// <summary>
+        /// Complete plastid genome.
+        /// </summary>
+        [Display(Name = "Mitochondrial plasmid")]
+        [Description("Complete mitochondrial plasmid sequence")]
+        [Nature(Nature.Genetic)]
+        MitochondrialPlasmid = 12
     }
 }

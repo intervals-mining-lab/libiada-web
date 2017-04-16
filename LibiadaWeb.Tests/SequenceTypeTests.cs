@@ -17,7 +17,7 @@
         /// <summary>
         /// The sequence types count.
         /// </summary>
-        private const int SequenceTypesCount = 11;
+        private const int SequenceTypesCount = 12;
 
         /// <summary>
         /// Tests count of sequence types.
@@ -63,6 +63,7 @@
         [TestCase((SequenceType)9, "RRNA18S")]
         [TestCase((SequenceType)10, "Mitochondrion16SRRNA")]
         [TestCase((SequenceType)11, "Plastid")]
+        [TestCase((SequenceType)12, "MitochondrialPlasmid")]
         public void SequenceTypeNamesTest(SequenceType sequenceType, string name)
         {
             Assert.AreEqual(name, sequenceType.GetName());

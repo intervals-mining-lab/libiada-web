@@ -38,7 +38,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void CreateMatterFromSequence(CommonSequence commonSequence)
         {
-            var matter = commonSequence.Matter;
+            Matter matter = commonSequence.Matter;
             if (matter != null)
             {
                 matter.Sequence = new Collection<CommonSequence>();
@@ -113,7 +113,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                  Nature = Nature.Genetic
                              };
 
-            FillGropAndSequenceType(matter);
+            FillGroupAndSequenceType(matter);
 
             return matter;
         }
@@ -176,18 +176,20 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// Fills grop and sequence type params i matter.
+        /// Fills group and sequence type params in matter.
         /// </summary>
         /// <param name="matter">
         /// The matter.
         /// </param>
-        public void FillGropAndSequenceType(Matter matter)
+        public void FillGroupAndSequenceType(Matter matter)
         {
-            var name = matter.Name.ToLower();
+            string name = matter.Name.ToLower();
             if (name.Contains("mitochondrion") || name.Contains("mitochondrial"))
             {
                 matter.Group = Group.Eucariote;
-                matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA : SequenceType.MitochondrionGenome;
+                matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
+                                    : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
+                                    : SequenceType.MitochondrionGenome;
             }
             else if (name.Contains("18s"))
             {
@@ -199,7 +201,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 matter.Group = Group.Eucariote;
                 matter.SequenceType = SequenceType.ChloroplastGenome;
             }
-            else if (name.Contains("plastid"))
+            else if (name.Contains("plastid") || name.Contains("apicoplast"))
             {
                 matter.Group = Group.Eucariote;
                 matter.SequenceType = SequenceType.Plastid;

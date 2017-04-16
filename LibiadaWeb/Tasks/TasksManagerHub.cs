@@ -1,15 +1,15 @@
 ﻿namespace LibiadaWeb.Tasks
 {
     using System;
+    using System.Linq;
 
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Models;
 
     using Microsoft.AspNet.SignalR;
+
     using Newtonsoft.Json;
-    using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// SignalR messages hub class.
@@ -52,6 +52,9 @@
         /// <summary>
         /// Called by clients on connect.
         /// </summary>
+        /// <returns>
+        /// The JSON of all tasks as <see cref="string"/>.
+        /// </returns>
         public string GetAllTasks()
         {
             var tasks = TaskManager.GetTasksData().Select(t => new

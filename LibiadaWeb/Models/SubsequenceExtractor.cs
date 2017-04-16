@@ -121,7 +121,7 @@
         }
 
         /// <summary>
-        /// Checkes if subsequence attribute passes filters.
+        /// Checks if subsequence attribute passes filters.
         /// </summary>
         /// <param name="subsequence">
         /// The subsequence.
