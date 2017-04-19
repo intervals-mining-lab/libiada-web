@@ -282,7 +282,7 @@
                 .attr("y", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")")
-                .text(function(d) { return "Cluster " + d.name; })
+                .text(function (d) { return ($scope.clustersCount ? "Cluster " : "") + d.name; })
                 .style("font-size", "9pt");
         }
 
