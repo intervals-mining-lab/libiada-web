@@ -116,7 +116,7 @@
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
-                    var sequencesCharacteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                    var sequencesCharacteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 
                     // Sequences characterstic
@@ -143,7 +143,7 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    var subsequencesCharacteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                    var subsequencesCharacteristicTypeLinkRepository = new FullCharacteristicRepository(db);
 
                     characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicLinkId);
 

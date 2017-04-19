@@ -10,10 +10,10 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
-    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
+    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The accordance calculation controller.
@@ -34,7 +34,7 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
+        private readonly AccordanceCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
@@ -43,7 +43,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+            characteristicTypeLinkRepository = new AccordanceCharacteristicRepository(db);
         }
 
         /// <summary>

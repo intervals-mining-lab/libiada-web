@@ -31,7 +31,7 @@
         /// <summary>
         /// The characteristic type link repository.
         /// </summary>
-        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
+        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
@@ -39,7 +39,7 @@
         public CustomSequenceCalculationController() : base("Custom sequence calculation")
         {
             db = new LibiadaWebEntities();
-            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+            characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
         }
 
         /// <summary>

@@ -88,7 +88,7 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                    var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
                         var characteristicLinkId = characteristicLinkIds[k];

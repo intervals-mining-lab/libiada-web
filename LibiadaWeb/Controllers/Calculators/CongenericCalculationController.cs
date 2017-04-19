@@ -36,7 +36,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
+        private readonly CongenericCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCalculationController"/> class.
@@ -45,7 +45,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+            characteristicTypeLinkRepository = new CongenericCharacteristicRepository(db);
         }
 
         /// <summary>

@@ -41,7 +41,7 @@
         /// <summary>
         /// The characteristic type repository.
         /// </summary>
-        private readonly CharacteristicLinkRepository characteristicTypeLinkRepository;
+        private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
@@ -50,7 +50,7 @@
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
-            characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+            characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
         }
 

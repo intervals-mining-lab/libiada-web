@@ -366,6 +366,10 @@
     <Compile Include="Models\CalculatorsData\FragmentData.cs" />
     <Compile Include="Models\Calculators\SubsequencesCharacteristicsCalculator.cs" />
     <Compile Include="Models\CalculatorsData\SelectListItemWithNature.cs" />
+    <Compile Include="Models\Repositories\Catalogs\AccordanceCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -434,9 +438,7 @@
     <Compile Include="Models\CalculatorsData\SubsequenceData.cs" />
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
     <Compile Include="Models\CalculatorsData\IntPair.cs" />
-    <Compile Include="Models\Repositories\Calculators\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\CharacteristicLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\IAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
@@ -456,7 +458,6 @@
     <Compile Include="Models\Repositories\Sequences\MatterRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\MusicSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ElementRepository.cs" />
-    <Compile Include="Models\Repositories\Calculators\IBinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IElementRepository.cs" />
     <Compile Include="Models\SubsequenceExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -76,7 +76,7 @@
                         .GroupBy(c => c.SequenceId)
                         .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
 
-                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     short characteristicLinkId = characteristicLinkIds[k];

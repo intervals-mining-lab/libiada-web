@@ -100,7 +100,7 @@
             return Action(() =>
             {
                 var db = new LibiadaWebEntities();
-                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var mattersCharacteristics = new object[matterIds.Length];
                 matterIds = matterIds.OrderBy(m => m).ToArray();

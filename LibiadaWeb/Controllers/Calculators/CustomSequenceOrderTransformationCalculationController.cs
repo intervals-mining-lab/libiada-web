@@ -105,7 +105,7 @@
             return Action(() =>
             {
                 var db = new LibiadaWebEntities();
-                var characteristicTypeLinkRepository = new CharacteristicLinkRepository(db);
+                var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
                 var names = new string[sequencesCount];
