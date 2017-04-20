@@ -2055,9 +2055,8 @@ ALTER TABLE accordance_characteristic RENAME characteristic_type_link_id TO char
 ALTER TABLE accordance_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
 
 -- 20.04.2017
--- Change task result type from json to text.
+-- Refactor task table.
 
-ALTER TABLE public.task DROP COLUMN result;
-ALTER TABLE public.task  ADD COLUMN result text;
+ALTER TABLE task ALTER COLUMN status SET NOT NULL;
 
 COMMIT;

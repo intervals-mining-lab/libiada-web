@@ -11,7 +11,7 @@
 
             switch (event) {
                 case "addTask":
-                    $scope.tasks.push(data);       
+                    $scope.tasks.push(data);
                     break;
                 case "deleteTask":
                     var taskToDelete = $scope.tasks.find(function (t) { return t.Id == data.Id; });
@@ -27,8 +27,8 @@
                         taskToChange.TaskState = data.TaskState;
                         taskToChange.TaskStateName = data.TaskStateName;
                     }
-                    else { 
-                        $scope.tasks.push(data);        
+                    else {
+                        $scope.tasks.push(data);
                     }
                     break;
                 default: console.log("Unknown task event");
@@ -57,13 +57,6 @@
             else if (change.newState === $.signalR.connectionState.connected) {
                 $scope.flags.reconnecting = false;
             }
-            //else if (change.newState === $.signalR.connectionState.disconnected) {
-            //    delay(function () {
-            //        if (confirm('Connection lost. Refresh page?')) {
-            //            location.reload(true);
-            //        }
-            //    }, 5000);
-            //}
             $scope.$apply();
         });
 
