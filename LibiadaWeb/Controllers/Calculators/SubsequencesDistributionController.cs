@@ -26,7 +26,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController() : base("Subsequences distribution")
+        public SubsequencesDistributionController() : base("Subsequences distribution", TaskType.SubsequencesDistribution)
         {
         }
 

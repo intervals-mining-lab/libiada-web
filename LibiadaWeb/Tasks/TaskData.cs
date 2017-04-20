@@ -13,7 +13,7 @@
         /// <summary>
         /// The id.
         /// </summary>
-        public readonly int Id;
+        public int Id;
 
         /// <summary>
         /// The display name.

@@ -43,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController() : base("Local calculation")
+        public LocalCalculationController() : base("Local calculation", TaskType.LocalCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

@@ -22,7 +22,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Characteristics calculation")
+        public CalculationController() : base("Characteristics calculation", TaskType.Calculation)
         {
         }
 

@@ -22,16 +22,19 @@
         /// </summary>
         private readonly string displayName;
 
+        private readonly TaskType taskType;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractResultController"/> class.
         /// </summary>
         /// <param name="displayName">
         /// The display name.
         /// </param>
-        protected AbstractResultController(string displayName)
+        protected AbstractResultController(string displayName, TaskType taskType)
         {
             this.controllerName = System.Web.HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("controller");
             this.displayName = displayName;
+            this.taskType = taskType;
         }
 
         /// <summary>

@@ -27,7 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
-        public BatchSequenceImportController() : base("Batch sequences import")
+        public BatchSequenceImportController() : base("Batch sequences import", TaskType.BatchSequenceImport)
         {
         }
 

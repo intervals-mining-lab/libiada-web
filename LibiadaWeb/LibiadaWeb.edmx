@@ -365,6 +365,7 @@
           <Property Name="task_type" Type="int2" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="status" Type="int2" />
+          <Property Name="result" Type="text" />
           <Property Name="user_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="started" Type="timestamptz" Precision="7" />
@@ -790,7 +791,7 @@
           <EntitySet Name="AspNetUserClaims" EntityType="LibiadaWebModel.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="LibiadaWebModel.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="LibiadaWebModel.AspNetUser" />
-          <EntitySet Name="CalculationTasks" EntityType="LibiadaWebModel.CalculationTask" />
+          <EntitySet Name="CalculationTask" EntityType="LibiadaWebModel.CalculationTask" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -1014,7 +1015,7 @@
 
           <AssociationSet Name="fk_task_user" Association="LibiadaWebModel.fk_task_user">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-            <End Role="task" EntitySet="CalculationTasks" />
+            <End Role="task" EntitySet="CalculationTask" />
           </AssociationSet>
 
           <AssociationSet Name="AspNetUserRoles" Association="LibiadaWebModel.AspNetUserRoles">
@@ -1455,6 +1456,7 @@
           <Property Name="task_type" Type="Int16" Nullable="false" />
           <Property Name="description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="status" Type="Int16" />
+          <Property Name="result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="user_id" Type="Int32" Nullable="false" />
           <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="started" Type="DateTimeOffset" Precision="7" />
@@ -2465,7 +2467,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <EntitySetMapping Name="CalculationTasks">
+          <EntitySetMapping Name="CalculationTask">
             <EntityTypeMapping TypeName="LibiadaWebModel.CalculationTask">
               <MappingFragment StoreEntitySet="task">
                 <ScalarProperty Name="completed" ColumnName="completed" />
@@ -2473,6 +2475,7 @@
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="user_id" ColumnName="user_id" />
                 <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="result" ColumnName="result" />
                 <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="task_type" ColumnName="task_type" />
                 <ScalarProperty Name="id" ColumnName="id" />

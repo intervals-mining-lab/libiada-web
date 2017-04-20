@@ -32,7 +32,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BuildingsSimilarityController"/> class.
         /// </summary>
-        public BuildingsSimilarityController() : base("Buildings comparison")
+        public BuildingsSimilarityController() : base("Buildings comparison", TaskType.BuildingsSimilarity)
         {
             db = new LibiadaWebEntities();
             sequenceRepository = new CommonSequenceRepository(db);

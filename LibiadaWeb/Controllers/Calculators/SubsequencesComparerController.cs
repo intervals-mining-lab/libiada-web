@@ -28,7 +28,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequencesComparerController() : base("Subsequences comparer")
+        public SubsequencesComparerController() : base("Subsequences comparer", TaskType.SubsequencesComparer)
         {
         }
 

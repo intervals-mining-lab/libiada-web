@@ -20,8 +20,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
         /// </summary>
-        public BatchGenesImportController()
-            : base("Batch genes import")
+        public BatchGenesImportController() : base("Batch genes import", TaskType.BatchGenesImport)
         {
         }
 

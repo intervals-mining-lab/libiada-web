@@ -6,6 +6,9 @@
     using System.Threading;
 
     using LibiadaWeb.Models.Account;
+    using System.Data.Entity.Validation;
+    using System.Data.Entity;
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The task manager.
@@ -38,8 +41,25 @@
             lock (Tasks)
             {
                 Tasks.Add(task);
+                using (var db = new LibiadaWebEntities())
+                {
+                    var dbTask = new CalculationTask()
+                    {
+                        created = DateTime.Now,
+                        started = task.TaskData.Started,
+                        description = task.TaskData.DisplayName,
+                        status = (short)task.TaskData.TaskState,
+                        user_id = Convert.ToInt32(task.TaskData.UserId),
+                        task_type = (short)task.taskType
+                    };
+
+                    db.CalculationTask.Add(dbTask);
+                    db.SaveChanges();
+                    task.TaskData.Id = (int)dbTask.id;
+                }
                 TasksManagerHub.Send(TaskEvent.addTask, task.TaskData);
             }
+
 
             ManageTasks();
         }
@@ -220,6 +240,17 @@
                 {
                     method = task.Action;
                     task.TaskData.Started = DateTime.Now;
+                    ///////////
+                    using (var db = new LibiadaWebEntities())
+                    {
+                        var dbTask = db.CalculationTask.Single(t => (t.id == task.TaskData.Id));
+
+                        dbTask.started = DateTime.Now;
+                        db.Entry(dbTask).State = EntityState.Modified;
+                        db.SaveChanges();
+                      
+                    }
+                    ///////////
                     TasksManagerHub.Send(TaskEvent.changeStatus, task.TaskData);
                 }
 
@@ -230,6 +261,16 @@
                     task.TaskData.ExecutionTime = task.TaskData.Completed - task.TaskData.Started;
                     task.Result = result;
                     task.TaskData.TaskState = TaskState.Completed;
+                    using (var db = new LibiadaWebEntities())
+                    {
+                        var dbTask = db.CalculationTask.Single(t => (t.id == task.TaskData.Id));
+
+                        dbTask.completed = DateTime.Now;
+                        dbTask.result = JsonConvert.SerializeObject(result["data"]);
+                        db.Entry(dbTask).State = EntityState.Modified;
+                        db.SaveChanges();
+
+                    }
                     TasksManagerHub.Send(TaskEvent.changeStatus, task.TaskData);
                 }
             }

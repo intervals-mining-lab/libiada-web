@@ -25,7 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController() : base("Order transformation/derivative characteristics calculation")
+        public OrderTransformationCalculationController() : base("Order transformation/derivative characteristics calculation", TaskType.OrderTransformationCalculation)
         {
         }
 

@@ -13,6 +13,7 @@
         /// The action.
         /// </summary>
         public readonly Func<Dictionary<string, object>> Action;
+        public readonly TaskType taskType;
 
         /// <summary>
         /// The task data.

@@ -42,7 +42,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController() : base("Clusterization")
+        public ClusterizationController() : base("Clusterization", TaskType.Clusterization)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

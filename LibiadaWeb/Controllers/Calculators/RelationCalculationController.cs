@@ -43,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController() : base("Relation calculation")
+        public RelationCalculationController() : base("Relation calculation", TaskType.RelationCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

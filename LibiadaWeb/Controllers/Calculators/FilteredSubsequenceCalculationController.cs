@@ -22,7 +22,7 @@
        /// <summary>
         /// Initializes a new instance of the <see cref="FilteredSubsequenceCalculationController"/> class.
         /// </summary>
-        public FilteredSubsequenceCalculationController() : base("Subsequences characteristics calculation")
+        public FilteredSubsequenceCalculationController() : base("Subsequences characteristics calculation", TaskType.FilteredSubsequenceCalculation)
         {
         }
 

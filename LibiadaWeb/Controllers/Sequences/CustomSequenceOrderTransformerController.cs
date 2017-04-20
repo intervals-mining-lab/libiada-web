@@ -25,7 +25,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformerController() : base("Custom sequences order transformation")
+        public CustomSequenceOrderTransformerController() : base("Custom sequences order transformation", TaskType.CustomSequenceOrderTransformer)
         {
         }
 

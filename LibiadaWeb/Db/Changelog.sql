@@ -2054,4 +2054,10 @@ ALTER TABLE binary_characteristic ALTER COLUMN characteristic_link_id TYPE small
 ALTER TABLE accordance_characteristic RENAME characteristic_type_link_id TO characteristic_link_id;
 ALTER TABLE accordance_characteristic ALTER COLUMN characteristic_link_id TYPE smallint;
 
+-- 20.04.2017
+-- Change task result type from json to text.
+
+ALTER TABLE public.task DROP COLUMN result;
+ALTER TABLE public.task  ADD COLUMN result text;
+
 COMMIT;

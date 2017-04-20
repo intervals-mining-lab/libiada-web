@@ -462,6 +462,7 @@
     <Compile Include="Models\SubsequenceExtractor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="TaskType.cs" />
     <Compile Include="Translator.cs" />
   </ItemGroup>
   <ItemGroup>

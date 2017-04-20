@@ -29,7 +29,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformationCalculationController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformationCalculationController() : base("Custom sequences order transformation/derivative characteristics calculation")
+        public CustomSequenceOrderTransformationCalculationController() : base("Custom sequences order transformation/derivative characteristics calculation", TaskType.CustomSequenceOrderTransformationCalculation)
         {
         }
 

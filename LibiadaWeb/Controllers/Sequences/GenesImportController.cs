@@ -20,8 +20,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController()
-            : base("Genes import")
+        public GenesImportController() : base("Genes import", TaskType.GenesImport)
         {
         }
 

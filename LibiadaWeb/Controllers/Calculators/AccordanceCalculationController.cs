@@ -39,7 +39,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController() : base("Accordance calculation")
+        public AccordanceCalculationController() : base("Accordance calculation", TaskType.AccordanceCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

@@ -39,7 +39,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesAlignmentController"/> class.
         /// </summary>
-        public SequencesAlignmentController() : base("Sequences alignment")
+        public SequencesAlignmentController() : base("Sequences alignment", TaskType.SequencesAlignment)
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);

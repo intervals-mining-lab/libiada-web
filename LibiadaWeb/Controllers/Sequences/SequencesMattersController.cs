@@ -52,7 +52,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
-        protected SequencesMattersController() : base("Sequence upload")
+        protected SequencesMattersController() : base("Sequence upload", TaskType.SequencesMatters)
         {
             Db = new LibiadaWebEntities();
             dnaSequenceRepository = new DnaSequenceRepository(Db);

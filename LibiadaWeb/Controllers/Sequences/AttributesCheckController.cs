@@ -23,7 +23,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
-        public AttributesCheckController() : base("Attributes check")
+        public AttributesCheckController() : base("Attributes check", TaskType.AttributesCheck)
         {
         }
 
