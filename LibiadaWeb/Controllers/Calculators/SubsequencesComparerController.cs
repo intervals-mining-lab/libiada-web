@@ -119,7 +119,7 @@
                     var sequencesCharacteristicTypeLinkRepository = new FullCharacteristicRepository(db);
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 
-                    // Sequences characterstic
+                    // Sequences characteristic
                     double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
 
                     var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];

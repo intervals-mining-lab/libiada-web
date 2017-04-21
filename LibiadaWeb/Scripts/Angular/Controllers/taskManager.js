@@ -14,11 +14,11 @@
                     $scope.tasks.push(data);
                     break;
                 case "deleteTask":
-                    var taskToDelete = $scope.tasks.find(function (t) { return t.Id == data.Id; });
+                    var taskToDelete = $scope.tasks.find(function (t) { return t.Id === data.Id; });
                     $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
                     break;
                 case "changeStatus":
-                    var taskToChange = $scope.tasks.find(function (t) { return t.Id == data.Id; });
+                    var taskToChange = $scope.tasks.find(function (t) { return t.Id === data.Id; });
                     if (taskToChange) {
                         taskToChange.Created = data.Created;
                         taskToChange.Started = data.Started;
@@ -63,7 +63,7 @@
 
         tasksHub.client.onConnected = function (data) {
             alert(data);
-        }
+        };
 
         $.connection.hub.start().done(function (data) {
             tasksHub.server.getAllTasks().done(function (tasksJson) {

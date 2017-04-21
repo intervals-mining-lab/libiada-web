@@ -10,10 +10,10 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
     using Newtonsoft.Json;
-    using LibiadaWeb.Models.Repositories.Catalogs;
 
     /// <summary>
     /// The accordance calculation controller.

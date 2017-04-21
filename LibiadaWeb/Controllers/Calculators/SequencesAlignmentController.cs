@@ -108,8 +108,8 @@
                     throw new ArgumentException("Count of selected matters must be 2.", "matterIds");
                 }
 
-                var firstMatterId = matterIds[0];
-                var secondMatterId = matterIds[1];
+                long firstMatterId = matterIds[0];
+                long secondMatterId = matterIds[1];
 
                 var firstSequenceCharacteristics = CalculateCharacteristic(firstMatterId, characteristicLinkId, notation, features);
                 var secondSequenceCharacteristics = CalculateCharacteristic(secondMatterId, characteristicLinkId, notation, features);
@@ -135,7 +135,7 @@
 
                 if (!cyclicShift)
                 {
-                    var length = longer.Count;
+                    int length = longer.Count;
                     for (int i = 0; i < length; i++)
                     {
                         longer.Add(0);
@@ -143,10 +143,10 @@
                 }
 
                 var distanceCalculator = GetDistanceCalculator(validationType);
-                List<double> distances = new List<double>();
-                var optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
+                var distances = new List<double>();
+                int optimalRotation = CalculateMeasureForRotation(longer, shorter, distances, distanceCalculator);
 
-                var characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
