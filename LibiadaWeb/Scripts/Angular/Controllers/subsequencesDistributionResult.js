@@ -49,12 +49,11 @@
                 $scope.filters.push({ value: $scope.newFilter });
 
                 d3.selectAll(".dot")
-                    .attr("visibility",
-                        function (d) {
-                            var productId = getProductAttributeId(d);
-                            d.filtersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
+                    .attr("visibility", function (d) {
+                        var productId = getProductAttributeId(d);
+                        d.filtersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
+                        return $scope.dotVisible(d) ? "visible" : "hidden";
+                    });
 
                 $scope.fillVisiblePoints();
                 $scope.newFilter = "";
@@ -65,11 +64,10 @@
         // deletes given filter
         function deleteFilter(filter) {
             d3.selectAll(".dot")
-                    .attr("visibility",
-                        function (d) {
-                            d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
+                .attr("visibility", function (d) {
+                    d.filtersVisible.splice($scope.filters.indexOf(filter), 1);
+                    return $scope.dotVisible(d) ? "visible" : "hidden";
+                });
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
             $scope.fillVisiblePoints();
         }
@@ -461,7 +459,7 @@
                             case 40: // down
                                 for (var i = indexOfPoint + 1; i < $scope.visiblePoints.length; i++) {
                                     if ($scope.visiblePoints[i].matterId === selectedPoint.matterId
-                                       && $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
+                                        && $scope.yValue($scope.visiblePoints[i]) !== $scope.yValue(selectedPoint)) {
                                         nextPoint = $scope.visiblePoints[i];
                                         break;
                                     }
@@ -536,23 +534,23 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
+        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            .then(function (data) {
+                MapModelFromJson($scope, JSON.parse(data.data));
 
-            $scope.legendHeight = $scope.result.length * 20;
-            $scope.height = 800 + $scope.legendHeight;
-            $scope.width = 800;
-            $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
+                $scope.legendHeight = $scope.result.length * 20;
+                $scope.height = 800 + $scope.legendHeight;
+                $scope.width = 800;
+                $scope.subsequenceCharacteristic = $scope.subsequencesCharacteristicsList[0];
 
-            $scope.fillPoints();
-            $scope.addCharacteristicComparer();
-            $scope.hideModalLoadingWindow();
-        }).error(function (data) {
-            alert("Failed loading genes map data");
-        });
+                $scope.fillPoints();
+                $scope.addCharacteristicComparer();
+                $scope.hideModalLoadingWindow();
+            }, function () {
+                alert("Failed loading genes map data");
+
+                $scope.hideModalLoadingWindow();
+            });
     }
 
     angular.module("SubsequencesDistributionResult", []).controller("SubsequencesDistributionResultCtrl", ["$scope", "$http", subsequencesDistributionResult]);

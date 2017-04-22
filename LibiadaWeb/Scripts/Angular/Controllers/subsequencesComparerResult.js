@@ -101,24 +101,22 @@
                 $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
                 $scope.hideModalLoadingWindow();
             } else {
-                $http({
-                    url: "/api/TaskManagerWebApi?taskId=" + $scope.taskId
+                $http.get("/api/TaskManagerWebApi?taskId=" + $scope.taskId
                     + "&firstIndex=" + firstIndex
-                    + "&secondIndex=" + secondIndex,
-                    method: "GET"
-                }).success(function (equalElements) {
-                    $scope.equalElements[firstIndex][secondIndex] = JSON.parse(equalElements);
+                    + "&secondIndex=" + secondIndex)
+                    .then(function (equalElements) {
+                        $scope.equalElements[firstIndex][secondIndex] = JSON.parse(equalElements.data);
 
-                    $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
+                        $scope.applyFilters($scope.equalElements[firstIndex][secondIndex]);
 
-                    $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
+                        $scope.equalElementsToShow = $scope.equalElements[firstIndex][secondIndex];
 
-                    $scope.hideModalLoadingWindow();
-                }).error(function (data) {
-                    alert("Failed loading subsequences data");
+                        $scope.hideModalLoadingWindow();
+                    }, function () {
+                        alert("Failed loading subsequences data");
 
-                    $scope.hideModalLoadingWindow();
-                });
+                        $scope.hideModalLoadingWindow();
+                    });
             }
         }
 
@@ -134,36 +132,32 @@
         function calculateLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
             $scope.showModalLoadingWindow("Loading local characteristics...");
 
-            $http({
-                url: "/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
-                    "&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
-                    "&windowSize=" + $scope.slidingWindowParams.windowSize +
-                    "&step=" + $scope.slidingWindowParams.step,
-                method: "GET"
-            }).success(function (firstCharacteristics) {
-                $scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics);
+            $http.get("/api/LocalCalculationWebApi?subsequenceId=" + firstSubsequenceId +
+                "&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
+                "&windowSize=" + $scope.slidingWindowParams.windowSize +
+                "&step=" + $scope.slidingWindowParams.step)
+                .then(function (firstCharacteristics) {
+                    $scope.firstSubsequenceLocalCharactristics = JSON.parse(firstCharacteristics.data);
 
-                $http({
-                    url: "/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
+                    $http.get("/api/LocalCalculationWebApi?subsequenceId=" + secondSubsequenceId +
                         "&characteristicLinkId=" + $scope.characteristic.link.CharacteristicLinkId +
                         "&windowSize=" + $scope.slidingWindowParams.windowSize +
-                        "&step=" + $scope.slidingWindowParams.step,
-                    method: "GET"
-                }).success(function (secondCharacteristics) {
-                    $scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics);
-                    $scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
+                        "&step=" + $scope.slidingWindowParams.step)
+                        .then(function (secondCharacteristics) {
+                            $scope.secondSubsequenceLocalCharactristics = JSON.parse(secondCharacteristics.data);
+                            $scope.drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index);
 
-                    $scope.hideModalLoadingWindow();
-                }).error(function (data) {
-                    alert("Failed loading characteristics data");
+                            $scope.hideModalLoadingWindow();
+                        }, function () {
+                            alert("Failed loading characteristics data");
+
+                            $scope.hideModalLoadingWindow();
+                        });
+                }, function () {
+                    alert("Failed loading local characteristics data");
 
                     $scope.hideModalLoadingWindow();
                 });
-            }).error(function (data) {
-                alert("Failed loading local characteristics data");
-
-                $scope.hideModalLoadingWindow();
-            });
         }
 
         function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
@@ -319,8 +313,8 @@
                         .style("fill-opacity", function () { return d.visible ? 1 : 0; });
 
                     svg.selectAll(".line")
-                        .filter(function(line) {
-                             return line[0].id === d.id;
+                        .filter(function (line) {
+                            return line[0].id === d.id;
                         })
                         .attr("visibility", function (line) {
                             return d.visible ? "visible" : "hidden";
@@ -369,27 +363,27 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
         $scope.loading = true;
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
+        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            .then(function (data) {
+                MapModelFromJson($scope, JSON.parse(data.data));
 
-            $scope.equalElements = new Array($scope.mattersNames.length);
+                $scope.equalElements = new Array($scope.mattersNames.length);
 
-            for (var i = 0; i < $scope.mattersNames.length; i++) {
-                $scope.equalElements[i] = new Array($scope.mattersNames.length);
-            }
+                for (var i = 0; i < $scope.mattersNames.length; i++) {
+                    $scope.equalElements[i] = new Array($scope.mattersNames.length);
+                }
 
-            $scope.characteristic = {
-                characteristicType: $scope.characteristicTypes[0],
-                link: $scope.characteristicTypes[0].CharacteristicLinks[0]
-            };
+                $scope.characteristic = {
+                    characteristicType: $scope.characteristicTypes[0],
+                    link: $scope.characteristicTypes[0].CharacteristicLinks[0]
+                };
 
-            $scope.hideModalLoadingWindow();
-        }).error(function (data) {
-            alert("Failed loading characteristic data");
-        });
+                $scope.hideModalLoadingWindow();
+            }, function () {
+                alert("Failed loading characteristic data");
+
+                $scope.hideModalLoadingWindow();
+            });
 
         $scope.slidingWindowParams = {
             windowSize: 50,

@@ -2,27 +2,19 @@
     "use strict";
 
     function localCalculationResult($scope, $http) {
-        var location = window.location.href.split("/");
-        $scope.taskId = location[location.length - 1];
-        $scope.loading = true;
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
 
-            $scope.fillLegend();
+        // shows modal window with progressbar and given text
+        function showModalLoadingWindow(headerText) {
+            $scope.loadingScreenHeader = headerText;
+            $scope.loadingModalWindow.modal("show");
+            $scope.loading = true;
+        }
 
-            $scope.firstCharacteristic = $scope.characteristicsList[0];
-            $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
-
-            $scope.legendHeight = $scope.legend.length * 20;
-            $scope.height = 800 + $scope.legendHeight;
-
+        // hides modal window
+        function hideModalLoadingWindow() {
             $scope.loading = false;
-        }).error(function (data) {
-            alert("Failed loading local characteristics data");
-        });
+            $scope.loadingModalWindow.modal("hide");
+        }
 
         function fillLegend() {
             $scope.legend = [];
@@ -121,11 +113,11 @@
         }
 
         function xValue(d) {
-             return $scope.lineChart ? d.id : d.x;
+            return $scope.lineChart ? d.id : d.x;
         }
 
         function yValue(d) {
-             return $scope.lineChart ? d.x : d.y;
+            return $scope.lineChart ? d.x : d.y;
         }
 
         function draw() {
@@ -175,7 +167,7 @@
             // setup fill color
             var cValue = function (d) { return d.cluster; };
             var color = d3.scaleOrdinal(d3.schemeCategory20);
-            var elementColor = function(d) { return color(cValue(d)); };
+            var elementColor = function (d) { return color(cValue(d)); };
 
             // add the graph canvas to the body of the webpage
             var svg = d3.select("#chart").append("svg")
@@ -231,11 +223,11 @@
 
                 // Nest the entries by symbol
                 var dataNest = d3.nest()
-                    .key(function(d) { return d.cluster })
+                    .key(function (d) { return d.cluster })
                     .entries($scope.points);
 
                 // Loop through each symbol / key
-                dataNest.forEach(function(d) {
+                dataNest.forEach(function (d) {
                     svg.append("path")
                         .datum(d.values)
                         .attr("class", "line")
@@ -245,21 +237,21 @@
                         .attr('fill', 'none');
                 });
             }
-                // draw dots
-                svg.selectAll(".dot")
-                    .data($scope.points)
-                    .enter()
-                    .append("ellipse")
-                    .attr("class", "dot")
-                    .attr("rx", $scope.dotRadius)
-                    .attr("ry", $scope.dotRadius)
-                    .attr("cx", $scope.xMap)
-                    .attr("cy", $scope.yMap)
-                    .style("fill-opacity", 0.6)
-                    .style("opacity", $scope.lineChart ? 0 : 1)
-                    .style("fill", elementColor)
-                    .style("stroke", elementColor)
-                    .on("click", function(d) { return $scope.showTooltip(d, tooltip, svg); });
+            // draw dots
+            svg.selectAll(".dot")
+                .data($scope.points)
+                .enter()
+                .append("ellipse")
+                .attr("class", "dot")
+                .attr("rx", $scope.dotRadius)
+                .attr("ry", $scope.dotRadius)
+                .attr("cx", $scope.xMap)
+                .attr("cy", $scope.yMap)
+                .style("fill-opacity", 0.6)
+                .style("opacity", $scope.lineChart ? 0 : 1)
+                .style("fill", elementColor)
+                .style("stroke", elementColor)
+                .on("click", function (d) { return $scope.showTooltip(d, tooltip, svg); });
 
             // draw legend
             var legend = svg.selectAll(".legend")
@@ -316,10 +308,36 @@
         $scope.fillLegend = fillLegend;
         $scope.yValue = yValue;
         $scope.xValue = xValue;
+        $scope.showModalLoadingWindow = showModalLoadingWindow;
+        $scope.hideModalLoadingWindow = hideModalLoadingWindow;
 
+        $scope.loadingModalWindow = $("#loadingDialog");
         $scope.width = 800;
         $scope.dotRadius = 4;
         $scope.selectedDotRadius = $scope.dotRadius * 2;
+
+        $scope.showModalLoadingWindow("Loading data");
+
+        var location = window.location.href.split("/");
+        $scope.taskId = location[location.length - 1];
+
+        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            .then(function (data) {
+                MapModelFromJson($scope, JSON.parse(data.data));
+
+                $scope.fillLegend();
+
+                $scope.firstCharacteristic = $scope.characteristicsList[0];
+                $scope.secondCharacteristic = $scope.characteristicsList.length > 1 ? $scope.characteristicsList[1] : $scope.characteristicsList[0];
+
+                $scope.legendHeight = $scope.legend.length * 20;
+                $scope.height = 800 + $scope.legendHeight;
+
+                $scope.hideModalLoadingWindow();
+            }, function () {
+                alert("Failed loading local characteristics data");
+                $scope.hideModalLoadingWindow();
+            });
     }
 
     angular.module("LocalCalculationResult", []).controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);

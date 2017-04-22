@@ -34,15 +34,14 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
-            $scope.hideModalLoadingWindow();
-        }).error(function (data) {
-            alert("Failed loading import results");
-        });
+        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            .then(function (data) {
+                MapModelFromJson($scope, JSON.parse(data.data));
+                $scope.hideModalLoadingWindow();
+            }, function () {
+                alert("Failed loading import results");
+                $scope.hideModalLoadingWindow();
+            });
     }
 
     angular.module("BatchSequenceImportResult", []).controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);

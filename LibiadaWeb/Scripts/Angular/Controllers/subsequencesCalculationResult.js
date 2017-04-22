@@ -53,11 +53,11 @@
 
                 d3.selectAll(".dot")
                     .attr("visibility",
-                        function (d) {
-                            var productId = getProductAttributeId(d);
-                            d.FiltersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
+                    function (d) {
+                        var productId = getProductAttributeId(d);
+                        d.FiltersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
+                        return $scope.dotVisible(d) ? "visible" : "hidden";
+                    });
 
                 $scope.fillVisiblePoints();
                 $scope.newFilter = "";
@@ -68,11 +68,10 @@
         // deletes given filter
         function deleteFilter(filter) {
             d3.selectAll(".dot")
-                    .attr("visibility",
-                        function (d) {
-                            d.FiltersVisible.splice($scope.filters.indexOf(filter), 1);
-                            return $scope.dotVisible(d) ? "visible" : "hidden";
-                        });
+                .attr("visibility", function (d) {
+                    d.FiltersVisible.splice($scope.filters.indexOf(filter), 1);
+                    return $scope.dotVisible(d) ? "visible" : "hidden";
+                });
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
             $scope.fillVisiblePoints();
         }
@@ -436,10 +435,10 @@
                         });
 
                     svg.selectAll(".line")
-                       .filter(function (line) { return line[0].Matter.MatterId === d.MatterId; })
-                       .attr("visibility", function (line) {
-                           return d.visible ? "visible" : "hidden";
-                       });
+                        .filter(function (line) { return line[0].Matter.MatterId === d.MatterId; })
+                        .attr("visibility", function (line) {
+                            return d.visible ? "visible" : "hidden";
+                        });
                 });
 
             // draw legend colored rectangles
@@ -482,7 +481,7 @@
 
                         var selectedPoint = tooltip.selectedPoints[0];
                         var subsequencesData = $scope.sequencesData
-                            .find(function(p) { return p.MatterId === selectedPoint.Matter.MatterId; })
+                            .find(function (p) { return p.MatterId === selectedPoint.Matter.MatterId; })
                             .SubsequencesData;
 
                         var indexOfPoint = subsequencesData.indexOf(selectedPoint);
@@ -546,26 +545,24 @@
         var location = window.location.href.split("/");
         $scope.taskId = location[location.length - 1];
 
-        $http({
-            url: "/api/TaskManagerWebApi/" + $scope.taskId,
-            method: "GET"
-        }).success(function (data) {
-            MapModelFromJson($scope, JSON.parse(data));
+        $http.get("/api/TaskManagerWebApi/" + $scope.taskId)
+            .then(function (data) {
+                MapModelFromJson($scope, JSON.parse(data.data));
 
-            $scope.legendHeight = $scope.sequencesData.length * 20;
-            $scope.height = 800 + $scope.legendHeight;
-            $scope.width = 800;
+                $scope.legendHeight = $scope.sequencesData.length * 20;
+                $scope.height = 800 + $scope.legendHeight;
+                $scope.width = 800;
 
-            $scope.firstCharacteristic = $scope.subsequencesCharacteristicsList[0];
-            $scope.secondCharacteristic = $scope.subsequencesCharacteristicsList.length > 1 ? $scope.subsequencesCharacteristicsList[1] : $scope.subsequencesCharacteristicsList[0];
+                $scope.firstCharacteristic = $scope.subsequencesCharacteristicsList[0];
+                $scope.secondCharacteristic = $scope.subsequencesCharacteristicsList[$scope.subsequencesCharacteristicsList.length - 1];
 
-            $scope.fillPoints();
+                $scope.fillPoints();
 
-            $scope.hideModalLoadingWindow();
-        }).error(function (data) {
-            alert("Failed loading subsequences characteristics");
-        });
+                $scope.hideModalLoadingWindow();
+            }, function () {
+                alert("Failed loading subsequences characteristics");
+            });
     }
 
-    angular.module("SubsequencesCalculationResult", []).controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", '$sce', subsequencesCalculationResult]);
+    angular.module("SubsequencesCalculationResult", []).controller("SubsequencesCalculationResultCtrl", ["$scope", "$http", "$sce", subsequencesCalculationResult]);
 }
