@@ -1,10 +1,5 @@
 ﻿namespace LibiadaWeb.Tasks
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
-
     /// <summary>
     /// Tasks events for signalR messages.
     /// </summary>
@@ -13,16 +8,16 @@
         /// <summary>
         /// Add task event flag.
         /// </summary>
-        addTask,
+        AddTask,
 
         /// <summary>
         /// Delete task event flag.
         /// </summary>
-        deleteTask,
+        DeleteTask,
 
         /// <summary>
-        /// Task statu change event flag.
+        /// Task status change event flag.
         /// </summary>
-        changeStatus
+        ChangeStatus
     }
 }

@@ -2,12 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Threading;
 
     using LibiadaWeb.Models.Account;
-    using System.Data.Entity.Validation;
-    using System.Data.Entity;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -43,7 +43,7 @@
                 Tasks.Add(task);
                 using (var db = new LibiadaWebEntities())
                 {
-                    var dbTask = new CalculationTask()
+                    var dbTask = new CalculationTask
                     {
                         created = DateTime.Now,
                         started = task.TaskData.Started,
@@ -57,7 +57,7 @@
                     db.SaveChanges();
                     task.TaskData.Id = (int)dbTask.id;
                 }
-                TasksManagerHub.Send(TaskEvent.addTask, task.TaskData);
+                TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
             }
 
 
@@ -82,7 +82,7 @@
         {
             lock (Tasks)
             {
-                var tasks = Tasks;
+                List<Task> tasks = Tasks;
 
                 if (!UserHelper.IsAdmin())
                 {
@@ -91,7 +91,7 @@
 
                 while (tasks.Count > 0)
                 {
-                    var task = tasks.Last();
+                    Task task = tasks.Last();
                     lock (task)
                     {
                         if (task.Thread != null && task.Thread.IsAlive)
@@ -102,7 +102,7 @@
                         tasks.Remove(task);
                         Tasks.Remove(task);
 
-                        TasksManagerHub.Send(TaskEvent.deleteTask, task.TaskData);
+                        TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
             }
@@ -118,7 +118,7 @@
         {
             lock (Tasks)
             {
-                var task = Tasks.Single(t => t.TaskData.Id == id);
+                Task task = Tasks.Single(t => t.TaskData.Id == id);
                 if (task.TaskData.UserId == UserHelper.GetUserId() || UserHelper.IsAdmin())
                 {
                     lock (task)
@@ -129,7 +129,7 @@
                         }
 
                         Tasks.Remove(task);
-                        TasksManagerHub.Send(TaskEvent.deleteTask, task.TaskData);
+                        TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
             }
@@ -145,7 +145,7 @@
         {
             lock (Tasks)
             {
-                var tasks = Tasks;
+                List<Task> tasks = Tasks;
 
                 if (!UserHelper.IsAdmin())
                 {
@@ -170,7 +170,7 @@
             Task result;
             lock (Tasks)
             {
-                var task = Tasks.Single(t => t.TaskData.Id == id);
+                Task task = Tasks.Single(t => t.TaskData.Id == id);
 
                 lock (task)
                 {
@@ -194,7 +194,7 @@
             lock (Tasks)
             {
                 int activeTasks = 0;
-                foreach (var task in Tasks)
+                foreach (Task task in Tasks)
                 {
                     lock (task)
                     {
@@ -208,7 +208,7 @@
                 while (activeTasks < CoreCount)
                 {
                     activeTasks++;
-                    var taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
+                    Task taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
                     if (taskToStart != null)
                     {
                         lock (taskToStart)
@@ -243,18 +243,17 @@
                     ///////////
                     using (var db = new LibiadaWebEntities())
                     {
-                        var dbTask = db.CalculationTask.Single(t => (t.id == task.TaskData.Id));
+                        CalculationTask dbTask = db.CalculationTask.Single(t => t.id == task.TaskData.Id);
 
                         dbTask.started = DateTime.Now;
                         db.Entry(dbTask).State = EntityState.Modified;
                         db.SaveChanges();
-                      
                     }
                     ///////////
-                    TasksManagerHub.Send(TaskEvent.changeStatus, task.TaskData);
+                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
 
-                var result = method();
+                Dictionary<string, object> result = method();
                 lock (task)
                 {
                     task.TaskData.Completed = DateTime.Now;
@@ -263,7 +262,7 @@
                     task.TaskData.TaskState = TaskState.Completed;
                     using (var db = new LibiadaWebEntities())
                     {
-                        var dbTask = db.CalculationTask.Single(t => (t.id == task.TaskData.Id));
+                        CalculationTask dbTask = db.CalculationTask.Single(t => (t.id == task.TaskData.Id));
 
                         dbTask.completed = DateTime.Now;
                         dbTask.result = JsonConvert.SerializeObject(result["data"]);
@@ -271,7 +270,7 @@
                         db.SaveChanges();
 
                     }
-                    TasksManagerHub.Send(TaskEvent.changeStatus, task.TaskData);
+                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
             catch (Exception e)
@@ -296,7 +295,7 @@
                                           { "ErrorMessage", errorMessage },
                                           { "StackTrace", stackTrace }
                                       };
-                    TasksManagerHub.Send(TaskEvent.changeStatus, task.TaskData);
+                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
 

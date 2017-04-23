@@ -10,14 +10,14 @@
         tasksHub.client.TaskEvent = function (event, data) {
 
             switch (event) {
-                case "addTask":
+                case "AddTask":
                     $scope.tasks.push(data);
                     break;
-                case "deleteTask":
+                case "DeleteTask":
                     var taskToDelete = $scope.tasks.find(function (t) { return t.Id === data.Id; });
                     $scope.tasks.splice($scope.tasks.indexOf(taskToDelete), 1);
                     break;
-                case "changeStatus":
+                case "ChangeStatus":
                     var taskToChange = $scope.tasks.find(function (t) { return t.Id === data.Id; });
                     if (taskToChange) {
                         taskToChange.Created = data.Created;
