@@ -199,14 +199,14 @@
                         if (theoretical)
                         {
                             theoreticalRanks[w].Add(new List<double>());
-                            ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCongenericCalculator("Count");
+                            ICongenericCalculator countCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.ElementsCount);
                             var counts = new List<int>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {
                                 counts.Add((int)countCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied));
                             }
 
-                            ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCongenericCalculator("Probability");
+                            ICongenericCalculator frequencyCalculator = CongenericCalculatorsFactory.CreateCalculator(CongenericCharacteristic.Probability);
                             var frequency = new List<double>();
                             for (int f = 0; f < chain.Alphabet.Cardinality; f++)
                             {

@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Sequence import result";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    <br />
+    <div>
+        Sequence <strong> @ViewBag.matterName </strong> imported successfully
+    </div>
+    <br/>
+    <div>
+        @Html.ActionLink("Import another sequence", "Create") or go @Html.ActionLink("back to List", "Index").
+    </div>
+}

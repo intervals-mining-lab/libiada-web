@@ -99,7 +99,7 @@
         /// Precision of data sequence.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -154,9 +154,9 @@
                     }
 
                     return new Dictionary<string, object>
-                        {
-                            { "matterName", commonSequence.Matter.Name }
-                        };
+                               {
+                                   { "data", JsonConvert.SerializeObject(new { matterName = commonSequence.Matter.Name }) }
+                               };
                 }
                 catch (Exception)
                 {
@@ -176,49 +176,6 @@
                     Dispose(true);
                 }
             });
-        }
-
-        /// <summary>
-        /// The result.
-        /// </summary>
-        /// <param name="taskId">
-        /// The task Id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public override ActionResult Result(string taskId)
-        {
-            try
-            {
-                var result = TempData["result"] as Dictionary<string, object>;
-                if (result == null)
-                {
-                    throw new Exception("No data.");
-                }
-
-                foreach (var key in result.Keys)
-                {
-                    ViewData[key] = result[key];
-                }
-
-                TempData.Keep();
-
-                if (!string.IsNullOrEmpty((ViewData["ErrorMessage"] ?? string.Empty).ToString()))
-                {
-                    RedirectToAction("Index");
-                }
-            }
-            catch (Exception e)
-            {
-                ModelState.AddModelError("Error", e.Message);
-
-                ViewBag.Error = true;
-
-                ViewBag.ErrorMessage = e.Message;
-            }
-
-            return View();
         }
 
         /// <summary>
