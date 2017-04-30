@@ -7,6 +7,10 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Bio;
+
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -19,45 +23,10 @@
     public abstract class SequencesMattersController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        protected readonly LibiadaWebEntities Db;
-
-        /// <summary>
-        /// The thread disposable.
-        /// </summary>
-        protected bool ThreadDisposable = true;
-
-        /// <summary>
-        /// The DNA sequence repository.
-        /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
-
-        /// <summary>
-        /// The literature sequence repository.
-        /// </summary>
-        private readonly LiteratureSequenceRepository literatureSequenceRepository;
-
-        /// <summary>
-        /// The music sequence repository.
-        /// </summary>
-        private readonly MusicSequenceRepository musicSequenceRepository;
-
-        /// <summary>
-        /// The data sequence repository.
-        /// </summary>
-        private readonly DataSequenceRepository dataSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
         protected SequencesMattersController() : base("Sequence upload", TaskType.SequencesMatters)
         {
-            Db = new LibiadaWebEntities();
-            dnaSequenceRepository = new DnaSequenceRepository(Db);
-            literatureSequenceRepository = new LiteratureSequenceRepository(Db);
-            musicSequenceRepository = new MusicSequenceRepository(Db);
-            dataSequenceRepository = new DataSequenceRepository(Db);
         }
 
         /// <summary>
@@ -68,8 +37,11 @@
         /// </returns>
         public ActionResult Create()
         {
-            var viewDataHelper = new ViewDataHelper(Db);
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationData());
+            using (var db = new LibiadaWebEntities())
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillMatterCreationData());
+            }
 
             return View();
         }
@@ -104,7 +76,7 @@
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "Id,Notation,RemoteDb,RemoteId,Description,Matter")] CommonSequence commonSequence,
+            [Bind(Include = "Id,Notation,RemoteDb,RemoteId,Description,Matter,MatterId")] CommonSequence commonSequence,
             bool localFile,
             Language? language,
             bool? original,
@@ -112,10 +84,9 @@
             bool? partial,
             int? precision)
         {
-            ThreadDisposable = false;
-
             return Action(() =>
             {
+                var db = new LibiadaWebEntities();
                 try
                 {
                     if (!ModelState.IsValid)
@@ -124,7 +95,7 @@
                     }
 
                     Stream sequenceStream;
-                    var nature = commonSequence.Notation.GetNature();
+                    Nature nature = commonSequence.Notation.GetNature();
                     if (nature == Nature.Genetic && !localFile)
                     {
                         sequenceStream = NcbiHelper.GetFastaFileStream(commonSequence.RemoteId);
@@ -134,10 +105,15 @@
                         sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
 
+                    var dnaSequenceRepository = new DnaSequenceRepository(db);
+                    var literatureSequenceRepository = new LiteratureSequenceRepository(db);
+                    var musicSequenceRepository = new MusicSequenceRepository(db);
+                    var dataSequenceRepository = new DataSequenceRepository(db);
+
                     switch (nature)
                     {
                         case Nature.Genetic:
-                            var bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                            ISequence bioSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                             dnaSequenceRepository.Create(commonSequence, bioSequence, partial ?? false);
                             break;
                         case Nature.Music:
@@ -153,45 +129,141 @@
                             throw new Exception("Unknown nature.");
                     }
 
+                    var data = new ImportResult(commonSequence, language, original, translator, partial, precision);
                     return new Dictionary<string, object>
                                {
-                                   { "data", JsonConvert.SerializeObject(new { matterName = commonSequence.Matter.Name }) }
+                                   { "data", JsonConvert.SerializeObject(data) }
                                };
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-                    var orphanMatter = Db.Matter.Include(m => m.Sequence).Where(m => m.Name == commonSequence.Matter.Name && m.Sequence.Count == 0).ToList();
+                    long matterId = commonSequence.MatterId;
+                    List<Matter> orphanMatter = db.Matter
+                        .Include(m => m.Sequence)
+                        .Where(m => m.Id == matterId && m.Sequence.Count == 0)
+                        .ToList();
 
                     if (orphanMatter.Count > 0)
                     {
-                        Db.Matter.Remove(orphanMatter[0]);
-                        Db.SaveChanges();
+                        db.Matter.Remove(orphanMatter[0]);
+                        db.SaveChanges();
                     }
 
                     throw;
                 }
                 finally
                 {
-                    ThreadDisposable = true;
                     Dispose(true);
                 }
             });
         }
 
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <param name="disposing">
-        /// The disposing flag.
-        /// </param>
-        protected override void Dispose(bool disposing)
+        private struct ImportResult
         {
-            if (disposing && ThreadDisposable)
-            {
-                Db.Dispose();
-            }
+            /// <summary>
+            /// The name.
+            /// </summary>
+            public readonly string Name;
 
-            base.Dispose(disposing);
+            /// <summary>
+            /// The description.
+            /// </summary>
+            public readonly string Description;
+
+            /// <summary>
+            /// The nature.
+            /// </summary>
+            public readonly string Nature;
+
+            /// <summary>
+            /// The notation of the imported sequence.
+            /// </summary>
+            public readonly string Notation;
+
+            /// <summary>
+            /// The group.
+            /// </summary>
+            public readonly string Group;
+
+            /// <summary>
+            /// The sequence type.
+            /// </summary>
+            public readonly string SequenceType;
+
+            /// <summary>
+            /// The remote id.
+            /// </summary>
+            public readonly string RemoteId;
+
+            /// <summary>
+            /// The language.
+            /// </summary>
+            public readonly string Language;
+
+            /// <summary>
+            /// The original.
+            /// </summary>
+            public readonly bool? Original;
+
+            /// <summary>
+            /// The translator.
+            /// </summary>
+            public readonly string Translator;
+
+            /// <summary>
+            /// The partial.
+            /// </summary>
+            public readonly bool? Partial;
+
+            /// <summary>
+            /// The precision.
+            /// </summary>
+            public readonly double? Precision;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="ImportResult"/> struct.
+            /// </summary>
+            /// <param name="sequence">
+            /// The sequence.
+            /// </param>
+            /// <param name="language">
+            /// The language.
+            /// </param>
+            /// <param name="original">
+            /// The original.
+            /// </param>
+            /// <param name="translator">
+            /// The translator.
+            /// </param>
+            /// <param name="partial">
+            /// The partial.
+            /// </param>
+            /// <param name="precision">
+            /// The precision.
+            /// </param>
+            public ImportResult(
+                CommonSequence sequence,
+                Language? language,
+                bool? original,
+                Translator? translator,
+                bool? partial,
+                double? precision)
+            {
+                Matter matter = sequence.Matter;
+
+                Name = matter.Name;
+                Description = matter.Description;
+                Nature = matter.Nature.GetDisplayValue();
+                Notation = sequence.Notation.GetDisplayValue();
+                Group = matter.Group.GetDisplayValue();
+                SequenceType = matter.SequenceType.GetDisplayValue();
+                RemoteId = sequence.RemoteId;
+                Language = language?.GetDisplayValue();
+                Original = original;
+                Translator = translator?.GetDisplayValue();
+                Partial = partial;
+                Precision = precision;
+            }
         }
     }
 }

@@ -58,28 +58,30 @@
             </div>
         </div>
         @Html.Partial("_LocalFile")
-        <div class="form-group">
-            @Html.LabelFor(model => model.RemoteDb, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbs | filter:{ Nature: nature }"></select>
-                <input type="hidden" name="RemoteDb" ng-value="remoteDbId" />
-                @Html.ValidationMessageFor(model => model.RemoteDb, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group" ng-show="isRemoteDbDefined()">
-            @Html.LabelFor(model => model.RemoteId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RemoteId, new { htmlAttributes = new { @class = "form-control", ng_model = "remoteId", ng_change = "remoteIdChanged(remoteId)" } })
-                @Html.ValidationMessageFor(model => model.RemoteId, "", new { @class = "text-danger" })
-            </div>
-        </div>
         <div ng-switch="nature">
             <div ng-switch-when="@((byte)Nature.Genetic)">
                 <div class="form-group">
+                    @Html.LabelFor(model => model.RemoteDb, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <select class="form-control" ng-model="remoteDbId" ng-options="r.Value as r.Text for r in remoteDbs | filter:{ Nature: nature }">
+                            <option value="">None</option>
+                        </select>
+                        <input type="hidden" name="RemoteDb" ng-value="remoteDbId" />
+                        @Html.ValidationMessageFor(model => model.RemoteDb, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group" ng-show="isRemoteDbDefined()">
+                    @Html.LabelFor(model => model.RemoteId, new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RemoteId, new { htmlAttributes = new { @class = "form-control", ng_model = "remoteId", ng_change = "remoteIdChanged(remoteId)" } })
+                        @Html.ValidationMessageFor(model => model.RemoteId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <label>
-                            <input type="checkbox" name="partial" value="true" />
-                            <input type="hidden" name="partial" value="false" />
+                            <input type="checkbox" name="partial" value="true"/>
+                            <input type="hidden" name="partial" value="false"/>
                             Sequence is partial (incomplete)
                         </label>
                     </div>

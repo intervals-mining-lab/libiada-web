@@ -44,6 +44,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 matter.Sequence = new Collection<CommonSequence>();
                 commonSequence.MatterId = CreateMatter(matter);
             }
+            else
+            {
+                commonSequence.Matter = db.Matter.Single(m => m.Id == commonSequence.MatterId);
+            }
         }
 
         /// <summary>

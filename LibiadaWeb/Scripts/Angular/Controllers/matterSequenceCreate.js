@@ -39,6 +39,7 @@
         $scope.original = false;
         $scope.localFile = false;
         $scope.languageId = $scope.languages[0].Value;
+        $scope.translatorId = $scope.translators[0].Value;
         $scope.nature = $scope.natures[0].Value;
         $scope.name = "";
     }

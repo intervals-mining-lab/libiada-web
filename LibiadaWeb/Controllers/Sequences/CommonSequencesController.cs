@@ -20,10 +20,11 @@
         /// </returns>
         public async Task<ActionResult> Index()
         {
-            var commonSequence = Db.CommonSequence.Include(c => c.Matter)
-                                .Include(c => c.Notation)
-                                .Include(c => c.RemoteDb);
-            return View(await commonSequence.ToListAsync());
+            using (var db = new LibiadaWebEntities())
+            {
+                var commonSequence = db.CommonSequence.Include(c => c.Matter);
+                return View(await commonSequence.ToListAsync());
+            }
         }
 
         /// <summary>
@@ -42,13 +43,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence commonSequence = await Db.CommonSequence.FindAsync(id);
-            if (commonSequence == null)
+            using (var db = new LibiadaWebEntities())
             {
-                return HttpNotFound();
-            }
+                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                if (commonSequence == null)
+                {
+                    return HttpNotFound();
+                }
 
-            return View(commonSequence);
+                return View(commonSequence);
+            }
         }
 
         /// <summary>
@@ -67,16 +71,19 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence commonSequence = await Db.CommonSequence.FindAsync(id);
-            if (commonSequence == null)
+            using (var db = new LibiadaWebEntities())
             {
-                return HttpNotFound();
-            }
+                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                if (commonSequence == null)
+                {
+                    return HttpNotFound();
+                }
 
-            ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
-            ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
-            return View(commonSequence);
+                ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+                ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
+                ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
+                return View(commonSequence);
+            }
         }
 
         /// <summary>
@@ -92,17 +99,20 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Notation,MatterId,RemoteDb,RemoteId,Description")] CommonSequence commonSequence)
         {
-            if (ModelState.IsValid)
+            using (var db = new LibiadaWebEntities())
             {
-                Db.Entry(commonSequence).State = EntityState.Modified;
-                await Db.SaveChangesAsync();
-                return RedirectToAction("Index");
-            }
+                if (ModelState.IsValid)
+                {
+                    db.Entry(commonSequence).State = EntityState.Modified;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
 
-            ViewBag.MatterId = new SelectList(Db.Matter, "Id", "Name", commonSequence.MatterId);
-            ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
-            ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
-            return View(commonSequence);
+                ViewBag.MatterId = new SelectList(db.Matter, "Id", "Name", commonSequence.MatterId);
+                ViewBag.Notation = EnumHelper.GetSelectList(typeof(Notation), commonSequence.Notation);
+                ViewBag.RemoteDb = EnumHelper.GetSelectList(typeof(RemoteDb), commonSequence.RemoteDb);
+                return View(commonSequence);
+            }
         }
 
         /// <summary>
@@ -121,13 +131,16 @@
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CommonSequence commonSequence = await Db.CommonSequence.FindAsync(id);
-            if (commonSequence == null)
+            using (var db = new LibiadaWebEntities())
             {
-                return HttpNotFound();
-            }
+                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                if (commonSequence == null)
+                {
+                    return HttpNotFound();
+                }
 
-            return View(commonSequence);
+                return View(commonSequence);
+            }
         }
 
         /// <summary>
@@ -143,10 +156,13 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(long id)
         {
-            CommonSequence commonSequence = await Db.CommonSequence.FindAsync(id);
-            Db.CommonSequence.Remove(commonSequence);
-            await Db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            using (var db = new LibiadaWebEntities())
+            {
+                CommonSequence commonSequence = await db.CommonSequence.FindAsync(id);
+                db.CommonSequence.Remove(commonSequence);
+                await db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
         }
     }
 }

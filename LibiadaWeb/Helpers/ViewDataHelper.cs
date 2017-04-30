@@ -58,17 +58,15 @@
         {
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
-            IEnumerable<SequenceType> sequenceTypes;
-            IEnumerable<Group> groups;
-            IEnumerable<RemoteDb> remoteDbs;
+
+            IEnumerable<RemoteDb> remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
+            IEnumerable<SequenceType> sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+            IEnumerable<Group> groups = ArrayExtensions.ToArray<Group>();
 
             if (UserHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = ArrayExtensions.ToArray<Notation>();
-                remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
-                groups = ArrayExtensions.ToArray<Group>();
             }
             else
             {
@@ -80,16 +78,16 @@
             }
 
             return new Dictionary<string, object>
-                           {
-                                   { "matters", matterRepository.GetMatterSelectList() },
-                                   { "natures", natures },
-                                   { "notations", notations.ToSelectListWithNature() },
-                                   { "languages", EnumHelper.GetSelectList(typeof(Language)) },
-                                   { "remoteDbs", remoteDbs.ToSelectListWithNature() },
-                                   { "translators", EnumHelper.GetSelectList(typeof(Translator)) },
-                                   { "sequenceTypes", sequenceTypes.ToSelectListWithNature(true) },
-                                   { "groups", groups.ToSelectListWithNature(true) }
-                           };
+                       {
+                           { "matters", matterRepository.GetMatterSelectList() },
+                           { "natures", natures },
+                           { "notations", notations.ToSelectListWithNature() },
+                           { "remoteDbs", remoteDbs.ToSelectListWithNature() },
+                           { "sequenceTypes", sequenceTypes.ToSelectListWithNature() },
+                           { "groups", groups.ToSelectListWithNature() },
+                           { "languages", EnumHelper.GetSelectList(typeof(Language)) },
+                           { "translators", EnumHelper.GetSelectList(typeof(Translator)) }
+                       };
         }
 
         /// <summary>
