@@ -6,6 +6,8 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using LibiadaWeb.Tasks;
+
     /// <summary>
     /// The common sequences controller.
     /// </summary>
@@ -13,10 +15,17 @@
     public class CommonSequencesController : SequencesMattersController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="CommonSequencesController"/> class.
+        /// </summary>
+        public CommonSequencesController() : base(TaskType.CommonSequences)
+        {
+        }
+
+        /// <summary>
         /// The index.
         /// </summary>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Index()
         {
@@ -34,7 +43,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Details(long? id)
         {
@@ -62,7 +71,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Edit(long? id)
         {
@@ -93,7 +102,7 @@
         /// The common sequence.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -122,7 +131,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Delete(long? id)
         {
@@ -150,7 +159,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

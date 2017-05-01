@@ -159,17 +159,24 @@
         OrderTransformer = 21,
 
         /// <summary>
-        /// The sequence check.
+        /// Checks if sequence in database equals one in file.
         /// </summary>
         [Display(Name = "Sequence check")]
         [TaskClass(typeof(SequenceCheckController))]
         SequenceCheck = 22,
 
         /// <summary>
-        /// The sequences matters.
+        /// Sequences import for existing matter.
         /// </summary>
         [Display(Name = "Sequence upload")]
-        [TaskClass(typeof(SequencesMattersController))]
-        SequencesMatters = 23
+        [TaskClass(typeof(CommonSequencesController))]
+        CommonSequences = 23,
+
+        /// <summary>
+        /// Matter creation and sequence import.
+        /// </summary>
+        [Display(Name = "Sequence import")]
+        [TaskClass(typeof(MattersController))]
+        Matters = 24
     }
 }

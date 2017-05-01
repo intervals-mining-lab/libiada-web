@@ -18,7 +18,7 @@
         /// <summary>
         /// The task types count.
         /// </summary>
-        private const int TaskTypesCount = 23;
+        private const int TaskTypesCount = 24;
 
         /// <summary>
         /// Tests count of task types.
@@ -75,7 +75,8 @@
         [TestCase((TaskType)20, "GenesImport")]
         [TestCase((TaskType)21, "OrderTransformer")]
         [TestCase((TaskType)22, "SequenceCheck")]
-        [TestCase((TaskType)23, "SequencesMatters")]
+        [TestCase((TaskType)23, "CommonSequences")]
+        [TestCase((TaskType)24, "Matters")]
         public void TaskTypeNameTest(TaskType taskType, string name)
         {
             Assert.AreEqual(name, taskType.GetName());

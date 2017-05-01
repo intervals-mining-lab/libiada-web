@@ -12,6 +12,7 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.Account;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -22,10 +23,17 @@
     public class MattersController : SequencesMattersController
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="MattersController"/> class.
+        /// </summary>
+        public MattersController() : base(TaskType.Matters)
+        {
+        }
+
+        /// <summary>
         /// The index.
         /// </summary>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Index()
         {
@@ -49,7 +57,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Details(long? id)
         {
@@ -77,7 +85,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Edit(long? id)
         {
@@ -118,7 +126,7 @@
         /// The matter.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -157,7 +165,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         public async Task<ActionResult> Delete(long? id)
         {
@@ -185,7 +193,7 @@
         /// The id.
         /// </param>
         /// <returns>
-        /// The <see cref="Task"/>.
+        /// The <see cref="System.Threading.Tasks.Task"/>.
         /// </returns>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
