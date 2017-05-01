@@ -14,6 +14,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -36,7 +37,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceCalculationController"/> class.
         /// </summary>
-        public CustomSequenceCalculationController() : base("Custom sequence calculation", TaskType.CustomSequenceCalculation)
+        public CustomSequenceCalculationController() : base(TaskType.CustomSequenceCalculation)
         {
             db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = new FullCharacteristicRepository(db);

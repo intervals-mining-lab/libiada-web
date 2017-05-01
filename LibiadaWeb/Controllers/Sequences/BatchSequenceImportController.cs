@@ -15,6 +15,7 @@
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -27,7 +28,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchSequenceImportController"/> class.
         /// </summary>
-        public BatchSequenceImportController() : base("Batch sequences import", TaskType.BatchSequenceImport)
+        public BatchSequenceImportController() : base(TaskType.BatchSequenceImport)
         {
         }
 

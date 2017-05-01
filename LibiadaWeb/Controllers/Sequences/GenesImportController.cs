@@ -8,6 +8,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -20,7 +21,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="GenesImportController"/> class.
         /// </summary>
-        public GenesImportController() : base("Genes import", TaskType.GenesImport)
+        public GenesImportController() : base(TaskType.GenesImport)
         {
         }
 
@@ -81,7 +82,6 @@
                     matterName = db.Matter.Single(m => m.Id == matterId).Name;
                     sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
                                                          .Include(s => s.Position)
-                                                         .Include(s => s.Feature)
                                                          .Include(s => s.SequenceAttribute)
                                                          .ToArray();
                 }

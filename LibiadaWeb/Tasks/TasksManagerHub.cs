@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Tasks
 {
-    using System;
     using System.Linq;
 
     using LibiadaCore.Extensions;
@@ -27,18 +26,18 @@
         /// </param>
         public static void Send(TaskEvent taskEvent, TaskData task)
         {
-            var hubContext = GlobalHost.ConnectionManager.GetHubContext<TasksManagerHub>();
+            IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<TasksManagerHub>();
 
             lock (task)
             {
                 var result = new
                 {
                     task.Id,
-                    task.DisplayName,
+                    DisplayName = task.TaskState.GetDisplayValue(),
                     Created = task.Created.ToString(OutputFormats.DateTimeFormat),
-                    Started = task.Started == null ? string.Empty : ((DateTimeOffset)task.Started).ToString(OutputFormats.DateTimeFormat),
-                    Completed = task.Completed == null ? string.Empty : ((DateTimeOffset)task.Completed).ToString(OutputFormats.DateTimeFormat),
-                    ExecutionTime = task.ExecutionTime == null ? string.Empty : ((TimeSpan)task.ExecutionTime).ToString(OutputFormats.TimeFormat),
+                    Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
+                    Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
+                    ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
                     TaskState = task.TaskState.ToString(),
                     TaskStateName = task.TaskState.GetDisplayValue(),
                     task.UserId,
@@ -60,11 +59,11 @@
             var tasks = TaskManager.GetTasksData().Select(t => new
             {
                 t.Id,
-                t.DisplayName,
+                DisplayName = t.TaskState.GetDisplayValue(),
                 Created = t.Created.ToString(OutputFormats.DateTimeFormat),
-                Started = t.Started == null ? string.Empty : ((DateTimeOffset)t.Started).ToString(OutputFormats.DateTimeFormat),
-                Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
-                ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
+                Started = t.Started?.ToString(OutputFormats.DateTimeFormat),
+                Completed = t.Completed?.ToString(OutputFormats.DateTimeFormat),
+                ExecutionTime = t.ExecutionTime?.ToString(OutputFormats.TimeFormat),
                 TaskState = t.TaskState.ToString(),
                 TaskStateName = t.TaskState.GetDisplayValue(),
                 t.UserId,

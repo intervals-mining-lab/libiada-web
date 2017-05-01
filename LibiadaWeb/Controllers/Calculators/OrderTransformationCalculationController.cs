@@ -13,6 +13,7 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformationCalculationController"/> class.
         /// </summary>
-        public OrderTransformationCalculationController() : base("Order transformation/derivative characteristics calculation", TaskType.OrderTransformationCalculation)
+        public OrderTransformationCalculationController() : base(TaskType.OrderTransformationCalculation)
         {
         }
 

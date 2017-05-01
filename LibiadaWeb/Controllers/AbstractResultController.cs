@@ -13,27 +13,18 @@
     public abstract class AbstractResultController : Controller
     {
         /// <summary>
-        /// The controller name.
+        /// The task type.
         /// </summary>
-        private readonly string controllerName;
-
-        /// <summary>
-        /// The display name.
-        /// </summary>
-        private readonly string displayName;
-
         private readonly TaskType taskType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AbstractResultController"/> class.
         /// </summary>
-        /// <param name="displayName">
-        /// The display name.
+        /// <param name="taskType">
+        /// The task Type.
         /// </param>
-        protected AbstractResultController(string displayName, TaskType taskType)
+        protected AbstractResultController(TaskType taskType)
         {
-            this.controllerName = System.Web.HttpContext.Current.Request.RequestContext.RouteData.GetRequiredString("controller");
-            this.displayName = displayName;
             this.taskType = taskType;
         }
 
@@ -46,7 +37,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public virtual ActionResult Result(string taskId)
+        public ActionResult Result(string taskId)
         {
             try
             {
@@ -88,7 +79,7 @@
         protected ActionResult Action(Func<Dictionary<string, object>> action)
         {
             int taskId = TaskManager.GetId();
-            var task = new Task(taskId, action, controllerName, displayName, UserHelper.GetUserId());
+            var task = new Task(taskId, action, UserHelper.GetUserId(), taskType);
 
             TaskManager.AddTask(task);
             return RedirectToAction("Index", "TaskManager");

@@ -9,6 +9,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -23,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributesCheckController"/> class.
         /// </summary>
-        public AttributesCheckController() : base("Attributes check", TaskType.AttributesCheck)
+        public AttributesCheckController() : base(TaskType.AttributesCheck)
         {
         }
 
@@ -38,6 +39,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct().ToArray();
+                // TODO: Store this list separately
                 var matterIds = db.DnaSequence.Include(c => c.Matter).Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
                                                           !sequencesWithSubsequencesIds.Contains(c.Id) &&
                                                           (c.Matter.SequenceType == SequenceType.CompleteGenome

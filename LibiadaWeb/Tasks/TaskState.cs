@@ -1,34 +1,39 @@
 ﻿namespace LibiadaWeb.Tasks
 {
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The task state.
     /// </summary>
-    public enum TaskState
+    public enum TaskState : byte
     {
         /// <summary>
         /// The task is in queue.
         /// </summary>
         [Display(Name = "In queue")]
-        InQueue,
+        [Description("The task is in queue")]
+        InQueue = 1,
 
         /// <summary>
         /// The task is in progress.
         /// </summary>
         [Display(Name = "In progress")]
-        InProgress,
+        [Description("The task is in progress")]
+        InProgress = 2,
 
         /// <summary>
         /// The task is completed.
         /// </summary>
         [Display(Name = "Completed")]
-        Completed,
+        [Description("The task is completed")]
+        Completed = 3,
 
         /// <summary>
         /// Error occurred.
         /// </summary>
         [Display(Name = "Error")]
-        Error
+        [Description("Error occurred")]
+        Error = 4
     }
 }

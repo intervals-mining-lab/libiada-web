@@ -13,6 +13,7 @@
 
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomSequenceOrderTransformerController"/> class.
         /// </summary>
-        public CustomSequenceOrderTransformerController() : base("Custom sequences order transformation", TaskType.CustomSequenceOrderTransformer)
+        public CustomSequenceOrderTransformerController() : base(TaskType.CustomSequenceOrderTransformer)
         {
         }
 

@@ -13,6 +13,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Models.Repositories.Catalogs;
 
@@ -42,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="RelationCalculationController"/> class.
         /// </summary>
-        public RelationCalculationController() : base("Relation calculation", TaskType.RelationCalculation)
+        public RelationCalculationController() : base(TaskType.RelationCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

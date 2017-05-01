@@ -9,6 +9,8 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
+
     using Models.Repositories.Catalogs;
 
     using Newtonsoft.Json;
@@ -22,7 +24,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="CalculationController"/> class.
         /// </summary>
-        public CalculationController() : base("Characteristics calculation", TaskType.Calculation)
+        public CalculationController() : base(TaskType.Calculation)
         {
         }
 

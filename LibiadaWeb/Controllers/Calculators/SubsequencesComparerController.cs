@@ -14,6 +14,7 @@
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Tasks;
 
     using Models.Repositories.Sequences;
 
@@ -28,7 +29,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesComparerController"/> class.
         /// </summary>
-        public SubsequencesComparerController() : base("Subsequences comparer", TaskType.SubsequencesComparer)
+        public SubsequencesComparerController() : base(TaskType.SubsequencesComparer)
         {
         }
 

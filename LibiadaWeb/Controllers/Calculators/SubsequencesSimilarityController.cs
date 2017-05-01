@@ -14,6 +14,7 @@
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesSimilarityController"/> class.
         /// </summary>
-        public SubsequencesSimilarityController() : base("Subsequences similarity", TaskType.SubsequencesSimilarity)
+        public SubsequencesSimilarityController() : base(TaskType.SubsequencesSimilarity)
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);

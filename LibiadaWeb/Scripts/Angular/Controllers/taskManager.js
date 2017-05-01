@@ -46,13 +46,13 @@
             if (change.newState === $.signalR.connectionState.reconnecting) {
                 $scope.flags.reconnecting = true;
 
-                delay(function () {
-                    if (change.newState === $.signalR.connectionState.reconnecting){
-                        if (confirm('Connection lost. Refresh page?')) {
-                            location.reload(true);
-                        }
-                    }
-                }, 30000);
+                //delay(function () {
+                //    if (change.newState === $.signalR.connectionState.reconnecting){
+                //        if (confirm('Connection lost. Refresh page?')) {
+                //            location.reload(true);
+                //        }
+                //    }
+                //}, 30000);
             }
             else if (change.newState === $.signalR.connectionState.connected) {
                 $scope.flags.reconnecting = false;

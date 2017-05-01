@@ -12,6 +12,7 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Math;
 
@@ -43,7 +44,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="LocalCalculationController"/> class.
         /// </summary>
-        public LocalCalculationController() : base("Local calculation", TaskType.LocalCalculation)
+        public LocalCalculationController() : base(TaskType.LocalCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

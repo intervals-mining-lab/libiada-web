@@ -11,6 +11,7 @@
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -33,7 +34,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="OrderTransformerController"/> class.
         /// </summary>
-        public OrderTransformerController() : base("Order transformation", TaskType.OrderTransformer)
+        public OrderTransformerController() : base(TaskType.OrderTransformer)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

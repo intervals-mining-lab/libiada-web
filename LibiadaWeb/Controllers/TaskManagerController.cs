@@ -9,6 +9,7 @@
 
     using LibiadaCore.Extensions;
 
+    using LibiadaWeb.Attributes;
     using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 
@@ -45,11 +46,11 @@
             var tasks = TaskManager.GetTasksData().Select(t => new
                         {
                             t.Id,
-                            t.DisplayName,
+                            DisplayName = t.TaskState.GetDisplayValue(),
                             Created = t.Created.ToString(OutputFormats.DateTimeFormat),
-                            Started = t.Started == null ? string.Empty : ((DateTimeOffset)t.Started).ToString(OutputFormats.DateTimeFormat),
-                            Completed = t.Completed == null ? string.Empty : ((DateTimeOffset)t.Completed).ToString(OutputFormats.DateTimeFormat),
-                            ExecutionTime = t.ExecutionTime == null ? string.Empty : ((TimeSpan)t.ExecutionTime).ToString(OutputFormats.TimeFormat),
+                            Started = t.Started?.ToString(OutputFormats.DateTimeFormat),
+                            Completed = t.Completed?.ToString(OutputFormats.DateTimeFormat),
+                            ExecutionTime = t.ExecutionTime?.ToString(OutputFormats.TimeFormat),
                             TaskState = t.TaskState.ToString(),
                             TaskStateName = t.TaskState.GetDisplayValue(),
                             t.UserId,
@@ -77,22 +78,22 @@
         {
             try
             {
-                var task = TaskManager.GetTask(id);
+                Task task = TaskManager.GetTask(id);
 
                 switch (task.TaskData.TaskState)
                 {
                     case TaskState.Completed:
                     case TaskState.Error:
                         TempData["Result"] = task.Result;
-                        return RedirectToAction("Result", task.ControllerName, new { id });
+                        return RedirectToAction("Result", task.TaskType.GetName(), new { id });
                     default:
-                        TempData["ErrorMessage"] = string.Format("Task with id = {0} is not completed, current status is {1}", id, task.TaskData.TaskState);
+                        TempData["ErrorMessage"] = $"Task with id = {id} is not completed, current status is {task.TaskData.TaskState}";
                         return RedirectToAction("Index");
                 }
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = string.Format("Cannot redirect to result of task with id = {0}. {1}", id, e.Message);
+                TempData["ErrorMessage"] = $"Cannot redirect to result of task with id = {id}. {e.Message}";
                 return RedirectToAction("Index");
             }
         }
@@ -116,7 +117,7 @@
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = string.Format("Unable to delete task with id = {0}, reason: {1}", id, e.Message);
+                TempData["ErrorMessage"] = $"Unable to delete task with id = {id}, reason: {e.Message}";
             }
 
             return RedirectToAction("Index");
@@ -138,7 +139,7 @@
             }
             catch (Exception e)
             {
-                TempData["ErrorMessage"] = string.Format("Unable to delete tasks, reason: {0}", e.Message);
+                TempData["ErrorMessage"] = $"Unable to delete tasks, reason: {e.Message}";
             }
 
             return RedirectToAction("Index");

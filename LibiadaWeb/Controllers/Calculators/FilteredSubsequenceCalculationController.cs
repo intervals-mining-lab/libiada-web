@@ -11,6 +11,7 @@
     using LibiadaWeb.Models.Calculators;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -22,7 +23,7 @@
        /// <summary>
         /// Initializes a new instance of the <see cref="FilteredSubsequenceCalculationController"/> class.
         /// </summary>
-        public FilteredSubsequenceCalculationController() : base("Subsequences characteristics calculation", TaskType.FilteredSubsequenceCalculation)
+        public FilteredSubsequenceCalculationController() : base(TaskType.FilteredSubsequenceCalculation)
         {
         }
 

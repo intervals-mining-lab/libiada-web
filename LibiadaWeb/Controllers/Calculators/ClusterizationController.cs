@@ -13,6 +13,7 @@
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Models.Repositories.Catalogs;
 
@@ -42,7 +43,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ClusterizationController"/> class.
         /// </summary>
-        public ClusterizationController() : base("Clusterization", TaskType.Clusterization)
+        public ClusterizationController() : base(TaskType.Clusterization)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

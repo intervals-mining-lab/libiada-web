@@ -12,6 +12,7 @@
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -39,7 +40,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCalculationController"/> class.
         /// </summary>
-        public AccordanceCalculationController() : base("Accordance calculation", TaskType.AccordanceCalculation)
+        public AccordanceCalculationController() : base(TaskType.AccordanceCalculation)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
@@ -103,7 +104,7 @@
             {
                 if (matterIds.Length != 2)
                 {
-                    throw new ArgumentException("Number of selected matters must be 2.", "matterIds");
+                    throw new ArgumentException("Number of selected matters must be 2.", nameof(matterIds));
                 }
 
                 var characteristics = new List<List<double>>();
@@ -209,7 +210,7 @@
                         throw new NotImplementedException();
 
                     default:
-                        throw new ArgumentException("Calculation type is not", "calculationType");
+                        throw new ArgumentException("Calculation type is not implemented", nameof(calculationType));
                 }
 
                 return result;

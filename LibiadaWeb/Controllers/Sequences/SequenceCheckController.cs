@@ -8,6 +8,7 @@
     using LibiadaCore.Core;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// The sequence check controller.
@@ -28,7 +29,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
-        public SequenceCheckController() : base("Sequence check", TaskType.SequenceCheck)
+        public SequenceCheckController() : base(TaskType.SequenceCheck)
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);

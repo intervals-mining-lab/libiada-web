@@ -13,17 +13,16 @@
         /// The action.
         /// </summary>
         public readonly Func<Dictionary<string, object>> Action;
-        public readonly TaskType taskType;
+
+        /// <summary>
+        /// The task type.
+        /// </summary>
+        public readonly TaskType TaskType;
 
         /// <summary>
         /// The task data.
         /// </summary>
         public readonly TaskData TaskData;
-
-        /// <summary>
-        /// The controller name.
-        /// </summary>
-        public readonly string ControllerName;
 
         /// <summary>
         /// The result.
@@ -44,20 +43,17 @@
         /// <param name="action">
         /// The action.
         /// </param>
-        /// <param name="controllerName">
-        /// The controller name.
-        /// </param>
-        /// <param name="displayName">
-        /// The display name.
-        /// </param>
         /// <param name="userId">
         /// Creator id.
         /// </param>
-        public Task(int id, Func<Dictionary<string, object>> action, string controllerName, string displayName, string userId)
+        /// <param name="taskType">
+        /// The task Type.
+        /// </param>
+        public Task(int id, Func<Dictionary<string, object>> action, string userId, TaskType taskType)
         {
+            TaskType = taskType;
             Action = action;
-            ControllerName = controllerName;
-            TaskData = new TaskData(id, displayName, userId);
+            TaskData = new TaskData(id, userId);
         }
 
         /// <summary>
@@ -72,19 +68,19 @@
         /// <param name="result">
         /// The result.
         /// </param>
-        /// <param name="controllerName">
-        /// The controller name.
-        /// </param>
         /// <param name="thread">
         /// The thread.
         /// </param>
-        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, string controllerName, Thread thread)
+        /// <param name="taskType">
+        /// The task Type.
+        /// </param>
+        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, Thread thread, TaskType taskType)
         {
             Action = action;
             TaskData = taskData.Clone();
             Result = result;
-            ControllerName = controllerName;
             Thread = thread;
+            TaskType = taskType;
         }
 
         /// <summary>
@@ -95,7 +91,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, Result, ControllerName, Thread);
+            return new Task(Action, TaskData, Result, Thread, TaskType);
         }
     }
 }

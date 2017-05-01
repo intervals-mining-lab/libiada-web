@@ -14,6 +14,7 @@
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -26,7 +27,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequencesDistributionController"/> class.
         /// </summary>
-        public SubsequencesDistributionController() : base("Subsequences distribution", TaskType.SubsequencesDistribution)
+        public SubsequencesDistributionController() : base(TaskType.SubsequencesDistribution)
         {
         }
 

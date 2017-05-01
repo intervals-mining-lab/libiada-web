@@ -14,6 +14,7 @@
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Sequences;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -25,7 +26,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
-        protected SequencesMattersController() : base("Sequence upload", TaskType.SequencesMatters)
+        protected SequencesMattersController() : base(TaskType.SequencesMatters)
         {
         }
 
@@ -135,18 +136,21 @@
                                    { "data", JsonConvert.SerializeObject(data) }
                                };
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     long matterId = commonSequence.MatterId;
-                    List<Matter> orphanMatter = db.Matter
-                        .Include(m => m.Sequence)
-                        .Where(m => m.Id == matterId && m.Sequence.Count == 0)
-                        .ToList();
-
-                    if (orphanMatter.Count > 0)
+                    if (matterId != 0)
                     {
-                        db.Matter.Remove(orphanMatter[0]);
-                        db.SaveChanges();
+                        List<Matter> orphanMatter = db.Matter
+                            .Include(m => m.Sequence)
+                            .Where(m => m.Id == matterId && m.Sequence.Count == 0)
+                            .ToList();
+
+                        if (orphanMatter.Count > 0)
+                        {
+                            db.Matter.Remove(orphanMatter[0]);
+                            db.SaveChanges();
+                        }
                     }
 
                     throw;
@@ -158,6 +162,9 @@
             });
         }
 
+        /// <summary>
+        /// Sequence import result struct.
+        /// </summary>
         private struct ImportResult
         {
             /// <summary>

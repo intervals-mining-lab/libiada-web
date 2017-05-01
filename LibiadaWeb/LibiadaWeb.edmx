@@ -364,7 +364,7 @@
           <Property Name="id" Type="int8" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="task_type" Type="int2" Nullable="false" />
           <Property Name="description" Type="text" Nullable="false" />
-          <Property Name="status" Type="int2" />
+          <Property Name="status" Type="int2" Nullable="false" />
           <Property Name="result" Type="text" />
           <Property Name="user_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
@@ -787,11 +787,11 @@
           <EntitySet Name="BinaryCharacteristicLink" EntityType="Self.BinaryCharacteristicLink" />
           <EntitySet Name="FullCharacteristicLink" EntityType="Self.FullCharacteristicLink" />
           <EntitySet Name="CongenericCharacteristicLink" EntityType="Self.CongenericCharacteristicLink" />
-          <EntitySet Name="AspNetRoles" EntityType="LibiadaWebModel.AspNetRole" />
-          <EntitySet Name="AspNetUserClaims" EntityType="LibiadaWebModel.AspNetUserClaim" />
-          <EntitySet Name="AspNetUserLogins" EntityType="LibiadaWebModel.AspNetUserLogin" />
-          <EntitySet Name="AspNetUsers" EntityType="LibiadaWebModel.AspNetUser" />
-          <EntitySet Name="CalculationTask" EntityType="LibiadaWebModel.CalculationTask" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRole" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
+          <EntitySet Name="CalculationTask" EntityType="Self.CalculationTask" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -1003,22 +1003,22 @@
             <End Role="Pitch" EntitySet="Pitch" />
           </AssociationSet>
 
-          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="LibiadaWebModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
+          <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
           </AssociationSet>
 
-          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="LibiadaWebModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
+          <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserLogin" EntitySet="AspNetUserLogins" />
           </AssociationSet>
 
-          <AssociationSet Name="fk_task_user" Association="LibiadaWebModel.fk_task_user">
+          <AssociationSet Name="fk_task_user" Association="Self.fk_task_user">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
-            <End Role="task" EntitySet="CalculationTask" />
+            <End Role="CalculationTask" EntitySet="CalculationTask" />
           </AssociationSet>
 
-          <AssociationSet Name="AspNetUserRoles" Association="LibiadaWebModel.AspNetUserRoles">
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
@@ -1044,6 +1044,8 @@
         <EnumType Name="BinaryCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators.BinaryCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="CongenericCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="FullCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.FullCalculators.FullCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="TaskType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.Tasks.TaskType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="TaskState" UnderlyingType="Byte" a:ExternalTypeName="LibiadaWeb.Tasks.TaskState" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
 
         <EntityType Name="BinaryCharacteristicValue">
           <Key>
@@ -1400,7 +1402,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUsers" Relationship="LibiadaWebModel.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRole" ToRole="AspNetUser" />
         </EntityType>
 
         <EntityType Name="AspNetUserClaim">
@@ -1411,7 +1413,7 @@
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUser" Relationship="LibiadaWebModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUserClaim" ToRole="AspNetUser" />
         </EntityType>
 
         <EntityType Name="AspNetUserLogin">
@@ -1423,7 +1425,7 @@
           <Property Name="LoginProvider" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ProviderKey" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="AspNetUser" Relationship="LibiadaWebModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUserLogin" ToRole="AspNetUser" />
         </EntityType>
 
         <EntityType Name="AspNetUser">
@@ -1442,26 +1444,26 @@
           <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
           <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
           <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="AspNetUserClaims" Relationship="LibiadaWebModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
-          <NavigationProperty Name="AspNetUserLogins" Relationship="LibiadaWebModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
-          <NavigationProperty Name="tasks" Relationship="LibiadaWebModel.fk_task_user" FromRole="AspNetUser" ToRole="task" />
-          <NavigationProperty Name="AspNetRoles" Relationship="LibiadaWebModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
+          <NavigationProperty Name="AspNetUserClaims" Relationship="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserClaim" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUser" ToRole="AspNetUserLogin" />
+          <NavigationProperty Name="Tasks" Relationship="Self.fk_task_user" FromRole="AspNetUser" ToRole="CalculationTask" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
         </EntityType>
 
         <EntityType Name="CalculationTask">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="task_type" Type="Int16" Nullable="false" />
-          <Property Name="description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="status" Type="Int16" />
-          <Property Name="result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="user_id" Type="Int32" Nullable="false" />
-          <Property Name="created" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="started" Type="DateTimeOffset" Precision="7" />
-          <Property Name="completed" Type="DateTimeOffset" Precision="7" />
-          <NavigationProperty Name="AspNetUser" Relationship="LibiadaWebModel.fk_task_user" FromRole="task" ToRole="AspNetUser" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TaskType" Type="LibiadaWebModel.TaskType" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="LibiadaWebModel.TaskState" Nullable="false" />
+          <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="Started" Type="DateTimeOffset" Precision="7" />
+          <Property Name="Completed" Type="DateTimeOffset" Precision="7" />
+          <NavigationProperty Name="AspNetUser" Relationship="Self.fk_task_user" FromRole="CalculationTask" ToRole="AspNetUser" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2045,10 +2047,10 @@
         </Association>
 
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="LibiadaWebModel.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
+          <End Type="Self.AspNetUserClaim" Role="AspNetUserClaim" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
@@ -2060,10 +2062,10 @@
         </Association>
 
         <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="LibiadaWebModel.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
+          <End Type="Self.AspNetUserLogin" Role="AspNetUserLogin" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
@@ -2075,21 +2077,21 @@
         </Association>
 
         <Association Name="fk_task_user">
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
-          <End Type="LibiadaWebModel.CalculationTask" Role="task" Multiplicity="*" />
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="Self.CalculationTask" Role="CalculationTask" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUser">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="task">
-              <PropertyRef Name="user_id" />
+            <Dependent Role="CalculationTask">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
 
         <Association Name="AspNetUserRoles">
-          <End Type="LibiadaWebModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
-          <End Type="LibiadaWebModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
+          <End Type="Self.AspNetRole" Role="AspNetRole" Multiplicity="*" />
+          <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
 
       </Schema>
@@ -2409,15 +2411,6 @@
             </EntityTypeMapping>
           </EntitySetMapping>
 
-          <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
-            <EndProperty Name="Note">
-              <ScalarProperty Name="Id" ColumnName="note_id" />
-            </EndProperty>
-            <EndProperty Name="Pitch">
-              <ScalarProperty Name="Id" ColumnName="pitch_id" />
-            </EndProperty>
-          </AssociationSetMapping>
-
           <EntitySetMapping Name="AspNetRoles">
             <EntityTypeMapping TypeName="LibiadaWebModel.AspNetRole">
               <MappingFragment StoreEntitySet="AspNetRoles">
@@ -2470,18 +2463,27 @@
           <EntitySetMapping Name="CalculationTask">
             <EntityTypeMapping TypeName="LibiadaWebModel.CalculationTask">
               <MappingFragment StoreEntitySet="task">
-                <ScalarProperty Name="completed" ColumnName="completed" />
-                <ScalarProperty Name="started" ColumnName="started" />
-                <ScalarProperty Name="created" ColumnName="created" />
-                <ScalarProperty Name="user_id" ColumnName="user_id" />
-                <ScalarProperty Name="status" ColumnName="status" />
-                <ScalarProperty Name="result" ColumnName="result" />
-                <ScalarProperty Name="description" ColumnName="description" />
-                <ScalarProperty Name="task_type" ColumnName="task_type" />
-                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Completed" ColumnName="completed" />
+                <ScalarProperty Name="Started" ColumnName="started" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="UserId" ColumnName="user_id" />
+                <ScalarProperty Name="Status" ColumnName="status" />
+                <ScalarProperty Name="Result" ColumnName="result" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="TaskType" ColumnName="task_type" />
+                <ScalarProperty Name="Id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+
+          <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
+            <EndProperty Name="Note">
+              <ScalarProperty Name="Id" ColumnName="note_id" />
+            </EndProperty>
+            <EndProperty Name="Pitch">
+              <ScalarProperty Name="Id" ColumnName="pitch_id" />
+            </EndProperty>
+          </AssociationSetMapping>
 
           <AssociationSetMapping Name="AspNetUserRoles" TypeName="LibiadaWebModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
             <EndProperty Name="AspNetUser">

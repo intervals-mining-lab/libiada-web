@@ -53,7 +53,6 @@
         public Dictionary<long, AttributeValue[]> GetAttributes(IEnumerable<long> subsequenceIds)
         {
             return db.SequenceAttribute.Where(sa => subsequenceIds.Contains(sa.SequenceId))
-                                       .Include(sa => sa.Attribute)
                                        .Select(sa => new
                                                      {
                                                          sa.SequenceId,

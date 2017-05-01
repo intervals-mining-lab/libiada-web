@@ -8,6 +8,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
 
@@ -20,7 +21,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="BatchGenesImportController"/> class.
         /// </summary>
-        public BatchGenesImportController() : base("Batch genes import", TaskType.BatchGenesImport)
+        public BatchGenesImportController() : base(TaskType.BatchGenesImport)
         {
         }
 
