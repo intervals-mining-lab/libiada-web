@@ -66,31 +66,29 @@
             return Action(() =>
                 {
                     string[] matterNames;
-                    string[] results = new string[matterIds.Length];
-                    string[] statuses = new string[matterIds.Length];
+                    var results = new string[matterIds.Length];
+                    var statuses = new string[matterIds.Length];
                     using (var db = new LibiadaWebEntities())
                     {
                         matterNames = db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToArray();
-                        var parentSequences = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId)).OrderBy(c => c.MatterId);
-                        long[] parentSequenceIds = parentSequences.Select(c => c.Id).ToArray();
-                        string[] parentRemoteIds = parentSequences.Select(c => c.RemoteId).ToArray();
-                        var features = NcbiHelper.GetFeatures(parentRemoteIds);
+                        var parentSequences = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId)).OrderBy(c => c.MatterId).ToArray();
 
-                        for (int i = 0; i < matterIds.Length; i++)
+                        for (int i = 0; i < parentSequences.Length; i++)
                         {
                             try
                             {
-                                var parentSequenceId = parentSequenceIds[i];
-                                using (var subsequenceImporter = new SubsequenceImporter(features[i], parentSequenceId))
+                                var parentSequence = parentSequences[i];
+                                using (var subsequenceImporter = new SubsequenceImporter(parentSequence))
                                 {
                                     subsequenceImporter.CreateSubsequences();
                                 }
-
-                                var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequenceId && s.Feature == Feature.NonCodingSequence);
-                                var featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequenceId && s.Feature != Feature.NonCodingSequence);
+                                var featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                                                                              && s.Feature != Feature.NonCodingSequence);
+                                var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                                                                            && s.Feature == Feature.NonCodingSequence);
 
                                 statuses[i] = "Success";
-                                results[i] = "Successfully imported " + featuresCount + " features and " + nonCodingCount + " non coding subsequences";
+                                results[i] = $"Successfully imported {featuresCount} features and {nonCodingCount} non coding subsequences";
                             }
                             catch (Exception exception)
                             {

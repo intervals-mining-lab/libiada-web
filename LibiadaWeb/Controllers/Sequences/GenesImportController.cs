@@ -1,6 +1,5 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
-    using System;
     using System.Collections.Generic;
     using System.Data.Entity;
     using System.Linq;
@@ -33,19 +32,26 @@
         /// </returns>
         public ActionResult Index()
         {
-            var db = new LibiadaWebEntities();
-            var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-            var matterIds = db.DnaSequence.Include(c => c.Matter).Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
-                                                          !genesSequenceIds.Contains(c.Id) &&
-                                                          (c.Matter.SequenceType == SequenceType.CompleteGenome
-                                                        || c.Matter.SequenceType == SequenceType.MitochondrionGenome
-                                                        || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToList();
+            using (var db = new LibiadaWebEntities())
+            {
+                var genesSequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
 
-            var viewDataHelper = new ViewDataHelper(db);
-            var data = viewDataHelper.GetMattersData(1, 1, m => matterIds.Contains(m.Id), "Import");
-            data.Add("nature", (byte)Nature.Genetic);
-            ViewBag.data = JsonConvert.SerializeObject(data);
-            return View();
+                // TODO: extract list of applicable SequenceTypes into separate entity
+                var matterIds = db.DnaSequence
+                                  .Include(c => c.Matter)
+                                  .Where(c => !string.IsNullOrEmpty(c.RemoteId) &&
+                                                                                 !genesSequenceIds.Contains(c.Id) &&
+                                                                                 (c.Matter.SequenceType == SequenceType.CompleteGenome
+                                                                               || c.Matter.SequenceType == SequenceType.MitochondrionGenome
+                                                                               || c.Matter.SequenceType == SequenceType.Plasmid))
+                                  .Select(c => c.MatterId).ToList();
+
+                var viewDataHelper = new ViewDataHelper(db);
+                var data = viewDataHelper.GetMattersData(1, 1, m => matterIds.Contains(m.Id), "Import");
+                data.Add("nature", (byte)Nature.Genetic);
+                ViewBag.data = JsonConvert.SerializeObject(data);
+                return View();
+            }
         }
 
         /// <summary>
@@ -57,40 +63,41 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if unknown feature or attribute is found.
-        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId)
         {
             return Action(() =>
             {
-                string matterName;
-                Subsequence[] sequenceSubsequences;
+                Dictionary<string, object> result;
+
                 using (var db = new LibiadaWebEntities())
                 {
-                    long parentSequenceId = db.DnaSequence.Single(d => d.MatterId == matterId).Id;
-                    DnaSequence parentSequence = db.DnaSequence.Single(c => c.Id == parentSequenceId);
-
+                    DnaSequence parentSequence = db.DnaSequence.Single(d => d.MatterId == matterId);
                     var features = NcbiHelper.GetFeatures(parentSequence.RemoteId);
-                    using (var subsequenceImporter = new SubsequenceImporter(features, parentSequenceId))
+                    using (var subsequenceImporter = new SubsequenceImporter(features, parentSequence.Id))
                     {
                         subsequenceImporter.CreateSubsequences();
                     }
 
-                    matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                    sequenceSubsequences = db.Subsequence.Where(s => s.SequenceId == parentSequenceId)
-                                                         .Include(s => s.Position)
-                                                         .Include(s => s.SequenceAttribute)
-                                                         .ToArray();
+                    string matterName = db.Matter.Single(m => m.Id == matterId).Name;
+                    Subsequence[] sequenceSubsequences = db.Subsequence
+                        .Where(s => s.SequenceId == parentSequence.Id)
+                        .Include(s => s.Position)
+                        .Include(s => s.SequenceAttribute)
+                        .ToArray();
+
+                    result = new Dictionary<string, object>
+                                 {
+                                     { "matterName", matterName },
+                                     { "genes", sequenceSubsequences }
+                                 };
                 }
 
                 return new Dictionary<string, object>
-                                     {
-                                         { "matterName", matterName },
-                                         { "genes", sequenceSubsequences }
-                                     };
+                           {
+                               { "data", JsonConvert.SerializeObject(result) }
+                           };
             });
         }
     }

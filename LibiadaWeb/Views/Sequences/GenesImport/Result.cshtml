@@ -2,52 +2,48 @@
     ViewBag.Title = "Subsequences import results";
 }
 
-<h2>Subsequences import results for @ViewBag.matterName</h2>
-
-
 @if (ViewBag.Error == null)
 {
-        <table class="table table-bordered table-hover">
+    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+
+    <div ng-app="BatchSequenceImportResult" ng-controller="BatchSequenceImportResultCtrl">
+        @Html.Partial("_ModalLoadingWindow")
+        <br />
+        <h2>Subsequences import results for <strong>{{matterName}}</strong></h2>
+
+        <table class="table table-bordered table-hover" ng-cloak>
             <thead>
-                <tr>
-                    <th>
-                        Feature
-                    </th>
-                    <th>
-                        Gene position
-                    </th>
-                    <th>
-                        Gene length
-                    </th>
-                    <th>
-                        Partial
-                    </th>
-                    <th>
-                        Additional positions count
-                    </th>
-                </tr>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Feature
+                </th>
+                <th>
+                    Gene position
+                </th>
+                <th>
+                    Gene length
+                </th>
+                <th>
+                    Partial
+                </th>
+                <th>
+                    Additional positions count
+                </th>
+            </tr>
             </thead>
             <tbody>
-                @for (int d = 0; d < ViewBag.genes.Length; d++)
-                {
-                    <tr>
-                        <td>
-                            @ViewBag.genes[d].Feature.Name
-                        </td>
-                        <td>
-                            @ViewBag.genes[d].Start
-                        </td>
-                        <td>
-                            @ViewBag.genes[d].Length
-                        </td>
-                        <td>
-                            @ViewBag.genes[d].Partial
-                        </td>
-                        <td>
-                            @ViewBag.genes[d].Position.Count
-                        </td>
-                    </tr>
-                }
+            <tr ng-repeat="gene in genes">
+                <td ng-bind="$index + 1"/>
+                <td ng-bind="gene.Feature.Name"/>
+                <td ng-bind="gene.Start"/>
+                <td ng-bind="gene.Length"/>
+                <td ng-bind="gene.Partial"/>
+                <td ng-bind="gene.Position.Count" />
+            </tr>
             </tbody>
         </table>
+    </div>
 }

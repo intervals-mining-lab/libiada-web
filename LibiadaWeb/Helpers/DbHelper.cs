@@ -122,5 +122,23 @@
         {
             db.Database.ExecuteSqlCommand(query, parameters);
         }
+
+        /// <summary>
+        /// Extracts sequence length from database.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        /// <param name="sequenceId">
+        /// The sequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="int"/>.
+        /// </returns>
+        public static int GetSequenceLength(LibiadaWebEntities db, long sequenceId)
+        {
+            const string Query = "SELECT array_length(building, 1) FROM chain WHERE id = @id";
+            return db.Database.SqlQuery<int>(Query, new NpgsqlParameter("@id", sequenceId)).First();
+        }
     }
 }

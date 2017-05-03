@@ -6,12 +6,10 @@
 
     using Bio.IO.GenBank;
 
-    using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
-    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The subsequence importer.
@@ -39,22 +37,12 @@
         private readonly List<FeatureItem> features;
 
         /// <summary>
-        /// The parent length.
-        /// </summary>
-        private readonly int parentLength;
-
-        /// <summary>
-        /// The source length.
-        /// </summary>
-        private readonly int sourceLength;
-
-        /// <summary>
         /// The all non genes leaf locations.
         /// </summary>
         private readonly List<ILocation>[] allNonGenesLeafLocations;
 
         /// <summary>
-        /// The positions map.
+        /// Boolean map of filled positions in full sequence.
         /// </summary>
         private readonly bool[] positionsMap;
 
@@ -66,29 +54,44 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
         /// </summary>
+        /// <param name="sequence">
+        /// Dna sequence for which subsequences will be imported.
+        /// </param>
+        public SubsequenceImporter(DnaSequence sequence) : this(NcbiHelper.GetFeatures(sequence.RemoteId), sequence.Id)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SubsequenceImporter"/> class.
+        /// </summary>
         /// <param name="features">
         /// The features.
         /// </param>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
+        /// <exception cref="Exception">
+        /// thrown if length of sequence from database
+        /// is not equal to the length of downloaded sequence.
+        /// </exception>
         public SubsequenceImporter(List<FeatureItem> features, long sequenceId)
         {
             this.features = features;
             this.sequenceId = sequenceId;
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
-            using (var commonSequenceRepository = new CommonSequenceRepository(db))
-            {
-                BaseChain parentSequence = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
-                parentLength = parentSequence.GetLength();
-            }
-
-            sourceLength = features[0].Location.LocationEnd;
-            positionsMap = new bool[parentLength];
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)
-                                               .Select(f => f.Location.GetLeafLocations())
-                                               .ToArray();
+                .Select(f => f.Location.GetLeafLocations())
+                .ToArray();
+
+            int parentLength = DbHelper.GetSequenceLength(db, sequenceId);
+            int sourceLength = features[0].Location.LocationEnd;
+            positionsMap = new bool[parentLength];
+
+            if (parentLength != sourceLength)
+            {
+                throw new Exception($"Local and loaded sequence length are not equal. Local length: {parentLength}, loaded length: {sourceLength}");
+            }
         }
 
         /// <summary>
@@ -130,11 +133,6 @@
         /// </exception>
         private void CheckImportability()
         {
-            if (parentLength != sourceLength)
-            {
-                throw new Exception("Parent and source lengthes are not equal. Parent length = " + parentLength + " source length = " + sourceLength);
-            }
-
             for (int i = 1; i < features.Count; i++)
             {
                 FeatureItem feature = features[i];
@@ -143,7 +141,7 @@
 
                 if (feature.Key == "source")
                 {
-                    throw new Exception("Sequence seems to be chimeric as it is several 'source' records in file. Second source location = " + leafLocations[0].StartData);
+                    throw new Exception($"Sequence seems to be chimeric as it is several 'source' records in file. Second source location: {leafLocations[0].StartData}");
                 }
 
                 if (!FeatureRepository.FeatureExists(feature.Key))
@@ -154,7 +152,7 @@
                 if (feature.Key == gene)
                 {
                     // checking if there is any feature with identical location
-                    if (allNonGenesLeafLocations.Where(l => leafLocations[0].LocationStart == l[0].LocationStart).Any(l => LocationsEqual(leafLocations, l)))
+                    if (allNonGenesLeafLocations.Any(l => LocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
@@ -168,7 +166,7 @@
                     {
                         if (subLocation.Operator != subLocationOperator)
                         {
-                            throw new Exception("SubLocation operators does not match: " + subLocationOperator + " and " + subLocation.Operator);
+                            throw new Exception($"SubLocation operators does not match: {subLocationOperator} and {subLocation.Operator}");
                         }
                     }
                 }
@@ -199,16 +197,16 @@
         /// </returns>
         private bool LocationsEqual(List<ILocation> geneLocation, List<ILocation> otherLocation)
         {
-            // if there is join in child record parent record contains only
+            // if there is a join in child record parent record contains only
             // first child start and last child end
             if (geneLocation.Count == 1
-                && geneLocation[0].LocationStart == otherLocation[0].LocationStart
-                && geneLocation[0].LocationEnd == otherLocation[otherLocation.Count - 1].LocationEnd)
+             && geneLocation[0].LocationStart == otherLocation[0].LocationStart
+             && geneLocation[0].LocationEnd == otherLocation[otherLocation.Count - 1].LocationEnd)
             {
                 return true;
             }
 
-            // if gene is multipositional
+            // if gene is multi-positional
             if (geneLocation.Count != otherLocation.Count)
             {
                 return false;
@@ -247,7 +245,7 @@
 
                 if (feature.Key == gene)
                 {
-                    if (allNonGenesLeafLocations.Where(l => leafLocations[0].LocationStart == l[0].LocationStart).Any(l => LocationsEqual(leafLocations, l)))
+                    if (allNonGenesLeafLocations.Any(l => LocationsEqual(leafLocations, l)))
                     {
                         continue;
                     }
@@ -259,8 +257,8 @@
                     subsequenceFeature = FeatureRepository.GetFeatureByName(feature.Key);
                 }
 
-                if (feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudo.GetDisplayValue()) ||
-                    feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudogene.GetDisplayValue()))
+                if (feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudo.GetDisplayValue())
+                 || feature.Qualifiers.ContainsKey(LibiadaWeb.Attribute.Pseudogene.GetDisplayValue()))
                 {
                     subsequenceFeature = Feature.PseudoGen;
                 }
@@ -294,24 +292,7 @@
 
                 AddPositionToMap(start, end);
 
-                for (int k = 1; k < leafLocations.Count; k++)
-                {
-                    ILocation leafLocation = leafLocations[k];
-                    int leafStart = leafLocation.LocationStart - 1;
-                    int leafEnd = leafLocation.LocationEnd - 1;
-                    int leafLength = leafEnd - leafStart + 1;
-
-                    var position = new Position
-                    {
-                        SubsequenceId = subsequence.Id,
-                        Start = leafStart,
-                        Length = leafLength
-                    };
-
-                    newPositions.Add(position);
-
-                    AddPositionToMap(leafStart, leafEnd);
-                }
+                newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence.Id));
 
                 newSequenceAttributes.AddRange(sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence));
             }
@@ -326,6 +307,36 @@
         }
 
         /// <summary>
+        /// The create additional positions.
+        /// </summary>
+        /// <param name="leafLocations">
+        /// The leaf locations.
+        /// </param>
+        /// <param name="subsequenceId">
+        /// The subsequence id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="List{Position}"/>.
+        /// </returns>
+        private List<Position> CreateAdditionalPositions(List<ILocation> leafLocations, long subsequenceId)
+        {
+            var result = new List<Position>();
+
+            for (int k = 1; k < leafLocations.Count; k++)
+            {
+                ILocation leafLocation = leafLocations[k];
+                int leafStart = leafLocation.LocationStart - 1;
+                int leafEnd = leafLocation.LocationEnd - 1;
+                int leafLength = leafEnd - leafStart + 1;
+
+                result.Add(new Position { SubsequenceId = subsequenceId, Start = leafStart, Length = leafLength });
+                AddPositionToMap(leafStart, leafEnd);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Creates non coding subsequences.
         /// </summary>
         /// <returns>
@@ -333,12 +344,10 @@
         /// </returns>
         private List<Subsequence> CreateNonCodingSubsequences()
         {
-            List<int>[] positions = ExtractNonCodingSubsequencesPositions();
-            List<int> starts = positions[0];
-            List<int> lengths = positions[1];
+            NonCodingPosition[] positions = ExtractNonCodingSubsequencesPositions();
             var result = new List<Subsequence>();
 
-            for (int i = 0; i < lengths.Count; i++)
+            for (int i = 0; i < positions.Length; i++)
             {
                 result.Add(new Subsequence
                 {
@@ -346,8 +355,8 @@
                     Feature = Feature.NonCodingSequence,
                     Partial = false,
                     SequenceId = sequenceId,
-                    Start = starts[i],
-                    Length = lengths[i]
+                    Start = positions[i].Start,
+                    Length = positions[i].Length
                 });
             }
 
@@ -378,10 +387,9 @@
         /// <returns>
         /// The <see cref="T:List{Int32}[]"/>.
         /// </returns>
-        private List<int>[] ExtractNonCodingSubsequencesPositions()
+        private NonCodingPosition[] ExtractNonCodingSubsequencesPositions()
         {
-            var starts = new List<int>();
-            var lengths = new List<int>();
+            var map = new List<NonCodingPosition>();
             var currentStart = 0;
             var currentLength = 0;
 
@@ -391,8 +399,7 @@
                 {
                     if (currentLength > 0)
                     {
-                        starts.Add(currentStart);
-                        lengths.Add(currentLength);
+                        map.Add(new NonCodingPosition(currentStart, currentLength));
                     }
 
                     currentStart = i + 1;
@@ -406,11 +413,10 @@
 
             if (currentLength > 0)
             {
-                starts.Add(currentStart);
-                lengths.Add(currentLength);
+                map.Add(new NonCodingPosition(currentStart, currentLength));
             }
 
-            return new[] { starts, lengths };
+            return map.ToArray();
         }
 
         /// <summary>
@@ -424,8 +430,39 @@
         /// </returns>
         private bool CheckPartial(List<ILocation> leafLocations)
         {
-            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData ||
-                                                     leafLocation.LocationEnd.ToString() != leafLocation.EndData);
+            return leafLocations.Any(leafLocation => leafLocation.LocationStart.ToString() != leafLocation.StartData
+                                                  || leafLocation.LocationEnd.ToString() != leafLocation.EndData);
+        }
+
+        /// <summary>
+        /// The non coding position start and length.
+        /// </summary>
+        private struct NonCodingPosition
+        {
+            /// <summary>
+            /// The start.
+            /// </summary>
+            public readonly int Start;
+
+            /// <summary>
+            /// The length.
+            /// </summary>
+            public readonly int Length;
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="NonCodingPosition"/> struct.
+            /// </summary>
+            /// <param name="start">
+            /// The start.
+            /// </param>
+            /// <param name="length">
+            /// The length.
+            /// </param>
+            public NonCodingPosition(int start, int length)
+            {
+                Start = start;
+                Length = length;
+            }
         }
     }
 }
