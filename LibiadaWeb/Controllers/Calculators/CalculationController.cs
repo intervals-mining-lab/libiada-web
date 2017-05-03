@@ -36,11 +36,13 @@
         /// </returns>
         public ActionResult Index()
         {
-            var db = new LibiadaWebEntities();
-            var viewDataHelper = new ViewDataHelper(db);
-
-            ViewBag.data = JsonConvert.SerializeObject(viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate"));
-            return View();
+            using (var db = new LibiadaWebEntities())
+            {
+                var viewDataHelper = new ViewDataHelper(db);
+                var viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 1, int.MaxValue, "Calculate");
+                ViewBag.data = JsonConvert.SerializeObject(viewData);
+                return View();
+            }
         }
 
         /// <summary>
@@ -86,64 +88,64 @@
             uint? rotationLength)
         {
             return Action(() =>
+            {
+                var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
+                var characteristicNames = new string[characteristicLinkIds.Length];
+                var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
+                Dictionary<long, string> mattersNames;
+                double[][] characteristics;
+                Chain[][] chains;
+
+                using (var db = new LibiadaWebEntities())
                 {
-                    var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
-                    var characteristicNames = new string[characteristicLinkIds.Length];
-                    var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
-                    Dictionary<long, string> mattersNames;
-                    double[][] characteristics;
-                    Chain[][] chains;
+                    mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
-                    using (var db = new LibiadaWebEntities())
+                    var commonSequenceRepository = new CommonSequenceRepository(db);
+                    chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translators);
+
+                    var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+                    for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
-
-                        var commonSequenceRepository = new CommonSequenceRepository(db);
-                        chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translators);
-
-                        var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
-                        for (int k = 0; k < characteristicLinkIds.Length; k++)
+                        characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
+                        characteristicsList[k] = new SelectListItem
                         {
-                            characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
-                            characteristicsList[k] = new SelectListItem
-                            {
-                                Value = k.ToString(),
-                                Text = characteristicNames[k],
-                                Selected = false
-                            };
-                        }
-                    }
-
-                    if (!rotate && !complementary)
-                    {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds);
-                    }
-                    else
-                    {
-                        characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds, rotate, complementary, rotationLength);
-                    }
-
-                    for (int i = 0; i < matterIds.Length; i++)
-                    {
-                        sequencesCharacteristics[i] = new SequenceCharacteristics
-                        {
-                            MatterName = mattersNames[matterIds[i]],
-                            Characteristics = characteristics[i]
+                            Value = k.ToString(),
+                            Text = characteristicNames[k],
+                            Selected = false
                         };
                     }
+                }
 
-                    var result = new Dictionary<string, object>
-                                            {
-                                                    { "characteristics", sequencesCharacteristics },
-                                                    { "characteristicNames", characteristicNames },
-                                                    { "characteristicsList", characteristicsList }
-                                            };
+                if (!rotate && !complementary)
+                {
+                    characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds);
+                }
+                else
+                {
+                    characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds, rotate, complementary, rotationLength);
+                }
 
-                    return new Dictionary<string, object>
+                for (int i = 0; i < matterIds.Length; i++)
+                {
+                    sequencesCharacteristics[i] = new SequenceCharacteristics
+                    {
+                        MatterName = mattersNames[matterIds[i]],
+                        Characteristics = characteristics[i]
+                    };
+                }
+
+                var result = new Dictionary<string, object>
+                                 {
+                                         { "characteristics", sequencesCharacteristics },
+                                         { "characteristicNames", characteristicNames },
+                                         { "characteristicsList", characteristicsList }
+                                 };
+
+                return new Dictionary<string, object>
                            {
                                { "data", JsonConvert.SerializeObject(result) }
                            };
-                });
+            });
         }
     }
 }

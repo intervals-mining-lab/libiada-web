@@ -26,6 +26,9 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="SequencesMattersController"/> class.
         /// </summary>
+        /// <param name="taskType">
+        /// The task Type.
+        /// </param>
         protected SequencesMattersController(TaskType taskType) : base(taskType)
         {
         }
