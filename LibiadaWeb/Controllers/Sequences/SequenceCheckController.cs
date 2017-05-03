@@ -10,6 +10,8 @@
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The sequence check controller.
     /// </summary>
@@ -17,22 +19,10 @@
     public class SequenceCheckController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
-        /// The sequence repository.
-        /// </summary>
-        private readonly CommonSequenceRepository commonSequenceRepository;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SequenceCheckController"/> class.
         /// </summary>
         public SequenceCheckController() : base(TaskType.SequenceCheck)
         {
-            db = new LibiadaWebEntities();
-            commonSequenceRepository = new CommonSequenceRepository(db);
         }
 
         /// <summary>
@@ -43,8 +33,11 @@
         /// </returns>
         public ActionResult Index()
         {
-            ViewBag.matterId = new SelectList(db.Matter, "id", "name");
-            return View();
+            using (var db = new LibiadaWebEntities())
+            {
+                ViewBag.matterId = new SelectList(db.Matter.ToArray(), "id", "name");
+                return View();
+            }
         }
 
         /// <summary>
@@ -69,7 +62,7 @@
 
                 if (myFile == null || myFile.ContentLength == 0)
                 {
-                    throw new ArgumentNullException("file", "Sequence file not found or empty.");
+                    throw new ArgumentNullException(nameof(file), "Sequence file not found or empty.");
                 }
 
                 int fileLen = myFile.ContentLength;
@@ -86,7 +79,6 @@
                 string[] tempString = stringSequence.Split('\n', '\r');
 
                 var sequenceStringBuilder = new StringBuilder();
-                string fastaHeader = tempString[0];
 
                 for (int j = 1; j < tempString.Length; j++)
                 {
@@ -96,60 +88,61 @@
                 string resultStringSequence = DataTransformers.CleanFastaFile(sequenceStringBuilder.ToString());
 
                 var chain = new BaseChain(resultStringSequence);
-
-                long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
-
                 string message;
+                string status;
+                BaseChain dbChain;
+                using (var db = new LibiadaWebEntities())
+                {
+                    long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
+                    var commonSequenceRepository = new CommonSequenceRepository(db);
+                    dbChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
+                }
 
-                BaseChain dataBaseChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
-
-                if (dataBaseChain.Equals(chain))
+                if (dbChain.Equals(chain))
                 {
                     message = "Sequence in db and in file are equal";
+                    status = "Success";
                 }
                 else
                 {
-                    if (chain.Alphabet.Cardinality != dataBaseChain.Alphabet.Cardinality)
+                    status = "Error";
+                    if (chain.Alphabet.Cardinality != dbChain.Alphabet.Cardinality)
                     {
-                        message = "Alphabet sizes are not equal. In db - " + dataBaseChain.Alphabet.Cardinality + ". In file - " + chain.Alphabet.Cardinality;
-
-                        return new Dictionary<string, object> { { "message", message } };
+                        message = $"Alphabet sizes are not equal. In db - {dbChain.Alphabet.Cardinality}. In file - {chain.Alphabet.Cardinality}";
+                        return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message }) } };
                     }
 
                     for (int i = 0; i < chain.Alphabet.Cardinality; i++)
                     {
-                        if (!chain.Alphabet[i].ToString().Equals(dataBaseChain.Alphabet[i].ToString()))
+                        if (!chain.Alphabet[i].ToString().Equals(dbChain.Alphabet[i].ToString()))
                         {
-                            message = i + "Elements in alphabet are not equal. In db - " + dataBaseChain.Alphabet[i] + ". In file - " + chain.Alphabet[i];
-
-                            return new Dictionary<string, object> { { "message", message } };
+                            message = $"{i} elements in alphabet are not equal. In db - {dbChain.Alphabet[i]}. In file - {chain.Alphabet[i]}";
+                            return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message }) } };
                         }
                     }
 
-                    if (chain.GetLength() != dataBaseChain.GetLength())
+                    if (chain.GetLength() != dbChain.GetLength())
                     {
-                        message = "Sequence length in db " + dataBaseChain.GetLength() + ", and sequence length from file" + chain.GetLength();
-
-                        return new Dictionary<string, object> { { "message", message } };
+                        message = $"Sequence length in db {dbChain.GetLength()}, and sequence length from file{chain.GetLength()}";
+                        return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                     }
 
                     int[] libiadaBuilding = chain.Building;
-                    int[] dataBaseBuilding = dataBaseChain.Building;
+                    int[] dataBaseBuilding = dbChain.Building;
 
                     for (int j = 0; j < chain.GetLength(); j++)
                     {
                         if (libiadaBuilding[j] != dataBaseBuilding[j])
                         {
-                            message = j + "Sequences elements are not equal. In db " + dataBaseBuilding[j] + ". In file " + libiadaBuilding[j];
-
-                            return new Dictionary<string, object> { { "message", message } };
+                            message = $"{j} sequences elements are not equal. In db {dataBaseBuilding[j]}. In file {libiadaBuilding[j]}";
+                            return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
                         }
                     }
 
                     message = "Sequences are equal and not equal at the same time.";
                 }
 
-                return new Dictionary<string, object> { { "message", message } };
+                return new Dictionary<string, object> { { "data", JsonConvert.SerializeObject(new { message, status }) } };
             });
         }
     }

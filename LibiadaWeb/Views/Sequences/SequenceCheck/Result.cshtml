@@ -1,6 +1,19 @@
 ﻿@{
-    ViewBag.Title = "Check result";
+    ViewBag.Title = "Sequence check result";
 }
 
 <h2>@ViewBag.Title</h2>
-<p>@ViewBag.message</p>
+
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "BatchSequenceImportResultController")
+
+    <div ng-app="BatchSequenceImportResult" ng-controller="BatchSequenceImportResultCtrl">
+        @Html.Partial("_ModalLoadingWindow")
+        <br />
+        <div ng-class="calculateStatusClass(status)">{{message}}</div>
+        <div>
+            @Html.ActionLink("Check another sequence", "Index").
+        </div>
+    </div>
+}
