@@ -77,14 +77,14 @@
                         {
                             try
                             {
-                                var parentSequence = parentSequences[i];
+                                DnaSequence parentSequence = parentSequences[i];
                                 using (var subsequenceImporter = new SubsequenceImporter(parentSequence))
                                 {
                                     subsequenceImporter.CreateSubsequences();
                                 }
-                                var featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                                int featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
                                                                               && s.Feature != Feature.NonCodingSequence);
-                                var nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
+                                int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
                                                                             && s.Feature == Feature.NonCodingSequence);
 
                                 statuses[i] = "Success";

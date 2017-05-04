@@ -5,8 +5,11 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -74,23 +77,26 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     DnaSequence parentSequence = db.DnaSequence.Single(d => d.MatterId == matterId);
-                    var features = NcbiHelper.GetFeatures(parentSequence.RemoteId);
-                    using (var subsequenceImporter = new SubsequenceImporter(features, parentSequence.Id))
+                    using (var subsequenceImporter = new SubsequenceImporter(parentSequence))
                     {
                         subsequenceImporter.CreateSubsequences();
                     }
 
+                    Dictionary<byte, string> features = ArrayExtensions.ToArray<Feature>()
+                        .ToDictionary(f => (byte)f, f => f.GetDisplayValue());
                     string matterName = db.Matter.Single(m => m.Id == matterId).Name;
-                    Subsequence[] sequenceSubsequences = db.Subsequence
+                    SubsequenceData[] sequenceSubsequences = db.Subsequence
                         .Where(s => s.SequenceId == parentSequence.Id)
                         .Include(s => s.Position)
-                        .Include(s => s.SequenceAttribute)
+                        .ToArray()
+                        .Select(s => new SubsequenceData(s))
                         .ToArray();
 
                     result = new Dictionary<string, object>
                                  {
                                      { "matterName", matterName },
-                                     { "genes", sequenceSubsequences }
+                                     { "genes", sequenceSubsequences },
+                                     { "features", features }
                                  };
                 }
 

@@ -37,11 +37,11 @@
             <tbody>
             <tr ng-repeat="gene in genes">
                 <td ng-bind="$index + 1"/>
-                <td ng-bind="gene.Feature.Name"/>
-                <td ng-bind="gene.Start"/>
-                <td ng-bind="gene.Length"/>
+                <td ng-bind="features[gene.FeatureId]"/>
+                <td ng-bind="gene.Starts[0]"/>
+                <td ng-bind="gene.Lengths[0]"/>
                 <td ng-bind="gene.Partial"/>
-                <td ng-bind="gene.Position.Count" />
+                <td ng-bind="gene.Starts.length - 1" />
             </tr>
             </tbody>
         </table>
