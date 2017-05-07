@@ -9,7 +9,6 @@
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Attributes;
     using LibiadaWeb.Models;
     using LibiadaWeb.Tasks;
 

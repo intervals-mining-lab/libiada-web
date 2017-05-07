@@ -1,6 +1,7 @@
 ﻿namespace LibiadaWeb.Controllers.Sequences
 {
     using System;
+    using System.ComponentModel;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -173,7 +174,7 @@
                     dataSequenceRepository.Create(result, alphabet, chain.Building);
                     break;
                 default:
-                    throw new Exception("Unknown sequence nature.");
+                    throw new InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
             }
 
             return RedirectToAction("Index", "Matters");

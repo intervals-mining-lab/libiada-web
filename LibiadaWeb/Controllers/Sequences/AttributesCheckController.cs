@@ -51,9 +51,8 @@
                 var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Check");
                 data.Add("nature", (byte)Nature.Genetic);
                 ViewBag.data = JsonConvert.SerializeObject(data);
+                return View();
             }
-
-            return View();
         }
 
         /// <summary>

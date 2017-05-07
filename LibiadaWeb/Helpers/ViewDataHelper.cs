@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
@@ -107,7 +108,7 @@
         /// </returns>
         public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
         {
-            var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
+            Dictionary<string, object> data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
@@ -178,7 +179,7 @@
                     characteristicTypes = GetBinaryCharacteristicTypes();
                     break;
                 default:
-                    throw new ArgumentException("Unknown characteristic category");
+                    throw new InvalidEnumArgumentException(nameof(characteristicsType), (int)characteristicsType, typeof(CharacteristicCategory));
             }
 
             data.Add("characteristicTypes", characteristicTypes);

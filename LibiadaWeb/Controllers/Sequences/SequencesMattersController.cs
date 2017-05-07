@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data.Entity;
     using System.IO;
     using System.Linq;
@@ -130,7 +131,7 @@
                             dataSequenceRepository.Create(commonSequence, sequenceStream, precision ?? 0);
                             break;
                         default:
-                            throw new Exception("Unknown nature.");
+                            throw new InvalidEnumArgumentException(nameof(nature), (int)nature, typeof(Nature));
                     }
 
                     var data = new ImportResult(commonSequence, language, original, translator, partial, precision);
