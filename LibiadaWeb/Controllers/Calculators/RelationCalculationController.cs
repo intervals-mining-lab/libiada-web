@@ -47,7 +47,7 @@
         {
             db = new LibiadaWebEntities();
             commonSequenceRepository = new CommonSequenceRepository(db);
-            characteristicTypeLinkRepository = new BinaryCharacteristicRepository(db);
+            characteristicTypeLinkRepository = BinaryCharacteristicRepository.Instance;
         }
 
         /// <summary>

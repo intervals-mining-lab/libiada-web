@@ -167,20 +167,16 @@
             switch (characteristicsType)
             {
                 case CharacteristicCategory.Full:
-                    var fullCharacteristicRepository = new FullCharacteristicRepository(db);
-                    characteristicTypes = fullCharacteristicRepository.GetFullCharacteristicTypes();
+                    characteristicTypes = FullCharacteristicRepository.Instance.GetFullCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Congeneric:
-                    var congenericCharacteristicRepository = new CongenericCharacteristicRepository(db);
-                    characteristicTypes = congenericCharacteristicRepository.GetCongenericCharacteristicTypes();
+                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCongenericCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Accordance:
-                    var accordanceCharacteristicRepository = new AccordanceCharacteristicRepository(db);
-                    characteristicTypes = accordanceCharacteristicRepository.GetAccordanceCharacteristicTypes();
+                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetAccordanceCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Binary:
-                    var binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
-                    characteristicTypes = binaryCharacteristicRepository.GetBinaryCharacteristicTypes();
+                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetBinaryCharacteristicTypes();
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(characteristicsType), (int)characteristicsType, typeof(CharacteristicCategory));
@@ -218,7 +214,7 @@
             var groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            var characteristicTypes = GetFullCharacteristicTypes();
+            var characteristicTypes = FullCharacteristicRepository.Instance.GetFullCharacteristicTypes();
 
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", geneticNotations.ToSelectListWithNature());

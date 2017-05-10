@@ -18,13 +18,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         private readonly List<CongenericCharacteristicLink> congenericCharacteristicLinks;
 
+        private static CongenericCharacteristicRepository instance;
+
+        private static object syncRoot = new object();
+
+        public static CongenericCharacteristicRepository Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            using (var db = new LibiadaWebEntities())
+                            {
+                                instance = new CongenericCharacteristicRepository(db);
+                            }
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public CongenericCharacteristicRepository(LibiadaWebEntities db)
+        private CongenericCharacteristicRepository(LibiadaWebEntities db)
         {
             congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToList();
         }

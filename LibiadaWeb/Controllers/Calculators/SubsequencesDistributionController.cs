@@ -98,7 +98,7 @@
                         var commonSequenceRepository = new CommonSequenceRepository(db);
                         chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
-                        var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+                        var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
                         sequenceCharacteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 

@@ -45,7 +45,7 @@
 
             using (var context = new LibiadaWebEntities())
             {
-                var characteristicTypeLinkRepository = new FullCharacteristicRepository(context);
+                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
                 FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
                 calculator = FullCalculatorsFactory.CreateCalculator(characteristic);

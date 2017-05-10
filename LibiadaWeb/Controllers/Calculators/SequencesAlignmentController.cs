@@ -44,7 +44,7 @@
         {
             db = new LibiadaWebEntities();
             subsequenceExtractor = new SubsequenceExtractor(db);
-            characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
 
         /// <summary>

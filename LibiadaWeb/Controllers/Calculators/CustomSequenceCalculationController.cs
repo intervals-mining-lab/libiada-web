@@ -40,7 +40,7 @@
         public CustomSequenceCalculationController() : base(TaskType.CustomSequenceCalculation)
         {
             db = new LibiadaWebEntities();
-            characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+            characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
 
         /// <summary>
@@ -51,11 +51,10 @@
         /// </returns>
         public ActionResult Index()
         {
-            var viewDataHelper = new ViewDataHelper(db);
-
+            var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
-                    { "characteristicTypes", viewDataHelper.GetFullCharacteristicTypes() }
+                    { "characteristicTypes", fullCharacteristicRepository.GetFullCharacteristicTypes() }
                 });
 
             return View();

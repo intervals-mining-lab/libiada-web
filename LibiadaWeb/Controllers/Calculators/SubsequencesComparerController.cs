@@ -117,7 +117,7 @@
                     var commonSequenceRepository = new CommonSequenceRepository(db);
                     Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
 
-                    var sequencesCharacteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+                    var sequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
@@ -144,13 +144,12 @@
                         matterNames[n] = parentSequences[parentSequenceIds[n]].MatterName;
                     }
 
-                    var subsequencesCharacteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+                    var subsequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
                     characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicLinkId);
-
-                    var viewDataHelper = new ViewDataHelper(db);
-
-                    localCharacteristicsType = viewDataHelper.GetFullCharacteristicTypes();
+             
+                    var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
+                    localCharacteristicsType = fullCharacteristicRepository.GetFullCharacteristicTypes();
                 }
 
                 // cycle through matters; first level of characteristics array

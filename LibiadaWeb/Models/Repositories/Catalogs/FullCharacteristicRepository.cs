@@ -17,13 +17,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         private readonly List<FullCharacteristicLink> fullCharacteristicLinks;
 
+        private static FullCharacteristicRepository instance;
+
+        private static object syncRoot = new object();
+
+        public static FullCharacteristicRepository Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            using (var db = new LibiadaWebEntities())
+                            {
+                                instance = new FullCharacteristicRepository(db);
+                            }
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public FullCharacteristicRepository(LibiadaWebEntities db)
+        private FullCharacteristicRepository(LibiadaWebEntities db)
         {
             fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
         }

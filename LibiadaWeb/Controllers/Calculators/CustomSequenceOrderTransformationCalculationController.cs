@@ -47,7 +47,7 @@
 
             var data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", viewDataHelper.GetFullCharacteristicTypes() }
+                    { "characteristicTypes", FullCharacteristicRepository.Instance.GetFullCharacteristicTypes() }
                 };
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
@@ -106,7 +106,7 @@
             return Action(() =>
             {
                 var db = new LibiadaWebEntities();
-                var characteristicTypeLinkRepository = new FullCharacteristicRepository(db);
+                var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];
                 var names = new string[sequencesCount];

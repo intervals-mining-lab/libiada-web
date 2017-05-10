@@ -6,7 +6,6 @@ using LibiadaWeb.Models.CalculatorsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
@@ -17,13 +16,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         private readonly List<BinaryCharacteristicLink> binaryCharacteristicLinks;
 
+        private static BinaryCharacteristicRepository instance;
+
+        private static object syncRoot = new object();
+
+        public static BinaryCharacteristicRepository Instance
+        {
+            get
+            {
+                if(instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if(instance == null)
+                        {
+                            using (var db = new LibiadaWebEntities())
+                            {
+                                instance = new BinaryCharacteristicRepository(db);
+                            }
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public BinaryCharacteristicRepository(LibiadaWebEntities db)
+        private BinaryCharacteristicRepository(LibiadaWebEntities db)
         {
             binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToList();
         }

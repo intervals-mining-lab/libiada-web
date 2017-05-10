@@ -17,13 +17,39 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </summary>
         private readonly List<AccordanceCharacteristicLink> accordanceCharacteristicLinks;
 
+        private static AccordanceCharacteristicRepository instance;
+
+        private static object syncRoot = new object();
+
+        public static AccordanceCharacteristicRepository Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                        {
+                            using (var db = new LibiadaWebEntities())
+                            {
+                                instance = new AccordanceCharacteristicRepository(db);
+                            }
+                        }
+                    }
+                }
+
+                return instance;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public AccordanceCharacteristicRepository(LibiadaWebEntities db)
+        private AccordanceCharacteristicRepository(LibiadaWebEntities db)
         {
             accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToList();
         }
