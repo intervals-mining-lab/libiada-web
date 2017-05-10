@@ -167,16 +167,20 @@
             switch (characteristicsType)
             {
                 case CharacteristicCategory.Full:
-                    characteristicTypes = GetFullCharacteristicTypes();
+                    var fullCharacteristicRepository = new FullCharacteristicRepository(db);
+                    characteristicTypes = fullCharacteristicRepository.GetFullCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Congeneric:
-                    characteristicTypes = GetCongenericCharacteristicTypes();
+                    var congenericCharacteristicRepository = new CongenericCharacteristicRepository(db);
+                    characteristicTypes = congenericCharacteristicRepository.GetCongenericCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Accordance:
-                    characteristicTypes = GetAccordanceCharacteristicTypes();
+                    var accordanceCharacteristicRepository = new AccordanceCharacteristicRepository(db);
+                    characteristicTypes = accordanceCharacteristicRepository.GetAccordanceCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Binary:
-                    characteristicTypes = GetBinaryCharacteristicTypes();
+                    var binaryCharacteristicRepository = new BinaryCharacteristicRepository(db);
+                    characteristicTypes = binaryCharacteristicRepository.GetBinaryCharacteristicTypes();
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(characteristicsType), (int)characteristicsType, typeof(CharacteristicCategory));
@@ -226,157 +230,6 @@
             return data;
         }
 
-        /// <summary>
-        /// Gets characteristics types.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="List{CharacteristicData}"/>.
-        /// </returns>
-        public List<CharacteristicData> GetFullCharacteristicTypes()
-        {
-            var characteristicTypeRepository = new FullCharacteristicRepository(db);
-
-            Link[] links;
-            FullCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
-            {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<FullCharacteristic>();
-            }
-            else
-            {
-                links = Aliases.UserAvailableLinks.ToArray();
-                characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
-            }
-
-            var result = new List<CharacteristicData>();
-
-            foreach (FullCharacteristic characteristic in characteristics)
-            {
-                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.FullCharacteristicLinks
-                    .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
-                    .ToList();
-
-                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The get congeneric characteristic types.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="List{CharacteristicData}"/>.
-        /// </returns>
-        public List<CharacteristicData> GetCongenericCharacteristicTypes()
-        {
-            var characteristicTypeRepository = new CongenericCharacteristicRepository(db);
-
-            Link[] links;
-            CongenericCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
-            {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<CongenericCharacteristic>();
-            }
-            else
-            {
-                links = Aliases.UserAvailableLinks.ToArray();
-                characteristics = Aliases.UserAvailableCongenericCharacteristics.ToArray();
-            }
-
-            var result = new List<CharacteristicData>();
-
-            foreach (CongenericCharacteristic characteristic in characteristics)
-            {
-                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.CongenericCharacteristicLinks
-                    .Where(cl => cl.CongenericCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
-                    .ToList();
-
-                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The get accordance characteristic types.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="List{CharacteristicData}"/>.
-        /// </returns>
-        public List<CharacteristicData> GetAccordanceCharacteristicTypes()
-        {
-            var characteristicTypeRepository = new AccordanceCharacteristicRepository(db);
-
-            Link[] links;
-            AccordanceCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
-            {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<AccordanceCharacteristic>();
-            }
-            else
-            {
-                links = Aliases.UserAvailableLinks.ToArray();
-                characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
-            }
-
-            var result = new List<CharacteristicData>();
-
-            foreach (AccordanceCharacteristic characteristic in characteristics)
-            {
-                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.AccordanceCharacteristicLinks
-                    .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
-                    .ToList();
-
-                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// The get binary characteristic types.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="List{CharacteristicData}"/>.
-        /// </returns>
-        public List<CharacteristicData> GetBinaryCharacteristicTypes()
-        {
-            var characteristicTypeRepository = new BinaryCharacteristicRepository(db);
-
-            Link[] links;
-            BinaryCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
-            {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<BinaryCharacteristic>();
-            }
-            else
-            {
-                links = Aliases.UserAvailableLinks.ToArray();
-                characteristics = Aliases.UserAvailableBinaryCharacteristics.ToArray();
-            }
-
-            var result = new List<CharacteristicData>();
-
-            foreach (BinaryCharacteristic characteristic in characteristics)
-            {
-                List<LinkSelectListItem> linkSelectListItems = characteristicTypeRepository.BinaryCharacteristicLinks
-                    .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
-                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
-                    .ToList();
-
-                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
-            }
-
-            return result;
-        }
 
         /// <summary>
         /// Fills matters data dictionary.

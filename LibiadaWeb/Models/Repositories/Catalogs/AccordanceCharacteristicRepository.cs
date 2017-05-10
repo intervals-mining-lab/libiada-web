@@ -1,6 +1,8 @@
 ﻿using LibiadaCore.Core;
 using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
 using LibiadaCore.Extensions;
+using LibiadaWeb.Models.Account;
+using LibiadaWeb.Models.CalculatorsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -99,6 +101,44 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
+        }
+
+
+
+        /// <summary>
+        /// The get accordance characteristic types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetAccordanceCharacteristicTypes()
+        {
+            Link[] links;
+            AccordanceCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<AccordanceCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableAccordanceCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (AccordanceCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = accordanceCharacteristicLinks
+                    .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
         }
 
         /// <summary>

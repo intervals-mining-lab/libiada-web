@@ -1,6 +1,8 @@
 ﻿using LibiadaCore.Core;
 using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 using LibiadaCore.Extensions;
+using LibiadaWeb.Models.Account;
+using LibiadaWeb.Models.CalculatorsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -100,6 +102,45 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
             return string.Join("  ", characteristicType, link);
         }
+
+
+        /// <summary>
+        /// Gets characteristics types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetFullCharacteristicTypes()
+        {
+            Link[] links;
+            FullCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<FullCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableFullCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (FullCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = fullCharacteristicLinks
+                    .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
+        }
+
+
 
         /// <summary>
         /// The dispose.

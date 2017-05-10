@@ -1,6 +1,8 @@
 ﻿using LibiadaCore.Core;
 using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
 using LibiadaCore.Extensions;
+using LibiadaWeb.Models.Account;
+using LibiadaWeb.Models.CalculatorsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -133,6 +135,44 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
 
             return string.Join("  ", characteristicType, link);
+        }
+
+
+
+        /// <summary>
+        /// The get binary characteristic types.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List{CharacteristicData}"/>.
+        /// </returns>
+        public List<CharacteristicData> GetBinaryCharacteristicTypes()
+        {
+            Link[] links;
+            BinaryCharacteristic[] characteristics;
+            if (UserHelper.IsAdmin())
+            {
+                links = ArrayExtensions.ToArray<Link>();
+                characteristics = ArrayExtensions.ToArray<BinaryCharacteristic>();
+            }
+            else
+            {
+                links = Aliases.UserAvailableLinks.ToArray();
+                characteristics = Aliases.UserAvailableBinaryCharacteristics.ToArray();
+            }
+
+            var result = new List<CharacteristicData>();
+
+            foreach (BinaryCharacteristic characteristic in characteristics)
+            {
+                List<LinkSelectListItem> linkSelectListItems = binaryCharacteristicLinks
+                    .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
+                    .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
+                    .ToList();
+
+                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+            }
+
+            return result;
         }
 
         /// <summary>
