@@ -1,7 +1,7 @@
 ﻿function SubsequencesDistributionController(data) {
     "use strict";
 
-    function subsequencesDistribution($scope) {
+    function subsequencesDistribution($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         function matterCheckChanged(matter) {
@@ -28,6 +28,34 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         }
 
+        function getVisibleMatters() {
+            var visibleMatters = $scope.matters;
+            visibleMatters = filterFilter(visibleMatters, { Text: $scope.searchMatter });
+            visibleMatters = filterFilter(visibleMatters, { Description: $scope.searchDescription });
+            visibleMatters = filterFilter(visibleMatters, { Group: $scope.group || "" });
+            visibleMatters = filterFilter(visibleMatters, { SequenceType: $scope.sequenceType || "" });
+            visibleMatters = filterFilter(visibleMatters, function (value) {
+                return !$scope.flags.showRefSeqOnly || $scope.nature !== "1" || value.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+            });
+
+            return visibleMatters;
+        }
+
+        function selectAllVisibleMatters() {
+            getVisibleMatters().forEach(function (matter) {
+                matter.Selected = true;
+            });
+        }
+
+        function unselectAllVisibleMatters() {
+            getVisibleMatters().forEach(function (matter) {
+                matter.Selected = false;
+            });
+        }
+
+        $scope.getVisibleMatters = getVisibleMatters;
+        $scope.selectAllVisibleMatters = selectAllVisibleMatters;
+        $scope.unselectAllVisibleMatters = unselectAllVisibleMatters;
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
         $scope.addCharacteristic = addCharacteristic;
@@ -49,5 +77,5 @@
         $scope.characteristics = [];
     }
 
-    angular.module("SubsequencesDistribution", []).controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
+    angular.module("SubsequencesDistribution", []).controller("SubsequencesDistributionCtrl", ["$scope", "filterFilter", subsequencesDistribution]);
 }

@@ -1,7 +1,7 @@
 ﻿function SequencesAlignmentController(data) {
     "use strict";
 
-    function sequencesAlignment($scope) {
+    function sequencesAlignment($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
         function matterCheckChanged(matter) {
@@ -31,6 +31,34 @@
             $scope.filters.splice($scope.filters.indexOf(filter), 1);
         }
 
+        function getVisibleMatters() {
+            var visibleMatters = $scope.matters;
+            visibleMatters = filterFilter(visibleMatters, { Text: $scope.searchMatter });
+            visibleMatters = filterFilter(visibleMatters, { Description: $scope.searchDescription });
+            visibleMatters = filterFilter(visibleMatters, { Group: $scope.group || "" });
+            visibleMatters = filterFilter(visibleMatters, { SequenceType: $scope.sequenceType || "" });
+            visibleMatters = filterFilter(visibleMatters, function (value) {
+                return !$scope.flags.showRefSeqOnly || $scope.nature !== "1" || value.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+            });
+
+            return visibleMatters;
+        }
+
+        function selectAllVisibleMatters() {
+            getVisibleMatters().forEach(function (matter) {
+                matter.Selected = true;
+            });
+        }
+
+        function unselectAllVisibleMatters() {
+            getVisibleMatters().forEach(function (matter) {
+                matter.Selected = false;
+            });
+        }
+
+        $scope.getVisibleMatters = getVisibleMatters;
+        $scope.selectAllVisibleMatters = selectAllVisibleMatters;
+        $scope.unselectAllVisibleMatters = unselectAllVisibleMatters;
         $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableMattersSelect = disableMattersSelect;
         $scope.disableSubmit = disableSubmit;
@@ -58,5 +86,5 @@
         };
     }
 
-    angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);
+    angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", "filterFilter", sequencesAlignment]);
 }
