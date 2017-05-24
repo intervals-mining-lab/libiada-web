@@ -59,6 +59,7 @@
     <Compile Include="FeatureTests.cs" />
     <Compile Include="GroupTests.cs" />
     <Compile Include="LanguageTests.cs" />
+    <Compile Include="Models\Repositories\Sequences\MatterRepositoryTests.cs" />
     <Compile Include="NatureTests.cs" />
     <Compile Include="NotationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

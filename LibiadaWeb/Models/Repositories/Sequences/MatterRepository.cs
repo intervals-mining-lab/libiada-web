@@ -134,7 +134,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <exception cref="Exception">
         /// Thrown if all name fields are contradictory.
         /// </exception>
-        public string ExtractMatterName(GenBankMetadata metadata)
+        public static string ExtractMatterName(GenBankMetadata metadata)
         {
             string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
             string commonName = metadata.Source.CommonName;
@@ -185,46 +185,66 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <param name="matter">
         /// The matter.
         /// </param>
-        public void FillGroupAndSequenceType(Matter matter)
+        public static void FillGroupAndSequenceType(Matter matter)
         {
             string name = matter.Name.ToLower();
-            if (name.Contains("mitochondrion") || name.Contains("mitochondrial"))
+            switch (matter.Nature)
             {
-                matter.Group = Group.Eucariote;
-                matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
-                                    : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
-                                    : SequenceType.MitochondrionGenome;
+                case Nature.Literature:
+                    matter.Group = Group.ClassicalLiterature;
+                    matter.SequenceType = SequenceType.CompleteText;
+                    break;
+                case Nature.Music:
+                    matter.Group = Group.ClassicalMusic;
+                    matter.SequenceType = SequenceType.CompleteMusicalComposition;
+                    break;
+                case Nature.MeasurementData:
+                    matter.Group = Group.ObservationData;
+                    matter.SequenceType = SequenceType.CompleteNumericSequence;
+                    break;
+                case Nature.Genetic:
+                    if (name.Contains("mitochondrion") || name.Contains("mitochondrial"))
+                    {
+                        matter.Group = Group.Eucariote;
+                        matter.SequenceType = name.Contains("16s") ? SequenceType.Mitochondrion16SRRNA
+                                            : name.Contains("plasmid") ? SequenceType.MitochondrialPlasmid
+                                            : SequenceType.MitochondrionGenome;
+                    }
+                    else if (name.Contains("18s"))
+                    {
+                        matter.Group = Group.Eucariote;
+                        matter.SequenceType = SequenceType.RRNA18S;
+                    }
+                    else if (name.Contains("chloroplast"))
+                    {
+                        matter.Group = Group.Eucariote;
+                        matter.SequenceType = SequenceType.ChloroplastGenome;
+                    }
+                    else if (name.Contains("plastid") || name.Contains("apicoplast"))
+                    {
+                        matter.Group = Group.Eucariote;
+                        matter.SequenceType = SequenceType.Plastid;
+                    }
+                    else if (name.Contains("plasmid"))
+                    {
+                        matter.Group = Group.Bacteria;
+                        matter.SequenceType = SequenceType.Plasmid;
+                    }
+                    else if (name.Contains("16s"))
+                    {
+                        matter.Group = Group.Bacteria;
+                        matter.SequenceType = SequenceType.RRNA16S;
+                    }
+                    else
+                    {
+                        matter.Group = name.Contains("virus") ? Group.Virus : Group.Bacteria;
+                        matter.SequenceType = SequenceType.CompleteGenome;
+                    }
+                    break;
+                default:
+                    throw new System.ComponentModel.InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
             }
-            else if (name.Contains("18s"))
-            {
-                matter.Group = Group.Eucariote;
-                matter.SequenceType = SequenceType.RRNA18S;
-            }
-            else if (name.Contains("chloroplast"))
-            {
-                matter.Group = Group.Eucariote;
-                matter.SequenceType = SequenceType.ChloroplastGenome;
-            }
-            else if (name.Contains("plastid") || name.Contains("apicoplast"))
-            {
-                matter.Group = Group.Eucariote;
-                matter.SequenceType = SequenceType.Plastid;
-            }
-            else if (name.Contains("plasmid"))
-            {
-                matter.Group = Group.Bacteria;
-                matter.SequenceType = SequenceType.Plasmid;
-            }
-            else if (name.Contains("16s"))
-            {
-                matter.Group = Group.Bacteria;
-                matter.SequenceType = SequenceType.RRNA16S;
-            }
-            else
-            {
-                matter.Group = name.Contains("virus") ? Group.Virus : Group.Bacteria;
-                matter.SequenceType = SequenceType.CompleteGenome;
-            }
+            
         }
 
         /// <summary>
