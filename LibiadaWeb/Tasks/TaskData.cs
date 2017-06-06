@@ -11,9 +11,9 @@
     public class TaskData
     {
         /// <summary>
-        /// The id.
+        /// The task type.
         /// </summary>
-        public int Id;
+        public readonly TaskType TaskType;
 
         /// <summary>
         /// The user id.
@@ -24,6 +24,11 @@
         /// The user name.
         /// </summary>
         public readonly string UserName;
+
+        /// <summary>
+        /// The id.
+        /// </summary>
+        public int Id;
 
         /// <summary>
         /// The task state.
@@ -59,9 +64,13 @@
         /// <param name="userId">
         /// Creator id.
         /// </param>
-        public TaskData(int id, string userId)
+        /// <param name="taskType">
+        /// The task Type.
+        /// </param>
+        public TaskData(int id, string userId, TaskType taskType)
         {
             Id = id;
+            TaskType = taskType;
             UserId = userId;
             UserName = HttpContext.Current.User.Identity.Name;
             Created = DateTime.Now;

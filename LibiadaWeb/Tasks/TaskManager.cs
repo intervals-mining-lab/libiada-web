@@ -52,7 +52,7 @@
                         Description = task.TaskData.TaskState.GetDisplayValue(),
                         Status = task.TaskData.TaskState,
                         UserId = Convert.ToInt32(task.TaskData.UserId),
-                        TaskType = task.TaskType
+                        TaskType = task.TaskData.TaskType
                     };
 
                     db.CalculationTask.Add(dbTask);
@@ -268,7 +268,7 @@
                         CalculationTask dbTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
 
                         dbTask.Completed = DateTime.Now;
-                        dbTask.Result = JsonConvert.SerializeObject(result["data"]);
+                        //dbTask.Result = JsonConvert.SerializeObject(result["data"]);
                         db.Entry(dbTask).State = EntityState.Modified;
                         db.SaveChanges();
 

@@ -59,7 +59,7 @@
             var tasks = TaskManager.GetTasksData().Select(t => new
             {
                 t.Id,
-                DisplayName = t.TaskState.GetDisplayValue(),
+                DisplayName = t.TaskType.GetDisplayValue(),
                 Created = t.Created.ToString(OutputFormats.DateTimeFormat),
                 Started = t.Started?.ToString(OutputFormats.DateTimeFormat),
                 Completed = t.Completed?.ToString(OutputFormats.DateTimeFormat),

@@ -15,11 +15,6 @@
         public readonly Func<Dictionary<string, object>> Action;
 
         /// <summary>
-        /// The task type.
-        /// </summary>
-        public readonly TaskType TaskType;
-
-        /// <summary>
         /// The task data.
         /// </summary>
         public readonly TaskData TaskData;
@@ -51,9 +46,8 @@
         /// </param>
         public Task(int id, Func<Dictionary<string, object>> action, string userId, TaskType taskType)
         {
-            TaskType = taskType;
             Action = action;
-            TaskData = new TaskData(id, userId);
+            TaskData = new TaskData(id, userId, taskType);
         }
 
         /// <summary>
@@ -71,16 +65,12 @@
         /// <param name="thread">
         /// The thread.
         /// </param>
-        /// <param name="taskType">
-        /// The task Type.
-        /// </param>
-        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, Thread thread, TaskType taskType)
+        private Task(Func<Dictionary<string, object>> action, TaskData taskData, Dictionary<string, object> result, Thread thread)
         {
             Action = action;
             TaskData = taskData.Clone();
             Result = result;
             Thread = thread;
-            TaskType = taskType;
         }
 
         /// <summary>
@@ -91,7 +81,7 @@
         /// </returns>
         public Task Clone()
         {
-            return new Task(Action, TaskData, Result, Thread, TaskType);
+            return new Task(Action, TaskData, Result, Thread);
         }
     }
 }
