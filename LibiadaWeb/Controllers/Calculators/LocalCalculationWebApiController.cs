@@ -55,7 +55,7 @@
 
                 Subsequence dbSubsequence = context.Subsequence.Single(s => s.Id == subsequenceId);
 
-                chain = subsequenceExtractor.ExtractChains(new[] { dbSubsequence }).Single();
+                chain = subsequenceExtractor.ExtractChains(dbSubsequence.SequenceId, new[] { dbSubsequence }).Single();
             }
 
             CutRule cutRule = new SimpleCutRule(chain.GetLength(), step, windowSize);

@@ -41,15 +41,18 @@
         /// <summary>
         /// The extract chains.
         /// </summary>
+        /// <param name="sequenceId">
+        /// The sequence Id.
+        /// </param>
         /// <param name="subsequences">
         /// The subsequences.
         /// </param>
         /// <returns>
         /// The <see cref="List{Chain}"/>.
         /// </returns>
-        public Chain[] ExtractChains(Subsequence[] subsequences)
+        public Chain[] ExtractChains(long sequenceId, Subsequence[] subsequences)
         {
-            string parentChain = commonSequenceRepository.ToLibiadaBaseChain(subsequences[0].SequenceId).ToString();
+            string parentChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId).ToString();
             var sourceSequence = new Sequence(Alphabets.DNA, parentChain);
             var result = new Chain[subsequences.Length];
 

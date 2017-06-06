@@ -65,7 +65,7 @@
                 subsequenceData = dbSubsequences.Select(s => new SubsequenceData(s)).ToArray();
 
                 // converting to libiada sequences
-                sequences = subsequenceExtractor.ExtractChains(dbSubsequences);
+                sequences = subsequenceExtractor.ExtractChains(parentSequenceId, dbSubsequences);
 
                 subsequenceIds = dbSubsequences.Select(s => s.Id).ToArray();
                 dbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(subsequenceIds);

@@ -226,7 +226,7 @@
 
             Subsequence[] subsequences = subsequenceExtractor.GetSubsequences(parentSequenceId, features);
 
-            Chain[] sequences = subsequenceExtractor.ExtractChains(subsequences);
+            Chain[] sequences = subsequenceExtractor.ExtractChains(parentSequenceId, subsequences);
 
             FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);

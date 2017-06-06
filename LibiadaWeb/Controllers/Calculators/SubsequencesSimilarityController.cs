@@ -115,7 +115,7 @@
                 long firstMatterId = matterIds[0];
                 long firstParentSequenceId = db.CommonSequence.Single(c => c.MatterId == firstMatterId && c.Notation == notation).Id;
                 Subsequence[] firstSequenceSubsequences = subsequenceExtractor.GetSubsequences(firstParentSequenceId, features);
-                Chain[] firstSequences = subsequenceExtractor.ExtractChains(firstSequenceSubsequences);
+                Chain[] firstSequences = subsequenceExtractor.ExtractChains(firstParentSequenceId, firstSequenceSubsequences);
                 List<double> firstSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, firstSequences, firstSequenceSubsequences);
                 Dictionary<long, AttributeValue[]> firstDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(firstSequenceSubsequences.Select(s => s.Id));
                 var firstSequenceAttributes = new List<AttributeValue[]>();
@@ -133,7 +133,7 @@
                 long secondMatterId = matterIds[1];
                 long secondParentSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 Subsequence[] secondSequenceSubsequences = subsequenceExtractor.GetSubsequences(secondParentSequenceId, features);
-                Chain[] secondSequences = subsequenceExtractor.ExtractChains(secondSequenceSubsequences);
+                Chain[] secondSequences = subsequenceExtractor.ExtractChains(secondParentSequenceId, secondSequenceSubsequences);
                 List<double> secondSequenceCharacteristics = CalculateCharacteristic(characteristicLinkId, secondSequences, secondSequenceSubsequences);
                 Dictionary<long, AttributeValue[]> secondDbSubsequencesAttributes = sequenceAttributeRepository.GetAttributes(secondSequenceSubsequences.Select(s => s.Id));
                 var secondSequenceAttributes = new List<AttributeValue[]>();
