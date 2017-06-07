@@ -14,12 +14,12 @@
             $scope.accessionsField = "";
         }
 
-        function deleteCharacteristic(accession) {
+        function deleteId(accession) {
             $scope.accessions.splice($scope.accessions.indexOf(accession), 1);
         }
 
         $scope.parseIds = parseIds;
-        $scope.deleteCharacteristic = deleteCharacteristic;
+        $scope.deleteId = deleteId;
 
         $scope.accessions = [];
     }
