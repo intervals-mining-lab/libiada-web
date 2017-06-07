@@ -33,7 +33,7 @@
                 var result = new
                 {
                     task.Id,
-                    DisplayName = task.TaskState.GetDisplayValue(),
+                    DisplayName = task.TaskType.GetDisplayValue(),
                     Created = task.Created.ToString(OutputFormats.DateTimeFormat),
                     Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
                     Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
