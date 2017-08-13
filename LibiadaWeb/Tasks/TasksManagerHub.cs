@@ -71,7 +71,6 @@
             });
 
             return JsonConvert.SerializeObject(tasks.ToArray());
-
         }
     }
 }

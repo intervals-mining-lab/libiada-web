@@ -50,7 +50,7 @@
                                   .Select(c => c.MatterId).ToList();
 
                 var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.GetMattersData(1, 1, m => matterIds.Contains(m.Id), "Import");
+                var data = viewDataHelper.FillViewData(1, 1, m => matterIds.Contains(m.Id), "Import");
                 data.Add("nature", (byte)Nature.Genetic);
                 ViewBag.data = JsonConvert.SerializeObject(data);
                 return View();

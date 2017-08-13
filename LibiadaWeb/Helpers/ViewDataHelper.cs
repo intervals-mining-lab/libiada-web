@@ -7,20 +7,13 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
-    using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-    using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
-    using LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators;
-    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models;
     using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
-
-    using Link = LibiadaCore.Core.Link;
 
     /// <summary>
     /// Class filling data for ViewBag.
@@ -92,12 +85,64 @@
         }
 
         /// <summary>
+        /// Fills view data.
+        /// </summary>
+        /// <param name="minSelectedMatters">
+        /// The minimum selected matters.
+        /// </param>
+        /// <param name="maxSelectedMatters">
+        /// The maximum selected matters.
+        /// </param>
+        /// <param name="filter">
+        /// The matters filter.
+        /// </param>
+        /// <param name="submitName">
+        /// The submit button name.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary{String, Object}"/>.
+        /// </returns>
+        public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter, string submitName)
+        {
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, filter, submitName);
+
+            IEnumerable<SelectListItem> natures;
+            IEnumerable<Notation> notations;
+            IEnumerable<SequenceType> sequenceTypes;
+            IEnumerable<Group> groups;
+
+            if (UserHelper.IsAdmin())
+            {
+                natures = EnumHelper.GetSelectList(typeof(Nature));
+                notations = ArrayExtensions.ToArray<Notation>();
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+                groups = ArrayExtensions.ToArray<Group>();
+            }
+            else
+            {
+                natures = new[] { Nature.Genetic }.ToSelectList();
+                notations = new[] { Notation.Nucleotides };
+                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            }
+
+            data.Add("natures", natures);
+            data.Add("notations", notations.ToSelectListWithNature());
+            data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
+            data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
+            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
+            data.Add("groups", groups.ToSelectListWithNature(true));
+
+            return data;
+        }
+
+        /// <summary>
         /// The fill calculation data.
         /// </summary>
-        /// <param name="minimumSelectedMatters">
+        /// <param name="minSelectedMatters">
         /// The minimum Selected Matters.
         /// </param>
-        /// <param name="maximumSelectedMatters">
+        /// <param name="maxSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
         /// <param name="submitName">
@@ -106,9 +151,9 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
+        public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
-            Dictionary<string, object> data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => true, submitName);
+            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true, submitName);
 
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
@@ -146,10 +191,10 @@
         /// <param name="characteristicsType">
         /// The characteristics category.
         /// </param>
-        /// <param name="minimumSelectedMatters">
+        /// <param name="minSelectedMatters">
         /// The minimum Selected Matters.
         /// </param>
-        /// <param name="maximumSelectedMatters">
+        /// <param name="maxSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
         /// <param name="submitName">
@@ -158,9 +203,9 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
+        public Dictionary<string, object> FillViewData(CharacteristicCategory characteristicsType, int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
-            Dictionary<string, object> data = FillViewData(minimumSelectedMatters, maximumSelectedMatters, submitName);
+            Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
 
             List<CharacteristicData> characteristicTypes;
 
@@ -190,10 +235,10 @@
         /// <summary>
         /// Fills subsequences calculation data dictionary.
         /// </summary>
-        /// <param name="minimumSelectedMatters">
+        /// <param name="minSelectedMatters">
         /// The minimum Selected Matters.
         /// </param>
-        /// <param name="maximumSelectedMatters">
+        /// <param name="maxSelectedMatters">
         /// The maximum Selected Matters.
         /// </param>
         /// <param name="submitName">
@@ -202,12 +247,12 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> FillSubsequencesViewData(int minimumSelectedMatters, int maximumSelectedMatters, string submitName)
+        public Dictionary<string, object> FillSubsequencesViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
             var sequenceIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
             var matterIds = db.DnaSequence.Where(c => sequenceIds.Contains(c.Id)).Select(c => c.MatterId).ToList();
 
-            var data = GetMattersData(minimumSelectedMatters, maximumSelectedMatters, m => matterIds.Contains(m.Id), submitName);
+            var data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
             var geneticNotations = ArrayExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
             var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
@@ -226,14 +271,13 @@
             return data;
         }
 
-
         /// <summary>
         /// Fills matters data dictionary.
         /// </summary>
-        /// <param name="minimumSelectedMatters">
+        /// <param name="minSelectedMatters">
         /// The minimum selected matters.
         /// </param>
-        /// <param name="maximumSelectedMatters">
+        /// <param name="maxSelectedMatters">
         /// The maximum selected matters.
         /// </param>
         /// <param name="filter">
@@ -245,14 +289,14 @@
         /// <returns>
         /// The <see cref="Dictionary{String, Object}"/>.
         /// </returns>
-        public Dictionary<string, object> GetMattersData(int minimumSelectedMatters, int maximumSelectedMatters, Func<Matter, bool> filter, string submitName)
+        private Dictionary<string, object> GetMattersData(int minSelectedMatters, int maxSelectedMatters, Func<Matter, bool> filter, string submitName)
         {
             return new Dictionary<string, object>
                 {
-                    { "minimumSelectedMatters", minimumSelectedMatters },
-                    { "maximumSelectedMatters", maximumSelectedMatters },
+                    { "minimumSelectedMatters", minSelectedMatters },
+                    { "maximumSelectedMatters", maxSelectedMatters },
                     { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "radiobuttonsForMatters", maximumSelectedMatters == 1 && minimumSelectedMatters == 1 },
+                    { "radiobuttonsForMatters", maxSelectedMatters == 1 && minSelectedMatters == 1 },
                     { "submitName", submitName }
                 };
         }

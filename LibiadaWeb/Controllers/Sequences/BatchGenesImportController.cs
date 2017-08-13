@@ -36,13 +36,16 @@
             using (var db = new LibiadaWebEntities())
             {
                 var sequencesWithSubsequencesIds = db.Subsequence.Select(s => s.SequenceId).Distinct();
-                var matterIds = db.DnaSequence.Include(c => c.Matter).Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
+
+                // TODO: Move list of sequenceTypes into separate entity
+                var matterIds = db.DnaSequence.Include(c => c.Matter)
+                    .Where(c => !string.IsNullOrEmpty(c.RemoteId) && !sequencesWithSubsequencesIds.Contains(c.Id)
                                 && (c.Matter.SequenceType == SequenceType.CompleteGenome
                                     || c.Matter.SequenceType == SequenceType.MitochondrionGenome
                                     || c.Matter.SequenceType == SequenceType.Plasmid)).Select(c => c.MatterId).ToArray();
 
                 var viewDataHelper = new ViewDataHelper(db);
-                var data = viewDataHelper.GetMattersData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
+                var data = viewDataHelper.FillViewData(1, int.MaxValue, m => matterIds.Contains(m.Id), "Import");
                 data.Add("nature", (byte)Nature.Genetic);
                 ViewBag.data = JsonConvert.SerializeObject(data);
             }
