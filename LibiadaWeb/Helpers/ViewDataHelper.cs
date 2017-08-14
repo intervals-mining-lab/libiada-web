@@ -137,7 +137,7 @@
         }
 
         /// <summary>
-        /// The fill calculation data.
+        /// Fills view data.
         /// </summary>
         /// <param name="minSelectedMatters">
         /// The minimum Selected Matters.
@@ -153,36 +153,7 @@
         /// </returns>
         public Dictionary<string, object> FillViewData(int minSelectedMatters, int maxSelectedMatters, string submitName)
         {
-            Dictionary<string, object> data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => true, submitName);
-
-            IEnumerable<SelectListItem> natures;
-            IEnumerable<Notation> notations;
-            IEnumerable<SequenceType> sequenceTypes;
-            IEnumerable<Group> groups;
-
-            if (UserHelper.IsAdmin())
-            {
-                natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = ArrayExtensions.ToArray<Notation>();
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
-                groups = ArrayExtensions.ToArray<Group>();
-            }
-            else
-            {
-                natures = new[] { Nature.Genetic }.ToSelectList();
-                notations = new[] { Notation.Nucleotides };
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
-                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
-            }
-
-            data.Add("natures", natures);
-            data.Add("notations", notations.ToSelectListWithNature());
-            data.Add("languages", EnumHelper.GetSelectList(typeof(Language)));
-            data.Add("translators", EnumHelper.GetSelectList(typeof(Translator)));
-            data.Add("sequenceTypes", sequenceTypes.ToSelectListWithNature(true));
-            data.Add("groups", groups.ToSelectListWithNature(true));
-
-            return data;
+            return FillViewData(minSelectedMatters, maxSelectedMatters, m => true, submitName);
         }
 
         /// <summary>
