@@ -2066,4 +2066,23 @@ CREATE INDEX ix_subsequence_sequence_id_brin ON subsequence USING brin (chain_id
 CREATE INDEX ix_subsequence_sequence_id_feature_brin ON subsequence USING brin (chain_id, feature);
 CREATE INDEX ix_subsequence_feature_brin ON subsequence USING brin (feature);
 
+-- 15.08.2017
+-- Add indexes of new type to characteristics values tables.
+
+CREATE INDEX ix_full_characteristic_sequence_id_brin ON full_characteristic USING brin (chain_id);
+CREATE INDEX ix_full_characteristic_characteristic_link_id_brin ON full_characteristic USING brin (characteristic_link_id);
+
+CREATE INDEX ix_congeneric_characteristic_sequence_id_brin ON congeneric_characteristic USING brin (chain_id);
+CREATE INDEX ix_congeneric_characteristic_characteristic_link_id_brin ON congeneric_characteristic USING brin (characteristic_link_id);
+CREATE INDEX ix_congeneric_characteristic_sequence_id_element_id_brin ON congeneric_characteristic USING brin (chain_id, element_id);
+CREATE INDEX ix_congeneric_characteristic_sequence_id_characteristic_link_id_brin ON congeneric_characteristic USING brin (chain_id, characteristic_link_id);
+
+CREATE INDEX ix_accordance_characteristic_first_sequence_id_brin ON accordance_characteristic USING brin (first_chain_id);
+CREATE INDEX ix_accordance_characteristic_second_sequence_id_brin ON accordance_characteristic USING brin (second_chain_id);
+CREATE INDEX ix_accordance_characteristic_sequences_ids_brin ON accordance_characteristic USING brin (first_chain_id, second_chain_id);
+CREATE INDEX ix_accordance_characteristic_sequences_ids_characteristic_link_id_brin ON accordance_characteristic USING brin (first_chain_id, second_chain_id, characteristic_link_id);
+
+CREATE INDEX ix_binary_characteristic_first_sequence_id_brin ON binary_characteristic USING brin (chain_id);
+CREATE INDEX ix_binary_characteristic_sequence_id_characteristic_link_id_brin ON binary_characteristic USING brin (chain_id, characteristic_link_id);
+
 COMMIT;
