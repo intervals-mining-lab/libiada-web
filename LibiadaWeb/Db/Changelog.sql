@@ -2059,4 +2059,11 @@ ALTER TABLE accordance_characteristic ALTER COLUMN characteristic_link_id TYPE s
 
 ALTER TABLE task ALTER COLUMN status SET NOT NULL;
 
+-- 15.08.2017
+-- Add indexes of new type to subsequence table.
+
+CREATE INDEX ix_subsequence_sequence_id_brin ON subsequence USING brin (chain_id);
+CREATE INDEX ix_subsequence_sequence_id_feature_brin ON subsequence USING brin (chain_id, feature);
+CREATE INDEX ix_subsequence_feature_brin ON subsequence USING brin (feature);
+
 COMMIT;
