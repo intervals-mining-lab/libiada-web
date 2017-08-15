@@ -2085,4 +2085,9 @@ CREATE INDEX ix_accordance_characteristic_sequences_ids_characteristic_link_id_b
 CREATE INDEX ix_binary_characteristic_first_sequence_id_brin ON binary_characteristic USING brin (chain_id);
 CREATE INDEX ix_binary_characteristic_sequence_id_characteristic_link_id_brin ON binary_characteristic USING brin (chain_id, characteristic_link_id);
 
+-- 15.08.2017
+-- Add indexes of new type to other tables.
+CREATE INDEX ix_sequence_attribute_sequence_id_brin ON chain_attribute USING brin (chain_id);
+CREATE INDEX ix_position_subsequence_id_brin ON "position" USING brin (subsequence_id);
+
 COMMIT;
