@@ -6,7 +6,6 @@ using LibiadaWeb.Models.CalculatorsData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {

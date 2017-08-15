@@ -73,8 +73,15 @@
                     var statuses = new string[matterIds.Length];
                     using (var db = new LibiadaWebEntities())
                     {
-                        matterNames = db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToArray();
-                        var parentSequences = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId)).OrderBy(c => c.MatterId).ToArray();
+                        matterNames = db.Matter
+                                        .Where(m => matterIds.Contains(m.Id))
+                                        .OrderBy(m => m.Id)
+                                        .Select(m => m.Name)
+                                        .ToArray();
+                        var parentSequences = db.DnaSequence
+                                                .Where(c => matterIds.Contains(c.MatterId))
+                                                .OrderBy(c => c.MatterId)
+                                                .ToArray();
 
                         for (int i = 0; i < parentSequences.Length; i++)
                         {
@@ -85,6 +92,7 @@
                                 {
                                     subsequenceImporter.CreateSubsequences();
                                 }
+
                                 int featuresCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id
                                                                               && s.Feature != Feature.NonCodingSequence);
                                 int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == parentSequence.Id

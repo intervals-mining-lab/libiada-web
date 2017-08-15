@@ -3,7 +3,6 @@
     using System;
 
     using LibiadaWeb.Controllers;
-    using LibiadaWeb.Tasks;
 
     /// <summary>
     /// Task class attribute.

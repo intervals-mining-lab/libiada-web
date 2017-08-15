@@ -1,6 +1,5 @@
 namespace LibiadaWeb.Models.Repositories.Catalogs
 {
-    using System;
     using System.Linq;
 
     using LibiadaCore.Extensions;

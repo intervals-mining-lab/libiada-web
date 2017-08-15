@@ -10,8 +10,6 @@
 
     using LibiadaWeb.Models.Account;
 
-    using Newtonsoft.Json;
-
     /// <summary>
     /// The task manager.
     /// </summary>
