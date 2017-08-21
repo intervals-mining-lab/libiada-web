@@ -100,7 +100,7 @@
             bool sort,
             bool theoretical)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var characteristics = new List<List<List<KeyValuePair<int, double>>>>();
                 var theoreticalRanks = new List<List<List<double>>>();

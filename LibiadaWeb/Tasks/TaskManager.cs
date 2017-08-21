@@ -8,7 +8,9 @@
 
     using LibiadaCore.Extensions;
 
-    using LibiadaWeb.Models.Account;
+    using LibiadaWeb.Helpers;
+
+    using Newtonsoft.Json;
 
     /// <summary>
     /// The task manager.
@@ -16,9 +18,9 @@
     public static class TaskManager
     {
         /// <summary>
-        /// Machine core count.
+        /// Machine cores count.
         /// </summary>
-        private static readonly int CoreCount = Environment.ProcessorCount;
+        private static readonly int CoresCount = Environment.ProcessorCount;
 
         /// <summary>
         /// Gets the tasks.
@@ -31,37 +33,41 @@
         private static int taskCounter;
 
         /// <summary>
-        /// The add task.
+        /// Adds new task to db and tasks list.
         /// </summary>
-        /// <param name="task">
-        /// The task.
+        /// <param name="action">
+        /// The action.
         /// </param>
-        public static void AddTask(Task task)
+        /// <param name="taskType">
+        /// The task Type.
+        /// </param>
+        public static void CreateTask(Func<Dictionary<string, object>> action, TaskType taskType)
         {
-            lock (Tasks)
+            CalculationTask databaseTask;
+            Task task;
+
+            using (var db = new LibiadaWebEntities())
             {
-                Tasks.Add(task);
-                using (var db = new LibiadaWebEntities())
+                databaseTask = new CalculationTask
                 {
-                    var dbTask = new CalculationTask
-                    {
-                        Created = DateTime.Now,
-                        Started = task.TaskData.Started,
-                        Description = task.TaskData.TaskState.GetDisplayValue(),
-                        Status = task.TaskData.TaskState,
-                        UserId = Convert.ToInt32(task.TaskData.UserId),
-                        TaskType = task.TaskData.TaskType
-                    };
+                    Created = DateTime.Now,
+                    Description = taskType.GetDisplayValue(),
+                    Status = TaskState.InQueue,
+                    UserId = Convert.ToInt32(AccountHelper.GetUserId()),
+                    TaskType = taskType
+                };
 
-                    db.CalculationTask.Add(dbTask);
-                    db.SaveChanges();
-                    task.TaskData.Id = (int)dbTask.Id;
-                }
-
-                TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
+                db.CalculationTask.Add(databaseTask);
+                db.SaveChanges();
             }
 
+            lock (Tasks)
+            {
+                task = new Task(databaseTask.Id, action, databaseTask.UserId, taskType);
+                Tasks.Add(task);
+            }
 
+            TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
             ManageTasks();
         }
 
@@ -85,9 +91,9 @@
             {
                 List<Task> tasks = Tasks;
 
-                if (!UserHelper.IsAdmin())
+                if (!AccountHelper.IsAdmin())
                 {
-                    tasks = tasks.Where(t => t.TaskData.UserId == UserHelper.GetUserId()).ToList();
+                    tasks = tasks.Where(t => t.TaskData.UserId == AccountHelper.GetUserId()).ToList();
                 }
 
                 while (tasks.Count > 0)
@@ -120,7 +126,7 @@
             lock (Tasks)
             {
                 Task task = Tasks.Single(t => t.TaskData.Id == id);
-                if (task.TaskData.UserId == UserHelper.GetUserId() || UserHelper.IsAdmin())
+                if (task.TaskData.UserId == AccountHelper.GetUserId() || AccountHelper.IsAdmin())
                 {
                     lock (task)
                     {
@@ -148,9 +154,9 @@
             {
                 List<Task> tasks = Tasks;
 
-                if (!UserHelper.IsAdmin())
+                if (!AccountHelper.IsAdmin())
                 {
-                    tasks = tasks.Where(t => t.TaskData.UserId == UserHelper.GetUserId()).ToList();
+                    tasks = tasks.Where(t => t.TaskData.UserId == AccountHelper.GetUserId()).ToList();
                 }
 
                 return tasks.Select(t => t.TaskData.Clone());
@@ -175,7 +181,7 @@
 
                 lock (task)
                 {
-                    if (!UserHelper.IsAdmin() && task.TaskData.UserId != UserHelper.GetUserId())
+                    if (!AccountHelper.IsAdmin() && task.TaskData.UserId != AccountHelper.GetUserId())
                     {
                         throw new AccessViolationException("You do not have access to current task");
                     }
@@ -206,7 +212,7 @@
                     }
                 }
 
-                while (activeTasks < CoreCount)
+                while (activeTasks < CoresCount)
                 {
                     activeTasks++;
                     Task taskToStart = Tasks.FirstOrDefault(t => t.TaskData.TaskState == TaskState.InQueue);
@@ -232,29 +238,31 @@
         /// <param name="task">
         /// The task.
         /// </param>
-        private static void Action(Task task)
+        private static void ExecuteTaskAction(Task task)
         {
             try
             {
-                Func<Dictionary<string, object>> method;
+                Func<Dictionary<string, object>> actionToCall;
                 lock (task)
                 {
-                    method = task.Action;
+                    actionToCall = task.Action;
                     task.TaskData.Started = DateTime.Now;
-                    ///////////
                     using (var db = new LibiadaWebEntities())
                     {
                         CalculationTask dbTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
 
                         dbTask.Started = DateTime.Now;
+                        dbTask.Status = TaskState.InProgress;
                         db.Entry(dbTask).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                    ///////////
+
                     TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
 
-                Dictionary<string, object> result = method();
+                // executing action
+                Dictionary<string, object> result = actionToCall();
+
                 lock (task)
                 {
                     task.TaskData.Completed = DateTime.Now;
@@ -263,14 +271,23 @@
                     task.TaskData.TaskState = TaskState.Completed;
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask dbTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
 
-                        dbTask.Completed = DateTime.Now;
-                        //dbTask.Result = JsonConvert.SerializeObject(result["data"]);
-                        db.Entry(dbTask).State = EntityState.Modified;
+                        databaseTask.Completed = DateTime.Now;
+                        if (result.ContainsKey("data"))
+                        {
+                            databaseTask.Result = JsonConvert.SerializeObject(result["data"]);
+                        }
+
+                        if (result.ContainsKey("additionalData"))
+                        {
+                            databaseTask.AdditionalResultData = JsonConvert.SerializeObject(result["additionalData"]);
+                        }
+
+                        db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
-
                     }
+
                     TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
@@ -309,7 +326,7 @@
         /// <param name="id">
         /// The id.
         /// </param>
-        private static void StartTask(int id)
+        private static void StartTask(long id)
         {
             Task taskToStart;
             lock (Tasks)
@@ -317,9 +334,7 @@
                 taskToStart = Tasks.Single(t => t.TaskData.Id == id);
             }
 
-            Action<Task> action = Action;
-
-            var thread = new Thread(() => action(taskToStart));
+            var thread = new Thread(() => ExecuteTaskAction(taskToStart));
             taskToStart.Thread = thread;
             thread.Start();
         }

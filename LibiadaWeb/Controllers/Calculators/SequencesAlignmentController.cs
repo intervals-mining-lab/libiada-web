@@ -102,7 +102,7 @@
             bool cyclicShift,
             bool sort)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 if (matterIds.Length != 2)
                 {

@@ -105,7 +105,7 @@
             string maxDifference,
             string excludeType)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 if (matterIds.Length != 2)
                 {

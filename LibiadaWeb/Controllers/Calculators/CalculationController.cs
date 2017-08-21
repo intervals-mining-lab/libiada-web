@@ -87,7 +87,7 @@
             bool complementary,
             uint? rotationLength)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var sequencesCharacteristics = new SequenceCharacteristics[matterIds.Length];
                 var characteristicNames = new string[characteristicLinkIds.Length];

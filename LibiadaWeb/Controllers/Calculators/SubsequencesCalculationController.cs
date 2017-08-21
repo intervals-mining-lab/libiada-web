@@ -64,7 +64,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var attributeValues = new List<AttributeValue>();
                 var sequencesData = new SequenceData[matterIds.Length];

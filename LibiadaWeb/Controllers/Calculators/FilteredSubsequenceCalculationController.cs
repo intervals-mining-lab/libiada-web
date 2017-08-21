@@ -67,7 +67,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long[] matterIds, short[] characteristicLinkIds, Feature[] features, string[] filters)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new Dictionary<string, SubsequenceData[]>(matterIds.Length);

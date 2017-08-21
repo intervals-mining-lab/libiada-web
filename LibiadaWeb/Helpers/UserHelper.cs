@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models.Account
+﻿namespace LibiadaWeb.Helpers
 {
     using System.Web;
 
@@ -7,7 +7,7 @@
     /// <summary>
     /// Envelop for some user methods.
     /// </summary>
-    public static class UserHelper
+    public static class AccountHelper
     {
         /// <summary>
         /// Gets id of current user.
@@ -15,9 +15,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public static string GetUserId()
+        public static int GetUserId()
         {
-            return HttpContext.Current.User.Identity.GetUserId();
+            return HttpContext.Current.User.Identity.GetUserId<int>();
         }
 
         /// <summary>

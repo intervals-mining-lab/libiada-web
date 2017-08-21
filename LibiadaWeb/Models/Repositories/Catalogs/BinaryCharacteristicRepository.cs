@@ -1,34 +1,58 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
-using LibiadaCore.Extensions;
-using LibiadaWeb.Models.Account;
-using LibiadaWeb.Models.CalculatorsData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LibiadaWeb.Models.Repositories.Catalogs
+﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
-    public class BinaryCharacteristicRepository : IDisposable
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators;
+    using LibiadaCore.Extensions;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+
+    /// <summary>
+    /// The binary characteristic repository.
+    /// </summary>
+    public class BinaryCharacteristicRepository
     {
+        /// <summary>
+        /// The sync root.
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// The instance.
+        /// </summary>
+        private static BinaryCharacteristicRepository instance;
+
         /// <summary>
         /// The binary characteristic links.
         /// </summary>
         private readonly List<BinaryCharacteristicLink> binaryCharacteristicLinks;
 
-        private static BinaryCharacteristicRepository instance;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        private BinaryCharacteristicRepository(LibiadaWebEntities db)
+        {
+            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToList();
+        }
 
-        private static object syncRoot = new object();
-
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
         public static BinaryCharacteristicRepository Instance
         {
             get
             {
-                if(instance == null)
+                if (instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
-                        if(instance == null)
+                        if (instance == null)
                         {
                             using (var db = new LibiadaWebEntities())
                             {
@@ -43,26 +67,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        private BinaryCharacteristicRepository(LibiadaWebEntities db)
-        {
-            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToList();
-        }
-
-        /// <summary>
         /// Gets the binary characteristic links.
         /// </summary>
-        public IEnumerable<BinaryCharacteristicLink> BinaryCharacteristicLinks
-        {
-            get
-            {
-                return binaryCharacteristicLinks.ToArray();
-            }
-        }
+        public IEnumerable<BinaryCharacteristicLink> BinaryCharacteristicLinks => binaryCharacteristicLinks.ToArray();
 
         /// <summary>
         /// The create binary characteristic.
@@ -102,7 +109,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get link for binary characteristic.
         /// </summary>
         /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
+        /// The characteristic link id.
         /// </param>
         /// <returns>
         /// The <see cref="Link"/>.
@@ -116,7 +123,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get binary characteristic type.
         /// </summary>
         /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
+        /// The characteristic link id.
         /// </param>
         /// <returns>
         /// The <see cref="BinaryCharacteristic"/>.
@@ -130,7 +137,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get binary characteristic name.
         /// </summary>
         /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
+        /// The characteristic link id.
         /// </param>
         /// <param name="notation">
         /// The notation.
@@ -147,19 +154,19 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The get binary characteristic name.
         /// </summary>
         /// <param name="characteristicLinkId">
-        /// The characteristic type link id.
+        /// The characteristic link id.
         /// </param>
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
         public string GetBinaryCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetBinaryCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetBinaryCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForBinaryCharacteristic(characteristicLinkId);
-            var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
+            Link link = GetLinkForBinaryCharacteristic(characteristicLinkId);
+            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
-            return string.Join("  ", characteristicType, link);
+            return string.Join("  ", characteristicTypeName, linkName);
         }
 
 
@@ -174,7 +181,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             Link[] links;
             BinaryCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
+            if (AccountHelper.IsAdmin())
             {
                 links = ArrayExtensions.ToArray<Link>();
                 characteristics = ArrayExtensions.ToArray<BinaryCharacteristic>();
@@ -198,13 +205,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
         }
     }
 }

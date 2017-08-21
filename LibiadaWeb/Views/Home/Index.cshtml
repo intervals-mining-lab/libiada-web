@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 @{
     ViewBag.Title = "Libiada";
 }
@@ -13,9 +13,9 @@
     <div class="row">
         <div class="col-md-4">
             <h2>Data</h2>
-            @Html.ActionLink(UserHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
+            @Html.ActionLink(AccountHelper.IsAdmin() ? "Matters" : "Sequences", "Index", "Matters")
             <br />
-            @if (UserHelper.IsAdmin())
+            @if (AccountHelper.IsAdmin())
             {
                 @Html.ActionLink("Sequences", "Index", "CommonSequences")
                 <br />
@@ -42,7 +42,7 @@
             <br />
             @Html.ActionLink("Genes map (Subsequences distribution)", "Index", "SubsequencesDistribution")
             <br />
-            @if (UserHelper.IsAdmin())
+            @if (AccountHelper.IsAdmin())
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
                 <br />

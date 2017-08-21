@@ -89,7 +89,7 @@
             bool localFile,
             HttpPostedFileBase[] file)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sourceSequences = new string[sequencesCount];

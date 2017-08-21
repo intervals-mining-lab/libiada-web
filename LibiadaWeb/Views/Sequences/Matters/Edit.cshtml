@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 @model Matter
 
 @{
@@ -19,7 +19,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
 
-        @if (UserHelper.IsAdmin())
+        @if (AccountHelper.IsAdmin())
         {
             <div class="form-group">
                 @Html.LabelFor(model => model.Nature, new { @class = "control-label col-md-2" })

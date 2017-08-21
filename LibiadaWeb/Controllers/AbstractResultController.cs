@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Tasks;
 
     /// <summary>
@@ -47,7 +46,7 @@
                     throw new Exception("No data.");
                 }
 
-                foreach (var key in result.Keys)
+                foreach (string key in result.Keys)
                 {
                     ViewData[key] = key == "data" || key == "additionalData" ? "{}" : result[key];
                 }
@@ -68,7 +67,7 @@
         }
 
         /// <summary>
-        /// The action method.
+        /// Creates new task in task manager.
         /// </summary>
         /// <param name="action">
         /// The action.
@@ -76,12 +75,9 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        protected ActionResult Action(Func<Dictionary<string, object>> action)
+        protected ActionResult CreateTask(Func<Dictionary<string, object>> action)
         {
-            int taskId = TaskManager.GetId();
-            var task = new Task(taskId, action, UserHelper.GetUserId(), taskType);
-
-            TaskManager.AddTask(task);
+            TaskManager.CreateTask(action, taskType);
             return RedirectToAction("Index", "TaskManager");
         }
     }

@@ -18,7 +18,7 @@
         /// <summary>
         /// The user id.
         /// </summary>
-        public readonly string UserId;
+        public readonly int UserId;
 
         /// <summary>
         /// The user name.
@@ -28,7 +28,7 @@
         /// <summary>
         /// The id.
         /// </summary>
-        public int Id;
+        public readonly long Id;
 
         /// <summary>
         /// The task state.
@@ -67,7 +67,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public TaskData(int id, string userId, TaskType taskType)
+        public TaskData(long id, int userId, TaskType taskType)
         {
             Id = id;
             TaskType = taskType;

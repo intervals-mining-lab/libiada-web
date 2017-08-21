@@ -115,7 +115,7 @@
             double distanceWeight = 1,
             double bandwidth = 0)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var characteristicNames = new List<string>();
                 var mattersCharacteristics = new object[matterIds.Length];

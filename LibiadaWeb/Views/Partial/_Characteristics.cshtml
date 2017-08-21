@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 
 <br />
 <div ng-repeat="characteristic in characteristics">
@@ -17,7 +17,7 @@
             <input type="hidden" name="characteristicLinkIds" ng-value="characteristic.link.CharacteristicLinkId"/>
         </div>
     </div>
-    @if (UserHelper.IsAdmin())
+    @if (AccountHelper.IsAdmin())
     {
         <div class="form-group" ng-hide="hideNotation">
             <label class="control-label col-md-2" for="notation">Notation:</label>

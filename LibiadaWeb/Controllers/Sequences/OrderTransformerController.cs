@@ -84,7 +84,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId, Link[] transformationLinkIds, int[] transformationIds, int iterationsCount)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
                 var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);

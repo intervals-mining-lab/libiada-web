@@ -1,32 +1,56 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
-using LibiadaCore.Extensions;
-using LibiadaWeb.Models.Account;
-using LibiadaWeb.Models.CalculatorsData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LibiadaWeb.Models.Repositories.Catalogs
+﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
-    public class AccordanceCharacteristicRepository : IDisposable
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators;
+    using LibiadaCore.Extensions;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+
+    /// <summary>
+    /// The accordance characteristic repository.
+    /// </summary>
+    public class AccordanceCharacteristicRepository
     {
+        /// <summary>
+        /// The sync root.
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// The instance.
+        /// </summary>
+        private static AccordanceCharacteristicRepository instance;
+
         /// <summary>
         /// The accordance characteristic links.
         /// </summary>
         private readonly List<AccordanceCharacteristicLink> accordanceCharacteristicLinks;
 
-        private static AccordanceCharacteristicRepository instance;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        private AccordanceCharacteristicRepository(LibiadaWebEntities db)
+        {
+            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToList();
+        }
 
-        private static object syncRoot = new object();
-
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
         public static AccordanceCharacteristicRepository Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
                         if (instance == null)
                         {
@@ -40,17 +64,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
 
                 return instance;
             }
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        private AccordanceCharacteristicRepository(LibiadaWebEntities db)
-        {
-            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToList();
         }
 
         /// <summary>
@@ -120,12 +133,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public string GetAccordanceCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetAccordanceCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetAccordanceCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForAccordanceCharacteristic(characteristicLinkId);
-            var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
+            Link link = GetLinkForAccordanceCharacteristic(characteristicLinkId);
+            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
-            return string.Join("  ", characteristicType, link);
+            return string.Join("  ", characteristicTypeName, linkName);
         }
 
 
@@ -140,7 +153,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             Link[] links;
             AccordanceCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
+            if (AccountHelper.IsAdmin())
             {
                 links = ArrayExtensions.ToArray<Link>();
                 characteristics = ArrayExtensions.ToArray<AccordanceCharacteristic>();
@@ -164,13 +177,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
         }
     }
 }

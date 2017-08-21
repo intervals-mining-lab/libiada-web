@@ -100,7 +100,7 @@
             Translator? translator,
             string calculationType)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 if (matterIds.Length != 2)
                 {

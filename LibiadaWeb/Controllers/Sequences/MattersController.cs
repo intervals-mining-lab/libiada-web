@@ -11,7 +11,7 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models.Account;
+    using LibiadaWeb.Helpers;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -41,7 +41,7 @@
             {
                 List<Matter> matter = await db.Matter.ToListAsync();
 
-                if (!UserHelper.IsAdmin())
+                if (!AccountHelper.IsAdmin())
                 {
                     matter = matter.Where(m => m.Nature == Nature.Genetic).ToList();
                 }
@@ -132,7 +132,6 @@
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit([Bind(Include = "Id,Name,Nature,Description,Group,SequenceType")] Matter matter)
         {
-
             if (ModelState.IsValid)
             {
                 using (var db = new LibiadaWebEntities())

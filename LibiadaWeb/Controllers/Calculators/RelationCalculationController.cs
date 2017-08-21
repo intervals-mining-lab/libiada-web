@@ -109,7 +109,7 @@
             bool frequencyFilter,
             int frequencyCount)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var characteristics = new List<BinaryCharacteristicValue>();
                 var elements = new List<Element>();

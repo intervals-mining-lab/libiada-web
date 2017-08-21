@@ -70,7 +70,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 Dictionary<string, object> result;
 

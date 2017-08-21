@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 
 @{
     ViewBag.Title = "Libiada task manager";
@@ -15,7 +15,7 @@
                 <th>
                     #
                 </th>
-                @if (UserHelper.IsAdmin())
+                @if (AccountHelper.IsAdmin())
                 {
                     <th>
                         User
@@ -55,7 +55,7 @@
             </tr>
             <tr ng-repeat="task in tasks" ng-cloak ng-class="calculateStatusClass(task.TaskState)">
                 <td ng-bind="$index + 1" />
-                @if (UserHelper.IsAdmin())
+                @if (AccountHelper.IsAdmin())
                 {
                     <td aria-label="{{task.UserName}}" title="{{task.UserName}}" ng-bind="task.UserId" />
                 }

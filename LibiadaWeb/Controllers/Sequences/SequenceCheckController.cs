@@ -56,7 +56,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long matterId, string[] file)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var myFile = Request.Files[0];
 

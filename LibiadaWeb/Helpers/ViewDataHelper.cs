@@ -10,7 +10,6 @@
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Extensions;
-    using LibiadaWeb.Models.Account;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
@@ -57,7 +56,7 @@
             IEnumerable<SequenceType> sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
             IEnumerable<Group> groups = ArrayExtensions.ToArray<Group>();
 
-            if (UserHelper.IsAdmin())
+            if (AccountHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = ArrayExtensions.ToArray<Notation>();
@@ -111,7 +110,7 @@
             IEnumerable<SequenceType> sequenceTypes;
             IEnumerable<Group> groups;
 
-            if (UserHelper.IsAdmin())
+            if (AccountHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
                 notations = ArrayExtensions.ToArray<Notation>();

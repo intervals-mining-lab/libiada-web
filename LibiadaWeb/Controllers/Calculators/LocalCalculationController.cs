@@ -118,7 +118,7 @@
             bool growingWindow,
             bool autocorrelation)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var partNames = new List<string>[matterIds.Length];

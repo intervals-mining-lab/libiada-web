@@ -24,6 +24,7 @@
     <UseGlobalApplicationHostFile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -325,7 +326,7 @@
     <Compile Include="Measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Account\UserHelper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\ViewDataHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
     <Compile Include="Helpers\DbHelper.cs" />

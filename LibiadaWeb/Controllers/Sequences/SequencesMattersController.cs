@@ -89,7 +89,7 @@
             bool? partial,
             int? precision)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var db = new LibiadaWebEntities();
                 try

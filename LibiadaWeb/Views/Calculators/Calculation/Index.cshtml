@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 
 @{
     ViewBag.Title = "Characteristics calculation";
@@ -18,7 +18,7 @@
         @Html.Partial("_NatureSelect")
         @Html.Partial("_MattersTable")
         @Html.Partial("_Characteristics")
-        @if (UserHelper.IsAdmin())
+        @if (AccountHelper.IsAdmin())
         {
             <div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
                 <div class="col-md-offset-2 col-md-10">

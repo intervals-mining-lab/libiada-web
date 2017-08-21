@@ -1,32 +1,56 @@
-﻿using LibiadaCore.Core;
-using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
-using LibiadaCore.Extensions;
-using LibiadaWeb.Models.Account;
-using LibiadaWeb.Models.CalculatorsData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LibiadaWeb.Models.Repositories.Catalogs
+﻿namespace LibiadaWeb.Models.Repositories.Catalogs
 {
-    public class FullCharacteristicRepository : IDisposable
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LibiadaCore.Core;
+    using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaCore.Extensions;
+
+    using LibiadaWeb.Helpers;
+    using LibiadaWeb.Models.CalculatorsData;
+
+    /// <summary>
+    /// The full characteristic repository.
+    /// </summary>
+    public class FullCharacteristicRepository
     {
+        /// <summary>
+        /// The sync root.
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// The instance.
+        /// </summary>
+        private static FullCharacteristicRepository instance;
+
         /// <summary>
         /// The characteristic type links.
         /// </summary>
         private readonly List<FullCharacteristicLink> fullCharacteristicLinks;
 
-        private static FullCharacteristicRepository instance;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
+        /// </summary>
+        /// <param name="db">
+        /// The db.
+        /// </param>
+        private FullCharacteristicRepository(LibiadaWebEntities db)
+        {
+            fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
+        }
 
-        private static object syncRoot = new object();
-
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
         public static FullCharacteristicRepository Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    lock (syncRoot)
+                    lock (SyncRoot)
                     {
                         if (instance == null)
                         {
@@ -43,26 +67,9 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicLinkRepository"/> class.
-        /// </summary>
-        /// <param name="db">
-        /// The db.
-        /// </param>
-        private FullCharacteristicRepository(LibiadaWebEntities db)
-        {
-            fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
-        }
-
-        /// <summary>
         /// Gets the characteristic type links.
         /// </summary>
-        public IEnumerable<FullCharacteristicLink> FullCharacteristicLinks
-        {
-            get
-            {
-                return fullCharacteristicLinks.ToArray();
-            }
-        }
+        public IEnumerable<FullCharacteristicLink> FullCharacteristicLinks => fullCharacteristicLinks.ToArray();
 
         /// <summary>
         /// The get libiada link.
@@ -77,7 +84,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
-        
+
         /// <summary>
         /// The get characteristic type.
         /// </summary>
@@ -85,13 +92,13 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// The characteristic type link id.
         /// </param>
         /// <returns>
-        /// The <see cref="CharacteristicType"/>.
+        /// The <see cref="FullCharacteristic"/>.
         /// </returns>
         public FullCharacteristic GetFullCharacteristic(int characteristicLinkId)
         {
             return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).FullCharacteristic;
         }
-        
+
         /// <summary>
         /// The get characteristic name.
         /// </summary>
@@ -120,12 +127,12 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public string GetFullCharacteristicName(int characteristicLinkId)
         {
-            var characteristicType = GetFullCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetFullCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            var databaseLink = GetLinkForFullCharacteristic(characteristicLinkId);
-            var link = databaseLink == Link.NotApplied ? string.Empty : databaseLink.GetDisplayValue();
+            Link link = GetLinkForFullCharacteristic(characteristicLinkId);
+            string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
-            return string.Join("  ", characteristicType, link);
+            return string.Join("  ", characteristicTypeName, linkName);
         }
 
 
@@ -139,7 +146,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         {
             Link[] links;
             FullCharacteristic[] characteristics;
-            if (UserHelper.IsAdmin())
+            if (AccountHelper.IsAdmin())
             {
                 links = ArrayExtensions.ToArray<Link>();
                 characteristics = ArrayExtensions.ToArray<FullCharacteristic>();
@@ -163,15 +170,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
             }
 
             return result;
-        }
-
-
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
         }
     }
 }

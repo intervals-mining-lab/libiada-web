@@ -1,4 +1,4 @@
-﻿@using LibiadaWeb.Models.Account
+﻿@using LibiadaWeb.Helpers
 
 @{
     ViewBag.Title = "Subsequences comparer";
@@ -35,7 +35,7 @@
                 <input type="hidden" name="subsequencesCharacteristicLinkId" ng-value="subsequencesCharacteristic.link.CharacteristicLinkId" />
             </div>
         </div>
-        @if (UserHelper.IsAdmin())
+        @if (AccountHelper.IsAdmin())
         {
             <div class="form-group">
                 <label class="control-label col-md-2" for="subsequencesCharacteristicNotation">Notation:</label>

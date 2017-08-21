@@ -66,7 +66,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long[] matterIds)
         {
-            return Action(() =>
+            return CreateTask(() =>
                 {
                     string[] matterNames;
                     var results = new string[matterIds.Length];

@@ -1,5 +1,5 @@
 ﻿@using LibiadaCore.Extensions
-@using LibiadaWeb.Models.Account
+@using LibiadaWeb.Helpers
 @model IEnumerable<Matter>
 
 @{
@@ -34,7 +34,7 @@
         <th>
             @Html.DisplayNameFor(model => model.SequenceType)
         </th>
-        @if (UserHelper.IsAdmin())
+        @if (AccountHelper.IsAdmin())
         {
             <th></th>
         }
@@ -63,7 +63,7 @@
             <td>
                 @item.SequenceType.GetDisplayValue()
             </td>
-            @if (UserHelper.IsAdmin())
+            @if (AccountHelper.IsAdmin())
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |

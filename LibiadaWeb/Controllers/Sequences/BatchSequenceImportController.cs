@@ -60,7 +60,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(string[] accessions, bool importGenes)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var result = new MatterImportResult[accessions.Length];
 

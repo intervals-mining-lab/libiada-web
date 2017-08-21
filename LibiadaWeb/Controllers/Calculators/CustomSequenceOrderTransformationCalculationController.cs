@@ -103,9 +103,8 @@
             bool localFile,
             HttpPostedFileBase[] file)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
-                var db = new LibiadaWebEntities();
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                 var sequences = new string[sequencesCount];

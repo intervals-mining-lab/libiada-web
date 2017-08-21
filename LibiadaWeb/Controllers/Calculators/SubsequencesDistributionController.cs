@@ -70,7 +70,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(long[] matterIds, short characteristicLinkId, short[] characteristicLinkIds, Feature[] features)
         {
-            return Action(() =>
+            return CreateTask(() =>
                 {
                     matterIds = matterIds.OrderBy(m => m).ToArray();
 

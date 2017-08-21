@@ -25,11 +25,6 @@
     public class CustomSequenceCalculationController : AbstractResultController
     {
         /// <summary>
-        /// The db.
-        /// </summary>
-        private readonly LibiadaWebEntities db;
-
-        /// <summary>
         /// The characteristic type link repository.
         /// </summary>
         private readonly FullCharacteristicRepository characteristicTypeLinkRepository;
@@ -39,7 +34,6 @@
         /// </summary>
         public CustomSequenceCalculationController() : base(TaskType.CustomSequenceCalculation)
         {
-            db = new LibiadaWebEntities();
             characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
         }
 
@@ -82,7 +76,7 @@
         [ValidateAntiForgeryToken]
         public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, HttpPostedFileBase[] file)
         {
-            return Action(() =>
+            return CreateTask(() =>
                 {
                     int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
                     var sequences = new string[sequencesCount];

@@ -44,7 +44,7 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        public Task(int id, Func<Dictionary<string, object>> action, string userId, TaskType taskType)
+        public Task(long id, Func<Dictionary<string, object>> action, int userId, TaskType taskType)
         {
             Action = action;
             TaskData = new TaskData(id, userId, taskType);

@@ -96,7 +96,7 @@
             double characteristicValueTo,
             string[] filters)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new SubsequenceData[matterIds.Length][];

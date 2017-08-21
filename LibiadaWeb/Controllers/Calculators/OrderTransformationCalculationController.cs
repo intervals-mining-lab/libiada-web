@@ -98,7 +98,7 @@
             Language[] languages,
             Translator?[] translators)
         {
-            return Action(() =>
+            return CreateTask(() =>
             {
                 var db = new LibiadaWebEntities();
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
