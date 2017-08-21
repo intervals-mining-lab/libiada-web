@@ -2090,4 +2090,23 @@ CREATE INDEX ix_binary_characteristic_sequence_id_characteristic_link_id_brin ON
 CREATE INDEX ix_sequence_attribute_sequence_id_brin ON chain_attribute USING brin (chain_id);
 CREATE INDEX ix_position_subsequence_id_brin ON "position" USING brin (subsequence_id);
 
+
+-- 21.08.2017
+-- Add additional result data column to task table.
+-- Also fixing some naming errors.
+
+ALTER TABLE task ADD COLUMN additional_result_data json;
+
+COMMENT ON COLUMN chain.remote_db IS 'Remote db from which sequence is downloaded.';
+ALTER TABLE fmotiv DROP CONSTRAINT chk_remote_id;
+ALTER TABLE fmotiv RENAME remote_db_id TO remote_db;
+COMMENT ON COLUMN fmotiv.remote_db IS 'Remote database from which sequence is downloaded.';
+ALTER TABLE fmotiv ADD CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL);
+
+ALTER TABLE measure DROP CONSTRAINT chk_remote_id;
+ALTER TABLE measure RENAME remote_db_id TO remote_db;
+COMMENT ON COLUMN measure.remote_db IS 'Remote database from which sequence is downloaded.';
+ALTER TABLE measure ADD CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL);
+
+
 COMMIT;

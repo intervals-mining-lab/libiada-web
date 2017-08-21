@@ -366,6 +366,7 @@
           <Property Name="description" Type="text" Nullable="false" />
           <Property Name="status" Type="int2" Nullable="false" />
           <Property Name="result" Type="text" />
+          <Property Name="additional_result_data" Type="text" />
           <Property Name="user_id" Type="int4" Nullable="false" />
           <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
           <Property Name="started" Type="timestamptz" Precision="7" />
@@ -1459,6 +1460,7 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="LibiadaWebModel.TaskState" Nullable="false" />
           <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AdditionalResultData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
           <Property Name="Started" Type="DateTimeOffset" Precision="7" />
@@ -2469,6 +2471,7 @@
                 <ScalarProperty Name="UserId" ColumnName="user_id" />
                 <ScalarProperty Name="Status" ColumnName="status" />
                 <ScalarProperty Name="Result" ColumnName="result" />
+                <ScalarProperty Name="AdditionalResultData" ColumnName="additional_result_data" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="TaskType" ColumnName="task_type" />
                 <ScalarProperty Name="Id" ColumnName="id" />
