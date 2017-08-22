@@ -326,7 +326,7 @@
     <Compile Include="Measure.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\UserHelper.cs" />
+    <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Helpers\ViewDataHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
     <Compile Include="Helpers\DbHelper.cs" />
