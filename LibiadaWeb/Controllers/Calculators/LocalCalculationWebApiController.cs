@@ -60,17 +60,17 @@
 
             CutRule cutRule = new SimpleCutRule(chain.GetLength(), step, windowSize);
 
-            CutRuleIterator iter = cutRule.GetIterator();
+            CutRuleIterator iterator = cutRule.GetIterator();
 
             var fragments = new List<Chain>();
 
-            while (iter.Next())
+            while (iterator.Next())
             {
-                var fragment = new Chain(iter.GetEndPosition() - iter.GetStartPosition());
+                var fragment = new Chain(iterator.GetEndPosition() - iterator.GetStartPosition());
 
-                for (int k = 0; iter.GetStartPosition() + k < iter.GetEndPosition(); k++)
+                for (int k = 0; iterator.GetStartPosition() + k < iterator.GetEndPosition(); k++)
                 {
-                    fragment.Set(chain[iter.GetStartPosition() + k], k);
+                    fragment.Set(chain[iterator.GetStartPosition() + k], k);
                 }
 
                 fragments.Add(fragment);

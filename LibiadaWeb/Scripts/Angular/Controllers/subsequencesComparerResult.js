@@ -160,6 +160,7 @@
                 });
         }
 
+        // draws local charactetistics linechart
         function drawLocalCharacteristics(firstSubsequenceId, secondSubsequenceId, index) {
             var legendData = [
                 { id: firstSubsequenceId, name: "First", visible: true, points: [] },
@@ -321,7 +322,7 @@
                         });
                 });
 
-            // draw legend colored rectangles
+            // draw legend's colored rectangles
             legend.append("rect")
                 .attr("width", 15)
                 .attr("height", 15)
@@ -330,7 +331,7 @@
                 .style("stroke-width", 4)
                 .attr("transform", "translate(0, -" + $scope.legendHeight + ")");
 
-            // draw legend text
+            // draw legend's text
             legend.append("text")
                 .attr("x", 24)
                 .attr("y", 9)

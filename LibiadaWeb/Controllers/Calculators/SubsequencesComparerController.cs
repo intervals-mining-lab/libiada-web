@@ -147,7 +147,7 @@
                     var subsequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
                     characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicLinkId);
-             
+
                     var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
                     localCharacteristicsType = fullCharacteristicRepository.GetFullCharacteristicTypes();
                 }

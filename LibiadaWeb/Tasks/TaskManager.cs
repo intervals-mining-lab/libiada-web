@@ -28,9 +28,25 @@
         private static readonly List<Task> Tasks = new List<Task>();
 
         /// <summary>
-        /// The created tasks counter.
+        /// Initializes static members of the <see cref="TaskManager"/> class.
         /// </summary>
-        private static int taskCounter;
+        static TaskManager()
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                CalculationTask[] databaseTasks = db.CalculationTask.ToArray();
+                lock (Tasks)
+                {
+                    foreach (CalculationTask task in databaseTasks)
+                    {
+                        if (task.Status == TaskState.Completed && !string.IsNullOrEmpty(task.Result))
+                        {
+                            Tasks.Add(new Task(task));
+                        }
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// Adds new task to db and tasks list.
@@ -69,17 +85,6 @@
 
             TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
             ManageTasks();
-        }
-
-        /// <summary>
-        /// The get id.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="int"/>.
-        /// </returns>
-        public static int GetId()
-        {
-            return taskCounter++;
         }
 
         /// <summary>
@@ -249,11 +254,11 @@
                     task.TaskData.Started = DateTime.Now;
                     using (var db = new LibiadaWebEntities())
                     {
-                        CalculationTask dbTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => t.Id == task.TaskData.Id);
 
-                        dbTask.Started = DateTime.Now;
-                        dbTask.Status = TaskState.InProgress;
-                        db.Entry(dbTask).State = EntityState.Modified;
+                        databaseTask.Started = DateTime.Now;
+                        databaseTask.Status = TaskState.InProgress;
+                        db.Entry(databaseTask).State = EntityState.Modified;
                         db.SaveChanges();
                     }
 
@@ -274,9 +279,10 @@
                         CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
 
                         databaseTask.Completed = DateTime.Now;
+                        databaseTask.Status = TaskState.Completed;
                         if (result.ContainsKey("data"))
                         {
-                            databaseTask.Result = JsonConvert.SerializeObject(result["data"]);
+                            databaseTask.Result = result["data"].ToString();
                         }
 
                         if (result.ContainsKey("additionalData"))
@@ -313,6 +319,18 @@
                                           { "ErrorMessage", errorMessage },
                                           { "StackTrace", stackTrace }
                                       };
+
+                    using (var db = new LibiadaWebEntities())
+                    {
+                        CalculationTask databaseTask = db.CalculationTask.Single(t => (t.Id == task.TaskData.Id));
+
+                        databaseTask.Completed = DateTime.Now;
+                        databaseTask.Status = TaskState.Error;
+                        databaseTask.Result = JsonConvert.SerializeObject(task.Result);
+                        db.Entry(databaseTask).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                     TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }

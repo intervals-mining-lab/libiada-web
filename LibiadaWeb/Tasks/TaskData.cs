@@ -5,6 +5,8 @@
 
     using AutoMapper;
 
+    using LibiadaWeb.Helpers;
+
     /// <summary>
     /// The task data.
     /// </summary>
@@ -75,6 +77,25 @@
             UserName = HttpContext.Current.User.Identity.Name;
             Created = DateTime.Now;
             TaskState = TaskState.InQueue;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TaskData"/> class.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public TaskData(CalculationTask task)
+        {
+            Id = task.Id;
+            TaskType = task.TaskType;
+            UserId = task.UserId;
+            UserName = AccountHelper.GetUserNameById(task.UserId);
+            Created = task.Created;
+            Started = task.Started;
+            Completed = task.Completed;
+            ExecutionTime = Completed - Started;
+            TaskState = task.Status;
         }
 
         /// <summary>

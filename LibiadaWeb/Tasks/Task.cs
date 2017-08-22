@@ -4,6 +4,10 @@
     using System.Collections.Generic;
     using System.Threading;
 
+    using LibiadaWeb.Models.CalculatorsData;
+
+    using Newtonsoft.Json;
+
     /// <summary>
     /// The task.
     /// </summary>
@@ -48,6 +52,23 @@
         {
             Action = action;
             TaskData = new TaskData(id, userId, taskType);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Task"/> class.
+        /// </summary>
+        /// <param name="task">
+        /// The task.
+        /// </param>
+        public Task(CalculationTask task)
+        {
+            TaskData = new TaskData(task);
+            Result = new Dictionary<string, object> { { "data", task.Result } };
+            if (!string.IsNullOrEmpty(task.AdditionalResultData))
+            {
+                // rewrite to use more abstract class or leave json for further parsing
+                Result.Add("additionalData", JsonConvert.DeserializeObject<List<SubsequenceComparisonData>[,]>(task.AdditionalResultData));
+            }
         }
 
         /// <summary>
