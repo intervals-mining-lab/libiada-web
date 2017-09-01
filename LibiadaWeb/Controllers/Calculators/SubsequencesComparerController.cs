@@ -23,7 +23,7 @@
     /// <summary>
     /// The subsequences comparer controller.
     /// </summary>
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class SubsequencesComparerController : AbstractResultController
     {
         /// <summary>

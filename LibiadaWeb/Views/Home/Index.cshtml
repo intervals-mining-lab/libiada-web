@@ -42,6 +42,8 @@
             <br />
             @Html.ActionLink("Genes map (Subsequences distribution)", "Index", "SubsequencesDistribution")
             <br />
+            @Html.ActionLink("Subsequences comparer", "Index", "SubsequencesComparer")
+            <br />
             @if (AccountHelper.IsAdmin())
             {
                 @Html.ActionLink("Sliding window calculation (Functions of sequences)", "Index", "LocalCalculation")
@@ -53,8 +55,6 @@
                 @Html.ActionLink("Subsequences characteristics calculation", "Index", "SubsequencesCalculation")
                 <br />
                 @Html.ActionLink("Subsequences similarity", "Index", "SubsequencesSimilarity")
-                <br />
-                @Html.ActionLink("Subsequences comparer", "Index", "SubsequencesComparer")
                 <br/>
                 @Html.ActionLink("Calculation of characteristics of congeneric sequences", "Index", "CongenericCalculation")
                 <br />
