@@ -1,15 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb", "LibiadaWeb\LibiadaWeb.csproj", "{47FAD378-F2BC-4470-AE1A-F497D698600C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaCore", "..\libiada-core\LibiadaCore\LibiadaCore.csproj", "{AF8DF9BB-B796-457E-91AB-E41674BEB92B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaMusic", "..\libiada-core\LibiadaMusic\LibiadaMusic.csproj", "{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clusterizator", "..\libiada-core\Clusterizator\Clusterizator.csproj", "{A33E97AE-575F-4ED5-B63E-32D8CF200E20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb.Tests", "LibiadaWeb.Tests\LibiadaWeb.Tests.csproj", "{EB0D176B-D8E7-4A34-BF0F-317112C5048F}"
 EndProject
@@ -20,11 +14,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B45027
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaCore.Tests", "..\libiada-core\LibiadaCore.Tests\LibiadaCore.Tests.csproj", "{934D10F1-0F12-4046-B9D6-4ECE76EB8672}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaCore", "..\libiada-core\LibiadaCore\LibiadaCore.csproj", "{791DA20B-3149-4BB0-9AFF-6CED1A94D828}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clusterizator.Tests", "..\libiada-core\Clusterizator.Tests\Clusterizator.Tests.csproj", "{260B03D7-580C-45F4-BBF3-2F345F8B81EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clusterizator", "..\libiada-core\Clusterizator\Clusterizator.csproj", "{B69ABC4E-1C8D-4E9F-929F-A915ADD21B81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaMusic.Tests", "..\libiada-core\LibiadaMusic.Tests\LibiadaMusic.Tests.csproj", "{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaMusic", "..\libiada-core\LibiadaMusic\LibiadaMusic.csproj", "{DCC2B837-5B01-4D7D-9DE6-7C88EDCF8AE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Clusterizator.Tests", "..\libiada-core\Clusterizator.Tests\Clusterizator.Tests.csproj", "{D0A7A2A6-65E8-4B42-BA73-517A16F7B221}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaCore.Tests", "..\libiada-core\LibiadaCore.Tests\LibiadaCore.Tests.csproj", "{820658FE-55EE-4E28-B082-9F8019B30059}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaMusic.Tests", "..\libiada-core\LibiadaMusic.Tests\LibiadaMusic.Tests.csproj", "{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,36 +36,39 @@ Global
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47FAD378-F2BC-4470-AE1A-F497D698600C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF8DF9BB-B796-457E-91AB-E41674BEB92B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB02B0A5-68BB-4786-96A3-B6D4276CF74F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A33E97AE-575F-4ED5-B63E-32D8CF200E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A33E97AE-575F-4ED5-B63E-32D8CF200E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A33E97AE-575F-4ED5-B63E-32D8CF200E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A33E97AE-575F-4ED5-B63E-32D8CF200E20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB0D176B-D8E7-4A34-BF0F-317112C5048F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{934D10F1-0F12-4046-B9D6-4ECE76EB8672}.Release|Any CPU.Build.0 = Release|Any CPU
-		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{260B03D7-580C-45F4-BBF3-2F345F8B81EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A976DCB7-432E-4F6B-A2B1-B4FAB06E14BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{791DA20B-3149-4BB0-9AFF-6CED1A94D828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{791DA20B-3149-4BB0-9AFF-6CED1A94D828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{791DA20B-3149-4BB0-9AFF-6CED1A94D828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{791DA20B-3149-4BB0-9AFF-6CED1A94D828}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B69ABC4E-1C8D-4E9F-929F-A915ADD21B81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B69ABC4E-1C8D-4E9F-929F-A915ADD21B81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B69ABC4E-1C8D-4E9F-929F-A915ADD21B81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B69ABC4E-1C8D-4E9F-929F-A915ADD21B81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCC2B837-5B01-4D7D-9DE6-7C88EDCF8AE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCC2B837-5B01-4D7D-9DE6-7C88EDCF8AE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCC2B837-5B01-4D7D-9DE6-7C88EDCF8AE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCC2B837-5B01-4D7D-9DE6-7C88EDCF8AE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A7A2A6-65E8-4B42-BA73-517A16F7B221}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A7A2A6-65E8-4B42-BA73-517A16F7B221}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A7A2A6-65E8-4B42-BA73-517A16F7B221}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A7A2A6-65E8-4B42-BA73-517A16F7B221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{820658FE-55EE-4E28-B082-9F8019B30059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{820658FE-55EE-4E28-B082-9F8019B30059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{820658FE-55EE-4E28-B082-9F8019B30059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{820658FE-55EE-4E28-B082-9F8019B30059}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {69280731-CB8A-4BF5-814A-C4E3BE49256A}
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EB0D176B-D8E7-4A34-BF0F-317112C5048F}</ProjectGuid>
@@ -74,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj">
-      <Project>{af8df9bb-b796-457e-91ab-e41674beb92b}</Project>
+      <Project>{791da20b-3149-4bb0-9aff-6ced1a94d828}</Project>
       <Name>LibiadaCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\LibiadaWeb\LibiadaWeb.csproj">
@@ -109,7 +110,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
