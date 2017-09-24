@@ -62,5 +62,5 @@
         $scope.selectedMatters = 0;
     }
 
-    angular.module("BuildingsSimilarity", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
+    angular.module("libiada", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
 }

@@ -56,7 +56,8 @@
                         "~/Scripts/Angular/Controllers/buildingsSimilarity.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationController").Include(
-                        "~/Scripts/Angular/Controllers/calculation.js"));
+                        "~/Scripts/Angular/Controllers/calculation.js",
+                        "~/Scripts/Angular/Components/mattersTable.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/controllers/CalculationResultController").Include(
                         "~/Scripts/Angular/Controllers/calculationResult.js"));

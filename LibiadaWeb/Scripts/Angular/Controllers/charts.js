@@ -1,5 +1,5 @@
-﻿angular.module('Charts', ['Directives.TableParse'])
-    .controller('ChartsCtrl', ['$scope', function ($scope) {
+﻿angular.module("libiada", ["Directives.TableParse"])
+    .controller("ChartsCtrl", ["$scope", function ($scope) {
 
         function draw() {
             var margin = { top: 30, right: 20, bottom: 30, left: 200 },
@@ -91,12 +91,12 @@
 
         $scope.draw = draw;
 
-        $scope.rawPaste = '';
+        $scope.rawPaste = "";
         $scope.parsedPaste = [];
         $scope.data = [];
-        $scope.i = '';
-        $scope.j = '';
-        $scope.l = '';
+        $scope.i = "";
+        $scope.j = "";
+        $scope.l = "";
         $scope.data.date = [];
         $scope.data.close = [];
         $scope.data.name = [];

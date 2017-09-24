@@ -70,5 +70,5 @@
         };
     }
 
-    angular.module("Accordance", []).controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
+    angular.module("libiada", []).controller("AccordanceCtrl", ["$scope", "filterFilter", accordance]);
 }

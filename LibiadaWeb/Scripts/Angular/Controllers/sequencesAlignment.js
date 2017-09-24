@@ -86,5 +86,5 @@
         };
     }
 
-    angular.module("SequencesAlignment", []).controller("SequencesAlignmentCtrl", ["$scope", "filterFilter", sequencesAlignment]);
+    angular.module("libiada", []).controller("SequencesAlignmentCtrl", ["$scope", "filterFilter", sequencesAlignment]);
 }

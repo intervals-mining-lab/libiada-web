@@ -77,5 +77,5 @@
         $scope.characteristics = [];
     }
 
-    angular.module("SubsequencesDistribution", []).controller("SubsequencesDistributionCtrl", ["$scope", "filterFilter", subsequencesDistribution]);
+    angular.module("libiada", []).controller("SubsequencesDistributionCtrl", ["$scope", "filterFilter", subsequencesDistribution]);
 }

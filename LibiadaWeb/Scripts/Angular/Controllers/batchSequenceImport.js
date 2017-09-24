@@ -24,5 +24,5 @@
         $scope.accessions = [];
     }
 
-    angular.module("BatchSequenceImport", []).controller("BatchSequenceImportCtrl", ["$scope", batchSequenceImport]);
+    angular.module("libiada", []).controller("BatchSequenceImportCtrl", ["$scope", batchSequenceImport]);
 }

@@ -1,18 +1,18 @@
 ﻿@model IEnumerable<Matter>
 
 <br />
-<div class="form-group" ng-if="nature==@((byte)Nature.Genetic)">
+<div class="form-group" ng-if="$ctrl.nature==@((byte)Nature.Genetic)">
     <div class="col-md-offset-2 col-md-10">
         <label>
-            <input type="checkbox" name="showRefSeqOnly" checked="checked" ng-model="flags.showRefSeqOnly" />
+            <input type="checkbox" name="showRefSeqOnly" checked="checked" ng-model="$ctrl.showRefSeqOnly" />
             Show only reference sequences
         </label>
     </div>
 </div>
 <div class="form-group">
     <div class="col-md-offset-2 col-md-10">
-        <input type="button" class="btn btn-success" ng-click="selectAllVisibleMatters()" value="Select all visible sequences" />
-        <input type="button" class="btn btn-default" ng-click="unselectAllVisibleMatters()" value="Unselect all visible sequences" />
+        <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
+        <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
     </div>
 </div>
 <label class="control-label">Sequences:</label>
@@ -22,18 +22,18 @@
             <th>
             </th>
             <th>
-                <input type="text" class="form-control" placeholder="Filter by name" ng-model="searchMatter" />
+                <input type="text" class="form-control" placeholder="Filter by name" ng-model="$ctrl.searchMatter" />
             </th>
             <th>
-                <input type="text" class="form-control" placeholder="Filter by description" ng-model="searchDescription" />
+                <input type="text" class="form-control" placeholder="Filter by description" ng-model="$ctrl.searchDescription" />
             </th>
             <th>
-                <select class="form-control" ng-model="group" ng-options="g.Value as g.Text for g in groups | filter:{ Nature: nature }">
+                <select class="form-control" ng-model="$ctrl.group" ng-options="g.Value as g.Text for g in $ctrl.groups | filter:{ Nature: $ctrl.nature }">
                     <option value="">-- All groups --</option>
                 </select>
             </th>
             <th>
-                <select class="form-control" ng-model="sequenceType" ng-options="s.Value as s.Text for s in sequenceTypes | filter:{ Nature: nature }">
+                <select class="form-control" ng-model="$ctrl.sequenceType" ng-options="s.Value as s.Text for s in $ctrl.sequenceTypes | filter:{ Nature: $ctrl.nature }">
                     <option value="">-- All sequence types --</option>
                 </select>
             </th>
@@ -67,14 +67,14 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="matter in matters | filter:{ Nature: nature }"
-            ng-show="([matter] | filter:{ Text: searchMatter } | filter: { Description: searchDescription } | filter: { Group: group || '' } | filter: { SequenceType: sequenceType || '' }).length > 0 && (!flags.showRefSeqOnly || nature!=@((byte)Nature.Genetic) ||  matter.Text.split('|').slice(-1)[0].indexOf('_') != -1)"
+        <tr ng-repeat="matter in $ctrl.matters | filter:{ Nature: $ctrl.nature }"
+            ng-show="([matter] | filter:{ Text: searchMatter } | filter: { Description: searchDescription } | filter: { Group: $ctrl.group || '' } | filter: { SequenceType: $ctrl.sequenceType || '' }).length > 0 && (!$ctrl.showRefSeqOnly || $ctrl.nature!=@((byte)Nature.Genetic) ||  matter.Text.split('|').slice(-1)[0].indexOf('_') != -1)"
             ng-cloak>
             <td ng-bind="$index + 1" />
             <td>
                 <label>
-                    <input type="radio" ng-if="radiobuttonsForMatters" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" />
-                    <input type="checkbox" ng-if="!radiobuttonsForMatters" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="matterCheckChanged(matter)" ng-disabled="disableMattersSelect(matter)" />
+                    <input type="radio" ng-if="$ctrl.radiobuttonsForMatters" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="$ctrl.matterCheckChanged(matter)" />
+                    <input type="checkbox" ng-if="!$ctrl.radiobuttonsForMatters" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="$ctrl.matterCheckChanged(matter)" ng-disabled="$ctrl.disableMattersSelect(matter)" />
 
                     {{matter.Text}}
                 </label>

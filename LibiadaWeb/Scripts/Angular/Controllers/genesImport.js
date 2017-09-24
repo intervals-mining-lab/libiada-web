@@ -54,5 +54,5 @@
         $scope.selectedMatters = 0;
     }
 
-    angular.module("GenesImport", []).controller("GenesImportCtrl", ["$scope", "filterFilter", genesImport]);
+    angular.module("libiada", []).controller("GenesImportCtrl", ["$scope", "filterFilter", genesImport]);
 }

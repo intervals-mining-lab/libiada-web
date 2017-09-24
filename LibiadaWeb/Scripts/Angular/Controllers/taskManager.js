@@ -94,5 +94,5 @@
         $scope.calculateStatusGlyphicon = calculateStatusGlyphicon;
     }
 
-    angular.module("TaskManager", []).controller("TaskManagerCtrl", ["$scope", taskManager]);
+    angular.module("libiada", []).controller("TaskManagerCtrl", ["$scope", taskManager]);
 }

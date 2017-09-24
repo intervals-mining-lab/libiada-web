@@ -4,14 +4,6 @@
     function calculation($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        function matterCheckChanged(matter) {
-            if (matter.Selected) {
-                $scope.selectedMatters++;
-            } else {
-                $scope.selectedMatters--;
-            }
-        }
-
         function disableSubmit() {
             return $scope.selectedMatters < $scope.minimumSelectedMatters;
         }
@@ -43,46 +35,20 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         }
 
-        function getVisibleMatters() {
-            var visibleMatters = $scope.matters;
-            visibleMatters = filterFilter(visibleMatters, { Text: $scope.searchMatter });
-            visibleMatters = filterFilter(visibleMatters, { Description: $scope.searchDescription });
-            visibleMatters = filterFilter(visibleMatters, { Group: $scope.group || "" });
-            visibleMatters = filterFilter(visibleMatters, { SequenceType: $scope.sequenceType || "" });
-            visibleMatters = filterFilter(visibleMatters, function (value) {
-                return !$scope.flags.showRefSeqOnly || $scope.nature !== "1" || value.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
-            });
-
-            return visibleMatters;
+        function selectedMattersCountChange(count) {
+            $scope.selectedMatters = count;
         }
 
-        function selectAllVisibleMatters() {
-            getVisibleMatters().forEach(function (matter) {
-                matter.Selected = true;
-            });
-        }
 
-        function unselectAllVisibleMatters() {
-            getVisibleMatters().forEach(function (matter) {
-                matter.Selected = false;
-            });
-        }
-
-        $scope.matterCheckChanged = matterCheckChanged;
         $scope.disableSubmit = disableSubmit;
         $scope.filterByNature = filterByNature;
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
-        $scope.getVisibleMatters = getVisibleMatters;
-        $scope.selectAllVisibleMatters = selectAllVisibleMatters;
-        $scope.unselectAllVisibleMatters = unselectAllVisibleMatters;
+        $scope.selectedMattersCountChange = selectedMattersCountChange;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
-        $scope.disableMattersSelect = FakeDisableMattersSelect;
 
-        $scope.flags = { showRefSeqOnly: true };
-        $scope.selectedMatters = 0;
         $scope.characteristics = [];
         $scope.nature = $scope.natures[0].Value;
 
@@ -97,5 +63,7 @@
         }
     }
 
-    angular.module("Calculation", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
+    var libiadaModule = angular.module("libiada", []);
+    libiadaModule.controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
+    mattersTable(libiadaModule);
 }

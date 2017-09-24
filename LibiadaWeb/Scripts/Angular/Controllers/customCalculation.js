@@ -50,5 +50,5 @@
         $scope.customSequences = [];
     }
 
-    angular.module("CustomCalculation", []).controller("CustomCalculationCtrl", ["$scope", customCalculation]);
+    angular.module("libiada", []).controller("CustomCalculationCtrl", ["$scope", customCalculation]);
 }

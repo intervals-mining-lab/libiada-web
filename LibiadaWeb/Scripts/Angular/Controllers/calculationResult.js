@@ -314,5 +314,5 @@
 
     }
 
-    angular.module("CalculationResult", []).controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
+    angular.module("libiada", []).controller("CalculationResultCtrl", ["$scope", "$http", calculationResult]);
 }

@@ -340,5 +340,5 @@
             });
     }
 
-    angular.module("LocalCalculationResult", []).controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);
+    angular.module("libiada", []).controller("LocalCalculationResultCtrl", ["$scope", "$http", localCalculationResult]);
 }
