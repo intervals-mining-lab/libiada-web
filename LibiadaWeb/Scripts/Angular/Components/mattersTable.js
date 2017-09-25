@@ -3,8 +3,12 @@
 
     function MattersTableController(filterFilter) {
         var ctrl = this;
-        ctrl.selectedMatters = 0;
-        ctrl.showRefSeqOnly = true;
+
+        ctrl.$onInit = function () {
+            ctrl.selectedMatters = 0;
+            ctrl.showRefSeqOnly = true;
+            ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
+        }
 
         ctrl.matterCheckChanged = function (matter) {
             if (matter.Selected) {
@@ -50,7 +54,7 @@
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
-            maxSelectedMatters: "<",
+            maximumSelectedMatters: "<",
             onSelectedMattersCountChange: "&"
         }
     });

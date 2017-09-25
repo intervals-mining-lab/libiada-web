@@ -73,8 +73,12 @@
             <td ng-bind="$index + 1" />
             <td>
                 <label>
-                    <input type="radio" ng-if="$ctrl.radiobuttonsForMatters" ng-model="matter.Selected" name="matterId" ng-value="matter.Value" ng-change="$ctrl.matterCheckChanged(matter)" />
-                    <input type="checkbox" ng-if="!$ctrl.radiobuttonsForMatters" ng-model="matter.Selected" name="matterIds" ng-value="matter.Value" ng-change="$ctrl.matterCheckChanged(matter)" ng-disabled="$ctrl.disableMattersSelect(matter)" />
+                    <input type="{{$ctrl.checkboxes ? 'checkbox' : 'radio'}}"
+                           ng-model="matter.Selected"
+                           name="{{$ctrl.checkboxes ? 'matterIds' : 'matterId'}}"
+                           ng-value="matter.Value"
+                           ng-change="$ctrl.matterCheckChanged(matter)"
+                           ng-disabled="($ctrl.selectedMattersCount >= $ctrl.maximumSelectedMattersCount) && ($ctrl.checkboxes)" />
 
                     {{matter.Text}}
                 </label>
