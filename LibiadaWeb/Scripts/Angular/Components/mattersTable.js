@@ -50,7 +50,7 @@
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
-            radiobuttonsForMatters: "@",
+            radiobuttonsForMatters: "<",
             onSelectedMattersCountChange: "&"
         }
     });
