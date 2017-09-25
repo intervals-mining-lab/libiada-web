@@ -266,7 +266,6 @@
                     { "minimumSelectedMatters", minSelectedMatters },
                     { "maximumSelectedMatters", maxSelectedMatters },
                     { "matters", matterRepository.GetMatterSelectList(filter) },
-                    { "radiobuttonsForMatters", maxSelectedMatters == 1 && minSelectedMatters == 1 },
                     { "submitName", submitName }
                 };
         }
