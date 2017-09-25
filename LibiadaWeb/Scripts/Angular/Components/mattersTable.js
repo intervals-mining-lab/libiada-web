@@ -5,19 +5,17 @@
         var ctrl = this;
 
         ctrl.$onInit = function () {
-            ctrl.selectedMatters = 0;
+            ctrl.selectedMattersCount = 0;
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
         }
 
         ctrl.matterCheckChanged = function (matter) {
             if (matter.Selected) {
-                ctrl.selectedMatters++;
+                ctrl.selectedMattersCount++;
             } else {
-                ctrl.selectedMatters--;
+                ctrl.selectedMattersCount--;
             }
-
-            ctrl.onSelectedMattersCountChange(ctrl.selectedMatters);
         }
 
         ctrl.getVisibleMatters = function () {
@@ -35,7 +33,7 @@
 
         ctrl.selectAllVisibleMatters = function () {
             ctrl.getVisibleMatters().forEach(function (matter) {
-                if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters) && !matter.Selected) {
+                if ((ctrl.selectedMattersCount < ctrl.maximumSelectedMatters) && !matter.Selected) {
                     matter.Selected = true;
                     ctrl.matterCheckChanged(matter);
                 }
@@ -43,7 +41,7 @@
         }
 
         ctrl.unselectAllVisibleMatters = function () {
-            getVisibleMatters().forEach(function (matter) {
+            ctrl.getVisibleMatters().forEach(function (matter) {
                 if (matter.Selected) {
                     matter.Selected = false;
                     ctrl.matterCheckChanged(matter);
@@ -56,12 +54,12 @@
         templateUrl: "Partial/_MattersTable",
         controller: ["filterFilter", MattersTableController],
         bindings: {
+            selectedMattersCount: "=",
             matters: "<",
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
-            maximumSelectedMatters: "<",
-            onSelectedMattersCountChange: "&"
+            maximumSelectedMatters: "<"
         }
     });
 }

@@ -4,10 +4,6 @@
     function calculation($scope, filterFilter) {
         MapModelFromJson($scope, data);
 
-        function disableSubmit() {
-            return $scope.selectedMatters < $scope.minimumSelectedMatters;
-        }
-
         function filterByNature() {
             var notation = filterFilter($scope.notations, { Nature: $scope.nature })[0];
 
@@ -35,22 +31,16 @@
             $scope.characteristics.splice($scope.characteristics.indexOf(characteristic), 1);
         }
 
-        function selectedMattersCountChange(count) {
-            $scope.selectedMatters = count;
-        }
-
-
-        $scope.disableSubmit = disableSubmit;
         $scope.filterByNature = filterByNature;
         $scope.addCharacteristic = addCharacteristic;
         $scope.deleteCharacteristic = deleteCharacteristic;
-        $scope.selectedMattersCountChange = selectedMattersCountChange;
 
         $scope.isLinkable = IsLinkable;
         $scope.selectLink = SelectLink;
 
         $scope.characteristics = [];
         $scope.nature = $scope.natures[0].Value;
+        $scope.disableSubmit = $scope.minimumSelectedMatters > 0;
 
         // if notation is not linked to characteristic
         $scope.language = $scope.languages[0];
