@@ -68,7 +68,7 @@
     </thead>
     <tbody>
         <tr ng-repeat="matter in $ctrl.matters | filter:{ Nature: $ctrl.nature }"
-            ng-show="([matter] | filter:{ Text: $ctrl.searchMatter } | filter: { Description: $ctrl.searchDescription } | filter: { Group: $ctrl.group || '' } | filter: { SequenceType: $ctrl.sequenceType || '' }).length > 0 && (!$ctrl.showRefSeqOnly || $ctrl.nature!=@((byte)Nature.Genetic) ||  matter.Text.split('|').slice(-1)[0].indexOf('_') != -1)"
+            ng-show="([matter] | filter:{ Text: $ctrl.searchMatter } | filter: { Description: $ctrl.searchDescription } | filter: { Group: $ctrl.group || '' } | filter: { SequenceType: $ctrl.sequenceType || '' }).length > 0 && ($ctrl.nature!=@((byte)Nature.Genetic) || !$ctrl.showRefSeqOnly || $ctrl.isRefSeq(matter))"
             ng-cloak>
             <td ng-bind="$index + 1" />
             <td>

@@ -5,17 +5,12 @@
         var ctrl = this;
 
         ctrl.$onInit = function () {
-            ctrl.selectedMattersCount = 0;
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
         }
 
-        ctrl.matterCheckChanged = function (matter) {
-            if (matter.Selected) {
-                ctrl.selectedMattersCount++;
-            } else {
-                ctrl.selectedMattersCount--;
-            }
+        ctrl.isRefSeq = function (matter) {
+            return matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
         }
 
         ctrl.getVisibleMatters = function () {
@@ -24,8 +19,8 @@
             visibleMatters = filterFilter(visibleMatters, { Description: ctrl.searchDescription });
             visibleMatters = filterFilter(visibleMatters, { Group: ctrl.group || "" });
             visibleMatters = filterFilter(visibleMatters, { SequenceType: ctrl.sequenceType || "" });
-            visibleMatters = filterFilter(visibleMatters, function (value) {
-                return !ctrl.showRefSeqOnly || ctrl.nature !== "1" || value.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+            visibleMatters = filterFilter(visibleMatters, function (matter) {
+                return ctrl.nature !== "1" || !ctrl.showRefSeqOnly || ctrl.isRefSeq(matter);
             });
 
             return visibleMatters;
@@ -33,9 +28,8 @@
 
         ctrl.selectAllVisibleMatters = function () {
             ctrl.getVisibleMatters().forEach(function (matter) {
-                if ((ctrl.selectedMattersCount < ctrl.maximumSelectedMatters) && !matter.Selected) {
+                if (filterFilter(ctrl.matters, { Selected: true }).length < ctrl.maximumSelectedMatters) {
                     matter.Selected = true;
-                    ctrl.matterCheckChanged(matter);
                 }
             });
         }
@@ -44,7 +38,6 @@
             ctrl.getVisibleMatters().forEach(function (matter) {
                 if (matter.Selected) {
                     matter.Selected = false;
-                    ctrl.matterCheckChanged(matter);
                 }
             });
         }
@@ -54,7 +47,6 @@
         templateUrl: "Partial/_MattersTable",
         controller: ["filterFilter", MattersTableController],
         bindings: {
-            selectedMattersCount: "=",
             matters: "<",
             nature: "<",
             groups: "<",
