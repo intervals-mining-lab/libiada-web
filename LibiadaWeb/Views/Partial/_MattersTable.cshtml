@@ -9,7 +9,7 @@
         </label>
     </div>
 </div>
-<div class="form-group">
+<div class="form-group" ng-if="$ctrl.checkboxes">
     <div class="col-md-offset-2 col-md-10">
         <input type="button" class="btn btn-success" ng-click="$ctrl.selectAllVisibleMatters()" value="Select all visible sequences" />
         <input type="button" class="btn btn-default" ng-click="$ctrl.unselectAllVisibleMatters()" value="Unselect all visible sequences" />
@@ -78,7 +78,7 @@
                            name="{{$ctrl.checkboxes ? 'matterIds' : 'matterId'}}"
                            ng-value="matter.Value"
                            ng-change="$ctrl.matterCheckChanged(matter)"
-                           ng-disabled="($ctrl.selectedMattersCount >= $ctrl.maximumSelectedMattersCount) && ($ctrl.checkboxes)" />
+                           ng-disabled="($ctrl.selectedMatters >= $ctrl.maximumSelectedMattersCount) && ($ctrl.checkboxes)" />
 
                     {{matter.Text}}
                 </label>

@@ -34,14 +34,20 @@
         }
 
         ctrl.selectAllVisibleMatters = function () {
-            getVisibleMatters().forEach(function (matter) {
-                matter.Selected = true;
+            ctrl.getVisibleMatters().forEach(function (matter) {
+                if ((ctrl.selectedMatters < ctrl.maximumSelectedMatters) && !matter.Selected) {
+                    matter.Selected = true;
+                    ctrl.matterCheckChanged(matter);
+                }
             });
         }
 
         ctrl.unselectAllVisibleMatters = function () {
             getVisibleMatters().forEach(function (matter) {
-                matter.Selected = false;
+                if (matter.Selected) {
+                    matter.Selected = false;
+                    ctrl.matterCheckChanged(matter);
+                }
             });
         }
     }
