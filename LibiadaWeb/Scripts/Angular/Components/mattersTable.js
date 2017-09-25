@@ -1,4 +1,4 @@
-﻿function mattersTable(libiadaModule) {
+﻿function mattersTable() {
     "use strict";
 
     function MattersTableController(filterFilter) {
@@ -42,7 +42,7 @@
         }
     }
 
-    libiadaModule.component("mattersTable", {
+    angular.module("libiada").component("mattersTable", {
         templateUrl: "Partial/_MattersTable",
         controller: ["filterFilter", MattersTableController],
         bindings: {
@@ -50,7 +50,7 @@
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
-            radiobuttonsForMatters: "<",
+            maxSelectedMatters: "<",
             onSelectedMattersCountChange: "&"
         }
     });

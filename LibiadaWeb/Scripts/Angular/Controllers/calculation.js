@@ -63,7 +63,6 @@
         }
     }
 
-    var libiadaModule = angular.module("libiada", []);
-    libiadaModule.controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
-    mattersTable(libiadaModule);
+    angular.module("libiada", []).controller("CalculationCtrl", ["$scope", "filterFilter", calculation]);
+    mattersTable();
 }
