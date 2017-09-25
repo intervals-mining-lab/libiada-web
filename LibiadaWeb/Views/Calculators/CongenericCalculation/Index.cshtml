@@ -14,7 +14,12 @@
         <hr />
         @(Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" }))
         @Html.Partial("_NatureSelect")
-        @Html.Partial("_MattersTable")
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters">
+        </matters-table>
         @Html.Partial("_Characteristics")
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

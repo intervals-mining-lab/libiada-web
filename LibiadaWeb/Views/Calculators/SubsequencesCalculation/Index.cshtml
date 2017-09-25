@@ -12,7 +12,12 @@
     <div class="form-horizontal" ng-app="libiada" ng-controller="SubsequencesCalculationCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
-        @Html.Partial("_MattersTable")
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters">
+        </matters-table>
         @Html.Partial("_FeaturesSelect")
         @Html.Partial("_Characteristics")
         @Html.Partial("_MattersSubmit")

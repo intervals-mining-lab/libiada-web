@@ -13,7 +13,12 @@
         <h4>Sequences and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.Partial("_MattersTable")
+        <matters-table matters="matters"
+                       nature="nature"
+                       groups="groups"
+                       sequence-types="sequenceTypes"
+                       maximum-selected-matters="maximumSelectedMatters">
+        </matters-table>
         <label class="control-label col-md-2" for="transformType">Transform nucleotide sequences To:</label>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
