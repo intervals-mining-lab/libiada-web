@@ -7,10 +7,18 @@
         ctrl.$onInit = function () {
             ctrl.showRefSeqOnly = true;
             ctrl.checkboxes = ctrl.maximumSelectedMatters > 1;
+            ctrl.selectedMatters = 0;
         }
 
         ctrl.isRefSeq = function (matter) {
             return matter.Text.split("|").slice(-1)[0].indexOf("_") !== -1;
+        }
+        ctrl.matterSelectChange = function (matter) {
+            if (matter.Selected) {
+                ctrl.selectedMatters++;
+            } else {
+                ctrl.selectedMatters--;
+            }
         }
 
         ctrl.getVisibleMatters = function () {
@@ -28,8 +36,9 @@
 
         ctrl.selectAllVisibleMatters = function () {
             ctrl.getVisibleMatters().forEach(function (matter) {
-                if (filterFilter(ctrl.matters, { Selected: true }).length < ctrl.maximumSelectedMatters) {
+                if (!matter.Selected && (ctrl.selectedMatters < ctrl.maximumSelectedMatters)) {
                     matter.Selected = true;
+                    ctrl.selectedMatters++;
                 }
             });
         }
@@ -38,6 +47,7 @@
             ctrl.getVisibleMatters().forEach(function (matter) {
                 if (matter.Selected) {
                     matter.Selected = false;
+                    ctrl.selectedMatters--;
                 }
             });
         }
@@ -51,7 +61,8 @@
             nature: "<",
             groups: "<",
             sequenceTypes: "<",
-            maximumSelectedMatters: "<"
+            maximumSelectedMatters: "<",
+            selectedMatters: "="
         }
     });
 }

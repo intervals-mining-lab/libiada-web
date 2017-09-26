@@ -77,8 +77,8 @@
                            ng-model="matter.Selected"
                            name="{{$ctrl.checkboxes ? 'matterIds' : 'matterId'}}"
                            ng-value="matter.Value"
-                           ng-change="$ctrl.matterCheckChanged(matter)"
-                           ng-disabled="$ctrl.checkboxes && ($ctrl.selectedMattersCount >= $ctrl.maximumSelectedMattersCount)" />
+                           ng-change="$ctrl.matterSelectChange(matter)"
+                           ng-disabled="$ctrl.checkboxes && !matter.Selected && ($ctrl.selectedMatters >= $ctrl.maximumSelectedMatters)"/>
 
                     {{matter.Text}}
                 </label>
