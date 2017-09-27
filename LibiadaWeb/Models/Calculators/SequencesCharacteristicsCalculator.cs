@@ -23,8 +23,8 @@
         /// <summary>
         /// Calculation method.
         /// </summary>
-        /// <param name="chains">
-        /// The chains.
+        /// <param name="chainIds">
+        /// The chains ids.
         /// </param>
         /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
@@ -51,13 +51,12 @@
                                       .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
 
                 var commonSequenceRepository = new CommonSequenceRepository(db);
-                foreach(var sequenceCharacteristics in dbCharacteristics)
+                foreach (long sequenceId in sequenceIds)
                 {
-                    long seqienceId = sequenceCharacteristics.Key;
-                    if(sequenceCharacteristics.Value.Count < characteristicLinkIds.Length)
+                    if (!dbCharacteristics.TryGetValue(sequenceId, out var sequenceCharacteristics) || sequenceCharacteristics.Count < characteristicLinkIds.Length)
                     {
-                        notCalculatedSequences.Add(seqienceId,commonSequenceRepository.GetLibiadaChain(seqienceId));
-                        notCalculatedSequences[seqienceId].FillIntervalManagers();
+                        notCalculatedSequences.Add(sequenceId, commonSequenceRepository.GetLibiadaChain(sequenceId));
+                        notCalculatedSequences[sequenceId].FillIntervalManagers();
                     }
                 }
 
@@ -79,8 +78,7 @@
                 {
                     long sequenceId = chainIds[i][j];
 
-                    Dictionary<short, double> sequenceDbCharacteristics;
-                    if (!dbCharacteristics.TryGetValue(sequenceId, out sequenceDbCharacteristics))
+                    if (!dbCharacteristics.TryGetValue(sequenceId, out var sequenceDbCharacteristics))
                     {
                         sequenceDbCharacteristics = new Dictionary<short, double>();
                     }
@@ -113,8 +111,8 @@
         /// <summary>
         /// Calculation method.
         /// </summary>
-        /// <param name="chains">
-        /// The chains.
+        /// <param name="chainIds">
+        /// The chains ids.
         /// </param>
         /// <param name="characteristicLinkId">
         /// The characteristic type link id.
@@ -144,8 +142,8 @@
         /// <summary>
         /// Calculation method.
         /// </summary>
-        /// <param name="chains">
-        /// The chains.
+        /// <param name="chainIds">
+        /// The chains ids.
         /// </param>
         /// <param name="characteristicLinkIds">
         /// The characteristic type link ids.
@@ -167,18 +165,15 @@
             var links = new Link[characteristicLinkIds.Length];
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
             var characteristics = new double[chainIds.Length][];
-            var chains = new Chain[chainIds.Length][];
+            long[] sequenceIds = chainIds.SelectMany(c => c).Distinct().ToArray();
+            var sequences = new Dictionary<long, Chain>();
 
             using (var db = new LibiadaWebEntities())
             {
                 var commonSequenceRepository = new CommonSequenceRepository(db);
-                for (int i = 0; i < chainIds.Length; i++)
+                for (int i = 0; i < sequenceIds.Length; i++)
                 {
-                    chains[i] = new Chain[chainIds[i].Length];
-                    for(int j = 0; j < chainIds[i].Length; j++)
-                    {
-                        chains[i][j] = commonSequenceRepository.GetLibiadaChain(chainIds[i][j]);
-                    }
+                    sequences.Add(sequenceIds[i], commonSequenceRepository.GetLibiadaChain(sequenceIds[i]));
                 }
 
 
@@ -191,29 +186,31 @@
                 }
             }
 
-            for (int i = 0; i < chains.Length; i++)
+            for (int i = 0; i < chainIds.Length; i++)
             {
                 characteristics[i] = new double[calculators.Length];
 
                 for (int j = 0; j < calculators.Length; j++)
                 {
+                    long sequenceId = chainIds[i][j];
+                    var sequence = (Chain)sequences[sequenceId].Clone();
                     if (complementary)
                     {
-                        var sourceSequence = new Sequence(Alphabets.DNA, chains[i][j].ToString());
+                        var sourceSequence = new Sequence(Alphabets.DNA, sequence.ToString());
                         ISequence complementarySequence = sourceSequence.GetReverseComplementedSequence();
-                        chains[i][j] = new Chain(complementarySequence.ConvertToString());
+                        sequence = new Chain(complementarySequence.ConvertToString());
                     }
 
                     if (rotate)
                     {
-                        int[] building = chains[i][j].Building.Rotate(rotationLength ?? 0);
+                        int[] building = sequence.Building.Rotate(rotationLength ?? 0);
                         List<IBaseObject> newSequence = building.Select(t => new ValueInt(t)).ToList<IBaseObject>();
-                        chains[i][j] = new Chain(newSequence);
+                        sequence = new Chain(newSequence);
                     }
 
-                    chains[i][j].FillIntervalManagers();
+                    sequence.FillIntervalManagers();
 
-                    characteristics[i][j] = calculators[j].Calculate(chains[i][j], links[j]);
+                    characteristics[i][j] = calculators[j].Calculate(sequence, links[j]);
                 }
             }
 
