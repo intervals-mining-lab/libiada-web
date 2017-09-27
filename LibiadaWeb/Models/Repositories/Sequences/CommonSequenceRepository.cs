@@ -76,106 +76,82 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to libiada BaseChain.
+        /// Loads sequence by id from db and converts it to <see cref="BaseChain"/>.
         /// </summary>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="BaseChain"/>.
+        /// The sequence as <see cref="BaseChain"/>.
         /// </returns>
-        public BaseChain ToLibiadaBaseChain(long sequenceId)
+        public BaseChain GetLibiadaBaseChain(long sequenceId)
         {
             return new BaseChain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
-        /// The to libiada Chain.
+        /// Loads sequence by id from db and converts it to <see cref="Chain"/>.
         /// </summary>
         /// <param name="sequenceId">
         /// The sequence id.
         /// </param>
         /// <returns>
-        /// The <see cref="Chain"/>.
+        /// The sequence as <see cref="Chain"/>.
         /// </returns>
-        public Chain ToLibiadaChain(long sequenceId)
+        public Chain GetLibiadaChain(long sequenceId)
         {
             return new Chain(DbHelper.GetBuilding(Db, sequenceId), GetAlphabet(sequenceId), sequenceId);
         }
 
         /// <summary>
-        /// Extracts sequences from database.
+        /// Extracts sequences ids from database.
         /// </summary>
         /// <param name="matterIds">
-        /// The matter ids.
+        /// The matters ids.
         /// </param>
         /// <param name="notations">
-        /// The notation ids.
+        /// The notations ids.
         /// </param>
         /// <param name="languages">
-        /// The language ids.
+        /// The languages ids.
         /// </param>
         /// <param name="translators">
-        /// The translator ids.
+        /// The translators ids.
         /// </param>
         /// <returns>
-        /// The <see cref="T:Chain[][]"/>.
+        /// The seuqneces ids as <see cref="T:long[][]"/>.
         /// </returns>
-        public Chain[][] GetChains(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
+        public long[][] GetSeuqneceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
         {
-            var chains = new Chain[matterIds.Length][];
+            var sequenceIds = new long[matterIds.Length][];
 
             for (int i = 0; i < matterIds.Length; i++)
             {
                 var matterId = matterIds[i];
-                chains[i] = new Chain[notations.Length];
+                sequenceIds[i] = new long[notations.Length];
 
                 for (int j = 0; j < notations.Length; j++)
                 {
                     Notation notation = notations[j];
 
-                    long sequenceId;
                     if (notation.GetNature() == Nature.Literature)
                     {
                         Language language = languages[j];
                         Translator translator = translators[j] ?? Translator.NoneOrManual;
 
-                        sequenceId = Db.LiteratureSequence.Single(l => l.MatterId == matterId
+                        sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
                                                                     && l.Notation == notation
                                                                     && l.Language == language
                                                                     && l.Translator == translator).Id;
                     }
                     else
                     {
-                        sequenceId = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
+                        sequenceIds[i][j] = Db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                     }
-
-                    chains[i][j] = ToLibiadaChain(sequenceId);
                 }
             }
 
-            return chains;
-        }
-
-        /// <summary>
-        /// Extracts nucleotide sequences from database.
-        /// </summary>
-        /// <param name="matterIds">
-        /// The matter ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:Chain[]"/>.
-        /// </returns>
-        public Chain[] GetNucleotideChains(long[] matterIds)
-        {
-            var chains = new Chain[matterIds.Length];
-            CommonSequence[] sequences = Db.CommonSequence.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
-            for (int i = 0; i < matterIds.Length; i++)
-            {
-                chains[i] = ToLibiadaChain(sequences.Single(c => c.MatterId == matterIds[i]).Id);
-            }
-
-            return chains;
+            return sequenceIds;
         }
 
         /// <summary>

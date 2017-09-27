@@ -110,7 +110,7 @@
                         sequenceStream = FileHelper.GetFileStream(Request.Files[0]);
                     }
 
-                    var dnaSequenceRepository = new DnaSequenceRepository(db);
+                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
                     var literatureSequenceRepository = new LiteratureSequenceRepository(db);
                     var musicSequenceRepository = new MusicSequenceRepository(db);
                     var dataSequenceRepository = new DataSequenceRepository(db);

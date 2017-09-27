@@ -67,7 +67,7 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     var matterRepository = new MatterRepository(db);
-                    var dnaSequenceRepository = new DnaSequenceRepository(db);
+                    var dnaSequenceRepository = new GeneticSequenceRepository(db);
                     string[] existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
                     ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessions);
 

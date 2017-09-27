@@ -31,7 +31,7 @@
         /// <summary>
         /// The DNA sequence repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
+        private readonly GeneticSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The music sequence repository.
@@ -65,7 +65,7 @@
         {
             db = new LibiadaWebEntities();
             sequenceRepository = new CommonSequenceRepository(db);
-            dnaSequenceRepository = new DnaSequenceRepository(db);
+            dnaSequenceRepository = new GeneticSequenceRepository(db);
             musicSequenceRepository = new MusicSequenceRepository(db);
             literatureSequenceRepository = new LiteratureSequenceRepository(db);
             dataSequenceRepository = new DataSequenceRepository(db);
@@ -127,7 +127,7 @@
                 sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
             }
 
-            BaseChain chain = sequenceRepository.ToLibiadaBaseChain(sequenceId);
+            BaseChain chain = sequenceRepository.GetLibiadaBaseChain(sequenceId);
             for (int i = 0; i < scrambling; i++)
             {
                 int firstIndex = randomGenerator.Next(chain.GetLength());

@@ -152,7 +152,7 @@
                             break;
                     }
 
-                    chains[k] = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                    chains[k] = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 }
 
                 foreach (int characteristicLinkId in characteristicLinkIds)

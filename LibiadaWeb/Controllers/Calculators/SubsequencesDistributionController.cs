@@ -79,7 +79,7 @@
                     var subsequencesCharacteristicsNames = new string[characteristicLinkIds.Length];
                     var subsequencesCharacteristicsList = new SelectListItem[characteristicLinkIds.Length];
                     var attributeValues = new List<AttributeValue>();
-                    Chain[] chains;
+                    long[] sequenceIds;
                     string sequenceCharacteristicName;
 
                     using (var db = new LibiadaWebEntities())
@@ -95,8 +95,8 @@
                             remoteIds[n] = parentSequences[n].RemoteId;
                         }
 
-                        var commonSequenceRepository = new CommonSequenceRepository(db);
-                        chains = commonSequenceRepository.GetNucleotideChains(matterIds);
+                        var geneticSequenceRepository = new GeneticSequenceRepository(db);
+                        sequenceIds = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
                         var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
@@ -114,7 +114,7 @@
                         }
                     }
 
-                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
+                    double[] characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkId);
 
                     var sequencesData = new SequenceData[matterIds.Length];
 
@@ -124,7 +124,7 @@
                         SubsequenceData[] subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
                             characteristicLinkIds,
                             features,
-                            chains[i].Id,
+                            sequenceIds[i],
                             attributeValues);
 
                         sequencesData[i] = new SequenceData(matterIds[i], matterNames[i], remoteIds[i], characteristics[i], subsequencesData);

@@ -95,7 +95,7 @@
                 {
                     long sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    dbChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId);
+                    dbChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId);
                 }
 
                 if (dbChain.Equals(chain))

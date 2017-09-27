@@ -94,14 +94,14 @@
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 Dictionary<long, string> mattersNames;
                 double[][] characteristics;
-                Chain[][] chains;
+                long[][] sequenceIds;
 
                 using (var db = new LibiadaWebEntities())
                 {
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    chains = commonSequenceRepository.GetChains(matterIds, notations, languages, translators);
+                    sequenceIds = commonSequenceRepository.GetSeuqneceIds(matterIds, notations, languages, translators);
 
                     var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -118,11 +118,11 @@
 
                 if (!rotate && !complementary)
                 {
-                    characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds);
+                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
                 }
                 else
                 {
-                    characteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkIds, rotate, complementary, rotationLength);
+                    characteristics = SequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds, rotate, complementary, rotationLength);
                 }
 
                 for (int i = 0; i < matterIds.Length; i++)

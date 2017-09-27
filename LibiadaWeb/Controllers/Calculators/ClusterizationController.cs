@@ -139,7 +139,7 @@
                         }
                         else
                         {
-                            Chain tempChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                            Chain tempChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
                             Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);

@@ -52,7 +52,7 @@
         /// </returns>
         public Chain[] ExtractChains(long sequenceId, Subsequence[] subsequences)
         {
-            string parentChain = commonSequenceRepository.ToLibiadaBaseChain(sequenceId).ToString();
+            string parentChain = commonSequenceRepository.GetLibiadaBaseChain(sequenceId).ToString();
             var sourceSequence = new Sequence(Alphabets.DNA, parentChain);
             var result = new Chain[subsequences.Length];
 

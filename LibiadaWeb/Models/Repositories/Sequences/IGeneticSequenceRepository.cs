@@ -3,9 +3,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System;
 
     /// <summary>
-    /// The DnaSequenceRepository interface.
+    /// The GeneticSequenceRepository interface.
     /// </summary>
-    public interface IDnaSequenceRepository : IDisposable
+    public interface IGeneticSequenceRepository : IDisposable
     {
     }
 }

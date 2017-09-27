@@ -143,7 +143,7 @@
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
 
-                        Chain chain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                        Chain chain = commonSequenceRepository.GetLibiadaChain(sequenceId);
                         chain.FillIntervalManagers();
                         characteristics.Last().Add(new List<KeyValuePair<int, double>>());
                         short characteristicLinkId = characteristicLinkIds[i];

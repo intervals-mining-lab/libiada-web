@@ -228,6 +228,8 @@
     <Compile Include="Models\Repositories\Catalogs\BinaryCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\CongenericCharacteristicRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FullCharacteristicRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\GeneticSequenceRepository.cs" />
+    <Compile Include="Models\Repositories\Sequences\IGeneticSequenceRepository.cs" />
     <Compile Include="Models\SubsequenceImporter.cs" />
     <Compile Include="MusicSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -307,9 +309,7 @@
     <Compile Include="Models\Repositories\Sequences\ISubsequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\SequenceImporter.cs" />
     <Compile Include="Models\Repositories\Sequences\CommonSequenceRepository.cs" />
-    <Compile Include="Models\Repositories\Sequences\DnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ICommonSequenceRepository.cs" />
-    <Compile Include="Models\Repositories\Sequences\IDnaSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\ILiteratureSequenceRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IMatterRepository.cs" />
     <Compile Include="Models\Repositories\Sequences\IMusicSequenceRepository.cs" />

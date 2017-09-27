@@ -13,6 +13,7 @@
 
     using LibiadaWeb.Models.Repositories.Calculators;
     using LibiadaWeb.Models.Repositories.Catalogs;
+    using LibiadaWeb.Models.Repositories.Sequences;
 
     /// <summary>
     /// The sequences characteristics calculator.
@@ -31,22 +32,35 @@
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, short[] characteristicLinkIds)
+        public static double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds)
         {
-            IEnumerable<long> sequenceIds = chains.SelectMany(c => c).Select(c => c.Id).Distinct();
+            IEnumerable<long> sequenceIds = chainIds.SelectMany(c => c).Distinct();
             var newCharacteristics = new List<CharacteristicValue>();
-            var characteristics = new double[chains.Length][];
+            var characteristics = new double[chainIds.Length][];
             var links = new Link[characteristicLinkIds.Length];
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
 
+            var notCalculatedSequences = new Dictionary<long, Chain>();
             Dictionary<long, Dictionary<short, double>> dbCharacteristics;
             using (var db = new LibiadaWebEntities())
             {
                 dbCharacteristics = db.CharacteristicValue
-                                              .Where(c => characteristicLinkIds.Contains(c.CharacteristicLinkId) && sequenceIds.Contains(c.SequenceId))
-                                              .ToArray()
-                                              .GroupBy(c => c.SequenceId)
-                                              .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
+                                      .Where(c => characteristicLinkIds.Contains(c.CharacteristicLinkId) && sequenceIds.Contains(c.SequenceId))
+                                      .ToArray()
+                                      .GroupBy(c => c.SequenceId)
+                                      .ToDictionary(c => c.Key, c => c.ToDictionary(ct => ct.CharacteristicLinkId, ct => ct.Value));
+
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                foreach(var sequenceCharacteristics in dbCharacteristics)
+                {
+                    long seqienceId = sequenceCharacteristics.Key;
+                    if(sequenceCharacteristics.Value.Count < characteristicLinkIds.Length)
+                    {
+                        notCalculatedSequences.Add(seqienceId,commonSequenceRepository.GetLibiadaChain(seqienceId));
+                        notCalculatedSequences[seqienceId].FillIntervalManagers();
+                    }
+                }
+
 
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
@@ -57,14 +71,13 @@
                 }
             }
 
-            for (int i = 0; i < chains.Length; i++)
+            for (int i = 0; i < chainIds.Length; i++)
             {
                 characteristics[i] = new double[calculators.Length];
 
                 for (int j = 0; j < calculators.Length; j++)
                 {
-                    long sequenceId = chains[i][j].Id;
-                    chains[i][j].FillIntervalManagers();
+                    long sequenceId = chainIds[i][j];
 
                     Dictionary<short, double> sequenceDbCharacteristics;
                     if (!dbCharacteristics.TryGetValue(sequenceId, out sequenceDbCharacteristics))
@@ -74,7 +87,7 @@
 
                     if (!sequenceDbCharacteristics.TryGetValue(characteristicLinkIds[j], out characteristics[i][j]))
                     {
-                        characteristics[i][j] = calculators[j].Calculate(chains[i][j], links[j]);
+                        characteristics[i][j] = calculators[j].Calculate(notCalculatedSequences[sequenceId], links[j]);
                         var currentCharacteristic = new CharacteristicValue
                         {
                             SequenceId = sequenceId,
@@ -109,17 +122,17 @@
         /// <returns>
         /// The <see cref="T:double[]"/>.
         /// </returns>
-        public static double[] Calculate(Chain[] chains, short characteristicLinkId)
+        public static double[] Calculate(long[] chainIds, short characteristicLinkId)
         {
-            var twoDimensionalChains = new Chain[chains.Length][];
-            for (int i = 0; i < chains.Length; i++)
+            var twoDimensionalChainIds = new long[chainIds.Length][];
+            for (int i = 0; i < chainIds.Length; i++)
             {
-                twoDimensionalChains[i] = new[] { chains[i] };
+                twoDimensionalChainIds[i] = new[] { chainIds[i] };
             }
 
-            double[][] twoDimensionalResult = Calculate(twoDimensionalChains, new[] { characteristicLinkId });
+            double[][] twoDimensionalResult = Calculate(twoDimensionalChainIds, new[] { characteristicLinkId });
 
-            var result = new double[chains.Length];
+            var result = new double[chainIds.Length];
             for (int i = 0; i < twoDimensionalResult.Length; i++)
             {
                 result[i] = twoDimensionalResult[i][0];
@@ -149,14 +162,26 @@
         /// <returns>
         /// The <see cref="T:double[][]"/>.
         /// </returns>
-        public static double[][] Calculate(Chain[][] chains, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
+        public static double[][] Calculate(long[][] chainIds, short[] characteristicLinkIds, bool rotate, bool complementary, uint? rotationLength)
         {
             var links = new Link[characteristicLinkIds.Length];
             var calculators = new IFullCalculator[characteristicLinkIds.Length];
-            var characteristics = new double[chains.Length][];
+            var characteristics = new double[chainIds.Length][];
+            var chains = new Chain[chainIds.Length][];
 
             using (var db = new LibiadaWebEntities())
             {
+                var commonSequenceRepository = new CommonSequenceRepository(db);
+                for (int i = 0; i < chainIds.Length; i++)
+                {
+                    chains[i] = new Chain[chainIds[i].Length];
+                    for(int j = 0; j < chainIds[i].Length; j++)
+                    {
+                        chains[i][j] = commonSequenceRepository.GetLibiadaChain(chainIds[i][j]);
+                    }
+                }
+
+
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {

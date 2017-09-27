@@ -25,7 +25,7 @@
             using (var db = new LibiadaWebEntities())
             {
                 var matterRepository = new MatterRepository(db);
-                var dnaSequenceRepository = new DnaSequenceRepository(db);
+                var dnaSequenceRepository = new GeneticSequenceRepository(db);
                 var commonSequenceRepository = new CommonSequenceRepository(db);
                 var elementRepository = new ElementRepository(db);
                 var matterIds = new long[] { 1332, 1333, 1339, 1330, 1337, 1342, 1331, 1338, 1340, 1943, 1945, 1334 };
@@ -50,7 +50,7 @@
                                               RemoteDb = sequences[i].RemoteDb,
                                               RemoteId = sequences[i].RemoteId
                                           };
-                    var chain = commonSequenceRepository.ToLibiadaChain(sequences[i].Id);
+                    var chain = commonSequenceRepository.GetLibiadaChain(sequences[i].Id);
 
                     matterRepository.CreateMatterFromSequence(newSequence);
                     dnaSequenceRepository.Create(newSequence, false, elementRepository.ToDbElements(chain.Alphabet, Notation.Nucleotides, false), chain.Building);

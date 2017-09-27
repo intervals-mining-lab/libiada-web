@@ -26,7 +26,7 @@
         /// <summary>
         /// The DNA sequence repository.
         /// </summary>
-        private readonly DnaSequenceRepository dnaSequenceRepository;
+        private readonly GeneticSequenceRepository dnaSequenceRepository;
 
         /// <summary>
         /// The sequence repository.
@@ -44,7 +44,7 @@
         public SequenceTransformerController()
         {
             db = new LibiadaWebEntities();
-            dnaSequenceRepository = new DnaSequenceRepository(db);
+            dnaSequenceRepository = new GeneticSequenceRepository(db);
             commonSequenceRepository = new CommonSequenceRepository(db);
             elementRepository = new ElementRepository(db);
         }
@@ -87,7 +87,7 @@
             foreach (var matterId in matterIds)
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == Notation.Nucleotides).Id;
-                Chain sourceChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                Chain sourceChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
                 BaseChain transformedChain = transformType.Equals("toAmino")
                                                  ? DnaTransformer.EncodeAmino(sourceChain)

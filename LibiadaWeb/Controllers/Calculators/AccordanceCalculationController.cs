@@ -138,9 +138,9 @@
                     secondSequenceId = db.CommonSequence.Single(c => c.MatterId == secondMatterId && c.Notation == notation).Id;
                 }
 
-                Chain firstChain = commonSequenceRepository.ToLibiadaChain(firstSequenceId);
+                Chain firstChain = commonSequenceRepository.GetLibiadaChain(firstSequenceId);
                 firstChain.FillIntervalManagers();
-                Chain secondChain = commonSequenceRepository.ToLibiadaChain(secondSequenceId);
+                Chain secondChain = commonSequenceRepository.GetLibiadaChain(secondSequenceId);
                 secondChain.FillIntervalManagers();
 
                 AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetAccordanceCharacteristic(characteristicLinkId);

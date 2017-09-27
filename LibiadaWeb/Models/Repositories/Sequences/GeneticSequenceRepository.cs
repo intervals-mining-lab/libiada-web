@@ -12,19 +12,20 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using Npgsql;
 
     using NpgsqlTypes;
+    using System.Linq;
 
     /// <summary>
     /// The DNA sequence repository.
     /// </summary>
-    public class DnaSequenceRepository : SequenceImporter, IDnaSequenceRepository
+    public class GeneticSequenceRepository : SequenceImporter, IGeneticSequenceRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DnaSequenceRepository"/> class.
+        /// Initializes a new instance of the <see cref="GeneticSequenceRepository"/> class.
         /// </summary>
         /// <param name="db">
         /// The db.
         /// </param>
-        public DnaSequenceRepository(LibiadaWebEntities db) : base(db)
+        public GeneticSequenceRepository(LibiadaWebEntities db) : base(db)
         {
         }
 
@@ -133,13 +134,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The dispose.
-        /// </summary>
-        public void Dispose()
-        {
-        }
-
-        /// <summary>
         /// The to sequence.
         /// </summary>
         /// <param name="source">
@@ -156,6 +150,34 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Notation = source.Notation,
                 MatterId = source.MatterId
             };
+        }
+
+        /// <summary>
+        /// Extracts nucleotide sequences ids from database.
+        /// </summary>
+        /// <param name="matterIds">
+        /// The matter ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:long[]"/>.
+        /// </returns>
+        public long[] GetNucleotideSequenceIds(long[] matterIds)
+        {
+            var chains = new long[matterIds.Length];
+            DnaSequence[] sequences = Db.DnaSequence.Where(c => matterIds.Contains(c.MatterId) && c.Notation == Notation.Nucleotides).ToArray();
+            for (int i = 0; i < matterIds.Length; i++)
+            {
+                chains[i] = sequences.Single(c => c.MatterId == matterIds[i]).Id;
+            }
+
+            return chains;
+        }
+
+        /// <summary>
+        /// The dispose.
+        /// </summary>
+        public void Dispose()
+        {
         }
     }
 }

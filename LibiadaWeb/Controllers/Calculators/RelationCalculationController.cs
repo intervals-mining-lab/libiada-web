@@ -130,7 +130,7 @@
                     sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                 }
 
-                Chain currentChain = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetBinaryCharacteristic(characteristicLinkId);
 
                 IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(binaryCharacteristic);

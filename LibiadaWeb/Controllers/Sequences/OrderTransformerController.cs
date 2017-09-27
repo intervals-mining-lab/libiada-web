@@ -87,7 +87,7 @@
             return CreateTask(() =>
             {
                 var sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId).Id;
-                var sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                var sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                 for (int j = 0; j < iterationsCount; j++)
                 {
                     for (int i = 0; i < transformationIds.Length; i++)

@@ -114,8 +114,8 @@
                 using (var db = new LibiadaWebEntities())
                 {
                     // Sequences characteristic
-                    var commonSequenceRepository = new CommonSequenceRepository(db);
-                    Chain[] chains = commonSequenceRepository.GetNucleotideChains(matterIds);
+                    var geneticSequenceRepository = new GeneticSequenceRepository(db);
+                    long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
                     var sequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);

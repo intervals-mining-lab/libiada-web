@@ -130,7 +130,7 @@
                             sequenceId = db.CommonSequence.Single(c => c.MatterId == matterId && c.Notation == notation).Id;
                         }
 
-                        Chain sequence = commonSequenceRepository.ToLibiadaChain(sequenceId);
+                        Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                         for (int l = 0; l < iterationsCount; l++)
                         {
                             for (int j = 0; j < transformationIds.Length; j++)
