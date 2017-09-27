@@ -88,7 +88,7 @@
         }
 
         /// <summary>
-        /// The clear tasks.
+        /// Deletes all visible to user tasks.
         /// </summary>
         public static void DeleteAllTasks()
         {
@@ -101,32 +101,20 @@
                     tasks = tasks.Where(t => t.TaskData.UserId == AccountHelper.GetUserId()).ToList();
                 }
 
-                while (tasks.Count > 0)
+                for (int i = tasks.Count - 1; i >= 0; i--)
                 {
-                    Task task = tasks.Last();
-                    lock (task)
-                    {
-                        if (task.Thread != null && task.Thread.IsAlive)
-                        {
-                            task.Thread.Abort();
-                        }
-
-                        tasks.Remove(task);
-                        Tasks.Remove(task);
-
-                        TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
-                    }
+                    DeleteTask(tasks[i].TaskData.Id);
                 }
             }
         }
 
         /// <summary>
-        /// The delete task.
+        /// Deletes the task by id.
         /// </summary>
         /// <param name="id">
-        /// The id.
+        /// The task id.
         /// </param>
-        public static void DeleteTask(int id)
+        public static void DeleteTask(long id)
         {
             lock (Tasks)
             {
@@ -141,6 +129,15 @@
                         }
 
                         Tasks.Remove(task);
+
+                        using (var db = new LibiadaWebEntities())
+                        {
+                            CalculationTask databaseTask = db.CalculationTask.Find(id);
+                            db.CalculationTask.Remove(databaseTask);
+                            db.SaveChanges();
+                        }
+
+
                         TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
