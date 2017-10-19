@@ -33,6 +33,7 @@
                 var result = new
                 {
                     task.Id,
+                    TaskType = task.TaskType.GetName(),
                     DisplayName = task.TaskType.GetDisplayValue(),
                     Created = task.Created.ToString(OutputFormats.DateTimeFormat),
                     Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
@@ -56,18 +57,19 @@
         /// </returns>
         public string GetAllTasks()
         {
-            var tasks = TaskManager.GetTasksData().Select(t => new
+            var tasks = TaskManager.GetTasksData().Select(task => new
             {
-                t.Id,
-                DisplayName = t.TaskType.GetDisplayValue(),
-                Created = t.Created.ToString(OutputFormats.DateTimeFormat),
-                Started = t.Started?.ToString(OutputFormats.DateTimeFormat),
-                Completed = t.Completed?.ToString(OutputFormats.DateTimeFormat),
-                ExecutionTime = t.ExecutionTime?.ToString(OutputFormats.TimeFormat),
-                TaskState = t.TaskState.ToString(),
-                TaskStateName = t.TaskState.GetDisplayValue(),
-                t.UserId,
-                t.UserName
+                task.Id,
+                TaskType = task.TaskType.GetName(),
+                DisplayName = task.TaskType.GetDisplayValue(),
+                Created = task.Created.ToString(OutputFormats.DateTimeFormat),
+                Started = task.Started?.ToString(OutputFormats.DateTimeFormat),
+                Completed = task.Completed?.ToString(OutputFormats.DateTimeFormat),
+                ExecutionTime = task.ExecutionTime?.ToString(OutputFormats.TimeFormat),
+                TaskState = task.TaskState.ToString(),
+                TaskStateName = task.TaskState.GetDisplayValue(),
+                task.UserId,
+                task.UserName
             });
 
             return JsonConvert.SerializeObject(tasks.ToArray());

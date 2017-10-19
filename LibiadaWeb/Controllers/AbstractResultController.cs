@@ -7,7 +7,7 @@
     using LibiadaWeb.Tasks;
 
     /// <summary>
-    /// The abstract result controller.
+    /// Abstract parent controller for all tasks controllers (calculators, etc.).
     /// </summary>
     public abstract class AbstractResultController : Controller
     {
@@ -22,36 +22,41 @@
         /// <param name="taskType">
         /// The task Type.
         /// </param>
-        protected AbstractResultController(TaskType taskType)
-        {
-            this.taskType = taskType;
-        }
+        protected AbstractResultController(TaskType taskType) => this.taskType = taskType;
 
         /// <summary>
         /// The result.
         /// </summary>
-        /// <param name="taskId">
+        /// <param name="id">
         /// The task Id.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Result(string taskId)
+        public ActionResult Result(int id)
         {
             try
             {
-                var result = TempData["result"] as Dictionary<string, object>;
-                if (result == null)
+                Task task = TaskManager.GetTask(id);
+                switch (task.TaskData.TaskState)
                 {
-                    throw new Exception("No data.");
-                }
+                    case TaskState.Completed:
+                    case TaskState.Error:
+                        Dictionary<string, object> result = task.Result;
+                        if (result == null)
+                        {
+                            throw new Exception("No data.");
+                        }
 
-                foreach (string key in result.Keys)
-                {
-                    ViewData[key] = key == "data" || key == "additionalData" ? "{}" : result[key];
-                }
+                        foreach (string key in result.Keys)
+                        {
+                            ViewData[key] = key == "data" || key == "additionalData" ? "{}" : result[key];
+                        }
 
-                TempData.Keep();
+                        break;
+                    default:
+                        throw new Exception($"Task with id = {id} is not completed, current status is {task.TaskData.TaskState}");
+                }
             }
             catch (Exception e)
             {
@@ -62,7 +67,7 @@
                 ViewBag.ErrorMessage = e.Message;
             }
 
-            ViewBag.taskId = taskId;
+            ViewBag.taskId = id;
             return View();
         }
 
