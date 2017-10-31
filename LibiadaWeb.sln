@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibiadaWeb", "LibiadaWeb\LibiadaWeb.csproj", "{47FAD378-F2BC-4470-AE1A-F497D698600C}"
 EndProject
@@ -25,6 +25,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaCore.Tests", "..\libiada-core\LibiadaCore.Tests\LibiadaCore.Tests.csproj", "{820658FE-55EE-4E28-B082-9F8019B30059}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibiadaMusic.Tests", "..\libiada-core\LibiadaMusic.Tests\LibiadaMusic.Tests.csproj", "{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGenerator", "..\libiada-core\SequenceGenerator\SequenceGenerator.csproj", "{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SequenceGeneretor.Tests", "..\libiada-core\SequenceGeneretor.Tests\SequenceGeneretor.Tests.csproj", "{91D7CA7B-E8B7-4EAD-9E8A-7018D8921BA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +68,14 @@ Global
 		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC7FB960-7E26-4CBF-94F3-06ABAA97C810}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91D7CA7B-E8B7-4EAD-9E8A-7018D8921BA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91D7CA7B-E8B7-4EAD-9E8A-7018D8921BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91D7CA7B-E8B7-4EAD-9E8A-7018D8921BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91D7CA7B-E8B7-4EAD-9E8A-7018D8921BA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

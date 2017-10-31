@@ -177,6 +177,13 @@
         /// </summary>
         [Display(Name = "Sequence import")]
         [TaskClass(typeof(MattersController))]
-        Matters = 24
+        Matters = 24,
+
+        /// <summary>
+        /// Calculates distribution of sequences by order.
+        /// </summary>
+        [Display(Name = "Distribution of sequences by order")]
+        [TaskClass(typeof(SequencesOrderDistributionController))]
+        SequencesOrderDistribution = 25
     }
 }

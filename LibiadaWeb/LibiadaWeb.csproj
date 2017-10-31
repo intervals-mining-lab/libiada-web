@@ -136,6 +136,7 @@
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />
     <Compile Include="Controllers\Calculators\CongenericCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\SequencesOrderDistributionController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesComparerController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SubsequencesDistributionController.cs" />
@@ -576,6 +577,8 @@
     <Content Include="Views\Partial\_ModalLoadingWindow.cshtml" />
     <Content Include="Views\SequenceCleaner\Index.cshtml" />
     <Content Include="Views\Sequences\CommonSequences\Result.cshtml" />
+    <Content Include="Views\Calculators\SequencesOrderDistribution\Index.cshtml" />
+    <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -599,6 +602,10 @@
     <ProjectReference Include="..\..\libiada-core\LibiadaMusic\LibiadaMusic.csproj">
       <Project>{dcc2b837-5b01-4d7d-9de6-7c88edcf8ae5}</Project>
       <Name>LibiadaMusic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj">
+      <Project>{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}</Project>
+      <Name>SequenceGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
