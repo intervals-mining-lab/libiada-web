@@ -34,7 +34,7 @@
         {
             using (var db = new LibiadaWebEntities())
             {
-                CalculationTask[] databaseTasks = db.CalculationTask.ToArray();
+                CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
                 lock (Tasks)
                 {
                     foreach (CalculationTask task in databaseTasks)

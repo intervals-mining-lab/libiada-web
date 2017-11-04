@@ -34,8 +34,9 @@
                 default: console.log("Unknown task event");
                     break;
             }
-
-            $scope.$apply();
+            try {
+                $scope.$apply();
+            } catch (e) {}
         };
 
         $.connection.hub.stateChanged(function (change) {
@@ -46,18 +47,20 @@
             if (change.newState === $.signalR.connectionState.reconnecting) {
                 $scope.flags.reconnecting = true;
 
-                //delay(function () {
-                //    if (change.newState === $.signalR.connectionState.reconnecting){
-                //        if (confirm('Connection lost. Refresh page?')) {
-                //            location.reload(true);
-                //        }
-                //    }
-                //}, 30000);
+                delay(function () {
+                    if (change.newState === $.signalR.connectionState.reconnecting){
+                        if (confirm('Connection lost. Refresh page?')) {
+                            location.reload(true);
+                        }
+                    }
+                }, 30000);
             }
             else if (change.newState === $.signalR.connectionState.connected) {
                 $scope.flags.reconnecting = false;
             }
-            $scope.$apply();
+            try {
+                $scope.$apply();
+            } catch (e) { }
         });
 
 
@@ -71,7 +74,9 @@
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
                 }
-                $scope.$apply();
+                try {
+                    $scope.$apply();
+                } catch (e) { }
             });
         });
 
