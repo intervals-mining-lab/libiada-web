@@ -1,1 +1,44 @@
 ﻿
+@{
+    ViewBag.Title = "Sequences Order Distribution";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@if (ViewBag.Error == null)
+{
+    @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionController")
+
+    <div ng-app="libiada" ng-controller="SequencesOrderDistributionCtrl">
+        @Html.Partial("_ModalLoadingWindow")
+        <div ng-disabled="loading">
+            <div ng-repeat="order in result" >
+                <table class="table table-bordered table-hover" ng-cloak>
+                    <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th ng-bind="order.order">
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="sequence in order.sequences">
+                        <td ng-bind="$index+1"></td>
+                        <td ng-bind="sequence">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br/>
+            </div>
+           
+        </div>
+    </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/d3js")
+}
