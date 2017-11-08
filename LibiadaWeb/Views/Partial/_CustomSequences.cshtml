@@ -8,6 +8,15 @@
     </div>
 </div>
 <div class="form-group" ng-show="localFile">
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="checkbox" name="fileIsImage" ng-model="fileIsImage" value="true" />
+            <input type="hidden" name="fileIsImage" value="false" />
+            File is image
+        </label>
+    </div>
+</div>
+<div class="form-group" ng-show="localFile">
     <label class="control-label col-md-2" for="file">Sequence file(s):</label>
     <div class="col-md-10">
         <input type="file" name="file" id="file" multiple />

@@ -9,6 +9,8 @@
     using Bio;
     using Bio.Extensions;
 
+    using ImageSharp;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
@@ -17,6 +19,7 @@
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
+    using LibiadaCore.Images;
 
     /// <summary>
     /// The quick calculation controller.
@@ -74,26 +77,36 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, HttpPostedFileBase[] file)
+        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, bool fileIsImage, HttpPostedFileBase[] file)
         {
             return CreateTask(() =>
                 {
                     int sequencesCount = localFile ? Request.Files.Count : customSequences.Length;
-                    var sequences = new string[sequencesCount];
                     var names = new string[sequencesCount];
+                    var sequences = new Chain[sequencesCount];
 
                     for (int i = 0; i < sequencesCount; i++)
                     {
                         if (localFile)
                         {
                             Stream sequenceStream = FileHelper.GetFileStream(file[i]);
-                            ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                            sequences[i] = fastaSequence.ConvertToString();
-                            names[i] = fastaSequence.ID;
+                            if (fileIsImage)
+                            {
+                                var image = new Image(sequenceStream);
+                                var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+                                sequences[i] = new Chain(sequence.Building, sequence.Alphabet);
+                            }
+                            else
+                            {
+                                ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                                var stringSequence = fastaSequence.ConvertToString();
+                                sequences[i] = new Chain(stringSequence);
+                                names[i] = fastaSequence.ID;
+                            }
                         }
                         else
                         {
-                            sequences[i] = customSequences[i];
+                            sequences[i] = new Chain(customSequences[i]);
                             names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
                         }
                     }
@@ -104,13 +117,11 @@
                     {
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            var chain = new Chain(sequences[j]);
-
                             Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
-                            characteristics[j, k] = calculator.Calculate(chain, link);
+                            characteristics[j, k] = calculator.Calculate(sequences[j], link);
                         }
                     }
 
