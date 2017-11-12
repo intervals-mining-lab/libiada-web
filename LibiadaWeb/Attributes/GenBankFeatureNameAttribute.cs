@@ -20,9 +20,6 @@
         /// <param name="value">
         /// GenBank name of the feature.
         /// </param>
-        public GenBankFeatureNameAttribute(string value)
-        {
-            Value = value;
-        }
+        public GenBankFeatureNameAttribute(string value) => Value = value;
     }
 }

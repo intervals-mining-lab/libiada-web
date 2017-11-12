@@ -23,7 +23,7 @@
         {
             if (!Enum.IsDefined(typeof(Nature), value))
             {
-                throw new ArgumentException("Nature attribute value is not valid nature", "value");
+                throw new ArgumentException("Nature attribute value is not valid nature", nameof(value));
             }
 
             Value = value;

@@ -77,7 +77,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence commonSequence, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(commonSequence, alphabet, building);
+            List<object> parameters = FillParams(commonSequence, alphabet, building);
 
             const string Query = @"INSERT INTO music_chain (
                                         id,
