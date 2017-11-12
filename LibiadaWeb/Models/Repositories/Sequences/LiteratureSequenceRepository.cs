@@ -1,5 +1,6 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
+    using System.Collections.Generic;
     using System.IO;
 
     using LibiadaCore.Core;
@@ -92,7 +93,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence sequence, bool original, Language language, Translator translator, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(sequence, alphabet, building);
+            List<object> parameters = FillParams(sequence, alphabet, building);
 
             parameters.Add(new NpgsqlParameter
             {

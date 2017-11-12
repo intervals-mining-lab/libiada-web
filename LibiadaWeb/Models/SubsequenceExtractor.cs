@@ -81,9 +81,9 @@
         public Subsequence[] GetSubsequences(long sequenceId, IEnumerable<Feature> features)
         {
             return db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
-                                        .Include(s => s.Position)
-                                        .Include(s => s.SequenceAttribute)
-                                        .ToArray();
+                                 .Include(s => s.Position)
+                                 .Include(s => s.SequenceAttribute)
+                                 .ToArray();
         }
 
         /// <summary>
@@ -107,9 +107,9 @@
             filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
             var result = new List<Subsequence>();
             Subsequence[] allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
-                                        .Include(s => s.Position)
-                                        .Include(s => s.SequenceAttribute)
-                                        .ToArray();
+                                                          .Include(s => s.Position)
+                                                          .Include(s => s.SequenceAttribute)
+                                                          .ToArray();
 
             foreach (Subsequence subsequence in allSubsequences)
             {
@@ -213,11 +213,11 @@
         {
             string joinedSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length).ConvertToString();
 
-            Position[] position = subsequence.Position.ToArray();
+            Position[] positions = subsequence.Position.ToArray();
 
-            for (int j = 0; j < position.Length; j++)
+            foreach (Position position in positions)
             {
-                joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
+                joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
             }
 
             return new Chain(joinedSequence);
@@ -238,16 +238,16 @@
         private Chain ExtractJoinedSubsequenceWithComplement(Sequence sourceSequence, Subsequence subsequence)
         {
             ISequence bioSequence = sourceSequence.GetSubSequence(subsequence.Start, subsequence.Length);
-            Position[] position = subsequence.Position.ToArray();
+            Position[] positions = subsequence.Position.ToArray();
             string resultSequence;
 
             if (subsequence.SequenceAttribute.Any(sa => sa.Attribute == Attribute.ComplementJoin))
             {
                 string joinedSequence = bioSequence.ConvertToString();
 
-                for (int j = 0; j < position.Length; j++)
+                foreach (Position position in positions)
                 {
-                    joinedSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).ConvertToString();
+                    joinedSequence += sourceSequence.GetSubSequence(position.Start, position.Length).ConvertToString();
                 }
 
                 resultSequence = new Sequence(Alphabets.DNA, joinedSequence).GetReverseComplementedSequence().ConvertToString();
@@ -256,9 +256,9 @@
             {
                 resultSequence = bioSequence.GetReverseComplementedSequence().ConvertToString();
 
-                for (int j = 0; j < position.Length; j++)
+                foreach (Position position in positions)
                 {
-                    resultSequence += sourceSequence.GetSubSequence(position[j].Start, position[j].Length).GetReverseComplementedSequence().ConvertToString();
+                    resultSequence += sourceSequence.GetSubSequence(position.Start, position.Length).GetReverseComplementedSequence().ConvertToString();
                 }
             }
 

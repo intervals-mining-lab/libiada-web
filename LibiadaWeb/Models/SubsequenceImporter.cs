@@ -81,8 +81,8 @@
             sequenceAttributeRepository = new SequenceAttributeRepository(db);
 
             allNonGenesLeafLocations = features.Where(f => f.Key != gene)
-                .Select(f => f.Location.GetLeafLocations())
-                .ToArray();
+                                               .Select(f => f.Location.GetLeafLocations())
+                                               .ToArray();
 
             int parentLength = DbHelper.GetSequenceLength(db, sequenceId);
             int sourceLength = features[0].Location.LocationEnd;

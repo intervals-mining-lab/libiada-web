@@ -1,6 +1,8 @@
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Bio;
     using Bio.Extensions;
@@ -12,7 +14,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using Npgsql;
 
     using NpgsqlTypes;
-    using System.Linq;
 
     /// <summary>
     /// The DNA sequence repository.
@@ -63,7 +64,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
+            long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, false);
             Create(sequence, partial, alphabet, chain.Building);
         }
 
@@ -84,7 +85,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence sequence, bool partial, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(sequence, alphabet, building);
+            List<object> parameters = FillParams(sequence, alphabet, building);
 
             parameters.Add(new NpgsqlParameter
             {
@@ -134,25 +135,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The to sequence.
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <returns>
-        /// The <see cref="CommonSequence"/>.
-        /// </returns>
-        private CommonSequence ToCommonSequence(DnaSequence source)
-        {
-            return new CommonSequence
-            {
-                Id = source.Id,
-                Notation = source.Notation,
-                MatterId = source.MatterId
-            };
-        }
-
-        /// <summary>
         /// Extracts nucleotide sequences ids from database.
         /// </summary>
         /// <param name="matterIds">
@@ -178,6 +160,25 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
+        }
+
+        /// <summary>
+        /// The to sequence.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CommonSequence"/>.
+        /// </returns>
+        private CommonSequence ToCommonSequence(DnaSequence source)
+        {
+            return new CommonSequence
+                       {
+                           Id = source.Id,
+                           Notation = source.Notation,
+                           MatterId = source.MatterId
+                       };
         }
     }
 }
