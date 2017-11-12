@@ -52,7 +52,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
         }
 
         /// <summary>
@@ -69,7 +68,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         public bool ElementsInDb(Alphabet alphabet, Notation notation)
         {
-            var elements = from IBaseObject element in alphabet select element.ToString();
+            IEnumerable<string> elements = alphabet.Select(e => e.ToString());
 
             int existingElementsCount = db.Element.Count(e => elements.Contains(e.Value) && e.Notation == notation);
 
@@ -88,28 +87,29 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public long[] GetOrCreateNotesInDb(Alphabet alphabet)
         {
             var newNotes = new List<Note>();
-            var result = new long[alphabet.Cardinality];
+            var result = new Note[alphabet.Cardinality];
             for (int i = 0; i < alphabet.Cardinality; i++)
             {
                 var note = (ValueNote)alphabet[i];
-                var pitches = GetOrCreatePitchesInDb(note.Pitch);
+                int[] pitches = GetOrCreatePitchesInDb(note.Pitch);
 
-                var localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
+                string localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
                 if (db.Note.Any(n => n.Value == localNoteHash))
                 {
-                    var databaseNote = db.Note.Single(n => n.Value == localNoteHash);
-                    result[i] = databaseNote.Id;
-                    if (note.Triplet != databaseNote.Triplet || note.Duration.Denominator != databaseNote.Denominator
-                        || note.Duration.Numerator != databaseNote.Numerator
-                        || note.Duration.Odenominator != databaseNote.Odenominator
-                        || note.Duration.Onumerator != databaseNote.Onumerator || note.Tie != databaseNote.Tie)
+                    result[i] = db.Note.Single(n => n.Value == localNoteHash);
+                    if (note.Triplet != result[i].Triplet
+                     || note.Duration.Denominator != result[i].Denominator
+                     || note.Duration.Numerator != result[i].Numerator
+                     || note.Duration.Odenominator != result[i].Odenominator
+                     || note.Duration.Onumerator != result[i].Onumerator
+                     || note.Tie != result[i].Tie)
                     {
                         throw new Exception("Found in db note not equals to local note.");
                     }
                 }
                 else
                 {
-                    var newNote = new Note
+                    result[i] = new Note
                     {
                         Value = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty),
                         Triplet = note.Triplet,
@@ -122,14 +122,13 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
                         Notation = Notation.Notes
                     };
-                    newNotes.Add(newNote);
-                    result[i] = newNote.Id;
+                    newNotes.Add(result[i]);
                 }
             }
 
             db.Note.AddRange(newNotes);
             db.SaveChanges();
-            return result;
+            return result.Select(n => n.Id).ToArray();
         }
 
         /// <summary>
@@ -164,11 +163,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 }
             }
 
-            var staticNotation = Aliases.StaticNotations.Contains(notation);
+            bool staticNotation = Aliases.StaticNotations.Contains(notation);
 
-            var stringElements = alphabet.Select(element => element.ToString()).ToList();
+            List<string> stringElements = alphabet.Select(element => element.ToString()).ToList();
 
-            var elements = staticNotation ?
+            List<Element> elements = staticNotation ?
                             CachedElements.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList() :
                             db.Element.Where(e => e.Notation == notation && stringElements.Contains(e.Value)).ToList();
 
@@ -236,7 +235,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             }
 
             var elementsList = new List<SelectListItem>();
-            foreach (var element in allElements)
+            foreach (Element element in allElements)
             {
                 elementsList.Add(new SelectListItem
                     {
@@ -261,41 +260,39 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         private int[] GetOrCreatePitchesInDb(List<Pitch> pitches)
         {
             var newPitches = new List<LibiadaWeb.Pitch>();
-            var result = new int[pitches.Count];
+            var result = new LibiadaWeb.Pitch[pitches.Count];
 
             for (int i = 0; i < pitches.Count; i++)
             {
-                var pitch = pitches[i];
+                Pitch pitch = pitches[i];
 
                 if (db.Pitch.Any(p => p.Midinumber == pitch.MidiNumber))
                 {
-                    var databasePitch = db.Pitch.Single(p => p.Midinumber == pitch.MidiNumber);
-                    result[i] = databasePitch.Id;
+                    result[i] = db.Pitch.Single(p => p.Midinumber == pitch.MidiNumber);
 
-                    if (pitch.Alter != databasePitch.Accidental
-                        || pitch.Step != databasePitch.NoteSymbol
-                        || pitch.Octave != databasePitch.Octave)
+                    if (pitch.Alter != result[i].Accidental
+                     || pitch.Step != result[i].NoteSymbol
+                     || pitch.Octave != result[i].Octave)
                     {
                         throw new Exception("Found in db pitch not equals to local pitch.");
                     }
                 }
                 else
                 {
-                    var newPitch = new LibiadaWeb.Pitch
+                    result[i] = new LibiadaWeb.Pitch
                     {
                         Accidental = pitch.Alter,
                         NoteSymbol = pitch.Step,
                         Octave = pitch.Octave,
                         Midinumber = pitch.MidiNumber
                     };
-                    newPitches.Add(newPitch);
-                    result[i] = newPitch.Id;
+                    newPitches.Add(result[i]);
                 }
             }
 
             db.Pitch.AddRange(newPitches);
             db.SaveChanges();
-            return result;
+            return result.Select(p => p.Id).ToArray();
         }
 
         /// <summary>
@@ -312,11 +309,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             var newElements = new List<Element>();
             List<string> elements = (from IBaseObject element in libiadaAlphabet select element.ToString()).ToList();
 
-            var existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.Notation == notation).Select(e => e.Value);
+            IQueryable<string> existingElements = db.Element.Where(e => elements.Contains(e.Value) && e.Notation == notation).Select(e => e.Value);
 
-            var notExistingElements = elements.Where(e => !existingElements.Contains(e)).ToList();
+            List<string> notExistingElements = elements.Where(e => !existingElements.Contains(e)).ToList();
 
-            foreach (var element in notExistingElements)
+            foreach (string element in notExistingElements)
             {
                 var newElement = new Element
                 {

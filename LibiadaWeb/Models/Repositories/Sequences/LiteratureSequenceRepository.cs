@@ -46,7 +46,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </param>
         public void Create(CommonSequence commonSequence, Stream sequenceStream, Language language, bool original, Translator translator)
         {
-            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
+            string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             string[] text = stringSequence.Split('\n');
             for (int l = 0; l < text.Length - 1; l++)
             {

@@ -39,17 +39,17 @@
         /// </param>
         public void Create(CommonSequence sequence, Stream sequenceStream, int precision)
         {
-            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
+            string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
 
             string[] text = stringSequence.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
 
-            var cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToList();
+            List<string> cleanedSequence = text.Where(t => !t.Equals("\"volume\"") && !string.IsNullOrEmpty(t) && !string.IsNullOrWhiteSpace(t)).ToList();
 
             var elements = new List<IBaseObject>();
 
             for (int i = 0; i < cleanedSequence.Count; i++)
             {
-                var element = cleanedSequence[i];
+                string element = cleanedSequence[i];
                 if (element.Substring(element.Length - 2, 2).Equals(".0"))
                 {
                     cleanedSequence[i] = cleanedSequence[i].Substring(0, cleanedSequence[i].Length - 2);
@@ -67,7 +67,7 @@
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
+            long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, sequence.Notation, true);
             Create(sequence, alphabet, chain.Building);
         }
 
@@ -85,7 +85,7 @@
         /// </param>
         public void Create(CommonSequence sequence, long[] alphabet, int[] building)
         {
-            var parameters = FillParams(sequence, alphabet, building);
+            List<object> parameters = FillParams(sequence, alphabet, building);
 
             const string Query = @"INSERT INTO data_chain (
                                         id,

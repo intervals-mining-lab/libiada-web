@@ -99,7 +99,7 @@
                     mattersNames = db.Matter.Where(m => matterIds.Contains(m.Id)).ToDictionary(m => m.Id, m => m.Name);
 
                     var commonSequenceRepository = new CommonSequenceRepository(db);
-                    sequenceIds = commonSequenceRepository.GetSeuqneceIds(matterIds, notations, languages, translators);
+                    sequenceIds = commonSequenceRepository.GetSequenceIds(matterIds, notations, languages, translators);
 
                     var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)

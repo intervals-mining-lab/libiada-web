@@ -28,7 +28,7 @@
         /// <summary>
         /// The binary characteristic links.
         /// </summary>
-        private readonly List<BinaryCharacteristicLink> binaryCharacteristicLinks;
+        private readonly BinaryCharacteristicLink[] binaryCharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private BinaryCharacteristicRepository(LibiadaWebEntities db)
         {
-            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToList();
+            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToArray();
         }
 
         /// <summary>

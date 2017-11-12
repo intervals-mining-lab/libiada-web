@@ -6,6 +6,8 @@
 
     using LibiadaWeb.Models.CalculatorsData;
 
+    using Attribute = LibiadaWeb.Attribute;
+
     /// <summary>
     /// The sequence attribute.
     /// </summary>
@@ -88,9 +90,9 @@
         {
             var result = new List<SequenceAttribute>();
 
-            foreach (var qualifier in qualifiers)
+            foreach (KeyValuePair<string, List<string>> qualifier in qualifiers)
             {
-                foreach (var value in qualifier.Value)
+                foreach (string value in qualifier.Value)
                 {
                     if (qualifier.Key == "translation")
                     {
@@ -99,7 +101,7 @@
 
                     if (qualifier.Key == "protein_id")
                     {
-                        var remoteId = value.Replace("\"", string.Empty);
+                        string remoteId = value.Replace("\"", string.Empty);
 
                         if (!string.IsNullOrEmpty(subsequence.RemoteId) && subsequence.RemoteId != remoteId)
                         {
@@ -135,7 +137,7 @@
         /// </returns>
         private SequenceAttribute CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
         {
-            var attribute = attributeRepository.GetAttributeByName(attributeName);
+            Attribute attribute = attributeRepository.GetAttributeByName(attributeName);
 
             var subsequenceAttribute = new SequenceAttribute
             {
@@ -162,7 +164,7 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(LibiadaWeb.Attribute attribute, string attributeValue, long sequenceId)
+        private SequenceAttribute CreateSequenceAttribute(Attribute attribute, string attributeValue, long sequenceId)
         {
             var subsequenceAttribute = new SequenceAttribute
             {
@@ -186,7 +188,7 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(LibiadaWeb.Attribute attribute, long sequenceId)
+        private SequenceAttribute CreateSequenceAttribute(Attribute attribute, long sequenceId)
         {
             return CreateSequenceAttribute(attribute, string.Empty, sequenceId);
         }
@@ -225,17 +227,17 @@
             var result = new List<SequenceAttribute>();
             if (complement)
             {
-                result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.Complement, subsequence.Id));
+                result.Add(CreateSequenceAttribute(Attribute.Complement, subsequence.Id));
 
                 if (complementJoin)
                 {
-                    result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.ComplementJoin, subsequence.Id));
+                    result.Add(CreateSequenceAttribute(Attribute.ComplementJoin, subsequence.Id));
                 }
             }
 
             if (subsequence.Partial)
             {
-                result.Add(CreateSequenceAttribute(LibiadaWeb.Attribute.Partial, subsequence.Id));
+                result.Add(CreateSequenceAttribute(Attribute.Partial, subsequence.Id));
             }
 
             return result;

@@ -23,8 +23,8 @@
         /// </summary>
         public AttributeRepository()
         {
-            var attributes = ArrayExtensions.ToArray<Attribute>();
-            attributesDictionary = attributes.ToList().ToDictionary(a => a.GetDisplayValue());
+            Attribute[] attributes = ArrayExtensions.ToArray<Attribute>();
+            attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
         }
 
         /// <summary>
@@ -41,8 +41,7 @@
         /// </exception>
         public Attribute GetAttributeByName(string name)
         {
-            Attribute value;
-            if (attributesDictionary.TryGetValue(name, out value))
+            if (attributesDictionary.TryGetValue(name, out Attribute value))
             {
                 return value;
             }

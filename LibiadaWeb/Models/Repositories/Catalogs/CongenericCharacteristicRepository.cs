@@ -28,7 +28,7 @@
         /// <summary>
         /// The congeneric characteristic links.
         /// </summary>
-        private readonly List<CongenericCharacteristicLink> congenericCharacteristicLinks;
+        private readonly CongenericCharacteristicLink[] congenericCharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private CongenericCharacteristicRepository(LibiadaWebEntities db)
         {
-            congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToList();
+            congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToArray();
         }
 
         /// <summary>

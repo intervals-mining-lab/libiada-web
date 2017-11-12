@@ -42,11 +42,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </exception>
         public void Create(CommonSequence sequence, Stream sequenceStream)
         {
-            var stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
+            string stringSequence = FileHelper.ReadSequenceFromStream(sequenceStream);
             var doc = new XmlDocument();
             doc.LoadXml(stringSequence);
 
-            MusicXmlParser parser = new MusicXmlParser();
+            var parser = new MusicXmlParser();
             parser.Execute(doc, "test");
             ScoreTrack tempTrack = parser.ScoreModel;
 
@@ -55,11 +55,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            var chain = ConvertCongenericScoreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
+            BaseChain chain = ConvertCongenericScoreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
 
             MatterRepository.CreateMatterFromSequence(sequence);
 
-            var alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
+            long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
             Create(sequence, alphabet, chain.Building);
         }
 

@@ -119,9 +119,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// The translators ids.
         /// </param>
         /// <returns>
-        /// The seuqneces ids as <see cref="T:long[][]"/>.
+        /// The sequences ids as <see cref="T:long[][]"/>.
         /// </returns>
-        public long[][] GetSeuqneceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
+        public long[][] GetSequenceIds(long[] matterIds, Notation[] notations, Language[] languages, Translator?[] translators)
         {
             var sequenceIds = new long[matterIds.Length][];
 

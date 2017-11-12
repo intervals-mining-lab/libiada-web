@@ -28,7 +28,7 @@
         /// <summary>
         /// The characteristic type links.
         /// </summary>
-        private readonly List<FullCharacteristicLink> fullCharacteristicLinks;
+        private readonly FullCharacteristicLink[] fullCharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private FullCharacteristicRepository(LibiadaWebEntities db)
         {
-            fullCharacteristicLinks = db.FullCharacteristicLink.ToList();
+            fullCharacteristicLinks = db.FullCharacteristicLink.ToArray();
         }
 
         /// <summary>

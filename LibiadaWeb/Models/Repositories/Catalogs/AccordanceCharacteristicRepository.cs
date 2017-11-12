@@ -28,7 +28,7 @@
         /// <summary>
         /// The accordance characteristic links.
         /// </summary>
-        private readonly List<AccordanceCharacteristicLink> accordanceCharacteristicLinks;
+        private readonly AccordanceCharacteristicLink[] accordanceCharacteristicLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private AccordanceCharacteristicRepository(LibiadaWebEntities db)
         {
-            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToList();
+            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToArray();
         }
 
         /// <summary>
@@ -69,13 +69,7 @@
         /// <summary>
         /// Gets the accordance characteristic links.
         /// </summary>
-        public IEnumerable<AccordanceCharacteristicLink> AccordanceCharacteristicLinks
-        {
-            get
-            {
-                return accordanceCharacteristicLinks.ToArray();
-            }
-        }
+        public IEnumerable<AccordanceCharacteristicLink> AccordanceCharacteristicLinks => accordanceCharacteristicLinks.ToArray();
 
         /// <summary>
         /// The get link for accordance characteristic.

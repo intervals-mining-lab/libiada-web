@@ -301,8 +301,6 @@
     <Compile Include="Models\CalculatorsData\SequenceData.cs" />
     <Compile Include="Models\CalculatorsData\IntPair.cs" />
     <Compile Include="Models\Repositories\Catalogs\AttributeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\IAttributeRepository.cs" />
-    <Compile Include="Models\Repositories\Catalogs\ICharacteristicTypeLinkRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\ISequenceAttributeRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\FeatureRepository.cs" />
     <Compile Include="Models\Repositories\Catalogs\SequenceAttributeRepository.cs" />

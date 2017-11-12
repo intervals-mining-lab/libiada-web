@@ -31,155 +31,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
-        /// The create matter.
-        /// </summary>
-        /// <param name="commonSequence">
-        /// The common sequence.
-        /// </param>
-        public void CreateMatterFromSequence(CommonSequence commonSequence)
-        {
-            Matter matter = commonSequence.Matter;
-            if (matter != null)
-            {
-                matter.Sequence = new Collection<CommonSequence>();
-                commonSequence.MatterId = CreateMatter(matter);
-            }
-            else
-            {
-                commonSequence.Matter = db.Matter.Single(m => m.Id == commonSequence.MatterId);
-            }
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList()
-        {
-            return GetMatterSelectList(m => true);
-        }
-
-        /// <summary>
-        /// The get select list with nature.
-        /// </summary>
-        /// <param name="matters">
-        /// The matters.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
-        {
-            return matters.OrderBy(m => m.Created).Select(m => new
-            {
-                Value = m.Id,
-                Text = m.Name,
-                Selected = false,
-                Created = m.Created.ToString(),
-                Modified = m.Modified.ToString(),
-                SequenceType = m.SequenceType.GetDisplayValue(),
-                Group = m.Group.GetDisplayValue(),
-                m.Nature,
-                m.Description
-            });
-        }
-
-        /// <summary>
-        /// The get matter select list.
-        /// </summary>
-        /// <param name="filter">
-        /// The filter.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{Object}"/>.
-        /// </returns>
-        public IEnumerable<object> GetMatterSelectList(Func<Matter, bool> filter)
-        {
-            return GetMatterSelectList(db.Matter.Where(filter));
-        }
-
-        /// <summary>
-        /// Creates matter from genBank metadata.
-        /// </summary>
-        /// <param name="metadata">
-        /// The metadata.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Matter"/>.
-        /// </returns>
-        public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
-        {
-            var matter = new Matter
-                             {
-                                 Name = ExtractMatterName(metadata) + " | " + metadata.Version.CompoundAccession,
-                                 Nature = Nature.Genetic
-                             };
-
-            FillGroupAndSequenceType(matter);
-
-            return matter;
-        }
-
-        /// <summary>
-        /// Extracts supposed sequence name from metadata.
-        /// </summary>
-        /// <param name="metadata">
-        /// The metadata.
-        /// </param>
-        /// <returns>
-        /// Supposed name as <see cref="string"/>.
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if all name fields are contradictory.
-        /// </exception>
-        public static string ExtractMatterName(GenBankMetadata metadata)
-        {
-            string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
-            string commonName = metadata.Source.CommonName;
-            string definition = metadata.Definition.TrimEnd(", complete genome.")
-                                                   .TrimEnd(", complete sequence.")
-                                                   .TrimEnd(", complete CDS.")
-                                                   .TrimEnd(", complete cds.")
-                                                   .TrimEnd(", genome.");
-
-            if (commonName.Contains(species))
-            {
-                if (definition.Contains(commonName))
-                {
-                    return definition;
-                }
-
-                if (commonName.Contains(definition))
-                {
-                    return commonName;
-                }
-
-                return commonName + " | " + definition;
-            }
-
-            if (species.Contains(commonName))
-            {
-                if (definition.Contains(species))
-                {
-                    return definition;
-                }
-
-                if (species.Contains(definition))
-                {
-                    return species;
-                }
-
-                return species + " | " + definition;
-            }
-
-            throw new Exception("Sequences names are not equal. CommonName = " + commonName +
-                                ", Species = " + species +
-                                ", Definition = " + definition);
-        }
-
-        /// <summary>
         /// Fills group and sequence type params in matter.
         /// </summary>
         /// <param name="matter">
@@ -240,11 +91,79 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         matter.Group = name.Contains("virus") ? Group.Virus : Group.Bacteria;
                         matter.SequenceType = SequenceType.CompleteGenome;
                     }
+
                     break;
                 default:
                     throw new System.ComponentModel.InvalidEnumArgumentException(nameof(matter.Nature), (int)matter.Nature, typeof(Nature));
             }
-            
+
+        }
+
+        /// <summary>
+        /// The create matter.
+        /// </summary>
+        /// <param name="commonSequence">
+        /// The common sequence.
+        /// </param>
+        public void CreateMatterFromSequence(CommonSequence commonSequence)
+        {
+            Matter matter = commonSequence.Matter;
+            if (matter != null)
+            {
+                matter.Sequence = new Collection<CommonSequence>();
+                commonSequence.MatterId = CreateMatter(matter);
+            }
+            else
+            {
+                commonSequence.Matter = db.Matter.Single(m => m.Id == commonSequence.MatterId);
+            }
+        }
+
+        /// <summary>
+        /// The get select list with nature.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetMatterSelectList()
+        {
+            return GetMatterSelectList(m => true);
+        }
+
+        /// <summary>
+        /// The get matter select list.
+        /// </summary>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        public IEnumerable<object> GetMatterSelectList(Func<Matter, bool> filter)
+        {
+            return GetMatterSelectList(db.Matter.Where(filter));
+        }
+
+        /// <summary>
+        /// Creates matter from genBank metadata.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Matter"/>.
+        /// </returns>
+        public Matter CreateMatterFromGenBankMetadata(GenBankMetadata metadata)
+        {
+            var matter = new Matter
+                             {
+                                 Name = ExtractMatterName(metadata) + " | " + metadata.Version.CompoundAccession,
+                                 Nature = Nature.Genetic
+                             };
+
+            FillGroupAndSequenceType(matter);
+
+            return matter;
         }
 
         /// <summary>
@@ -252,7 +171,88 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </summary>
         public void Dispose()
         {
-            db.Dispose();
+        }
+
+        /// <summary>
+        /// Extracts supposed sequence name from metadata.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <returns>
+        /// Supposed name as <see cref="string"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Thrown if all name fields are contradictory.
+        /// </exception>
+        private static string ExtractMatterName(GenBankMetadata metadata)
+        {
+            string species = metadata.Source.Organism.Species.GetLargestRepeatingSubstring();
+            string commonName = metadata.Source.CommonName;
+            string definition = metadata.Definition.TrimEnd(", complete genome.")
+                                                   .TrimEnd(", complete sequence.")
+                                                   .TrimEnd(", complete CDS.")
+                                                   .TrimEnd(", complete cds.")
+                                                   .TrimEnd(", genome.");
+
+            if (commonName.Contains(species))
+            {
+                if (definition.Contains(commonName))
+                {
+                    return definition;
+                }
+
+                if (commonName.Contains(definition))
+                {
+                    return commonName;
+                }
+
+                return commonName + " | " + definition;
+            }
+
+            if (species.Contains(commonName))
+            {
+                if (definition.Contains(species))
+                {
+                    return definition;
+                }
+
+                if (species.Contains(definition))
+                {
+                    return species;
+                }
+
+                return species + " | " + definition;
+            }
+
+            throw new Exception("Sequences names are not equal. CommonName = " + commonName +
+                                ", Species = " + species +
+                                ", Definition = " + definition);
+        }
+
+        /// <summary>
+        /// The get select list with nature.
+        /// </summary>
+        /// <param name="matters">
+        /// The matters.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{Object}"/>.
+        /// </returns>
+        private IEnumerable<object> GetMatterSelectList(IEnumerable<Matter> matters)
+        {
+            return matters.OrderBy(m => m.Created).Select(m => new
+            {
+                Value = m.Id,
+                Text = m.Name,
+                Selected = false,
+                Created = m.Created.ToString(),
+                Modified = m.Modified.ToString(),
+                SequenceType = m.SequenceType.GetDisplayValue(),
+                Group = m.Group.GetDisplayValue(),
+                m.Nature,
+                m.Description
+            });
         }
 
         /// <summary>
