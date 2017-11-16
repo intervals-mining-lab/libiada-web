@@ -11,6 +11,7 @@
 
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
+    using LibiadaCore.Core.SimpleTypes;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
@@ -93,7 +94,13 @@
                             {
                                 var image = Image.Load(sequenceStream);
                                 var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
-                                sequences[i] = new Chain(sequence.Building, sequence.Alphabet);
+                                var alphabet = new Alphabet { NullValue.Instance()};
+                                var incompleteAlphabet = sequence.Alphabet;
+                                for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
+                                {
+                                    alphabet.Add(incompleteAlphabet[j]);
+                                }
+                                sequences[i] = new Chain(sequence.Building, alphabet);
                             }
                             else
                             {
