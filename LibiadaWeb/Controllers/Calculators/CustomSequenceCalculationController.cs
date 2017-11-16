@@ -9,8 +9,6 @@
     using Bio;
     using Bio.Extensions;
 
-    using ImageSharp;
-
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
 
@@ -20,6 +18,7 @@
 
     using Newtonsoft.Json;
     using LibiadaCore.Images;
+    using SixLabors.ImageSharp;
 
     /// <summary>
     /// The quick calculation controller.
@@ -92,7 +91,7 @@
                             Stream sequenceStream = FileHelper.GetFileStream(file[i]);
                             if (fileIsImage)
                             {
-                                var image = new Image(sequenceStream);
+                                var image = Image.Load(sequenceStream);
                                 var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
                                 sequences[i] = new Chain(sequence.Building, sequence.Alphabet);
                             }
