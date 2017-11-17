@@ -189,9 +189,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Alphabet ToLibiadaAlphabet(List<long> elementIds)
         {
             var alphabet = new Alphabet { NullValue.Instance() };
+            var elements = GetElements(elementIds);
             foreach (long elementId in elementIds)
             {
-                Element el = db.Element.Single(e => e.Id == elementId);
+                Element el = elements.Single(e => e.Id == elementId);
                 alphabet.Add(new ValueString(el.Value));
             }
 

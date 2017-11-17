@@ -89,7 +89,7 @@
         }
 
         /// <summary>
-        /// Gets building of sequence by id..
+        /// Gets building of sequence by id.
         /// </summary>
         /// <param name="db">
         /// Database connection.
