@@ -6,6 +6,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Calculators;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -104,7 +105,7 @@
                     var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
+                        characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
                         characteristicsList[k] = new SelectListItem
                         {
                             Value = k.ToString(),

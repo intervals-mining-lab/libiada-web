@@ -26,9 +26,9 @@
         private static AccordanceCharacteristicRepository instance;
 
         /// <summary>
-        /// The accordance characteristic links.
+        /// The accordance characteristics links.
         /// </summary>
-        private readonly AccordanceCharacteristicLink[] accordanceCharacteristicLinks;
+        private readonly AccordanceCharacteristicLink[] characteristicsLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccordanceCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private AccordanceCharacteristicRepository(LibiadaWebEntities db)
         {
-            accordanceCharacteristicLinks = db.AccordanceCharacteristicLink.ToArray();
+            characteristicsLinks = db.AccordanceCharacteristicLink.ToArray();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// <summary>
         /// Gets the accordance characteristic links.
         /// </summary>
-        public IEnumerable<AccordanceCharacteristicLink> AccordanceCharacteristicLinks => accordanceCharacteristicLinks.ToArray();
+        public IEnumerable<AccordanceCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
 
         /// <summary>
         /// The get link for accordance characteristic.
@@ -80,9 +80,9 @@
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForAccordanceCharacteristic(int characteristicLinkId)
+        public Link GetLinkForCharacteristic(int characteristicLinkId)
         {
-            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
@@ -94,9 +94,9 @@
         /// <returns>
         /// The <see cref="AccordanceCharacteristic"/>.
         /// </returns>
-        public AccordanceCharacteristic GetAccordanceCharacteristic(int characteristicLinkId)
+        public AccordanceCharacteristic GetCharacteristic(int characteristicLinkId)
         {
-            return accordanceCharacteristicLinks.Single(c => c.Id == characteristicLinkId).AccordanceCharacteristic;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).AccordanceCharacteristic;
         }
 
         /// <summary>
@@ -111,9 +111,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetAccordanceCharacteristicName(int characteristicLinkId, Notation notation)
+        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetAccordanceCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
@@ -125,11 +125,11 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetAccordanceCharacteristicName(int characteristicLinkId)
+        public string GetCharacteristicName(int characteristicLinkId)
         {
-            string characteristicTypeName = GetAccordanceCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            Link link = GetLinkForAccordanceCharacteristic(characteristicLinkId);
+            Link link = GetLinkForCharacteristic(characteristicLinkId);
             string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
             return string.Join("  ", characteristicTypeName, linkName);
@@ -143,7 +143,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetAccordanceCharacteristicTypes()
+        public List<CharacteristicData> GetCharacteristicTypes()
         {
             Link[] links;
             AccordanceCharacteristic[] characteristics;
@@ -162,7 +162,7 @@
 
             foreach (AccordanceCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = accordanceCharacteristicLinks
+                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.AccordanceCharacteristic == characteristic && links.Contains(cl.Link))
                     .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
                     .ToList();

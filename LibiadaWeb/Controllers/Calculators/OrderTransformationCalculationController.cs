@@ -141,8 +141,8 @@
                         }
 
                         int characteristicLinkId = characteristicLinkIds[k];
-                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
 
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                         characteristics.Add(calculator.Calculate(sequence, link));
@@ -154,7 +154,7 @@
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]);
                 }
 
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];

@@ -108,7 +108,7 @@
                 }
 
                 var characteristics = new List<List<double>>();
-                string characteristicName = characteristicTypeLinkRepository.GetAccordanceCharacteristicName(characteristicLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
                 var result = new Dictionary<string, object>
                                  {
                                      { "characteristics", characteristics },
@@ -143,9 +143,9 @@
                 Chain secondChain = commonSequenceRepository.GetLibiadaChain(secondSequenceId);
                 secondChain.FillIntervalManagers();
 
-                AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetAccordanceCharacteristic(characteristicLinkId);
+                AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
-                Link link = characteristicTypeLinkRepository.GetLinkForAccordanceCharacteristic(characteristicLinkId);
+                Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
                 switch (calculationType)
                 {

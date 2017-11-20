@@ -141,8 +141,8 @@
                         {
                             Chain tempChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
 
-                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+                            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
                             characteristics[j][i] = calculator.Calculate(tempChain, link);
                         }
@@ -151,7 +151,7 @@
 
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames.Add(characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notations[k]));
+                    characteristicNames.Add(characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notations[k]));
                 }
 
                 var clusterizationParams = new Dictionary<string, double>

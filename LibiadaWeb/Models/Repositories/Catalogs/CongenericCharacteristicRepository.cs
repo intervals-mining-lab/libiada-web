@@ -28,7 +28,7 @@
         /// <summary>
         /// The congeneric characteristic links.
         /// </summary>
-        private readonly CongenericCharacteristicLink[] congenericCharacteristicLinks;
+        private readonly CongenericCharacteristicLink[] characteristicsLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CongenericCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private CongenericCharacteristicRepository(LibiadaWebEntities db)
         {
-            congenericCharacteristicLinks = db.CongenericCharacteristicLink.ToArray();
+            characteristicsLinks = db.CongenericCharacteristicLink.ToArray();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// <summary>
         /// Gets the congeneric characteristic links.
         /// </summary>
-        public IEnumerable<CongenericCharacteristicLink> CongenericCharacteristicLinks => congenericCharacteristicLinks.ToArray();
+        public IEnumerable<CongenericCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
 
         /// <summary>
         /// The get link for congeneric characteristic.
@@ -80,9 +80,9 @@
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForCongenericCharacteristic(int characteristicLinkId)
+        public Link GetLinkForCharacteristic(int characteristicLinkId)
         {
-            return congenericCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
@@ -94,9 +94,9 @@
         /// <returns>
         /// The <see cref="CongenericCharacteristic"/>.
         /// </returns>
-        public CongenericCharacteristic GetCongenericCharacteristic(int characteristicLinkId)
+        public CongenericCharacteristic GetCharacteristic(int characteristicLinkId)
         {
-            return congenericCharacteristicLinks.Single(c => c.Id == characteristicLinkId).CongenericCharacteristic;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).CongenericCharacteristic;
         }
 
         /// <summary>
@@ -111,9 +111,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetCongenericCharacteristicName(int characteristicLinkId, Notation notation)
+        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetCongenericCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
@@ -125,11 +125,11 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetCongenericCharacteristicName(int characteristicLinkId)
+        public string GetCharacteristicName(int characteristicLinkId)
         {
-            string characteristicTypeName = GetCongenericCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            Link link = GetLinkForCongenericCharacteristic(characteristicLinkId);
+            Link link = GetLinkForCharacteristic(characteristicLinkId);
             string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
             return string.Join("  ", characteristicTypeName, linkName);
@@ -141,7 +141,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetCongenericCharacteristicTypes()
+        public List<CharacteristicData> GetCharacteristicTypes()
         {
             Link[] links;
             CongenericCharacteristic[] characteristics;
@@ -160,7 +160,7 @@
 
             foreach (CongenericCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = congenericCharacteristicLinks
+                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.CongenericCharacteristic == characteristic && links.Contains(cl.Link))
                     .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
                     .ToList();

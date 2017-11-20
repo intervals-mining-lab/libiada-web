@@ -92,7 +92,7 @@
                     var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                     for (int k = 0; k < characteristicLinkIds.Length; k++)
                     {
-                        subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k]);
+                        subsequencesCharacteristicsNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k]);
                         subsequencesCharacteristicsList[k] = new SelectListItem
                         {
                             Value = k.ToString(),

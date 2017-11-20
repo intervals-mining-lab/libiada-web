@@ -182,16 +182,16 @@
             switch (characteristicsType)
             {
                 case CharacteristicCategory.Full:
-                    characteristicTypes = FullCharacteristicRepository.Instance.GetFullCharacteristicTypes();
+                    characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Congeneric:
-                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCongenericCharacteristicTypes();
+                    characteristicTypes = CongenericCharacteristicRepository.Instance.GetCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Accordance:
-                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetAccordanceCharacteristicTypes();
+                    characteristicTypes = AccordanceCharacteristicRepository.Instance.GetCharacteristicTypes();
                     break;
                 case CharacteristicCategory.Binary:
-                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetBinaryCharacteristicTypes();
+                    characteristicTypes = BinaryCharacteristicRepository.Instance.GetCharacteristicTypes();
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(characteristicsType), (int)characteristicsType, typeof(CharacteristicCategory));
@@ -229,7 +229,7 @@
             var groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
-            var characteristicTypes = FullCharacteristicRepository.Instance.GetFullCharacteristicTypes();
+            var characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
 
             data.Add("characteristicTypes", characteristicTypes);
             data.Add("notations", geneticNotations.ToSelectListWithNature());

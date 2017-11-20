@@ -169,7 +169,7 @@
                     }
                 }
 
-                var characteristicName = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId, notation);
+                var characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
                 var similarity = similarSubsequences.Count * 200d / (firstSequenceSubsequences.Length + secondSequenceSubsequences.Length);
 
@@ -213,9 +213,9 @@
         {
             var characteristics = new List<double>();
             var newCharacteristics = new List<CharacteristicValue>();
-            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+            FullCharacteristic fullCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(fullCharacteristic);
-            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
+            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
             for (int j = 0; j < sequences.Length; j++)
             {

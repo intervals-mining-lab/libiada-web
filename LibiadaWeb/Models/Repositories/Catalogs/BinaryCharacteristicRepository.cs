@@ -28,7 +28,7 @@
         /// <summary>
         /// The binary characteristic links.
         /// </summary>
-        private readonly BinaryCharacteristicLink[] binaryCharacteristicLinks;
+        private readonly BinaryCharacteristicLink[] characteristicsLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private BinaryCharacteristicRepository(LibiadaWebEntities db)
         {
-            binaryCharacteristicLinks = db.BinaryCharacteristicLink.ToArray();
+            characteristicsLinks = db.BinaryCharacteristicLink.ToArray();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// <summary>
         /// Gets the binary characteristic links.
         /// </summary>
-        public IEnumerable<BinaryCharacteristicLink> BinaryCharacteristicLinks => binaryCharacteristicLinks.ToArray();
+        public IEnumerable<BinaryCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
 
         /// <summary>
         /// The create binary characteristic.
@@ -92,7 +92,7 @@
         /// <returns>
         /// The <see cref="BinaryCharacteristicValue"/>.
         /// </returns>
-        public BinaryCharacteristicValue CreateBinaryCharacteristic(long sequenceId, short characteristicLinkId, long firstElementId, long secondElementId, double value)
+        public BinaryCharacteristicValue CreateCharacteristic(long sequenceId, short characteristicLinkId, long firstElementId, long secondElementId, double value)
         {
             var characteristic = new BinaryCharacteristicValue
             {
@@ -114,9 +114,9 @@
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForBinaryCharacteristic(int characteristicLinkId)
+        public Link GetLinkForCharacteristic(int characteristicLinkId)
         {
-            return binaryCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
@@ -128,9 +128,9 @@
         /// <returns>
         /// The <see cref="BinaryCharacteristic"/>.
         /// </returns>
-        public BinaryCharacteristic GetBinaryCharacteristic(int characteristicLinkId)
+        public BinaryCharacteristic GetCharacteristic(int characteristicLinkId)
         {
-            return binaryCharacteristicLinks.Single(c => c.Id == characteristicLinkId).BinaryCharacteristic;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).BinaryCharacteristic;
         }
 
         /// <summary>
@@ -145,9 +145,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetBinaryCharacteristicName(int characteristicLinkId, Notation notation)
+        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetBinaryCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
@@ -159,11 +159,11 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetBinaryCharacteristicName(int characteristicLinkId)
+        public string GetCharacteristicName(int characteristicLinkId)
         {
-            string characteristicTypeName = GetBinaryCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            Link link = GetLinkForBinaryCharacteristic(characteristicLinkId);
+            Link link = GetLinkForCharacteristic(characteristicLinkId);
             string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
             return string.Join("  ", characteristicTypeName, linkName);
@@ -177,7 +177,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetBinaryCharacteristicTypes()
+        public List<CharacteristicData> GetCharacteristicTypes()
         {
             Link[] links;
             BinaryCharacteristic[] characteristics;
@@ -196,7 +196,7 @@
 
             foreach (BinaryCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = binaryCharacteristicLinks
+                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.BinaryCharacteristic == characteristic && links.Contains(cl.Link))
                     .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
                     .ToList();

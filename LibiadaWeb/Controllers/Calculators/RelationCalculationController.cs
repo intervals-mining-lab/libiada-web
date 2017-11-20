@@ -131,10 +131,10 @@
                 }
 
                 Chain currentChain = commonSequenceRepository.GetLibiadaChain(sequenceId);
-                BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetBinaryCharacteristic(characteristicLinkId);
+                BinaryCharacteristic binaryCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
 
                 IBinaryCalculator calculator = BinaryCalculatorsFactory.CreateCalculator(binaryCharacteristic);
-                Link link = characteristicTypeLinkRepository.GetLinkForBinaryCharacteristic(characteristicLinkId);
+                Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
                 if (frequencyFilter)
                 {
@@ -175,7 +175,7 @@
                     }
                 }
 
-                string characteristicName = characteristicTypeLinkRepository.GetBinaryCharacteristicName(characteristicLinkId, notation);
+                string characteristicName = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId, notation);
 
                 return new Dictionary<string, object>
                 {
@@ -231,7 +231,7 @@
                         {
                             double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                            newCharacteristics.Add(characteristicTypeLinkRepository.CreateBinaryCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
+                            newCharacteristics.Add(characteristicTypeLinkRepository.CreateCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
                         }
                     }
                 }
@@ -297,7 +297,7 @@
                     {
                         double result = calculator.Calculate(chain.GetRelationIntervalsManager(i + 1, j + 1), link);
 
-                        newCharacteristics.Add(characteristicTypeLinkRepository.CreateBinaryCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
+                        newCharacteristics.Add(characteristicTypeLinkRepository.CreateCharacteristic(sequenceId, characteristicLinkId, firstElementId, secondElementId, result));
                     }
                 }
             }

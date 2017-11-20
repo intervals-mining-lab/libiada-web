@@ -48,7 +48,7 @@
             var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
-                    { "characteristicTypes", fullCharacteristicRepository.GetFullCharacteristicTypes() }
+                    { "characteristicTypes", fullCharacteristicRepository.GetCharacteristicTypes() }
                 });
 
             return View();
@@ -106,15 +106,15 @@
                         {
                             var chain = new Chain(sequences[j]);
 
-                            Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
-                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
+                            Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
+                            FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                             IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                             characteristics[j, k] = calculator.Calculate(chain, link);
                         }
                     }
 
-                    List<string> characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToList();
+                    List<string> characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToList();
 
                     return new Dictionary<string, object>
                     {

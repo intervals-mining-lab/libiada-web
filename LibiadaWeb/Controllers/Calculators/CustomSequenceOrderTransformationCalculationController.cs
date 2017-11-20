@@ -47,7 +47,7 @@
 
             var data = new Dictionary<string, object>
                 {
-                    { "characteristicTypes", FullCharacteristicRepository.Instance.GetFullCharacteristicTypes() }
+                    { "characteristicTypes", FullCharacteristicRepository.Instance.GetCharacteristicTypes() }
                 };
 
             var transformationLinks = new[] { Link.Start, Link.End, Link.CycleStart, Link.CycleEnd };
@@ -142,15 +142,15 @@
                             }
                         }
 
-                        Link link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkIds[k]);
-                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkIds[k]);
+                        Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
+                        FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);
                         IFullCalculator calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
 
                         characteristics[j, k] = calculator.Calculate(sequence, link);
                     }
                 }
 
-                string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetFullCharacteristicName(c)).ToArray();
+                string[] characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToArray();
 
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 for (int i = 0; i < characteristicNames.Length; i++)

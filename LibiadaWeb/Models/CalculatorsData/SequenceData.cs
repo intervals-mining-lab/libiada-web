@@ -1,11 +1,9 @@
-﻿namespace LibiadaWeb.Models.Calculators
+﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-    using LibiadaWeb.Models.CalculatorsData;
-
     /// <summary>
     /// The sequence characteristics.
     /// </summary>
-    public class SequenceData
+    public struct SequenceData
     {
         /// <summary>
         /// The matter id.

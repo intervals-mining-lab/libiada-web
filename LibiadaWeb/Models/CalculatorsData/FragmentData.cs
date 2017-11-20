@@ -1,9 +1,9 @@
-namespace LibiadaWeb.Models
+namespace LibiadaWeb.Models.CalculatorsData
 {
     /// <summary>
     /// The fragment data of local characteristics (sliding window).
     /// </summary>
-    public class FragmentData
+    public struct FragmentData
     {
         /// <summary>
         /// The characteristics values.

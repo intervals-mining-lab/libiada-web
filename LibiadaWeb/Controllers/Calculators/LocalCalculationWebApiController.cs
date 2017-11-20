@@ -47,9 +47,9 @@
             {
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
-                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+                FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 calculator = FullCalculatorsFactory.CreateCalculator(characteristic);
-                link = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
+                link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
 
                 var subsequenceExtractor = new SubsequenceExtractor(context);
 

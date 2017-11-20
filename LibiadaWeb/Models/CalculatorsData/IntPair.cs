@@ -1,4 +1,4 @@
-﻿namespace LibiadaWeb.Models.Calculators
+﻿namespace LibiadaWeb.Models.CalculatorsData
 {
     /// <summary>
     /// The integer pair.

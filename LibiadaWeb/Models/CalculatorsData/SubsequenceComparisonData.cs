@@ -3,7 +3,7 @@
     /// <summary>
     /// The subsequence comparison data.
     /// </summary>
-    public class SubsequenceComparisonData
+    public struct SubsequenceComparisonData
     {
         /// <summary>
         /// Gets or sets the difference.

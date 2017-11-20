@@ -118,7 +118,7 @@
                     long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
                     var sequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkId);
+                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
                     double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
@@ -146,10 +146,10 @@
 
                     var subsequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
 
-                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetFullCharacteristicName(subsequencesCharacteristicLinkId);
+                    characteristicName = subsequencesCharacteristicTypeLinkRepository.GetCharacteristicName(subsequencesCharacteristicLinkId);
 
                     var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
-                    localCharacteristicsType = fullCharacteristicRepository.GetFullCharacteristicTypes();
+                    localCharacteristicsType = fullCharacteristicRepository.GetCharacteristicTypes();
                 }
 
                 // cycle through matters; first level of characteristics array

@@ -80,9 +80,9 @@
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
                     short characteristicLinkId = characteristicLinkIds[k];
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                     calculators[k] = FullCalculatorsFactory.CreateCalculator(characteristic);
-                    links[k] = characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId);
+                    links[k] = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
                 }
             }
 

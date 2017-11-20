@@ -11,6 +11,7 @@
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models;
+    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Sequences;
     using LibiadaWeb.Tasks;
 
@@ -157,9 +158,9 @@
 
                 foreach (int characteristicLinkId in characteristicLinkIds)
                 {
-                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetFullCharacteristic(characteristicLinkId);
+                    FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                     calculators.Add(FullCalculatorsFactory.CreateCalculator(characteristic));
-                    links.Add(characteristicTypeLinkRepository.GetLinkForFullCharacteristic(characteristicLinkId));
+                    links.Add(characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId));
                 }
 
                 for (int i = 0; i < chains.Length; i++)
@@ -226,13 +227,13 @@
 
                 for (int l = 0; l < characteristicLinkIds.Length; l++)
                 {
-                    characteristicNames[l] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[l]);
+                    characteristicNames[l] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[l]);
                 }
 
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {
-                    characteristicNames[k] = characteristicTypeLinkRepository.GetFullCharacteristicName(characteristicLinkIds[k], notation);
+                    characteristicNames[k] = characteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkIds[k], notation);
                     characteristicsList[k] = new SelectListItem
                     {
                         Value = k.ToString(),

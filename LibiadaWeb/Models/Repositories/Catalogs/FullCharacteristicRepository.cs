@@ -28,7 +28,7 @@
         /// <summary>
         /// The characteristic type links.
         /// </summary>
-        private readonly FullCharacteristicLink[] fullCharacteristicLinks;
+        private readonly FullCharacteristicLink[] characteristicsLinks;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FullCharacteristicRepository"/> class.
@@ -38,7 +38,7 @@
         /// </param>
         private FullCharacteristicRepository(LibiadaWebEntities db)
         {
-            fullCharacteristicLinks = db.FullCharacteristicLink.ToArray();
+            characteristicsLinks = db.FullCharacteristicLink.ToArray();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@
         /// <summary>
         /// Gets the characteristic type links.
         /// </summary>
-        public IEnumerable<FullCharacteristicLink> FullCharacteristicLinks => fullCharacteristicLinks.ToArray();
+        public IEnumerable<FullCharacteristicLink> CharacteristicLinks => characteristicsLinks.ToArray();
 
         /// <summary>
         /// The get libiada link.
@@ -80,9 +80,9 @@
         /// <returns>
         /// The <see cref="Link"/>.
         /// </returns>
-        public Link GetLinkForFullCharacteristic(int characteristicLinkId)
+        public Link GetLinkForCharacteristic(int characteristicLinkId)
         {
-            return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).Link;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).Link;
         }
 
         /// <summary>
@@ -94,9 +94,9 @@
         /// <returns>
         /// The <see cref="FullCharacteristic"/>.
         /// </returns>
-        public FullCharacteristic GetFullCharacteristic(int characteristicLinkId)
+        public FullCharacteristic GetCharacteristic(int characteristicLinkId)
         {
-            return fullCharacteristicLinks.Single(c => c.Id == characteristicLinkId).FullCharacteristic;
+            return characteristicsLinks.Single(c => c.Id == characteristicLinkId).FullCharacteristic;
         }
 
         /// <summary>
@@ -111,9 +111,9 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetFullCharacteristicName(int characteristicLinkId, Notation notation)
+        public string GetCharacteristicName(int characteristicLinkId, Notation notation)
         {
-            return string.Join("  ", GetFullCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
+            return string.Join("  ", GetCharacteristicName(characteristicLinkId), notation.GetDisplayValue());
         }
 
         /// <summary>
@@ -125,11 +125,11 @@
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        public string GetFullCharacteristicName(int characteristicLinkId)
+        public string GetCharacteristicName(int characteristicLinkId)
         {
-            string characteristicTypeName = GetFullCharacteristic(characteristicLinkId).GetDisplayValue();
+            string characteristicTypeName = GetCharacteristic(characteristicLinkId).GetDisplayValue();
 
-            Link link = GetLinkForFullCharacteristic(characteristicLinkId);
+            Link link = GetLinkForCharacteristic(characteristicLinkId);
             string linkName = link == Link.NotApplied ? string.Empty : link.GetDisplayValue();
 
             return string.Join("  ", characteristicTypeName, linkName);
@@ -142,7 +142,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetFullCharacteristicTypes()
+        public List<CharacteristicData> GetCharacteristicTypes()
         {
             Link[] links;
             FullCharacteristic[] characteristics;
@@ -161,7 +161,7 @@
 
             foreach (FullCharacteristic characteristic in characteristics)
             {
-                List<LinkSelectListItem> linkSelectListItems = fullCharacteristicLinks
+                List<LinkSelectListItem> linkSelectListItems = characteristicsLinks
                     .Where(cl => cl.FullCharacteristic == characteristic && links.Contains(cl.Link))
                     .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
                     .ToList();

@@ -1,9 +1,8 @@
 ﻿namespace LibiadaWeb.Models.CalculatorsData
 {
-    /// <summary>
-    /// The sequence characteristics.
-    /// </summary>
-    public struct SequenceCharacteristics
+    using LibiadaCore.Core;
+
+    public class CongenericSequencesCharacteristics
     {
         /// <summary>
         /// The matter name.
@@ -11,8 +10,13 @@
         public string MatterName;
 
         /// <summary>
+        /// The elements of the sequence.
+        /// </summary>
+        public IBaseObject[] Elements;
+
+        /// <summary>
         /// The sequence characteristics values.
         /// </summary>
-        public double[] Characteristics;
+        public double[][] Characteristics;
     }
 }
