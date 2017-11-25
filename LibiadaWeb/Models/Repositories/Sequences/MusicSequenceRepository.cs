@@ -12,6 +12,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaMusic.ScoreModel;
 
     using LibiadaWeb.Helpers;
+    using LibiadaMusic.BorodaDivider;
 
     /// <summary>
     /// The music sequence repository.
@@ -55,12 +56,32 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
-            BaseChain chain = ConvertCongenericScoreTrackToBaseChain(tempTrack.CongenericScoreTracks[0]);
+            switch (sequence.Notation)
+            {
+                case Notation.Notes:
+                    {
+                        BaseChain chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
 
-            MatterRepository.CreateMatterFromSequence(sequence);
+                        MatterRepository.CreateMatterFromSequence(sequence);
 
-            long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
-            Create(sequence, alphabet, chain.Building);
+                        long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
+                        Create(sequence, alphabet, chain.Building);
+
+                        break;
+                    }
+                case Notation.Measures:
+                    {
+                        BaseChain chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+                        break;
+                    }
+                case Notation.FormalMotifs:
+                    {
+                        BaseChain chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
+                        break;
+                    }
+            }
+
+            
         }
 
         /// <summary>
@@ -116,10 +137,23 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="BaseChain"/>.
         /// </returns>
-        private BaseChain ConvertCongenericScoreTrackToBaseChain(CongenericScoreTrack scoreTrack)
+        private BaseChain ConvertCongenericScoreTrackToNotesBaseChain(CongenericScoreTrack scoreTrack)
         {
             List<ValueNote> notes = scoreTrack.GetNotes();
             return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
+        }
+
+        private BaseChain ConvertCongenericScoreTrackToMeasuresBaseChain(CongenericScoreTrack scoreTrack)
+        {
+            List<Measure> measures = scoreTrack.MeasureOrder();
+            return new BaseChain(((IEnumerable<IBaseObject>)measures).ToList());
+        }
+
+        private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack)
+        {
+            BorodaDivider borodaDivider = new BorodaDivider();
+            FmotivChain fMotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
+            return new BaseChain(((IEnumerable<IBaseObject>)fMotifChain).ToList());
         }
     }
 }
