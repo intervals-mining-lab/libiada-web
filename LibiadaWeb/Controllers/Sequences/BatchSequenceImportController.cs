@@ -7,6 +7,7 @@
     using System.Web.Mvc;
 
     using Bio;
+    using Bio.Extensions;
     using Bio.IO.GenBank;
 
     using LibiadaCore.Extensions;
@@ -69,24 +70,20 @@
                     var matterRepository = new MatterRepository(db);
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
 
-                    var (existingAccesssions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoImportedAndNotImported(accessions);
+                    var(existingAccessions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoExistingAndNotImported(accessions);
 
-
-                    foreach (string existingAccesssion in existingAccesssions)
-                    {
-                        var result = new MatterImportResult();
-                        importResults.Add(result);
-                        result.MatterName = existingAccesssion;
-                        result.Result = "Sequence already exists";
-                        result.Status = "Exist";
-                    }
+                    importResults.AddRange(existingAccessions.ConvertAll(existingAccession => new MatterImportResult
+                                                                                                  {
+                                                                                                      MatterName = existingAccession,
+                                                                                                      Result = "Sequence already exists",
+                                                                                                      Status = "Exist"
+                                                                                                  }));
 
                     ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessionsToImport);
-
                     foreach (ISequence bioSequence in bioSequences)
                     {
                         var result = new MatterImportResult();
-                        importResults.Add(result);
+
                         try
                         {
                             GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
@@ -112,20 +109,18 @@
                             bool partial = metadata.Definition.ToLower().Contains("partial");
                             dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
-                            if (importGenes)
-                            {
-                                ImportFeatures(metadata, sequence, result);
-                            }
-                            else
-                            {
-                                result.Result = "successfully imported sequence";
-                                result.Status = "Success";
-                            }
+                            (result.Result, result.Status) = importGenes ?
+                                                             ImportFeatures(metadata, sequence) :
+                                                             ("Successfully imported sequence", "Success");
                         }
                         catch (Exception exception)
                         {
                             result.Result = "Error:" + exception.Message + (exception.InnerException?.Message ?? string.Empty);
                             result.Status = "Error";
+                        }
+                        finally
+                        {
+                            importResults.Add(result);
                         }
                     }
 
@@ -144,43 +139,49 @@
                     }
                 }
 
+                var data = new Dictionary<string, object> { { "result", importResults } };
+
                 return new Dictionary<string, object>
                            {
-                               { "data", JsonConvert.SerializeObject(new Dictionary<string, object>
-                                                                         {
-                                                                             { "result", importResults }
-                                                                         })
-                               }
+                               { "data", JsonConvert.SerializeObject(data) }
                            };
             });
         }
 
-        private void ImportFeatures(GenBankMetadata metadata, CommonSequence sequence, MatterImportResult result)
+        /// <summary>
+        /// Imports sequence features.
+        /// </summary>
+        /// <param name="metadata">
+        /// The metadata.
+        /// </param>
+        /// <param name="sequence">
+        /// The sequence.
+        /// </param>
+        /// <returns>
+        /// Returns tuple where first element is import result text
+        /// and second element is import status as  string.
+        /// </returns>
+        private (string, string) ImportFeatures(GenBankMetadata metadata, CommonSequence sequence)
         {
             try
             {
                 using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
                 {
-                    (int featuresCount, int nonCodingCount) = subsequenceImporter.CreateSubsequences();
+                    var(featuresCount, nonCodingCount) = subsequenceImporter.CreateSubsequences();
 
-                    result.Result = $"Successfully imported sequence, "
-                                    + $"{featuresCount} features "
-                                    + $"and {nonCodingCount} non-coding subsequences";
-                    result.Status = "Success";
+                    string result = $"Successfully imported sequence, {featuresCount} features "
+                                  + $"and {nonCodingCount} non-coding subsequences";
+                    string status = "Success";
+
+                    return (result, status);
                 }
-
-                //int featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature != Feature.NonCodingSequence);
-                //int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature == Feature.NonCodingSequence);
             }
             catch (Exception exception)
             {
-                result.Result = $"successfully imported sequence but failed to import genes: {exception.Message}";
-                result.Status = "Error";
-
-                if (exception.InnerException != null)
-                {
-                    result.Result += " " + exception.InnerException.Message;
-                }
+                string result = $"successfully imported sequence but failed to import genes: {exception.Message}"
+                              + $" {exception.InnerException?.Message}";
+                string status = "Error";
+                return (result, status);
             }
         }
     }

@@ -64,7 +64,16 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return true;
         }
 
-        public (string[], string[]) SplitAccessionsIntoImportedAndNotImported(string[] accessions)
+        /// <summary>
+        /// Splits given accessions into existing and not imported.
+        /// </summary>
+        /// <param name="accessions">
+        /// The accessions.
+        /// </param>
+        /// <returns>
+        /// First array in tuple are existing accessions and second array are not imported accessions.
+        /// </returns>
+        public (string[], string[]) SplitAccessionsIntoExistingAndNotImported(string[] accessions)
         {
             string[] allExistingAccessions = Db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
             var result = (new List<string>(), new List<string>());

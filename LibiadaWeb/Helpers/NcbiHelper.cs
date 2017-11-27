@@ -76,16 +76,20 @@
         /// The ids.
         /// </param>
         /// <returns>
-        /// The <see cref="ISequence[]"/>.
+        /// The <see cref="T:ISequence[]"/>.
         /// </returns>
         public static ISequence[] GetGenBankSequences(string[] ids)
         {
+            if (ids.Length == 0)
+            {
+                return new ISequence[0];
+            }
+
             ISequenceParser parser = new GenBankParser();
             string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
             Stream fileStream = GetResponseStream(url);
             ISequence[] result = parser.Parse(fileStream).ToArray();
             fileStream.Dispose();
-
             return result;
         }
 

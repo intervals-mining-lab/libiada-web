@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using LibiadaCore.Core;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Helpers;
