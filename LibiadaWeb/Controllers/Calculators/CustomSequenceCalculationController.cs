@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
 
@@ -114,7 +113,7 @@
                         }
                     }
 
-                    List<string> characteristicNames = characteristicLinkIds.Select(c => characteristicTypeLinkRepository.GetCharacteristicName(c)).ToList();
+                    List<string> characteristicNames = characteristicLinkIds.ConvertAll(c => characteristicTypeLinkRepository.GetCharacteristicName(c));
 
                     return new Dictionary<string, object>
                     {

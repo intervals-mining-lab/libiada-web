@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using Bio.Extensions;
+
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Extensions;
@@ -154,7 +156,7 @@
                     { "firstSequenceName", db.Matter.Single(m => m.Id == firstMatterId).Name },
                     { "secondSequenceName", db.Matter.Single(m => m.Id == secondMatterId).Name },
                     { "characteristicName", characteristicName },
-                    { "features", features.Select(p => p.GetDisplayValue()).ToList() },
+                    { "features", features.ConvertAll(p => p.GetDisplayValue()) },
                     { "optimalRotation", optimalRotation },
                     { "distances", distances },
                     { "validationType", validationType },

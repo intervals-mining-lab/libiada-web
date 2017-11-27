@@ -108,7 +108,7 @@
         /// <exception cref="Exception">
         /// Thrown if error occurs during importability check.
         /// </exception>
-        public void CreateSubsequences()
+        public (int, int) CreateSubsequences()
         {
             try
             {
@@ -119,7 +119,7 @@
                 throw new Exception("Error occurred during importability check.", e);
             }
 
-            CreateFeatureSubsequences();
+            return CreateFeatureSubsequences();
         }
 
         /// <summary>
@@ -230,7 +230,7 @@
         /// Create subsequences from features
         /// and noncoding subsequences from gaps.
         /// </summary>
-        private void CreateFeatureSubsequences()
+        private (int, int) CreateFeatureSubsequences()
         {
             var newSubsequences = new List<Subsequence>();
             var newPositions = new List<Position>();
@@ -289,21 +289,23 @@
                 };
 
                 newSubsequences.Add(subsequence);
-
                 AddPositionToMap(start, end);
-
                 newPositions.AddRange(CreateAdditionalPositions(leafLocations, subsequence.Id));
-
-                newSequenceAttributes.AddRange(sequenceAttributeRepository.CreateSubsequenceAttributes(feature.Qualifiers, complement, complementJoin, subsequence));
+                var sequenceAttributes = sequenceAttributeRepository.Create(feature.Qualifiers, complement, complementJoin, subsequence);
+                newSequenceAttributes.AddRange(sequenceAttributes);
             }
 
+            int featuresCount = newSubsequences.Count;
             newSubsequences.AddRange(CreateNonCodingSubsequences());
+            int nonCoudingCount = newSubsequences.Count - featuresCount;
 
             db.Subsequence.AddRange(newSubsequences);
             db.Position.AddRange(newPositions);
             db.SequenceAttribute.AddRange(newSequenceAttributes);
 
             db.SaveChanges();
+
+            return (featuresCount, nonCoudingCount);
         }
 
         /// <summary>

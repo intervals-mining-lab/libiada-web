@@ -31,6 +31,60 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         }
 
         /// <summary>
+        /// Compares two sequence accessions.
+        /// Takes into account their versions only if they has one.
+        /// </summary>
+        /// <param name="firstAccession">
+        /// The first accession.
+        /// </param>
+        /// <param name="secondAccession">
+        /// The second accession.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool CompareAccessions(string firstAccession, string secondAccession)
+        {
+            string[] splitFirstAccession = firstAccession.Split('.');
+            string[] splitSecondAccession = secondAccession.Split('.');
+
+            // comparing accessions without versions
+            if (!splitFirstAccession[0].Equals(splitSecondAccession[0]))
+            {
+                return false;
+            }
+
+            // checking if both accessions have version
+            if (splitFirstAccession.Length == 2 && splitSecondAccession.Length == 2)
+            {
+                // comparing versions
+                return splitFirstAccession[1].Equals(splitSecondAccession[1]);
+            }
+
+            return true;
+        }
+
+        public (string[], string[]) SplitAccessionsIntoImportedAndNotImported(string[] accessions)
+        {
+            string[] allExistingAccessions = Db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
+            var result = (new List<string>(), new List<string>());
+
+            foreach (string accession in accessions)
+            {
+                if (allExistingAccessions.Any(aa => CompareAccessions(aa, accession)))
+                {
+                    result.Item1.Add(accession);
+                }
+                else
+                {
+                    result.Item2.Add(accession);
+                }
+            }
+
+            return (result.Item1.ToArray(), result.Item2.ToArray());
+        }
+
+        /// <summary>
         /// The create DNA sequence.
         /// </summary>
         /// <param name="sequence">

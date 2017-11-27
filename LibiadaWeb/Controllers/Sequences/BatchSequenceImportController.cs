@@ -62,47 +62,45 @@
         {
             return CreateTask(() =>
             {
-                var result = new MatterImportResult[accessions.Length];
+                var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())
                 {
                     var matterRepository = new MatterRepository(db);
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
-                    string[] existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
-                    string[] accessionsToCreate = accessions.Where(a => !existingAccessions.Any(ea => NcbiHelper.CompareAccessions(ea, a))).ToArray();
-                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessionsToCreate);
 
-                    for (int i = 0; i < accessions.Length; i++)
+                    var (existingAccesssions, accessionsToImport) = dnaSequenceRepository.SplitAccessionsIntoImportedAndNotImported(accessions);
+
+
+                    foreach (string existingAccesssion in existingAccesssions)
                     {
-                        result[i] = new MatterImportResult();
-                        string accession = accessions[i];
-                        result[i].MatterName = accession;
-                        if (!accessionsToCreate.Contains(accession))
-                        {
-                            result[i].Result = "Sequence already exists";
-                            result[i].Status = "Exist";
-                            continue;
-                        }
+                        var result = new MatterImportResult();
+                        importResults.Add(result);
+                        result.MatterName = existingAccesssion;
+                        result.Result = "Sequence already exists";
+                        result.Status = "Exist";
+                    }
 
+                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessionsToImport);
+
+                    foreach (ISequence bioSequence in bioSequences)
+                    {
+                        var result = new MatterImportResult();
+                        importResults.Add(result);
                         try
                         {
-                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequences.Single());
-                            if (existingAccessions.Contains(metadata.Version.CompoundAccession))
-                            {
-                                result[i].Result = "Sequence already exists";
-                                result[i].Status = "Exist";
-                                continue;
-                            }
+                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
+                            result.MatterName = metadata.Version.CompoundAccession;
 
                             Matter matter = matterRepository.CreateMatterFromGenBankMetadata(metadata);
 
-                            result[i].SequenceType = matter.SequenceType.GetDisplayValue();
-                            result[i].Group = matter.Group.GetDisplayValue();
-                            result[i].MatterName = matter.Name;
-                            result[i].AllNames = "Common name=" + metadata.Source.CommonName +
-                                             ", Species=" + metadata.Source.Organism.Species +
-                                             ", Definition=" + metadata.Definition +
-                                             ", Saved matter name=" + result[i].MatterName;
+                            result.SequenceType = matter.SequenceType.GetDisplayValue();
+                            result.Group = matter.Group.GetDisplayValue();
+                            result.MatterName = matter.Name;
+                            result.AllNames = $"Common name = {metadata.Source.CommonName}, "
+                                            + $"Species = {metadata.Source.Organism.Species}, "
+                                            + $"Definition = {metadata.Definition}, "
+                                            + $"Saved matter name = {result.MatterName}";
 
                             var sequence = new CommonSequence
                                                {
@@ -111,49 +109,27 @@
                                                    RemoteDb = RemoteDb.GenBank,
                                                    RemoteId = metadata.Version.CompoundAccession
                                                };
-
-                            dnaSequenceRepository.Create(sequence, bioSequences[i], metadata.Definition.ToLower().Contains("partial"));
+                            bool partial = metadata.Definition.ToLower().Contains("partial");
+                            dnaSequenceRepository.Create(sequence, bioSequence, partial);
 
                             if (importGenes)
                             {
-                                try
-                                {
-                                    using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
-                                    {
-                                        subsequenceImporter.CreateSubsequences();
-                                    }
-
-                                    int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature == Feature.NonCodingSequence);
-                                    int featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature != Feature.NonCodingSequence);
-
-                                    result[i].Result = "Successfully imported sequence and " + featuresCount + " features and " + nonCodingCount + " noncoding subsequences";
-                                    result[i].Status = "Success";
-                                }
-                                catch (Exception exception)
-                                {
-                                    result[i].Result = "successfully imported sequence but failed to import genes: " + exception.Message;
-                                    result[i].Status = "Error";
-
-                                    if (exception.InnerException != null)
-                                    {
-                                        result[i].Result += " " + exception.InnerException.Message;
-                                    }
-                                }
+                                ImportFeatures(metadata, sequence, result);
                             }
                             else
                             {
-                                result[i].Result = "successfully imported sequence";
-                                result[i].Status = "Success";
+                                result.Result = "successfully imported sequence";
+                                result.Status = "Success";
                             }
                         }
                         catch (Exception exception)
                         {
-                            result[i].Result = "Error:" + exception.Message + (exception.InnerException == null ? string.Empty : exception.InnerException.Message);
-                            result[i].Status = "Error";
+                            result.Result = "Error:" + exception.Message + (exception.InnerException?.Message ?? string.Empty);
+                            result.Status = "Error";
                         }
                     }
 
-                    string[] names = result.Select(r => r.MatterName).ToArray();
+                    string[] names = importResults.Select(r => r.MatterName).ToArray();
 
                     // removing matters for which adding of sequence failed
                     Matter[] orphanMatters = db.Matter
@@ -172,11 +148,40 @@
                            {
                                { "data", JsonConvert.SerializeObject(new Dictionary<string, object>
                                                                          {
-                                                                             { "result", result }
+                                                                             { "result", importResults }
                                                                          })
                                }
                            };
             });
+        }
+
+        private void ImportFeatures(GenBankMetadata metadata, CommonSequence sequence, MatterImportResult result)
+        {
+            try
+            {
+                using (var subsequenceImporter = new SubsequenceImporter(metadata.Features.All, sequence.Id))
+                {
+                    (int featuresCount, int nonCodingCount) = subsequenceImporter.CreateSubsequences();
+
+                    result.Result = $"Successfully imported sequence, "
+                                    + $"{featuresCount} features "
+                                    + $"and {nonCodingCount} non-coding subsequences";
+                    result.Status = "Success";
+                }
+
+                //int featuresCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature != Feature.NonCodingSequence);
+                //int nonCodingCount = db.Subsequence.Count(s => s.SequenceId == sequence.Id && s.Feature == Feature.NonCodingSequence);
+            }
+            catch (Exception exception)
+            {
+                result.Result = $"successfully imported sequence but failed to import genes: {exception.Message}";
+                result.Status = "Error";
+
+                if (exception.InnerException != null)
+                {
+                    result.Result += " " + exception.InnerException.Message;
+                }
+            }
         }
     }
 }

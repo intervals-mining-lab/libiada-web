@@ -86,7 +86,7 @@
         /// <returns>
         /// The <see cref="List{SequenceAttribute}"/>.
         /// </returns>
-        public List<SequenceAttribute> CreateSubsequenceAttributes(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
+        public List<SequenceAttribute> Create(Dictionary<string, List<string>> qualifiers, bool complement, bool complementJoin, Subsequence subsequence)
         {
             var result = new List<SequenceAttribute>();
 
@@ -111,7 +111,7 @@
                         subsequence.RemoteId = remoteId;
                     }
 
-                    result.Add(CreateSequenceAttribute(qualifier.Key, CleanAttributeValue(value), subsequence.Id));
+                    result.Add(Create(qualifier.Key, CleanAttributeValue(value), subsequence.Id));
                 }
             }
 
@@ -135,18 +135,10 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(string attributeName, string attributeValue, long sequenceId)
+        private SequenceAttribute Create(string attributeName, string attributeValue, long sequenceId)
         {
             Attribute attribute = attributeRepository.GetAttributeByName(attributeName);
-
-            var subsequenceAttribute = new SequenceAttribute
-            {
-                Attribute = attribute,
-                SequenceId = sequenceId,
-                Value = attributeValue
-            };
-
-            return subsequenceAttribute;
+            return Create(attribute, attributeValue, sequenceId);
         }
 
         /// <summary>
@@ -164,16 +156,14 @@
         /// <returns>
         /// The <see cref="SequenceAttribute"/>.
         /// </returns>
-        private SequenceAttribute CreateSequenceAttribute(Attribute attribute, string attributeValue, long sequenceId)
+        private SequenceAttribute Create(Attribute attribute, string attributeValue, long sequenceId)
         {
-            var subsequenceAttribute = new SequenceAttribute
+            return new SequenceAttribute
             {
                 Attribute = attribute,
                 SequenceId = sequenceId,
                 Value = attributeValue
             };
-
-            return subsequenceAttribute;
         }
 
         /// <summary>
@@ -190,7 +180,7 @@
         /// </returns>
         private SequenceAttribute CreateSequenceAttribute(Attribute attribute, long sequenceId)
         {
-            return CreateSequenceAttribute(attribute, string.Empty, sequenceId);
+            return Create(attribute, string.Empty, sequenceId);
         }
 
         /// <summary>
@@ -204,7 +194,11 @@
         /// </returns>
         private string CleanAttributeValue(string attributeValue)
         {
-            return attributeValue.Replace("\"", string.Empty).Replace("\n", " ").Replace("\r", " ").Replace("\t", " ").Replace("  ", " ");
+            return attributeValue.Replace("\"", string.Empty)
+                                 .Replace("\n", " ")
+                                 .Replace("\r", " ")
+                                 .Replace("\t", " ")
+                                 .Replace("  ", " ");
         }
 
         /// <summary>
