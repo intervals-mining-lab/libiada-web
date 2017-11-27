@@ -69,14 +69,15 @@
                     var matterRepository = new MatterRepository(db);
                     var dnaSequenceRepository = new GeneticSequenceRepository(db);
                     string[] existingAccessions = db.DnaSequence.Select(d => d.RemoteId).Distinct().ToArray();
-                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessions);
+                    string[] accessionsToCreate = accessions.Where(a => !existingAccessions.Any(ea => NcbiHelper.CompareAccessions(ea, a))).ToArray();
+                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessionsToCreate);
 
                     for (int i = 0; i < accessions.Length; i++)
                     {
                         result[i] = new MatterImportResult();
                         string accession = accessions[i];
                         result[i].MatterName = accession;
-                        if (existingAccessions.Contains(accession) || existingAccessions.Contains(accession + ".1"))
+                        if (!accessionsToCreate.Contains(accession))
                         {
                             result[i].Result = "Sequence already exists";
                             result[i].Status = "Exist";
@@ -85,7 +86,7 @@
 
                         try
                         {
-                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequences[i]);
+                            GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequences.Single());
                             if (existingAccessions.Contains(metadata.Version.CompoundAccession))
                             {
                                 result[i].Result = "Sequence already exists";

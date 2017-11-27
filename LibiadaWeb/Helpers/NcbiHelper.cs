@@ -33,6 +33,40 @@
         private static DateTimeOffset lastRequestDateTime = DateTimeOffset.MinValue;
 
         /// <summary>
+        /// Compares two sequence accessions.
+        /// Takes into account their versions only if they has one.
+        /// </summary>
+        /// <param name="firstAccession">
+        /// The first accession.
+        /// </param>
+        /// <param name="secondAccession">
+        /// The second accession.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool CompareAccessions(string firstAccession, string secondAccession)
+        {
+            string[] splitFirstAccession = firstAccession.Split('.');
+            string[] splitSecondAccession = secondAccession.Split('.');
+
+            // comparing accessions without versions
+            if (!splitFirstAccession[0].Equals(splitSecondAccession[0]))
+            {
+                return false;
+            }
+
+            // checking if both accessions have version
+            if (splitFirstAccession.Length == 2 && splitSecondAccession.Length == 2)
+            {
+                // comparing versions
+                return splitFirstAccession[1].Equals(splitSecondAccession[1]);
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Extracts features from genBank file downloaded from ncbi.
         /// </summary>
         /// <param name="id">
