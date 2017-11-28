@@ -43,7 +43,7 @@
         /// </returns>
         public static List<FeatureItem> GetFeatures(string id)
         {
-            var metadata = GetMetadata(GetGenBankSequence(id));
+            GenBankMetadata metadata = GetMetadata(GetGenBankSequence(id));
             return metadata.Features.All;
         }
 
@@ -59,10 +59,10 @@
         public static List<FeatureItem>[] GetFeatures(string[] ids)
         {
             var result = new List<FeatureItem>[ids.Length];
-            var sequences = GetGenBankSequences(ids);
+            ISequence[] sequences = GetGenBankSequences(ids);
             for (int i = 0; i < sequences.Length; i++)
             {
-                var metadata = GetMetadata(sequences[i]);
+                GenBankMetadata metadata = GetMetadata(sequences[i]);
                 result[i] = metadata.Features.All;
             }
 
@@ -103,13 +103,11 @@
         /// The <see cref="GenBankMetadata"/>.
         /// </returns>
         /// <exception cref="Exception">
-        /// Thrown if metadata is abscent.
+        /// Thrown if metadata is absent.
         /// </exception>
         public static GenBankMetadata GetMetadata(ISequence sequence)
         {
-            GenBankMetadata metadata = sequence.Metadata["GenBank"] as GenBankMetadata;
-
-            if (metadata == null)
+            if (!(sequence.Metadata["GenBank"] is GenBankMetadata metadata))
             {
                 throw new Exception("GenBank file metadata is empty.");
             }
@@ -129,7 +127,7 @@
         public static ISequence GetFastaSequence(Stream fastaFileStream)
         {
             var fastaParser = new FastAParser();
-            var result = fastaParser.ParseOne(fastaFileStream);
+            ISequence result = fastaParser.ParseOne(fastaFileStream);
             fastaFileStream.Dispose();
             return result;
         }
@@ -175,7 +173,7 @@
         /// </returns>
         private static string GetEfetchParamsString(string retType)
         {
-            return @"efetch.fcgi?db=nuccore&retmode=text&rettype=" + retType + "&id=";
+            return $"efetch.fcgi?db=nuccore&retmode=text&rettype={retType}&id=";
         }
 
         /// <summary>
@@ -192,18 +190,15 @@
         /// </exception>
         private static Stream GetResponseStream(string url)
         {
-            var resultUrl = BaseUrl + url;
+            string resultUrl = BaseUrl + url;
             var downloader = new WebClient();
             var memoryStream = new MemoryStream();
 
             lock (SyncRoot)
             {
-                if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 500))
-                {
-                    Thread.Sleep(500);
-                }
+                WaitForRequest();
 
-                using (var stream = downloader.OpenRead(resultUrl))
+                using (Stream stream = downloader.OpenRead(resultUrl))
                 {
                     if (stream == null)
                     {
@@ -212,12 +207,24 @@
 
                     stream.CopyTo(memoryStream);
                 }
-
-                lastRequestDateTime = DateTimeOffset.Now;
             }
 
             memoryStream.Position = 0;
             return memoryStream;
+        }
+
+        /// <summary>
+        /// NCBI allows only 3 requests per second.
+        /// So we wait half a second between requests to be sure.
+        /// </summary>
+        private static void WaitForRequest()
+        {
+            if (DateTimeOffset.Now - lastRequestDateTime < new TimeSpan(0, 0, 0, 0, 500))
+            {
+                Thread.Sleep(500);
+            }
+
+            lastRequestDateTime = DateTimeOffset.Now;
         }
     }
 }

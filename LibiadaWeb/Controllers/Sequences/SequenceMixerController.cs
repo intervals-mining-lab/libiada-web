@@ -142,7 +142,7 @@
             var resultMatter = new Matter
                 {
                     Nature = matter.Nature,
-                    Name = matter.Name + " " + scrambling + " mixes"
+                    Name = $"{matter.Name} {scrambling} mixes"
                 };
             db.Matter.Add(resultMatter);
             db.SaveChanges();

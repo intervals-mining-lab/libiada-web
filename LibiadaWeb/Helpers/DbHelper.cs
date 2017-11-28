@@ -34,7 +34,7 @@
                     }
                     catch (Exception e)
                     {
-                        databaseName = "No connection to db. Reason: " + e.Message;
+                        databaseName = $"No connection to db. Reason: {e.Message}";
                     }
                 }
 

@@ -115,7 +115,7 @@
                         }
                         catch (Exception exception)
                         {
-                            result.Result = "Error:" + exception.Message + (exception.InnerException?.Message ?? string.Empty);
+                            result.Result = $"Error: {exception.Message} {exception.InnerException?.Message ?? string.Empty}";
                             result.Status = "Error";
                         }
                         finally

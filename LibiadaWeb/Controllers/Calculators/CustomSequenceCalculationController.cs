@@ -93,7 +93,7 @@
                         else
                         {
                             sequences[i] = customSequences[i];
-                            names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
+                            names[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                         }
                     }
 

@@ -35,7 +35,7 @@
                 {
                     var newMatter = new Matter
                                         {
-                                            Name = sequences[i].Matter.Name + " Cleaned of IS110",
+                                            Name = $"{sequences[i].Matter.Name} Cleaned of IS110",
                                             Description = sequences[i].Matter.Description,
                                             Nature = sequences[i].Matter.Nature,
                                             Group = sequences[i].Matter.Group,

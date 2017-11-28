@@ -42,9 +42,6 @@
         /// </returns>
         public ActionResult Index()
         {
-            var db = new LibiadaWebEntities();
-            var viewDataHelper = new ViewDataHelper(db);
-
             var data = new Dictionary<string, object>
                 {
                     { "characteristicTypes", FullCharacteristicRepository.Instance.GetCharacteristicTypes() }
@@ -81,7 +78,7 @@
         /// The characteristic type link ids.
         /// </param>
         /// <param name="customSequences">
-        /// Custom sequences inputed by user.
+        /// Custom sequences input by user.
         /// </param>
         /// <param name="localFile">
         /// Local file flag.
@@ -122,7 +119,7 @@
                     else
                     {
                         sequences[i] = customSequences[i];
-                        names[i] = "Custom sequence " + (i + 1) + ". Length: " + customSequences[i].Length;
+                        names[i] = $"Custom sequence {i + 1}. Length: {customSequences[i].Length}";
                     }
                 }
 
@@ -166,7 +163,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : $"higher order {transformationLinkIds[i].GetDisplayValue()}");
                 }
 
                 var result = new Dictionary<string, object>

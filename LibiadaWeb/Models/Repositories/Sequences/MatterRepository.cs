@@ -157,7 +157,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         {
             var matter = new Matter
                              {
-                                 Name = ExtractMatterName(metadata) + " | " + metadata.Version.CompoundAccession,
+                                 Name = $"{ExtractMatterName(metadata)} | {metadata.Version.CompoundAccession}",
                                  Nature = Nature.Genetic
                              };
 
@@ -207,7 +207,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     return commonName;
                 }
 
-                return commonName + " | " + definition;
+                return $"{commonName} | {definition}";
             }
 
             if (species.Contains(commonName))
@@ -222,12 +222,10 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                     return species;
                 }
 
-                return species + " | " + definition;
+                return $"{species} | {definition}";
             }
 
-            throw new Exception("Sequences names are not equal. CommonName = " + commonName +
-                                ", Species = " + species +
-                                ", Definition = " + definition);
+            throw new Exception($"Sequences names are not equal. CommonName = {commonName }, Species = {species}, Definition = {definition}");
         }
 
         /// <summary>

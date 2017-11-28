@@ -101,11 +101,11 @@
 
                     if (qualifier.Key == "protein_id")
                     {
-                        string remoteId = value.Replace("\"", string.Empty);
+                        string remoteId = CleanAttributeValue(value);
 
                         if (!string.IsNullOrEmpty(subsequence.RemoteId) && subsequence.RemoteId != remoteId)
                         {
-                            throw new Exception("Several remote ids in one subsequence. First " + subsequence.RemoteId + "Second " + value);
+                            throw new Exception($"Several remote ids in one subsequence. First {subsequence.RemoteId} Second {remoteId}");
                         }
 
                         subsequence.RemoteId = remoteId;

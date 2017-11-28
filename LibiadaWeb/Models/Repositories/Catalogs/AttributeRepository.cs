@@ -47,7 +47,7 @@
             }
             else
             {
-                throw new Exception("Unknown attribute: " + name);
+                throw new Exception($"Unknown attribute: {name}");
             }
         }
     }

@@ -100,7 +100,7 @@
                 var transformations = new Dictionary<int, string>();
                 for (int i = 0; i < transformationIds.Length; i++)
                 {
-                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : "higher order " + transformationLinkIds[i].GetDisplayValue());
+                    transformations.Add(i, transformationIds[i] == 1 ? "dissimilar" : $"higher order {transformationLinkIds[i].GetDisplayValue()}");
                 }
 
                 var result = new Dictionary<string, object>

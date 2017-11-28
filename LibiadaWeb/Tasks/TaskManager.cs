@@ -302,7 +302,7 @@
                 while (e.InnerException != null)
                 {
                     e = e.InnerException;
-                    errorMessage += "<br/>" + e.Message;
+                    errorMessage += $"<br/> {e.Message}";
                 }
 
                 lock (task)

@@ -107,7 +107,7 @@
                                 results[i] = exception.Message;
                                 if (exception.InnerException != null)
                                 {
-                                    results[i] += " " + exception.InnerException.Message;
+                                    results[i] += $" {exception.InnerException.Message}";
                                 }
                             }
                         }

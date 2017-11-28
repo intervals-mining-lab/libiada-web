@@ -146,7 +146,7 @@
 
                 if (!FeatureRepository.FeatureExists(feature.Key))
                 {
-                    throw new Exception("Unknown feature. Feature name = " + feature.Key);
+                    throw new Exception($"Unknown feature. Feature name = {feature.Key}");
                 }
 
                 if (feature.Key == gene)
