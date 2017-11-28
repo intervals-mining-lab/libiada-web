@@ -25,7 +25,7 @@
         [Test]
         public void NatureCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Nature>().Length;
+            var actualCount = EnumExtensions.ToArray<Nature>().Length;
             Assert.AreEqual(NaturesCount, actualCount);
         }
 
@@ -35,7 +35,7 @@
         [Test]
         public void NatureValuesTest()
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             for (int i = 1; i <= NaturesCount; i++)
             {
                 Assert.IsTrue(natures.Contains((Nature)i));
@@ -90,7 +90,7 @@
         [Test]
         public void NatureValuesUniqueTest()
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             var natureValues = natures.Cast<byte>();
             Assert.That(natureValues, Is.Unique);
         }

@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// RemoteDb enum tests.
     /// </summary>
@@ -25,7 +27,7 @@
         [Test]
         public void RemoteDbCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<RemoteDb>().Length;
+            var actualCount = EnumExtensions.ToArray<RemoteDb>().Length;
             Assert.AreEqual(RemoteDbsCount, actualCount);
         }
 
@@ -35,7 +37,7 @@
         [Test]
         public void RemoteDbValuesTest()
         {
-            var remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
+            var remoteDbs = EnumExtensions.ToArray<RemoteDb>();
 
             for (int i = 1; i <= RemoteDbsCount; i++)
             {
@@ -91,7 +93,7 @@
         [Test]
         public void RemoteDbHasNatureTest([Values]RemoteDb remoteDb)
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(remoteDb.GetNature()));
         }
 
@@ -101,7 +103,7 @@
         [Test]
         public void RemoteDbValuesUniqueTest()
         {
-            var remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
+            var remoteDbs = EnumExtensions.ToArray<RemoteDb>();
             var remoteDbValues = remoteDbs.Cast<byte>();
             Assert.That(remoteDbValues, Is.Unique);
         }

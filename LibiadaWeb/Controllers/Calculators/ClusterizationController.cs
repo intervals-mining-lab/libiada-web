@@ -19,6 +19,8 @@
 
     using Newtonsoft.Json;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// The clusterization controller.
     /// </summary>
@@ -60,7 +62,7 @@
         {
             var viewDataHelper = new ViewDataHelper(db);
             Dictionary<string, object> viewData = viewDataHelper.FillViewData(CharacteristicCategory.Full, 3, int.MaxValue, "Calculate");
-            viewData.Add("ClusterizatorsTypes", ArrayExtensions.ToArray<ClusterizationType>().ToSelectList());
+            viewData.Add("ClusterizatorsTypes", EnumExtensions.ToArray<ClusterizationType>().ToSelectList());
             ViewBag.data = JsonConvert.SerializeObject(viewData);
             return View();
         }

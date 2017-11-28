@@ -14,6 +14,8 @@
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Models.Repositories.Sequences;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// Class filling data for ViewBag.
     /// </summary>
@@ -52,22 +54,22 @@
             IEnumerable<SelectListItem> natures;
             IEnumerable<Notation> notations;
 
-            IEnumerable<RemoteDb> remoteDbs = ArrayExtensions.ToArray<RemoteDb>();
-            IEnumerable<SequenceType> sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
-            IEnumerable<Group> groups = ArrayExtensions.ToArray<Group>();
+            IEnumerable<RemoteDb> remoteDbs = EnumExtensions.ToArray<RemoteDb>();
+            IEnumerable<SequenceType> sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+            IEnumerable<Group> groups = EnumExtensions.ToArray<Group>();
 
             if (AccountHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = ArrayExtensions.ToArray<Notation>();
+                notations = EnumExtensions.ToArray<Notation>();
             }
             else
             {
                 natures = new[] { Nature.Genetic }.ToSelectList();
                 notations = new[] { Notation.Nucleotides };
-                remoteDbs = ArrayExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic);
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
-                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+                remoteDbs = EnumExtensions.ToArray<RemoteDb>().Where(rd => rd.GetNature() == Nature.Genetic);
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
 
             return new Dictionary<string, object>
@@ -113,16 +115,16 @@
             if (AccountHelper.IsAdmin())
             {
                 natures = EnumHelper.GetSelectList(typeof(Nature));
-                notations = ArrayExtensions.ToArray<Notation>();
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
-                groups = ArrayExtensions.ToArray<Group>();
+                notations = EnumExtensions.ToArray<Notation>();
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>();
+                groups = EnumExtensions.ToArray<Group>();
             }
             else
             {
                 natures = new[] { Nature.Genetic }.ToSelectList();
                 notations = new[] { Notation.Nucleotides };
-                sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
-                groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+                sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+                groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
             }
 
             data.Add("natures", natures);
@@ -224,10 +226,10 @@
 
             var data = GetMattersData(minSelectedMatters, maxSelectedMatters, m => matterIds.Contains(m.Id), submitName);
 
-            var geneticNotations = ArrayExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
-            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
-            var groups = ArrayExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
-            var features = ArrayExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
+            var geneticNotations = EnumExtensions.ToArray<Notation>().Where(n => n.GetNature() == Nature.Genetic);
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>().Where(st => st.GetNature() == Nature.Genetic);
+            var groups = EnumExtensions.ToArray<Group>().Where(g => g.GetNature() == Nature.Genetic);
+            var features = EnumExtensions.ToArray<Feature>().Where(f => f.GetNature() == Nature.Genetic).ToArray();
             var selectedFeatures = features.Where(f => f != Feature.NonCodingSequence);
             var characteristicTypes = FullCharacteristicRepository.Instance.GetCharacteristicTypes();
 

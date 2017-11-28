@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// Sequence type enum tests.
     /// </summary>
@@ -25,7 +27,7 @@
         [Test]
         public void SequenceTypeCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<SequenceType>().Length;
+            var actualCount = EnumExtensions.ToArray<SequenceType>().Length;
             Assert.AreEqual(SequenceTypesCount, actualCount);
         }
 
@@ -35,7 +37,7 @@
         [Test]
         public void SequenceTypeValuesTest()
         {
-            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
 
             for (int i = 1; i <= SequenceTypesCount; i++)
             {
@@ -102,7 +104,7 @@
         [Test]
         public void SequenceTypeHasNatureTest([Values]SequenceType sequenceType)
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(sequenceType.GetNature()));
         }
 
@@ -112,7 +114,7 @@
         [Test]
         public void SequenceTypeValuesUniqueTest()
         {
-            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>();
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>();
             var sequenceTypeValues = sequenceTypes.Cast<byte>();
             Assert.That(sequenceTypeValues, Is.Unique);
         }

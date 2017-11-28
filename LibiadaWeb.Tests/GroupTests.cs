@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// Group enum tests.
     /// </summary>
@@ -25,7 +27,7 @@
         [Test]
         public void GroupCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Group>().Length;
+            var actualCount = EnumExtensions.ToArray<Group>().Length;
             Assert.AreEqual(GroupsCount, actualCount);
         }
 
@@ -35,7 +37,7 @@
         [Test]
         public void GroupValuesTest()
         {
-            var groups = ArrayExtensions.ToArray<Group>();
+            var groups = EnumExtensions.ToArray<Group>();
 
             for (int i = 1; i <= GroupsCount; i++)
             {
@@ -96,7 +98,7 @@
         [Test]
         public void GroupHasNatureTest([Values]Group group)
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(group.GetNature()));
         }
 
@@ -106,7 +108,7 @@
         [Test]
         public void GroupValuesUniqueTest()
         {
-            var groups = ArrayExtensions.ToArray<Group>();
+            var groups = EnumExtensions.ToArray<Group>();
             var groupValues = groups.Cast<byte>();
             Assert.That(groupValues, Is.Unique);
         }

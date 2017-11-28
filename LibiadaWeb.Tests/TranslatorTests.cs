@@ -23,7 +23,7 @@
         [Test]
         public void TranslatorCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Translator>().Length;
+            var actualCount = EnumExtensions.ToArray<Translator>().Length;
             Assert.AreEqual(TranslatorsCount, actualCount);
         }
 
@@ -33,7 +33,7 @@
         [Test]
         public void TranslatorValuesTest()
         {
-            var translators = ArrayExtensions.ToArray<Translator>();
+            var translators = EnumExtensions.ToArray<Translator>();
             for (int i = 0; i < TranslatorsCount; i++)
             {
                 Assert.IsTrue(translators.Contains((Translator)i));
@@ -88,7 +88,7 @@
         [Test]
         public void TranslatorValuesUniqueTest()
         {
-            var translators = ArrayExtensions.ToArray<Translator>();
+            var translators = EnumExtensions.ToArray<Translator>();
             var translatorValues = translators.Cast<byte>();
             Assert.That(translatorValues, Is.Unique);
         }

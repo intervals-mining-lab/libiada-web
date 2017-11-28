@@ -25,7 +25,7 @@
         [Test]
         public void TaskStateCountTest()
         {
-            int actualCount = ArrayExtensions.ToArray<TaskState>().Length;
+            int actualCount = EnumExtensions.ToArray<TaskState>().Length;
             Assert.AreEqual(TaskStatesCount, actualCount);
         }
 
@@ -35,7 +35,7 @@
         [Test]
         public void TaskStateValuesTest()
         {
-            TaskState[] taskStates = ArrayExtensions.ToArray<TaskState>();
+            TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
 
             for (int i = 1; i <= TaskStatesCount; i++)
             {
@@ -91,7 +91,7 @@
         [Test]
         public void TaskStateValuesUniqueTest()
         {
-            TaskState[] taskStates = ArrayExtensions.ToArray<TaskState>();
+            TaskState[] taskStates = EnumExtensions.ToArray<TaskState>();
             Assert.That(taskStates.Cast<byte>(), Is.Unique);
         }
     }

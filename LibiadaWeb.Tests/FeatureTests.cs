@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// Feature enum tests.
     /// </summary>
@@ -25,7 +27,7 @@
         [Test]
         public void FeatureCountTest()
         {
-            int actualCount = ArrayExtensions.ToArray<Feature>().Length;
+            int actualCount = EnumExtensions.ToArray<Feature>().Length;
             Assert.AreEqual(FeaturesCount, actualCount);
         }
 
@@ -35,7 +37,7 @@
         [Test]
         public void FeatureValuesTest()
         {
-            Feature[] features = ArrayExtensions.ToArray<Feature>();
+            Feature[] features = EnumExtensions.ToArray<Feature>();
 
             for (int i = 0; i < FeaturesCount; i++)
             {
@@ -123,7 +125,7 @@
         [Test]
         public void FeatureHasNatureTest([Values]Feature feature)
         {
-            Nature[] natures = ArrayExtensions.ToArray<Nature>();
+            Nature[] natures = EnumExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(feature.GetNature()));
         }
 
@@ -133,7 +135,7 @@
         [Test]
         public void FeatureValuesUniqueTest()
         {
-            Feature[] features = ArrayExtensions.ToArray<Feature>();
+            Feature[] features = EnumExtensions.ToArray<Feature>();
             Assert.That(features.Cast<byte>(), Is.Unique);
         }
     }

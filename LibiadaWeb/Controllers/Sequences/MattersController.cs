@@ -16,6 +16,8 @@
 
     using Newtonsoft.Json;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// The matters controller.
     /// </summary>
@@ -102,8 +104,8 @@
                     return HttpNotFound();
                 }
 
-                var groups = ArrayExtensions.ToArray<Group>().ToSelectListWithNature();
-                var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().ToSelectListWithNature();
+                var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
+                var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
                 var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
                 var data = new Dictionary<string, object>
                                {
@@ -142,8 +144,8 @@
                 }
             }
 
-            var groups = ArrayExtensions.ToArray<Group>().ToSelectListWithNature();
-            var sequenceTypes = ArrayExtensions.ToArray<SequenceType>().ToSelectListWithNature();
+            var groups = EnumExtensions.ToArray<Group>().ToSelectListWithNature();
+            var sequenceTypes = EnumExtensions.ToArray<SequenceType>().ToSelectListWithNature();
             var natures = EnumHelper.GetSelectList(typeof(Nature), matter.Nature);
             var data = new Dictionary<string, object>
                                {

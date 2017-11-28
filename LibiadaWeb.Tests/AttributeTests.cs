@@ -23,7 +23,7 @@
         [Test]
         public void AttributesCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Attribute>().Length;
+            var actualCount = EnumExtensions.ToArray<Attribute>().Length;
             Assert.AreEqual(AttributesCount, actualCount);
         }
 
@@ -33,7 +33,7 @@
         [Test]
         public void AttributeValuesTest()
         {
-            var attributes = ArrayExtensions.ToArray<Attribute>();
+            var attributes = EnumExtensions.ToArray<Attribute>();
             for (int i = 1; i <= AttributesCount; i++)
             {
                 Assert.IsTrue(attributes.Contains((Attribute)i));
@@ -101,7 +101,7 @@
         [Test]
         public void AttributeValuesUniqueTest()
         {
-            var attributes = ArrayExtensions.ToArray<Attribute>();
+            var attributes = EnumExtensions.ToArray<Attribute>();
             var attributeValues = attributes.Cast<byte>();
             Assert.That(attributeValues, Is.Unique);
         }

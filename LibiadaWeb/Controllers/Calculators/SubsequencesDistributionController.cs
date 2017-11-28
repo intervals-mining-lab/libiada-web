@@ -18,6 +18,8 @@
 
     using Newtonsoft.Json;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// The subsequences distribution controller.
     /// </summary>
@@ -140,7 +142,7 @@
                                      { "subsequencesCharacteristicsList", subsequencesCharacteristicsList },
                                      { "sequenceCharacteristicName", sequenceCharacteristicName },
                                      { "features", features.ToSelectList(features).ToDictionary(f => f.Value) },
-                                     { "attributes", ArrayExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
+                                     { "attributes", EnumExtensions.ToArray<Attribute>().ToDictionary(a => (byte)a, a => a.GetDisplayValue()) },
                                      { "attributeValues", attributeValues.Select(sa => new { attribute = sa.AttributeId, value = sa.Value }) }
                                  };
 

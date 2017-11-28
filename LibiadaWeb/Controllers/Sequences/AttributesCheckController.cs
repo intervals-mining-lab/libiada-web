@@ -81,7 +81,7 @@
                     string[] parentRemoteIds;
                     using (var db = new LibiadaWebEntities())
                     {
-                        databaseAttributes = ArrayExtensions.ToArray<Attribute>().Select(a => a.GetDisplayValue()).ToArray();
+                        databaseAttributes = EnumExtensions.ToArray<Attribute>().Select(a => a.GetDisplayValue()).ToArray();
                         matterNames = db.Matter.Where(m => matterIds.Contains(m.Id)).OrderBy(m => m.Id).Select(m => m.Name).ToArray();
                         parentRemoteIds = db.DnaSequence.Where(c => matterIds.Contains(c.MatterId)).OrderBy(c => c.MatterId).Select(c => c.RemoteId).ToArray();
                     }

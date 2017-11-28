@@ -23,7 +23,7 @@
         /// </summary>
         public AttributeRepository()
         {
-            Attribute[] attributes = ArrayExtensions.ToArray<Attribute>();
+            Attribute[] attributes = EnumExtensions.ToArray<Attribute>();
             attributesDictionary = attributes.ToDictionary(a => a.GetDisplayValue());
         }
 

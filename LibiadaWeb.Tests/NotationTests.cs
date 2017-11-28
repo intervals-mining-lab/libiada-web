@@ -8,6 +8,8 @@
 
     using NUnit.Framework;
 
+    using EnumExtensions = LibiadaCore.Extensions.EnumExtensions;
+
     /// <summary>
     /// Notation enum tests.
     /// </summary>
@@ -25,7 +27,7 @@
         [Test]
         public void NotationCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Notation>().Length;
+            var actualCount = EnumExtensions.ToArray<Notation>().Length;
             Assert.AreEqual(NotationsCount, actualCount);
         }
 
@@ -35,7 +37,7 @@
         [Test]
         public void NotationValuesTest()
         {
-            var notations = ArrayExtensions.ToArray<Notation>();
+            var notations = EnumExtensions.ToArray<Notation>();
 
             for (int i = 1; i <= NotationsCount; i++)
             {
@@ -100,7 +102,7 @@
         [Test]
         public void NotationHasNatureTest([Values]Notation notation)
         {
-            var natures = ArrayExtensions.ToArray<Nature>();
+            var natures = EnumExtensions.ToArray<Nature>();
             Assert.True(natures.Contains(notation.GetNature()));
         }
 
@@ -110,7 +112,7 @@
         [Test]
         public void NotationValuesUniqueTest()
         {
-            var notations = ArrayExtensions.ToArray<Notation>();
+            var notations = EnumExtensions.ToArray<Notation>();
             var notationValues = notations.Cast<byte>();
             Assert.That(notationValues, Is.Unique);
         }

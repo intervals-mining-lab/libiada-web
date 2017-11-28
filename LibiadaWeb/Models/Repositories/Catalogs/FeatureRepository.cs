@@ -23,7 +23,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </exception>
         public static Feature GetFeatureByName(string name)
         {
-            return ArrayExtensions.ToArray<Feature>().Single(f => f.GetGenBankName() == name);
+            return EnumExtensions.ToArray<Feature>().Single(f => f.GetGenBankName() == name);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// </returns>
         public static bool FeatureExists(string name)
         {
-            return ArrayExtensions.ToArray<Feature>().Any(f => f.GetGenBankName() == name);
+            return EnumExtensions.ToArray<Feature>().Any(f => f.GetGenBankName() == name);
         }
     }
 }

@@ -12,6 +12,8 @@
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
 
+    using LibiadaCore.Extensions;
+
     /// <summary>
     /// The ncbi helper.
     /// </summary>
@@ -43,7 +45,7 @@
         /// </returns>
         public static List<FeatureItem> GetFeatures(string id)
         {
-            GenBankMetadata metadata = GetMetadata(GetGenBankSequence(id));
+            GenBankMetadata metadata = GetMetadata(DownloadGenBankSequence(id));
             return metadata.Features.All;
         }
 
@@ -85,12 +87,33 @@
                 return new ISequence[0];
             }
 
-            ISequenceParser parser = new GenBankParser();
-            string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
-            Stream fileStream = GetResponseStream(url);
-            ISequence[] result = parser.Parse(fileStream).ToArray();
-            fileStream.Dispose();
-            return result;
+            var result = new List<ISequence>(ids.Length);
+            for (int i = 0; i < ids.Length; i += 25)
+            {
+                string[] idsPortion = ids.SubArray(i, Math.Min(25, ids.Length - i));
+                try
+                {
+                    result.AddRange(DownloadGenBankSequences(idsPortion));
+                }
+                catch (Exception)
+                {
+                    // if some of the sequences failed to load
+                    // try each one separately
+                    foreach (string id in idsPortion)
+                    {
+                        try
+                        {
+                            result.Add(DownloadGenBankSequence(id));
+                        }
+                        catch (Exception)
+                        {
+                            result.Add(null);
+                        }
+                    }
+                }
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>
@@ -147,6 +170,28 @@
         }
 
         /// <summary>
+        /// Downloads sequences from genbank by id.
+        /// </summary>
+        /// <param name="ids">
+        /// Remote sequences ids.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable{ISequence}"/>.
+        /// </returns>
+        private static IEnumerable<ISequence> DownloadGenBankSequences(string[] ids)
+        {
+            ISequenceParser parser = new GenBankParser();
+            string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
+            IEnumerable<ISequence> result;
+            using (Stream fileStream = GetResponseStream(url))
+            {
+                result = parser.Parse(fileStream);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Extracts sequence from genbank file.
         /// </summary>
         /// <param name="id">
@@ -155,11 +200,9 @@
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        private static ISequence GetGenBankSequence(string id)
+        private static ISequence DownloadGenBankSequence(string id)
         {
-            Stream fileStream = GetResponseStream(GetEfetchParamsString("gbwithparts") + id);
-            ISequenceParser parser = new GenBankParser();
-            return parser.ParseOne(fileStream);
+            return DownloadGenBankSequences(new[] { id }).Single();
         }
 
         /// <summary>

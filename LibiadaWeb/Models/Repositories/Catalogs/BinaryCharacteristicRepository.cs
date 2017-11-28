@@ -183,8 +183,8 @@
             BinaryCharacteristic[] characteristics;
             if (AccountHelper.IsAdmin())
             {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<BinaryCharacteristic>();
+                links = EnumExtensions.ToArray<Link>();
+                characteristics = EnumExtensions.ToArray<BinaryCharacteristic>();
             }
             else
             {

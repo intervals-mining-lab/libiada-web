@@ -149,8 +149,8 @@
             AccordanceCharacteristic[] characteristics;
             if (AccountHelper.IsAdmin())
             {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<AccordanceCharacteristic>();
+                links = EnumExtensions.ToArray<Link>();
+                characteristics = EnumExtensions.ToArray<AccordanceCharacteristic>();
             }
             else
             {

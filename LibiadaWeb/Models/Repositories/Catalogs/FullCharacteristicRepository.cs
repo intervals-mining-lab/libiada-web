@@ -148,8 +148,8 @@
             FullCharacteristic[] characteristics;
             if (AccountHelper.IsAdmin())
             {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<FullCharacteristic>();
+                links = EnumExtensions.ToArray<Link>();
+                characteristics = EnumExtensions.ToArray<FullCharacteristic>();
             }
             else
             {

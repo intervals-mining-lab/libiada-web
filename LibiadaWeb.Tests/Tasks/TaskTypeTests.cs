@@ -26,7 +26,7 @@
         [Test]
         public void TaskTypeCountTest()
         {
-            int actualCount = ArrayExtensions.ToArray<TaskType>().Length;
+            int actualCount = EnumExtensions.ToArray<TaskType>().Length;
             Assert.AreEqual(TaskTypesCount, actualCount);
         }
 
@@ -36,7 +36,7 @@
         [Test]
         public void TaskTypeValuesTest()
         {
-            TaskType[] taskTypes = ArrayExtensions.ToArray<TaskType>();
+            TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
 
             for (int i = 1; i <= TaskTypesCount; i++)
             {
@@ -112,7 +112,7 @@
         [Test]
         public void TaskTypeValuesUniqueTest()
         {
-            TaskType[] taskTypes = ArrayExtensions.ToArray<TaskType>();
+            TaskType[] taskTypes = EnumExtensions.ToArray<TaskType>();
             Assert.That(taskTypes.Cast<byte>(), Is.Unique);
         }
     }

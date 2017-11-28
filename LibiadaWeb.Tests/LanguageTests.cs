@@ -23,7 +23,7 @@
         [Test]
         public void LanguageCountTest()
         {
-            var actualCount = ArrayExtensions.ToArray<Language>().Length;
+            var actualCount = EnumExtensions.ToArray<Language>().Length;
             Assert.AreEqual(LanguagesCount, actualCount);
         }
 
@@ -33,7 +33,7 @@
         [Test]
         public void LanguageValuesTest()
         {
-            var languages = ArrayExtensions.ToArray<Language>();
+            var languages = EnumExtensions.ToArray<Language>();
             for (int i = 1; i <= LanguagesCount; i++)
             {
                 Assert.IsTrue(languages.Contains((Language)i));
@@ -87,7 +87,7 @@
         [Test]
         public void LanguageValuesUniqueTest()
         {
-            var languages = ArrayExtensions.ToArray<Language>();
+            var languages = EnumExtensions.ToArray<Language>();
             var languageValues = languages.Cast<byte>();
             Assert.That(languageValues, Is.Unique);
         }

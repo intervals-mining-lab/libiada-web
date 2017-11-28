@@ -147,8 +147,8 @@
             CongenericCharacteristic[] characteristics;
             if (AccountHelper.IsAdmin())
             {
-                links = ArrayExtensions.ToArray<Link>();
-                characteristics = ArrayExtensions.ToArray<CongenericCharacteristic>();
+                links = EnumExtensions.ToArray<Link>();
+                characteristics = EnumExtensions.ToArray<CongenericCharacteristic>();
             }
             else
             {
