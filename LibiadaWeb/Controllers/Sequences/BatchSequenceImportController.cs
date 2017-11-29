@@ -46,7 +46,8 @@
         }
 
         /// <summary>
-        /// The create.
+        /// Imports sequences from GenBank by their ids.
+        /// Optionally imports all subsequences.
         /// </summary>
         /// <param name="accessions">
         /// Ids of imported sequences in ncbi (remote ids).

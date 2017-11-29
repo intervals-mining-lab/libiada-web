@@ -195,14 +195,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                                                    .TrimEnd(", complete cds.")
                                                    .TrimEnd(", genome.");
 
-            if (commonName.Contains(species))
+            if (commonName.Contains(species) || species.IsSubsetOf(commonName))
             {
-                if (definition.Contains(commonName))
+                if (definition.Contains(commonName) || commonName.IsSubsetOf(definition))
                 {
                     return definition;
                 }
 
-                if (commonName.Contains(definition))
+                if (commonName.Contains(definition) || definition.IsSubsetOf(commonName))
                 {
                     return commonName;
                 }
@@ -210,14 +210,14 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 return $"{commonName} | {definition}";
             }
 
-            if (species.Contains(commonName))
+            if (species.Contains(commonName) || commonName.IsSubsetOf(species))
             {
-                if (definition.Contains(species))
+                if (definition.Contains(species) || species.IsSubsetOf(definition))
                 {
                     return definition;
                 }
 
-                if (species.Contains(definition))
+                if (species.Contains(definition) || definition.IsSubsetOf(species))
                 {
                     return species;
                 }
