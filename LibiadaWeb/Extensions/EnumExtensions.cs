@@ -62,7 +62,7 @@
 
             if (!type.IsEnum)
             {
-                throw new TypeArgumentException("Type argument must be enum.");
+                throw new TypeArgumentException("Type argument must be enum.", type);
             }
 
             return values.Select(e => new SelectListItem
@@ -105,7 +105,7 @@
 
             if (!type.IsEnum)
             {
-                throw new TypeArgumentException("Type argument must be enum.");
+                throw new TypeArgumentException("Type argument must be enum.", type);
             }
 
             return values.Select(e => new SelectListItem
@@ -145,7 +145,7 @@
 
             if (!type.IsEnum)
             {
-                throw new TypeArgumentException("Type argument must be enum.");
+                throw new TypeArgumentException("Type argument must be enum.", type);
             }
 
             return values.Select(e => new SelectListItemWithNature
@@ -189,7 +189,7 @@
 
             if (!type.IsEnum)
             {
-                throw new TypeArgumentException("Type argument must be enum.");
+                throw new TypeArgumentException("Type argument must be enum.", type);
             }
 
             return values.Select(e => new SelectListItemWithNature
