@@ -64,6 +64,7 @@
         {
             return CreateTask(() =>
             {
+                accessions = accessions.Distinct().ToArray();
                 var importResults = new List<MatterImportResult>(accessions.Length);
 
                 using (var db = new LibiadaWebEntities())
@@ -116,8 +117,13 @@
                         }
                         catch (Exception exception)
                         {
-                            result.Result = $"Error: {exception.Message} {exception.InnerException?.Message ?? string.Empty}";
                             result.Status = "Error";
+                            result.Result = $"Error: {exception.Message}";
+                            while (exception.InnerException != null)
+                            {
+                                exception = exception.InnerException;
+                                result.Result += $"<br/> {exception.Message}";
+                            }
                         }
                         finally
                         {
@@ -179,8 +185,13 @@
             }
             catch (Exception exception)
             {
-                string result = $"successfully imported sequence but failed to import genes: {exception.Message}"
-                              + $" {exception.InnerException?.Message}";
+                string result = $"successfully imported sequence but failed to import genes: {exception.Message}";
+                while (exception.InnerException != null)
+                {
+                    exception = exception.InnerException;
+                    result += $"<br/> {exception.Message}";
+                }
+
                 string status = "Error";
                 return (result, status);
             }

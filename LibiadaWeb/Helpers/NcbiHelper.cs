@@ -95,7 +95,7 @@
                 {
                     result.AddRange(DownloadGenBankSequences(idsPortion));
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
                     // if some of the sequences failed to load
                     // try each one separately
@@ -105,7 +105,7 @@
                         {
                             result.Add(DownloadGenBankSequence(id));
                         }
-                        catch (Exception)
+                        catch (Exception anotherException)
                         {
                             result.Add(null);
                         }
@@ -182,13 +182,8 @@
         {
             ISequenceParser parser = new GenBankParser();
             string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
-            IEnumerable<ISequence> result;
-            using (Stream fileStream = GetResponseStream(url))
-            {
-                result = parser.Parse(fileStream);
-            }
-
-            return result;
+            Stream fileStream = GetResponseStream(url);
+            return parser.Parse(fileStream);
         }
 
         /// <summary>
