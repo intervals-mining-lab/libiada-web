@@ -108,6 +108,9 @@
         /// <exception cref="Exception">
         /// Thrown if error occurs during importability check.
         /// </exception>
+        /// <returns>
+        /// Returns tuple of coding and non-coding features count.
+        /// </returns>
         public (int, int) CreateSubsequences()
         {
             try
@@ -230,6 +233,9 @@
         /// Create subsequences from features
         /// and noncoding subsequences from gaps.
         /// </summary>
+        /// <returns>
+        /// Returns tuple of coding and non-coding features count.
+        /// </returns>
         private (int, int) CreateFeatureSubsequences()
         {
             var newSubsequences = new List<Subsequence>();

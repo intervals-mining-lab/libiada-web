@@ -81,13 +81,13 @@
                                                                                                       Status = "Exist"
                                                                                                   }));
 
-                    ISequence[] bioSequences = NcbiHelper.GetGenBankSequences(accessionsToImport);
-                    foreach (ISequence bioSequence in bioSequences)
+                    foreach (string accession in accessionsToImport)
                     {
-                        var result = new MatterImportResult();
+                        var result = new MatterImportResult() { MatterName = accession };
 
                         try
                         {
+                            ISequence bioSequence = NcbiHelper.DownloadGenBankSequence(accession);
                             GenBankMetadata metadata = NcbiHelper.GetMetadata(bioSequence);
                             result.MatterName = metadata.Version.CompoundAccession;
 
@@ -123,6 +123,14 @@
                             {
                                 exception = exception.InnerException;
                                 result.Result += $"<br/> {exception.Message}";
+                            }
+
+                            foreach (var dbEntityEntry in db.ChangeTracker.Entries())
+                            {
+                                if (dbEntityEntry.Entity != null)
+                                {
+                                    dbEntityEntry.State = EntityState.Detached;
+                                }
                             }
                         }
                         finally

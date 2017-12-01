@@ -15,6 +15,11 @@
         public IBaseObject[] Elements;
 
         /// <summary>
+        /// The elements names.
+        /// </summary>
+        public string[] ElementsNames;
+
+        /// <summary>
         /// The sequence characteristics values.
         /// </summary>
         public double[][] Characteristics;

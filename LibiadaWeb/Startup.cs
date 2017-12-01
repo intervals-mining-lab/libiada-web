@@ -8,6 +8,10 @@ using Owin;
 
 namespace LibiadaWeb
 {
+    using AutoMapper;
+
+    using LibiadaWeb.Tasks;
+
     /// <summary>
     /// The startup.
     /// </summary>
@@ -21,6 +25,7 @@ namespace LibiadaWeb
         /// </param>
         public void Configuration(IAppBuilder app)
         {
+            Mapper.Initialize(cfg => cfg.CreateMap<TaskData, TaskData>());
             ConfigureAuth(app);
 
             app.MapSignalR();

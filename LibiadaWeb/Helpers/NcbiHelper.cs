@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Net;
     using System.Threading;
 
@@ -11,8 +10,6 @@
     using Bio.IO;
     using Bio.IO.FastA;
     using Bio.IO.GenBank;
-
-    using LibiadaCore.Extensions;
 
     /// <summary>
     /// The ncbi helper.
@@ -47,73 +44,6 @@
         {
             GenBankMetadata metadata = GetMetadata(DownloadGenBankSequence(id));
             return metadata.Features.All;
-        }
-
-        /// <summary>
-        /// Extracts features from genBank files downloaded from ncbi.
-        /// </summary>
-        /// <param name="ids">
-        /// Accession ids of the sequences in ncbi (remote ids).
-        /// </param>
-        /// <returns>
-        /// The <see cref="List{FeatureItem}"/>.
-        /// </returns>
-        public static List<FeatureItem>[] GetFeatures(string[] ids)
-        {
-            var result = new List<FeatureItem>[ids.Length];
-            ISequence[] sequences = GetGenBankSequences(ids);
-            for (int i = 0; i < sequences.Length; i++)
-            {
-                GenBankMetadata metadata = GetMetadata(sequences[i]);
-                result[i] = metadata.Features.All;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Extracts sequences from genbank files.
-        /// </summary>
-        /// <param name="ids">
-        /// The ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="T:ISequence[]"/>.
-        /// </returns>
-        public static ISequence[] GetGenBankSequences(string[] ids)
-        {
-            if (ids.Length == 0)
-            {
-                return new ISequence[0];
-            }
-
-            var result = new List<ISequence>(ids.Length);
-            for (int i = 0; i < ids.Length; i += 25)
-            {
-                string[] idsPortion = ids.SubArray(i, Math.Min(25, ids.Length - i));
-                try
-                {
-                    result.AddRange(DownloadGenBankSequences(idsPortion));
-                }
-                catch (Exception exception)
-                {
-                    // if some of the sequences failed to load
-                    // try each one separately
-                    foreach (string id in idsPortion)
-                    {
-                        try
-                        {
-                            result.Add(DownloadGenBankSequence(id));
-                        }
-                        catch (Exception anotherException)
-                        {
-                            result.Add(null);
-                        }
-                    }
-                }
-            }
-
-            return result.ToArray();
         }
 
         /// <summary>
@@ -170,23 +100,6 @@
         }
 
         /// <summary>
-        /// Downloads sequences from genbank by id.
-        /// </summary>
-        /// <param name="ids">
-        /// Remote sequences ids.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IEnumerable{ISequence}"/>.
-        /// </returns>
-        private static IEnumerable<ISequence> DownloadGenBankSequences(string[] ids)
-        {
-            ISequenceParser parser = new GenBankParser();
-            string url = GetEfetchParamsString("gbwithparts") + string.Join(",", ids);
-            Stream fileStream = GetResponseStream(url);
-            return parser.Parse(fileStream);
-        }
-
-        /// <summary>
         /// Extracts sequence from genbank file.
         /// </summary>
         /// <param name="id">
@@ -195,9 +108,12 @@
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        private static ISequence DownloadGenBankSequence(string id)
+        public static ISequence DownloadGenBankSequence(string id)
         {
-            return DownloadGenBankSequences(new[] { id }).Single();
+            ISequenceParser parser = new GenBankParser();
+            string url = GetEfetchParamsString("gbwithparts") + id;
+            Stream dataStream = GetResponseStream(url);
+            return parser.ParseOne(dataStream);
         }
 
         /// <summary>

@@ -117,11 +117,11 @@
         SubsequencesSimilarity = 15,
 
         /// <summary>
-        /// The attributes check.
+        /// Calculates distribution of sequences by order.
         /// </summary>
-        [Display(Name = "Attributes check")]
-        [TaskClass(typeof(AttributesCheckController))]
-        AttributesCheck = 16,
+        [Display(Name = "Distribution of sequences by order")]
+        [TaskClass(typeof(SequencesOrderDistributionController))]
+        SequencesOrderDistribution = 16,
 
         /// <summary>
         /// The batch genes import.
@@ -177,13 +177,6 @@
         /// </summary>
         [Display(Name = "Sequence import")]
         [TaskClass(typeof(MattersController))]
-        Matters = 24,
-
-        /// <summary>
-        /// Calculates distribution of sequences by order.
-        /// </summary>
-        [Display(Name = "Distribution of sequences by order")]
-        [TaskClass(typeof(SequencesOrderDistributionController))]
-        SequencesOrderDistribution = 25
+        Matters = 24
     }
 }

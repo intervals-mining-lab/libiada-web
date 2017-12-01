@@ -108,7 +108,6 @@
                 var characteristicNames = new string[characteristicLinkIds.Length];
                 var characteristicsList = new SelectListItem[characteristicLinkIds.Length];
                 Dictionary<long, string> mattersNames;
-                double[][][] characteristics;
                 long[][] sequenceIds;
 
                 using (var db = new LibiadaWebEntities())
@@ -131,13 +130,14 @@
                     }
                 }
 
-                characteristics = CongenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
+                double[][][] characteristics = CongenericSequencesCharacteristicsCalculator.Calculate(sequenceIds, characteristicLinkIds);
 
                 for (int i = 0; i < matterIds.Length; i++)
                 {
                     sequencesCharacteristics[i] = new CongenericSequencesCharacteristics
                     {
                         MatterName = mattersNames[matterIds[i]],
+                        Elements = null,
                         Characteristics = characteristics[i]
                     };
                 }
@@ -162,7 +162,6 @@
 
 
                 //var theoreticalRanks = new List<List<List<double>>>();
-                //var matterNames = new List<string>();
                 //var elementNames = new List<List<string>>();
                 //var newCharacteristics = new List<CongenericCharacteristicValue>();
 
@@ -172,7 +171,6 @@
                 //for (int w = 0; w < matterIds.Length; w++)
                 //{
                 //    long matterId = matterIds[w];
-                //    matterNames.Add(db.Matter.Single(m => m.Id == matterId).Name);
                 //    elementNames.Add(new List<string>());
                 //    characteristics.Add(new List<List<KeyValuePair<int, double>>>());
                 //    theoreticalRanks.Add(new List<List<double>>());
@@ -321,7 +319,6 @@
                 //return new Dictionary<string, object>
                 //{
                 //    { "characteristics", characteristics },
-                //    { "matterNames", matterNames },
                 //    { "elementNames", elementNames },
                 //    { "characteristicNames", characteristicNames },
                 //    { "matterIds", matterIds },

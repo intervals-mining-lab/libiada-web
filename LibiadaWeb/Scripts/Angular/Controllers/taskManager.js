@@ -47,7 +47,7 @@
             if (change.newState === $.signalR.connectionState.reconnecting) {
                 $scope.flags.reconnecting = true;
 
-                delay(function () {
+                setInterval(function () {
                     if (change.newState === $.signalR.connectionState.reconnecting){
                         if (confirm('Connection lost. Refresh page?')) {
                             location.reload(true);
