@@ -122,7 +122,7 @@
                             while (exception.InnerException != null)
                             {
                                 exception = exception.InnerException;
-                                result.Result += $"<br/> {exception.Message}";
+                                result.Result += $" {exception.Message}";
                             }
 
                             foreach (var dbEntityEntry in db.ChangeTracker.Entries())
@@ -197,7 +197,7 @@
                 while (exception.InnerException != null)
                 {
                     exception = exception.InnerException;
-                    result += $"<br/> {exception.Message}";
+                    result += $" {exception.Message}";
                 }
 
                 string status = "Error";
