@@ -3,7 +3,21 @@
         <label>
             <input type="checkbox" name="localFile" ng-model="localFile" value="true" />
             <input type="hidden" name="localFile" value="false" />
-            Load sequence from fasta file(s)
+            Load sequence from local file(s)
+        </label>
+    </div>
+</div>
+<div class="form-group" ng-show="localFile">
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="radio" name="fileType" ng-model="fileType" value="genetic" selected/>
+            File contains genetic sequence
+        </label>
+    </div>
+    <div class="col-md-offset-2 col-md-10">
+        <label>
+            <input type="radio" name="fileType" ng-model="fileType" value="image" />
+            File is image
         </label>
     </div>
 </div>
