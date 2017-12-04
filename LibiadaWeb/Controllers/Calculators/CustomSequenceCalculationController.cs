@@ -20,6 +20,7 @@
     using Newtonsoft.Json;
     using LibiadaCore.Images;
     using SixLabors.ImageSharp;
+    using System;
 
     /// <summary>
     /// The quick calculation controller.
@@ -77,7 +78,7 @@
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, bool fileIsImage, HttpPostedFileBase[] file)
+        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, HttpPostedFileBase[] file)
         {
             return CreateTask(() =>
                 {
@@ -90,24 +91,27 @@
                         if (localFile)
                         {
                             Stream sequenceStream = FileHelper.GetFileStream(file[i]);
-                            if (fileIsImage)
+                            switch (fileType)
                             {
-                                var image = Image.Load(sequenceStream);
-                                var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
-                                var alphabet = new Alphabet { NullValue.Instance()};
-                                var incompleteAlphabet = sequence.Alphabet;
-                                for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
-                                {
-                                    alphabet.Add(incompleteAlphabet[j]);
-                                }
-                                sequences[i] = new Chain(sequence.Building, alphabet);
-                            }
-                            else
-                            {
-                                ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
-                                var stringSequence = fastaSequence.ConvertToString();
-                                sequences[i] = new Chain(stringSequence);
-                                names[i] = fastaSequence.ID;
+                                case "image":
+                                    var image = Image.Load(sequenceStream);
+                                    var sequence = ImageProcessor.ProcessImage(image, new IImageTransformer[0], new IMatrixTransformer[0], new LineOrderExtractor());
+                                    var alphabet = new Alphabet { NullValue.Instance() };
+                                    var incompleteAlphabet = sequence.Alphabet;
+                                    for (int j = 0; j < incompleteAlphabet.Cardinality; j++)
+                                    {
+                                        alphabet.Add(incompleteAlphabet[j]);
+                                    }
+                                    sequences[i] = new Chain(sequence.Building, alphabet);
+                                    break;
+                                case "genetic":
+                                    ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
+                                    var stringSequence = fastaSequence.ConvertToString();
+                                    sequences[i] = new Chain(stringSequence);
+                                    names[i] = fastaSequence.ID;
+                                    break;
+                                default:
+                                    throw new ArgumentException("Unknown file type", nameof(fileType));
                             }
                         }
                         else
