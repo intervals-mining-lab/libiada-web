@@ -8,11 +8,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
     using LibiadaCore.Core;
 
+    using LibiadaMusic.BorodaDivider;
     using LibiadaMusic.MusicXml;
     using LibiadaMusic.ScoreModel;
 
     using LibiadaWeb.Helpers;
-    using LibiadaMusic.BorodaDivider;
 
     /// <summary>
     /// The music sequence repository.
@@ -48,7 +48,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             doc.LoadXml(stringSequence);
 
             var parser = new MusicXmlParser();
-            parser.Execute(doc, "test");
+            parser.Execute(doc);
             ScoreTrack tempTrack = parser.ScoreModel;
 
             if (tempTrack.CongenericScoreTracks.Count != 1)
@@ -56,32 +56,25 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 throw new Exception("Track contains more then one or zero congeneric score tracks (parts).");
             }
 
+            BaseChain chain = null;
+            long[] alphabet = null;
+
             switch (sequence.Notation)
             {
                 case Notation.Notes:
-                    {
-                        BaseChain chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
-
-                        MatterRepository.CreateMatterFromSequence(sequence);
-
-                        long[] alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
-                        Create(sequence, alphabet, chain.Building);
-
-                        break;
-                    }
+                    chain = ConvertCongenericScoreTrackToNotesBaseChain(tempTrack.CongenericScoreTracks[0]);
+                    MatterRepository.CreateMatterFromSequence(sequence);
+                    alphabet = ElementRepository.GetOrCreateNotesInDb(chain.Alphabet);
+                    break;
                 case Notation.Measures:
-                    {
-                        BaseChain chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
-                        break;
-                    }
+                    chain = ConvertCongenericScoreTrackToMeasuresBaseChain(tempTrack.CongenericScoreTracks[0]);
+                    break;
                 case Notation.FormalMotifs:
-                    {
-                        BaseChain chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
-                        break;
-                    }
+                    chain = ConvertCongenericScoreTrackToFormalMotifsBaseChain(tempTrack.CongenericScoreTracks[0]);
+                    break;
             }
 
-            
+            Create(sequence, alphabet, chain.Building);
         }
 
         /// <summary>
@@ -143,15 +136,33 @@ namespace LibiadaWeb.Models.Repositories.Sequences
             return new BaseChain(((IEnumerable<IBaseObject>)notes).ToList());
         }
 
+        /// <summary>
+        /// Convert congeneric score track to measures base chain.
+        /// </summary>
+        /// <param name="scoreTrack">
+        /// The score track.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BaseChain"/>.
+        /// </returns>
         private BaseChain ConvertCongenericScoreTrackToMeasuresBaseChain(CongenericScoreTrack scoreTrack)
         {
             List<Measure> measures = scoreTrack.MeasureOrder();
             return new BaseChain(((IEnumerable<IBaseObject>)measures).ToList());
         }
 
+        /// <summary>
+        /// Converts congeneric score track to formal motifs base chain.
+        /// </summary>
+        /// <param name="scoreTrack">
+        /// The score track.
+        /// </param>
+        /// <returns>
+        /// The <see cref="BaseChain"/>.
+        /// </returns>
         private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack)
         {
-            BorodaDivider borodaDivider = new BorodaDivider();
+            var borodaDivider = new BorodaDivider();
             FmotivChain fMotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
             return new BaseChain(((IEnumerable<IBaseObject>)fMotifChain).ToList());
         }
