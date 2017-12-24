@@ -55,6 +55,7 @@
                 }
             }
         }
+
         // applies filters
         function applyFilters(elements) {
             for (var i = 0; i < elements.length; i++) {
@@ -62,29 +63,35 @@
                 for (var j = 0; j < $scope.filters.length; j++) {
                     var filterValue = $scope.filters[j].value.toUpperCase();
 
-                    var firstProductId = $scope.getFirstProductAttributeId(elements[i]);
-                    var firstVisible = firstProductId && $scope.attributeValues[firstProductId].value.toUpperCase().indexOf(filterValue) !== -1;
+                    var firstSubsequenceIndex = elements[i].FirstSubsequenceIndex;
+                    var firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
+                    firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "locus_tag", filterValue);
 
-                    var secondProductId = $scope.getSecondProductAttributeId(elements[i]);
-                    var secondVisible = secondProductId && $scope.attributeValues[secondProductId].value.toUpperCase().indexOf(filterValue) !== -1;
+                    var secondSubsequenceIndex = elements[i].SecondSubsequenceIndex;
+                    var secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
+                    secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "locus_tag", filterValue);
 
                     elements[i].filtersVisible.push(firstVisible || secondVisible);
                 }
             }
         }
 
-        // returns first product attribute index if any
-        function getFirstProductAttributeId(equalElement) {
-            return $scope.characteristics[$scope.firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
+        // returns attribute index by its name if any
+        function getAttributeIdByName(matterIndex, subsequenceIndex, attributeName) {
+            return $scope.characteristics[matterIndex][subsequenceIndex].Attributes.find(function (a) {
+                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
             });
         }
 
-        // returns second product attribute index if any
-        function getSecondProductAttributeId(equalElement) {
-            return $scope.characteristics[$scope.secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
-            });
+        // returns true if dot has given attribute and its value equal to the given value
+        function isAttributeEqual(matterIndex, subsequenceIndex, attributeName, expectedValue) {
+            var attributeId = $scope.getAttributeIdByName(matterIndex, subsequenceIndex, attributeName);
+            if (attributeId) {
+                var product = $scope.attributeValues[attributeId].value.toUpperCase();
+                return product.indexOf(expectedValue) !== -1;
+            }
+
+            return false;
         }
 
         // shows list of equal elements only for given pair of matters
@@ -344,8 +351,8 @@
         $scope.getHighlightColor = getHighlightColor;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
-        $scope.getFirstProductAttributeId = getFirstProductAttributeId;
-        $scope.getSecondProductAttributeId = getSecondProductAttributeId;
+        $scope.getAttributeIdByName = getAttributeIdByName;
+        $scope.isAttributeEqual = isAttributeEqual;
         $scope.elementVisible = elementVisible;
         $scope.showEqualPairs = showEqualPairs;
         $scope.showModalLoadingWindow = showModalLoadingWindow;

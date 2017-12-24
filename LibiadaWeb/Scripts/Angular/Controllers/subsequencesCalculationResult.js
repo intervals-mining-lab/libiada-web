@@ -39,11 +39,22 @@
             return $sce.trustAsHtml(attributesText.join("<br/>"));
         }
 
-        // returns product attribute index if any
-        function getProductAttributeId(dot) {
-            return dot.Attributes.find(function (a) {
-                return $scope.attributes[$scope.attributeValues[a].attribute] === "product";
+        // returns attribute index by its name if any
+        function getAttributeIdByName(dot, attributeName) {
+            return dot.attributes.find(function (a) {
+                return $scope.attributes[$scope.attributeValues[a].attribute] === attributeName;
             });
+        }
+
+        // returns true if dot has given attribute and its value equal to the given value
+        function isAttributeEqual(dot, attributeName, expectedValue) {
+            var attributeId = $scope.getAttributeIdByName(dot, attributeName);
+            if (attributeId) {
+                var product = $scope.attributeValues[attributeId].value.toUpperCase();
+                return product.indexOf(expectedValue) !== -1;
+            }
+
+            return false;
         }
 
         // adds and applies new filter
@@ -54,8 +65,10 @@
                 d3.selectAll(".dot")
                     .attr("visibility",
                     function (d) {
-                        var productId = getProductAttributeId(d);
-                        d.FiltersVisible.push(productId && $scope.attributeValues[productId].value.toUpperCase().indexOf($scope.newFilter.toUpperCase()) !== -1);
+                        var filterValue = $scope.newFilter.toUpperCase();
+                        var visible = $scope.isAttributeEqual(d, "product", filterValue);
+                        visible = visible || $scope.isAttributeEqual(d, "locus_tag", filterValue);
+                        d.filtersVisible.push(visible);
                         return $scope.dotVisible(d) ? "visible" : "hidden";
                     });
 
@@ -134,8 +147,8 @@
                 case 1: // CDS
                 case 2: // RRNA
                 case 3: // TRNA
-                    var firstProductId = getProductAttributeId(d);
-                    var secondProductId = getProductAttributeId(dot);
+                    var firstProductId = $scope.getAttributeIdByName(d, "product");
+                    var secondProductId = $scope.getAttributeIdByName(dot, "product");
                     if ($scope.attributeValues[firstProductId].value.toUpperCase() !== $scope.attributeValues[secondProductId].value.toUpperCase()) {
                         return false;
                     }
@@ -528,7 +541,8 @@
         $scope.xValue = xValue;
         $scope.addFilter = addFilter;
         $scope.deleteFilter = deleteFilter;
-        $scope.getProductAttributeId = getProductAttributeId;
+        $scope.getAttributeIdByName = getAttributeIdByName;
+        $scope.isAttributeEqual = isAttributeEqual;
         $scope.showModalLoadingWindow = showModalLoadingWindow;
         $scope.hideModalLoadingWindow = hideModalLoadingWindow;
 

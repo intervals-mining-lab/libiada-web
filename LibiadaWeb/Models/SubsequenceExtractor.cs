@@ -106,15 +106,13 @@
         {
             filters = filters.ConvertAll(f => f.ToLowerInvariant()).ToArray();
             var result = new List<Subsequence>();
-            Subsequence[] allSubsequences = db.Subsequence.Where(s => s.SequenceId == sequenceId && features.Contains(s.Feature))
-                                                          .Include(s => s.Position)
-                                                          .Include(s => s.SequenceAttribute)
-                                                          .ToArray();
+            Subsequence[] allSubsequences = GetSubsequences(sequenceId, features);
 
             foreach (Subsequence subsequence in allSubsequences)
             {
                 if (SubsequenceAttributePassesFilters(subsequence, Attribute.Product, filters)
-                 || SubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters))
+                 || SubsequenceAttributePassesFilters(subsequence, Attribute.Gene, filters)
+                 || SubsequenceAttributePassesFilters(subsequence, Attribute.LocusTag, filters))
                 {
                         result.Add(subsequence);
                 }
