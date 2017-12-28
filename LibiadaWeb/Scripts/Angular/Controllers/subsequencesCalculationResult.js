@@ -186,8 +186,8 @@
             var matrix = tooltip.selectedDots.nodes()[0].parentNode.getScreenCTM()
                 .translate($scope.xMap(point), $scope.yMap(point));
 
-            tooltip.style("background", "#000")
-                .style("color", "#fff")
+            tooltip.style("background", "#eee")
+                .style("color", "#000")
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")

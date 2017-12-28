@@ -85,8 +85,8 @@
 
             tooltip.html(tooltipHtml.join("</br></br>"));
 
-            tooltip.style("background", "#000")
-                .style("color", "#fff")
+            tooltip.style("background", "#eee")
+                .style("color", "#000")
                 .style("border-radius", "5px")
                 .style("font-family", "monospace")
                 .style("padding", "5px")
