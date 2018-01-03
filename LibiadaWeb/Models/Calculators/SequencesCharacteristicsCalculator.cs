@@ -58,13 +58,12 @@
             {
                 short[] characteristicLinkIds = chainCharacteristicsIds.SelectMany(c => c.Value).Distinct().ToArray();
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                var links = new Dictionary<short, Link>();
-                var calculators = new Dictionary<short, IFullCalculator>();
+                var calculators = new Dictionary<short, LinkedFullCalculator>();
                 foreach (short characteristicLinkId in characteristicLinkIds)
                 {
-                    links.Add(characteristicLinkId, characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId));
+                    Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
                     FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
-                    calculators.Add(characteristicLinkId, FullCalculatorsFactory.CreateCalculator(characteristic));
+                    calculators.Add(characteristicLinkId, new LinkedFullCalculator(characteristic, link));
                 }
 
                 var commonSequenceRepository = new CommonSequenceRepository(db);
@@ -83,21 +82,20 @@
                         Chain sequence = commonSequenceRepository.GetLibiadaChain(sequenceId);
                         sequence.FillIntervalManagers();
 
-                        foreach (short squenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
+                        foreach (short sequenceCharacteristicLinkId in sequenceCharacteristicLinkIds)
                         {
-                            if (!characteristics.ContainsKey(squenceCharacteristicLinkId))
+                            if (!characteristics.ContainsKey(sequenceCharacteristicLinkId))
                             {
-                                IFullCalculator calculator = calculators[squenceCharacteristicLinkId];
-                                Link link = links[squenceCharacteristicLinkId];
-                                double characteristicValue = calculator.Calculate(sequence, link);
+                                LinkedFullCalculator calculator = calculators[sequenceCharacteristicLinkId];
+                                double characteristicValue = calculator.Calculate(sequence);
                                 var characteristic = new CharacteristicValue
                                 {
                                     SequenceId = sequenceId,
-                                    CharacteristicLinkId = squenceCharacteristicLinkId,
+                                    CharacteristicLinkId = sequenceCharacteristicLinkId,
                                     Value = characteristicValue
                                 };
 
-                                characteristics.Add(squenceCharacteristicLinkId, characteristicValue);
+                                characteristics.Add(sequenceCharacteristicLinkId, characteristicValue);
                                 newCharacteristics.Add(characteristic);
                             }
                         }
