@@ -173,7 +173,6 @@
                     sequences.Add(sequenceIds[i], commonSequenceRepository.GetLibiadaChain(sequenceIds[i]));
                 }
 
-
                 var characteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
                 for (int k = 0; k < characteristicLinkIds.Length; k++)
                 {

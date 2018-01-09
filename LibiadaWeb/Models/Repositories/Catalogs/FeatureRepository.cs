@@ -18,9 +18,6 @@ namespace LibiadaWeb.Models.Repositories.Catalogs
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
-        /// <exception cref="Exception">
-        /// Thrown if feature type is unknown.
-        /// </exception>
         public static Feature GetFeatureByName(string name)
         {
             return EnumExtensions.ToArray<Feature>().Single(f => f.GetGenBankName() == name);

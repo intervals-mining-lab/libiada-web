@@ -7,8 +7,6 @@
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
-    using LibiadaCore.Extensions;
-
     using LibiadaWeb.Extensions;
     using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Models.Repositories.Catalogs;

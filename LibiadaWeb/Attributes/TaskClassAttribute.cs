@@ -29,7 +29,7 @@
         {
             if (!value.IsSubclassOf(typeof(AbstractResultController)))
             {
-                throw new ArgumentException("Task class attribute value is invalid", nameof(value));
+                throw new ArgumentException($"Task class attribute value is invalid, it can only be subtype of {nameof(AbstractResultController)}", nameof(value));
             }
 
             Value = value;

@@ -137,7 +137,6 @@
                             db.SaveChanges();
                         }
 
-
                         TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
