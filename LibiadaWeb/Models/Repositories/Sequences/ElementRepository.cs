@@ -8,8 +8,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using LibiadaCore.Core;
     using LibiadaCore.Core.SimpleTypes;
 
-    using LibiadaMusic.ScoreModel;
-
     /// <summary>
     /// The element repository.
     /// </summary>

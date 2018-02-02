@@ -1036,11 +1036,11 @@
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="FmotivType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.FmotivType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Instrument" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaMusic.ScoreModel.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaMusic.ScoreModel.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="FmotivType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.FmotivType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Instrument" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="Tie" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.Tie" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="AccordanceCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.AccordanceCalculators.AccordanceCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="BinaryCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.BinaryCalculators.BinaryCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="CongenericCharacteristic" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Characteristics.Calculators.CongenericCalculators.CongenericCharacteristic" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />

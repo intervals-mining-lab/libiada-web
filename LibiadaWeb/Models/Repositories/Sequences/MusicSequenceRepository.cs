@@ -1,3 +1,7 @@
+using LibiadaCore.Core.SimpleTypes;
+using LibiadaCore.Music;
+using LibiadaCore.Music.MusicXml;
+
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
@@ -7,10 +11,6 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Xml;
 
     using LibiadaCore.Core;
-
-    using LibiadaMusic.BorodaDivider;
-    using LibiadaMusic.MusicXml;
-    using LibiadaMusic.ScoreModel;
 
     using LibiadaWeb.Helpers;
 
@@ -147,7 +147,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// </returns>
         private BaseChain ConvertCongenericScoreTrackToMeasuresBaseChain(CongenericScoreTrack scoreTrack)
         {
-            List<Measure> measures = scoreTrack.MeasureOrder();
+            List<LibiadaCore.Core.SimpleTypes.Measure> measures = scoreTrack.MeasureOrder();
             return new BaseChain(((IEnumerable<IBaseObject>)measures).ToList());
         }
 

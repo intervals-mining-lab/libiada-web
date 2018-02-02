@@ -16,7 +16,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -595,10 +595,6 @@
     <ProjectReference Include="..\..\libiada-core\LibiadaCore\LibiadaCore.csproj">
       <Project>{791da20b-3149-4bb0-9aff-6ced1a94d828}</Project>
       <Name>LibiadaCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\libiada-core\LibiadaMusic\LibiadaMusic.csproj">
-      <Project>{dcc2b837-5b01-4d7d-9de6-7c88edcf8ae5}</Project>
-      <Name>LibiadaMusic</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\libiada-core\SequenceGenerator\SequenceGenerator.csproj">
       <Project>{C65C1903-8A6A-43CC-BB08-4107DE51C8ED}</Project>
