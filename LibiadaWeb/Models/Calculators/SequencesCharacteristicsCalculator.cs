@@ -130,7 +130,7 @@
             var result = new double[chainIds.Length];
             for (int i = 0; i < dictionaryResult.Count; i++)
             {
-                result[i] = dictionaryResult[chainIds[i]][0];
+                result[i] = dictionaryResult[chainIds[i]][characteristicLinkId];
             }
 
             return result;
