@@ -230,7 +230,7 @@
         {
             Dictionary<long, List<short>> result = sequenceIds.SelectMany(s => s)
                                                               .Distinct()
-                                                              .ToDictionary(c => c, c => new List<short>());
+                                                              .ToDictionary(s => s, s => new List<short>());
             for (int i = 0; i < sequenceIds.Length; i++)
             {
                 for (int j = 0; j < sequenceIds[i].Length; j++)

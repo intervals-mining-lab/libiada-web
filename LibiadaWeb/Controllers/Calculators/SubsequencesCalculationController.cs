@@ -102,7 +102,6 @@
                     }
                 }
 
-                // cycle through matters; first level of characteristics array
                 for (int i = 0; i < parentSequenceIds.Length; i++)
                 {
                     var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(

@@ -89,12 +89,9 @@
             // cycle through subsequences
             for (int i = 0; i < sequences.Length; i++)
             {
+                dbCharacteristics.TryGetValue(subsequenceIds[i], out Dictionary<short, double> sequenceDbCharacteristics);
+                sequenceDbCharacteristics = sequenceDbCharacteristics ?? new Dictionary<short, double>();
                 var values = new double[calculators.Length];
-                Dictionary<short, double> sequenceDbCharacteristics;
-                if (!dbCharacteristics.TryGetValue(subsequenceIds[i], out sequenceDbCharacteristics))
-                {
-                    sequenceDbCharacteristics = new Dictionary<short, double>();
-                }
 
                 // cycle through characteristics and notations
                 for (int j = 0; j < calculators.Length; j++)
@@ -146,11 +143,8 @@
         /// </returns>
         private static int[] FillAttributesIndexes(List<AttributeValue> attributeValues, Dictionary<long, AttributeValue[]> dbSubsequencesAttributes, long subsequenceId)
         {
-            AttributeValue[] attributes;
-            if (!dbSubsequencesAttributes.TryGetValue(subsequenceId, out attributes))
-            {
-                attributes = new AttributeValue[0];
-            }
+            dbSubsequencesAttributes.TryGetValue(subsequenceId, out AttributeValue[] attributes);
+            attributes = attributes ?? new AttributeValue[0];
 
             var attributesIndexes = new int[attributes.Length];
             for (int j = 0; j < attributes.Length; j++)
