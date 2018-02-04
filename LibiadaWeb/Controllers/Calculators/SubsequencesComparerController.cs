@@ -192,6 +192,7 @@
                 foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence)) in allSimilarPairs)
                 {
                     equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence));
+                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence));
                 }
 
                 for (int i = 0; i < mattersCount; i++)
