@@ -142,7 +142,7 @@
                     localCharacteristicsType = fullCharacteristicRepository.GetCharacteristicTypes();
                 }
 
-                var characteristicsValues = new Dictionary<double, List<(int, int)>>();
+                var characteristicValueSubsequences = new Dictionary<double, List<(int, int)>>();
 
                 // cycle through matters
                 for (int i = 0; i < mattersCount; i++)
@@ -161,22 +161,23 @@
                     for (int j = 0; j < subsequencesData.Length; j++)
                     {
                         SubsequenceData value = subsequencesData[j];
-                        if (characteristicsValues.TryGetValue(value.CharacteristicsValues[0], out List<(int, int)> subsequencesList))
+                        if (characteristicValueSubsequences.TryGetValue(value.CharacteristicsValues[0], out List<(int, int)> subsequencesList))
                         {
                             subsequencesList.Add((i, j));
                         }
                         else
                         {
-                            characteristicsValues.Add(value.CharacteristicsValues[0], new List<(int, int)> { (i, j) });
+                            characteristicValueSubsequences.Add(value.CharacteristicsValues[0], new List<(int, int)> { (i, j) });
                         }
                     }
                 }
 
-                var orderedCharacteristicsValues = characteristicsValues.OrderBy(c => c.Key).ToList();
+                var orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v);
+
                 var allSimilarPairs = new List<((int, int),(int, int))>();
-                for (int i = 0; i < orderedCharacteristicsValues.Count; i++)
+                foreach (double key in characteristicValueSubsequences.Keys)
                 {
-                    allSimilarPairs.AddRange(ExtractAllPossiblePairs(orderedCharacteristicsValues[i].Value));
+                    allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
                 }
 
                 var similarities = new object[mattersCount, mattersCount];
