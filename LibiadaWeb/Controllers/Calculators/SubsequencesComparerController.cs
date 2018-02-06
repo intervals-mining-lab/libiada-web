@@ -83,11 +83,13 @@
             short characteristicLinkId,
             short subsequencesCharacteristicLinkId,
             Feature[] features,
-            string maxPercentageDifference,
+            double maxPercentageDifference,
             string[] filters)
         {
             return CreateTask(() =>
             {
+                maxPercentageDifference /= 100;
+
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new SubsequenceData[matterIds.Length][];
                 string characteristicName;
@@ -172,12 +174,22 @@
                     }
                 }
 
-                var orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v);
+                var orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
 
                 var allSimilarPairs = new List<((int, int),(int, int))>();
                 foreach (double key in characteristicValueSubsequences.Keys)
                 {
                     allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+                }
+
+                for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
+                {
+                    int j = i + 1;
+                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < maxPercentageDifference)
+                    {
+                        allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[orderedCharacteristicValue[i]], characteristicValueSubsequences[orderedCharacteristicValue[j]]));
+                        if (++j == orderedCharacteristicValue.Length) break;
+                    }
                 }
 
                 var similarities = new object[mattersCount, mattersCount];
@@ -437,7 +449,7 @@
         }
 
         /// <summary>
-        /// Extract all possible pairs from given list.
+        /// Extract all possible unique pairs from given list.
         /// (calculates Cartesian product)
         /// </summary>
         /// <param name="list">
@@ -459,6 +471,34 @@
                 for (int j = i + 1; j < list.Count; j++)
                 {
                     result.Add((list[i], list[j]));
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Extract all possible pairs from given lists.
+        /// (calculates Cartesian product)
+        /// </summary>
+        /// <param name="firstList">
+        /// First list for Cartesian product.
+        /// </param>
+        /// <param name="secondList">
+        /// Second list for Cartesian product.
+        /// </param>
+        /// <returns>
+        /// The <see cref="T:List{((int,int), (int,int))}"/>.
+        /// </returns>
+        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList)
+        {
+            var result = new List<((int, int), (int, int))>();
+
+            foreach ((int, int) firstElement in firstList)
+            {
+                foreach ((int, int) secondElement in secondList)
+                {
+                    result.Add((firstElement, secondElement));
                 }
             }
 
