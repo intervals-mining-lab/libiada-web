@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
+    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -83,12 +84,12 @@
             short characteristicLinkId,
             short subsequencesCharacteristicLinkId,
             Feature[] features,
-            double maxPercentageDifference,
+            string maxPercentageDifference,
             string[] filters)
         {
             return CreateTask(() =>
             {
-                maxPercentageDifference /= 100;
+                double percentageDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
 
                 var attributeValues = new List<AttributeValue>();
                 var characteristics = new SubsequenceData[matterIds.Length][];
@@ -185,7 +186,7 @@
                 for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
                 {
                     int j = i + 1;
-                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < maxPercentageDifference)
+                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < percentageDifference)
                     {
                         allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[orderedCharacteristicValue[i]], characteristicValueSubsequences[orderedCharacteristicValue[j]]));
                         if (++j == orderedCharacteristicValue.Length) break;
