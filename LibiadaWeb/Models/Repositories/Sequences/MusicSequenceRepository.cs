@@ -163,7 +163,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         private BaseChain ConvertCongenericScoreTrackToFormalMotifsBaseChain(CongenericScoreTrack scoreTrack)
         {
             var borodaDivider = new BorodaDivider();
-            FmotivChain fMotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
+            FmotifChain fMotifChain = borodaDivider.Divide(scoreTrack, ParamPauseTreatment.Ignore, ParamEqualFM.NonSequent);
             return new BaseChain(((IEnumerable<IBaseObject>)fMotifChain).ToList());
         }
     }

@@ -1036,7 +1036,7 @@
         <EnumType Name="Group" UnderlyingType="Byte" a:ExternalTypeName="Group" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Attribute" UnderlyingType="Byte" a:ExternalTypeName="Attribute" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Link" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.Link" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
-        <EnumType Name="FmotivType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.FmotivType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
+        <EnumType Name="FmotifType" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.FmotifType" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Instrument" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.Instrument" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="NoteSymbol" UnderlyingType="Byte" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.NoteSymbol" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
         <EnumType Name="Accidental" UnderlyingType="Int16" a:ExternalTypeName="LibiadaCore.Core.SimpleTypes.Accidental" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration" />
@@ -1292,7 +1292,7 @@
           <Property Name="Value" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Description" Type="String" Unicode="true" FixedLength="false" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="FmotivType" Type="LibiadaWebModel.FmotivType" Nullable="false" />
+          <Property Name="FmotifType" Type="LibiadaWebModel.FmotifType" Nullable="false" />
           <Property Name="RemoteDb" Type="LibiadaWebModel.RemoteDb" />
           <Property Name="RemoteId" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
@@ -2319,7 +2319,7 @@
                 <ScalarProperty Name="Value" ColumnName="value" />
                 <ScalarProperty Name="Description" ColumnName="description" />
                 <ScalarProperty Name="Name" ColumnName="name" />
-                <ScalarProperty Name="FmotivType" ColumnName="fmotiv_type" />
+                <ScalarProperty Name="FmotifType" ColumnName="fmotiv_type" />
                 <ScalarProperty Name="RemoteDb" ColumnName="remote_db" />
                 <ScalarProperty Name="RemoteId" ColumnName="remote_id" />
                 <ScalarProperty Name="Modified" ColumnName="modified" />
