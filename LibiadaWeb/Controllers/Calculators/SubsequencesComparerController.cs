@@ -177,7 +177,7 @@
 
                 var orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
 
-                var allSimilarPairs = new List<((int, int),(int, int))>();
+                var allSimilarPairs = new List<((int, int),(int, int), double)>();
                 foreach (double key in characteristicValueSubsequences.Keys)
                 {
                     allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
@@ -186,27 +186,32 @@
                 for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
                 {
                     int j = i + 1;
-                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < percentageDifference)
+
+                    double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
+                    while (difference < percentageDifference)
                     {
-                        allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[orderedCharacteristicValue[i]], characteristicValueSubsequences[orderedCharacteristicValue[j]]));
+                        List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
+                        List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
+                        allSimilarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+
                         if (++j == orderedCharacteristicValue.Length) break;
                     }
                 }
 
                 var similarities = new object[mattersCount, mattersCount];
-                var equalElements = new List<(int, int)>[mattersCount, mattersCount];
+                var equalElements = new List<(int, int, double)>[mattersCount, mattersCount];
                 for (int i = 0; i < mattersCount; i++)
                 {
                     for (int j = 0; j < mattersCount; j++)
                     {
-                        equalElements[i,j] = new List<(int, int)>();
+                        equalElements[i,j] = new List<(int, int, double)>();
                     }
                 }
 
-                foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence)) in allSimilarPairs)
+                foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence) , double difference) in allSimilarPairs)
                 {
-                    equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence));
-                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence));
+                    equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence, difference));
+                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence, difference));
                 }
 
                 for (int i = 0; i < mattersCount; i++)
@@ -220,10 +225,11 @@
                         double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
 
                         double formula2 = 0;
-                        //if (equalElements[i, j].Count != 0 && formula1 != 0)
-                        //{
-                        //    formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
-                        //}
+                        if (equalElements[i, j].Count != 0 && formula1 != 0)
+                        {
+                            double differenceSum = equalElements[i, j].Sum(e => e.Item3);
+                            formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
+                        }
 
                         double firstCharacteristicSum = equalElements[i, j]
                                                             .Select(s => s.Item1)
@@ -258,157 +264,6 @@
                         };
                     }
                 }
-
-                //double decimalDifference = double.Parse(maxPercentageDifference, CultureInfo.InvariantCulture) / 100;
-
-
-
-                //for (int i = 0; i < characteristics.Length; i++)
-                //{
-                //    for (int j = 0; j < characteristics.Length; j++)
-                //    {
-                //        int firstAbsolutelyEqualElementsCount = 0;
-                //        int firstNearlyEqualElementsCount = 0;
-
-                //        int secondAbsolutelyEqualElementsCount = 0;
-                //        int secondNearlyEqualElementsCount = 0;
-
-                //        equalElements[i, j] = new List<SubsequenceComparisonData>();
-                //        double similarSequencesCharacteristicValueFirst = 0;
-                //        var similarSequencesCharacteristicValueSecond = new Dictionary<int, double>();
-
-                //        int secondArrayStartPosition = 0;
-                //        double differenceSum = 0;
-
-                //        int equalElementsCountFromFirst = 0;
-                //        var equalElementsCountFromSecond = new Dictionary<int, bool>();
-
-                //        int equalPairsCount = 0;
-                //        double difference = 0;
-
-                //        for (int k = 0; k < characteristics[i].Length; k++)
-                //        {
-                //            bool? equalFoundFromFirstAbsolutely = null;
-                //            bool? equalFoundFromSecondAbsolutely = null;
-
-                //            double first = characteristics[i][k].CharacteristicsValues[0];
-
-                //            for (int l = secondArrayStartPosition; l < characteristics[j].Length; l++)
-                //            {
-                //                double second = characteristics[j][l].CharacteristicsValues[0];
-
-                //                difference = CalculateAverageDifference(first, second);
-
-                //                if (difference <= decimalDifference)
-                //                {
-                //                    if (!equalFoundFromFirstAbsolutely.HasValue || !equalFoundFromFirstAbsolutely.Value)
-                //                    {
-                //                        equalFoundFromFirstAbsolutely = difference == 0;
-                //                    }
-
-                //                    equalPairsCount++;
-
-                //                    if (!equalElementsCountFromSecond.ContainsKey(l))
-                //                    {
-                //                        equalElementsCountFromSecond.Add(l, difference == 0);
-                //                        differenceSum += difference;
-                //                    }
-                //                    else
-                //                    {
-                //                        if (!equalElementsCountFromSecond[l])
-                //                        {
-                //                            equalElementsCountFromSecond[l] = difference == 0;
-                //                        }
-                //                    }
-
-                //                    if (!similarSequencesCharacteristicValueSecond.ContainsKey(l))
-                //                    {
-                //                        similarSequencesCharacteristicValueSecond.Add(l, second);
-                //                    }
-
-                //                    if (i != j)
-                //                    {
-                //                        equalElements[i, j].Add(new SubsequenceComparisonData
-                //                        {
-                //                            Difference = difference,
-                //                            FirstSubsequenceIndex = k,
-                //                            SecondSubsequenceIndex = l
-                //                        });
-                //                    }
-
-                //                    if (l < characteristics[j].Length - 1)
-                //                    {
-                //                        bool nextElementInSecondArrayIsEqual = CalculateAverageDifference(second, characteristics[j][l + 1].CharacteristicsValues[0]) <= decimalDifference;
-
-                //                        if (!nextElementInSecondArrayIsEqual)
-                //                        {
-                //                            break;
-                //                        }
-                //                    }
-                //                }
-                //                else if (second < first)
-                //                {
-                //                    secondArrayStartPosition++;
-                //                }
-                //            }
-
-                //            if (equalFoundFromFirstAbsolutely.HasValue)
-                //            {
-                //                equalElementsCountFromFirst++;
-                //                similarSequencesCharacteristicValueFirst += first;
-
-                //                // fill equal elements count for first chain
-                //                if (equalFoundFromFirstAbsolutely.Value)
-                //                {
-                //                    firstAbsolutelyEqualElementsCount++;
-                //                }
-                //                else
-                //                {
-                //                    firstNearlyEqualElementsCount++;
-                //                }
-                //            }
-                //        }
-
-                //    secondAbsolutelyEqualElementsCount = equalElementsCountFromSecond.Count(e => e.Value);
-                //    secondNearlyEqualElementsCount = equalElementsCountFromSecond.Count(e => !e.Value);
-
-                //    double differenceSecondFinal = equalElementsCountFromSecond.Count;
-                //    double differenceFinal = equalElementsCountFromFirst < differenceSecondFinal ? equalElementsCountFromFirst * 2d : differenceSecondFinal * 2d;
-
-                //    double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
-
-                //    double formula2 = 0;
-                //    if (equalPairsCount != 0 && formula1 != 0)
-                //    {
-                //        formula2 = (differenceSum / equalPairsCount) / formula1;
-                //    }
-
-                //    double similarSequencesCharacteristicValueSecondFinal = similarSequencesCharacteristicValueSecond.Sum(s => s.Value);
-                //    double similarSequencesCharacteristicValue = similarSequencesCharacteristicValueFirst < similarSequencesCharacteristicValueSecondFinal ?
-                //                        similarSequencesCharacteristicValueFirst * 2d : similarSequencesCharacteristicValueSecondFinal * 2d;
-
-                //    double formula3 = similarSequencesCharacteristicValue / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
-
-                //    const int digits = 5;
-
-                //    similarities[i, j] = new
-                //    {
-                //        formula1 = Math.Round(formula1, digits),
-                //        formula2 = Math.Round(formula2, digits),
-                //        formula3 = Math.Round(formula3, digits),
-
-                //        firstAbsolutelyEqualElementsCount,
-                //        firstNearlyEqualElementsCount,
-                //        firstNotEqualElementsCount = characteristics[i].Length - (firstAbsolutelyEqualElementsCount + firstNearlyEqualElementsCount),
-
-                //        secondAbsolutelyEqualElementsCount,
-                //        secondNearlyEqualElementsCount,
-                //        secondNotEqualElementsCount = characteristics[j].Length - (secondAbsolutelyEqualElementsCount + secondNearlyEqualElementsCount),
-                //    };
-
-                //    equalElements[i, j] = equalElements[i, j].OrderBy(e => e.Difference).ToList();
-                //}
-                //}
 
                 var result = new Dictionary<string, object>
                 {
@@ -457,11 +312,11 @@
         /// The list for pairs extraction.
         /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int))}"/>.
+        /// The <see cref="T:List{((int,int), (int,int), double)}"/>.
         /// </returns>
-        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> list)
+        private List<((int, int), (int, int), double)> ExtractAllPossiblePairs(List<(int, int)> list)
         {
-            var result = new List<((int, int),(int, int))> ();
+            var result = new List<((int, int),(int, int), double)> ();
             if (list.Count < 2)
             {
                 return result;
@@ -471,7 +326,7 @@
             {
                 for (int j = i + 1; j < list.Count; j++)
                 {
-                    result.Add((list[i], list[j]));
+                    result.Add((list[i], list[j], 0));
                 }
             }
 
@@ -488,18 +343,21 @@
         /// <param name="secondList">
         /// Second list for Cartesian product.
         /// </param>
+        /// <param name="difference">
+        /// Distance between elements in the arrays.
+        /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int))}"/>.
+        /// The <see cref="T:List{((int,int), (int,int), double)}"/>.
         /// </returns>
-        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList)
+        private List<((int, int), (int, int), double)> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList, double difference)
         {
-            var result = new List<((int, int), (int, int))>();
+            var result = new List<((int, int), (int, int), double)>();
 
             foreach ((int, int) firstElement in firstList)
             {
                 foreach ((int, int) secondElement in secondList)
                 {
-                    result.Add((firstElement, secondElement));
+                    result.Add((firstElement, secondElement, difference));
                 }
             }
 
