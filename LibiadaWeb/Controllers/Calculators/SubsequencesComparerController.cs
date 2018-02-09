@@ -101,8 +101,7 @@
                 string sequenceCharacteristicName;
 
                 int mattersCount = matterIds.Length;
-                var subsequencesCount = new int[mattersCount];
-                List<CharacteristicData> localCharacteristicsType;
+                List<CharacteristicTypeData> localCharacteristicsType;
 
                 using (var db = new LibiadaWebEntities())
                 {
@@ -157,8 +156,6 @@
                             attributeValues,
                             filters);
 
-                    subsequencesCount[i] = subsequencesData.Length;
-
                     characteristics[i] = subsequencesData;
 
                     for (int j = 0; j < subsequencesData.Length; j++)
@@ -175,43 +172,41 @@
                     }
                 }
 
-                var orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
+                double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
 
-                var allSimilarPairs = new List<((int, int),(int, int), double)>();
+                var similarPairs = new List<((int, int),(int, int))>();
                 foreach (double key in characteristicValueSubsequences.Keys)
                 {
-                    allSimilarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+                    similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
                 }
 
                 for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
                 {
                     int j = i + 1;
-
-                    double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
-                    while (difference < percentageDifference)
+                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < percentageDifference)
                     {
                         List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                         List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                        allSimilarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+                        similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex));
 
                         if (++j == orderedCharacteristicValue.Length) break;
                     }
                 }
 
                 var similarities = new object[mattersCount, mattersCount];
-                var equalElements = new List<(int, int, double)>[mattersCount, mattersCount];
+                var equalElements = new List<(int, int)>[mattersCount, mattersCount];
                 for (int i = 0; i < mattersCount; i++)
                 {
                     for (int j = 0; j < mattersCount; j++)
                     {
-                        equalElements[i,j] = new List<(int, int, double)>();
+                        equalElements[i,j] = new List<(int, int)>();
                     }
                 }
 
-                foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence) , double difference) in allSimilarPairs)
+                foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence)) in similarPairs)
                 {
-                    equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence, difference));
-                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence, difference));
+                    equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence));
+                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence));
                 }
 
                 for (int i = 0; i < mattersCount; i++)
@@ -221,15 +216,15 @@
                         int firstEqualCount = equalElements[i, j].Select(s => s.Item1).Distinct().Count();
                         int secondEqualCount = equalElements[i, j].Select(s => s.Item2).Distinct().Count();
 
-                        double differenceFinal = firstEqualCount < secondEqualCount ? firstEqualCount * 2d : secondEqualCount * 2d;
-                        double formula1 = differenceFinal / (subsequencesCount[i] + subsequencesCount[j]);
+                        double equalSequencesCount = firstEqualCount < secondEqualCount ?
+                                                     firstEqualCount * 2d : secondEqualCount * 2d;
+                        double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
 
                         double formula2 = 0;
-                        if (equalElements[i, j].Count != 0 && formula1 != 0)
-                        {
-                            double differenceSum = equalElements[i, j].Sum(e => e.Item3);
-                            formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
-                        }
+                        //if (equalElements[i, j].Count != 0 && formula1 != 0)
+                        //{
+                        //    formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
+                        //}
 
                         double firstCharacteristicSum = equalElements[i, j]
                                                             .Select(s => s.Item1)
@@ -241,11 +236,11 @@
                                                             .Distinct()
                                                             .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
 
-                        double similarSequencesCharacteristicValue = equalElements[i, j].Select(s => s.Item1).Distinct().Sum(s => characteristics[i][s].CharacteristicsValues[0]) < secondCharacteristicSum ?
-                                                                         firstCharacteristicSum * 2d : secondCharacteristicSum * 2d;
+                        double similarSequencesCharacteristicSum = firstCharacteristicSum < secondCharacteristicSum ?
+                                                                     firstCharacteristicSum * 2d : secondCharacteristicSum * 2d;
 
 
-                        double formula3 = similarSequencesCharacteristicValue / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
+                        double formula3 = similarSequencesCharacteristicSum / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
 
 
                         const int digits = 5;
@@ -312,11 +307,11 @@
         /// The list for pairs extraction.
         /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int), double)}"/>.
+        /// The <see cref="T:List{((int,int), (int,int))}"/>.
         /// </returns>
-        private List<((int, int), (int, int), double)> ExtractAllPossiblePairs(List<(int, int)> list)
+        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> list)
         {
-            var result = new List<((int, int),(int, int), double)> ();
+            var result = new List<((int, int),(int, int))> ();
             if (list.Count < 2)
             {
                 return result;
@@ -326,7 +321,7 @@
             {
                 for (int j = i + 1; j < list.Count; j++)
                 {
-                    result.Add((list[i], list[j], 0));
+                    result.Add((list[i], list[j]));
                 }
             }
 
@@ -343,21 +338,18 @@
         /// <param name="secondList">
         /// Second list for Cartesian product.
         /// </param>
-        /// <param name="difference">
-        /// Distance between elements in the arrays.
-        /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int), double)}"/>.
+        /// The <see cref="T:List{((int,int), (int,int))}"/>.
         /// </returns>
-        private List<((int, int), (int, int), double)> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList, double difference)
+        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList)
         {
-            var result = new List<((int, int), (int, int), double)>();
+            var result = new List<((int, int), (int, int))>();
 
             foreach ((int, int) firstElement in firstList)
             {
                 foreach ((int, int) secondElement in secondList)
                 {
-                    result.Add((firstElement, secondElement, difference));
+                    result.Add((firstElement, secondElement));
                 }
             }
 
