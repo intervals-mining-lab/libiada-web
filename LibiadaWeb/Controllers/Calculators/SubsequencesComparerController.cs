@@ -172,14 +172,13 @@
                     }
                 }
 
-                double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
-
                 var similarPairs = new List<((int, int),(int, int))>();
                 foreach (double key in characteristicValueSubsequences.Keys)
                 {
                     similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
                 }
 
+                double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
                 for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
                 {
                     int j = i + 1;
@@ -189,11 +188,14 @@
                         List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
                         similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex));
 
-                        if (++j == orderedCharacteristicValue.Length) break;
+                        j++;
+                        if (j == orderedCharacteristicValue.Length)
+                        {
+                            break;
+                        }
                     }
                 }
 
-                var similarities = new object[mattersCount, mattersCount];
                 var equalElements = new List<(int, int)>[mattersCount, mattersCount];
                 for (int i = 0; i < mattersCount; i++)
                 {
@@ -209,6 +211,7 @@
                     equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence));
                 }
 
+                var similarities = new object[mattersCount, mattersCount];
                 for (int i = 0; i < mattersCount; i++)
                 {
                     for (int j = 0; j < mattersCount; j++)
