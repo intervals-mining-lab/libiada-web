@@ -218,12 +218,14 @@
                 .Where(b => b.SequenceId == sequenceId && b.CharacteristicLinkId == characteristicLinkId)
                 .ToArray();
             int calculatedCount = databaseCharacteristics.Length;
-            if (calculatedCount < chain.Alphabet.Cardinality * chain.Alphabet.Cardinality)
+            int alphabetCardinality = chain.Alphabet.Cardinality;
+
+            if (calculatedCount < alphabetCardinality * alphabetCardinality)
             {
                 List<long> sequenceElements = DbHelper.GetElementIds(db, sequenceId);
-                for (int i = 0; i < chain.Alphabet.Cardinality; i++)
+                for (int i = 0; i < alphabetCardinality; i++)
                 {
-                    for (int j = 0; j < chain.Alphabet.Cardinality; j++)
+                    for (int j = 0; j < alphabetCardinality; j++)
                     {
                         long firstElementId = sequenceElements[i];
                         long secondElementId = sequenceElements[i];
@@ -272,11 +274,12 @@
 
             // calculating frequencies of elements in alphabet
             var frequencies = new List<KeyValuePair<IBaseObject, double>>();
-            for (int f = 0; f < chain.Alphabet.Cardinality; f++)
+            Alphabet alphabet = chain.Alphabet;
+            for (int f = 0; f < alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
                 double result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
-                frequencies.Add(new KeyValuePair<IBaseObject, double>(chain.Alphabet[f], result));
+                frequencies.Add(new KeyValuePair<IBaseObject, double>(alphabet[f], result));
             }
 
             // ordering alphabet by frequencies
@@ -287,8 +290,8 @@
             {
                 for (int j = 0; j < frequencyCount; j++)
                 {
-                    int firstElementNumber = chain.Alphabet.IndexOf(frequencies[i].Key) + 1;
-                    int secondElementNumber = chain.Alphabet.IndexOf(frequencies[j].Key) + 1;
+                    int firstElementNumber = alphabet.IndexOf(frequencies[i].Key) + 1;
+                    int secondElementNumber = alphabet.IndexOf(frequencies[j].Key) + 1;
                     long firstElementId = sequenceElements[firstElementNumber];
                     long secondElementId = sequenceElements[secondElementNumber];
 

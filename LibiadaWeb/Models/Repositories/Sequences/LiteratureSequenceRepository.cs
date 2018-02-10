@@ -66,7 +66,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
 
             MatterRepository.CreateMatterFromSequence(commonSequence);
 
-            var alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
+            long[] alphabet = ElementRepository.ToDbElements(chain.Alphabet, commonSequence.Notation, true);
             Create(commonSequence, original, language, translator, alphabet, chain.Building);
         }
 

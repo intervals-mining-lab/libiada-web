@@ -146,11 +146,13 @@
                 AccordanceCharacteristic accordanceCharacteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkId);
                 IAccordanceCalculator calculator = AccordanceCalculatorsFactory.CreateCalculator(accordanceCharacteristic);
                 Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkId);
+                Alphabet firstChainAlphabet = firstChain.Alphabet;
+                Alphabet secondChainAlphabet = secondChain.Alphabet;
 
                 switch (calculationType)
                 {
                     case "Equality":
-                        if (!firstChain.Alphabet.Equals(secondChain.Alphabet))
+                        if (!firstChainAlphabet.Equals(secondChainAlphabet))
                         {
                             throw new Exception("Alphabets of sequences are not equal.");
                         }
@@ -159,9 +161,9 @@
                         characteristics.Add(new List<double>());
                         var alphabet = new List<string>();
 
-                        for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
+                        for (int i = 0; i < firstChainAlphabet.Cardinality; i++)
                         {
-                            IBaseObject element = firstChain.Alphabet[i];
+                            IBaseObject element = firstChainAlphabet[i];
                             alphabet.Add(element.ToString());
 
                             CongenericChain firstCongenericChain = firstChain.CongenericChain(element);
@@ -182,11 +184,11 @@
                         for (int i = 0; i < firstChain.Alphabet.Cardinality; i++)
                         {
                             characteristics.Add(new List<double>());
-                            IBaseObject firstElement = firstChain.Alphabet[i];
+                            IBaseObject firstElement = firstChainAlphabet[i];
                             firstAlphabet.Add(firstElement.ToString());
-                            for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
+                            for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
                             {
-                                var secondElement = secondChain.Alphabet[j];
+                                var secondElement = secondChainAlphabet[j];
 
                                 var firstCongenericChain = firstChain.CongenericChain(firstElement);
                                 var secondCongenericChain = secondChain.CongenericChain(secondElement);
@@ -197,9 +199,9 @@
                         }
 
                         var secondAlphabet = new List<string>();
-                        for (int j = 0; j < secondChain.Alphabet.Cardinality; j++)
+                        for (int j = 0; j < secondChainAlphabet.Cardinality; j++)
                         {
-                            secondAlphabet.Add(secondChain.Alphabet[j].ToString());
+                            secondAlphabet.Add(secondChainAlphabet[j].ToString());
                         }
 
                         result.Add("firstAlphabet", firstAlphabet);

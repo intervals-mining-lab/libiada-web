@@ -70,15 +70,15 @@
         /// <param name="localFile">
         /// The local file.
         /// </param>
-        /// <param name="file">
-        /// The files.
+        /// <param name="fileType">
+        /// Uploaded files type.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType, HttpPostedFileBase[] file)
+        public ActionResult Index(int[] characteristicLinkIds, string[] customSequences, bool localFile, string fileType)
         {
             return CreateTask(() =>
                 {
@@ -90,7 +90,7 @@
                     {
                         if (localFile)
                         {
-                            Stream sequenceStream = FileHelper.GetFileStream(file[i]);
+                            Stream sequenceStream = FileHelper.GetFileStream(Request.Files[i]);
                             switch (fileType)
                             {
                                 case "image":
@@ -102,6 +102,7 @@
                                     {
                                         alphabet.Add(incompleteAlphabet[j]);
                                     }
+
                                     sequences[i] = new Chain(sequence.Building, alphabet);
                                     names[i] = Request.Files[i].FileName;
                                     break;
