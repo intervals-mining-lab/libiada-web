@@ -16,7 +16,7 @@
     <AssemblyName>LibiadaWeb</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -131,6 +131,7 @@
     <Compile Include="Controllers\Calculators\CustomSequenceOrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\FilteredSubsequenceCalculationController.cs" />
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
+    <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
@@ -405,6 +406,7 @@
     <Content Include="Scripts\Angular\Controllers\charts.js" />
     <Content Include="Scripts\Angular\Controllers\localCalculationResult.js" />
     <Content Include="Scripts\Angular\Controllers\matterEdit.js" />
+    <Content Include="Scripts\Angular\Controllers\musicFilesResult.js" />
     <Content Include="Scripts\Angular\Controllers\orderTransformer.js" />
     <Content Include="Scripts\Angular\Controllers\sequencesAlignment.js" />
     <Content Include="Scripts\Angular\Controllers\buildingsSimilarity.js" />
@@ -576,6 +578,8 @@
     <Content Include="Views\Sequences\CommonSequences\Result.cshtml" />
     <Content Include="Views\Calculators\SequencesOrderDistribution\Index.cshtml" />
     <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />
+    <Content Include="Views\Calculators\MusicFiles\Result.cshtml" />
+    <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

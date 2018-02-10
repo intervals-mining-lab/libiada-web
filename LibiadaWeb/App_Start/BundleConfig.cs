@@ -80,6 +80,9 @@
             bundles.Add(new ScriptBundle("~/bundles/controllers/MatterSequenceCreateController").Include(
                         "~/Scripts/Angular/Controllers/matterSequenceCreate.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/controllers/MusicFilesResultController").Include(
+                        "~/Scripts/Angular/Controllers/musicFilesResult.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/controllers/OrderTransformerController").Include(
                         "~/Scripts/Angular/Controllers/orderTransformer.js",
                         "~/Scripts/Angular/Components/mattersTable.js"));

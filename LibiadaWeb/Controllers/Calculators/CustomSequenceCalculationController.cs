@@ -1,5 +1,6 @@
 ﻿namespace LibiadaWeb.Controllers.Calculators
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
@@ -11,15 +12,15 @@
     using LibiadaCore.Core;
     using LibiadaCore.Core.Characteristics.Calculators.FullCalculators;
     using LibiadaCore.Core.SimpleTypes;
+    using LibiadaCore.Images;
 
     using LibiadaWeb.Helpers;
     using LibiadaWeb.Models.Repositories.Catalogs;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
-    using LibiadaCore.Images;
+
     using SixLabors.ImageSharp;
-    using System;
 
     /// <summary>
     /// The quick calculation controller.
@@ -102,12 +103,43 @@
                                         alphabet.Add(incompleteAlphabet[j]);
                                     }
                                     sequences[i] = new Chain(sequence.Building, alphabet);
+                                    names[i] = Request.Files[i].FileName;
                                     break;
                                 case "genetic":
                                     ISequence fastaSequence = NcbiHelper.GetFastaSequence(sequenceStream);
                                     var stringSequence = fastaSequence.ConvertToString();
                                     sequences[i] = new Chain(stringSequence);
                                     names[i] = fastaSequence.ID;
+                                    break;
+                                case "wavFile":
+                                    var reader = new BinaryReader(Request.Files[i].InputStream);
+
+                                    int chunkID = reader.ReadInt32();
+                                    int fileSize = reader.ReadInt32();
+                                    int riffType = reader.ReadInt32();
+                                    int fmtID = reader.ReadInt32();
+                                    int fmtSize = reader.ReadInt32();
+                                    int fmtCode = reader.ReadInt16();
+                                    int channels = reader.ReadInt16();
+                                    int sampleRate = reader.ReadInt32();
+                                    int fmtAvgBPS = reader.ReadInt32();
+                                    int fmtBlockAlign = reader.ReadInt16();
+                                    int bitDepth = reader.ReadInt16();
+
+                                    if (fmtSize == 18)
+                                    {
+                                        // Read any extra values
+                                        int fmtExtraSize = reader.ReadInt16();
+                                        reader.ReadBytes(fmtExtraSize);
+                                    }
+
+                                    int dataID = reader.ReadInt32();
+                                    int dataSize = reader.ReadInt32();
+                                    names[i] = Request.Files[i].FileName;
+                                    byte[] byteArray = reader.ReadBytes(dataSize);
+                                    short[] shortArray = new short[byteArray.Length / 2];
+                                    Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
+                                    sequences[i] = new Chain(shortArray);
                                     break;
                                 default:
                                     throw new ArgumentException("Unknown file type", nameof(fileType));
@@ -126,7 +158,7 @@
                     {
                         for (int k = 0; k < characteristicLinkIds.Length; k++)
                         {
-                            var chain = sequences[j];
+                            sequences[j].FillIntervalManagers();
 
                             Link link = characteristicTypeLinkRepository.GetLinkForCharacteristic(characteristicLinkIds[k]);
                             FullCharacteristic characteristic = characteristicTypeLinkRepository.GetCharacteristic(characteristicLinkIds[k]);

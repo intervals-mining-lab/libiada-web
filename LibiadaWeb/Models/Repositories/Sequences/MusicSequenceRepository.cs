@@ -1,7 +1,3 @@
-using LibiadaCore.Core.SimpleTypes;
-using LibiadaCore.Music;
-using LibiadaCore.Music.MusicXml;
-
 namespace LibiadaWeb.Models.Repositories.Sequences
 {
     using System;
@@ -11,6 +7,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
     using System.Xml;
 
     using LibiadaCore.Core;
+    using LibiadaCore.Core.SimpleTypes;
+    using LibiadaCore.Music;
+    using LibiadaCore.Music.MusicXml;
 
     using LibiadaWeb.Helpers;
 

@@ -177,6 +177,13 @@
         /// </summary>
         [Display(Name = "Sequence import")]
         [TaskClass(typeof(MattersController))]
-        Matters = 24
+        Matters = 24,
+
+        /// <summary>
+        /// Matter creation and sequence import.
+        /// </summary>
+        [Display(Name = "Music files processing")]
+        [TaskClass(typeof(MusicFilesController))]
+        MusicFiles = 25
     }
 }
