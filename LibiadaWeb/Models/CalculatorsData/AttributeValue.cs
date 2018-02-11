@@ -42,10 +42,7 @@
         /// <returns>
         /// True if both fields are equal and false otherwise.
         /// </returns>
-        public static bool operator ==(AttributeValue first, AttributeValue second)
-        {
-            return first.AttributeId == second.AttributeId && first.Value.Equals(second.Value);
-        }
+        public static bool operator ==(AttributeValue first, AttributeValue second) => first.AttributeId == second.AttributeId && first.Value == second.Value;
 
         /// <summary>
         /// The != operator overload.
@@ -59,10 +56,7 @@
         /// <returns>
         /// False if both fields are equal and true otherwise.
         /// </returns>
-        public static bool operator !=(AttributeValue first, AttributeValue second)
-        {
-            return !(first == second);
-        }
+        public static bool operator !=(AttributeValue first, AttributeValue second) => !(first == second);
 
         /// <summary>
         /// The equals.
@@ -73,20 +67,23 @@
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public override bool Equals(object obj)
-        {
-            return obj is AttributeValue && this == (AttributeValue)obj;
-        }
+        public override bool Equals(object obj) => obj is AttributeValue attributeValue && this == attributeValue;
 
         /// <summary>
-        /// The get hash code.
+        /// Calculates hash using <see cref="AttributeId"/> and <see cref="Value"/> hash codes.
         /// </summary>
         /// <returns>
         /// The <see cref="int"/>.
         /// </returns>
         public override int GetHashCode()
         {
-            return AttributeId.GetHashCode() ^ Value.GetHashCode();
+            unchecked
+            {
+                var hashCode = 1468198044;
+                hashCode = (hashCode * -1521134295) + AttributeId.GetHashCode();
+                hashCode = (hashCode * -1521134295) + Value.GetHashCode();
+                return hashCode;
+            }
         }
     }
 }

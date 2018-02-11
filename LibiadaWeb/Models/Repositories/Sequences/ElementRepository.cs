@@ -37,13 +37,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <summary>
         /// Gets the cached elements.
         /// </summary>
-        private Element[] CachedElements
-        {
-            get
-            {
-                return lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
-            }
-        }
+        private Element[] CachedElements => lazyCache ?? (lazyCache = db.Element.Where(e => Aliases.StaticNotations.Contains(e.Notation)).ToArray());
 
         /// <summary>
         /// The dispose.
@@ -91,30 +85,30 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 var note = (ValueNote)alphabet[i];
                 int[] pitches = GetOrCreatePitchesInDb(note.Pitch);
 
-                string localNoteHash = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty);
+                string localNoteHash = BitConverter.ToString(note.GetMD5HashCode()).Replace("-", string.Empty);
                 if (db.Note.Any(n => n.Value == localNoteHash))
                 {
                     result[i] = db.Note.Single(n => n.Value == localNoteHash);
                     if (note.Triplet != result[i].Triplet
                      || note.Duration.Denominator != result[i].Denominator
                      || note.Duration.Numerator != result[i].Numerator
-                     || note.Duration.Odenominator != result[i].Odenominator
-                     || note.Duration.Onumerator != result[i].Onumerator
+                     || note.Duration.OriginalDenominator != result[i].Odenominator
+                     || note.Duration.OriginalNumerator != result[i].Onumerator
                      || note.Tie != result[i].Tie)
                     {
-                        throw new Exception("Found in db note not equals to local note.");
+                        throw new Exception("Found in db note is not equal to local note.");
                     }
                 }
                 else
                 {
                     result[i] = new Note
                     {
-                        Value = BitConverter.ToString(note.GetHashCode()).Replace("-", string.Empty),
+                        Value = BitConverter.ToString(note.GetMD5HashCode()).Replace("-", string.Empty),
                         Triplet = note.Triplet,
                         Denominator = note.Duration.Denominator,
                         Numerator = note.Duration.Numerator,
-                        Onumerator = note.Duration.Onumerator,
-                        Odenominator = note.Duration.Odenominator,
+                        Onumerator = note.Duration.OriginalNumerator,
+                        Odenominator = note.Duration.OriginalDenominator,
                         Tie = note.Tie,
                         Priority = note.Priority,
                         Pitch = db.Pitch.Where(p => pitches.Contains(p.Id)).ToList(),
@@ -187,7 +181,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         public Alphabet ToLibiadaAlphabet(List<long> elementIds)
         {
             var alphabet = new Alphabet { NullValue.Instance() };
-            var elements = GetElements(elementIds);
+            List<Element> elements = GetElements(elementIds);
             foreach (long elementId in elementIds)
             {
                 Element el = elements.Single(e => e.Id == elementId);
@@ -206,10 +200,11 @@ namespace LibiadaWeb.Models.Repositories.Sequences
         /// <returns>
         /// The <see cref="List{Element}"/>.
         /// </returns>
-        public List<Element> GetElements(List<long> elementIds)
-        {
-            return db.Element.Where(e => elementIds.Contains(e.Id)).ToList();
-        }
+        public List<Element> GetElements(List<long> elementIds) => db.Element
+                                                                     .Where(e => elementIds.Contains(e.Id))
+                                                                     .ToList()
+                                                                     .OrderBy(e => elementIds.IndexOf(e.Id))
+                                                                     .ToList();
 
         /// <summary>
         /// The get select list items.
@@ -273,7 +268,7 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                      || pitch.Step != result[i].NoteSymbol
                      || pitch.Octave != result[i].Octave)
                     {
-                        throw new Exception("Found in db pitch not equals to local pitch.");
+                        throw new Exception("Found in db pitch is not equal to the local pitch.");
                     }
                 }
                 else

@@ -140,9 +140,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                         Translator translator = translators[j] ?? Translator.NoneOrManual;
 
                         sequenceIds[i][j] = Db.LiteratureSequence.Single(l => l.MatterId == matterId
-                                                                    && l.Notation == notation
-                                                                    && l.Language == language
-                                                                    && l.Translator == translator).Id;
+                                                                           && l.Notation == notation
+                                                                           && l.Language == language
+                                                                           && l.Translator == translator).Id;
                     }
                     else
                     {
