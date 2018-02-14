@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Web;
     using System.Web.Mvc;
 
@@ -138,8 +139,10 @@
                                     int dataSize = reader.ReadInt32();
                                     names[i] = Request.Files[i].FileName;
                                     byte[] byteArray = reader.ReadBytes(dataSize);
-                                    short[] shortArray = new short[byteArray.Length / 2];
+                                    var shortArray = new short[byteArray.Length / 2];
                                     Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
+                                    shortArray = Sampling(shortArray, 100);
+                                    //shortArray = shortArray.Select(s => (short)(s / 10)).ToArray();
                                     sequences[i] = new Chain(shortArray);
                                     break;
                                 default:
@@ -178,6 +181,37 @@
                         { "characteristics", characteristics }
                     };
                 });
+        }
+
+        private short[] Sampling(short[] shortArray, short cardinality)
+        {
+            short[] result = new short[shortArray.Length];
+            short min = shortArray.Min();
+            short max = shortArray.Max();
+            var alphabet = new short[cardinality];
+            for (int i = 0; i < cardinality; i++)
+            {
+                alphabet[i] = (short)((max - min) * i / cardinality + min);
+            }
+
+            for (int i = 0; i < shortArray.Length; i++)
+            {
+                short closest = 0;
+                short difference = short.MaxValue;
+                for (int j = 0; j < alphabet.Length; j++)
+                {
+                    short currentDifference = (short)Math.Abs(alphabet[j] - shortArray[i]);
+                    if (difference > currentDifference)
+                    {
+                        closest = alphabet[j];
+                        difference = currentDifference;
+                    }
+                }
+
+                result[i] = closest;
+            }
+
+            return result;
         }
     }
 }
