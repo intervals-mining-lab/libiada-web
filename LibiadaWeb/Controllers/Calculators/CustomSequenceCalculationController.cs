@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Mvc.Html;
 
     using Bio;
     using Bio.Extensions;
@@ -50,10 +51,13 @@
         /// </returns>
         public ActionResult Index()
         {
+            var imageTransformators = EnumHelper.GetSelectList(typeof(ImageTransformer));
+
             var fullCharacteristicRepository = FullCharacteristicRepository.Instance;
             ViewBag.data = JsonConvert.SerializeObject(new Dictionary<string, object>
                 {
-                    { "characteristicTypes", fullCharacteristicRepository.GetCharacteristicTypes() }
+                    { "characteristicTypes", fullCharacteristicRepository.GetCharacteristicTypes() },
+                    {"imageTransformators", imageTransformators }
                 });
 
             return View();

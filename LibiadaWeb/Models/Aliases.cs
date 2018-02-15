@@ -23,51 +23,51 @@
         /// The user available characteristics.
         /// </summary>
         public static readonly ReadOnlyCollection<FullCharacteristic> UserAvailableFullCharacteristics = new ReadOnlyCollection<FullCharacteristic>(new List<FullCharacteristic>
-                                                                                                                                          {
-                                                                                                                                            FullCharacteristic.ATSkew,
-                                                                                                                                            FullCharacteristic.AlphabetCardinality,
-                                                                                                                                            FullCharacteristic.AverageRemoteness,
-                                                                                                                                            FullCharacteristic.GCRatio,
-                                                                                                                                            FullCharacteristic.GCSkew,
-                                                                                                                                            FullCharacteristic.GCToATRatio,
-                                                                                                                                            FullCharacteristic.IdentificationInformation,
-                                                                                                                                            FullCharacteristic.Length,
-                                                                                                                                            FullCharacteristic.MKSkew,
-                                                                                                                                            FullCharacteristic.RYSkew,
-                                                                                                                                            FullCharacteristic.SWSkew
-                                                                                                                                          });
+        {
+            FullCharacteristic.ATSkew,
+            FullCharacteristic.AlphabetCardinality,
+            FullCharacteristic.AverageRemoteness,
+            FullCharacteristic.GCRatio,
+            FullCharacteristic.GCSkew,
+            FullCharacteristic.GCToATRatio,
+            FullCharacteristic.IdentificationInformation,
+            FullCharacteristic.Length,
+            FullCharacteristic.MKSkew,
+            FullCharacteristic.RYSkew,
+            FullCharacteristic.SWSkew
+        });
 
         /// <summary>
         /// The user available congeneric characteristics.
         /// </summary>
         public static readonly ReadOnlyCollection<CongenericCharacteristic> UserAvailableCongenericCharacteristics = new ReadOnlyCollection<CongenericCharacteristic>(new List<CongenericCharacteristic>
-                                                                                                                                          {
-                                                                                                                                            CongenericCharacteristic.AverageRemoteness,
-                                                                                                                                            CongenericCharacteristic.IdentificationInformation,
-                                                                                                                                            CongenericCharacteristic.Length
-                                                                                                                                          });
+        {
+            CongenericCharacteristic.AverageRemoteness,
+            CongenericCharacteristic.IdentificationInformation,
+            CongenericCharacteristic.Length
+        });
 
         /// <summary>
         /// The user available accordance characteristics.
         /// </summary>
         public static readonly ReadOnlyCollection<AccordanceCharacteristic> UserAvailableAccordanceCharacteristics = new ReadOnlyCollection<AccordanceCharacteristic>(new List<AccordanceCharacteristic>
-                                                                                                                                          {
-                                                                                                                                            AccordanceCharacteristic.PartialComplianceDegree,
-                                                                                                                                            AccordanceCharacteristic.MutualComplianceDegree
-                                                                                                                                          });
+        {
+            AccordanceCharacteristic.PartialComplianceDegree,
+            AccordanceCharacteristic.MutualComplianceDegree
+        });
 
         /// <summary>
         /// The user available binary characteristics.
         /// </summary>
         public static readonly ReadOnlyCollection<BinaryCharacteristic> UserAvailableBinaryCharacteristics = new ReadOnlyCollection<BinaryCharacteristic>(new List<BinaryCharacteristic>
-                                                                                                                                          {
-                                                                                                                                            BinaryCharacteristic.GeometricMean,
-                                                                                                                                            BinaryCharacteristic.Redundancy,
-                                                                                                                                            BinaryCharacteristic.InvolvedPartialDependenceCoefficient,
-                                                                                                                                            BinaryCharacteristic.PartialDependenceCoefficient,
-                                                                                                                                            BinaryCharacteristic.NormalizedPartialDependenceCoefficient,
-                                                                                                                                            BinaryCharacteristic.MutualDependenceCoefficient,
-                                                                                                                                          });
+        {
+            BinaryCharacteristic.GeometricMean,
+            BinaryCharacteristic.Redundancy,
+            BinaryCharacteristic.InvolvedPartialDependenceCoefficient,
+            BinaryCharacteristic.PartialDependenceCoefficient,
+            BinaryCharacteristic.NormalizedPartialDependenceCoefficient,
+            BinaryCharacteristic.MutualDependenceCoefficient,
+        });
 
         /// <summary>
         /// Notations elements of which will not change.

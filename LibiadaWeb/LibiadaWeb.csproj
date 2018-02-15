@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Attribute.cs" />
     <Compile Include="Attributes\GenBankFeatureNameAttribute.cs" />
+    <Compile Include="Attributes\ImageTransformerTypeAttribute.cs" />
     <Compile Include="Attributes\TaskClassAttribute.cs" />
     <Compile Include="BinaryCharacteristicLink.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -185,6 +186,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Group.cs" />
+    <Compile Include="ImageTransformer.cs" />
     <Compile Include="Language.cs" />
     <Compile Include="LiteratureSequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
@@ -580,6 +582,7 @@
     <Content Include="Views\Calculators\SequencesOrderDistribution\Result.cshtml" />
     <Content Include="Views\Calculators\MusicFiles\Result.cshtml" />
     <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
+    <Content Include="Views\Partial\_ImageTransformators.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
