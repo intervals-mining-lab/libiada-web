@@ -280,7 +280,7 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "additionalData", JsonConvert.SerializeObject(equalElements) },
+                               { "additionalData", equalElements },
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });

@@ -283,7 +283,7 @@
 
                         if (result.ContainsKey("additionalData"))
                         {
-                            databaseTask.AdditionalResultData = result["additionalData"].ToString();
+                            databaseTask.AdditionalResultData = JsonConvert.SerializeObject(result["additionalData"]);
                         }
 
                         db.Entry(databaseTask).State = EntityState.Modified;
