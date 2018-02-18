@@ -182,17 +182,16 @@
                 for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
                 {
                     int j = i + 1;
-                    while (CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]) < percentageDifference)
+                    double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
+                    while (difference < percentageDifference)
                     {
                         List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                         List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
                         similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex));
 
                         j++;
-                        if (j == orderedCharacteristicValue.Length)
-                        {
-                            break;
-                        }
+                        if (j == orderedCharacteristicValue.Length) break;
+                        difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
                     }
                 }
 
