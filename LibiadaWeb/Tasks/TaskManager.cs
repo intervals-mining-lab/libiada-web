@@ -234,7 +234,7 @@
         }
 
         /// <summary>
-        /// The create action.
+        /// Starts a new thread with the given task.
         /// </summary>
         /// <param name="task">
         /// The task.
@@ -283,7 +283,7 @@
 
                         if (result.ContainsKey("additionalData"))
                         {
-                            databaseTask.AdditionalResultData = JsonConvert.SerializeObject(result["additionalData"]);
+                            databaseTask.AdditionalResultData = result["additionalData"].ToString();
                         }
 
                         db.Entry(databaseTask).State = EntityState.Modified;

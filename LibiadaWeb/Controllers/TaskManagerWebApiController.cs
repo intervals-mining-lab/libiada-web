@@ -71,7 +71,9 @@
                 throw new Exception("Task doesn't have additional data");
             }
 
-            return JsonConvert.SerializeObject(((List<SubsequenceComparisonData>[,])task.Result["additionalData"])[firstIndex, secondIndex]);
+            List<(int, int)> result = ((List<(int, int)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

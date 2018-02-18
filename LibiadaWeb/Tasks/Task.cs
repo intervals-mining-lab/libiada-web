@@ -66,8 +66,8 @@
             Result = new Dictionary<string, object> { { "data", task.Result } };
             if (!string.IsNullOrEmpty(task.AdditionalResultData))
             {
-                // rewrite to use more abstract class or leave json for further parsing
-                Result.Add("additionalData", JsonConvert.DeserializeObject<List<SubsequenceComparisonData>[,]>(task.AdditionalResultData));
+                // TODO: rewrite to use more abstract class or leave json for further parsing
+                Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int)>[,]>(task.AdditionalResultData));
             }
         }
 

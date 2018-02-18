@@ -220,7 +220,8 @@
                         int secondEqualCount = equalElements[i, j].Select(s => s.Item2).Distinct().Count();
 
                         double equalSequencesCount = firstEqualCount < secondEqualCount ?
-                                                     firstEqualCount * 2d : secondEqualCount * 2d;
+                                                         firstEqualCount * 2d :
+                                                         secondEqualCount * 2d;
                         double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
 
                         double formula2 = 0;
@@ -240,11 +241,12 @@
                                                             .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
 
                         double similarSequencesCharacteristicSum = firstCharacteristicSum < secondCharacteristicSum ?
-                                                                     firstCharacteristicSum * 2d : secondCharacteristicSum * 2d;
+                                                                       firstCharacteristicSum * 2d :
+                                                                       secondCharacteristicSum * 2d;
 
-
-                        double formula3 = similarSequencesCharacteristicSum / (characteristics[i].Sum(c => c.CharacteristicsValues[0]) + characteristics[j].Sum(c => c.CharacteristicsValues[0]));
-
+                        double fistSequenceCharacteristicSum = characteristics[i].Sum(c => c.CharacteristicsValues[0]);
+                        double secondSequenceCharacteristicSum = characteristics[j].Sum(c => c.CharacteristicsValues[0]);
+                        double formula3 = similarSequencesCharacteristicSum / (fistSequenceCharacteristicSum + secondSequenceCharacteristicSum);
 
                         const int digits = 5;
                         similarities[i, j] = new
@@ -279,7 +281,7 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "additionalData", equalElements },
+                               { "additionalData", JsonConvert.SerializeObject(equalElements) },
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });
