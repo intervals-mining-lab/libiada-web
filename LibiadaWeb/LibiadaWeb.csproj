@@ -134,6 +134,7 @@
     <Compile Include="Controllers\Calculators\LocalCalculationWebApiController.cs" />
     <Compile Include="Controllers\Calculators\MusicFilesController.cs" />
     <Compile Include="Controllers\Calculators\OrderTransformationCalculationController.cs" />
+    <Compile Include="Controllers\Calculators\SequencePredictionController.cs" />
     <Compile Include="Controllers\Calculators\SequencesAlignmentController.cs" />
     <Compile Include="Controllers\Calculators\CalculationController.cs" />
     <Compile Include="Controllers\Calculators\ClusterizationController.cs" />

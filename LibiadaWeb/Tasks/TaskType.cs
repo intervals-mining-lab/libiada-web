@@ -184,6 +184,10 @@
         /// </summary>
         [Display(Name = "Music files processing")]
         [TaskClass(typeof(MusicFilesController))]
-        MusicFiles = 25
+        MusicFiles = 25,
+		
+		[Display(Name = "Sequence prediction")]
+        [TaskClass(typeof(SequencePredictionController))]
+        SequencePrediction = 26
     }
 }
