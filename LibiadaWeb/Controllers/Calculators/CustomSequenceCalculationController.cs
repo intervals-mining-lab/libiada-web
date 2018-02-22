@@ -145,7 +145,8 @@
                                     byte[] byteArray = reader.ReadBytes(dataSize);
                                     var shortArray = new short[byteArray.Length / 2];
                                     Buffer.BlockCopy(byteArray, 0, shortArray, 0, byteArray.Length);
-                                    shortArray = Sampling(shortArray, 100);
+                                    //shortArray = Amplitude(shortArray, 20);
+                                    shortArray = Sampling(shortArray, 50);
                                     //shortArray = shortArray.Select(s => (short)(s / 10)).ToArray();
                                     sequences[i] = new Chain(shortArray);
                                     break;
@@ -185,6 +186,13 @@
                         { "characteristics", characteristics }
                     };
                 });
+        }
+
+        private short[] Amplitude(short[] shortArray, double percent)
+        {
+            short max = shortArray.Max( e => (short)Math.Max(e, -e));
+            double threshold = max * percent / 100;
+            return shortArray.Select(e => (e > threshold) || (e < -threshold) ? e : (short)0).ToArray();
         }
 
         private short[] Sampling(short[] shortArray, short cardinality)
