@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    using LibiadaWeb.Models.CalculatorsData;
-
     using Newtonsoft.Json;
 
     /// <summary>
@@ -67,7 +65,7 @@
             if (!string.IsNullOrEmpty(task.AdditionalResultData))
             {
                 // TODO: rewrite to use more abstract class or leave json for further parsing
-                Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int)>[,]>(task.AdditionalResultData));
+                Result.Add("additionalData", JsonConvert.DeserializeObject<List<(int, int, double)>[,]>(task.AdditionalResultData));
             }
         }
 

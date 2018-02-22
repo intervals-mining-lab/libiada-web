@@ -172,7 +172,7 @@
                     }
                 }
 
-                var similarPairs = new List<((int, int),(int, int))>();
+                var similarPairs = new List<((int, int),(int, int), double)>();
                 foreach (double key in characteristicValueSubsequences.Keys)
                 {
                     similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
@@ -187,7 +187,7 @@
                     {
                         List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                         List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                        similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex));
+                        similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
 
                         j++;
                         if (j == orderedCharacteristicValue.Length) break;
@@ -195,28 +195,15 @@
                     }
                 }
 
-                var equalElements = new List<(int, int)>[mattersCount, mattersCount];
-                for (int i = 0; i < mattersCount; i++)
-                {
-                    for (int j = 0; j < mattersCount; j++)
-                    {
-                        equalElements[i,j] = new List<(int, int)>();
-                    }
-                }
-
-                foreach (((int firstMatter, int firstSubsequence),(int secondMatter, int secondSubsequence)) in similarPairs)
-                {
-                    equalElements[firstMatter, secondMatter].Add((firstSubsequence, secondSubsequence));
-                    equalElements[secondMatter, firstMatter].Add((secondSubsequence, firstSubsequence));
-                }
+                List<(int, int, double)>[,] similarityMatrix = FillSimilarityMatrix(mattersCount, similarPairs);
 
                 var similarities = new object[mattersCount, mattersCount];
                 for (int i = 0; i < mattersCount; i++)
                 {
                     for (int j = 0; j < mattersCount; j++)
                     {
-                        int firstEqualCount = equalElements[i, j].Select(s => s.Item1).Distinct().Count();
-                        int secondEqualCount = equalElements[i, j].Select(s => s.Item2).Distinct().Count();
+                        int firstEqualCount = similarityMatrix[i, j].Select(s => s.Item1).Distinct().Count();
+                        int secondEqualCount = similarityMatrix[i, j].Select(s => s.Item2).Distinct().Count();
 
                         double equalSequencesCount = firstEqualCount < secondEqualCount ?
                                                          firstEqualCount * 2d :
@@ -229,12 +216,12 @@
                         //    formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
                         //}
 
-                        double firstCharacteristicSum = equalElements[i, j]
+                        double firstCharacteristicSum = similarityMatrix[i, j]
                                                             .Select(s => s.Item1)
                                                             .Distinct()
                                                             .Sum(s => characteristics[i][s].CharacteristicsValues[0]);
 
-                        double secondCharacteristicSum = equalElements[i, j]
+                        double secondCharacteristicSum = similarityMatrix[i, j]
                                                             .Select(s => s.Item2)
                                                             .Distinct()
                                                             .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
@@ -280,7 +267,7 @@
 
                 return new Dictionary<string, object>
                            {
-                               { "additionalData", equalElements },
+                               { "additionalData", similarityMatrix },
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });
@@ -311,11 +298,11 @@
         /// The list for pairs extraction.
         /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int))}"/>.
+        /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
         /// </returns>
-        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> list)
+        private List<((int, int), (int, int), double)> ExtractAllPossiblePairs(List<(int, int)> list)
         {
-            var result = new List<((int, int),(int, int))> ();
+            var result = new List<((int, int),(int, int),double)> ();
             if (list.Count < 2)
             {
                 return result;
@@ -325,7 +312,7 @@
             {
                 for (int j = i + 1; j < list.Count; j++)
                 {
-                    result.Add((list[i], list[j]));
+                    result.Add((list[i], list[j], 0));
                 }
             }
 
@@ -342,22 +329,54 @@
         /// <param name="secondList">
         /// Second list for Cartesian product.
         /// </param>
+        /// <param name="difference">
+        /// Distance between sets.
+        /// </param>
         /// <returns>
-        /// The <see cref="T:List{((int,int), (int,int))}"/>.
+        /// The <see cref="T:List{((int,int), (int,int),double)}"/>.
         /// </returns>
-        private List<((int, int), (int, int))> ExtractAllPossiblePairs(List<(int, int)> firstList, List<(int, int)> secondList)
+        private List<((int, int), (int, int),double)> ExtractAllPossiblePairs(
+            List<(int, int)> firstList,
+            List<(int, int)> secondList,
+            double difference)
         {
-            var result = new List<((int, int), (int, int))>();
+            var result = new List<((int, int), (int, int),double)>();
 
             foreach ((int, int) firstElement in firstList)
             {
                 foreach ((int, int) secondElement in secondList)
                 {
-                    result.Add((firstElement, secondElement));
+                    result.Add((firstElement, secondElement, difference));
                 }
             }
 
             return result;
+        }
+
+        private List<(int, int, double)>[,] FillSimilarityMatrix(int mattersCount, List<((int,int),(int,int),double)> similarPairs)
+        {
+            var similarityMatrix = new List<(int, int, double)>[mattersCount, mattersCount];
+            for (int i = 0; i < mattersCount; i++)
+            {
+                for (int j = 0; j < mattersCount; j++)
+                {
+                    similarityMatrix[i, j] = new List<(int, int, double)>();
+                }
+            }
+
+            foreach (((int, int) firstIndex, (int, int) secondIndex, double difference) in similarPairs)
+            {
+                (int firstMatter, int firstSubsequence) = firstIndex;
+                (int secondMatter, int secondSubsequence) = secondIndex;
+
+                (int, int, double) similarityData = (firstSubsequence, secondSubsequence, difference);
+                similarityMatrix[firstMatter, secondMatter].Add(similarityData);
+
+                (int, int, double) symmetricalSimilarityData = (secondSubsequence, firstSubsequence, difference);
+                similarityMatrix[secondMatter, firstMatter].Add(symmetricalSimilarityData);
+            }
+
+            return similarityMatrix;
         }
     }
 }
