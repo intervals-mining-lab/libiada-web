@@ -19,6 +19,8 @@
 
     using Newtonsoft.Json;
 
+    using static LibiadaWeb.Models.Calculators.SubsequencesCharacteristicsCalculator;
+
     /// <summary>
     /// The subsequences comparer controller.
     /// </summary>
@@ -113,23 +115,30 @@
                     sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
-                    double[] completeGenomesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
+                    double[] completeSeuqencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
 
                     var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];
 
-                    for (int i = 0; i < completeGenomesCharacteristics.Length; i++)
+                    for (int i = 0; i < completeSeuqencesCharacteristics.Length; i++)
                     {
-                        matterCharacteristics[i] = new KeyValuePair<long, double>(matterIds[i], completeGenomesCharacteristics[i]);
+                        matterCharacteristics[i] = new KeyValuePair<long, double>(matterIds[i], completeSeuqencesCharacteristics[i]);
                     }
 
-                    matterIds = matterCharacteristics.OrderBy(mc => mc.Value).Select(mc => mc.Key).ToArray();
+                    matterIds = matterCharacteristics
+                                .OrderBy(mc => mc.Value)
+                                .Select(mc => mc.Key)
+                                .ToArray();
 
                     // Subsequences characteristics
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
                                             .Where(s => s.Notation == Notation.Nucleotides && matterIds.Contains(s.MatterId))
                                             .Select(s => new { s.Id, s.MatterId, MatterName = s.Matter.Name })
                                             .ToDictionary(s => s.Id);
-                    parentSequenceIds = parentSequences.OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId)).Select(ps => ps.Key).ToArray();
+
+                    parentSequenceIds = parentSequences
+                                        .OrderBy(ps => Array.IndexOf(matterIds, ps.Value.MatterId))
+                                        .Select(ps => ps.Key)
+                                        .ToArray();
 
                     for (int n = 0; n < parentSequenceIds.Length; n++)
                     {
@@ -149,7 +158,7 @@
                 // cycle through matters
                 for (int i = 0; i < mattersCount; i++)
                 {
-                    var subsequencesData = SubsequencesCharacteristicsCalculator.CalculateSubsequencesCharacteristics(
+                    var subsequencesData = CalculateSubsequencesCharacteristics(
                             new[] { subsequencesCharacteristicLinkId },
                             features,
                             parentSequenceIds[i],
@@ -172,84 +181,11 @@
                     }
                 }
 
-                var similarPairs = new List<((int, int),(int, int), double)>();
-                foreach (double key in characteristicValueSubsequences.Keys)
-                {
-                    similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
-                }
-
-                double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
-                for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
-                {
-                    int j = i + 1;
-                    double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
-                    while (difference < percentageDifference)
-                    {
-                        List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
-                        List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
-                        similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
-
-                        j++;
-                        if (j == orderedCharacteristicValue.Length) break;
-                        difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
-                    }
-                }
+                List<((int, int), (int, int), double)> similarPairs = ExtractSimilarPairs(characteristicValueSubsequences, percentageDifference);
 
                 List<(int, int, double)>[,] similarityMatrix = FillSimilarityMatrix(mattersCount, similarPairs);
 
-                var similarities = new object[mattersCount, mattersCount];
-                for (int i = 0; i < mattersCount; i++)
-                {
-                    for (int j = 0; j < mattersCount; j++)
-                    {
-                        int firstEqualCount = similarityMatrix[i, j].Select(s => s.Item1).Distinct().Count();
-                        int secondEqualCount = similarityMatrix[i, j].Select(s => s.Item2).Distinct().Count();
-
-                        double equalSequencesCount = firstEqualCount < secondEqualCount ?
-                                                         firstEqualCount * 2d :
-                                                         secondEqualCount * 2d;
-                        double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
-
-                        double formula2 = 0;
-                        //if (equalElements[i, j].Count != 0 && formula1 != 0)
-                        //{
-                        //    formula2 = (differenceSum / equalElements[i, j].Count) / formula1;
-                        //}
-
-                        double firstCharacteristicSum = similarityMatrix[i, j]
-                                                            .Select(s => s.Item1)
-                                                            .Distinct()
-                                                            .Sum(s => characteristics[i][s].CharacteristicsValues[0]);
-
-                        double secondCharacteristicSum = similarityMatrix[i, j]
-                                                            .Select(s => s.Item2)
-                                                            .Distinct()
-                                                            .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
-
-                        double similarSequencesCharacteristicSum = firstCharacteristicSum < secondCharacteristicSum ?
-                                                                       firstCharacteristicSum * 2d :
-                                                                       secondCharacteristicSum * 2d;
-
-                        double fistSequenceCharacteristicSum = characteristics[i].Sum(c => c.CharacteristicsValues[0]);
-                        double secondSequenceCharacteristicSum = characteristics[j].Sum(c => c.CharacteristicsValues[0]);
-                        double formula3 = similarSequencesCharacteristicSum / (fistSequenceCharacteristicSum + secondSequenceCharacteristicSum);
-
-                        const int digits = 5;
-                        similarities[i, j] = new
-                        {
-                            formula1 = Math.Round(formula1, digits),
-                            formula2 = Math.Round(formula2, digits),
-                            formula3 = Math.Round(formula3, digits),
-                            firstAbsolutelyEqualElementsCount = firstEqualCount,
-                            firstNearlyEqualElementsCount = 0,
-                            firstNotEqualElementsCount = characteristics[i].Length - firstEqualCount,
-
-                            secondAbsolutelyEqualElementsCount = secondEqualCount,
-                            secondNearlyEqualElementsCount = 0,
-                            secondNotEqualElementsCount = characteristics[j].Length - secondEqualCount,
-                        };
-                    }
-                }
+                object[,] similarities = Similarities(similarityMatrix, characteristics, mattersCount);
 
                 var result = new Dictionary<string, object>
                 {
@@ -271,6 +207,118 @@
                                { "data", JsonConvert.SerializeObject(result) }
                            };
             });
+        }
+
+        private object[,] Similarities(List<(int, int, double)>[,] similarityMatrix, SubsequenceData[][] characteristics, int mattersCount)
+        {
+            var similarities = new object[mattersCount, mattersCount];
+            for (int i = 0; i < mattersCount; i++)
+            {
+                for (int j = 0; j < mattersCount; j++)
+                {
+                    int firstEqualCount = similarityMatrix[i, j]
+                                          .Select(s => s.Item1)
+                                          .Distinct()
+                                           .Count();
+                    int firstAbsolutelyEqualCount = similarityMatrix[i, j]
+                                                    .Where(s => s.Item3 == 0).Select(s => s.Item1)
+                                                    .Distinct()
+                                                    .Count();
+                    int firstNearlyEqualCount = similarityMatrix[i, j]
+                                                .Where(s => s.Item3 > 0)
+                                                .Select(s => s.Item1)
+                                                .Distinct()
+                                                .Count();
+
+                    int secondEqualCount = similarityMatrix[i, j]
+                                           .Select(s => s.Item2)
+                                           .Distinct()
+                                           .Count();
+                    int secondAbsolutelyEqualCount = similarityMatrix[i, j]
+                                                     .Where(s => s.Item3 == 0)
+                                                     .Select(s => s.Item2)
+                                                     .Distinct()
+                                                     .Count();
+                    int secondNearlyEqualCount = similarityMatrix[i, j]
+                                                 .Where(s => s.Item3 > 0)
+                                                 .Select(s => s.Item2)
+                                                 .Distinct()
+                                                 .Count();
+
+                    double equalSequencesCount = Math.Min(firstEqualCount * 2d, secondEqualCount * 2d);
+                    double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
+
+                    double formula2 = 0;
+                    if (similarityMatrix[i, j].Count != 0)
+                    {
+                        double differenceSum = similarityMatrix[i, j].Select(s => s.Item3).Sum();
+                        formula2 = formula1 * differenceSum / similarityMatrix[i, j].Count;
+                    }
+
+                    double firstCharacteristicSum = similarityMatrix[i, j]
+                                                    .Select(s => s.Item1)
+                                                    .Distinct()
+                                                    .Sum(s => characteristics[i][s].CharacteristicsValues[0]);
+
+                    double secondCharacteristicSum = similarityMatrix[i, j]
+                                                     .Select(s => s.Item2)
+                                                     .Distinct()
+                                                     .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
+
+                    double similarSequencesCharacteristicSum = Math.Min(firstCharacteristicSum * 2d, secondCharacteristicSum * 2d);
+
+                    double fistSequenceCharacteristicSum = characteristics[i].Sum(c => c.CharacteristicsValues[0]);
+                    double secondSequenceCharacteristicSum = characteristics[j].Sum(c => c.CharacteristicsValues[0]);
+                    double allSequencesCharacteristicSum = fistSequenceCharacteristicSum + secondSequenceCharacteristicSum;
+                    double formula3 = similarSequencesCharacteristicSum / allSequencesCharacteristicSum;
+
+                    const int digits = 5;
+                    similarities[i, j] = new
+                    {
+                        formula1 = Math.Round(formula1, digits),
+                        formula2 = Math.Round(formula2, digits),
+                        formula3 = Math.Round(formula3, digits),
+                        firstAbsolutelyEqualElementsCount = firstAbsolutelyEqualCount,
+                        firstNearlyEqualElementsCount = firstNearlyEqualCount,
+                        firstNotEqualElementsCount = characteristics[i].Length - firstEqualCount,
+                        secondAbsolutelyEqualElementsCount = secondAbsolutelyEqualCount,
+                        secondNearlyEqualElementsCount = secondNearlyEqualCount,
+                        secondNotEqualElementsCount = characteristics[j].Length - secondEqualCount,
+                    };
+                }
+            }
+
+            return similarities;
+        }
+
+        private List<((int, int), (int, int), double)> ExtractSimilarPairs(
+            Dictionary<double, List<(int, int)>> characteristicValueSubsequences,
+            double percentageDifference)
+        {
+            var similarPairs = new List<((int, int), (int, int), double)>();
+            foreach (double key in characteristicValueSubsequences.Keys)
+            {
+                similarPairs.AddRange(ExtractAllPossiblePairs(characteristicValueSubsequences[key]));
+            }
+
+            double[] orderedCharacteristicValue = characteristicValueSubsequences.Keys.OrderBy(v => v).ToArray();
+            for (int i = 0; i < orderedCharacteristicValue.Length - 1; i++)
+            {
+                int j = i + 1;
+                double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
+                while (difference < percentageDifference)
+                {
+                    List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
+                    List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
+                    similarPairs.AddRange(ExtractAllPossiblePairs(firstComponentIndex, secondComponentIndex, difference));
+
+                    j++;
+                    if (j == orderedCharacteristicValue.Length) break;
+                    difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
+                }
+            }
+
+            return similarPairs;
         }
 
         /// <summary>
