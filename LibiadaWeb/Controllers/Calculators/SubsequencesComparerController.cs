@@ -76,7 +76,7 @@
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        /// <exception cref="System.ArgumentException">
+        /// <exception cref="ArgumentException">
         /// Thrown if count of matters is not 2.
         /// </exception>
         [HttpPost]
@@ -111,23 +111,10 @@
                     var geneticSequenceRepository = new GeneticSequenceRepository(db);
                     long[] chains = geneticSequenceRepository.GetNucleotideSequenceIds(matterIds);
 
-                    var sequencesCharacteristicTypeLinkRepository = FullCharacteristicRepository.Instance;
-                    sequenceCharacteristicName = sequencesCharacteristicTypeLinkRepository.GetCharacteristicName(characteristicLinkId);
+                    sequenceCharacteristicName = FullCharacteristicRepository.Instance.GetCharacteristicName(characteristicLinkId);
 
                     // Sequences characteristic
-                    double[] completeSeuqencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
-
-                    var matterCharacteristics = new KeyValuePair<long, double>[matterIds.Length];
-
-                    for (int i = 0; i < completeSeuqencesCharacteristics.Length; i++)
-                    {
-                        matterCharacteristics[i] = new KeyValuePair<long, double>(matterIds[i], completeSeuqencesCharacteristics[i]);
-                    }
-
-                    matterIds = matterCharacteristics
-                                .OrderBy(mc => mc.Value)
-                                .Select(mc => mc.Key)
-                                .ToArray();
+                    matterIds = OrderMatterIds(matterIds, characteristicLinkId, chains);
 
                     // Subsequences characteristics
                     var parentSequences = db.DnaSequence.Include(s => s.Matter)
@@ -209,6 +196,20 @@
             });
         }
 
+        private long[] OrderMatterIds(long[] matterIds, short characteristicLinkId, long[] chains)
+        {
+            double[] completeSequencesCharacteristics = SequencesCharacteristicsCalculator.Calculate(chains, characteristicLinkId);
+
+            var matterCharacteristics = new (long, double)[matterIds.Length];
+
+            for (int i = 0; i < completeSequencesCharacteristics.Length; i++)
+            {
+                matterCharacteristics[i] = (matterIds[i], completeSequencesCharacteristics[i]);
+            }
+
+            return matterCharacteristics.OrderBy(mc => mc.Item2).Select(mc => mc.Item1).ToArray();
+        }
+
         private object[,] Similarities(List<(int, int, double)>[,] similarityMatrix, SubsequenceData[][] characteristics, int mattersCount)
         {
             var similarities = new object[mattersCount, mattersCount];
@@ -245,14 +246,14 @@
                                                  .Distinct()
                                                  .Count();
 
-                    double equalSequencesCount = Math.Min(firstEqualCount * 2d, secondEqualCount * 2d);
+                    double equalSequencesCount = Math.Min(firstEqualCount, secondEqualCount) * 2d;
                     double formula1 = equalSequencesCount / (characteristics[i].Length + characteristics[j].Length);
 
                     double formula2 = 0;
-                    if (similarityMatrix[i, j].Count != 0)
+                    if (similarityMatrix[i, j].Count != 0 && formula1 > 0)
                     {
                         double differenceSum = similarityMatrix[i, j].Select(s => s.Item3).Sum();
-                        formula2 = formula1 * differenceSum / similarityMatrix[i, j].Count;
+                        formula2 = differenceSum / (similarityMatrix[i, j].Count * formula1);
                     }
 
                     double firstCharacteristicSum = similarityMatrix[i, j]
@@ -265,7 +266,7 @@
                                                      .Distinct()
                                                      .Sum(s => characteristics[j][s].CharacteristicsValues[0]);
 
-                    double similarSequencesCharacteristicSum = Math.Min(firstCharacteristicSum * 2d, secondCharacteristicSum * 2d);
+                    double similarSequencesCharacteristicSum = Math.Min(firstCharacteristicSum, secondCharacteristicSum) * 2d;
 
                     double fistSequenceCharacteristicSum = characteristics[i].Sum(c => c.CharacteristicsValues[0]);
                     double secondSequenceCharacteristicSum = characteristics[j].Sum(c => c.CharacteristicsValues[0]);
@@ -306,7 +307,7 @@
             {
                 int j = i + 1;
                 double difference = CalculateAverageDifference(orderedCharacteristicValue[i], orderedCharacteristicValue[j]);
-                while (difference < percentageDifference)
+                while (difference <= percentageDifference)
                 {
                     List<(int, int)> firstComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[i]];
                     List<(int, int)> secondComponentIndex = characteristicValueSubsequences[orderedCharacteristicValue[j]];
