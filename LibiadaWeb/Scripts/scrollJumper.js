@@ -33,7 +33,7 @@
 	);
 	//mouseover
 	var timeDelay = 10;
-	var alphabet = ["f", "e", "b", "c", "b", "a", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0"];
+	var alphabet = ["f", "e", "c", "a", "8", "6", "4", "2", "0"];
 	$('#buttonScrollUp').mouseover(
 		function (e) {
 			var color;
@@ -42,7 +42,7 @@
 				color = "#" + "f" + alphabet[i] + "f" + alphabet[i] + "f" + alphabet[i];
 				document.getElementById('buttonScrollUp').style.backgroundColor = color;
 				i++;
-				if (i == 16) clearInterval(DescriptorInterval);
+				if (i == alphabet.length) clearInterval(DescriptorInterval);
 			}, timeDelay);
 	}
 	);
@@ -54,7 +54,7 @@
 				color = "#" + "f" + alphabet[i] + "f" + alphabet[i] + "f" + alphabet[i];
 				document.getElementById('buttonScrollDown').style.backgroundColor = color;
 				i++;
-				if (i == 16) clearInterval(DescriptorInterval);
+				if (i == alphabet.length) clearInterval(DescriptorInterval);
 			}, timeDelay);
 		}
 	);
@@ -69,4 +69,11 @@
 			document.getElementById('buttonScrollDown').style.backgroundColor = "#fff";
 		}
 	);
+	//hide scroll
+	if (document.body.clientHeight - document.documentElement.clientHeight <= 0) {
+		document.getElementById('scrollUpDown').setAttribute("hidden", true);
+	}
+	else {
+		document.getElementById('scrollUpDown').removeAttribute("hidden");
+	}
 });
