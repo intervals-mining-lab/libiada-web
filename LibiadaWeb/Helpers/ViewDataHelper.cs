@@ -177,7 +177,7 @@
         {
             Dictionary<string, object> data = FillViewData(minSelectedMatters, maxSelectedMatters, submitName);
 
-            List<CharacteristicData> characteristicTypes;
+            List<CharacteristicTypeData> characteristicTypes;
 
             switch (characteristicsType)
             {

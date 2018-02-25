@@ -49,14 +49,14 @@
             <label>
                 Number of equal subsequences from first sequence = {{similarityValue.firstAbsolutelyEqualElementsCount}}
                 <br />
-                Number of similar subsequences from first sequence = {{similarityValue.firstExeptableEqualElementsCount}}
+                Number of similar subsequences from first sequence = {{similarityValue.firstNearlyEqualElementsCount}}
                 <br />
                 Number of not equal subsequences from first sequence = {{similarityValue.firstNotEqualElementsCount}}
 
                 <br />
                 Number of equal subsequences from second sequence = {{similarityValue.secondAbsolutelyEqualElementsCount}}
                 <br />
-                Number of similar subsequences from second sequence = {{similarityValue.secondExeptableEqualElementsCount}}
+                Number of similar subsequences from second sequence = {{similarityValue.secondNearlyEqualElementsCount}}
                 <br />
                 Number of not equal subsequences from second sequence = {{similarityValue.secondNotEqualElementsCount}}
             </label>
@@ -78,36 +78,36 @@
                     <br />
                     First sequence: <b> {{mattersNames[firstMatterIndex]}} </b>
                     <br />
-                    Feature: {{features[characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].FeatureId]}}
+                    Feature: {{features[characteristics[firstMatterIndex][equalElement.Item1].FeatureId]}}
                     <br />
-                    Positions = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Starts.join(', ')}}
-                    <br/>
-                    Lengths = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Lengths.join(', ')}}
+                    Positions = {{characteristics[firstMatterIndex][equalElement.Item1].Starts.join(', ')}}
                     <br />
-                    <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Attributes">
+                    Lengths = {{characteristics[firstMatterIndex][equalElement.Item1].Lengths.join(', ')}}
+                    <br />
+                    <div ng-repeat="attributeId in characteristics[firstMatterIndex][equalElement.Item1].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
-                    <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].CharacteristicsValues[0]}} </i>
+                    <i> Characteristic value = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0]}} </i>
                     <br />
                     <br />
 
                     Second sequence: <b> {{mattersNames[secondMatterIndex]}} </b>
                     <br />
-                    Feature: {{features[characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].FeatureId]}}
+                    Feature: {{features[characteristics[secondMatterIndex][equalElement.Item2].FeatureId]}}
                     <br />
-                    Positions = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Starts.join(', ')}}
+                    Positions = {{characteristics[secondMatterIndex][equalElement.Item2].Starts.join(', ')}}
                     <br />
-                    Lengths = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Lengths.join(', ')}}
+                    Lengths = {{characteristics[secondMatterIndex][equalElement.Item2].Lengths.join(', ')}}
                     <br />
-                    <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Attributes">
+                    <div ng-repeat="attributeId in characteristics[secondMatterIndex][equalElement.Item2].Attributes">
                         {{attributes[attributeValues[attributeId].attribute]}} = {{attributeValues[attributeId].value}}
                     </div>
-                    <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].CharacteristicsValues[0]}} </i>
+                    <i> Characteristic value = {{characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0]}} </i>
                     <br />
                     <br />
-                    <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].CharacteristicsValues[0] | makePositive}}</i>
+                    <i> Absolute difference = {{characteristics[firstMatterIndex][equalElement.Item1].CharacteristicsValues[0] - characteristics[secondMatterIndex][equalElement.Item2].CharacteristicsValues[0] | makePositive}}</i>
                     <br />
-                    <i> Percentage difference = {{equalElement.Difference * 100}}%</i>
+                    <i> Percentage difference = {{equalElement.Item3 * 100}}%</i>
 
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.FirstSubsequenceIndex].Id, characteristics[secondMatterIndex][equalElement.SecondSubsequenceIndex].Id, $index)" value="CalculateLocalCharacteristics" />
+                                        <input type="button" class="btn btn-default" ng-click="calculateLocalCharacteristics(characteristics[firstMatterIndex][equalElement.Item1].Id, characteristics[secondMatterIndex][equalElement.Item2].Id, $index)" value="CalculateLocalCharacteristics" />
                                     </div>
                                 </div>
                                 <div id="chart{{$index}}">

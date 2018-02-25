@@ -50,11 +50,8 @@
                 </div>
             </div>
         }
-
         <input type="hidden" name="subsequencesCharacteristicNotation" ng-value="subsequencesCharacteristic.notation.Value" />
-
         <hr />
-
         <div class="form-group">
             <label class="control-label col-md-2" for="maxPercentageDifference">Maximum difference (%):</label>
             <div class="col-md-10">
@@ -62,20 +59,6 @@
                 @Html.ValidationMessage("maxPercentageDifference", "", new { @class = "text-danger" })
             </div>
         </div>
-        <hr />
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    Characteristic value from
-                </label>
-                <input class="form-control" type="number" min="0" name="characteristicValueFrom" value="0" step="any" />
-                <label>
-                    to
-                </label>
-                <input class="form-control" type="number" min="0" name="characteristicValueTo" value="0" step="any" />
-            </div>
-        </div>
-
         @Html.Partial("_MattersSubmit")
     </div>
 }

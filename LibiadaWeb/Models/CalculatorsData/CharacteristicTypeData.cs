@@ -4,9 +4,9 @@
     using System.Web.Mvc;
 
     /// <summary>
-    /// The characteristic data.
+    /// The characteristic types data.
     /// </summary>
-    public class CharacteristicData : SelectListItem
+    public class CharacteristicTypeData : SelectListItem
     {
         /// <summary>
         /// The characteristic links.
@@ -14,7 +14,7 @@
         public readonly List<LinkSelectListItem> CharacteristicLinks;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CharacteristicData"/> class.
+        /// Initializes a new instance of the <see cref="CharacteristicTypeData"/> class.
         /// </summary>
         /// <param name="value">
         /// The value.
@@ -25,7 +25,7 @@
         /// <param name="characteristicLinks">
         /// The characteristic links.
         /// </param>
-        public CharacteristicData(int value, string text, List<LinkSelectListItem> characteristicLinks)
+        public CharacteristicTypeData(int value, string text, List<LinkSelectListItem> characteristicLinks)
         {
             Value = value.ToString();
             Text = text;
