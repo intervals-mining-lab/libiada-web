@@ -6,7 +6,7 @@
 
     /// <summary>
     /// Task class attribute.
-    /// Used to link <see cref="TaskType"/> enum to task class.
+    /// Used to link <see cref="Tasks.TaskType"/> enum to task class.
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
     public class TaskClassAttribute : Attribute
