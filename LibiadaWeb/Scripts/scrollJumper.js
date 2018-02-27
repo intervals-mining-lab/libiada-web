@@ -42,7 +42,7 @@
 				color = "#" + "f" + alphabet[i] + "f" + alphabet[i] + "f" + alphabet[i];
 				document.getElementById('buttonScrollUp').style.backgroundColor = color;
 				i++;
-				if (i == alphabet.length) clearInterval(DescriptorInterval);
+				if (i === alphabet.length) clearInterval(DescriptorInterval);
 			}, timeDelay);
 	}
 	);
@@ -54,7 +54,7 @@
 				color = "#" + "f" + alphabet[i] + "f" + alphabet[i] + "f" + alphabet[i];
 				document.getElementById('buttonScrollDown').style.backgroundColor = color;
 				i++;
-				if (i == alphabet.length) clearInterval(DescriptorInterval);
+				if (i === alphabet.length) clearInterval(DescriptorInterval);
 			}, timeDelay);
 		}
 	);

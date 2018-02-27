@@ -48,7 +48,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-if="tasks.length == 0">
+            <tr ng-if="loading">
+                <td colspan="10" class="empty-table">
+                    Loading...
+                </td>
+            </tr>
+            <tr ng-if="!loading&&tasks.length == 0">
                 <td colspan="10" class="empty-table">
                     There are no sheduled or active tasks
                 </td>
