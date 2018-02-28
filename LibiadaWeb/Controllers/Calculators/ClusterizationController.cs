@@ -115,7 +115,8 @@
             double equipotencyWeight = 1,
             double normalizedDistanceWeight = 1,
             double distanceWeight = 1,
-            double bandwidth = 0)
+            double bandwidth = 0,
+            int maximumClusters = 2)
         {
             return CreateTask(() =>
             {
@@ -158,10 +159,12 @@
 
                 var clusterizationParams = new Dictionary<string, double>
                 {
+                    { "clustersCount", clustersCount },
                     { "equipotencyWeight", equipotencyWeight },
                     { "normalizedDistanceWeight", normalizedDistanceWeight },
                     { "distanceWeight", distanceWeight },
-                    { "bandwidth", bandwidth }
+                    { "bandwidth", bandwidth },
+                    { "maximumClusters", maximumClusters }
                 };
 
                 IClusterizator clusterizator = ClusterizatorsFactory.CreateClusterizator(clusterizationType, clusterizationParams);
@@ -192,7 +195,7 @@
                     { "characteristicNames", characteristicNames },
                     { "characteristics", mattersCharacteristics },
                     { "characteristicsList", characteristicsList },
-                    { "clustersCount", clustersCount }
+                    { "clustersCount", clusterizationResult.Distinct().Count() }
                 };
 
                 return new Dictionary<string, object>

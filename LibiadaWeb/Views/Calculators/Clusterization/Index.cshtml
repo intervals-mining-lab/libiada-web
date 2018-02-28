@@ -24,7 +24,7 @@
         @Html.Partial("_Characteristics")
 
         <div class="form-group">
-            <label class="control-label col-md-2" for="clustersCount">Clusters count:</label>
+            <label class="control-label col-md-2" for="clustersCount">Clusters count {{ClusterizationType.Text == 'FRiS-Cluster' ? '(Minimum clusters)' : ''}}:</label>
             <div class="col-md-10">
                 <input class="form-control" name="clustersCount" type="number" value="2" min="2" id="clustersCount" />
                 @Html.ValidationMessage("clustersCount", "", new { @class = "text-danger" })
@@ -66,6 +66,15 @@
                 <div class="col-md-10">
                     <input class="form-control" name="bandwidth" type="number" value="4" min="0" id="bandwidth" />
                     @Html.ValidationMessage("bandwidth", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div ng-show="ClusterizationType.Text == 'FRiS-Cluster'">
+            <div class="form-group">
+                <label class="control-label col-md-2" for="maximumClusters">Maximum Clusters:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="maximumClusters" type="number" value="2" min="2" id="maximumClusters" />
+                    @Html.ValidationMessage("Maximum Clusters", "", new { @class = "text-danger" })
                 </div>
             </div>
         </div>
