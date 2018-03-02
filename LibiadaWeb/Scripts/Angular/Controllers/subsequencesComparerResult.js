@@ -63,11 +63,11 @@
                 for (var j = 0; j < $scope.filters.length; j++) {
                     var filterValue = $scope.filters[j].value.toUpperCase();
 
-                    var firstSubsequenceIndex = elements[i].FirstSubsequenceIndex;
+                    var firstSubsequenceIndex = elements[i].Item1;
                     var firstVisible = $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "product", filterValue);
                     firstVisible = firstVisible || $scope.isAttributeEqual($scope.firstMatterIndex, firstSubsequenceIndex, "locus_tag", filterValue);
 
-                    var secondSubsequenceIndex = elements[i].SecondSubsequenceIndex;
+                    var secondSubsequenceIndex = elements[i].Item2;
                     var secondVisible = $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "product", filterValue);
                     secondVisible = secondVisible || $scope.isAttributeEqual($scope.secondMatterIndex, secondSubsequenceIndex, "locus_tag", filterValue);
 

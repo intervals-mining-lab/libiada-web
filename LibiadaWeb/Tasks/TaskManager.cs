@@ -234,7 +234,7 @@
         }
 
         /// <summary>
-        /// The create action.
+        /// Starts a new thread with the given task.
         /// </summary>
         /// <param name="task">
         /// The task.

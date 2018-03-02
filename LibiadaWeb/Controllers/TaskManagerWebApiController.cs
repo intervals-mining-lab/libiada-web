@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Web.Http;
 
-    using LibiadaWeb.Models.CalculatorsData;
     using LibiadaWeb.Tasks;
 
     using Newtonsoft.Json;
@@ -29,7 +28,7 @@
         /// </exception>
         public string GetTaskData(int id)
         {
-            var task = TaskManager.GetTask(id);
+            Task task = TaskManager.GetTask(id);
 
             if (task.TaskData.TaskState != TaskState.Completed)
             {
@@ -59,7 +58,7 @@
         /// </exception>
         public string GetSubsequencesComparerDataElement(int taskId, int firstIndex, int secondIndex)
         {
-            var task = TaskManager.GetTask(taskId);
+            Task task = TaskManager.GetTask(taskId);
 
             if (task.TaskData.TaskState != TaskState.Completed)
             {
@@ -71,7 +70,9 @@
                 throw new Exception("Task doesn't have additional data");
             }
 
-            return JsonConvert.SerializeObject(((List<SubsequenceComparisonData>[,])task.Result["additionalData"])[firstIndex, secondIndex]);
+            List<(int, int, double)> result = ((List<(int, int, double)>[,])task.Result["additionalData"])[firstIndex, secondIndex];
+
+            return JsonConvert.SerializeObject(result);
         }
     }
 }

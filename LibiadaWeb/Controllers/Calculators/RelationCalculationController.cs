@@ -273,13 +273,13 @@
                 .ToArray();
 
             // calculating frequencies of elements in alphabet
-            var frequencies = new List<KeyValuePair<IBaseObject, double>>();
+            var frequencies = new List<(IBaseObject, double)>();
             Alphabet alphabet = chain.Alphabet;
             for (int f = 0; f < alphabet.Cardinality; f++)
             {
                 var probabilityCalculator = new Probability();
                 double result = probabilityCalculator.Calculate(chain.CongenericChain(f), Link.NotApplied);
-                frequencies.Add(new KeyValuePair<IBaseObject, double>(alphabet[f], result));
+                frequencies.Add((alphabet[f], result));
             }
 
             // ordering alphabet by frequencies
@@ -290,8 +290,8 @@
             {
                 for (int j = 0; j < frequencyCount; j++)
                 {
-                    int firstElementNumber = alphabet.IndexOf(frequencies[i].Key) + 1;
-                    int secondElementNumber = alphabet.IndexOf(frequencies[j].Key) + 1;
+                    int firstElementNumber = alphabet.IndexOf(frequencies[i].Item1) + 1;
+                    int secondElementNumber = alphabet.IndexOf(frequencies[j].Item1) + 1;
                     long firstElementId = sequenceElements[firstElementNumber];
                     long secondElementId = sequenceElements[secondElementNumber];
 
@@ -310,14 +310,14 @@
         }
 
         /// <summary>
-        /// The sort key value pair list.
+        /// Sort list by second element of the tuple.
         /// </summary>
         /// <param name="arrayForSort">
         /// The array for sort.
         /// </param>
-        private void SortKeyValuePairList(List<KeyValuePair<IBaseObject, double>> arrayForSort)
+        private void SortKeyValuePairList(List<(IBaseObject, double)> arrayForSort)
         {
-            arrayForSort.Sort((firstPair, nextPair) => nextPair.Value.CompareTo(firstPair.Value));
+            arrayForSort.Sort((firstPair, nextPair) => nextPair.Item2.CompareTo(firstPair.Item2));
         }
     }
 }

@@ -141,7 +141,7 @@
         /// <returns>
         /// The <see cref="List{CharacteristicData}"/>.
         /// </returns>
-        public List<CharacteristicData> GetCharacteristicTypes()
+        public List<CharacteristicTypeData> GetCharacteristicTypes()
         {
             Link[] links;
             CongenericCharacteristic[] characteristics;
@@ -156,7 +156,7 @@
                 characteristics = Aliases.UserAvailableCongenericCharacteristics.ToArray();
             }
 
-            var result = new List<CharacteristicData>();
+            var result = new List<CharacteristicTypeData>();
 
             foreach (CongenericCharacteristic characteristic in characteristics)
             {
@@ -165,7 +165,7 @@
                     .Select(ctl => new LinkSelectListItem(ctl.Id, ctl.Link.ToString(), ctl.Link.GetDisplayValue()))
                     .ToList();
 
-                result.Add(new CharacteristicData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
+                result.Add(new CharacteristicTypeData((byte)characteristic, characteristic.GetDisplayValue(), linkSelectListItems));
             }
 
             return result;

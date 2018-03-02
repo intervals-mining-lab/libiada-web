@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using LibiadaCore.Extensions;
+
     using LibiadaWeb.Models.CalculatorsData;
 
     using Attribute = LibiadaWeb.Attribute;
@@ -90,16 +92,16 @@
         {
             var result = new List<SequenceAttribute>();
 
-            foreach (KeyValuePair<string, List<string>> qualifier in qualifiers)
+            foreach ((string key, List<string> values) in qualifiers)
             {
-                foreach (string value in qualifier.Value)
+                foreach (string value in values)
                 {
-                    if (qualifier.Key == "translation")
+                    if (key == "translation")
                     {
                         break;
                     }
 
-                    if (qualifier.Key == "protein_id")
+                    if (key == "protein_id")
                     {
                         string remoteId = CleanAttributeValue(value);
 
@@ -111,7 +113,7 @@
                         subsequence.RemoteId = remoteId;
                     }
 
-                    result.Add(Create(qualifier.Key, CleanAttributeValue(value), subsequence.Id));
+                    result.Add(Create(key, CleanAttributeValue(value), subsequence.Id));
                 }
             }
 
