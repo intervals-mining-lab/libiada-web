@@ -7,9 +7,9 @@
 
 @if (ViewBag.Error == null)
 {
-    @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionController")
+    @Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionResultController")
 
-    <div ng-app="libiada" ng-controller="SequencesOrderDistributionCtrl">
+    <div ng-app="libiada" ng-controller="SequencesOrderDistributionResultCtrl">
         @Html.Partial("_ModalLoadingWindow")
         <div ng-disabled="loading">
             <div ng-repeat="order in result" >

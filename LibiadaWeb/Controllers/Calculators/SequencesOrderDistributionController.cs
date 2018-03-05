@@ -33,6 +33,7 @@
         /// </returns>
         public ActionResult Index()
         {
+            ViewBag.data = "{}";
             return View();
         }
 
@@ -59,9 +60,11 @@
                 var sequenceGenerator = generateStrict ?
                                        (ISequenceGenerator)new StrictSequenceGenerator() :
                                        new SequenceGenerator();
-                var orderGenerator = new OrderGenerator();
                 var sequences = sequenceGenerator.GenerateSequences(length, alphabetCardinality);
-                var orders = orderGenerator.GenerateOrders(length, alphabetCardinality);
+                var orderGenerator = new OrderGenerator();
+                var orders = generateStrict ?
+                                 orderGenerator.StrictGenerateOrders(length, alphabetCardinality) :
+                                 orderGenerator.GenerateOrders(length, alphabetCardinality);
                 Dictionary<int[], List<BaseChain>> result = new Dictionary<int[], List<BaseChain>>(new OrderEqualityComparer());
                 foreach (var order in orders)
                 {

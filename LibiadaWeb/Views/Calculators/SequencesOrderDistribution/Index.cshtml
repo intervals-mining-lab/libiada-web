@@ -1,47 +1,52 @@
 ﻿@{
-    ViewBag.Title = "Sequences Order Disrtibution";
+    ViewBag.Title = "Sequences Order Distribution";
 }
 
 <h2>@ViewBag.Title</h2>
 
+@Html.Partial("_AngularControllerInitializer", "SequencesOrderDistributionController")
+
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    <div class="form-horizontal">
-        <h4>Parameters</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            <label class="control-label col-md-2" for="length">Generated sequnces length:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
-                @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+    <div ng-app="libiada" ng-controller="SequencesOrderDistributionCtrl">
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <h4>Parameters</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2" for="length">Generated sequnces length:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="length" type="number" value="4" min="0" id="length" />
+                    @Html.ValidationMessage("length", "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
-            <div class="col-md-10">
-                <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
-                @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2" for="alphabetCardinality">Generated sequnces alphabet cardinality:</label>
+                <div class="col-md-10">
+                    <input class="form-control" name="alphabetCardinality" type="number" value="4" min="0" id="alphabetCardinality" />
+                    @Html.ValidationMessage("alphabetCardinality", "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="generateStrict" id="generateStrict" value="true" checked />
-                    Generate sequnces with only given alphabet cardinality
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="generateStrict" id="generateStrict" value="true" checked />
+                        Generate sequnces with only given alphabet cardinality
+                    </label>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <label>
-                    <input type="radio" name="generateStrict" id="generateStrict" value="false" />
-                    Generate sequnces with alphabet cardinality less or equal to given
-                </label>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <label>
+                        <input type="radio" name="generateStrict" id="generateStrict" value="false" />
+                        Generate sequnces with alphabet cardinality less or equal to given
+                    </label>
+                </div>
             </div>
+            @Html.Partial("_MattersSubmit")
         </div>
-        @Html.Partial("_MattersSubmit")
+
     </div>
 }
 
