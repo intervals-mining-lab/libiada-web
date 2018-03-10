@@ -32,6 +32,7 @@
         /// </summary>
         static TaskManager()
         {
+            RemoveGarbageFromDb();
             using (var db = new LibiadaWebEntities())
             {
                 CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
@@ -39,12 +40,22 @@
                 {
                     foreach (CalculationTask task in databaseTasks)
                     {
-                        if (task.Status == TaskState.Completed && !string.IsNullOrEmpty(task.Result))
-                        {
-                            Tasks.Add(new Task(task));
-                        }
+                        Tasks.Add(new Task(task));
                     }
                 }
+            }
+        }
+
+        private static void RemoveGarbageFromDb()
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                var tasksToDelete = db.CalculationTask
+                  .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                  .ToArray();
+
+                db.CalculationTask.RemoveRange(tasksToDelete);
+                db.SaveChanges();
             }
         }
 
