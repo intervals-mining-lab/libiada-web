@@ -1,4 +1,6 @@
-﻿namespace LibiadaWeb.Tasks
+﻿using LibiadaWeb.Helpers;
+
+namespace LibiadaWeb.Tasks
 {
     using System.Linq;
 
@@ -57,7 +59,12 @@
         /// </returns>
         public string GetAllTasks()
         {
-            var tasks = TaskManager.GetTasksData().Select(task => new
+            int userId = AccountHelper.GetUserId();
+            bool isAdmin = AccountHelper.IsAdmin();
+
+            var tasks = TaskManager.GetTasksData()
+                .Where(t => t.UserId == userId || isAdmin)
+                .Select(task => new
             {
                 task.Id,
                 TaskType = task.TaskType.GetName(),

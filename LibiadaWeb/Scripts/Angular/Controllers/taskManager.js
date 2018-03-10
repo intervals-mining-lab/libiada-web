@@ -59,9 +59,6 @@
             else if (change.newState === $.signalR.connectionState.connected) {
                 $scope.flags.reconnecting = false;
             }
-            try {
-                $scope.$apply();
-            } catch (e) { }
         });
 
 
