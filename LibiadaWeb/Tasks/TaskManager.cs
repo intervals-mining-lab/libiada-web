@@ -28,10 +28,16 @@
         private static readonly List<Task> Tasks = new List<Task>();
 
         /// <summary>
+        /// The signalr hub.
+        /// </summary>
+        private static readonly TasksManagerHub SignalrHub = new TasksManagerHub();
+
+        /// <summary>
         /// Initializes static members of the <see cref="TaskManager"/> class.
         /// </summary>
         static TaskManager()
         {
+            RemoveGarbageFromDb();
             using (var db = new LibiadaWebEntities())
             {
                 CalculationTask[] databaseTasks = db.CalculationTask.OrderBy(t => t.Created).ToArray();
@@ -39,12 +45,22 @@
                 {
                     foreach (CalculationTask task in databaseTasks)
                     {
-                        if (task.Status == TaskState.Completed && !string.IsNullOrEmpty(task.Result))
-                        {
-                            Tasks.Add(new Task(task));
-                        }
+                        Tasks.Add(new Task(task));
                     }
                 }
+            }
+        }
+
+        private static void RemoveGarbageFromDb()
+        {
+            using (var db = new LibiadaWebEntities())
+            {
+                var tasksToDelete = db.CalculationTask
+                  .Where(t => (t.Status != TaskState.Completed && t.Status != TaskState.Error) || t.Result == null)
+                  .ToArray();
+
+                db.CalculationTask.RemoveRange(tasksToDelete);
+                db.SaveChanges();
             }
         }
 
@@ -83,7 +99,7 @@
                 Tasks.Add(task);
             }
 
-            TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
+            SignalrHub.Send(TaskEvent.AddTask, task.TaskData);
             ManageTasks();
         }
 
@@ -137,7 +153,7 @@
                             db.SaveChanges();
                         }
 
-                        TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
+                        SignalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
             }
@@ -258,7 +274,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
 
                 // executing action
@@ -290,7 +306,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
             catch (Exception e)
@@ -327,7 +343,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
 

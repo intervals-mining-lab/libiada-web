@@ -2,12 +2,13 @@
 
 namespace LibiadaWeb.Tasks
 {
+    using System.Collections.Generic;
     using System.Linq;
-
+    using System.Web;
     using LibiadaCore.Extensions;
 
     using LibiadaWeb.Models;
-
+    using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.SignalR;
 
     using Newtonsoft.Json;
@@ -15,6 +16,7 @@ namespace LibiadaWeb.Tasks
     /// <summary>
     /// SignalR messages hub class.
     /// </summary>
+    [Authorize]
     public class TasksManagerHub : Hub
     {
         /// <summary>
@@ -26,7 +28,7 @@ namespace LibiadaWeb.Tasks
         /// <param name="task">
         /// Task itself.
         /// </param>
-        public static void Send(TaskEvent taskEvent, TaskData task)
+        public void Send(TaskEvent taskEvent, TaskData task)
         {
             IHubContext hubContext = GlobalHost.ConnectionManager.GetHubContext<TasksManagerHub>();
 
@@ -47,7 +49,12 @@ namespace LibiadaWeb.Tasks
                     task.UserName
                 };
 
-                hubContext.Clients.All.TaskEvent(taskEvent.ToString(), result);
+                int userId = task.UserId;
+                List<string> usersId = new List<string>{
+                    userId.ToString()
+                };
+
+                hubContext.Clients.Users(usersId).TaskEvent(taskEvent.ToString(), result);
             }
         }
 
