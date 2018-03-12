@@ -28,6 +28,11 @@
         private static readonly List<Task> Tasks = new List<Task>();
 
         /// <summary>
+        /// The signalr hub.
+        /// </summary>
+        private static readonly TasksManagerHub SignalrHub = new TasksManagerHub();
+
+        /// <summary>
         /// Initializes static members of the <see cref="TaskManager"/> class.
         /// </summary>
         static TaskManager()
@@ -94,7 +99,7 @@
                 Tasks.Add(task);
             }
 
-            TasksManagerHub.Send(TaskEvent.AddTask, task.TaskData);
+            SignalrHub.Send(TaskEvent.AddTask, task.TaskData);
             ManageTasks();
         }
 
@@ -148,7 +153,7 @@
                             db.SaveChanges();
                         }
 
-                        TasksManagerHub.Send(TaskEvent.DeleteTask, task.TaskData);
+                        SignalrHub.Send(TaskEvent.DeleteTask, task.TaskData);
                     }
                 }
             }
@@ -269,7 +274,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
 
                 // executing action
@@ -301,7 +306,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
             catch (Exception e)
@@ -338,7 +343,7 @@
                         db.SaveChanges();
                     }
 
-                    TasksManagerHub.Send(TaskEvent.ChangeStatus, task.TaskData);
+                    SignalrHub.Send(TaskEvent.ChangeStatus, task.TaskData);
                 }
             }
 

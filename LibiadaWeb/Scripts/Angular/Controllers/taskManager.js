@@ -3,7 +3,8 @@
 
     function taskManager($scope) {
 
-        $scope.tasks = [];
+		$scope.tasks = [];
+		$scope.loading = true;
         $scope.flags = { reconnecting: false };
         var tasksHub = $.connection.tasksManagerHub;
 
@@ -33,7 +34,7 @@
                     break;
                 default: console.log("Unknown task event");
                     break;
-            }
+			}
             try {
                 $scope.$apply();
             } catch (e) {}
@@ -58,9 +59,6 @@
             else if (change.newState === $.signalR.connectionState.connected) {
                 $scope.flags.reconnecting = false;
             }
-            try {
-                $scope.$apply();
-            } catch (e) { }
         });
 
 
@@ -73,7 +71,8 @@
                 var tasks = JSON.parse(tasksJson);
                 for (var i = 0; i < tasks.length; i++) {
                     $scope.tasks.push(tasks[i]);
-                }
+				}
+				$scope.loading = false;
                 try {
                     $scope.$apply();
                 } catch (e) { }
