@@ -24,7 +24,6 @@
         ctrl.getVisibleMatters = function () {
             var visibleMatters = ctrl.matters;
             visibleMatters = filterFilter(visibleMatters, { Text: ctrl.searchMatter });
-            visibleMatters = filterFilter(visibleMatters, { Description: ctrl.searchDescription });
             visibleMatters = filterFilter(visibleMatters, { Group: ctrl.group || "" });
             visibleMatters = filterFilter(visibleMatters, { SequenceType: ctrl.sequenceType || "" });
             visibleMatters = filterFilter(visibleMatters, function (matter) {

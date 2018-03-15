@@ -244,12 +244,9 @@ namespace LibiadaWeb.Models.Repositories.Sequences
                 Value = m.Id,
                 Text = m.Name,
                 Selected = false,
-                Created = m.Created.ToString(),
-                Modified = m.Modified.ToString(),
                 SequenceType = m.SequenceType.GetDisplayValue(),
                 Group = m.Group.GetDisplayValue(),
-                m.Nature,
-                m.Description
+                m.Nature
             });
         }
 
