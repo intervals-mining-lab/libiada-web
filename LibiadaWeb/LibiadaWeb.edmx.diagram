@@ -131,6 +131,8 @@
         <edmx:AssociationConnector Association="LibiadaWebModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <edmx:AssociationConnector Association="LibiadaWebModel.fk_task_user" />
         <edmx:AssociationConnector Association="LibiadaWebModel.AspNetUserRoles" />
+        <edmx:EntityTypeShape EntityType="LibiadaWebModel.sequence_group" Width="1.5" PointX="0.75" PointY="25.625" />
+        <edmx:AssociationConnector Association="LibiadaWebModel.sequence_group_matter" />
         </edmx:Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -342,6 +342,25 @@
           <Property Name="length" Type="int4" Nullable="false" />
         </EntityType>
 
+        <EntityType Name="sequence_group">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="text" Nullable="false" />
+          <Property Name="created" Type="timestamptz" Precision="7" Nullable="false" />
+          <Property Name="creator_id" Type="int4" Nullable="false" />
+          <Property Name="modified" Type="timestamptz" Precision="7" Nullable="false" />
+          <Property Name="modifier_id" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sequence_group_matter">
+          <Key>
+            <PropertyRef Name="group_id" />
+            <PropertyRef Name="matter_id" />
+          </Key>
+          <Property Name="group_id" Type="int4" Nullable="false" />
+          <Property Name="matter_id" Type="int8" Nullable="false" />
+        </EntityType>
         <EntityType Name="subsequence">
           <Key>
             <PropertyRef Name="id" />
@@ -550,6 +569,20 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_matter_sequence_group">
+          <End Role="sequence_group" Type="Self.sequence_group" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sequence_group_matter" Type="Self.sequence_group_matter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="sequence_group">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sequence_group_matter">
+              <PropertyRef Name="group_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_measure_matter">
           <End Role="matter" Type="Self.matter" Multiplicity="1" />
           <End Role="measure" Type="Self.measure" Multiplicity="*" />
@@ -619,6 +652,20 @@
           </ReferentialConstraint>
         </Association>
 
+        <Association Name="fk_sequence_group_matter">
+          <End Role="matter" Type="Self.matter" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="sequence_group_matter" Type="Self.sequence_group_matter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="matter">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="sequence_group_matter">
+              <PropertyRef Name="matter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_task_user">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
           <End Role="task" Type="Self.task" Multiplicity="*" />
@@ -660,6 +707,8 @@
           <EntitySet Name="note_pitch" EntityType="Self.note_pitch" Schema="public" store:Type="Tables" />
           <EntitySet Name="pitch" EntityType="Self.pitch" Schema="public" store:Type="Tables" />
           <EntitySet Name="position" EntityType="Self.position" Schema="public" store:Type="Tables" />
+          <EntitySet Name="sequence_group" EntityType="Self.sequence_group" Schema="public" store:Type="Tables" />
+          <EntitySet Name="sequence_group_matter" EntityType="Self.sequence_group_matter" Schema="public" store:Type="Tables" />
           <EntitySet Name="subsequence" EntityType="Self.subsequence" Schema="public" store:Type="Tables" />
           <EntitySet Name="task" EntityType="Self.task" Schema="public" store:Type="Tables" />
 
@@ -728,6 +777,10 @@
             <End Role="literature_chain" EntitySet="literature_chain" />
           </AssociationSet>
 
+          <AssociationSet Name="fk_matter_sequence_group" Association="Self.fk_matter_sequence_group">
+            <End Role="sequence_group" EntitySet="sequence_group" />
+            <End Role="sequence_group_matter" EntitySet="sequence_group_matter" />
+          </AssociationSet>
           <AssociationSet Name="fk_measure_matter" Association="Self.fk_measure_matter">
             <End Role="matter" EntitySet="matter" />
             <End Role="measure" EntitySet="measure" />
@@ -752,6 +805,10 @@
             <End Role="position" EntitySet="position" />
           </AssociationSet>
 
+          <AssociationSet Name="fk_sequence_group_matter" Association="Self.fk_sequence_group_matter">
+            <End Role="matter" EntitySet="matter" />
+            <End Role="sequence_group_matter" EntitySet="sequence_group_matter" />
+          </AssociationSet>
           <AssociationSet Name="fk_task_user" Association="Self.fk_task_user">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="task" EntitySet="task" />
@@ -793,6 +850,7 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
           <EntitySet Name="CalculationTask" EntityType="Self.CalculationTask" />
+          <EntitySet Name="SequenceGroup" EntityType="Self.SequenceGroup" />
 
           <AssociationSet Name="fk_binary_characteristic_first_element" Association="Self.fk_binary_characteristic_first_element">
             <End Role="Element" EntitySet="Element" />
@@ -1022,6 +1080,13 @@
           <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
+          </AssociationSet>
+
+          
+
+          <AssociationSet Name="sequence_group_matter" Association="Self.sequence_group_matter">
+            <End Role="SequenceGroup" EntitySet="SequenceGroup" />
+            <End Role="Matter" EntitySet="Matter" />
           </AssociationSet>
 
         </EntityContainer>
@@ -1267,6 +1332,7 @@
           <NavigationProperty Name="Measure" Relationship="Self.fk_measure_matter" FromRole="Matter" ToRole="Measure" />
           <NavigationProperty Name="MusicSequence" Relationship="Self.fk_music_chain_matter" FromRole="Matter" ToRole="MusicSequence" />
           <NavigationProperty Name="DataSequence" Relationship="Self.fk_data_chain_matter" FromRole="Matter" ToRole="DataSequence" />
+          <NavigationProperty Name="SequenceGroup" Relationship="Self.sequence_group_matter" FromRole="Matter" ToRole="SequenceGroup" />
         </EntityType>
 
         <EntityType Name="SequenceAttribute">
@@ -1466,6 +1532,19 @@
           <Property Name="Started" Type="DateTimeOffset" Precision="7" />
           <Property Name="Completed" Type="DateTimeOffset" Precision="7" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.fk_task_user" FromRole="CalculationTask" ToRole="AspNetUser" />
+        </EntityType>
+        
+        <EntityType Name="SequenceGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="CreatorId" Type="Int32" Nullable="false" />
+          <Property Name="Modified" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="ModifierId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="matters" Relationship="Self.sequence_group_matter" FromRole="SequenceGroup" ToRole="Matter" />
         </EntityType>
 
         <Association Name="fk_binary_characteristic_chain">
@@ -2096,6 +2175,11 @@
           <End Type="Self.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
 
+        <Association Name="sequence_group_matter">
+          <End Type="Self.SequenceGroup" Role="SequenceGroup" Multiplicity="*" />
+          <End Type="Self.Matter" Role="Matter" Multiplicity="*" />
+        </Association>
+
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2478,6 +2562,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          
+          <EntitySetMapping Name="SequenceGroup">
+            <EntityTypeMapping TypeName="LibiadaWebModel.SequenceGroup">
+              <MappingFragment StoreEntitySet="sequence_group">
+                <ScalarProperty Name="ModifierId" ColumnName="modifier_id" />
+                <ScalarProperty Name="Modified" ColumnName="modified" />
+                <ScalarProperty Name="CreatorId" ColumnName="creator_id" />
+                <ScalarProperty Name="Created" ColumnName="created" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
 
           <AssociationSetMapping Name="note_pitch" TypeName="LibiadaWebModel.note_pitch" StoreEntitySet="note_pitch">
             <EndProperty Name="Note">
@@ -2494,6 +2591,16 @@
             </EndProperty>
             <EndProperty Name="AspNetRole">
               <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+          </AssociationSetMapping>
+
+          
+          <AssociationSetMapping Name="sequence_group_matter" TypeName="LibiadaWebModel.sequence_group_matter" StoreEntitySet="sequence_group_matter">
+            <EndProperty Name="Matter">
+              <ScalarProperty Name="Id" ColumnName="matter_id" />
+            </EndProperty>
+            <EndProperty Name="SequenceGroup">
+              <ScalarProperty Name="Id" ColumnName="group_id" />
             </EndProperty>
           </AssociationSetMapping>
 

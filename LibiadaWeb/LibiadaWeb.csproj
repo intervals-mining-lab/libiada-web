@@ -260,6 +260,9 @@
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
     <Compile Include="SequenceType.cs" />
+    <Compile Include="sequence_group.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Subsequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
