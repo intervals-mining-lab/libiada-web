@@ -189,15 +189,6 @@
     <Compile Include="Group.cs" />
     <Compile Include="ImageTransformer.cs" />
     <Compile Include="Language.cs" />
-    <Compile Include="LiteratureSequence.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Matter.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Measure.cs">
-      <DependentUpon>LibiadaWeb.tt</DependentUpon>
-    </Compile>
     <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Helpers\ViewDataHelper.cs" />
     <Compile Include="Helpers\DataTransformers.cs" />
@@ -220,6 +211,15 @@
       <DependentUpon>LibiadaWeb.edmx</DependentUpon>
     </Compile>
     <Compile Include="LibiadaWebDataAnnotations.cs" />
+    <Compile Include="LiteratureSequence.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Matter.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Measure.cs">
+      <DependentUpon>LibiadaWeb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CalculatorsData\AttributeValue.cs" />
     <Compile Include="Models\CalculatorsData\CongenericSequencesCharacteristics.cs" />
     <Compile Include="Models\CalculatorsData\MattersImportResult.cs" />
@@ -259,10 +259,10 @@
     <Compile Include="SequenceAttribute.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
-    <Compile Include="SequenceType.cs" />
-    <Compile Include="sequence_group.cs">
+    <Compile Include="SequenceGroup.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
+    <Compile Include="SequenceType.cs" />
     <Compile Include="Subsequence.cs">
       <DependentUpon>LibiadaWeb.tt</DependentUpon>
     </Compile>
