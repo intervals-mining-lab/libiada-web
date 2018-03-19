@@ -2108,5 +2108,38 @@ ALTER TABLE measure RENAME remote_db_id TO remote_db;
 COMMENT ON COLUMN measure.remote_db IS 'Remote database from which sequence is downloaded.';
 ALTER TABLE measure ADD CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND remote_id IS NULL OR remote_db IS NOT NULL AND remote_id IS NOT NULL);
 
+-- 19.03.2018
+-- Add table for sequences groups.
+
+CREATE TABLE public.sequence_group
+(
+    id integer NOT NULL DEFAULT nextval('sequence_group_id_seq'::regclass),
+    name text COLLATE pg_catalog."default" NOT NULL,
+    created timestamp with time zone NOT NULL,
+    creator_id integer NOT NULL,
+    modified timestamp with time zone NOT NULL,
+    modifier_id integer NOT NULL,
+    CONSTRAINT sequence_group_pkey PRIMARY KEY (id),
+    CONSTRAINT uk_sequence_group_name UNIQUE (name)
+);
+
+COMMENT ON TABLE public.sequence_group IS 'Table storing information about sequences groups.';
+
+CREATE TABLE public.sequence_group_matter
+(
+    group_id integer NOT NULL,
+    matter_id bigint NOT NULL,
+    PRIMARY KEY (matter_id, group_id),
+    CONSTRAINT fk_sequence_group_matter FOREIGN KEY (matter_id)
+        REFERENCES public.matter (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_matter_sequence_group FOREIGN KEY (group_id)
+        REFERENCES public.sequence_group (id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+COMMENT ON TABLE public.sequence_group_matter IS 'Intermediate table for matters belonging to groups infromation.';
 
 COMMIT;
