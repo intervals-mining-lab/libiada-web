@@ -123,7 +123,7 @@
                         "~/Scripts/Angular/Controllers/charts.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/scrollJumper").Include(
-                        "~/Scripts/scrollJumper.js"));
+                        "~/Scripts/Angular/Components/scrollJumper.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/bootstrap.css",

@@ -404,6 +404,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\Angular\Components\mattersTable.js" />
+    <Content Include="Scripts\Angular\Components\scrollJumper.js" />
     <Content Include="Scripts\Angular\Controllers\accordance.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImport.js" />
     <Content Include="Scripts\Angular\Controllers\batchSequenceImportResult.js" />
@@ -479,7 +480,6 @@
     <Content Include="Scripts\smart-table.min.js" />
     <Content Include="Scripts\smart-table.min.js.map" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Scripts\scrollJumper.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -587,6 +587,7 @@
     <Content Include="Views\Calculators\MusicFiles\Result.cshtml" />
     <Content Include="Views\Calculators\MusicFiles\Index.cshtml" />
     <Content Include="Views\Partial\_ImageTransformators.cshtml" />
+    <Content Include="Views\Partial\_ScrollJumper.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -15,5 +15,7 @@
         /// The <see cref="PartialViewResult"/>.
         /// </returns>
         public PartialViewResult _MattersTable() => PartialView();
+
+        public PartialViewResult _ScrollJumper() => PartialView();
     }
 }
