@@ -10,6 +10,10 @@
 		ctrl.$onInit = function () {
 		}
 
+		ctrl.isScrollable = function () {
+			return (document.body.clientHeight - document.documentElement.clientHeight > 0);
+		}
+
 		ctrl.scrollDown = function () {
 			if (ctrl.scrolledDown) {
 				$('html, body').animate({ scrollTop: ctrl.savedPosition }, 800);
