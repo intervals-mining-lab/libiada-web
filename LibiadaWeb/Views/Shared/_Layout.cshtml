@@ -34,38 +34,40 @@
             </div>
         </div>
     </div>
-    <div ng-app="libiada"><scroll-jumper></scroll-jumper></div>
-    <div class="container body-content">
-        @RenderBody()
-        <br />
-        @if (ViewBag.Error != null)
-        {
-            if (AccountHelper.IsAdmin())
+    <div ng-app="libiada">
+         <scroll-jumper></scroll-jumper>
+        <div class="container body-content">
+            @RenderBody()
+            <br />
+            @if (ViewBag.Error != null)
             {
-                <div class="error-message">
-                    @Html.Raw(ViewBag.ErrorMessage)
-                </div>
-                <br />
-                if (ViewBag.StackTrace != null)
-                {
-                    <div class="stack-trace">
-                        @Html.Raw(ViewBag.StackTrace)
-                    </div>
-                }
-            }
-            else
-            {
-                <h1 class="text-danger">Error.</h1>
-                <h2 class="text-danger">An error occurred while processing your request.</h2>
-
-                if (ViewBag.UserError != null)
+                if (AccountHelper.IsAdmin())
                 {
                     <div class="error-message">
-                        @ViewBag.UserError
+                        @Html.Raw(ViewBag.ErrorMessage)
                     </div>
+                    <br />
+                    if (ViewBag.StackTrace != null)
+                    {
+                        <div class="stack-trace">
+                            @Html.Raw(ViewBag.StackTrace)
+                        </div>
+                    }
+                }
+                else
+                {
+                    <h1 class="text-danger">Error.</h1>
+                    <h2 class="text-danger">An error occurred while processing your request.</h2>
+
+                    if (ViewBag.UserError != null)
+                    {
+                        <div class="error-message">
+                            @ViewBag.UserError
+                        </div>
+                    }
                 }
             }
-        }
+        </div>
     </div>
     <footer>
         <div class="container modal-footer">
