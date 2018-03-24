@@ -44,5 +44,5 @@
         $scope.name = "";
     }
 
-    angular.module("libiada", []).controller("MatterSequenceCreateCtrl", ["$scope", "filterFilter", matterSequenceCreate]);
+    angular.module("libiada").controller("MatterSequenceCreateCtrl", ["$scope", "filterFilter", matterSequenceCreate]);
 }

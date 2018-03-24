@@ -32,6 +32,6 @@
         $scope.characteristics = [];
     }
 
-    angular.module("libiada", []).controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
+    angular.module("libiada").controller("SubsequencesDistributionCtrl", ["$scope", subsequencesDistribution]);
     mattersTable();
 }

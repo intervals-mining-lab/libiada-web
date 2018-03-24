@@ -13,6 +13,6 @@
         $scope.nature = $scope.natures[0].Value;
     }
 
-    angular.module("libiada", []).controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
+    angular.module("libiada").controller("BuildingsSimilarityCtrl", ["$scope", "filterFilter", buildingsSimilarity]);
     mattersTable();
 }

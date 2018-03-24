@@ -9,7 +9,7 @@
 @using (Html.BeginForm("Index", "MusicFiles", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-app="libiada" ng-controller="CustomCalculationCtrl">
+    <div class="form-horizontal" ng-controller="CustomCalculationCtrl">
         <h4>Sequence and parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

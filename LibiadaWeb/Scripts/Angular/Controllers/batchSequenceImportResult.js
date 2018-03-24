@@ -44,5 +44,5 @@
             });
     }
 
-    angular.module("libiada", []).controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
+    angular.module("libiada").controller("BatchSequenceImportResultCtrl", ["$scope", "$http", batchSequenceImportResult]);
 }

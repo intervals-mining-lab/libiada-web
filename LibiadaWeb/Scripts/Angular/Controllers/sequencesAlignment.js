@@ -37,6 +37,6 @@
         };
     }
 
-    angular.module("libiada", []).controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);
+    angular.module("libiada").controller("SequencesAlignmentCtrl", ["$scope", sequencesAlignment]);
     mattersTable();
 }

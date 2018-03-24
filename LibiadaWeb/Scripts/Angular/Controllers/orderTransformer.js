@@ -51,6 +51,6 @@
         $scope.nature = $scope.natures[0].Value;
     }
 
-    angular.module("libiada", []).controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);
+    angular.module("libiada").controller("OrderTransformerCtrl", ["$scope", "filterFilter", orderTransformer]);
     mattersTable();
 }

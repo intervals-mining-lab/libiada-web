@@ -16,6 +16,12 @@
         /// </returns>
         public PartialViewResult _MattersTable() => PartialView();
 
+        /// <summary>
+        /// The scroll jumper partial view.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="PartialViewResult"/>.
+        /// </returns>
         public PartialViewResult _ScrollJumper() => PartialView();
     }
 }

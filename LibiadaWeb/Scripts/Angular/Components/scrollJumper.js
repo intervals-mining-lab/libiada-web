@@ -8,13 +8,8 @@
 		ctrl.savedPosition = 0;
 
 		ctrl.$onInit = function () {
-			if (document.body.clientHeight - document.documentElement.clientHeight <= 0) {
-				document.getElementById('scrollUpDown').setAttribute("hidden", true);
-			}
-			else {
-				document.getElementById('scrollUpDown').removeAttribute("hidden");
-			}
 		}
+
 		ctrl.scrollDown = function () {
 			if (ctrl.scrolledDown) {
 				$('html, body').animate({ scrollTop: ctrl.savedPosition }, 800);

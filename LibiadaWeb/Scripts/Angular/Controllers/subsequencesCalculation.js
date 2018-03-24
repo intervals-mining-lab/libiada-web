@@ -46,6 +46,6 @@
         $scope.hideNotation = true;
     }
 
-    angular.module("libiada", []).controller("SubsequencesCalculationCtrl", ["$scope", "filterFilter", subsequencesCalculation]);
+    angular.module("libiada").controller("SubsequencesCalculationCtrl", ["$scope", "filterFilter", subsequencesCalculation]);
     mattersTable();
 }

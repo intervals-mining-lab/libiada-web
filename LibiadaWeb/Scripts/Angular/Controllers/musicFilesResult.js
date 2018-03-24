@@ -13,5 +13,5 @@
             });
     }
 
-    angular.module("libiada", []).controller("MusicFilesResultCtrl", ["$scope", "$http", musicFilesResult]);
+    angular.module("libiada").controller("MusicFilesResultCtrl", ["$scope", "$http", musicFilesResult]);
 }

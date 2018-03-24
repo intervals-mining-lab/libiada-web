@@ -413,7 +413,7 @@
         return function (num) { return Math.abs(num); }
     }
 
-    angular.module("libiada", [])
+    angular.module("libiada")
         .filter('makePositive', makePositive)
         .controller("SubsequencesComparerResultCtrl", ["$scope", "$http", subsequencesComparerResult]);
 }

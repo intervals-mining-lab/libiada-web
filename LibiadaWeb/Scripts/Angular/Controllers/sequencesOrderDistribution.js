@@ -7,5 +7,5 @@
         $scope.submitName = "Generate orders";
     }
 
-    angular.module("libiada", []).controller("SequencesOrderDistributionCtrl", ["$scope", sequencesOrderDistribution]);
+    angular.module("libiada").controller("SequencesOrderDistributionCtrl", ["$scope", sequencesOrderDistribution]);
 }

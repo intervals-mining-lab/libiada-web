@@ -7,6 +7,6 @@
         $scope.localFile = false;
     }
 
-    angular.module("libiada", []).controller("GenesImportCtrl", ["$scope", genesImport]);
+    angular.module("libiada").controller("GenesImportCtrl", ["$scope", genesImport]);
     mattersTable();
 }

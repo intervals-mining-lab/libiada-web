@@ -1,4 +1,4 @@
-﻿angular.module("libiada", [])
+﻿angular.module("libiada")
     .directive("tableParse", ["$parse", "$document",
         function ($parse, $document) {
             return {
