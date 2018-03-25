@@ -2111,9 +2111,9 @@ ALTER TABLE measure ADD CONSTRAINT chk_remote_id CHECK (remote_db IS NULL AND re
 -- 19.03.2018
 -- Add table for sequences groups.
 
-CREATE TABLE public.sequence_group
+CREATE TABLE sequence_group
 (
-    id integer NOT NULL DEFAULT nextval('sequence_group_id_seq'::regclass),
+    id serial NOT NULL,
     name text COLLATE pg_catalog."default" NOT NULL,
     created timestamp with time zone NOT NULL,
     creator_id integer NOT NULL,
@@ -2123,23 +2123,23 @@ CREATE TABLE public.sequence_group
     CONSTRAINT uk_sequence_group_name UNIQUE (name)
 );
 
-COMMENT ON TABLE public.sequence_group IS 'Table storing information about sequences groups.';
+COMMENT ON TABLE sequence_group IS 'Table storing information about sequences groups.';
 
-CREATE TABLE public.sequence_group_matter
+CREATE TABLE sequence_group_matter
 (
     group_id integer NOT NULL,
     matter_id bigint NOT NULL,
     PRIMARY KEY (matter_id, group_id),
     CONSTRAINT fk_sequence_group_matter FOREIGN KEY (matter_id)
-        REFERENCES public.matter (id) MATCH SIMPLE
+        REFERENCES matter (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT fk_matter_sequence_group FOREIGN KEY (group_id)
-        REFERENCES public.sequence_group (id) MATCH SIMPLE
+        REFERENCES sequence_group (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
-COMMENT ON TABLE public.sequence_group_matter IS 'Intermediate table for matters belonging to groups infromation.';
+COMMENT ON TABLE sequence_group_matter IS 'Intermediate table for matters belonging to groups infromation.';
 
 COMMIT;
