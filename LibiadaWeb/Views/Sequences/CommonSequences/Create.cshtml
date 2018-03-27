@@ -15,7 +15,7 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal" ng-app="libiada" ng-controller="MatterSequenceCreateCtrl">
+    <div class="form-horizontal" ng-controller="MatterSequenceCreateCtrl">
         <h4>Sequence parameters</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })

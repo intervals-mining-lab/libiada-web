@@ -10,7 +10,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="form-horizontal" ng-app="libiada" ng-controller="SubsequencesDistributionCtrl">
+    <div class="form-horizontal" ng-controller="SubsequencesDistributionCtrl">
         <h4>Sequences and parameters</h4>
         @Html.ValidationSummary(true, string.Empty, new { @class = "text-danger" })
         <matters-table matters="matters"

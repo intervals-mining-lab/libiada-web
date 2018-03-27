@@ -86,8 +86,5 @@ input[type="checkbox"].input-validation-error {
 
 .arrow-button {
     fill: #337ab7;
-}
-
-.up-down-scroll {
-	line-height: 2000%;
+    height: 50%;
 }

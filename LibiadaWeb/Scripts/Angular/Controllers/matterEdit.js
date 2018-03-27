@@ -26,5 +26,5 @@
         $scope.sequenceType = $scope.matter.SequenceType;
     }
 
-    angular.module("libiada", []).controller("MatterEditCtrl", ["$scope", "filterFilter", matterEdit]);
+    angular.module("libiada").controller("MatterEditCtrl", ["$scope", "filterFilter", matterEdit]);
 }
