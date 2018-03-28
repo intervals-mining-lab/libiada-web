@@ -2142,4 +2142,18 @@ CREATE TABLE sequence_group_matter
 
 COMMENT ON TABLE sequence_group_matter IS 'Intermediate table for matters belonging to groups infromation.';
 
+-- 28.03.2018
+-- Add created/modified trigger on sequence_group.
+-- And add references to users table.
+
+CREATE TRIGGER tgiu_sequence_group_modified BEFORE INSERT OR UPDATE ON sequence_group FOR EACH ROW EXECUTE PROCEDURE trigger_set_modified();
+
+COMMENT ON TRIGGER tgiu_sequence_group_modified ON sequence_group IS 'Тригер для вставки даты последнего изменения записи.';
+
+ALTER TABLE sequence_group ALTER COLUMN created SET DEFAULT now();
+
+ALTER TABLE sequence_group ADD CONSTRAINT fk_sequence_group_creator FOREIGN KEY (creator_id) REFERENCES dbo."AspNetUsers" ("Id") MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
+ALTER TABLE sequence_group ADD CONSTRAINT fk_sequence_group_modifier FOREIGN KEY (modifier_id) REFERENCES dbo."AspNetUsers" ("Id") MATCH SIMPLE ON UPDATE CASCADE ON DELETE NO ACTION;
+
 COMMIT;
